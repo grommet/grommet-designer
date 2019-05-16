@@ -23,7 +23,7 @@ const rich = [
   { id: 3, componentType: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
   { id: 4, componentType: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
   { id: 5, componentType: 'Icon', props: { icon: 'LinkPrevious'} },
-  { id: 6, componentType: 'Paragraph', props:{}, text: 'Design using real grommet components!'},
+  { id: 6, componentType: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
   { id: 7, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
   { id: 8, componentType: 'Text', props: {}, text: 'add components' },
   { id: 9, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
