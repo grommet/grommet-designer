@@ -11,7 +11,7 @@ const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
   // prune out colors we tend to use internally
   .filter(color => (typeof base.global.colors[color] === 'string'
     && !internalColors.includes(color)))
-  .sort((c1, c2) => (c1 > c2 ? 1 : -1));
+  .sort((c1, c2) => (c1 > c2 ? 1 : -1)); // sort alphabetically
 
 export const componentTypes = {
   Box: {
@@ -115,6 +115,13 @@ export const componentTypes = {
   Menu: {
     component: Menu,
     name: 'Menu',
+    properties: {
+      disabled: false,
+      icon: false,
+      label: 'Actions',
+      open: false,
+      size: ['small', 'medium', 'large', 'xlarge'],
+    },
   },
   CheckBox: {
     component: CheckBox,
