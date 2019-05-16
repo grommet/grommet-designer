@@ -52,6 +52,7 @@ export default class Properties extends Component {
           {componentType.name !== 'Grommet' &&
             <Box flex={false} margin={{ top: 'medium' }}>
               <Button
+                title="delete"
                 icon={<Trash />}
                 hoverIndicator
                 onClick={() => onDelete()}

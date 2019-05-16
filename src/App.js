@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import {
   Box, Button, Grommet, Grid, ResponsiveContext, Text, grommet,
 } from 'grommet';
-import { Add } from 'grommet-icons';
+import { Add, Trash } from 'grommet-icons';
 import { componentTypes, Adder } from './Types';
 import Properties from './Properties';
 
+const bare = [
+  undefined, // leave id 0 undefined
+  { id: 1, componentType: 'Grommet', props: { style: { height: '100vh' } } },
+];
+
 class App extends Component {
   state = {
-    design: [
-      undefined, // leave id 0 undefined
-      { id: 1, componentType: 'Grommet', props: { style: { height: '100vh' } } },
-    ],
+    design: bare,
     selected: 1,
   }
 
@@ -93,6 +95,11 @@ class App extends Component {
     nextDesign[nextParent.id] = nextParent;
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
+  }
+
+  reset = () => {
+    this.setState({ design: { ...bare }, selected: 1 });
+    localStorage.setItem('design', JSON.stringify(bare));
   }
 
   renderDropArea = (id, above) => {
@@ -191,12 +198,16 @@ class App extends Component {
                     <Box height="xxsmall" />
                   ) : (
                     <Button
+                      title="add component"
                       icon={<Add />}
                       hoverIndicator
                       onClick={() => this.setState({ adding: true })}
                     />
                   )}
-                  {this.renderTree(1)}
+                  <Box flex="grow">
+                    {this.renderTree(1)}
+                  </Box>
+                  <Button title="delete all" icon={<Trash />} onClick={this.reset} />
                   {adding && (
                     <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
                   )}
