@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Grommet, Grid, Text, grommet,
+  Box, Button, Grommet, Grid, ResponsiveContext, Text, grommet,
 } from 'grommet';
 import { Add } from 'grommet-icons';
 import { componentTypes, Adder } from './Types';
@@ -178,36 +178,47 @@ class App extends Component {
     const selectedComponentType = componentTypes[selectedComponent.componentType];
     return (
       <Grommet full theme={grommet}>
-        <Grid fill columns={['small', 'flex', 'small']}>
+        <ResponsiveContext.Consumer>
+          {(responsive) => (
+            <Grid
+              fill
+              columns={responsive === 'small' ? 'flex' : ['small', 'flex', 'small']}
+            >
 
-          <Box background="light-2">
-            {selectedComponentType.text ? (
-              <Box height="xxsmall" />
-            ) : (
-              <Button
-                icon={<Add />}
-                hoverIndicator
-                onClick={() => this.setState({ adding: true })}
-              />
-            )}
-            {this.renderTree(1)}
-            {adding && (
-              <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
-            )}
-          </Box>
+              {responsive !== 'small' && (
+                <Box background="light-2">
+                  {selectedComponentType.text ? (
+                    <Box height="xxsmall" />
+                  ) : (
+                    <Button
+                      icon={<Add />}
+                      hoverIndicator
+                      onClick={() => this.setState({ adding: true })}
+                    />
+                  )}
+                  {this.renderTree(1)}
+                  {adding && (
+                    <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
+                  )}
+                </Box>
+              )}
 
-          <Box>
-            {this.renderComponent(1)}
-          </Box>
+              <Box>
+                {this.renderComponent(1)}
+              </Box>
 
-          <Properties
-            component={design[selected]}
-            onSetText={text => this.setText(selected, text)}
-            onSetProp={(propName, value) => this.setProp(selected, propName, value)}
-            onDelete={() => this.onDelete(selected)}
-          />
+              {responsive !== 'small' && (
+                <Properties
+                  component={design[selected]}
+                  onSetText={text => this.setText(selected, text)}
+                  onSetProp={(propName, value) => this.setProp(selected, propName, value)}
+                  onDelete={() => this.onDelete(selected)}
+                />
+              )}
 
-        </Grid>
+            </Grid>
+          )}
+        </ResponsiveContext.Consumer>
       </Grommet>
     );
   }
