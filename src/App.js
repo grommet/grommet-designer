@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Grommet, Grid, ResponsiveContext, Text, grommet,
+  Box, Button, Grommet, Grid, ResponsiveContext, Text, dark, grommet,
 } from 'grommet';
 import { Add, Share, Trash } from 'grommet-icons';
+import { dxc } from 'grommet-theme-dxc';
+import { hpe } from 'grommet-theme-hpe';
 import LZString from 'lz-string';
 import { componentTypes, Adder } from './Types';
 import Properties from './Properties';
+
+const themes = { dark, dxc, hpe, grommet };
 
 const bare = [
   undefined, // leave id 0 undefined
@@ -51,6 +55,9 @@ class App extends Component {
         const selected = JSON.parse(localStorage.getItem('selected')) || 1;
         this.setState({ design, selected });
       }
+    }
+    if (params.theme) {
+      this.setState({ theme: themes[params.theme] });
     }
   }
 
@@ -207,7 +214,7 @@ class App extends Component {
   }
 
   renderComponent = (id) => {
-    const { design, selected } = this.state;
+    const { design, selected, theme } = this.state;
     const component = design[id];
     const componentType = componentTypes[component.componentType];
     return React.createElement(
@@ -220,6 +227,7 @@ class App extends Component {
         },
         style: selected === id ? { outline: '1px dashed red' } : undefined,
         ...component.props,
+        theme: (id === 1 ? (theme || grommet) : undefined),
       },
       component.children
       ? component.children.map(childId => this.renderComponent(childId))
@@ -227,11 +235,11 @@ class App extends Component {
   }
 
   render() {
-    const { adding, design, selected } = this.state;
+    const { adding, design, selected, theme } = this.state;
     const selectedComponent = design[selected];
     const selectedComponentType = componentTypes[selectedComponent.componentType];
     return (
-      <Grommet full theme={grommet}>
+      <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
             <Grid

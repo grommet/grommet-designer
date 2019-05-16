@@ -5,6 +5,8 @@
   "dependencies": {
     "grommet": "^2.7.0",
     "grommet-icons": "^4.2.0",
+    "grommet-theme-dxc": "^0.1.2",
+    "grommet-theme-hpe": "^0.4.2",
     "lz-string": "^1.4.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
