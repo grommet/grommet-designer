@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Grommet, Grid, Heading, Text, grommet,
+  Box, Button, Grommet, Grid, Text, grommet,
 } from 'grommet';
 import { Add } from 'grommet-icons';
 import { componentTypes, Adder } from './Types';
@@ -78,7 +78,7 @@ class App extends Component {
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
-  moveChild = (moveId, afterId) => {
+  moveChild = (moveId, targetId, above) => {
     const { design } = this.state;
     const nextDesign = [...design];
     // remove from old parent
@@ -86,51 +86,68 @@ class App extends Component {
     const priorIndex = priorParent.children.indexOf(moveId);
     priorParent.children.splice(priorIndex, 1);
     // insert into new parent
-    const nextParent = { ...design.find(c => (c && c.children && c.children.includes(afterId)))};
-    const nextIndex = nextParent.children.indexOf(afterId);
-    nextParent.children.splice(nextIndex + 1, 0, moveId);
+    const nextParent = { ...design.find(c => (c && c.children && c.children.includes(targetId)))};
+    const nextIndex = nextParent.children.indexOf(targetId);
+    nextParent.children.splice(above ? nextIndex : nextIndex + 1, 0, moveId);
     nextDesign[priorParent.id] = priorParent;
     nextDesign[nextParent.id] = nextParent;
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
-  renderTree = (id) => {
-    const { design, dragging, dropTarget, selected } = this.state;
+  renderDropArea = (id, above) => {
+    const { dragging, dropAbove, dropTarget } = this.state;
+    return (
+      <Box
+        pad="xxsmall"
+        background={dragging && dropTarget === id && dropAbove === above
+          ? 'accent-2' : undefined}
+        onDragEnter={(event) => {
+          if (dragging && dragging !== id) {
+            event.preventDefault();
+            this.setState({ dropTarget: id, dropAbove: above });
+          } else {
+            this.setState({ dropTarget: undefined });
+          }
+        }}
+        onDragOver={(event) => {
+          if (dragging && dragging !== id) {
+            event.preventDefault();
+          }
+        }}
+        onDrop={() => this.moveChild(dragging, id, above)}
+      />
+    );
+  }
+
+  renderTree = (id, firstChild) => {
+    const { design, dragging, dropAbove, dropTarget, selected } = this.state;
     const component = design[id];
     const componentType = componentTypes[component.componentType];
     return (
       <Box key={id} pad={{ left: 'small' }}>
+        {firstChild && this.renderDropArea(id, true)}
         <Button
           hoverIndicator
           onClick={() => this.select(id)}
           draggable
           onDragStart={() => this.setState({ dragging: id })}
           onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
-          onDragEnter={(event) => {
-            if (dragging !== id) {
-              event.preventDefault();
-              this.setState({ dropTarget: id });
-            } else {
-              this.setState({ dropTarget: undefined });
-            }
+          onDragEnter={() => {
+            if (dropTarget !== id) this.setState({ dropTarget: undefined });
           }}
           onDragOver={(event) => {
-            if (dragging !== id) {
-              event.preventDefault();
-            }
+            if (dragging !== id) event.preventDefault();
           }}
-          onDrop={() => this.moveChild(dragging, id)}
+          onDrop={() => this.moveChild(dragging, id, dropAbove)}
         >
-          <Box
-            pad="xsmall"
-            background={selected === id ? 'accent-1' : undefined}
-            border={dropTarget === id ? { side: 'bottom', color: 'accent-2' } : undefined}
-          >
+          <Box pad="xsmall" background={selected === id ? 'accent-1' : undefined}>
             <Text>{component.name || componentType.name}</Text>
           </Box>
         </Button>
-        {component.children && component.children.map(id => this.renderTree(id))}
+        {component.children &&
+          component.children.map((id, index) => this.renderTree(id, index === 0))}
+        {this.renderDropArea(id, false)}
       </Box>
     )
   }
