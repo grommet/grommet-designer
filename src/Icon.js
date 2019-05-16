@@ -8,7 +8,7 @@ export const names = Object.keys(icons).filter(n => exp.test(n));
 export const SelectLabel = ({ icon }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <Icon icon={icon} />
-    <Text>{icon}</Text>
+    <Text weight="bold">{icon}</Text>
   </Box>
 );
 

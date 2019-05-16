@@ -10,7 +10,7 @@ import { SelectLabel as IconLabel } from './Icon';
 const ColorLabel = ({ color }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <Box pad="small" background={color} />
-    <Text>{color}</Text>
+    <Text weight="bold">{color}</Text>
   </Box>
 );
 
@@ -52,7 +52,7 @@ export default class Properties extends Component {
               const property = componentType.properties[propName];
               if (Array.isArray(property)) {
                 const isColor = property.includes('light-1');
-                const isIcon = componentType.name === 'Icon';
+                const isIcon = componentType.name === 'Icon' && propName === 'icon';
                 return (
                   <FormField key={propName} name={propName} label={propName}>
                     <Select
