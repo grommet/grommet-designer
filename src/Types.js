@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Anchor, Box, Button, FormField, Grid, Grommet, Heading, Layer,
+  Anchor, Box, Button, CheckBox, FormField, Grid, Grommet, Heading, Layer,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
@@ -14,13 +14,21 @@ export const componentTypes = {
     sample: <Box pad="xsmall" border>Box</Box>,
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
+      animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
       background: colors,
+      basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
       direction: ['column', 'row'],
+      elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       fill: ['horizontal', 'vertical'],
-      gap: ['xsmall', 'small', 'medium', 'large'],
+      flex: ['grow', 'shrink'],
+      gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      height: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       justify: ['between', 'start', 'center', 'end'],
-      round: ['xsmall', 'small', 'medium', 'large', 'full'],
+      margin: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      overflow: ['auto', 'hidden', 'scroll', 'visible'],
       pad: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      round: ['xsmall', 'small', 'medium', 'large', 'full'],
+      width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
     },
   },
   Grid: {
@@ -101,6 +109,17 @@ export const componentTypes = {
   Menu: {
     component: Menu,
     name: 'Menu',
+  },
+  CheckBox: {
+    component: CheckBox,
+    name: 'CheckBox',
+    properties: {
+      checked: false,
+      disabled: false,
+      label: 'enabled?',
+      reverse: false,
+      toggle: false,
+    },
   },
   FormField: {
     component: FormField,
