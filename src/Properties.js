@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box, Button, CheckBox, FormField, Heading, Select, TextArea, TextInput,
+  Box, Button, CheckBox, FormField, Heading, Select, Text, TextArea, TextInput,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { componentTypes } from './Types';
@@ -27,9 +27,10 @@ export default (props) => {
             return (
               <FormField key={propName} name={propName} label={propName}>
                 <Select
-                  options={property}
+                  options={[...property, 'undefined']}
                   value={component.props[propName] || ''}
-                  onChange={({ option }) => onSetProp(propName, option)}
+                  onChange={({ option }) =>
+                    onSetProp(propName, option === 'undefined' ? undefined : option)}
                 />
               </FormField>
             );

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  Anchor, Box, Button, CheckBox, FormField, Grid, Grommet, Heading, Layer,
+  Anchor, Box, Button, Calendar, CheckBox, FormField,
+  Grid, Grommet, Heading, Layer,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
@@ -146,6 +147,16 @@ export const componentTypes = {
       placeholder: '',
     }
   },
+  Calendar: {
+    component: Calendar,
+    name: 'Calendar',
+    properties: {
+      animate: false,
+      daysOfWeek: false,
+      range: false,
+      size: ['small', 'medium', 'large'],
+    },
+  },
   Meter: {
     component: Meter,
     name: 'Meter',
@@ -159,19 +170,21 @@ export const Adder = ({ onAdd, onClose }) => (
     onEsc={onClose}
     onClickOutside={onClose}
   >
-    <Grid columns="small" rows="xxsmall">
-      {Object.keys(componentTypes).filter(key => key !== 'Grommet').map((key) => {
-        const componentType = componentTypes[key];
-        return (
-          <Box fill key={key} round="small" overflow="hidden">
-            <Button fill hoverIndicator onClick={() => onAdd(key)}>
-              <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
-                {componentType.sample || componentType.name}
-              </Box>
-            </Button>
-          </Box>
-        );
-      })}
-    </Grid>
+    <Box fill="vertical" overflow="auto">
+      <Grid columns="small" rows="xxsmall">
+        {Object.keys(componentTypes).filter(key => key !== 'Grommet').map((key) => {
+          const componentType = componentTypes[key];
+          return (
+            <Box fill key={key} round="small" overflow="hidden">
+              <Button fill hoverIndicator onClick={() => onAdd(key)}>
+                <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
+                  {componentType.sample || componentType.name}
+                </Box>
+              </Button>
+            </Box>
+          );
+        })}
+      </Grid>
+    </Box>
   </Layer>
 );
