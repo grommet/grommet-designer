@@ -6,7 +6,12 @@ import {
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
 
-const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors });
+const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
+const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
+  // prune out colors we tend to use internally
+  .filter(color => (typeof base.global.colors[color] === 'string'
+    && !internalColors.includes(color)))
+  .sort((c1, c2) => (c1 > c2 ? 1 : -1));
 
 export const componentTypes = {
   Box: {
@@ -160,6 +165,13 @@ export const componentTypes = {
   Meter: {
     component: Meter,
     name: 'Meter',
+    properties: {
+      background: colors,
+      round: false,
+      size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
+      thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      type: ['bar', 'circle'],
+    },
   },
 };
 
