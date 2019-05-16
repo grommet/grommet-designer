@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Box, Button, Grommet, Grid, ResponsiveContext, Text, grommet,
 } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+import { Add, Share, Trash } from 'grommet-icons';
+import LZString from 'lz-string';
 import { componentTypes, Adder } from './Types';
 import Properties from './Properties';
 
@@ -18,11 +19,23 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const stored = localStorage.getItem('design');
-    if (stored) {
-      const design = JSON.parse(stored);
-      const selected = JSON.parse(localStorage.getItem('selected')) || 1;
-      this.setState({ design, selected });
+    const { location } = document;
+    const params = {};
+    location.search.slice(1).split('&').forEach(p => {
+      const [k, v] = p.split('=');
+      params[k] = v;
+    });
+    if (params.d) {
+      const text = LZString.decompressFromEncodedURIComponent(params.d);
+      const design = JSON.parse(text);
+      this.setState({ design, selected: 1 });
+    } else {
+      const stored = localStorage.getItem('design');
+      if (stored) {
+        const design = JSON.parse(stored);
+        const selected = JSON.parse(localStorage.getItem('selected')) || 1;
+        this.setState({ design, selected });
+      }
     }
   }
 
@@ -107,9 +120,11 @@ class App extends Component {
   }
 
   reset = () => {
+    const { location } = document;
     this.setState({ design: { ...bare }, selected: 1 });
     localStorage.removeItem('design');
     localStorage.removeItem('selected');
+    location.replace('?');
   }
 
   renderDropArea = (id, where) => {
@@ -224,7 +239,22 @@ class App extends Component {
                   <Box flex="grow">
                     {this.renderTree(1)}
                   </Box>
-                  <Button title="delete all" icon={<Trash />} onClick={this.reset} />
+                  <Box direction="row" justify="between" align="center">
+                    <Button
+                      title="delete all"
+                      icon={<Trash />}
+                      hoverIndicator
+                      onClick={this.reset}
+                    />
+                    <Button
+                      title="share"
+                      icon={<Share />}
+                      hoverIndicator
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`?d=${LZString.compressToEncodedURIComponent(JSON.stringify(design))}`}
+                    />
+                  </Box>
                   {adding && (
                     <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
                   )}

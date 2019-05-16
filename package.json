@@ -5,6 +5,7 @@
   "dependencies": {
     "grommet": "^2.7.0",
     "grommet-icons": "^4.2.0",
+    "lz-string": "^1.4.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
