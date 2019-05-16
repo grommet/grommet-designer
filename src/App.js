@@ -59,6 +59,9 @@ class App extends Component {
     if (params.theme) {
       this.setState({ theme: themes[params.theme] });
     }
+    if (params.preview) {
+      this.setState({ preview: true });
+    }
   }
 
   onAdd = (componentType) => {
@@ -235,7 +238,7 @@ class App extends Component {
   }
 
   render() {
-    const { adding, design, selected, theme } = this.state;
+    const { adding, design, preview, selected, theme } = this.state;
     const selectedComponent = design[selected];
     const selectedComponentType = componentTypes[selectedComponent.componentType];
     return (
@@ -244,10 +247,11 @@ class App extends Component {
           {(responsive) => (
             <Grid
               fill
-              columns={responsive === 'small' ? 'flex' : ['small', 'flex', 'small']}
+              columns={(responsive === 'small' || preview)
+                ? 'flex' : ['small', 'flex', 'small']}
             >
 
-              {responsive !== 'small' && (
+              {responsive !== 'small' && !preview && (
                 <Box background="light-2">
                   {selectedComponentType.text || selectedComponentType.name === 'Icon' ? (
                     <Box height="xxsmall" />
@@ -288,7 +292,7 @@ class App extends Component {
                 {this.renderComponent(1)}
               </Box>
 
-              {responsive !== 'small' && (
+              {responsive !== 'small' && !preview && (
                 <Properties
                   component={design[selected]}
                   onSetText={text => this.setText(selected, text)}
