@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Anchor, Box, Button, CheckBox, FormField, Heading, Select,
-  Text, TextArea, TextInput,
+  Anchor, Box, Button, Heading, TextArea,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { componentTypes } from './Types';
-import { SelectLabel as IconLabel } from './Icon';
-
-const ColorLabel = ({ color }) => (
-  <Box pad="small" direction="row" gap="small" align="center">
-    <Box pad="small" background={color} />
-    <Text weight="bold">{color}</Text>
-  </Box>
-);
+import Property from './Property';
 
 export default class Properties extends Component {
 
@@ -48,55 +40,14 @@ export default class Properties extends Component {
           }
           <Box flex="grow">
             {componentType.properties &&
-            Object.keys(componentType.properties).map((propName) => {
-              const property = componentType.properties[propName];
-              if (Array.isArray(property)) {
-                const isColor = property.includes('light-1');
-                const isIcon = componentType.name === 'Icon' && propName === 'icon';
-                return (
-                  <FormField key={propName} name={propName} label={propName}>
-                    <Select
-                      options={[...property, 'undefined']}
-                      value={component.props[propName] || ''}
-                      valueLabel={isColor && component.props[propName] ? (
-                        <ColorLabel color={component.props[propName]} />
-                      ) : (isIcon ? (
-                        <IconLabel icon={component.props[propName]} />
-                      ) : undefined)}
-                      onChange={({ option }) =>
-                        onSetProp(propName, option === 'undefined' ? undefined : option)}
-                    >
-                      {isColor
-                        ? (option) => <ColorLabel color={option} />
-                        : (isIcon ? (option) => <IconLabel icon={option} /> : null)}
-                    </Select>
-                  </FormField>
-                );
-              } else if (typeof property === 'string') {
-                return (
-                  <FormField key={propName} name={propName} label={propName}>
-                    <TextInput
-                      value={component.props[propName] || ''}
-                      onChange={(event) => onSetProp(propName, event.target.value)}
-                    />
-                  </FormField>
-                );
-              } else if (typeof property === 'boolean') {
-                return (
-                  <FormField key={propName} name={propName}>
-                    <Box pad="small">
-                      <CheckBox
-                        label={propName}
-                        toggle
-                        checked={!!component.props[propName]}
-                        onChange={(event) => onSetProp(propName, event.target.checked)}
-                      />
-                    </Box>
-                  </FormField>
-                );
-              }
-              return null;
-            })}
+            Object.keys(componentType.properties).map((propName) => (
+              <Property
+                key={propName}
+                component={component}
+                propName={propName}
+                onSetProp={onSetProp}
+              />
+            ))}
           </Box>
           {componentType.name !== 'Grommet' &&
             <Box flex={false} margin={{ top: 'medium' }}>
