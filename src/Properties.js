@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, FormField, Heading, Select, TextArea, TextInput,
+  Box, Button, CheckBox, FormField, Heading, Select, Text, TextArea, TextInput,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { componentTypes } from './Types';
+
+const ColorLabel = ({ color }) => (
+  <Box pad="small" direction="row" gap="small" align="center">
+    <Box pad="small" background={color} />
+    <Text>{color}</Text>
+  </Box>
+);
 
 export default class Properties extends Component {
 
@@ -41,14 +48,20 @@ export default class Properties extends Component {
           Object.keys(componentType.properties).map((propName) => {
             const property = componentType.properties[propName];
             if (Array.isArray(property)) {
+              const isColor = property.includes('light-1');
               return (
                 <FormField key={propName} name={propName} label={propName}>
                   <Select
                     options={[...property, 'undefined']}
                     value={component.props[propName] || ''}
+                    valueLabel={isColor && component.props[propName] ? (
+                      <ColorLabel color={component.props[propName]} />
+                    ) : undefined}
                     onChange={({ option }) =>
                       onSetProp(propName, option === 'undefined' ? undefined : option)}
-                  />
+                  >
+                    {isColor ? (option) => <ColorLabel color={option} /> : null}
+                  </Select>
                 </FormField>
               );
             } else if (typeof property === 'string') {
