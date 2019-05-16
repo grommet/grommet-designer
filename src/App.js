@@ -12,9 +12,24 @@ const bare = [
   { id: 1, componentType: 'Grommet', props: { style: { height: '100vh' } } },
 ];
 
+const rich = [
+  undefined,
+  { id: 1, componentType: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
+  { id: 2, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
+  { id: 3, componentType: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
+  { id: 4, componentType: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
+  { id: 5, componentType: 'Icon', props: { icon: 'LinkPrevious'} },
+  { id: 6, componentType: 'Paragraph', props:{}, text: 'Design using real grommet components!'},
+  { id: 7, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
+  { id: 8, componentType: 'Text', props: {}, text: 'add components' },
+  { id: 9, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
+  { id: 10, componentType: 'Text', props: {}, text: 'describe components' },
+  { id: 11, componentType: 'Icon', props: { icon: 'LinkNext'} },
+];
+
 class App extends Component {
   state = {
-    design: bare,
+    design: rich,
     selected: 1,
   }
 
@@ -122,8 +137,8 @@ class App extends Component {
   reset = () => {
     const { location } = document;
     this.setState({ design: { ...bare }, selected: 1 });
-    localStorage.removeItem('design');
-    localStorage.removeItem('selected');
+    localStorage.setItem('design', JSON.stringify(bare));
+    localStorage.setItem('selected', 1);
     location.replace('?');
   }
 
