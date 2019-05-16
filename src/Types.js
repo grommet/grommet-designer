@@ -5,6 +5,7 @@ import {
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
+import Icon, { names as iconNames } from './Icon';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
 const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
@@ -84,6 +85,14 @@ export const componentTypes = {
     properties: {
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
     },
+  },
+  Icon: {
+    component: Icon,
+    name: 'Icon',
+    properties: {
+      icon: iconNames,
+      size: ['small', 'medium', 'large'],
+    }
   },
   Anchor: {
     component: Anchor,

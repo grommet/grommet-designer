@@ -5,6 +5,7 @@ import {
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { componentTypes } from './Types';
+import { SelectLabel as IconLabel } from './Icon';
 
 const ColorLabel = ({ color }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -51,6 +52,7 @@ export default class Properties extends Component {
               const property = componentType.properties[propName];
               if (Array.isArray(property)) {
                 const isColor = property.includes('light-1');
+                const isIcon = componentType.name === 'Icon';
                 return (
                   <FormField key={propName} name={propName} label={propName}>
                     <Select
@@ -58,11 +60,15 @@ export default class Properties extends Component {
                       value={component.props[propName] || ''}
                       valueLabel={isColor && component.props[propName] ? (
                         <ColorLabel color={component.props[propName]} />
-                      ) : undefined}
+                      ) : (isIcon ? (
+                        <IconLabel icon={component.props[propName]} />
+                      ) : undefined)}
                       onChange={({ option }) =>
                         onSetProp(propName, option === 'undefined' ? undefined : option)}
                     >
-                      {isColor ? (option) => <ColorLabel color={option} /> : null}
+                      {isColor
+                        ? (option) => <ColorLabel color={option} />
+                        : (isIcon ? (option) => <IconLabel icon={option} /> : null)}
                     </Select>
                   </FormField>
                 );
