@@ -27,7 +27,12 @@ class App extends Component {
   onAdd = (componentType) => {
     const { design, selected } = this.state;
     const nextDesign = [...design];
-    const component = { componentType, id: design.length, props: {} };
+    const type = componentTypes[componentType];
+    const component = {
+      componentType,
+      id: design.length,
+      props: type.defaultProps ? { ...type.defaultProps } : {},
+    };
     nextDesign[component.id] = component;
     const parent = { ...design[selected] };
     if (!parent.children) parent.children = [];
