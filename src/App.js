@@ -157,19 +157,22 @@ class App extends Component {
 
   render() {
     const { adding, design, selected } = this.state;
+    const selectedComponent = design[selected];
+    const selectedComponentType = componentTypes[selectedComponent.componentType];
     return (
       <Grommet full theme={grommet}>
         <Grid fill columns={['small', 'flex', 'small']}>
 
           <Box background="light-2">
-            <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
-              components
-            </Heading>
-            <Button
-              icon={<Add />}
-              hoverIndicator
-              onClick={() => this.setState({ adding: true })}
-            />
+            {selectedComponentType.text ? (
+              <Box height="xxsmall" />
+            ) : (
+              <Button
+                icon={<Add />}
+                hoverIndicator
+                onClick={() => this.setState({ adding: true })}
+              />
+            )}
             {this.renderTree(1)}
             {adding && (
               <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
