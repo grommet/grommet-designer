@@ -80,39 +80,49 @@ class App extends Component {
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
-  moveChild = (moveId, targetId, above) => {
+  moveChild = (moveId, targetId, where) => {
     const { design } = this.state;
     const nextDesign = [...design];
     // remove from old parent
     const priorParent = { ...design.find(c => (c && c.children && c.children.includes(moveId)))};
     const priorIndex = priorParent.children.indexOf(moveId);
     priorParent.children.splice(priorIndex, 1);
-    // insert into new parent
-    const nextParent = { ...design.find(c => (c && c.children && c.children.includes(targetId)))};
-    const nextIndex = nextParent.children.indexOf(targetId);
-    nextParent.children.splice(above ? nextIndex : nextIndex + 1, 0, moveId);
     nextDesign[priorParent.id] = priorParent;
-    nextDesign[nextParent.id] = nextParent;
+    // insert into new parent
+    if (where === 'in') {
+      const parent = { ...design[targetId] };
+      if (!parent.children) parent.children = [];
+      parent.children.unshift(moveId);
+      nextDesign[parent.id] = parent;
+    } else {
+      const nextParent =
+        { ...design.find(c => (c && c.children && c.children.includes(targetId)))};
+      const nextIndex = nextParent.children.indexOf(targetId);
+      nextParent.children.splice(where === 'above' ? nextIndex : nextIndex + 1,
+        0, moveId);
+      nextDesign[nextParent.id] = nextParent;
+    }
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
   reset = () => {
     this.setState({ design: { ...bare }, selected: 1 });
-    localStorage.setItem('design', JSON.stringify(bare));
+    localStorage.removeItem('design');
+    localStorage.removeItem('selected');
   }
 
-  renderDropArea = (id, above) => {
-    const { dragging, dropAbove, dropTarget } = this.state;
+  renderDropArea = (id, where) => {
+    const { dragging, dropWhere, dropTarget } = this.state;
     return (
       <Box
         pad="xxsmall"
-        background={dragging && dropTarget === id && dropAbove === above
+        background={dragging && dropTarget === id && dropWhere === where
           ? 'accent-2' : undefined}
         onDragEnter={(event) => {
           if (dragging && dragging !== id) {
             event.preventDefault();
-            this.setState({ dropTarget: id, dropAbove: above });
+            this.setState({ dropTarget: id, dropWhere: where });
           } else {
             this.setState({ dropTarget: undefined });
           }
@@ -122,18 +132,18 @@ class App extends Component {
             event.preventDefault();
           }
         }}
-        onDrop={() => this.moveChild(dragging, id, above)}
+        onDrop={() => this.moveChild(dragging, id, where)}
       />
     );
   }
 
   renderTree = (id, firstChild) => {
-    const { design, dragging, dropAbove, dropTarget, selected } = this.state;
+    const { design, dragging, dropTarget, dropWhere, selected } = this.state;
     const component = design[id];
     const componentType = componentTypes[component.componentType];
     return (
       <Box key={id} pad={{ left: 'small' }}>
-        {firstChild && this.renderDropArea(id, true)}
+        {firstChild && this.renderDropArea(id, 'before')}
         <Button
           hoverIndicator
           onClick={() => this.select(id)}
@@ -141,20 +151,27 @@ class App extends Component {
           onDragStart={() => this.setState({ dragging: id })}
           onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
           onDragEnter={() => {
-            if (dropTarget !== id) this.setState({ dropTarget: undefined });
+            if (dragging && dragging !== id && !componentType.text
+              && componentType.name !== 'Icon') {
+              this.setState({ dropTarget: id, dropWhere: 'in' });
+            }
           }}
           onDragOver={(event) => {
-            if (dragging !== id) event.preventDefault();
+            if (dragging && dragging !== id) event.preventDefault();
           }}
-          onDrop={() => this.moveChild(dragging, id, dropAbove)}
+          onDrop={() => this.moveChild(dragging, id, dropWhere)}
         >
-          <Box pad="xsmall" background={selected === id ? 'accent-1' : undefined}>
+          <Box
+            pad="xsmall"
+            background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
+              (selected === id ? 'accent-1' : undefined)}
+          >
             <Text>{component.name || componentType.name}</Text>
           </Box>
         </Button>
         {component.children &&
           component.children.map((id, index) => this.renderTree(id, index === 0))}
-        {this.renderDropArea(id, false)}
+        {this.renderDropArea(id, 'after')}
       </Box>
     )
   }
@@ -194,7 +211,7 @@ class App extends Component {
 
               {responsive !== 'small' && (
                 <Box background="light-2">
-                  {selectedComponentType.text ? (
+                  {selectedComponentType.text || selectedComponentType.name === 'Icon' ? (
                     <Box height="xxsmall" />
                   ) : (
                     <Button

@@ -26,6 +26,7 @@ export const componentTypes = {
     },
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
+      alignSelf: ['stretch', 'start', 'center', 'end'],
       animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
       background: colors,
       basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
