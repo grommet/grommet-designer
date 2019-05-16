@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, FormField, Grommet, Grid, Heading, Layer,
-  Select, Text, TextArea, TextInput, grommet,
+  Box, Button, Grommet, Grid, Heading, Text, grommet,
 } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+import { Add } from 'grommet-icons';
 import { componentTypes, Adder } from './Types';
+import Properties from './Properties';
 
 class App extends Component {
   state = {
@@ -152,8 +152,6 @@ class App extends Component {
 
   render() {
     const { adding, design, selected } = this.state;
-    const selectedComponent = design[selected];
-    const selectedComponentType = componentTypes[selectedComponent.componentType];
     return (
       <Grommet full theme={grommet}>
         <Grid fill columns={['small', 'flex', 'small']}>
@@ -177,51 +175,12 @@ class App extends Component {
             {this.renderComponent(1)}
           </Box>
 
-          <Box background="light-2">
-            <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
-              {selectedComponent.name || selectedComponentType.name}
-            </Heading>
-            {selectedComponentType.text &&
-              <TextArea
-                value={selectedComponent.text}
-                onChange={event => this.setText(selected, event.target.value)}
-              />
-            }
-            {selectedComponentType.properties &&
-            Object.keys(selectedComponentType.properties).map((propName) => {
-              const property = selectedComponentType.properties[propName];
-              if (Array.isArray(property)) {
-                return (
-                  <FormField key={propName} name={propName} label={propName}>
-                    <Select
-                      options={property}
-                      value={selectedComponent.props[propName] || ''}
-                      onChange={({ option }) => this.setProp(selected, propName, option)}
-                    />
-                  </FormField>
-                );
-              } else if (typeof property === 'string') {
-                return (
-                  <FormField key={propName} name={propName} label={propName}>
-                    <TextInput
-                      value={selectedComponent.props[propName] || ''}
-                      onChange={(event) => this.setProp(selected, propName, event.target.value)}
-                    />
-                  </FormField>
-                );
-              }
-              return null;
-            })}
-            {selectedComponentType.name !== 'Grommet' &&
-              <Box margin={{ vertical: 'medium' }}>
-                <Button
-                  icon={<Trash />}
-                  hoverIndicator
-                  onClick={() => this.onDelete(selected)}
-                />
-              </Box>
-            }
-          </Box>
+          <Properties
+            component={design[selected]}
+            onSetText={text => this.setText(selected, text)}
+            onSetProp={(propName, value) => this.setProp(selected, propName, value)}
+            onDelete={() => this.onDelete(selected)}
+          />
 
         </Grid>
       </Grommet>
