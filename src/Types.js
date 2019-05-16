@@ -19,6 +19,11 @@ export const componentTypes = {
     component: Box,
     name: 'Box',
     sample: <Box pad="xsmall" border>Box</Box>,
+    defaultProps: {
+      align: 'center',
+      justify: 'center',
+      pad: 'small',
+    },
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
       animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
@@ -52,6 +57,11 @@ export const componentTypes = {
         <Box pad="xsmall" border>Stack</Box>
       </Stack>
     ),
+    properties: {
+      anchor: ['center', 'top', 'bottom', 'left', 'right'],
+      fill: false,
+      guidingChild: ['first', 'last'],
+    },
   },
   Layer: {
     component: Layer,
@@ -63,7 +73,7 @@ export const componentTypes = {
     component: Heading,
     name: 'Heading',
     sample: <Heading size="small" margin="none">Heading</Heading>,
-    text: true,
+    text: 'Heading',
     properties: {
       level: ['1', '2', '3', '4'],
       margin: ['none', 'small', 'medium', 'large'],
@@ -73,7 +83,7 @@ export const componentTypes = {
   Paragraph: {
     component: Paragraph,
     name: 'Paragraph',
-    text: true,
+    text: 'Paragraph',
     properties: {
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
     },
@@ -81,7 +91,7 @@ export const componentTypes = {
   Text: {
     component: Text,
     name: 'Text',
-    text: true,
+    text: 'Text',
     properties: {
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
     },

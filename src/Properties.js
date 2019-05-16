@@ -42,7 +42,7 @@ export default class Properties extends Component {
           </Heading>
           {componentType.text &&
             <TextArea
-              value={component.text}
+              value={component.text || componentType.text}
               onChange={event => onSetText(event.target.value)}
             />
           }

@@ -147,7 +147,7 @@ class App extends Component {
       },
       component.children
       ? component.children.map(childId => this.renderComponent(childId))
-      : component.text);
+      : component.text || componentType.text);
   }
 
   render() {
