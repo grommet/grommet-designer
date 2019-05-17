@@ -174,9 +174,11 @@ class Tree extends Component {
                   ? 'active' : undefined)
               }
             >
-              <Text>
+              <Text truncate>
                 {component.type === 'Layer' ? `${type.name} ${component.id}`
-                  : component.name || type.name}
+                  : component.text
+                  || component.props.name || component.props.label
+                  || component.name || type.name}
               </Text>
             </Box>
           </Button>
