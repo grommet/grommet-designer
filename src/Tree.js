@@ -80,6 +80,7 @@ class Tree extends Component {
     let nextScreen = screen - 1;
     while (nextScreen && !design[nextScreen]) nextScreen -= 1;
     onChange({ design: nextDesign, screen: nextScreen, selected: 1 });
+    this.setState({ confirmDelete: false });
   }
 
   reset = () => {
@@ -87,6 +88,7 @@ class Tree extends Component {
     const { onChange } = this.props;
     const nextDesign = [undefined, { id: 1, components: [...bare] }];
     onChange({ design: nextDesign, screen: 1, selected: 1 });
+    this.setState({ confirmReset: false });
     location.replace('?');
   }
 
@@ -163,7 +165,7 @@ class Tree extends Component {
 
   render() {
     const { design, screen, selected } = this.props;
-    const { adding } = this.state;
+    const { adding, confirmDelete, confirmReset } = this.state;
     const selectedComponent = design[screen].components[selected];
     const selectedtype = types[selectedComponent.type];
     return (
@@ -186,7 +188,22 @@ class Tree extends Component {
                   {`Screen ${s.id}`}
                 </Heading>
                 {s.id === screen && design.length > 1 ? (
-                  <Button icon={<Trash />} onClick={this.deleteScreen} />
+                  <Box direction="row" align="center">
+                    {confirmDelete && (
+                      <Button
+                        title="confirm delete"
+                        icon={<Trash color="status-critical" />}
+                        hoverIndicator
+                        onClick={this.deleteScreen}
+                      />
+                    )}
+                    <Button
+                      title="delete screen"
+                      icon={<Trash />}
+                      hoverIndicator
+                      onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+                    />
+                  </Box>
                 ) : null}
               </Box>
               {this.renderTree(s.id, 1)}
@@ -198,8 +215,16 @@ class Tree extends Component {
             title="delete all"
             icon={<Trash />}
             hoverIndicator
-            onClick={this.reset}
+            onClick={() => this.setState({ confirmReset: !confirmReset })}
           />
+          {confirmReset && (
+            <Button
+              title="confirm delete"
+              icon={<Trash color="status-critical" />}
+              hoverIndicator
+              onClick={this.reset}
+            />
+          )}
           <Button
             title="share"
             icon={<Share />}

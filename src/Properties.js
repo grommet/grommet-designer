@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Anchor, Box, Button, CheckBox, Heading, Select, TextArea,
+  Box, Button, CheckBox, Heading, Select, TextArea,
 } from 'grommet';
-import { Duplicate, Trash } from 'grommet-icons';
+import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
 
@@ -51,6 +51,27 @@ export default class Properties extends Component {
     const { design, screen, id, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     nextDesign[screen].components[id].hide = hide;
+    onChange({ design: nextDesign });
+  }
+
+  duplicateComponent = (nextDesign, screen, id) => {
+    const dupId = nextDesign[screen].components.length;
+    const dup = { ...nextDesign[screen].components[id], id: dupId };
+    nextDesign[screen].components[dupId] = dup;
+    if (dup.children) {
+      dup.children = dup.children
+        .map(c => this.duplicateComponent(nextDesign, screen, c));
+    }
+    return dupId;
+  }
+
+  duplicate = () => {
+    const { design, screen, id, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const dupId = this.duplicateComponent(nextDesign, screen, id);
+    const parent = nextDesign[screen].components
+      .find(c => (c && c.children && c.children.includes(id)));
+    parent.children.push(dupId);
     onChange({ design: nextDesign });
   }
 
@@ -137,30 +158,34 @@ export default class Properties extends Component {
             <Box flex={false} margin={{ top: 'medium' }}>
               <Box direction="row" align="center" justify="between">
                 <Button
-                  title="delete"
-                  icon={<Trash />}
+                  title="duplicate"
+                  icon={<Duplicate />}
                   hoverIndicator
-                  onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+                  onClick={() => this.duplicate()}
+                />
+                <Button
+                  title="documentation"
+                  icon={<CircleInformation />}
+                  hoverIndicator
+                  target="_blank"
+                  href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
                 />
                 {confirmDelete && (
                   <Button
                     title="confirm delete"
                     icon={<Trash color="status-critical" />}
                     hoverIndicator
-                    onClick={onDelete}
+                    onClick={() => {
+                      this.setState({ confirmDelete: false });
+                      onDelete();
+                    }}
                   />
                 )}
                 <Button
-                  title="duplicate"
-                  icon={<Duplicate />}
+                  title="delete"
+                  icon={<Trash />}
                   hoverIndicator
-                  onClick={() => this.duplicate()}
-                />
-              </Box>
-              <Box pad="small">
-                <Anchor
-                  href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
-                  label='docs'
+                  onClick={() => this.setState({ confirmDelete: !confirmDelete })}
                 />
               </Box>
             </Box>
