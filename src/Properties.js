@@ -5,6 +5,7 @@ import {
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
+import { defaultComponent, getComponent, getParent } from './designs';
 
 export default class Properties extends Component {
 
@@ -26,31 +27,34 @@ export default class Properties extends Component {
   // }
 
   setProp = (propName, option) => {
-    const { design, screen, id, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign[screen].components[id];
+    const component = getComponent(nextDesign, selected);
     component.props[propName] = option;
     onChange({ design: nextDesign });
   }
 
   setText = (text) => {
-    const { design, screen, id, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign[screen].components[id].text = text;
+    const component = getComponent(nextDesign, selected);
+    component.text = text;
     onChange({ design: nextDesign });
   }
 
-  link = (screenId) => {
-    const { design, screen, id, onChange } = this.props;
+  link = (to) => {
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign[screen].components[id].linkTo = screenId;
+    const component = getComponent(nextDesign, selected);
+    component.linkTo = to;
     onChange({ design: nextDesign });
   }
 
   setHide = (hide) => {
-    const { design, screen, id, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign[screen].components[id].hide = hide;
+    const component = getComponent(nextDesign, selected);
+    component.hide = hide;
     onChange({ design: nextDesign });
   }
 
@@ -66,27 +70,30 @@ export default class Properties extends Component {
   }
 
   duplicate = () => {
-    const { design, screen, id, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const dupId = this.duplicateComponent(nextDesign, screen, id);
-    const parent = nextDesign[screen].components
-      .find(c => (c && c.children && c.children.includes(id)));
+    const dupId = this.duplicateComponent(nextDesign, selected.screen, selected.component);
+    const parent = getParent(nextDesign, selected);
     parent.children.push(dupId);
     onChange({ design: nextDesign });
   }
 
   render() {
-    const { component, design, screen, onDelete } = this.props;
+    const { component, design, selected, onDelete } = this.props;
     const { confirmDelete } = this.state;
     const type = types[component.type];
     let linkOptions;
     if (type.name === 'Button') {
       // options for what the button should do:
       // open a layer, close the layer it is in, change screens,
+      const screenComponents = design.screens[selected.screen].components;
       linkOptions = [
-        ...design[screen].components.filter(c => c && c.type === 'Layer')
-          .map(c => ({ screen, selected: c.id })),
-        ...design.filter(s => s && s.id !== screen).map(s => ({ screen: s.id })),
+        ...Object.keys(screenComponents).map(k => screenComponents[k])
+          .filter(c => c.type === 'Layer')
+          .map(c => ({ screen: selected.screen, component: c.id })),
+        ...Object.keys(design.screens).map(k => parseInt(k, 10))
+          .filter(sId => sId !== selected.screen)
+          .map(sId => ({ screen: sId, component: defaultComponent(design, sId) })),
         undefined
       ];
     }
@@ -102,7 +109,7 @@ export default class Properties extends Component {
               onChange={event => this.setText(event.target.value)}
             />
           }
-          {type.name === 'Button' && (
+          {type.name === 'Button' && linkOptions.length > 1 && (
             <Box flex={false} margin={{ bottom: 'medium' }}>
               <Select
                 placeholder="link to ..."
@@ -111,8 +118,8 @@ export default class Properties extends Component {
                 onChange={({ option }) => this.link(option || undefined)}
                 valueLabel={component.linkTo ? (
                     <Box pad="small">
-                      {component.linkTo.selected
-                        ? `Layer ${component.linkTo.selected}`
+                      {component.linkTo.screen === selected.screen
+                        ? `Layer ${component.linkTo.component}`
                         : `Screen ${component.linkTo.screen}`}
                     </Box>
                   ) : undefined
@@ -122,7 +129,8 @@ export default class Properties extends Component {
                   if (option) {
                     return (
                       <Box pad="small">
-                        {option.selected ? `Layer ${option.selected}`
+                        {option.screen === selected.screen
+                          ? `Layer ${option.component}`
                           : `Screen ${option.screen}`}
                       </Box>
                     );

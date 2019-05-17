@@ -9,16 +9,12 @@ import { types } from './Types';
 import Properties from './Properties';
 import Tree from './Tree';
 import Icon from './Icon';
-import { rich } from './designs';
+import { getComponent, getParent, resetState, rich } from './designs';
 
 const themes = { dark, dxc, hpe, grommet };
 
 class App extends Component {
-  state = {
-    design: [undefined, { id: 1, components: [...rich] }],
-    screen: 1,
-    selected: 1,
-  }
+  state = resetState(rich);
 
   componentDidMount() {
     const { location } = document;
@@ -30,14 +26,15 @@ class App extends Component {
     if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
-      this.setState({ design, screen: 1, selected: 1 });
+      const screen = parseInt(Object.keys(design.screens)[0], 10);
+      const component = parseInt(Object.keys(screen.components)[0], 10);
+      this.setState({ design, selected: { screen, component } });
     } else {
       const stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
-        const screen = JSON.parse(localStorage.getItem('screen')) || 1;
-        const selected = JSON.parse(localStorage.getItem('selected')) || 1;
-        this.setState({ design, screen, selected });
+        const selected = JSON.parse(localStorage.getItem('selected'));
+        this.setState({ design, selected });
       }
     }
     if (params.theme) {
@@ -53,34 +50,34 @@ class App extends Component {
     if (nextState.design) {
       localStorage.setItem('design', JSON.stringify(nextState.design));
     }
-    if (nextState.screen) {
-      localStorage.setItem('screen', nextState.screen);
-    }
     if (nextState.selected) {
-      localStorage.setItem('selected', nextState.selected);
+      localStorage.setItem('selected', JSON.stringify(nextState.selected));
     }
   }
 
   onDelete = () => {
-    const { design, screen, selected } = this.state;
+    const { design, selected } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const parent = nextDesign[screen].components
-      .find(c => (c && c.children && c.children.includes(selected)));
-    nextDesign[screen].components[selected] = undefined;
-    parent.children = parent.children.filter(i => i !== selected);
-    this.onChange({ design: nextDesign, selected: parent.id });
+    // remove from the parent
+    const parent = getParent(nextDesign, selected);
+    parent.children = parent.children.filter(i => i !== selected.component);
+    delete nextDesign.screens[selected.screen].components[selected.component];
+    this.onChange({
+      design: nextDesign,
+      selected: { ...selected, component: parent.id },
+    });
   }
 
   setHide = (id, hide) => {
-    const { design, screen } = this.state;
+    const { design, selected: { screen } } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign[screen].components[id].hide = hide;
+    nextDesign.screens[screen].components[id].hide = hide;
     this.onChange({ design: nextDesign });
   }
 
   renderComponent = (id) => {
-    const { design, screen, selected, theme } = this.state;
-    const component = design[screen].components[id];
+    const { design, selected, theme } = this.state;
+    const component = design.screens[selected.screen].components[id];
     if (!component || component.hide) {
       return null;
     }
@@ -98,30 +95,31 @@ class App extends Component {
       {
         key: id,
         onClick: (event) => {
-          // event.stopPropagation();
+          event.stopPropagation();
           if (component.linkTo) {
-            if (component.linkTo.selected) {
-              const layer = design[screen].components[component.linkTo.selected];
+            if (component.linkTo.screen === selected.screen) {
+              const layer = getComponent(design, component.linkTo);
               this.setHide(layer.id, !layer.hide);
             } else {
-              this.onChange({ ...component.linkTo, selected: 1 });
+              this.onChange({ selected: { ...component.linkTo } });
             }
           } else {
-            this.onChange({ selected: id });
+            this.onChange({ selected: { ...selected, component: id } });
           }
         },
-        style: selected === id ? { outline: '1px dashed red' } : undefined,
+        style: selected.component === id
+          ? { outline: '1px dashed red' } : undefined,
         ...component.props,
         ...specialProps,
-        theme: (id === 1 ? (theme || grommet) : undefined),
+        theme: (type.name === 'Grommet' ? (theme || grommet) : undefined),
       },
       component.children
-      ? component.children.map(childId => this.renderComponent(childId))
-      : component.text || type.text);
+        ? component.children.map(childId => this.renderComponent(childId))
+        : component.text || type.text);
   }
 
   render() {
-    const { design, preview, screen, selected, theme } = this.state;
+    const { design, preview, selected, theme } = this.state;
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
@@ -135,22 +133,21 @@ class App extends Component {
               {responsive !== 'small' && !preview && (
                 <Tree
                   design={design}
-                  screen={screen}
                   selected={selected}
                   onChange={this.onChange}
                 />
               )}
 
               <Box>
-                {this.renderComponent(1)}
+                {this.renderComponent(parseInt(Object.keys(
+                  design.screens[selected.screen].components)[0], 10))}
               </Box>
 
               {responsive !== 'small' && !preview && (
                 <Properties
                   design={design}
-                  screen={screen}
-                  id={selected}
-                  component={design[screen].components[selected]}
+                  selected={selected}
+                  component={getComponent(design, selected)}
                   onChange={this.onChange}
                   onDelete={this.onDelete}
                 />

@@ -3,160 +3,176 @@ import { Box, Button, Heading, Stack, Text } from 'grommet';
 import { Add, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import LZString from 'lz-string';
 import { types, Adder } from './Types';
-import { bare } from './designs';
+import {
+  addScreen, defaultComponent, getComponent, getParent, bare, resetState,
+} from './designs';
 
 class Tree extends Component {
   state = {}
 
   onAdd = (typeName) => {
-    const { design, screen, selected, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    let nextScreen;
-    let nextSelected;
+    const nextSelected = { ...selected };
     if (typeName === 'Screen') {
-      nextDesign.push({ id: nextDesign.length, components: [...bare] });
-      nextScreen = nextDesign.length - 1;
-      nextSelected = 1;
+      nextSelected.screen = addScreen(nextDesign, bare);
+      nextSelected.component = parseInt(Object.keys(
+        nextDesign.screens[nextSelected.screen].components)[0], 10);
     } else {
       const type = types[typeName];
+      const id = nextDesign.nextId;
+      nextDesign.nextId += 1;
       const component = {
         type: typeName,
-        id: nextDesign[screen].components.length,
+        id,
         props: type.defaultProps ? { ...type.defaultProps } : {},
       };
-      nextDesign[screen].components[component.id] = component;
-      const parent = nextDesign[screen].components[selected];
+      nextDesign.screens[selected.screen].components[component.id] = component;
+      const parent = getComponent(nextDesign, selected);
       if (!parent.children) parent.children = [];
       parent.children.push(component.id);
-      nextScreen = screen;
-      nextSelected = component.id;
+      nextSelected.component = component.id;
     }
     this.setState({ adding: false });
-    onChange({ design: nextDesign, screen: nextScreen, selected: nextSelected });
+    onChange({ design: nextDesign, selected: nextSelected });
   }
 
-  onDelete = (id) => {
-    const { design, screen, onChange } = this.props;
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const parent = nextDesign[screen].components
-      .find(c => (c && c.children && c.children.includes(id)));
-    nextDesign[screen].components[id] = undefined;
-    parent.children = parent.children.filter(i => i !== id);
-    onChange({ design: nextDesign, selected: parent.id });
-  }
+  // onDelete = (id) => {
+  //   const { design, selected, onChange } = this.props;
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   console.log('!!! onDelete', nextDesign, selected, id);
+  //   const parent = nextDesign.screens[selected.screen].components
+  //     .find(c => (c && c.children && c.children.includes(id)));
+  //   nextDesign.screens[selected.screen].components[id] = undefined;
+  //   parent.children = parent.children.filter(i => i !== id);
+  //   const nextSelected = { ...selected, component: parent.id };
+  //   onChange({ design: nextDesign, selected: nextSelected });
+  // }
 
-  select = (screen, selected) => {
+  select = (selected) => {
     const { onChange } = this.props;
-    onChange({ screen, selected });
+    onChange({ selected });
   }
 
-  moveChild = (moveId, targetId, where) => {
-    const { design, screen, onChange } = this.props;
+  moveChild = (dragging, target, where) => {
+    const { design, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
-    const priorParent = nextDesign[screen].components
-      .find(c => (c && c.children && c.children.includes(moveId)));
-    const priorIndex = priorParent.children.indexOf(moveId);
+    const priorParent = getParent(nextDesign, dragging);
+    const priorIndex = priorParent.children.indexOf(dragging.component);
     priorParent.children.splice(priorIndex, 1);
     // insert into new parent
     if (where === 'in') {
-      const parent = nextDesign[screen].components[targetId];
+      const parent = getComponent(nextDesign, target);
       if (!parent.children) parent.children = [];
-      parent.children.unshift(moveId);
+      parent.children.unshift(dragging.component);
     } else {
-      const nextParent = nextDesign[screen].components
-        .find(c => (c && c.children && c.children.includes(targetId)));
-      const nextIndex = nextParent.children.indexOf(targetId);
-      nextParent.children.splice(where === 'above' ? nextIndex : nextIndex + 1,
-        0, moveId);
+      const nextParent = getParent(nextDesign, target);
+      const nextIndex = nextParent.children.indexOf(target.component);
+      nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
+        0, dragging.component);
     }
+    this.setState({ dragging: undefined, dropTarget: undefined });
     onChange({ design: nextDesign });
   }
 
   toggleCollapse = () => {
-    const { design, screen, selected, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign[screen].components[selected];
+    const component = getComponent(nextDesign, selected);
     component.collapsed = !component.collapsed;
     onChange({ design: nextDesign });
   }
 
   deleteScreen = () => {
-    const { design, screen, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    delete nextDesign[screen];
-    let nextScreen = screen - 1;
-    while (nextScreen && !design[nextScreen]) nextScreen -= 1;
-    onChange({ design: nextDesign, screen: nextScreen, selected: 1 });
+    delete nextDesign.screens[selected.screen];
+    let nextScreen = selected.screen - 1;
+    while (nextScreen && !design.screens[nextScreen]) nextScreen -= 1;
+    const nextSelected = {
+      screen: nextScreen,
+      component: defaultComponent(nextDesign, nextScreen),
+    };
+    onChange({ design: nextDesign, selected: nextSelected });
     this.setState({ confirmDelete: false });
   }
 
   reset = () => {
     const { location } = document;
     const { onChange } = this.props;
-    const nextDesign = [undefined, { id: 1, components: [...bare] }];
-    onChange({ design: nextDesign, screen: 1, selected: 1 });
+    onChange(resetState());
     this.setState({ confirmReset: false });
     location.replace('?');
   }
 
-  renderDropArea = (id, where) => {
+  renderDropArea = (ids, where) => {
     const { dragging, dropWhere, dropTarget } = this.state;
     return (
       <Box
         pad="xxsmall"
-        background={dragging && dropTarget === id && dropWhere === where
+        background={dragging && dropTarget && dropTarget.screen === ids.screen
+          && dropTarget.component === ids.component && dropWhere === where
           ? 'accent-2' : undefined}
         onDragEnter={(event) => {
-          if (dragging && dragging !== id) {
+          if (dragging && dragging.component !== ids.component) {
             event.preventDefault();
-            this.setState({ dropTarget: id, dropWhere: where });
+            this.setState({ dropTarget: ids, dropWhere: where });
           } else {
             this.setState({ dropTarget: undefined });
           }
         }}
         onDragOver={(event) => {
-          if (dragging && dragging !== id) {
+          if (dragging && dragging.component !== ids.component) {
             event.preventDefault();
           }
         }}
-        onDrop={() => this.moveChild(dragging, id, where)}
+        onDrop={() => this.moveChild(dragging, dropTarget, dropWhere)}
       />
     );
   }
 
-  renderTree = (screenId, id, firstChild) => {
-    const { design, screen, selected } = this.props;
+  renderTree = (ids, firstChild) => {
+    const { design, selected } = this.props;
     const { dragging, dropTarget, dropWhere } = this.state;
-    const component = design[screenId].components[id];
+    const component = getComponent(design, ids);
     if (!component) return null;
     const type = types[component.type];
     return (
-      <Box key={id} pad={{ left: 'small' }}>
-        {firstChild && this.renderDropArea(id, 'before')}
+      <Box key={ids.component}>
+        {firstChild && this.renderDropArea(ids, 'before')}
         <Stack anchor="right">
           <Button
             fill
             hoverIndicator
-            onClick={() => this.select(screenId, id)}
+            onClick={() => this.select(ids)}
             draggable
-            onDragStart={() => this.setState({ dragging: id })}
-            onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
+            onDragStart={() => this.setState({ dragging: ids })}
+            onDragEnd={() =>
+              this.setState({ dragging: undefined, dropTarget: undefined })}
             onDragEnter={() => {
-              if (dragging && dragging !== id && !type.text
+              if (dragging && dragging.component !== ids.component && !type.text
                 && type.name !== 'Icon') {
-                this.setState({ dropTarget: id, dropWhere: 'in' });
+                this.setState({ dropTarget: ids, dropWhere: 'in' });
               }
             }}
             onDragOver={(event) => {
-              if (dragging && dragging !== id) event.preventDefault();
+              if (dragging && dragging !== ids.component && !type.text) {
+                event.preventDefault();
+              }
             }}
-            onDrop={() => this.moveChild(dragging, id, dropWhere)}
+            onDrop={() => this.moveChild(dragging, dropTarget, dropWhere)}
           >
             <Box
-              pad="xsmall"
-              background={(dropTarget === id && dropWhere === 'in') ? 'accent-2'
-                : (screenId === screen && selected === id ? 'active' : undefined)}
+              pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              background={
+                (dropTarget && dropTarget.screen === ids.screen
+                  && dropTarget.component === ids.component && dropWhere === 'in')
+                ? 'accent-2'
+                : (selected.screen === ids.screen
+                  && selected.component === ids.component
+                  ? 'active' : undefined)
+              }
             >
               <Text>
                 {component.type === 'Layer' ? `${type.name} ${component.id}`
@@ -164,25 +180,31 @@ class Tree extends Component {
               </Text>
             </Box>
           </Button>
-          {screen === screenId && selected === id && component.children && (
+          {selected.screen === ids.screen
+            && selected.component === ids.component
+            && component.children && (
             <Button
               icon={component.collapsed ? <FormDown /> : <FormUp />}
               onClick={this.toggleCollapse}
             />
           )}
         </Stack>
-        {!component.collapsed && component.children &&
-          component.children.map((id, index) =>
-            this.renderTree(screenId, id, index === 0))}
-        {this.renderDropArea(id, 'after')}
+        {!component.collapsed && component.children && (
+          <Box pad={{ left: 'small' }}>
+            {component.children.map((childId, index) =>
+              this.renderTree({ screen: ids.screen, component: childId },
+                index === 0))}
+          </Box>
+        )}
+        {this.renderDropArea(ids, 'after')}
       </Box>
     )
   }
 
   render() {
-    const { design, screen, selected } = this.props;
+    const { design, selected } = this.props;
     const { adding, confirmDelete, confirmReset } = this.state;
-    const selectedComponent = design[screen].components[selected];
+    const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
     return (
       <Box background="light-2">
@@ -197,13 +219,16 @@ class Tree extends Component {
           />
         )}
         <Box flex="grow">
-          {design.filter(s => s).map(s => (
+          {Object.keys(design.screens)
+            .map(sId => design.screens[sId]).map(s => (
             <Box key={s.id}>
               <Box direction="row" align="center" justify="between">
                 <Heading level={3} size="small" margin="small">
                   {`Screen ${s.id}`}
                 </Heading>
-                {s.id === screen && design.length > 1 ? (
+                {s.id === selected.screen
+                  && Object.keys(design.screens).length > 1
+                  ? (
                   <Box direction="row" align="center">
                     {confirmDelete && (
                       <Button
@@ -222,7 +247,10 @@ class Tree extends Component {
                   </Box>
                 ) : null}
               </Box>
-              {this.renderTree(s.id, 1)}
+              {this.renderTree({
+                screen: s.id,
+                component: defaultComponent(design, s.id),
+              })}
             </Box>
           ))}
         </Box>
@@ -251,7 +279,10 @@ class Tree extends Component {
           />
         </Box>
         {adding && (
-          <Adder onAdd={this.onAdd} onClose={() => this.setState({ adding: false })} />
+          <Adder
+            onAdd={this.onAdd}
+            onClose={() => this.setState({ adding: false })}
+          />
         )}
       </Box>
     );
