@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Box, Button, Heading, Text } from 'grommet';
-import { Add, Share, Trash } from 'grommet-icons';
+import { Box, Button, Heading, Stack, Text } from 'grommet';
+import { Add, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import LZString from 'lz-string';
 import { types, Adder } from './Types';
 import { bare } from './designs';
@@ -73,6 +73,14 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
+  toggleCollapse = () => {
+    const { design, screen, selected, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const component = nextDesign[screen].components[selected];
+    component.collapsed = !component.collapsed;
+    onChange({ design: nextDesign });
+  }
+
   deleteScreen = () => {
     const { design, screen, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -126,36 +134,45 @@ class Tree extends Component {
     return (
       <Box key={id} pad={{ left: 'small' }}>
         {firstChild && this.renderDropArea(id, 'before')}
-        <Button
-          hoverIndicator
-          onClick={() => this.select(screenId, id)}
-          draggable
-          onDragStart={() => this.setState({ dragging: id })}
-          onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
-          onDragEnter={() => {
-            if (dragging && dragging !== id && !type.text
-              && type.name !== 'Icon') {
-              this.setState({ dropTarget: id, dropWhere: 'in' });
-            }
-          }}
-          onDragOver={(event) => {
-            if (dragging && dragging !== id) event.preventDefault();
-          }}
-          onDrop={() => this.moveChild(dragging, id, dropWhere)}
-        >
-          <Box
-            pad="xsmall"
-            background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
-              (screenId === screen && selected === id ? 'accent-1' :
-              (component.hide ? 'light-4' : undefined))}
+        <Stack anchor="right">
+          <Button
+            fill
+            hoverIndicator
+            onClick={() => this.select(screenId, id)}
+            draggable
+            onDragStart={() => this.setState({ dragging: id })}
+            onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
+            onDragEnter={() => {
+              if (dragging && dragging !== id && !type.text
+                && type.name !== 'Icon') {
+                this.setState({ dropTarget: id, dropWhere: 'in' });
+              }
+            }}
+            onDragOver={(event) => {
+              if (dragging && dragging !== id) event.preventDefault();
+            }}
+            onDrop={() => this.moveChild(dragging, id, dropWhere)}
           >
-            <Text>
-              {component.type === 'Layer' ? `${type.name} ${component.id}`
-                : component.name || type.name}
-            </Text>
-          </Box>
-        </Button>
-        {component.children &&
+            <Box
+              pad="xsmall"
+              background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
+                (screenId === screen && selected === id ? 'accent-1' :
+                (component.hide ? 'light-4' : undefined))}
+            >
+              <Text>
+                {component.type === 'Layer' ? `${type.name} ${component.id}`
+                  : component.name || type.name}
+              </Text>
+            </Box>
+          </Button>
+          {screen === screenId && selected === id && component.children && (
+            <Button
+              icon={component.collapsed ? <FormDown /> : <FormUp />}
+              onClick={this.toggleCollapse}
+            />
+          )}
+        </Stack>
+        {!component.collapsed && component.children &&
           component.children.map((id, index) =>
             this.renderTree(screenId, id, index === 0))}
         {this.renderDropArea(id, 'after')}
