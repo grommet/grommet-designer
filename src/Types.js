@@ -14,7 +14,7 @@ const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
     && !internalColors.includes(color)))
   .sort((c1, c2) => (c1 > c2 ? 1 : -1)); // sort alphabetically
 
-export const componentTypes = {
+export const types = {
   Box: {
     component: Box,
     name: 'Box',
@@ -216,18 +216,27 @@ export const Adder = ({ onAdd, onClose }) => (
   >
     <Box fill="vertical" overflow="auto">
       <Grid columns="small" rows="xxsmall">
-        {Object.keys(componentTypes).filter(key => key !== 'Grommet').map((key) => {
-          const componentType = componentTypes[key];
+        {Object.keys(types).filter(key => key !== 'Grommet').map((key) => {
+          const type = types[key];
           return (
-            <Box fill key={key} round="small" overflow="hidden">
+            <Box fill key={key} overflow="hidden">
               <Button fill hoverIndicator onClick={() => onAdd(key)}>
                 <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
-                  {componentType.sample || componentType.name}
+                  {type.sample || type.name}
                 </Box>
               </Button>
             </Box>
           );
         })}
+        {/*}
+        <Box border="top">
+          <Button fill hoverIndicator onClick={() => onAdd('Screen')}>
+            <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
+              Screen
+            </Box>
+          </Button>
+        </Box>
+        {*/}
       </Grid>
     </Box>
   </Layer>

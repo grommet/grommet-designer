@@ -3,7 +3,7 @@ import {
   Anchor, Box, Button, Heading, TextArea,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
-import { componentTypes } from './Types';
+import { types } from './Types';
 import Property from './Property';
 
 export default class Properties extends Component {
@@ -25,32 +25,32 @@ export default class Properties extends Component {
 
   render() {
     const { component, onDelete, onSetProp, onSetText } = this.props;
-    const componentType = componentTypes[component.componentType];
+    const type = types[component.type];
     return (
       <Box background="light-2" overflow="auto">
         <Box ref={this.ref} flex="grow">
           <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
-            {component.name || componentType.name}
+            {component.name || type.name}
           </Heading>
-          {componentType.text &&
+          {type.text &&
             <TextArea
-              value={component.text || componentType.text}
+              value={component.text || type.text}
               onChange={event => onSetText(event.target.value)}
             />
           }
           <Box flex="grow">
-            {componentType.properties &&
-            Object.keys(componentType.properties).map((propName) => (
+            {type.properties &&
+            Object.keys(type.properties).map((propName) => (
               <Property
                 key={propName}
                 name={propName}
-                property={componentType.properties[propName]}
+                property={type.properties[propName]}
                 value={component.props[propName]}
                 onChange={value => onSetProp(propName, value)}
               />
             ))}
           </Box>
-          {componentType.name !== 'Grommet' &&
+          {type.name !== 'Grommet' &&
             <Box flex={false} margin={{ top: 'medium' }}>
               <Button
                 title="delete"
@@ -60,7 +60,7 @@ export default class Properties extends Component {
               />
               <Box pad="small">
                 <Anchor
-                  href={`https://v2.grommet.io/${componentType.name.toLowerCase()}`}
+                  href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
                   label='docs'
                 />
               </Box>

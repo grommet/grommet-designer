@@ -6,29 +6,29 @@ import { Add, Share, Trash } from 'grommet-icons';
 import { dxc } from 'grommet-theme-dxc';
 import { hpe } from 'grommet-theme-hpe';
 import LZString from 'lz-string';
-import { componentTypes, Adder } from './Types';
+import { types, Adder } from './Types';
 import Properties from './Properties';
 
 const themes = { dark, dxc, hpe, grommet };
 
 const bare = [
   undefined, // leave id 0 undefined
-  { id: 1, componentType: 'Grommet', props: { style: { height: '100vh' } } },
+  { id: 1, type: 'Grommet', props: { style: { height: '100vh' } } },
 ];
 
 const rich = [
   undefined,
-  { id: 1, componentType: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
-  { id: 2, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
-  { id: 3, componentType: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
-  { id: 4, componentType: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
-  { id: 5, componentType: 'Icon', props: { icon: 'LinkPrevious'} },
-  { id: 6, componentType: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
-  { id: 7, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
-  { id: 8, componentType: 'Text', props: {}, text: 'add components' },
-  { id: 9, componentType: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
-  { id: 10, componentType: 'Text', props: {}, text: 'describe components' },
-  { id: 11, componentType: 'Icon', props: { icon: 'LinkNext'} },
+  { id: 1, type: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
+  { id: 2, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
+  { id: 3, type: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
+  { id: 4, type: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
+  { id: 5, type: 'Icon', props: { icon: 'LinkPrevious'} },
+  { id: 6, type: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
+  { id: 7, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
+  { id: 8, type: 'Text', props: {}, text: 'add components' },
+  { id: 9, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
+  { id: 10, type: 'Text', props: {}, text: 'describe components' },
+  { id: 11, type: 'Icon', props: { icon: 'LinkNext'} },
 ];
 
 class App extends Component {
@@ -64,12 +64,12 @@ class App extends Component {
     }
   }
 
-  onAdd = (componentType) => {
+  onAdd = (typeName) => {
     const { design, selected } = this.state;
     const nextDesign = [...design];
-    const type = componentTypes[componentType];
+    const type = types[typeName];
     const component = {
-      componentType,
+      type,
       id: design.length,
       props: type.defaultProps ? { ...type.defaultProps } : {},
     };
@@ -180,7 +180,7 @@ class App extends Component {
   renderTree = (id, firstChild) => {
     const { design, dragging, dropTarget, dropWhere, selected } = this.state;
     const component = design[id];
-    const componentType = componentTypes[component.componentType];
+    const type = types[component.type];
     return (
       <Box key={id} pad={{ left: 'small' }}>
         {firstChild && this.renderDropArea(id, 'before')}
@@ -191,8 +191,8 @@ class App extends Component {
           onDragStart={() => this.setState({ dragging: id })}
           onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
           onDragEnter={() => {
-            if (dragging && dragging !== id && !componentType.text
-              && componentType.name !== 'Icon') {
+            if (dragging && dragging !== id && !type.text
+              && type.name !== 'Icon') {
               this.setState({ dropTarget: id, dropWhere: 'in' });
             }
           }}
@@ -206,7 +206,7 @@ class App extends Component {
             background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
               (selected === id ? 'accent-1' : undefined)}
           >
-            <Text>{component.name || componentType.name}</Text>
+            <Text>{component.name || type.name}</Text>
           </Box>
         </Button>
         {component.children &&
@@ -219,9 +219,9 @@ class App extends Component {
   renderComponent = (id) => {
     const { design, selected, theme } = this.state;
     const component = design[id];
-    const componentType = componentTypes[component.componentType];
+    const type = types[component.type];
     return React.createElement(
-      componentType.component,
+      type.component,
       {
         key: id,
         onClick: (event) => {
@@ -234,13 +234,13 @@ class App extends Component {
       },
       component.children
       ? component.children.map(childId => this.renderComponent(childId))
-      : component.text || componentType.text);
+      : component.text || type.text);
   }
 
   render() {
     const { adding, design, preview, selected, theme } = this.state;
     const selectedComponent = design[selected];
-    const selectedComponentType = componentTypes[selectedComponent.componentType];
+    const selectedtype = types[selectedComponent.type];
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
@@ -253,7 +253,7 @@ class App extends Component {
 
               {responsive !== 'small' && !preview && (
                 <Box background="light-2">
-                  {selectedComponentType.text || selectedComponentType.name === 'Icon' ? (
+                  {selectedtype.text || selectedtype.name === 'Icon' ? (
                     <Box height="xxsmall" />
                   ) : (
                     <Button
