@@ -61,19 +61,27 @@ class App extends Component {
     }
   }
 
-  select = (screen, selected) => {
-    this.setState({ screen, selected });
-    localStorage.setItem('screen', screen);
-    localStorage.setItem('selected', selected);
+  setHide = (id, hide) => {
+    const { design, screen } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[id].hide = hide;
+    this.onChange({ design: nextDesign });
   }
 
   renderComponent = (id) => {
     const { design, screen, selected, theme } = this.state;
     const component = design[screen].components[id];
     const type = types[component.type];
+    if (component.hide) {
+      return null;
+    }
     const specialProps = {};
     if (type.name === 'Button' && component.props.icon) {
       specialProps.icon = <Icon icon={component.props.icon} />;
+    }
+    if (type.name === 'Layer') {
+      specialProps.onClickOutside = () => this.setHide(id, true);
+      specialProps.onEsc = () => this.setHide(id, true);
     }
     return React.createElement(
       type.component,
@@ -81,8 +89,16 @@ class App extends Component {
         key: id,
         onClick: (event) => {
           event.stopPropagation();
-          const nextScreen = component.linkTo || screen;
-          this.onChange({ screen: nextScreen, selected: component.linkTo ? 1 : id });
+          if (component.linkTo) {
+            if (component.linkTo.selected) {
+              const layer = design[screen].components[component.linkTo.selected];
+              this.setHide(layer.id, !layer.hide);
+            } else {
+              this.onChange({ ...component.linkTo, selected: 1 });
+            }
+          } else {
+            this.onChange({ selected: id });
+          }
         },
         style: selected === id ? { outline: '1px dashed red' } : undefined,
         ...component.props,

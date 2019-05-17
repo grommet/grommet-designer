@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Anchor, Box, Button, Heading, Select, TextArea,
+  Anchor, Box, Button, CheckBox, Heading, Select, TextArea,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { types } from './Types';
@@ -45,9 +45,27 @@ export default class Properties extends Component {
     onChange({ design: nextDesign });
   }
 
+  setHide = (hide) => {
+    const { design, screen, id, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[id].hide = hide;
+    onChange({ design: nextDesign });
+  }
+
   render() {
-    const { component, design } = this.props;
+    const { component, design, screen } = this.props;
     const type = types[component.type];
+    let linkOptions;
+    if (type.name === 'Button') {
+      // options for what the button should do:
+      // open a layer, close the layer it is in, change screens,
+      linkOptions = [
+        ...design[screen].components.filter(c => c && c.type === 'Layer')
+          .map(c => ({ screen, selected: c.id })),
+        ...design.filter(s => s && s.id !== screen).map(s => ({ screen: s.id })),
+        undefined
+      ];
+    }
     return (
       <Box background="light-2" overflow="auto">
         <Box ref={this.ref} flex="grow">
@@ -64,21 +82,40 @@ export default class Properties extends Component {
             <Box flex={false} margin={{ bottom: 'medium' }}>
               <Select
                 placeholder="link to ..."
-                options={[...design.filter(s => s).map(s => s.id), undefined]}
+                options={linkOptions}
                 value={component.linkTo || ''}
                 onChange={({ option }) => this.link(option || undefined)}
-                valueLabel={component.linkTo
-                  ? <Box pad="small">{`Screen ${component.linkTo}`}</Box>
-                  : undefined
+                valueLabel={component.linkTo ? (
+                    <Box pad="small">
+                      {component.linkTo.selected
+                        ? `Layer ${component.linkTo.selected}`
+                        : `Screen ${component.linkTo.screen}`}
+                    </Box>
+                  ) : undefined
                 }
               >
-                {(screenId) => {
-                  if (screenId) {
-                    return <Box pad="small">{`Screen ${screenId}`}</Box>
+                {(option) => {
+                  if (option) {
+                    return (
+                      <Box pad="small">
+                        {option.selected ? `Layer ${option.selected}`
+                          : `Screen ${option.screen}`}
+                      </Box>
+                    );
                   }
                   return <Box pad="small">clear</Box>;
                 }}
               </Select>
+            </Box>
+          )}
+          {type.name === 'Layer' && (
+            <Box pad="small" background="dark-3">
+              <CheckBox
+                toggle
+                label="hide"
+                checked={!!component.hide}
+                onChange={() => this.setHide(!component.hide)}
+              />
             </Box>
           )}
           <Box flex="grow">

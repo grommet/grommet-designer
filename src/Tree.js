@@ -143,9 +143,13 @@ class Tree extends Component {
           <Box
             pad="xsmall"
             background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
-              (screenId === screen && selected === id ? 'accent-1' : undefined)}
+              (screenId === screen && selected === id ? 'accent-1' :
+              (component.hide ? 'light-4' : undefined))}
           >
-            <Text>{component.name || type.name}</Text>
+            <Text>
+              {component.type === 'Layer' ? `${type.name} ${component.id}`
+                : component.name || type.name}
+            </Text>
           </Box>
         </Button>
         {component.children &&
