@@ -29,6 +29,11 @@ export const componentTypes = {
       alignSelf: ['stretch', 'start', 'center', 'end'],
       animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
       background: colors,
+      border: {
+        color: colors,
+        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        side: ['all', 'horizontal', 'vertical', 'top', 'left', 'bottom', 'right' ],
+      },
       basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
       direction: ['column', 'row'],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],

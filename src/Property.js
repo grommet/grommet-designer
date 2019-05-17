@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Box, CheckBox, FormField, Select, Text, TextInput,
 } from 'grommet';
-import { componentTypes } from './Types';
 import { SelectLabel as IconLabel } from './Icon';
 
 const ColorLabel = ({ color }) => (
@@ -12,32 +11,31 @@ const ColorLabel = ({ color }) => (
   </Box>
 );
 
-export default class Properties extends Component {
+export default class Property extends Component {
 
   state = {};
 
   render() {
-    const { component, onSetProp, propName } = this.props;
-    const { searchText } = this.state;
-    const componentType = componentTypes[component.componentType];
-    const property = componentType.properties[propName];
+    const { name, property, value, onChange } = this.props;
+    const { expand, searchText } = this.state;
     const searchExp = searchText && new RegExp(searchText, 'i');
     if (Array.isArray(property)) {
       const isColor = property.includes('light-1');
-      const isIcon = componentType.name === 'Icon' && propName === 'icon';
+      const isIcon = name === 'icon';
       return (
-        <FormField key={propName} name={propName} label={propName}>
+        <FormField key={name} name={name} label={name}>
           <Select
-            options={searchExp ? property.filter(p => searchExp.test(p)) : [...property, 'undefined']}
-            value={component.props[propName] || ''}
-            valueLabel={isColor && component.props[propName] ? (
-              <ColorLabel color={component.props[propName]} />
-            ) : (isIcon ? (
-              <IconLabel icon={component.props[propName]} />
+            options={searchExp ? property.filter(p => searchExp.test(p))
+              : [...property, 'undefined']}
+            value={value || ''}
+            valueLabel={isColor && value ? (
+              <ColorLabel color={value} />
+            ) : (isIcon && value ? (
+              <IconLabel icon={value} />
             ) : undefined)}
             onChange={({ option }) => {
               this.setState({ searchText: undefined });
-              onSetProp(propName, option === 'undefined' ? undefined : option);
+              onChange(option === 'undefined' ? undefined : option);
             }}
             onSearch={property.length > 20 ? (searchText) => {
               this.setState({ searchText })
@@ -51,25 +49,48 @@ export default class Properties extends Component {
       );
     } else if (typeof property === 'string') {
       return (
-        <FormField key={propName} name={propName} label={propName}>
+        <FormField key={name} name={name} label={name}>
           <TextInput
-            value={component.props[propName] || ''}
-            onChange={(event) => onSetProp(propName, event.target.value)}
+            value={value || ''}
+            onChange={(event) => onChange(event.target.value)}
           />
         </FormField>
       );
     } else if (typeof property === 'boolean') {
       return (
-        <FormField key={propName} name={propName}>
+        <FormField key={name} name={name}>
           <Box pad="small">
             <CheckBox
-              label={propName}
+              label={name}
               toggle
-              checked={!!component.props[propName]}
-              onChange={(event) => onSetProp(propName, event.target.checked)}
+              checked={!!value}
+              onChange={(event) => onChange(event.target.checked)}
             />
           </Box>
         </FormField>
+      );
+    } else if (typeof property === 'object') {
+      return (
+        <Box border="bottom" margin={{ bottom: 'small' }}>
+          <Box direction="row" pad="small">
+            <CheckBox
+              label={name}
+              reverse
+              checked={expand || false}
+              onChange={() => this.setState({ expand: !expand })}
+            />
+          </Box>
+          {expand && Object.keys(property).map((key) => (
+            <Property
+              key={key}
+              name={key}
+              property={property[key]}
+              value={(value || {})[key]}
+              onChange={subValue =>
+                onChange({ ...(value || {}), [key]: subValue })}
+            />
+          ))}
+        </Box>
       );
     }
     return null;

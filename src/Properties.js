@@ -43,9 +43,10 @@ export default class Properties extends Component {
             Object.keys(componentType.properties).map((propName) => (
               <Property
                 key={propName}
-                component={component}
-                propName={propName}
-                onSetProp={onSetProp}
+                name={propName}
+                property={componentType.properties[propName]}
+                value={component.props[propName]}
+                onChange={value => onSetProp(propName, value)}
               />
             ))}
           </Box>
