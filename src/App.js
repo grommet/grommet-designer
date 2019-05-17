@@ -82,7 +82,7 @@ class App extends Component {
         onClick: (event) => {
           event.stopPropagation();
           const nextScreen = component.linkTo || screen;
-          this.setState({ screen: nextScreen, selected: component.linkTo ? 1 : id });
+          this.onChange({ screen: nextScreen, selected: component.linkTo ? 1 : id });
         },
         style: selected === id ? { outline: '1px dashed red' } : undefined,
         ...component.props,
