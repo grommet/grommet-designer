@@ -61,6 +61,16 @@ class App extends Component {
     }
   }
 
+  onDelete = () => {
+    const { design, screen, selected } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const parent = nextDesign[screen].components
+      .find(c => (c && c.children && c.children.includes(selected)));
+    nextDesign[screen].components[selected] = undefined;
+    parent.children = parent.children.filter(i => i !== selected);
+    this.onChange({ design: nextDesign, selected: parent.id });
+  }
+
   setHide = (id, hide) => {
     const { design, screen } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -71,10 +81,10 @@ class App extends Component {
   renderComponent = (id) => {
     const { design, screen, selected, theme } = this.state;
     const component = design[screen].components[id];
-    const type = types[component.type];
-    if (component.hide) {
+    if (!component || component.hide) {
       return null;
     }
+    const type = types[component.type];
     const specialProps = {};
     if (type.name === 'Button' && component.props.icon) {
       specialProps.icon = <Icon icon={component.props.icon} />;
@@ -88,7 +98,7 @@ class App extends Component {
       {
         key: id,
         onClick: (event) => {
-          event.stopPropagation();
+          // event.stopPropagation();
           if (component.linkTo) {
             if (component.linkTo.selected) {
               const layer = design[screen].components[component.linkTo.selected];
@@ -142,6 +152,7 @@ class App extends Component {
                   id={selected}
                   component={design[screen].components[selected]}
                   onChange={this.onChange}
+                  onDelete={this.onDelete}
                 />
               )}
 

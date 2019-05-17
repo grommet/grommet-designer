@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import {
   Anchor, Box, Button, CheckBox, Heading, Select, TextArea,
 } from 'grommet';
-import { Trash } from 'grommet-icons';
+import { Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
 
 export default class Properties extends Component {
+
+  state = {};
 
   ref = React.createRef();
 
@@ -53,7 +55,8 @@ export default class Properties extends Component {
   }
 
   render() {
-    const { component, design, screen } = this.props;
+    const { component, design, screen, onDelete } = this.props;
+    const { confirmDelete } = this.state;
     const type = types[component.type];
     let linkOptions;
     if (type.name === 'Button') {
@@ -132,12 +135,28 @@ export default class Properties extends Component {
           </Box>
           {type.name !== 'Grommet' &&
             <Box flex={false} margin={{ top: 'medium' }}>
-              <Button
-                title="delete"
-                icon={<Trash />}
-                hoverIndicator
-                onClick={() => this.delete()}
-              />
+              <Box direction="row" align="center" justify="between">
+                <Button
+                  title="delete"
+                  icon={<Trash />}
+                  hoverIndicator
+                  onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+                />
+                {confirmDelete && (
+                  <Button
+                    title="confirm delete"
+                    icon={<Trash color="status-critical" />}
+                    hoverIndicator
+                    onClick={onDelete}
+                  />
+                )}
+                <Button
+                  title="duplicate"
+                  icon={<Duplicate />}
+                  hoverIndicator
+                  onClick={() => this.duplicate()}
+                />
+              </Box>
               <Box pad="small">
                 <Anchor
                   href={`https://v2.grommet.io/${type.name.toLowerCase()}`}

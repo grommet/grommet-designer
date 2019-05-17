@@ -119,6 +119,7 @@ class Tree extends Component {
     const { design, screen, selected } = this.props;
     const { dragging, dropTarget, dropWhere } = this.state;
     const component = design[screenId].components[id];
+    if (!component) return null;
     const type = types[component.type];
     return (
       <Box key={id} pad={{ left: 'small' }}>
