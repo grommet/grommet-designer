@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Anchor, Box, Button, Heading, TextArea,
+  Anchor, Box, Button, Heading, Select, TextArea,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import { types } from './Types';
@@ -24,7 +24,7 @@ export default class Properties extends Component {
   // }
 
   render() {
-    const { component, onDelete, onSetProp, onSetText } = this.props;
+    const { component, design, onDelete, onLink, onSetProp, onSetText } = this.props;
     const type = types[component.type];
     return (
       <Box background="light-2" overflow="auto">
@@ -38,6 +38,27 @@ export default class Properties extends Component {
               onChange={event => onSetText(event.target.value)}
             />
           }
+          {type.name === 'Button' && (
+            <Box flex={false} margin={{ bottom: 'medium' }}>
+              <Select
+                placeholder="link to ..."
+                options={[...design.filter(s => s).map(s => s.id), undefined]}
+                value={component.linkTo || ''}
+                onChange={({ option }) => onLink(option)}
+                valueLabel={component.linkTo
+                  ? <Box pad="small">{`Screen ${component.linkTo}`}</Box>
+                  : undefined
+                }
+              >
+                {(screenId) => {
+                  if (screenId) {
+                    return <Box pad="small">{`Screen ${screenId}`}</Box>
+                  }
+                  return <Box pad="small">clear</Box>;
+                }}
+              </Select>
+            </Box>
+          )}
           <Box flex="grow">
             {type.properties &&
             Object.keys(type.properties).map((propName) => (

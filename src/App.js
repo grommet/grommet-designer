@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Grommet, Grid, ResponsiveContext, Text, dark, grommet,
+  Box, Button, Grommet, Grid, Heading, ResponsiveContext, Text, dark, grommet,
 } from 'grommet';
 import { Add, Share, Trash } from 'grommet-icons';
 import { dxc } from 'grommet-theme-dxc';
@@ -33,7 +33,8 @@ const rich = [
 
 class App extends Component {
   state = {
-    design: rich,
+    design: [undefined, { id: 1, components: [...rich] }],
+    screen: 1,
     selected: 1,
   }
 
@@ -47,13 +48,14 @@ class App extends Component {
     if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
-      this.setState({ design, selected: 1 });
+      this.setState({ design, screen: 1, selected: 1 });
     } else {
       const stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
+        const screen = JSON.parse(localStorage.getItem('screen')) || 1;
         const selected = JSON.parse(localStorage.getItem('selected')) || 1;
-        this.setState({ design, selected });
+        this.setState({ design, screen, selected });
       }
     }
     if (params.theme) {
@@ -65,80 +67,101 @@ class App extends Component {
   }
 
   onAdd = (typeName) => {
-    const { design, selected } = this.state;
-    const nextDesign = [...design];
-    const type = types[typeName];
-    const component = {
-      type,
-      id: design.length,
-      props: type.defaultProps ? { ...type.defaultProps } : {},
-    };
-    nextDesign[component.id] = component;
-    const parent = { ...design[selected] };
-    if (!parent.children) parent.children = [];
-    parent.children.push(component.id);
-    nextDesign[selected] = parent;
-    this.setState({ design: nextDesign, selected: component.id, adding: false });
+    const { design, screen, selected } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    let nextScreen;
+    let nextSelected;
+    if (typeName === 'Screen') {
+      nextDesign.push({ id: nextDesign.length, components: [...bare] });
+      nextScreen = nextDesign.length - 1;
+      nextSelected = 1;
+    } else {
+      const type = types[typeName];
+      const component = {
+        type: typeName,
+        id: nextDesign[screen].components.length,
+        props: type.defaultProps ? { ...type.defaultProps } : {},
+      };
+      nextDesign[screen].components[component.id] = component;
+      const parent = nextDesign[screen].components[selected];
+      if (!parent.children) parent.children = [];
+      parent.children.push(component.id);
+      nextScreen = screen;
+      nextSelected = component.id;
+    }
+    this.setState({
+      design: nextDesign, 
+      screen: nextScreen,
+      selected: nextSelected,
+      adding: false,
+    });
     localStorage.setItem('design', JSON.stringify(nextDesign));
-    localStorage.setItem('selected', component.id);
+    localStorage.setItem('screen', nextScreen);
+    localStorage.setItem('selected', nextSelected);
   }
 
   onDelete = (id) => {
-    const { design } = this.state;
-    const nextDesign = [...design];
-    const parent = { ...design.find(c => (c && c.children && c.children.includes(id)))};
-    nextDesign[id] = undefined;
+    const { design, screen } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const parent = nextDesign[screen].components
+      .find(c => (c && c.children && c.children.includes(id)));
+    nextDesign[screen].components[id] = undefined;
     parent.children = parent.children.filter(i => i !== id);
-    nextDesign[parent.id] = parent;
     this.setState({ design: nextDesign, selected: parent.id });
     localStorage.setItem('design', JSON.stringify(nextDesign));
     localStorage.setItem('selected', parent.id);
   }
 
-  select = (id) => {
-    this.setState({ selected: id });
-    localStorage.setItem('selected', id);
+  select = (screen, selected) => {
+    this.setState({ screen, selected });
+    localStorage.setItem('screen', screen);
+    localStorage.setItem('selected', selected);
   }
 
   setProp = (id, propName, option) => {
-    const { design } = this.state;
-    const nextDesign = [...design];
-    const component = { ...nextDesign[id] };
+    const { design, screen } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const component = nextDesign[screen].components[id];
     component.props[propName] = option;
-    nextDesign[component.id] = component;
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
   setText = (id, text) => {
-    const { design } = this.state;
-    const nextDesign = [...design];
-    nextDesign[id] = { ...nextDesign[id], text };
+    const { design, screen } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[id].text = text;
+    this.setState({ design: nextDesign });
+    localStorage.setItem('design', JSON.stringify(nextDesign));
+  }
+
+  onLink = (screenId) => {
+    const { design, screen, selected } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[selected].linkTo = screenId;
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
   }
 
   moveChild = (moveId, targetId, where) => {
-    const { design } = this.state;
-    const nextDesign = [...design];
+    const { design, screen } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
-    const priorParent = { ...design.find(c => (c && c.children && c.children.includes(moveId)))};
+    const priorParent = nextDesign[screen].components
+      .find(c => (c && c.children && c.children.includes(moveId)));
     const priorIndex = priorParent.children.indexOf(moveId);
     priorParent.children.splice(priorIndex, 1);
-    nextDesign[priorParent.id] = priorParent;
     // insert into new parent
     if (where === 'in') {
-      const parent = { ...design[targetId] };
+      const parent = nextDesign[screen].components[targetId];
       if (!parent.children) parent.children = [];
       parent.children.unshift(moveId);
-      nextDesign[parent.id] = parent;
     } else {
-      const nextParent =
-        { ...design.find(c => (c && c.children && c.children.includes(targetId)))};
+      const nextParent = nextDesign[screen].components
+        .find(c => (c && c.children && c.children.includes(targetId)));
       const nextIndex = nextParent.children.indexOf(targetId);
       nextParent.children.splice(where === 'above' ? nextIndex : nextIndex + 1,
         0, moveId);
-      nextDesign[nextParent.id] = nextParent;
     }
     this.setState({ design: nextDesign });
     localStorage.setItem('design', JSON.stringify(nextDesign));
@@ -146,8 +169,10 @@ class App extends Component {
 
   reset = () => {
     const { location } = document;
-    this.setState({ design: { ...bare }, selected: 1 });
-    localStorage.setItem('design', JSON.stringify(bare));
+    const design = [undefined, { id: 1, components: [...bare] }];
+    this.setState({ design, screen: 1, selected: 1 });
+    localStorage.setItem('design', JSON.stringify(design));
+    localStorage.setItem('screen', 1);
     localStorage.setItem('selected', 1);
     location.replace('?');
   }
@@ -177,16 +202,16 @@ class App extends Component {
     );
   }
 
-  renderTree = (id, firstChild) => {
-    const { design, dragging, dropTarget, dropWhere, selected } = this.state;
-    const component = design[id];
+  renderTree = (screenId, id, firstChild) => {
+    const { design, dragging, dropTarget, dropWhere, screen, selected } = this.state;
+    const component = design[screenId].components[id];
     const type = types[component.type];
     return (
       <Box key={id} pad={{ left: 'small' }}>
         {firstChild && this.renderDropArea(id, 'before')}
         <Button
           hoverIndicator
-          onClick={() => this.select(id)}
+          onClick={() => this.select(screenId, id)}
           draggable
           onDragStart={() => this.setState({ dragging: id })}
           onDragEnd={() => this.setState({ dragging: undefined, dropTarget: undefined })}
@@ -204,21 +229,21 @@ class App extends Component {
           <Box
             pad="xsmall"
             background={(dropTarget === id && dropWhere === 'in') ? 'accent-2' :
-              (selected === id ? 'accent-1' : undefined)}
+              (screenId === screen && selected === id ? 'accent-1' : undefined)}
           >
             <Text>{component.name || type.name}</Text>
           </Box>
         </Button>
         {component.children &&
-          component.children.map((id, index) => this.renderTree(id, index === 0))}
+          component.children.map((id, index) => this.renderTree(screenId, id, index === 0))}
         {this.renderDropArea(id, 'after')}
       </Box>
     )
   }
 
   renderComponent = (id) => {
-    const { design, selected, theme } = this.state;
-    const component = design[id];
+    const { design, screen, selected, theme } = this.state;
+    const component = design[screen].components[id];
     const type = types[component.type];
     return React.createElement(
       type.component,
@@ -226,7 +251,8 @@ class App extends Component {
         key: id,
         onClick: (event) => {
           event.stopPropagation();
-          this.setState({ selected: id });
+          const nextScreen = component.linkTo || screen;
+          this.setState({ screen: nextScreen, selected: nextScreen ? 1 : id });
         },
         style: selected === id ? { outline: '1px dashed red' } : undefined,
         ...component.props,
@@ -238,8 +264,8 @@ class App extends Component {
   }
 
   render() {
-    const { adding, design, preview, selected, theme } = this.state;
-    const selectedComponent = design[selected];
+    const { adding, design, preview, screen, selected, theme } = this.state;
+    const selectedComponent = design[screen].components[selected];
     const selectedtype = types[selectedComponent.type];
     return (
       <Grommet full theme={theme || grommet}>
@@ -264,7 +290,14 @@ class App extends Component {
                     />
                   )}
                   <Box flex="grow">
-                    {this.renderTree(1)}
+                    {design.filter(s => s).map(screen => (
+                      <Box key={screen.id}>
+                        <Heading level={3} size="small" margin="small">
+                          {`Screen ${screen.id}`}
+                        </Heading>
+                        {this.renderTree(screen.id, 1)}
+                      </Box>
+                    ))}
                   </Box>
                   <Box direction="row" justify="between" align="center">
                     <Button
@@ -294,10 +327,12 @@ class App extends Component {
 
               {responsive !== 'small' && !preview && (
                 <Properties
-                  component={design[selected]}
+                  design={design}
+                  component={design[screen].components[selected]}
                   onSetText={text => this.setText(selected, text)}
                   onSetProp={(propName, value) => this.setProp(selected, propName, value)}
                   onDelete={() => this.onDelete(selected)}
+                  onLink={screen => this.onLink(screen)}
                 />
               )}
 

@@ -114,6 +114,9 @@ export const types = {
     component: Anchor,
     name: 'Anchor',
     sample: <Text style={{ textDecoration: 'underline' }}>Anchor</Text>,
+    defaultProps: {
+      label: 'anchor',
+    },
     properties: {
       color: colors,
       label: 'anchor',
@@ -132,6 +135,9 @@ export const types = {
         Button
       </Box>
     ),
+    defaultProps: {
+      label: 'Button',
+    },
     properties: {
       color: colors,
       label: 'Click Me',
@@ -140,6 +146,9 @@ export const types = {
   Menu: {
     component: Menu,
     name: 'Menu',
+    defaultProps: {
+      label: 'Menu',
+    },
     properties: {
       disabled: false,
       icon: false,
@@ -151,6 +160,9 @@ export const types = {
   CheckBox: {
     component: CheckBox,
     name: 'CheckBox',
+    defaultProps: {
+      label: 'CheckBox',
+    },
     properties: {
       checked: false,
       disabled: false,
@@ -228,7 +240,6 @@ export const Adder = ({ onAdd, onClose }) => (
             </Box>
           );
         })}
-        {/*}
         <Box border="top">
           <Button fill hoverIndicator onClick={() => onAdd('Screen')}>
             <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
@@ -236,7 +247,6 @@ export const Adder = ({ onAdd, onClose }) => (
             </Box>
           </Button>
         </Box>
-        {*/}
       </Grid>
     </Box>
   </Layer>
