@@ -73,6 +73,15 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
+  deleteScreen = () => {
+    const { design, screen, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    delete nextDesign[screen];
+    let nextScreen = screen - 1;
+    while (nextScreen && !design[nextScreen]) nextScreen -= 1;
+    onChange({ design: nextDesign, screen: nextScreen, selected: 1 });
+  }
+
   reset = () => {
     const { location } = document;
     const { onChange } = this.props;
@@ -165,12 +174,17 @@ class Tree extends Component {
           />
         )}
         <Box flex="grow">
-          {design.filter(s => s).map(screen => (
-            <Box key={screen.id}>
-              <Heading level={3} size="small" margin="small">
-                {`Screen ${screen.id}`}
-              </Heading>
-              {this.renderTree(screen.id, 1)}
+          {design.filter(s => s).map(s => (
+            <Box key={s.id}>
+              <Box direction="row" align="center" justify="between">
+                <Heading level={3} size="small" margin="small">
+                  {`Screen ${s.id}`}
+                </Heading>
+                {s.id === screen && design.length > 1 ? (
+                  <Button icon={<Trash />} onClick={this.deleteScreen} />
+                ) : null}
+              </Box>
+              {this.renderTree(s.id, 1)}
             </Box>
           ))}
         </Box>
