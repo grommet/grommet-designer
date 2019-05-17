@@ -44,7 +44,7 @@ export default class Properties extends Component {
                 placeholder="link to ..."
                 options={[...design.filter(s => s).map(s => s.id), undefined]}
                 value={component.linkTo || ''}
-                onChange={({ option }) => onLink(option)}
+                onChange={({ option }) => onLink(option || undefined)}
                 valueLabel={component.linkTo
                   ? <Box pad="small">{`Screen ${component.linkTo}`}</Box>
                   : undefined

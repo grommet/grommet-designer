@@ -8,6 +8,7 @@ import { hpe } from 'grommet-theme-hpe';
 import LZString from 'lz-string';
 import { types, Adder } from './Types';
 import Properties from './Properties';
+import Icon from './Icon';
 
 const themes = { dark, dxc, hpe, grommet };
 
@@ -245,6 +246,10 @@ class App extends Component {
     const { design, screen, selected, theme } = this.state;
     const component = design[screen].components[id];
     const type = types[component.type];
+    const specialProps = {};
+    if (type.name === 'Button' && component.props.icon) {
+      specialProps.icon = <Icon icon={component.props.icon} />;
+    }
     return React.createElement(
       type.component,
       {
@@ -252,10 +257,11 @@ class App extends Component {
         onClick: (event) => {
           event.stopPropagation();
           const nextScreen = component.linkTo || screen;
-          this.setState({ screen: nextScreen, selected: nextScreen ? 1 : id });
+          this.setState({ screen: nextScreen, selected: component.linkTo ? 1 : id });
         },
         style: selected === id ? { outline: '1px dashed red' } : undefined,
         ...component.props,
+        ...specialProps,
         theme: (id === 1 ? (theme || grommet) : undefined),
       },
       component.children

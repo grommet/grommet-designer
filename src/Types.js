@@ -73,6 +73,17 @@ export const types = {
     component: Layer,
     name: 'Layer',
     sample: <Box pad="xsmall" border={{ side: 'right', size: 'xlarge' }}>Layer</Box>,
+    defaultProps: {
+      modal: false,
+    },
+    properties: {
+      animate: false,
+      full: ['horizonta', 'vertical'],
+      margin: ['none', 'xsmall', 'small', 'medium', 'large'],
+      plain: false,
+      position: ['center', 'top', 'bottom', 'left', 'right'],
+      responsive: false,
+    },
   },
   Grommet: { component: Grommet, name: 'Grommet' },
   Heading: {
@@ -140,7 +151,15 @@ export const types = {
     },
     properties: {
       color: colors,
+      disabled: false,
+      fill: ['horizontal', 'vertical'],
+      gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      hoverIndicator: false,
+      icon: iconNames,
       label: 'Click Me',
+      plain: false,
+      primary: false,
+      reverse: false,
     },
   },
   Menu: {

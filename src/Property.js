@@ -25,7 +25,7 @@ export default class Property extends Component {
       return (
         <FormField key={name} name={name} label={name}>
           <Select
-            options={searchExp ? property.filter(p => searchExp.test(p))
+            options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
               : [...property, 'undefined']}
             value={value || ''}
             valueLabel={isColor && value ? (
