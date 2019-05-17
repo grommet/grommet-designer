@@ -23,8 +23,30 @@ export default class Properties extends Component {
   //   }
   // }
 
+  setProp = (propName, option) => {
+    const { design, screen, id, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const component = nextDesign[screen].components[id];
+    component.props[propName] = option;
+    onChange({ design: nextDesign });
+  }
+
+  setText = (text) => {
+    const { design, screen, id, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[id].text = text;
+    onChange({ design: nextDesign });
+  }
+
+  link = (screenId) => {
+    const { design, screen, id, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign[screen].components[id].linkTo = screenId;
+    onChange({ design: nextDesign });
+  }
+
   render() {
-    const { component, design, onDelete, onLink, onSetProp, onSetText } = this.props;
+    const { component, design } = this.props;
     const type = types[component.type];
     return (
       <Box background="light-2" overflow="auto">
@@ -35,7 +57,7 @@ export default class Properties extends Component {
           {type.text &&
             <TextArea
               value={component.text || type.text}
-              onChange={event => onSetText(event.target.value)}
+              onChange={event => this.setText(event.target.value)}
             />
           }
           {type.name === 'Button' && (
@@ -44,7 +66,7 @@ export default class Properties extends Component {
                 placeholder="link to ..."
                 options={[...design.filter(s => s).map(s => s.id), undefined]}
                 value={component.linkTo || ''}
-                onChange={({ option }) => onLink(option || undefined)}
+                onChange={({ option }) => this.link(option || undefined)}
                 valueLabel={component.linkTo
                   ? <Box pad="small">{`Screen ${component.linkTo}`}</Box>
                   : undefined
@@ -67,7 +89,7 @@ export default class Properties extends Component {
                 name={propName}
                 property={type.properties[propName]}
                 value={component.props[propName]}
-                onChange={value => onSetProp(propName, value)}
+                onChange={value => this.setProp(propName, value)}
               />
             ))}
           </Box>
@@ -77,7 +99,7 @@ export default class Properties extends Component {
                 title="delete"
                 icon={<Trash />}
                 hoverIndicator
-                onClick={() => onDelete()}
+                onClick={() => this.delete()}
               />
               <Box pad="small">
                 <Anchor
