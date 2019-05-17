@@ -30,11 +30,15 @@ class App extends Component {
       const component = parseInt(Object.keys(screen.components)[0], 10);
       this.setState({ design, selected: { screen, component } });
     } else {
-      const stored = localStorage.getItem('design');
+      let stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
-        const selected = JSON.parse(localStorage.getItem('selected'));
-        this.setState({ design, selected });
+        this.setState({ design });
+        stored = localStorage.getItem('selected');
+        if (stored) {
+          const selected = JSON.parse(stored);
+          this.setState({ selected });
+        }
       }
     }
     if (params.theme) {
@@ -61,6 +65,7 @@ class App extends Component {
     // remove from the parent
     const parent = getParent(nextDesign, selected);
     parent.children = parent.children.filter(i => i !== selected.component);
+    // TODO: remove any linkTo references
     delete nextDesign.screens[selected.screen].components[selected.component];
     this.onChange({
       design: nextDesign,
@@ -97,11 +102,16 @@ class App extends Component {
         onClick: (event) => {
           event.stopPropagation();
           if (component.linkTo) {
-            if (component.linkTo.screen === selected.screen) {
-              const layer = getComponent(design, component.linkTo);
-              this.setHide(layer.id, !layer.hide);
+            const target = getComponent(design, component.linkTo);
+            if (target) {
+              if (component.linkTo.screen === selected.screen) {
+                const layer = target;
+                this.setHide(layer.id, !layer.hide);
+              } else {
+                this.onChange({ selected: { ...component.linkTo } });
+              }
             } else {
-              this.onChange({ selected: { ...component.linkTo } });
+              this.onChange({ selected: { ...selected, component: id } });
             }
           } else {
             this.onChange({ selected: { ...selected, component: id } });
