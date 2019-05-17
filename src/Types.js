@@ -78,7 +78,7 @@ export const types = {
     },
     properties: {
       animate: false,
-      full: ['horizonta', 'vertical'],
+      full: ['horizontal', 'vertical'],
       margin: ['none', 'xsmall', 'small', 'medium', 'large'],
       plain: false,
       position: ['center', 'top', 'bottom', 'left', 'right'],
