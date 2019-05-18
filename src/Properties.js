@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, Heading, Select, TextArea,
+  Box, Button, CheckBox, Heading, Keyboard, Select, TextArea,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
@@ -11,7 +11,7 @@ export default class Properties extends Component {
 
   state = {};
 
-  ref = React.createRef();
+  textRef = React.createRef();
 
   // getSnapshotBeforeUpdate(prevProps, prevState) {
   //   // Capture the scroll position so we can preserve scroll later.
@@ -78,6 +78,15 @@ export default class Properties extends Component {
     onChange({ design: nextDesign });
   }
 
+  onKeyDown = (event) => {
+    if (event.metaKey) {
+      if (event.keyCode === 83) { // s
+        event.preventDefault();
+        this.textRef.current.focus();
+      }
+    }
+  }
+
   render() {
     const { component, design, selected, onDelete } = this.props;
     const { confirmDelete } = this.state;
@@ -98,108 +107,111 @@ export default class Properties extends Component {
       ];
     }
     return (
-      <Box background="light-2" overflow="auto">
-        <Box ref={this.ref} flex="grow">
-          <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
-            {component.name || type.name}
-          </Heading>
-          {type.text &&
-            <TextArea
-              value={component.text || type.text}
-              onChange={event => this.setText(event.target.value)}
-            />
-          }
-          {type.name === 'Button' && linkOptions.length > 1 && (
-            <Box flex={false} margin={{ bottom: 'medium' }}>
-              <Select
-                placeholder="link to ..."
-                options={linkOptions}
-                value={component.linkTo || ''}
-                onChange={({ option }) => this.link(option || undefined)}
-                valueLabel={component.linkTo ? (
-                    <Box pad="small">
-                      {component.linkTo.screen === selected.screen
-                        ? `Layer ${component.linkTo.component}`
-                        : `Screen ${component.linkTo.screen}`}
-                    </Box>
-                  ) : undefined
-                }
-              >
-                {(option) => {
-                  if (option) {
-                    return (
-                      <Box pad="small">
-                        {option.screen === selected.screen
-                          ? `Layer ${option.component}`
-                          : `Screen ${option.screen}`}
-                      </Box>
-                    );
-                  }
-                  return <Box pad="small">clear</Box>;
-                }}
-              </Select>
+      <Keyboard target="document" onKeyDown={this.onKeyDown}>
+        <Box background="light-2" height="100vh">
+          <Box flex={false}>
+            <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
+              {component.name || type.name}
+            </Heading>
+          </Box>
+          <Box flex overflow="auto">
+            <Box flex={false}>
+              {type.text &&
+                <TextArea
+                  ref={this.textRef}
+                  value={component.text || type.text}
+                  onChange={event => this.setText(event.target.value)}
+                />
+              }
+              {type.name === 'Button' && linkOptions.length > 1 && (
+                <Box flex={false} margin={{ bottom: 'medium' }}>
+                  <Select
+                    placeholder="link to ..."
+                    options={linkOptions}
+                    value={component.linkTo || ''}
+                    onChange={({ option }) => this.link(option || undefined)}
+                    valueLabel={component.linkTo ? (
+                        <Box pad="small">
+                          {component.linkTo.screen === selected.screen
+                            ? `Layer ${component.linkTo.component}`
+                            : `Screen ${component.linkTo.screen}`}
+                        </Box>
+                      ) : undefined
+                    }
+                  >
+                    {(option) => {
+                      if (option) {
+                        return (
+                          <Box pad="small">
+                            {option.screen === selected.screen
+                              ? `Layer ${option.component}`
+                              : `Screen ${option.screen}`}
+                          </Box>
+                        );
+                      }
+                      return <Box pad="small">clear</Box>;
+                    }}
+                  </Select>
+                </Box>
+              )}
+              {type.name === 'Layer' && (
+                <Box pad="small" background="dark-3">
+                  <CheckBox
+                    toggle
+                    label="hide"
+                    checked={!!component.hide}
+                    onChange={() => this.setHide(!component.hide)}
+                  />
+                </Box>
+              )}
+              {type.properties &&
+              Object.keys(type.properties).map((propName) => (
+                <Property
+                  key={propName}
+                  name={propName}
+                  property={type.properties[propName]}
+                  value={component.props[propName]}
+                  onChange={value => this.setProp(propName, value)}
+                />
+              ))}
             </Box>
-          )}
-          {type.name === 'Layer' && (
-            <Box pad="small" background="dark-3">
-              <CheckBox
-                toggle
-                label="hide"
-                checked={!!component.hide}
-                onChange={() => this.setHide(!component.hide)}
-              />
-            </Box>
-          )}
-          <Box flex="grow">
-            {type.properties &&
-            Object.keys(type.properties).map((propName) => (
-              <Property
-                key={propName}
-                name={propName}
-                property={type.properties[propName]}
-                value={component.props[propName]}
-                onChange={value => this.setProp(propName, value)}
-              />
-            ))}
           </Box>
           {type.name !== 'Grommet' &&
-            <Box flex={false} margin={{ top: 'medium' }}>
-              <Box direction="row" align="center" justify="between">
+            <Box flex={false} direction="row" align="center" justify="between">
+              <Button
+                title="duplicate"
+                icon={<Duplicate />}
+                hoverIndicator
+                onClick={() => this.duplicate()}
+              />
+              <Button
+                title="documentation"
+                icon={<CircleInformation />}
+                hoverIndicator
+                target="_blank"
+                href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
+              />
+              {confirmDelete && (
                 <Button
-                  title="duplicate"
-                  icon={<Duplicate />}
+                  title="confirm delete"
+                  icon={<Trash color="status-critical" />}
                   hoverIndicator
-                  onClick={() => this.duplicate()}
+                  onClick={() => {
+                    this.setState({ confirmDelete: false });
+                    onDelete();
+                  }}
                 />
-                <Button
-                  title="documentation"
-                  icon={<CircleInformation />}
-                  hoverIndicator
-                  target="_blank"
-                  href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
-                />
-                {confirmDelete && (
-                  <Button
-                    title="confirm delete"
-                    icon={<Trash color="status-critical" />}
-                    hoverIndicator
-                    onClick={() => {
-                      this.setState({ confirmDelete: false });
-                      onDelete();
-                    }}
-                  />
-                )}
-                <Button
-                  title="delete"
-                  icon={<Trash />}
-                  hoverIndicator
-                  onClick={() => this.setState({ confirmDelete: !confirmDelete })}
-                />
-              </Box>
+              )}
+              <Button
+                title="delete"
+                icon={<Trash />}
+                hoverIndicator
+                onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+              />
             </Box>
           }
         </Box>
-      </Box>
+      </Keyboard>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button, Heading, Stack, Text } from 'grommet';
+import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import LZString from 'lz-string';
 import { types, Adder } from './Types';
@@ -106,6 +106,15 @@ class Tree extends Component {
     location.replace('?');
   }
 
+  onKeyDown = (event) => {
+    if (event.metaKey) {
+      if (event.keyCode === 65) { // a
+        event.preventDefault();
+        this.setState({ adding: true });
+      }
+    }
+  }
+
   renderDropArea = (ids, where) => {
     const { dragging, dropWhere, dropTarget } = this.state;
     return (
@@ -208,85 +217,97 @@ class Tree extends Component {
     const { adding, confirmDelete, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
+    const isContainer = !(selectedtype.text || selectedtype.name === 'Icon');
     return (
-      <Box background="light-2">
-        {selectedtype.text || selectedtype.name === 'Icon' ? (
-          <Box height="xxsmall" />
-        ) : (
-          <Button
-            title="add component"
-            icon={<Add />}
-            hoverIndicator
-            onClick={() => this.setState({ adding: true })}
-          />
-        )}
-        <Box flex="grow">
-          {Object.keys(design.screens)
-            .map(sId => design.screens[sId]).map(s => (
-            <Box key={s.id}>
-              <Box direction="row" align="center" justify="between">
-                <Heading level={3} size="small" margin="small">
-                  {`Screen ${s.id}`}
-                </Heading>
-                {s.id === selected.screen
-                  && Object.keys(design.screens).length > 1
-                  ? (
-                  <Box direction="row" align="center">
-                    {confirmDelete && (
-                      <Button
-                        title="confirm delete"
-                        icon={<Trash color="status-critical" />}
-                        hoverIndicator
-                        onClick={this.deleteScreen}
-                      />
-                    )}
-                    <Button
-                      title="delete screen"
-                      icon={<Trash />}
-                      hoverIndicator
-                      onClick={() => this.setState({ confirmDelete: !confirmDelete })}
-                    />
+      <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
+        <Box background="light-2" height="100vh">
+          <Box flex={false}>
+            {isContainer ? (
+              <Button
+                title="add component"
+                icon={<Add />}
+                hoverIndicator
+                onClick={() => this.setState({ adding: true })}
+              />
+            ) : (
+              <Box height="xxsmall" />
+            )}
+          </Box>
+          <Box flex overflow="auto">
+            <Box flex={false}>
+              {Object.keys(design.screens)
+                .map(sId => design.screens[sId]).map(s => (
+                <Box key={s.id}>
+                  <Box direction="row" align="center" justify="between">
+                    <Heading level={3} size="small" margin="small">
+                      {`Screen ${s.id}`}
+                    </Heading>
+                    {s.id === selected.screen
+                      && Object.keys(design.screens).length > 1
+                      ? (
+                      <Box direction="row" align="center">
+                        {confirmDelete && (
+                          <Button
+                            title="confirm delete"
+                            icon={<Trash color="status-critical" />}
+                            hoverIndicator
+                            onClick={this.deleteScreen}
+                          />
+                        )}
+                        <Button
+                          title="delete screen"
+                          icon={<Trash />}
+                          hoverIndicator
+                          onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+                        />
+                      </Box>
+                    ) : null}
                   </Box>
-                ) : null}
-              </Box>
-              {this.renderTree({
-                screen: s.id,
-                component: defaultComponent(design, s.id),
-              })}
+                  {this.renderTree({
+                    screen: s.id,
+                    component: defaultComponent(design, s.id),
+                  })}
+                </Box>
+              ))}
             </Box>
-          ))}
-        </Box>
-        <Box direction="row" justify="between" align="center">
-          <Button
-            title="delete all"
-            icon={<Trash />}
-            hoverIndicator
-            onClick={() => this.setState({ confirmReset: !confirmReset })}
-          />
-          {confirmReset && (
+          </Box>
+          <Box 
+            flex={false}
+            direction="row"
+            justify="between"
+            align="center"
+          >
             <Button
-              title="confirm delete"
-              icon={<Trash color="status-critical" />}
+              title="delete all"
+              icon={<Trash />}
               hoverIndicator
-              onClick={this.reset}
+              onClick={() => this.setState({ confirmReset: !confirmReset })}
+            />
+            {confirmReset && (
+              <Button
+                title="confirm delete"
+                icon={<Trash color="status-critical" />}
+                hoverIndicator
+                onClick={this.reset}
+              />
+            )}
+            <Button
+              title="share"
+              icon={<Share />}
+              hoverIndicator
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`?d=${LZString.compressToEncodedURIComponent(JSON.stringify(design))}`}
+            />
+          </Box>
+          {adding && (
+            <Adder
+              onAdd={this.onAdd}
+              onClose={() => this.setState({ adding: false })}
             />
           )}
-          <Button
-            title="share"
-            icon={<Share />}
-            hoverIndicator
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`?d=${LZString.compressToEncodedURIComponent(JSON.stringify(design))}`}
-          />
         </Box>
-        {adding && (
-          <Adder
-            onAdd={this.onAdd}
-            onClose={() => this.setState({ adding: false })}
-          />
-        )}
-      </Box>
+      </Keyboard>
     );
   }
 }
