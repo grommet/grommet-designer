@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
-import { Add, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
+import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import LZString from 'lz-string';
 import { types, Adder } from './Types';
 import {
@@ -213,7 +213,7 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected } = this.props;
+    const { design, selected, onManage } = this.props;
     const { adding, confirmDelete, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
@@ -282,6 +282,12 @@ class Tree extends Component {
               icon={<Trash />}
               hoverIndicator
               onClick={() => this.setState({ confirmReset: !confirmReset })}
+            />
+            <Button
+              title="all my designs"
+              icon={<Folder />}
+              hoverIndicator
+              onClick={onManage}
             />
             {confirmReset && (
               <Button

@@ -13,19 +13,6 @@ export default class Properties extends Component {
 
   textRef = React.createRef();
 
-  // getSnapshotBeforeUpdate(prevProps, prevState) {
-  //   // Capture the scroll position so we can preserve scroll later.
-  //   const container = this.ref.current;
-  //   return container.scrollTop;
-  // }
-
-  // componentDidUpdate(prevProps, prevState, scrollTop) {
-  //   if (scrollTop) {
-  //     const container = this.ref.current;
-  //     container.scrollTop = scrollTop;
-  //   }
-  // }
-
   setProp = (propName, option) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));

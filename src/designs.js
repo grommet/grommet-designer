@@ -1,28 +1,44 @@
 
 export const bare = {
-  1: { id: 1, type: 'Grommet', props: { style: { height: '100vh' } } },
+  screens: {
+    1: {
+      id: 1,
+      components: {
+        1: { id: 1, type: 'Grommet', props: { style: { height: '100vh' } } },
+      },
+    },
+  },
 };
 
 export const rich = {
-  1: { id: 1, type: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
-  2: { id: 2, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
-  3: { id: 3, type: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
-  4: { id: 4, type: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
-  5: { id: 5, type: 'Icon', props: { icon: 'LinkPrevious'} },
-  6: { id: 6, type: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
-  7: { id: 7, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
-  8: { id: 8, type: 'Text', props: {}, text: 'add components' },
-  9: { id: 9, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
-  10: { id: 10, type: 'Text', props: {}, text: 'describe components' },
-  11: { id: 11, type: 'Icon', props: { icon: 'LinkNext'} },
+  screens: {
+    1: {
+      id: 1,
+      components: {
+        1: { id: 1, type: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
+        2: { id: 2, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
+        3: { id: 3, type: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
+        4: { id: 4, type: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
+        5: { id: 5, type: 'Icon', props: { icon: 'LinkPrevious'} },
+        6: { id: 6, type: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
+        7: { id: 7, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
+        8: { id: 8, type: 'Text', props: {}, text: 'add components' },
+        9: { id: 9, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
+        10: { id: 10, type: 'Text', props: {}, text: 'describe components' },
+        11: { id: 11, type: 'Icon', props: { icon: 'LinkNext'} },
+      },
+    },
+  },
 };
 
 export const resetState = (starter = bare) => {
   let nextId = 1;
-  Object.keys(starter).forEach(k => (nextId = Math.max(nextId, parseInt(k, 10))));
+  Object.keys(starter.screens)
+    .forEach(screenId => Object.keys(starter.screens[screenId].components)
+      .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10)))));
   nextId += 1;
   return {
-    design: { screens: { 1: { id: 1, components: { ...starter } } }, nextId },
+    design: { ...starter, nextId },
     selected: { screen: 1, component: 1 },
   };
 };

@@ -9,6 +9,7 @@ import { types } from './Types';
 import Properties from './Properties';
 import Tree from './Tree';
 import Icon from './Icon';
+import Manage from './Manage';
 import { getComponent, getParent, resetState, rich } from './designs';
 
 const themes = { dark, dxc, hpe, grommet };
@@ -142,7 +143,7 @@ class App extends Component {
   }
 
   render() {
-    const { design, preview, selected, theme } = this.state;
+    const { design, managing, preview, selected, theme } = this.state;
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
@@ -159,6 +160,7 @@ class App extends Component {
                     design={design}
                     selected={selected}
                     onChange={this.onChange}
+                    onManage={() => this.setState({ managing: true })}
                   />
                 )}
 
@@ -181,6 +183,16 @@ class App extends Component {
             </Keyboard>
           )}
         </ResponsiveContext.Consumer>
+        {managing && (
+          <Manage
+            design={design}
+            onChange={(design) => {
+              const nextState = resetState(design);
+              this.onChange(nextState);
+            }}
+            onClose={() => this.setState({ managing: false })}
+          />
+        )}
       </Grommet>
     );
   }
