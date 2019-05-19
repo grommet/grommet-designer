@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Anchor, Box, Button, Calendar, CheckBox, FormField,
+  Anchor, Box, Button, Calendar, CheckBox, DataTable, FormField,
   Grid, Grommet, Heading, Layer,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
@@ -223,6 +223,15 @@ export const types = {
       daysOfWeek: false,
       range: false,
       size: ['small', 'medium', 'large'],
+    },
+  },
+  DataTable: {
+    component: DataTable,
+    name: 'DataTable',
+    properties: {
+      resizeable: false,
+      size: ['small', 'medium', 'large', 'xlarge'],
+      sortable: false,
     },
   },
   Meter: {

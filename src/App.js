@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Grommet, Grid, ResponsiveContext, dark, grommet,
+  Box, Grommet, Grid, Keyboard, ResponsiveContext, dark, grommet,
 } from 'grommet';
 import { dxc } from 'grommet-theme-dxc';
 import { hpe } from 'grommet-theme-hpe';
@@ -80,6 +80,16 @@ class App extends Component {
     this.onChange({ design: nextDesign });
   }
 
+  onKeyDown = (event) => {
+    const { preview } = this.state;
+    if (event.metaKey) {
+      if (event.keyCode === 69) { // e
+        event.preventDefault();
+        this.setState({ preview: !preview });
+      }
+    }
+  }
+
   renderComponent = (id) => {
     const { design, selected, theme } = this.state;
     const component = design.screens[selected.screen].components[id];
@@ -134,36 +144,38 @@ class App extends Component {
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
-            <Grid
-              fill
-              columns={(responsive === 'small' || preview)
-                ? 'flex' : ['small', 'flex', 'small']}
-            >
+            <Keyboard target="document" onKeyDown={this.onKeyDown}>
+              <Grid
+                fill
+                columns={(responsive === 'small' || preview)
+                  ? 'flex' : ['small', 'flex', 'small']}
+              >
 
-              {responsive !== 'small' && !preview && (
-                <Tree
-                  design={design}
-                  selected={selected}
-                  onChange={this.onChange}
-                />
-              )}
+                {responsive !== 'small' && !preview && (
+                  <Tree
+                    design={design}
+                    selected={selected}
+                    onChange={this.onChange}
+                  />
+                )}
 
-              <Box>
-                {this.renderComponent(parseInt(Object.keys(
-                  design.screens[selected.screen].components)[0], 10))}
-              </Box>
+                <Box>
+                  {this.renderComponent(parseInt(Object.keys(
+                    design.screens[selected.screen].components)[0], 10))}
+                </Box>
 
-              {responsive !== 'small' && !preview && (
-                <Properties
-                  design={design}
-                  selected={selected}
-                  component={getComponent(design, selected)}
-                  onChange={this.onChange}
-                  onDelete={this.onDelete}
-                />
-              )}
+                {responsive !== 'small' && !preview && (
+                  <Properties
+                    design={design}
+                    selected={selected}
+                    component={getComponent(design, selected)}
+                    onChange={this.onChange}
+                    onDelete={this.onDelete}
+                  />
+                )}
 
-            </Grid>
+              </Grid>
+            </Keyboard>
           )}
         </ResponsiveContext.Consumer>
       </Grommet>

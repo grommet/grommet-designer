@@ -79,10 +79,15 @@ export default class Properties extends Component {
   }
 
   onKeyDown = (event) => {
+    const { onDelete } = this.props;
     if (event.metaKey) {
       if (event.keyCode === 83) { // s
         event.preventDefault();
         this.textRef.current.focus();
+      }
+      if (event.keyCode === 8) { // delete
+        event.preventDefault();
+        onDelete();
       }
     }
   }
