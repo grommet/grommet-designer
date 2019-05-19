@@ -51,12 +51,15 @@ class App extends Component {
 
   onChange = (nextState) => {
     this.setState(nextState);
-    if (nextState.design) {
-      localStorage.setItem('design', JSON.stringify(nextState.design));
-    }
-    if (nextState.selected) {
-      localStorage.setItem('selected', JSON.stringify(nextState.selected));
-    }
+    clearTimeout(this.storeTimer);
+    this.storeTimer = setTimeout(() => {
+      if (nextState.design) {
+        localStorage.setItem('design', JSON.stringify(nextState.design));
+      }
+      if (nextState.selected) {
+        localStorage.setItem('selected', JSON.stringify(nextState.selected));
+      }
+    }, 500);
   }
 
   onDelete = () => {
