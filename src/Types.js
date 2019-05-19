@@ -6,6 +6,7 @@ import {
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
+import List from './List';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
 const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
@@ -110,7 +111,11 @@ export const types = {
     name: 'Text',
     text: 'Text',
     properties: {
+      color: colors,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      textAlign: ['start', 'center', 'end'],
+      truncate: false,
+      weight: ['normal', 'bold'],
     },
   },
   Icon: {
@@ -228,6 +233,13 @@ export const types = {
   DataTable: {
     component: DataTable,
     name: 'DataTable',
+    defaultProps: {
+      columns: [
+        { header: 'Name', property: 'name', primary: true },
+        { header: 'Count', property: 'count' },
+      ],
+      data: [{ name: 'Eric', count: '5' }, { name: 'Shimi', count: '7' }],
+    },
     properties: {
       resizeable: false,
       size: ['small', 'medium', 'large', 'xlarge'],
@@ -245,6 +257,19 @@ export const types = {
       type: ['bar', 'circle'],
     },
   },
+  ListMock: {
+    component: List,
+    name: 'ListMock',
+    help: `ListMock is not a grommet component, it is a special component for
+    use with this design tool. It expects a single child component which
+    it will repeat 'count' times. Wrap it in a Box to control it's layout.`,
+    defaultProps: {
+      count: 2,
+    },
+    properties: {
+      count: [1, 2, 5, 10],
+    },
+  }
 };
 
 export const Adder = ({ onAdd, onClose }) => (

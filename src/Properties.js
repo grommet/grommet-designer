@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, Heading, Keyboard, Select, TextArea,
+  Box, Button, CheckBox, Heading, Keyboard, Paragraph, Select, TextArea,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
@@ -121,6 +121,11 @@ export default class Properties extends Component {
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
+              {type.help && (
+                <Box pad={{ horizontal: 'small' }}>
+                  <Paragraph>{type.help}</Paragraph>
+                </Box>
+              )}
               {type.text &&
                 <TextArea
                   ref={this.textRef}
