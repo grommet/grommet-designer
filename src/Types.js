@@ -7,6 +7,8 @@ import {
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
 import List from './List';
+import DataTableColumns from './custom/DataTableColumns';
+import DataTableData from './custom/DataTableData';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
 const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
@@ -238,9 +240,11 @@ export const types = {
         { header: 'Name', property: 'name', primary: true },
         { header: 'Count', property: 'count' },
       ],
-      data: [{ name: 'Eric', count: '5' }, { name: 'Shimi', count: '7' }],
+      data: [{ name: 'Eric', count: 5 }, { name: 'Shimi', count: 7 }],
     },
     properties: {
+      columns: DataTableColumns,
+      data: DataTableData,
       resizeable: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       sortable: false,

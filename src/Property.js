@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Box, CheckBox, FormField, Select, Text, TextInput,
+  Box, Button, CheckBox, FormField, Heading, Layer, Select, Text, TextInput,
 } from 'grommet';
+import { Close, Edit } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 
 const ColorLabel = ({ color }) => (
@@ -90,6 +91,36 @@ export default class Property extends Component {
                 onChange({ ...(value || {}), [key]: subValue })}
             />
           ))}
+        </Box>
+      );
+    } else if (typeof property === 'function') {
+      const CustomProperty = property;
+      return (
+        <Box border="bottom" margin={{ bottom: 'small' }}>
+          <Box direction="row" align="center" justify="between" pad={{ left: "small" }}>
+            <Text>{name}</Text>
+            <Button
+              icon={<Edit />}
+              hoverIndicator
+              onClick={() => this.setState({ expand: !expand })}
+            />
+          </Box>
+          {expand && (
+            <Layer
+              position="top"
+              onEsc={() => this.setState({ expand: false })}
+            >
+              <Box direction="row" align="center" justify="between" gap="medium">
+                <Heading margin={{ left: "small", vertical: "none" }} level={3}>{name}</Heading>
+                <Button
+                  icon={<Close />}
+                  hoverIndicator
+                  onClick={() => this.setState({ expand: false })}
+                />
+              </Box>
+              <CustomProperty {...this.props} />
+            </Layer>
+          )}
         </Box>
       );
     }
