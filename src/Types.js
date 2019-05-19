@@ -6,7 +6,7 @@ import {
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
-import List from './List';
+import Repeater from './Repeater';
 import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
 
@@ -261,10 +261,10 @@ export const types = {
       type: ['bar', 'circle'],
     },
   },
-  ListMock: {
-    component: List,
-    name: 'ListMock',
-    help: `ListMock is not a grommet component, it is a special component for
+  Repeater: {
+    component: Repeater,
+    name: 'Repeater',
+    help: `Repeater is not a grommet component, it is a special component for
     use with this design tool. It expects a single child component which
     it will repeat 'count' times. Wrap it in a Box to control it's layout.`,
     defaultProps: {

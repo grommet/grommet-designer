@@ -1,7 +1,6 @@
-import React from 'react';
-import { Box } from 'grommet';
+import React, { Fragment } from 'react';
 
-const List = ({ children, count }) => {
+const Repeater = ({ children, count }) => {
   let contents = [];
   if (React.Children.count(children) === 1) {
     const child = React.Children.toArray(children)[0];
@@ -13,10 +12,10 @@ const List = ({ children, count }) => {
     contents = children;
   }
   return (
-    <Box fill>
+    <Fragment>
       {contents}
-    </Box>
+    </Fragment>
   );
 };
 
-export default List;
+export default Repeater;
