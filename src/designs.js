@@ -62,10 +62,11 @@ const resetId = (nextDesign, components, id) => {
   })
 };
 
-export const addScreen = (nextDesign, starter) => {
+export const addScreen = (nextDesign) => {
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  const screen = { id: screenId, components: JSON.parse(JSON.stringify(starter)) };
+  const screen = JSON.parse(JSON.stringify(bare.screens[1]));
+  screen.id = screenId;
   nextDesign.screens[screenId] = screen;
   Object.keys(screen.components)
     .forEach(k => resetId(nextDesign, screen.components, parseInt(k, 10)));

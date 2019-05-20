@@ -3,7 +3,7 @@ import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import {
-  addScreen, defaultComponent, getComponent, getParent, bare,
+  addScreen, defaultComponent, getComponent, getParent,
 } from './designs';
 
 class Tree extends Component {
@@ -14,7 +14,7 @@ class Tree extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
     if (typeName === 'Screen') {
-      nextSelected.screen = addScreen(nextDesign, bare);
+      nextSelected.screen = addScreen(nextDesign);
       nextSelected.component = parseInt(Object.keys(
         nextDesign.screens[nextSelected.screen].components)[0], 10);
     } else {
