@@ -46,24 +46,26 @@ export default class Properties extends Component {
     onChange({ design: nextDesign });
   }
 
-  duplicateComponent = (nextDesign, screen, id) => {
-    const dupId = nextDesign[screen].components.length;
-    const dup = { ...nextDesign[screen].components[id], id: dupId };
-    nextDesign[screen].components[dupId] = dup;
-    if (dup.children) {
-      dup.children = dup.children
-        .map(c => this.duplicateComponent(nextDesign, screen, c));
+  duplicateComponent = (nextDesign, ids) => {
+    const component = getComponent(nextDesign, ids);
+    const newId = nextDesign.nextId;
+    nextDesign.nextId += 1;
+    const newComponent = { ...component, id: newId };
+    nextDesign.screens[ids.screen].components[newId] = newComponent;
+    if (newComponent.children) {
+      newComponent.children = newComponent.children
+        .map(c => this.duplicateComponent(nextDesign, { ...ids, component: c }));
     }
-    return dupId;
+    return newId;
   }
 
   duplicate = () => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const dupId = this.duplicateComponent(nextDesign, selected.screen, selected.component);
+    const newId = this.duplicateComponent(nextDesign, selected);
     const parent = getParent(nextDesign, selected);
-    parent.children.push(dupId);
-    onChange({ design: nextDesign });
+    parent.children.push(newId);
+    onChange({ design: nextDesign, selected: { ...selected, component: newId } });
   }
 
   onKeyDown = (event) => {
