@@ -3,7 +3,7 @@ import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import {
-  addScreen, defaultComponent, getComponent, getParent, bare, resetState,
+  addScreen, defaultComponent, getComponent, getParent, bare,
 } from './designs';
 
 class Tree extends Component {
