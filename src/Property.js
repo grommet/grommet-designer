@@ -90,7 +90,7 @@ export default class Property extends Component {
               value={(value || {})[key]}
               onChange={subValue => {
                 let nextValue = { ...(value || {}) };
-                if (subValue !== undefined) nextValue[key] = subValue
+                if (subValue !== undefined && subValue !== '') nextValue[key] = subValue
                 else delete nextValue[key];
                 onChange(Object.keys(nextValue).length > 0 ? nextValue : undefined);
               }}

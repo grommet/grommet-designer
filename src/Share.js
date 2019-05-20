@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Heading, Layer, Text, TextInput
+  Box, Button, Heading, Layer, Text, TextArea, TextInput
 } from 'grommet';
-import { Close, Copy, Download } from 'grommet-icons';
+import { Close, Copy, Code } from 'grommet-icons';
 import LZString from 'lz-string';
+import { generateJSX } from './designs';
 
 export default class Share extends Component {
 
@@ -19,7 +20,7 @@ export default class Share extends Component {
 
   render() {
     const { design, onClose } = this.props;
-    const { message } = this.state;
+    const { code, message } = this.state;
     const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(design));
     const url = `${window.location.href.split('?')[0]}?preview=true&d=${encoded}`;
     return (
@@ -47,7 +48,16 @@ export default class Share extends Component {
             </Box>
           </Box>
           <Heading level={3} margin="none">Developer</Heading>
-          <Button icon={<Download />} label="Download JSX" disabled />
+          {code
+            ? <TextArea value={code} rows={20} cols={40} readOnly />
+            : (
+              <Button
+                icon={<Code />}
+                label="Generate Code"
+                onClick={() => this.setState({ code: generateJSX(design) })}
+              />
+            )
+          }
         </Box>
       </Layer>
     );

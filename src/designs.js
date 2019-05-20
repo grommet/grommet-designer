@@ -60,7 +60,7 @@ const resetId = (nextDesign, components, id) => {
       }
     }
   })
-}
+};
 
 export const addScreen = (nextDesign, starter) => {
   const screenId = nextDesign.nextId;
@@ -70,7 +70,7 @@ export const addScreen = (nextDesign, starter) => {
   Object.keys(screen.components)
     .forEach(k => resetId(nextDesign, screen.components, parseInt(k, 10)));
   return screenId;
-}
+};
 
 export const getComponent = (design, { screen, component }) =>
   design.screens[screen].components[component];
@@ -90,4 +90,49 @@ export const getParent = (design, ids) => {
     return false;
   });
   return result;
+};
+
+const componentToJSX = (id, screen, imports, iconImports, indent = '  ') => {
+  const component = screen.components[id];
+  if (component.type === 'Icon') {
+    const { icon, ...rest } = component.props;
+    iconImports[icon] = true;
+    return `${indent}<${icon} ${Object.keys(rest).map(k => `${k}="${rest[k]}"`).join(' ')} />`;
+  }
+  if (component.type === 'Repeater') {
+    const childId = component.children && component.children[0];
+    return childId
+      ? componentToJSX(childId, screen, imports, iconImports, indent)
+      : '';
+  }
+  imports[component.type] = true;
+  const children = component.children && component.children.map(cId =>
+    componentToJSX(cId, screen, imports, iconImports, indent + '  ')).join("\n");
+  return `${indent}<${component.type} ${Object.keys(component.props).map(name => {
+    const value = component.props[name];
+    if (typeof value === 'string') {
+      return `${name}="${value}"`
+    }
+    return `${name}={${JSON.stringify(value)}}`;
+  }).join(' ')}${children ? '' :  ' /'}>${children ? `\n${children}\n${indent}</${component.type}>` : ''}`;
 }
+
+export const generateJSX = (design) => {
+  const grommetImports = {};
+  const grommetIconImports = {};
+
+  const screens = Object.keys(design.screens)
+    .map(sKey => design.screens[sKey])
+    .map(screen => `const ${screen.name || `Screen${screen.id}`} = () => (
+${componentToJSX(1, screen, grommetImports, grommetIconImports)}
+)`)
+    .join("\n");
+
+  return `import Rect from 'react'
+import { ${Object.keys(grommetImports).join(', ')} } from 'grommet'
+${Object.keys(grommetIconImports.length > 0)
+  ? `import { ${Object.keys(grommetIconImports).join(', ')} } from 'grommet-icons'\n`
+  : ''}
+${screens}
+`
+};
