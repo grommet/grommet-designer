@@ -17,7 +17,8 @@ export default class Properties extends Component {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = getComponent(nextDesign, selected);
-    component.props[propName] = option;
+    if (option !== undefined) component.props[propName] = option
+    else delete component.props[propName];
     onChange({ design: nextDesign });
   }
 

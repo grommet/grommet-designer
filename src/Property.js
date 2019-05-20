@@ -88,8 +88,12 @@ export default class Property extends Component {
               name={key}
               property={property[key]}
               value={(value || {})[key]}
-              onChange={subValue =>
-                onChange({ ...(value || {}), [key]: subValue })}
+              onChange={subValue => {
+                let nextValue = { ...(value || {}) };
+                if (subValue !== undefined) nextValue[key] = subValue
+                else delete nextValue[key];
+                onChange(Object.keys(nextValue).length > 0 ? nextValue : undefined);
+              }}
             />
           ))}
         </Box>

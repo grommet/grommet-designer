@@ -36,18 +36,6 @@ class Tree extends Component {
     onChange({ design: nextDesign, selected: nextSelected });
   }
 
-  // onDelete = (id) => {
-  //   const { design, selected, onChange } = this.props;
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   console.log('!!! onDelete', nextDesign, selected, id);
-  //   const parent = nextDesign.screens[selected.screen].components
-  //     .find(c => (c && c.children && c.children.includes(id)));
-  //   nextDesign.screens[selected.screen].components[id] = undefined;
-  //   parent.children = parent.children.filter(i => i !== id);
-  //   const nextSelected = { ...selected, component: parent.id };
-  //   onChange({ design: nextDesign, selected: nextSelected });
-  // }
-
   select = (selected) => {
     const { onChange } = this.props;
     onChange({ selected });
@@ -184,9 +172,9 @@ class Tree extends Component {
             >
               <Text truncate>
                 {component.type === 'Layer' ? `${type.name} ${component.id}`
-                  : component.text
+                  : component.name || component.text
                   || component.props.name || component.props.label
-                  || component.name || type.name}
+                  || type.name}
               </Text>
             </Box>
           </Button>
