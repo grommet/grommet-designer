@@ -10,6 +10,7 @@ import Properties from './Properties';
 import Tree from './Tree';
 import Icon from './Icon';
 import Manage from './Manage';
+import Share from './Share';
 import { getComponent, getParent, resetState, rich } from './designs';
 
 const themes = { dark, dxc, hpe, grommet };
@@ -143,7 +144,7 @@ class App extends Component {
   }
 
   render() {
-    const { design, managing, preview, selected, theme } = this.state;
+    const { design, managing, preview, selected, sharing, theme } = this.state;
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
@@ -161,6 +162,7 @@ class App extends Component {
                     selected={selected}
                     onChange={this.onChange}
                     onManage={() => this.setState({ managing: true })}
+                    onShare={() => this.setState({ sharing: true })}
                   />
                 )}
 
@@ -191,6 +193,12 @@ class App extends Component {
               this.onChange(nextState);
             }}
             onClose={() => this.setState({ managing: false })}
+          />
+        )}
+        {sharing && (
+          <Share
+            design={design}
+            onClose={() => this.setState({ sharing: false })}
           />
         )}
       </Grommet>

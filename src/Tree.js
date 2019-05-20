@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
-import LZString from 'lz-string';
 import { types, Adder } from './Types';
 import {
   addScreen, defaultComponent, getComponent, getParent, bare, resetState,
@@ -213,7 +212,7 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected, onManage } = this.props;
+    const { design, selected, onManage, onShare } = this.props;
     const { adding, confirmDelete, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
@@ -301,9 +300,7 @@ class Tree extends Component {
               title="share"
               icon={<Share />}
               hoverIndicator
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`?d=${LZString.compressToEncodedURIComponent(JSON.stringify(design))}`}
+              onClick={onShare}
             />
           </Box>
           {adding && (
