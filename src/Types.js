@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Anchor, Box, Button, Calendar, CheckBox, DataTable, FormField,
+  Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, FormField,
   Grid, Grommet, Heading, Image, Layer,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
@@ -240,6 +240,17 @@ export const types = {
       daysOfWeek: false,
       range: false,
       size: ['small', 'medium', 'large'],
+    },
+  },
+  Clock: {
+    component: Clock,
+    name: 'Clock',
+    properties: {
+      hourLimit: ["12", "24"],
+      precision: ['hours', 'minutes', 'seconds'],
+      run: ['forward', 'backward'],
+      size: ['small', 'medium', 'large', 'xlarge'],
+      type: ['analog', 'digital'],
     },
   },
   DataTable: {
