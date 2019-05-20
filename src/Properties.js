@@ -13,6 +13,14 @@ export default class Properties extends Component {
 
   textRef = React.createRef();
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.component.id !== this.props.component.id
+      && this.textRef.current) {
+      this.textRef.current.select();
+      this.textRef.current.focus();
+    }
+  }
+
   setProp = (propName, option) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -71,10 +79,6 @@ export default class Properties extends Component {
   onKeyDown = (event) => {
     const { onDelete } = this.props;
     if (event.metaKey) {
-      // if (event.keyCode === 83) { // s
-      //   event.preventDefault();
-      //   this.textRef.current.focus();
-      // }
       if (event.keyCode === 8) { // delete
         event.preventDefault();
         onDelete();

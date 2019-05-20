@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, CheckBox, FormField, Heading, Layer, Select, Text, TextInput,
 } from 'grommet';
-import { Close, Edit, FormDown, FormUp } from 'grommet-icons';
+import { Close, FormDown, FormNext, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 
 const ColorLabel = ({ color }) => (
@@ -24,7 +24,7 @@ export default class Property extends Component {
       const isColor = property.includes('light-1');
       const isIcon = name === 'icon';
       return (
-        <FormField key={name} name={name} label={name}>
+        <FormField key={name} name={name} label={name} style={{ margin: 0 }}>
           <Select
             options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
               : [...property, 'undefined']}
@@ -50,7 +50,7 @@ export default class Property extends Component {
       );
     } else if (typeof property === 'string') {
       return (
-        <FormField key={name} name={name} label={name}>
+        <FormField key={name} name={name} label={name} style={{ margin: 0 }}>
           <TextInput
             value={value || ''}
             onChange={(event) => onChange(event.target.value)}
@@ -59,7 +59,7 @@ export default class Property extends Component {
       );
     } else if (typeof property === 'boolean') {
       return (
-        <FormField key={name} name={name}>
+        <FormField key={name} name={name} style={{ margin: 0 }}>
           <Box pad="small">
             <CheckBox
               label={name}
@@ -73,15 +73,13 @@ export default class Property extends Component {
       );
     } else if (typeof property === 'object') {
       return (
-        <Box border="bottom" margin={{ bottom: 'small' }}>
-          <Box direction="row" align="center" justify="between" pad={{ left: "small" }}>
-            <Text>{name}</Text>
-            <Button
-              icon={expand ? <FormUp /> : <FormDown />}
-              hoverIndicator
-              onClick={() => this.setState({ expand: !expand })}
-            />
-          </Box>
+        <Box border="bottom">
+          <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
+            <Box direction="row" align="center" justify="between" pad="small">
+              <Text>{name}</Text>
+              {expand ? <FormUp /> : <FormDown />}
+            </Box>
+          </Button>
           {expand && Object.keys(property).map((key) => (
             <Property
               key={key}
@@ -101,15 +99,13 @@ export default class Property extends Component {
     } else if (typeof property === 'function') {
       const CustomProperty = property;
       return (
-        <Box border="bottom" margin={{ bottom: 'small' }}>
-          <Box direction="row" align="center" justify="between" pad={{ left: "small" }}>
-            <Text>{name}</Text>
-            <Button
-              icon={<Edit />}
-              hoverIndicator
-              onClick={() => this.setState({ expand: !expand })}
-            />
-          </Box>
+        <Box border="bottom">
+          <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
+            <Box direction="row" align="center" justify="between" pad="small">
+              <Text>{name}</Text>
+              <FormNext />
+            </Box>
+          </Button>
           {expand && (
             <Layer
               position="top"
