@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Anchor, Box, Button, Calendar, CheckBox, DataTable, FormField,
-  Grid, Grommet, Heading, Layer,
+  Grid, Grommet, Heading, Image, Layer,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
@@ -259,6 +259,15 @@ export const types = {
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       type: ['bar', 'circle'],
+    },
+  },
+  Image: {
+    component: Image,
+    name: 'Image',
+    properties: {
+      fit: ['cover', 'contain'],
+      opacity: ['weak', 'medium', 'strong'],
+      src: '',
     },
   },
   Repeater: {
