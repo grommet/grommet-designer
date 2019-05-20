@@ -96,7 +96,7 @@ class App extends Component {
   }
 
   renderComponent = (id) => {
-    const { design, selected, theme } = this.state;
+    const { design, preview, selected, theme } = this.state;
     const component = design.screens[selected.screen].components[id];
     if (!component || component.hide) {
       return null;
@@ -132,7 +132,7 @@ class App extends Component {
             this.onChange({ selected: { ...selected, component: id } });
           }
         },
-        style: selected.component === id
+        style: !preview && selected.component === id
           ? { outline: '1px dashed red' } : undefined,
         ...component.props,
         ...specialProps,
