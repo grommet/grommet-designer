@@ -38,7 +38,7 @@ export const resetState = (starter = bare) => {
       .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10)))));
   nextId += 1;
   return {
-    design: { ...starter, nextId },
+    design: { ...starter, nextId, version: 1.0 },
     selected: { screen: 1, component: 1 },
   };
 };
