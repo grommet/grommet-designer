@@ -85,14 +85,6 @@ class Tree extends Component {
     this.setState({ confirmDelete: false });
   }
 
-  reset = () => {
-    const { location } = document;
-    const { onChange } = this.props;
-    onChange(resetState());
-    this.setState({ confirmReset: false });
-    location.replace('?');
-  }
-
   onKeyDown = (event) => {
     if (event.metaKey) {
       if (event.keyCode === 65) { // a
@@ -200,7 +192,7 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected, onManage, onShare } = this.props;
+    const { design, selected, onManage, onReset, onShare } = this.props;
     const { adding, confirmDelete, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
@@ -275,7 +267,10 @@ class Tree extends Component {
                 title="confirm delete"
                 icon={<Trash color="status-critical" />}
                 hoverIndicator
-                onClick={this.reset}
+                onClick={() => {
+                  this.setState({ confirmReset: false });
+                  onReset();
+                }}
               />
             )}
             <Button

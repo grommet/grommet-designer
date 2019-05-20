@@ -11,7 +11,7 @@ import Tree from './Tree';
 import Icon from './Icon';
 import Manage from './Manage';
 import Share from './Share';
-import { getComponent, getParent, resetState, rich } from './designs';
+import { getComponent, getParent, resetState, bare, rich } from './designs';
 
 const themes = { dark, dxc, hpe, grommet };
 
@@ -83,6 +83,12 @@ class App extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     nextDesign.screens[screen].components[id].hide = hide;
     this.onChange({ design: nextDesign });
+  }
+
+  onReset = () => {
+    localStorage.removeItem('selected');
+    localStorage.removeItem('design');
+    this.setState(resetState(bare));
   }
 
   onKeyDown = (event) => {
@@ -163,6 +169,7 @@ class App extends Component {
                     onChange={this.onChange}
                     onManage={() => this.setState({ managing: true })}
                     onShare={() => this.setState({ sharing: true })}
+                    onReset={this.onReset}
                   />
                 )}
 
