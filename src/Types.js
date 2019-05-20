@@ -111,9 +111,12 @@ export const types = {
     sample: <Heading size="small" margin="none">Heading</Heading>,
     text: 'Heading',
     properties: {
+      color: colors,
       level: ['1', '2', '3', '4'],
       margin: ['none', 'small', 'medium', 'large'],
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      textAlign: ['start', 'center', 'end'],
+      truncate: false,
     },
   },
   Paragraph: {
@@ -121,7 +124,10 @@ export const types = {
     name: 'Paragraph',
     text: 'Paragraph',
     properties: {
+      color: colors,
+      margin: ['none', 'small', 'medium', 'large'],
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      textAlign: ['start', 'center', 'end'],
     },
   },
   Text: {
