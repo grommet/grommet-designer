@@ -270,12 +270,6 @@ class Tree extends Component {
               hoverIndicator
               onClick={() => this.setState({ confirmReset: !confirmReset })}
             />
-            <Button
-              title="all my designs"
-              icon={<Folder />}
-              hoverIndicator
-              onClick={onManage}
-            />
             {confirmReset && (
               <Button
                 title="confirm delete"
@@ -284,6 +278,12 @@ class Tree extends Component {
                 onClick={this.reset}
               />
             )}
+            <Button
+              title="all my designs"
+              icon={<Folder />}
+              hoverIndicator
+              onClick={onManage}
+            />
             <Button
               title="share"
               icon={<Share />}
