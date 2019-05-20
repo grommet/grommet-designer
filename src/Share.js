@@ -20,6 +20,8 @@ export default class Share extends Component {
   render() {
     const { design, onClose } = this.props;
     const { message } = this.state;
+    const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(design));
+    const url = `${window.location.href.split('?')[0]}?preview=true&d=${encoded}`;
     return (
       <Layer onEsc={onClose}>
         <Box pad="medium" gap="medium">
@@ -35,10 +37,7 @@ export default class Share extends Component {
             <Button icon={<Close />} hoverIndicator onClick={onClose} />
           </Box>
           <Box direction="row">
-            <TextInput
-              ref={this.ref}
-              value={`${window.location}?d=${LZString.compressToEncodedURIComponent(JSON.stringify(design))}`}
-            />
+            <TextInput ref={this.ref} value={url} />
             <Button icon={<Copy />} onClick={this.onCopy} />
           </Box>
           <Box>

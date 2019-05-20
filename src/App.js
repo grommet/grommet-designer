@@ -28,8 +28,8 @@ class App extends Component {
     if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
-      const screen = parseInt(Object.keys(design.screens)[0], 10);
-      const component = parseInt(Object.keys(screen.components)[0], 10);
+      const screen = Object.keys(design.screens)[0];
+      const component = Object.keys(design.screens[screen].components)[0];
       this.setState({ design, selected: { screen, component } });
     } else {
       let stored = localStorage.getItem('design');

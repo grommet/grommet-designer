@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, CheckBox, FormField, Heading, Layer, Select, Text, TextInput,
 } from 'grommet';
-import { Close, Edit } from 'grommet-icons';
+import { Close, Edit, FormDown, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 
 const ColorLabel = ({ color }) => (
@@ -64,6 +64,7 @@ export default class Property extends Component {
             <CheckBox
               label={name}
               toggle
+              reverse
               checked={!!value}
               onChange={(event) => onChange(event.target.checked)}
             />
@@ -73,12 +74,12 @@ export default class Property extends Component {
     } else if (typeof property === 'object') {
       return (
         <Box border="bottom" margin={{ bottom: 'small' }}>
-          <Box direction="row" pad="small">
-            <CheckBox
-              label={name}
-              reverse
-              checked={expand || false}
-              onChange={() => this.setState({ expand: !expand })}
+          <Box direction="row" align="center" justify="between" pad={{ left: "small" }}>
+            <Text>{name}</Text>
+            <Button
+              icon={expand ? <FormUp /> : <FormDown />}
+              hoverIndicator
+              onClick={() => this.setState({ expand: !expand })}
             />
           </Box>
           {expand && Object.keys(property).map((key) => (

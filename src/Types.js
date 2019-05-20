@@ -31,7 +31,13 @@ export const types = {
       align: ['stretch', 'start', 'center', 'end'],
       alignSelf: ['stretch', 'start', 'center', 'end'],
       animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
-      background: colors,
+      background: {
+        color: colors,
+        dark: false,
+        opacity: ['weak', 'medium', 'strong'],
+        position: ['center', 'top', 'bottom', 'left', 'right'],
+        image: '',
+      },
       border: {
         color: colors,
         size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
@@ -296,7 +302,8 @@ export const types = {
     name: 'Repeater',
     help: `Repeater is not a grommet component, it is a special component for
     use with this design tool. It expects a single child component which
-    it will repeat 'count' times. Wrap it in a Box to control it's layout.`,
+    it will repeat 'count' times. Wrap it in a Box or Grid to control
+    it's layout.`,
     defaultProps: {
       count: 2,
     },
