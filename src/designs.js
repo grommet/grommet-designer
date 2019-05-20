@@ -70,6 +70,19 @@ export const addScreen = (nextDesign) => {
   nextDesign.screens[screenId] = screen;
   Object.keys(screen.components)
     .forEach(k => resetId(nextDesign, screen.components, parseInt(k, 10)));
+  // set a good initial name
+  let suffix = 0;
+  let available = false;
+  const suffixAvailable = suffix =>
+    !Object.keys(nextDesign.screens)
+    .map(sId => nextDesign.screens[sId])
+    .some(screen => (screen.name === `Screen ${suffix}` || screen.id === suffix));
+  while (!available) {
+    suffix += 1;
+    available = suffixAvailable(suffix)
+  }
+  nextDesign.screens[screenId].name = `Screen ${suffix}`;
+
   return screenId;
 };
 

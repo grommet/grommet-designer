@@ -219,7 +219,7 @@ class Tree extends Component {
                 <Box key={s.id}>
                   <Box direction="row" align="center" justify="between">
                     <Heading level={3} size="small" margin="small">
-                      {`Screen ${s.id}`}
+                      {s.name || `Screen ${s.id}`}
                     </Heading>
                     {s.id === selected.screen
                       && Object.keys(design.screens).length > 1
