@@ -56,6 +56,16 @@ export const types = {
     component: Grid,
     name: 'Grid',
     sample: <Box pad="xsmall" border={{ side: 'vertical', size: 'xlarge' }}>Grid</Box>,
+    properties: {
+      align: ['stretch', 'start', 'center', 'end'],
+      alignContent: ['stretch', 'start', 'center', 'end'],
+      columns: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      fil: ['horizontal', 'vertical'],
+      gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      justify: ['between', 'start', 'center', 'end'],
+      margin: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      rows: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+    },
   },
   Stack: {
     component: Stack,
@@ -280,7 +290,7 @@ export const types = {
       count: 2,
     },
     properties: {
-      count: [1, 2, 5, 10],
+      count: [1, 2, 5, 10, 20, 100],
     },
   }
 };
