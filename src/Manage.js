@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Form, FormField, Heading, Layer, TextInput,
+  Box, Button, Form, FormField, Heading, Layer,
 } from 'grommet';
 import { Close, Save, Trash } from 'grommet-icons';
 
@@ -28,8 +28,9 @@ export default class Manage extends Component {
   onSave = (event) => {
     event.preventDefault();
     const { design } = this.props;
-    const { designs, name } = this.state;
-    const nextDesign = { ...design, name };
+    const { designs } = this.state;
+    const { value: { name } } = event;
+    const nextDesign = { ...design, name, date: (new Date()).toISOString() };
     localStorage.setItem(name, JSON.stringify(nextDesign));
     const nextDesigns = [...designs];
     nextDesigns.push(name);
@@ -47,28 +48,33 @@ export default class Manage extends Component {
 
   render() {
     const { onClose } = this.props;
-    const { designs, name } = this.state;
+    const { designs } = this.state;
     return (
       <Layer onEsc={onClose}>
-        <Box direction="row" gap="medium" align="center" justify="between">
+        <Box
+          direction="row"
+          gap="medium"
+          align="center"
+          justify="between"
+          pad="medium"
+        >
           <Heading level={2} margin={{ left: 'small', vertical: 'none'}}>
             Designs
           </Heading>
           <Button icon={<Close />} hoverIndicator onClick={onClose} />
         </Box>
-        <Box pad="small">
+        <Box pad={{ horizontal: "medium" }}>
           <Form onSubmit={this.onSave}>
-            <FormField label="Current">
-              <TextInput
-                value={name || ''}
-                onChange={(event) => this.setState({ name: event.target.value })}
-              />
-            </FormField>
-            <Button type="submit" icon={<Save />} />
+            <FormField
+              name="name"
+              label="Give your current design a name"
+              required
+            />
+            <Button title="save" type="submit" icon={<Save />} />
           </Form>
         </Box>
         
-        <Box flex overflow="auto">
+        <Box flex overflow="auto" pad="medium">
           {designs.map(name => (
             <Box
               key={name}
