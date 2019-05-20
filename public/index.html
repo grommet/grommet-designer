@@ -20,10 +20,28 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Grommet Designer</title>
+    <style type="text/css">
+      body { margin: 0; background-color: #7D4CDB; }
+      #loadingLogo {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        color: #fff; font-family: Helvetica, sans-serif;
+        display: flex; flex-direction: column; align-items: center;
+      }
+      #loadingLogo h1 {
+        font-weight: normal;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div id="loadingLogo">
+        <svg width="96" height="96">
+          <circle cx="48" cy="48" r="42" stroke="#fff" stroke-width="12" fill="none" />
+        </svg>
+        <h1>grommet designer</h1>
+      </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
