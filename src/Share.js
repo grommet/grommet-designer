@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, Heading, Layer, Text, TextInput
 } from 'grommet';
-import { Close, Copy } from 'grommet-icons';
+import { Close, Copy, Download } from 'grommet-icons';
 import LZString from 'lz-string';
 
 export default class Share extends Component {
@@ -31,18 +31,23 @@ export default class Share extends Component {
             align="center"
             justify="between"
           >
-            <Heading level={2} margin={{ left: 'small', vertical: 'none'}}>
+            <Heading level={2} margin="none">
               Share
             </Heading>
             <Button icon={<Close />} hoverIndicator onClick={onClose} />
           </Box>
-          <Box direction="row">
-            <TextInput ref={this.ref} value={url} />
-            <Button icon={<Copy />} onClick={this.onCopy} />
-          </Box>
+          <Heading level={3} margin="none">Browser</Heading>
           <Box>
-            <Text>{message}&nbsp;</Text>
+            <Box direction="row">
+              <TextInput ref={this.ref} value={url} />
+              <Button icon={<Copy />} onClick={this.onCopy} />
+            </Box>
+            <Box>
+              <Text textAlign="end">{message}&nbsp;</Text>
+            </Box>
           </Box>
+          <Heading level={3} margin="none">Developer</Heading>
+          <Button icon={<Download />} label="Download JSX" disabled />
         </Box>
       </Layer>
     );
