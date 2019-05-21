@@ -8,6 +8,7 @@ export const bare = {
       },
     },
   },
+  screenOrder: [1],
 };
 
 export const rich = {
@@ -29,6 +30,7 @@ export const rich = {
       },
     },
   },
+  screenOrder: [1],
 };
 
 export const resetState = (starter = bare) => {
@@ -38,7 +40,7 @@ export const resetState = (starter = bare) => {
       .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10)))));
   nextId += 1;
   return {
-    design: { ...starter, nextId, version: 1.0 },
+    design: { ...starter, nextId, version: 1.1 },
     selected: { screen: 1, component: 1 },
   };
 };
@@ -63,6 +65,10 @@ const resetId = (nextDesign, components, id) => {
 };
 
 export const addScreen = (nextDesign, copyScreen) => {
+  delete nextDesign.screenOrder;
+  if (!nextDesign.screenOrder) {
+    nextDesign.screenOrder = Object.keys(nextDesign.screens).map(k => parseInt(k, 10));
+  }
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
   const screen = JSON.parse(JSON.stringify(copyScreen || bare.screens[1]));
@@ -82,6 +88,12 @@ export const addScreen = (nextDesign, copyScreen) => {
     available = suffixAvailable(suffix)
   }
   nextDesign.screens[screenId].name = `Screen ${suffix}`;
+  if (copyScreen) {
+    const index = nextDesign.screenOrder.indexOf(copyScreen.id);
+    nextDesign.screenOrder.splice(index + 1, 0, screenId);
+  } else {
+    nextDesign.screenOrder.push(screenId);
+  }
 
   return screenId;
 };

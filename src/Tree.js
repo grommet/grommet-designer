@@ -62,6 +62,18 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
+  moveScreen = (dragging, target, where) => {
+    const { design, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const moveIndex = nextDesign.screenOrder.indexOf(dragging);
+    nextDesign.screenOrder.splice(moveIndex, 1);
+    const targetIndex = nextDesign.screenOrder.indexOf(target);
+    nextDesign.screenOrder.splice(where === 'before' ? targetIndex : targetIndex + 1,
+      0, dragging);
+    this.setState({ draggingScreen: undefined, dropScreenTarget: undefined });
+    onChange({ design: nextDesign });
+  }
+
   toggleCollapse = () => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -101,6 +113,33 @@ class Tree extends Component {
           }
         }}
         onDrop={() => this.moveChild(dragging, dropTarget, dropWhere)}
+      />
+    );
+  }
+
+  renderScreenDropArea = (screenId, where) => {
+    const { draggingScreen, dropWhere, dropScreenTarget } = this.state;
+    return (
+      <Box
+        pad="xxsmall"
+        background={draggingScreen
+          && dropScreenTarget && dropScreenTarget === screenId
+          && dropWhere === where
+          ? 'accent-2' : undefined}
+        onDragEnter={(event) => {
+          if (draggingScreen && draggingScreen !== screenId) {
+            event.preventDefault();
+            this.setState({ dropScreenTarget: screenId, dropWhere: where });
+          } else {
+            this.setState({ dropScreenTarget: undefined });
+          }
+        }}
+        onDragOver={(event) => {
+          if (draggingScreen && draggingScreen !== screenId) {
+            event.preventDefault();
+          }
+        }}
+        onDrop={() => this.moveScreen(draggingScreen, dropScreenTarget, dropWhere)}
       />
     );
   }
@@ -176,18 +215,23 @@ class Tree extends Component {
     )
   }
 
-  renderScreen = (screenId) => {
+  renderScreen = (screenId, firstScreen) => {
     const { design, selected } = this.props;
     const screen = design.screens[screenId];
     const id = defaultComponent(design, screen.id);
     const component = screen.components[id];
     return (
       <Box key={screen.id}>
+        {firstScreen && this.renderScreenDropArea(screenId, 'before')}
         <Stack anchor="right">
           <Button
             fill
             hoverIndicator
             onClick={() => this.select({ screen: screenId, component: id })}
+            draggable
+            onDragStart={() => this.setState({ draggingScreen: screenId })}
+            onDragEnd={() =>
+              this.setState({ draggingScreen: undefined, dropScreenTarget: undefined })}
           >
             <Box
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
@@ -216,6 +260,7 @@ class Tree extends Component {
               this.renderComponent({ screen: screen.id, component: childId }))}
           </Box>
         )}
+        {this.renderScreenDropArea(screenId, 'after')}
       </Box>
     );
   }
@@ -243,8 +288,8 @@ class Tree extends Component {
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
-              {Object.keys(design.screens)
-                .map(sId => this.renderScreen(parseInt(sId, 10)))}
+              {(design.screenOrder || Object.keys(design.screens))
+                .map((sId, index) => this.renderScreen(parseInt(sId, 10), index === 0))}
             </Box>
           </Box>
           <Box 

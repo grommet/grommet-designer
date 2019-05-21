@@ -30,6 +30,8 @@ export default class ScreenDetails extends Component {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     delete nextDesign.screens[selected.screen];
+    const index = nextDesign.screenOrder.indexOf(selected.screen);
+    nextDesign.screenOrder.splice(index, 1);
     let nextScreen = selected.screen - 1;
     while (nextScreen && !design.screens[nextScreen]) nextScreen -= 1;
     const nextSelected = {
