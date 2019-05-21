@@ -11,7 +11,10 @@ import Tree from './Tree';
 import Icon from './Icon';
 import Manage from './Manage';
 import Share from './Share';
-import { getComponent, getParent, resetState, bare, rich } from './designs';
+import {
+  defaultComponent, getComponent, getParent, resetState, bare, rich,
+} from './designs';
+import ScreenDetails from './ScreenDetails';
 
 const themes = { dark, dxc, hpe, grommet };
 
@@ -151,6 +154,8 @@ class App extends Component {
 
   render() {
     const { design, managing, preview, selected, sharing, theme } = this.state;
+    const rootComponent = defaultComponent(design, selected.screen);
+    const selectedComponent = getComponent(design, selected);
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>
@@ -174,18 +179,25 @@ class App extends Component {
                 )}
 
                 <Box>
-                  {this.renderComponent(parseInt(Object.keys(
-                    design.screens[selected.screen].components)[0], 10))}
+                  {this.renderComponent(rootComponent)}
                 </Box>
 
                 {responsive !== 'small' && !preview && (
-                  <Properties
-                    design={design}
-                    selected={selected}
-                    component={getComponent(design, selected)}
-                    onChange={this.onChange}
-                    onDelete={this.onDelete}
-                  />
+                  selectedComponent.type === 'Grommet' ? (
+                    <ScreenDetails
+                      design={design}
+                      selected={selected}
+                      onChange={this.onChange}
+                    />
+                  ) : (
+                    <Properties
+                      design={design}
+                      selected={selected}
+                      component={selectedComponent}
+                      onChange={this.onChange}
+                      onDelete={this.onDelete}
+                    />
+                  )
                 )}
 
               </Grid>

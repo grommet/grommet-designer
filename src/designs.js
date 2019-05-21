@@ -62,10 +62,10 @@ const resetId = (nextDesign, components, id) => {
   })
 };
 
-export const addScreen = (nextDesign) => {
+export const addScreen = (nextDesign, copyScreen) => {
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  const screen = JSON.parse(JSON.stringify(bare.screens[1]));
+  const screen = JSON.parse(JSON.stringify(copyScreen || bare.screens[1]));
   screen.id = screenId;
   nextDesign.screens[screenId] = screen;
   Object.keys(screen.components)

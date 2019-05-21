@@ -15,8 +15,7 @@ class Tree extends Component {
     const nextSelected = { ...selected };
     if (typeName === 'Screen') {
       nextSelected.screen = addScreen(nextDesign);
-      nextSelected.component = parseInt(Object.keys(
-        nextDesign.screens[nextSelected.screen].components)[0], 10);
+      nextSelected.component = defaultComponent(nextDesign, nextSelected.screen);
     } else {
       const type = types[typeName];
       const id = nextDesign.nextId;
@@ -71,20 +70,6 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
-  deleteScreen = () => {
-    const { design, selected, onChange } = this.props;
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    delete nextDesign.screens[selected.screen];
-    let nextScreen = selected.screen - 1;
-    while (nextScreen && !design.screens[nextScreen]) nextScreen -= 1;
-    const nextSelected = {
-      screen: nextScreen,
-      component: defaultComponent(nextDesign, nextScreen),
-    };
-    onChange({ design: nextDesign, selected: nextSelected });
-    this.setState({ confirmDelete: false });
-  }
-
   onKeyDown = (event) => {
     if (event.metaKey) {
       if (event.keyCode === 65) { // a
@@ -120,7 +105,7 @@ class Tree extends Component {
     );
   }
 
-  renderTree = (ids, firstChild) => {
+  renderComponent = (ids, firstChild) => {
     const { design, selected } = this.props;
     const { dragging, dropTarget, dropWhere } = this.state;
     const component = getComponent(design, ids);
@@ -182,7 +167,7 @@ class Tree extends Component {
         {!component.collapsed && component.children && (
           <Box pad={{ left: 'small' }}>
             {component.children.map((childId, index) =>
-              this.renderTree({ screen: ids.screen, component: childId },
+              this.renderComponent({ screen: ids.screen, component: childId },
                 index === 0))}
           </Box>
         )}
@@ -191,9 +176,53 @@ class Tree extends Component {
     )
   }
 
+  renderScreen = (screenId) => {
+    const { design, selected } = this.props;
+    const screen = design.screens[screenId];
+    const id = defaultComponent(design, screen.id);
+    const component = screen.components[id];
+    return (
+      <Box key={screen.id}>
+        <Stack anchor="right">
+          <Button
+            fill
+            hoverIndicator
+            onClick={() => this.select({ screen: screenId, component: id })}
+          >
+            <Box
+              pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              background={
+                selected.screen === screenId && selected.component === id
+                ? 'active' : undefined
+              }
+            >
+              <Heading level={3} size="small" margin="none">
+                {screen.name || `Screen ${screen.id}`}
+              </Heading>
+            </Box>
+          </Button>
+          {selected.screen === screenId
+            && selected.component === id
+            && component.children && (
+            <Button
+              icon={component.collapsed ? <FormDown /> : <FormUp />}
+              onClick={this.toggleCollapse}
+            />
+          )}
+        </Stack>
+        {!component.collapsed && component.children && (
+          <Box>
+            {component.children.map((childId) =>
+              this.renderComponent({ screen: screen.id, component: childId }))}
+          </Box>
+        )}
+      </Box>
+    );
+  }
+
   render() {
     const { design, selected, onManage, onReset, onShare } = this.props;
-    const { adding, confirmDelete, confirmReset } = this.state;
+    const { adding, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
     const isContainer = !(selectedtype.text || selectedtype.name === 'Icon');
@@ -215,39 +244,7 @@ class Tree extends Component {
           <Box flex overflow="auto">
             <Box flex={false}>
               {Object.keys(design.screens)
-                .map(sId => design.screens[sId]).map(s => (
-                <Box key={s.id}>
-                  <Box direction="row" align="center" justify="between">
-                    <Heading level={3} size="small" margin="small">
-                      {s.name || `Screen ${s.id}`}
-                    </Heading>
-                    {s.id === selected.screen
-                      && Object.keys(design.screens).length > 1
-                      ? (
-                      <Box direction="row" align="center">
-                        {confirmDelete && (
-                          <Button
-                            title="confirm delete"
-                            icon={<Trash color="status-critical" />}
-                            hoverIndicator
-                            onClick={this.deleteScreen}
-                          />
-                        )}
-                        <Button
-                          title="delete screen"
-                          icon={<Trash />}
-                          hoverIndicator
-                          onClick={() => this.setState({ confirmDelete: !confirmDelete })}
-                        />
-                      </Box>
-                    ) : null}
-                  </Box>
-                  {this.renderTree({
-                    screen: s.id,
-                    component: defaultComponent(design, s.id),
-                  })}
-                </Box>
-              ))}
+                .map(sId => this.renderScreen(parseInt(sId, 10)))}
             </Box>
           </Box>
           <Box 
