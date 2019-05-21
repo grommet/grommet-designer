@@ -19,10 +19,10 @@ export default class ScreenDetails extends Component {
   }
 
   setName = (name) => {
-    const { design, screen, onChange } = this.props;
+    const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const nextScreen = { ...nextDesign.screens[screen.id], name };
-    nextDesign.screens[screen.id] = nextScreen;
+    const nextScreen = { ...nextDesign.screens[selected.screen], name };
+    nextDesign.screens[selected.screen] = nextScreen;
     onChange({ design: nextDesign });
   }
 
