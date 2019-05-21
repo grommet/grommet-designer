@@ -159,7 +159,10 @@ class Tree extends Component {
             hoverIndicator
             onClick={() => this.select(ids)}
             draggable
-            onDragStart={() => this.setState({ dragging: ids })}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', 'ignored'); // for Firefox
+              this.setState({ dragging: ids });
+            }}
             onDragEnd={() =>
               this.setState({ dragging: undefined, dropTarget: undefined })}
             onDragEnter={() => {
@@ -229,7 +232,10 @@ class Tree extends Component {
             hoverIndicator
             onClick={() => this.select({ screen: screenId, component: id })}
             draggable
-            onDragStart={() => this.setState({ draggingScreen: screenId })}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', 'ignored'); // for Firefox
+              this.setState({ draggingScreen: screenId });
+            }}
             onDragEnd={() =>
               this.setState({ draggingScreen: undefined, dropScreenTarget: undefined })}
           >

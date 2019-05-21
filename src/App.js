@@ -161,6 +161,7 @@ class App extends Component {
         draggable: !preview && component.type !== 'Grommet',
         onDragStart: preview ? undefined : (event) => {
           event.stopPropagation();
+          event.dataTransfer.setData('text/plain', 'ignored'); // for Firefox
           this.setState({ dragging: id });
         },
         onDragEnd: preview ? undefined : (event) => {
