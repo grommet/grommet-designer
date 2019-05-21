@@ -157,30 +157,30 @@ class App extends Component {
             this.onChange({ selected: { ...selected, component: id } });
           }
         },
-        draggable: component.type !== 'Grommet',
-        onDragStart: (event) => {
+        draggable: !preview && component.type !== 'Grommet',
+        onDragStart: preview ? undefined : (event) => {
           event.stopPropagation();
           this.setState({ dragging: id });
         },
-        onDragEnd: (event) => {
+        onDragEnd: preview ? undefined : (event) => {
           event.stopPropagation();
           this.setState({ dragging: undefined, dropTarget: undefined });
         },
-        onDragEnter: (event) => {
+        onDragEnter: preview ? undefined : (event) => {
           if (droppable) event.stopPropagation();
           const { dragging } = this.state;
           if (dragging && dragging !== id && droppable) {
             this.setState({ dropTarget: id });
           }
         },
-        onDragOver: (event) => {
+        onDragOver: preview ? undefined : (event) => {
           if (droppable) event.stopPropagation();
           const { dragging } = this.state;
           if (dragging && dragging !== id && droppable) {
             event.preventDefault();
           }
         },
-        onDrop: (event) => {
+        onDrop: preview ? undefined : (event) => {
           if (droppable) event.stopPropagation();
           const { dragging, dropTarget } = this.state;
           this.moveChild(dragging, dropTarget);
