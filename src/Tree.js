@@ -72,10 +72,10 @@ class Tree extends Component {
 
   onKeyDown = (event) => {
     if (event.metaKey) {
-      if (event.keyCode === 65) { // a
-        event.preventDefault();
-        this.setState({ adding: true });
-      }
+      // if (event.keyCode === 65) { // a
+      //   event.preventDefault();
+      //   this.setState({ adding: true });
+      // }
     }
   }
 
