@@ -107,10 +107,10 @@ export const defaultComponent = (design, screen) =>
 export const getParent = (design, ids) => {
   const screen = design.screens[ids.screen];
   let result;
-  Object.keys(screen.components).some(k => {
-    const children = screen.components[k].children;
+  Object.keys(screen.components).some(id => {
+    const children = screen.components[id].children;
     if (children && children.includes(ids.component)) {
-      result = screen.components[k];
+      result = screen.components[id];
       return true;
     }
     return false;

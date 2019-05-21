@@ -94,6 +94,21 @@ class App extends Component {
     this.setState(resetState(bare));
   }
 
+  moveChild = (dragging, dropTarget) => {
+    const { design, selected } = this.state;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    // remove from old parent
+    const parent = getParent(nextDesign, { ...selected, component: dragging });
+    const index = parent.children.indexOf(dragging);
+    parent.children.splice(index, 1);
+    // add to new parent
+    const nextParent = getComponent(nextDesign, { ...selected, component: dropTarget });
+    if (!nextParent.children) nextParent.children = [];
+    nextParent.children.push(dragging);
+    this.setState({ dragging: undefined, dropTarget: undefined });
+    this.onChange({ design: nextDesign });
+  }
+
   onKeyDown = (event) => {
     const { preview } = this.state;
     if (event.metaKey) {
@@ -105,7 +120,7 @@ class App extends Component {
   }
 
   renderComponent = (id) => {
-    const { design, preview, selected, theme } = this.state;
+    const { design, dropTarget, preview, selected, theme } = this.state;
     const component = design.screens[selected.screen].components[id];
     if (!component || component.hide) {
       return null;
@@ -119,6 +134,7 @@ class App extends Component {
       specialProps.onClickOutside = () => this.setHide(id, true);
       specialProps.onEsc = () => this.setHide(id, true);
     }
+    const droppable = !type.text && type.name !== 'Icon';
     return React.createElement(
       type.component,
       {
@@ -141,8 +157,37 @@ class App extends Component {
             this.onChange({ selected: { ...selected, component: id } });
           }
         },
+        draggable: component.type !== 'Grommet',
+        onDragStart: (event) => {
+          event.stopPropagation();
+          this.setState({ dragging: id });
+        },
+        onDragEnd: (event) => {
+          event.stopPropagation();
+          this.setState({ dragging: undefined, dropTarget: undefined });
+        },
+        onDragEnter: (event) => {
+          if (droppable) event.stopPropagation();
+          const { dragging } = this.state;
+          if (dragging && dragging !== id && droppable) {
+            this.setState({ dropTarget: id });
+          }
+        },
+        onDragOver: (event) => {
+          if (droppable) event.stopPropagation();
+          const { dragging } = this.state;
+          if (dragging && dragging !== id && droppable) {
+            event.preventDefault();
+          }
+        },
+        onDrop: (event) => {
+          if (droppable) event.stopPropagation();
+          const { dragging, dropTarget } = this.state;
+          this.moveChild(dragging, dropTarget);
+        },
         style: !preview && selected.component === id
-          ? { outline: '1px dashed red' } : undefined,
+          ? { outline: '1px dashed red' }
+          : (dropTarget === id ? { outline: '5px dashed blue' } : undefined),
         ...component.props,
         ...specialProps,
         theme: (type.name === 'Grommet' ? (theme || grommet) : undefined),

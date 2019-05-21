@@ -33,7 +33,7 @@ export default class Manage extends Component {
     const nextDesign = { ...design, name, date: (new Date()).toISOString() };
     localStorage.setItem(name, JSON.stringify(nextDesign));
     const nextDesigns = [...designs];
-    nextDesigns.push(name);
+    if (!nextDesigns.includes(name)) nextDesigns.push(name);
     localStorage.setItem('designs', JSON.stringify(nextDesigns));
     this.setState({ designs: nextDesigns, name: undefined });
   }
