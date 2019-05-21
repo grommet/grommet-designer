@@ -140,8 +140,9 @@ class App extends Component {
       {
         key: id,
         onClick: (event) => {
-          event.stopPropagation();
+          if (!preview) event.stopPropagation();
           if (component.linkTo) {
+            event.stopPropagation();
             const target = getComponent(design, component.linkTo);
             if (target) {
               if (component.linkTo.screen === selected.screen) {

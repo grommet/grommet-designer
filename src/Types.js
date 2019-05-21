@@ -232,6 +232,15 @@ export const types = {
   Select: {
     component: Select,
     name: 'Select',
+    defaultProps: {
+      options: ['option 1', 'option 2'],
+    },
+    properties: {
+      disabled: false,
+      multiple: false,
+      placeholder: '',
+      size: ['small', 'medium', 'large', 'xlarge'],
+    },
   },
   TextArea: {
     component: TextArea,
