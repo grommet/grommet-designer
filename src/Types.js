@@ -126,7 +126,7 @@ export const types = {
     properties: {
       color: colors,
       margin: ['none', 'small', 'medium', 'large'],
-      size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      size: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       textAlign: ['start', 'center', 'end'],
     },
   },
