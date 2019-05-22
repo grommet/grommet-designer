@@ -104,9 +104,10 @@ export default ({ value, onChange }) => {
         <Box>
           <FormField label="size">
             <Select
-              options={['xsmall', 'small', 'medium', 'large', 'xlarge']}
+              options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
               value={(value && value.size) || value || ''}
-              onChange={({ option }) => onChange(option)}
+              onChange={({ option }) =>
+                onChange(option === 'undefined' ? undefined : option)}
             />
           </FormField>
         </Box>
