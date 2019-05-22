@@ -123,7 +123,8 @@ const componentToJSX = (id, screen, imports, iconImports, indent = '  ') => {
   if (component.type === 'Icon') {
     const { icon, ...rest } = component.props;
     iconImports[icon] = true;
-    return `${indent}<${icon} ${Object.keys(rest).map(k => `${k}="${rest[k]}"`).join(' ')} />`;
+    return `${indent}<${icon} ${Object.keys(rest).map(k =>
+      `${k}="${rest[k]}"`).join(' ')} />`;
   }
   if (component.type === 'Repeater') {
     const childId = component.children && component.children[0];
@@ -132,15 +133,17 @@ const componentToJSX = (id, screen, imports, iconImports, indent = '  ') => {
       : '';
   }
   imports[component.type] = true;
-  const children = component.children && component.children.map(cId =>
-    componentToJSX(cId, screen, imports, iconImports, indent + '  ')).join("\n");
-  return `${indent}<${component.type} ${Object.keys(component.props).map(name => {
+  const children = (component.children && component.children.map(cId =>
+    componentToJSX(cId, screen, imports, iconImports, indent + '  ')).join("\n"))
+    || (component.text && `${indent}  ${component.text}`);
+  return `${indent}<${component.type}${Object.keys(component.props).map(name => {
     const value = component.props[name];
     if (typeof value === 'string') {
-      return `${name}="${value}"`
+      return ` ${name}="${value}"`;
     }
-    return `${name}={${JSON.stringify(value)}}`;
-  }).join(' ')}${children ? '' :  ' /'}>${children ? `\n${children}\n${indent}</${component.type}>` : ''}`;
+    return ` ${name}={${JSON.stringify(value)}}`;
+  }).join('')}${children ? '' :  ' /'}>${children ?
+    `\n${children}\n${indent}</${component.type}>` : ''}`;
 }
 
 export const generateJSX = (design) => {
@@ -156,7 +159,7 @@ ${componentToJSX(1, screen, grommetImports, grommetIconImports)}
 
   return `import Rect from 'react'
 import { ${Object.keys(grommetImports).join(', ')} } from 'grommet'
-${Object.keys(grommetIconImports.length > 0)
+${Object.keys(grommetIconImports).length > 0
   ? `import { ${Object.keys(grommetIconImports).join(', ')} } from 'grommet-icons'\n`
   : ''}
 ${screens}
