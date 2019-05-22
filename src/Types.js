@@ -7,6 +7,8 @@ import {
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
 import Repeater from './Repeater';
+import GridColumns from './custom/GridColumns';
+import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
 
@@ -65,12 +67,12 @@ export const types = {
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
       alignContent: ['stretch', 'start', 'center', 'end'],
-      columns: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      columns: GridColumns,
       fill: ['horizontal', 'vertical'],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       justify: ['between', 'start', 'center', 'end'],
       margin: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-      rows: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      rows: GridRows,
     },
   },
   Stack: {
