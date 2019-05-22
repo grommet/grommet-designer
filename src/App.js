@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {
   Box, Grommet, Grid, Keyboard, ResponsiveContext, dark, grommet,
 } from 'grommet';
+import { aruba } from 'grommet-theme-aruba';
 import { dxc } from 'grommet-theme-dxc';
+import { hp } from 'grommet-theme-hp';
 import { hpe } from 'grommet-theme-hpe';
 import LZString from 'lz-string';
 import { types } from './Types';
@@ -16,7 +18,7 @@ import {
 } from './designs';
 import ScreenDetails from './ScreenDetails';
 
-const themes = { dark, dxc, hpe, grommet };
+const themes = { aruba, dark, dxc, grommet, hp, hpe };
 
 class App extends Component {
   state = resetState(rich);
@@ -121,7 +123,8 @@ class App extends Component {
 
   renderComponent = (id) => {
     const { design, dropTarget, preview, selected, theme } = this.state;
-    const component = design.screens[selected.screen].components[id];
+    const screen = design.screens[selected.screen];
+    const component = screen.components[id];
     if (!component || component.hide) {
       return null;
     }
@@ -192,7 +195,8 @@ class App extends Component {
           : (dropTarget === id ? { outline: '5px dashed blue' } : undefined),
         ...component.props,
         ...specialProps,
-        theme: (type.name === 'Grommet' ? (theme || grommet) : undefined),
+        theme: (type.name === 'Grommet'
+          ? (theme || themes[screen.theme] || grommet) : undefined),
       },
       component.children
         ? component.children.map(childId => this.renderComponent(childId))

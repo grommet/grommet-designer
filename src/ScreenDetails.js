@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Heading, Keyboard, TextArea,
+  Box, Button, FormField, Heading, Keyboard, Select, TextArea,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen, defaultComponent } from './designs';
@@ -62,7 +62,7 @@ export default class ScreenDetails extends Component {
   }
 
   render() {
-    const { design, selected } = this.props;
+    const { design, selected, onChange } = this.props;
     const { confirmDelete } = this.state;
     const screen = design.screens[selected.screen];
     return (
@@ -80,6 +80,18 @@ export default class ScreenDetails extends Component {
                 value={screen.name || `Screen ${screen.id}`}
                 onChange={event => this.setName(event.target.value)}
               />
+              <FormField label="theme">
+                <Select
+                  options={['grommet', 'dark', 'hpe', 'aruba', 'hp', 'dxc', 'undefined']}
+                  value={screen.theme || ''}
+                  onChange={({ option: theme }) => {
+                    const nextDesign = JSON.parse(JSON.stringify(design));
+                    nextDesign.screens[selected.screen].theme =
+                      (theme === 'undefined' ? undefined : theme);
+                    onChange({ design: nextDesign });
+                  }}
+                />
+              </FormField>
             </Box>
           </Box>
           <Box flex={false} direction="row" align="center" justify="between">
