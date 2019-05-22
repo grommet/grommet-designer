@@ -305,14 +305,14 @@ class Tree extends Component {
             align="center"
           >
             <Button
-              title="delete all"
+              title="empty this design"
               icon={<Trash />}
               hoverIndicator
               onClick={() => this.setState({ confirmReset: !confirmReset })}
             />
             {confirmReset && (
               <Button
-                title="confirm delete"
+                title="confirm empty"
                 icon={<Trash color="status-critical" />}
                 hoverIndicator
                 onClick={() => {
