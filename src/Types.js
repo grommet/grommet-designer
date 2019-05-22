@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, FormField,
   Grid, Grommet, Heading, Image, Layer,
@@ -23,7 +23,6 @@ export const types = {
   Box: {
     component: Box,
     name: 'Box',
-    sample: <Box pad="xsmall" border>Box</Box>,
     defaultProps: {
       align: 'center',
       justify: 'center',
@@ -63,7 +62,6 @@ export const types = {
   Grid: {
     component: Grid,
     name: 'Grid',
-    sample: <Box pad="xsmall" border={{ side: 'vertical', size: 'xlarge' }}>Grid</Box>,
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
       alignContent: ['stretch', 'start', 'center', 'end'],
@@ -78,12 +76,6 @@ export const types = {
   Stack: {
     component: Stack,
     name: 'Stack',
-    sample: (
-      <Stack guidingChild="last">
-        <Box width="xxsmall" background={{ color: 'brand', opacity: 'medium' }} fill="vertical" round="full"/>
-        <Box pad="xsmall" border>Stack</Box>
-      </Stack>
-    ),
     properties: {
       anchor: ['center', 'top', 'bottom', 'left', 'right'],
       fill: false,
@@ -93,7 +85,6 @@ export const types = {
   Layer: {
     component: Layer,
     name: 'Layer',
-    sample: <Box pad="xsmall" border={{ side: 'right', size: 'xlarge' }}>Layer</Box>,
     defaultProps: {
       modal: false,
     },
@@ -110,7 +101,6 @@ export const types = {
   Heading: {
     component: Heading,
     name: 'Heading',
-    sample: <Heading size="small" margin="none">Heading</Heading>,
     text: 'Heading',
     properties: {
       color: colors,
@@ -155,7 +145,6 @@ export const types = {
   Anchor: {
     component: Anchor,
     name: 'Anchor',
-    sample: <Text style={{ textDecoration: 'underline' }}>Anchor</Text>,
     defaultProps: {
       label: 'anchor',
     },
@@ -168,15 +157,6 @@ export const types = {
   Button: {
     component: Button,
     name: 'Button',
-    sample: (
-      <Box
-        round="medium"
-        border={{ color: 'brand', size: 'medium' }}
-        align="center"
-      >
-        Button
-      </Box>
-    ),
     defaultProps: {
       label: 'Button',
     },
@@ -330,35 +310,49 @@ export const types = {
   }
 };
 
+const structure = [
+  { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
+  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text'] },
+  { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
+  { name: 'Input', types: ['CheckBox', 'FormField', 'Select', 'TextArea', 'TextInput'] },
+  { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
+  { name: 'Media', types: ['Image'] },
+  { name: 'Design', types: ['Repeater'] },
+];
+
 export const Adder = ({ onAdd, onClose }) => (
   <Layer
     position="top-left"
-    margin="medium"
+    margin="small"
     onEsc={onClose}
     onClickOutside={onClose}
   >
     <Box fill="vertical" overflow="auto">
-      <Grid columns="small" rows="xxsmall">
-        {Object.keys(types).filter(key => key !== 'Grommet').map((key) => {
-          const type = types[key];
-          return (
-            <Box fill key={key} overflow="hidden">
-              <Button fill hoverIndicator onClick={() => onAdd(key)}>
-                <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
-                  {type.sample || type.name}
-                </Box>
-              </Button>
-            </Box>
-          );
-        })}
-        <Box border="top">
-          <Button fill hoverIndicator onClick={() => onAdd('Screen')}>
-            <Box pad={{ horizontal: 'small', vertical: 'xxsmall' }}>
-              Screen
-            </Box>
-          </Button>
+      {structure.map(({ name, types: sectionTypes }) => (
+        <Fragment key={name}>
+          <Box border="top">
+            <Heading
+              level={4}
+              size="small"
+              margin={{ horizontal: 'small', vertical: 'xsmall' }}
+            >
+              {name}
+            </Heading>
+          </Box>
+          {sectionTypes.map(key => (
+            <Button key={key} hoverIndicator onClick={() => onAdd(key)}>
+              <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+                {types[key].name}
+              </Box>
+            </Button>
+          ))}
+        </Fragment>
+      ))}
+      <Button hoverIndicator onClick={() => onAdd('Screen')}>
+        <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+          Screen
         </Box>
-      </Grid>
+      </Button>
     </Box>
   </Layer>
 );
