@@ -190,8 +190,7 @@ class Tree extends Component {
               }
             >
               <Text truncate>
-                {component.type === 'Layer' ? `${type.name} ${component.id}`
-                  : component.name || component.text
+                {component.name || component.text
                   || component.props.name || component.props.label
                   || type.name}
               </Text>

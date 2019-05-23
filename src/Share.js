@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Heading, Layer, Text, TextArea, TextInput
+  Box, Button, Heading, Layer, Markdown, Text, TextArea, TextInput
 } from 'grommet';
 import { Close, Copy, Code } from 'grommet-icons';
 import LZString from 'lz-string';
@@ -49,8 +49,20 @@ export default class Share extends Component {
           </Box>
           <Heading level={3} margin="none">Developer</Heading>
           {code
-            ? <TextArea value={code} rows={20} cols={40} readOnly />
-            : (
+            ? (
+              <Box>
+                <Markdown>{`
+* install nodejs, npm, yarn, and create-react-app (if needed)
+* \`# create-react-app my-app\`
+* \`# cd my-app\`
+* \`# yarn add grommet grommet-icons styled-components\`
+* replace the contents of \`src/App.js\` with the text below
+* \`# yarn start\`
+                  `}
+                </Markdown>
+                <TextArea value={code} rows={20} cols={40} readOnly />
+              </Box>
+            ) : (
               <Button
                 icon={<Code />}
                 label="Generate Code"

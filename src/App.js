@@ -148,14 +148,13 @@ class App extends Component {
             event.stopPropagation();
             const target = getComponent(design, component.linkTo);
             if (target) {
-              if (component.linkTo.screen === selected.screen) {
-                const layer = target;
-                this.setHide(layer.id, !layer.hide);
-              } else {
-                this.onChange({ selected: { ...component.linkTo } });
-              }
+              const layer = target;
+              this.setHide(layer.id, !layer.hide);
             } else {
-              this.onChange({ selected: { ...selected, component: id } });
+              this.onChange({ selected: {
+                screen: component.linkTo.screen,
+                component: defaultComponent(design, component.linkTo.screen),
+              } });
             }
           } else {
             this.onChange({ selected: { ...selected, component: id } });

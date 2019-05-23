@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, FormField, Heading, Keyboard, Select, TextArea,
+  Box, Button, FormField, Heading, Keyboard, Select, TextInput,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen, defaultComponent } from './designs';
@@ -70,16 +70,18 @@ export default class ScreenDetails extends Component {
         <Box background="light-2" height="100vh">
           <Box flex={false}>
             <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
-              {`Screen ${screen.id}`}
+              {screen.name || `Screen ${screen.id}`}
             </Heading>
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
-              <TextArea
-                ref={this.textRef}
-                value={screen.name || `Screen ${screen.id}`}
-                onChange={event => this.setName(event.target.value)}
-              />
+              <FormField label="name">
+                <TextInput
+                  ref={this.textRef}
+                  value={screen.name || ''}
+                  onChange={event => this.setName(event.target.value)}
+                />
+              </FormField>
               <FormField label="theme">
                 <Select
                   options={['grommet', 'dark', 'hpe', 'aruba', 'hp', 'dxc', 'undefined']}

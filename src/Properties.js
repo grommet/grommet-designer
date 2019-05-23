@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, Heading, Keyboard, Paragraph, Select, TextArea,
+  Box, Button, CheckBox, FormField, Heading, Keyboard, Paragraph,
+  Select, TextArea, TextInput,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
-import { defaultComponent, getComponent, getParent } from './designs';
+import { getComponent, getDisplayName, getParent } from './designs';
 
 export default class Properties extends Component {
 
@@ -35,6 +36,14 @@ export default class Properties extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = getComponent(nextDesign, selected);
     component.text = text;
+    onChange({ design: nextDesign });
+  }
+
+  setName= (name) => {
+    const { design, selected, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const component = getComponent(nextDesign, selected);
+    component.name = name;
     onChange({ design: nextDesign });
   }
 
@@ -99,9 +108,9 @@ export default class Properties extends Component {
         ...Object.keys(screenComponents).map(k => screenComponents[k])
           .filter(c => c.type === 'Layer')
           .map(c => ({ screen: selected.screen, component: c.id })),
-        ...Object.keys(design.screens).map(k => parseInt(k, 10))
-          .filter(sId => sId !== selected.screen)
-          .map(sId => ({ screen: sId, component: defaultComponent(design, sId) })),
+        ...Object.keys(design.screens).map(k => design.screens[k])
+          .filter(s => s.id !== selected.screen)
+          .map(s => ({ screen: s.id })),
         undefined
       ];
     }
@@ -120,64 +129,72 @@ export default class Properties extends Component {
                   <Paragraph>{type.help}</Paragraph>
                 </Box>
               )}
-              {type.text &&
-                <TextArea
+              <FormField label="name">
+                <TextInput
                   ref={this.textRef}
-                  value={component.text || type.text}
-                  onChange={event => this.setText(event.target.value)}
+                  value={component.name || ''}
+                  onChange={event => this.setName(event.target.value)}
                 />
+              </FormField>
+              {type.text &&
+                <FormField label="text">
+                  <TextArea
+                    ref={this.textRef}
+                    value={component.text || type.text}
+                    onChange={event => this.setText(event.target.value)}
+                  />
+                </FormField>
               }
               {type.name === 'Button' && linkOptions.length > 1 && (
-                <Box flex={false} margin={{ bottom: 'medium' }}>
+                <FormField label="link to">
                   <Select
-                    placeholder="link to ..."
                     options={linkOptions}
                     value={component.linkTo || ''}
-                    onChange={({ option }) => this.link(option || undefined)}
+                    onChange={({ option }) =>
+                      this.link(option ? option : undefined)}
                     valueLabel={component.linkTo ? (
-                        <Box pad="small">
-                          {component.linkTo.screen === selected.screen
-                            ? `Layer ${component.linkTo.component}`
-                            : `Screen ${component.linkTo.screen}`}
-                        </Box>
-                      ) : undefined
-                    }
+                      <Box pad="small">
+                        {getDisplayName(design, component.linkTo)}
+                      </Box>
+                    ) : undefined}
                   >
-                    {(option) => {
-                      if (option) {
-                        return (
-                          <Box pad="small">
-                            {option.screen === selected.screen
-                              ? `Layer ${option.component}`
-                              : `Screen ${option.screen}`}
-                          </Box>
-                        );
-                      }
-                      return <Box pad="small">clear</Box>;
-                    }}
+                    {(option) => (
+                      <Box pad="small">
+                        {option ? getDisplayName(design, option) : 'clear'}
+                      </Box>
+                    )}
                   </Select>
-                </Box>
+                </FormField>
               )}
               {type.name === 'Layer' && (
-                <Box pad="small" background="dark-3">
-                  <CheckBox
-                    toggle
-                    label="hide"
-                    checked={!!component.hide}
-                    onChange={() => this.setHide(!component.hide)}
-                  />
+                <FormField>
+                  <Box pad="small">
+                    <CheckBox
+                      toggle
+                      label="hide"
+                      reverse
+                      checked={!!component.hide}
+                      onChange={() => this.setHide(!component.hide)}
+                    />
+                  </Box>
+                </FormField>
+              )}
+              {type.properties && (
+                <Box>
+                  <Heading level={4} size="small" margin="small">
+                    Properties
+                  </Heading>
+                  {Object.keys(type.properties).map((propName) => (
+                    <Property
+                      key={propName}
+                      name={propName}
+                      property={type.properties[propName]}
+                      value={component.props[propName]}
+                      onChange={value => this.setProp(propName, value)}
+                    />
+                  ))}
                 </Box>
               )}
-              {type.properties &&
-              Object.keys(type.properties).map((propName) => (
-                <Property
-                  key={propName}
-                  name={propName}
-                  property={type.properties[propName]}
-                  value={component.props[propName]}
-                  onChange={value => this.setProp(propName, value)}
-                />
-              ))}
             </Box>
           </Box>
           {type.name !== 'Grommet' &&
