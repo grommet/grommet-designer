@@ -11,6 +11,7 @@ import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
+import Edge from './custom/Edge';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
 const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
@@ -52,9 +53,9 @@ export const types = {
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       height: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       justify: ['between', 'start', 'center', 'end'],
-      margin: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      margin: Edge,
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      pad: Edge,
       round: ['xsmall', 'small', 'medium', 'large', 'full'],
       width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
     },
