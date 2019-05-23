@@ -143,7 +143,6 @@ class App extends Component {
       {
         key: id,
         onClick: (event) => {
-          if (!preview) event.stopPropagation();
           if (component.linkTo) {
             event.stopPropagation();
             const target = getComponent(design, component.linkTo);
@@ -151,12 +150,14 @@ class App extends Component {
               const layer = target;
               this.setHide(layer.id, !layer.hide);
             } else {
-              this.onChange({ selected: {
-                screen: component.linkTo.screen,
-                component: defaultComponent(design, component.linkTo.screen),
-              } });
+              this.onChange({
+                selected: {
+                  screen: component.linkTo.screen,
+                  component: defaultComponent(design, component.linkTo.screen),
+                },
+              });
             }
-          } else {
+          } else if (event.target === event.currentTarget) {
             this.onChange({ selected: { ...selected, component: id } });
           }
         },
