@@ -77,7 +77,9 @@ export default class Property extends Component {
           <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
             <Box direction="row" align="center" justify="between" pad="small">
               <Text>{name}</Text>
-              {expand ? <FormUp /> : <FormDown />}
+              {expand
+                ? <FormUp color={value ? 'brand' : undefined} />
+                : <FormDown color={value ? 'brand' : undefined} />}
             </Box>
           </Button>
           {expand && Object.keys(property).map((key) => (
@@ -103,7 +105,7 @@ export default class Property extends Component {
           <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
             <Box direction="row" align="center" justify="between" pad="small">
               <Text>{name}</Text>
-              <FormNext />
+              <FormNext color={value ? 'brand' : undefined} />
             </Box>
           </Button>
           {expand && (
