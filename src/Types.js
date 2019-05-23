@@ -70,7 +70,7 @@ export const types = {
       fill: ['horizontal', 'vertical'],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       justify: ['between', 'start', 'center', 'end'],
-      margin: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      margin: Edge,
       rows: GridRows,
     },
   },
@@ -106,7 +106,7 @@ export const types = {
     properties: {
       color: colors,
       level: ['1', '2', '3', '4'],
-      margin: ['none', 'small', 'medium', 'large'],
+      margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       textAlign: ['start', 'center', 'end'],
       truncate: false,
@@ -118,7 +118,7 @@ export const types = {
     text: 'Paragraph',
     properties: {
       color: colors,
-      margin: ['none', 'small', 'medium', 'large'],
+      margin: Edge,
       size: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       textAlign: ['start', 'center', 'end'],
     },
@@ -129,6 +129,7 @@ export const types = {
     text: 'Text',
     properties: {
       color: colors,
+      margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       textAlign: ['start', 'center', 'end'],
       truncate: false,
@@ -152,6 +153,7 @@ export const types = {
     properties: {
       color: colors,
       label: 'anchor',
+      margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
     },
   },
@@ -169,6 +171,7 @@ export const types = {
       hoverIndicator: false,
       icon: iconNames,
       label: 'Click Me',
+      margin: Edge,
       plain: false,
       primary: false,
       reverse: false,
