@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Form, FormField, Heading, Layer,
+  Box, Button, Form, FormField, Heading, Layer, Paragraph, Text,
 } from 'grommet';
 import { Close, Save, Trash } from 'grommet-icons';
 
 export default class Manage extends Component {
 
-  state = { designs: [] };
+  state = { designs: [], name: '' };
 
   componentDidMount() {
     let item = localStorage.getItem('designs'); // array of names
@@ -35,7 +35,7 @@ export default class Manage extends Component {
     const nextDesigns = [...designs];
     if (!nextDesigns.includes(name)) nextDesigns.push(name);
     localStorage.setItem('designs', JSON.stringify(nextDesigns));
-    this.setState({ designs: nextDesigns, name: undefined });
+    this.setState({ designs: nextDesigns, name: '', message: `saved ${name}` });
   }
 
   onDelete = (name) => {
@@ -48,7 +48,7 @@ export default class Manage extends Component {
 
   render() {
     const { onClose } = this.props;
-    const { designs } = this.state;
+    const { designs, name, message } = this.state;
     return (
       <Layer onEsc={onClose}>
         <Box
@@ -64,20 +64,28 @@ export default class Manage extends Component {
           <Button icon={<Close />} hoverIndicator onClick={onClose} />
         </Box>
         <Box pad={{ horizontal: "medium" }}>
-          <Form onSubmit={this.onSave}>
+          <Form value={{ name }} onSubmit={this.onSave}>
             <FormField
               name="name"
-              label="Give your current design a name"
+              label="Save your current design with this name"
               required
             />
-            <Button title="save" type="submit" icon={<Save />} />
+            <Box direction="row" gap="medium" align="center">
+              <Button title="save" type="submit" icon={<Save />}  hoverIndicator />
+              {message && <Text>{message}</Text>}
+            </Box>
           </Form>
         </Box>
         
         <Box flex overflow="auto" pad="medium">
-          {designs.map(name => (
+          {designs.length > 0 && (
+            <Paragraph margin="small">
+              Or, discard your current design and load one you've saved previously
+            </Paragraph>
+          )}
+          {designs.map(designName => (
             <Box
-              key={name}
+              key={designName}
               direction="row"
               align="center"
               justify="between"
@@ -85,15 +93,15 @@ export default class Manage extends Component {
               <Box flex="grow">
                 <Button
                   hoverIndicator
-                  onClick={() => this.onSelect(name)}
+                  onClick={() => this.onSelect(designName)}
                 >
-                  <Box pad="small">{name}</Box>
+                  <Box pad="small">{designName}</Box>
                 </Button>
               </Box>
               <Button
                 icon={<Trash />}
                 hoverIndicator
-                onClick={() => this.onDelete(name)}
+                onClick={() => this.onDelete(designName)}
               />
             </Box>
           ))}
