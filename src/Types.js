@@ -11,6 +11,7 @@ import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
+import HeadingMargin from './custom/HeadingMargin';
 import Edge from './custom/Edge';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
@@ -106,7 +107,7 @@ export const types = {
     properties: {
       color: colors,
       level: ['1', '2', '3', '4'],
-      margin: Edge,
+      margin: HeadingMargin,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       textAlign: ['start', 'center', 'end'],
       truncate: false,
