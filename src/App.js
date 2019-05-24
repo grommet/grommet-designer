@@ -143,7 +143,10 @@ class App extends Component {
       {
         key: id,
         onClick: (event) => {
-          if (component.linkTo) {
+          if (component.type === 'Menu') {
+            event.stopPropagation();
+            this.onChange({ selected: { ...selected, component: id } });
+          } else if (component.linkTo) {
             event.stopPropagation();
             const target = getComponent(design, component.linkTo);
             if (target) {
