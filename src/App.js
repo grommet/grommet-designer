@@ -34,7 +34,7 @@ class App extends Component {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
       const screen = Object.keys(design.screens)[0];
-      const component = Object.keys(design.screens[screen].components)[0];
+      const component = defaultComponent(design, screen);
       this.setState({ design, selected: { screen, component } });
     } else {
       let stored = localStorage.getItem('design');
@@ -44,7 +44,9 @@ class App extends Component {
         stored = localStorage.getItem('selected');
         if (stored) {
           const selected = JSON.parse(stored);
-          this.setState({ selected });
+          if (getComponent(design, selected)) {
+            this.setState({ selected });
+          }
         }
       }
     }
@@ -209,7 +211,7 @@ class App extends Component {
   render() {
     const { design, managing, preview, selected, sharing, theme } = this.state;
     const rootComponent = defaultComponent(design, selected.screen);
-    const selectedComponent = getComponent(design, selected);
+    const selectedComponent = getComponent(design, selected) || rootComponent;
     return (
       <Grommet full theme={theme || grommet}>
         <ResponsiveContext.Consumer>

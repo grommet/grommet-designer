@@ -49,17 +49,26 @@ class Tree extends Component {
     priorParent.children.splice(priorIndex, 1);
     // insert into new parent
     if (where === 'in') {
-      const parent = getComponent(nextDesign, target);
-      if (!parent.children) parent.children = [];
-      parent.children.unshift(dragging.component);
+      const nextParent = getComponent(nextDesign, target);
+      if (!nextParent.children) nextParent.children = [];
+      nextParent.children.unshift(dragging.component);
     } else {
       const nextParent = getParent(nextDesign, target);
       const nextIndex = nextParent.children.indexOf(target.component);
       nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
         0, dragging.component);
     }
+    // if we changed screens, move component
+    if (dragging.screen !== target.screen) {
+      const component = getComponent(nextDesign, dragging);
+      delete nextDesign.screens[dragging.screen].components[dragging.component];
+      nextDesign.screens[target.screen].components[dragging.component] = component;
+    }
     this.setState({ dragging: undefined, dropTarget: undefined });
-    onChange({ design: nextDesign });
+    onChange({
+      design: nextDesign,
+      selected: { screen: target.screen, component: dragging.component },
+    });
   }
 
   moveScreen = (dragging, target, where) => {
