@@ -316,7 +316,7 @@ export const types = {
 
 const structure = [
   { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
-  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text'] },
+  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Icon'] },
   { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
   { name: 'Input', types: ['CheckBox', 'FormField', 'Select', 'TextArea', 'TextInput'] },
   { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
