@@ -13,6 +13,7 @@ import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
 import HeadingMargin from './custom/HeadingMargin';
 import MenuItems from './custom/MenuItems';
+import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
@@ -187,7 +188,8 @@ export const types = {
     },
     properties: {
       disabled: false,
-      icon: false,
+      dropAlign: DropAlign,
+      icon: iconNames,
       items: MenuItems,
       label: 'Actions',
       open: false,

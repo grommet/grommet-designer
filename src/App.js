@@ -158,14 +158,16 @@ class App extends Component {
       specialProps.onEsc = () => this.setHide(id, true);
     }
     if (type.name === 'Menu') {
-      // TODO: customize items so linkTo works
       specialProps.items = (component.props.items || []).map(item => ({
         ...item,
         onClick: (event) => {
           event.stopPropagation();
           this.followLink(item.linkTo);
         }
-      }))
+      }));
+      if (component.props.icon) {
+        specialProps.icon = <Icon icon={component.props.icon} />;
+      }
     }
     const droppable = !type.text && type.name !== 'Icon';
     return React.createElement(
