@@ -6,7 +6,7 @@ import {
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
-import { getComponent, getDisplayName, getParent } from './designs';
+import { getComponent, getDisplayName, getLinkOptions, getParent } from './designs';
 
 export default class Properties extends Component {
 
@@ -103,16 +103,7 @@ export default class Properties extends Component {
     if (type.name === 'Button') {
       // options for what the button should do:
       // open a layer, close the layer it is in, change screens,
-      const screenComponents = design.screens[selected.screen].components;
-      linkOptions = [
-        ...Object.keys(screenComponents).map(k => screenComponents[k])
-          .filter(c => c.type === 'Layer')
-          .map(c => ({ screen: selected.screen, component: c.id })),
-        ...Object.keys(design.screens).map(k => design.screens[k])
-          .filter(s => s.id !== selected.screen)
-          .map(s => ({ screen: s.id })),
-        undefined
-      ];
+      linkOptions = getLinkOptions(design, selected);
     }
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
@@ -187,6 +178,8 @@ export default class Properties extends Component {
                   {Object.keys(type.properties).map((propName) => (
                     <Property
                       key={propName}
+                      design={design}
+                      selected={selected}
                       name={propName}
                       property={type.properties[propName]}
                       value={component.props[propName]}

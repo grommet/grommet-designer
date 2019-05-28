@@ -104,6 +104,27 @@ export const getComponent = (design, { screen, component }) =>
 export const defaultComponent = (design, screen) =>
   parseInt(Object.keys(design.screens[screen].components)[0], 10);
 
+export const moveComponent = (nextDesign, fromIds, toScreenId) => {
+  const component = getComponent(nextDesign, fromIds);
+  delete nextDesign.screens[fromIds.screen].components[fromIds.component];
+  nextDesign.screens[toScreenId].components[fromIds.component] = component;
+  if (component.children) {
+    component.children.forEach(childId =>
+      moveComponent(nextDesign, { ...fromIds, component: childId }, toScreenId));
+  }
+}
+
+export const deleteOrphans = (design) => {
+  Object.keys(design.screens).map(sId => design.screens[sId]).forEach(screen =>
+    Object.keys(screen.components).map(cId => screen.components[cId])
+      .forEach(component => {
+        if (component.children) {
+          component.children = component.children.filter(childId =>
+            getComponent(design, { screen: screen.id, component: childId }));
+        }
+      }));
+}
+
 export const getDisplayName = (design, ids) => {
   const component = getComponent(design, ids);
   if (!component || component.type === 'Grommet') {
@@ -126,6 +147,21 @@ export const getParent = (design, ids) => {
   });
   return result;
 };
+
+export const getLinkOptions = (design, selected) => {
+  // options for what a Button or MenuItem should do:
+  // open a layer, close the layer it is in, change screens,
+  const screenComponents = design.screens[selected.screen].components;
+  return [
+    ...Object.keys(screenComponents).map(k => screenComponents[k])
+      .filter(c => c.type === 'Layer')
+      .map(c => ({ screen: selected.screen, component: c.id })),
+    ...Object.keys(design.screens).map(k => design.screens[k])
+      .filter(s => s.id !== selected.screen)
+      .map(s => ({ screen: s.id })),
+    undefined
+  ];
+}
 
 const componentToJSX = (id, screen, imports, iconImports, indent = '  ') => {
   let result;

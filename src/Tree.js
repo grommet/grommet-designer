@@ -3,7 +3,7 @@ import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import {
-  addScreen, defaultComponent, getComponent, getParent,
+  addScreen, defaultComponent, getComponent, getParent, moveComponent,
 } from './designs';
 
 class Tree extends Component {
@@ -58,11 +58,9 @@ class Tree extends Component {
       nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
         0, dragging.component);
     }
-    // if we changed screens, move component
+    // if we changed screens, move component and all of its children
     if (dragging.screen !== target.screen) {
-      const component = getComponent(nextDesign, dragging);
-      delete nextDesign.screens[dragging.screen].components[dragging.component];
-      nextDesign.screens[target.screen].components[dragging.component] = component;
+      moveComponent(nextDesign, dragging, target.screen);
     }
     this.setState({ dragging: undefined, dropTarget: undefined });
     onChange({

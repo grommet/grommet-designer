@@ -14,7 +14,7 @@ import Icon from './Icon';
 import Manage from './Manage';
 import Share from './Share';
 import {
-  defaultComponent, getComponent, getParent, resetState, bare, rich,
+  defaultComponent, deleteOrphans, getComponent, getParent, resetState, bare, rich,
 } from './designs';
 import ScreenDetails from './ScreenDetails';
 
@@ -40,6 +40,8 @@ class App extends Component {
       let stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
+        // delete any orphan components
+        deleteOrphans(design);
         this.setState({ design });
         stored = localStorage.getItem('selected');
         if (stored) {
@@ -123,6 +125,22 @@ class App extends Component {
     }
   }
 
+  followLink = (to) => {
+    const { design } = this.state;
+    const target = getComponent(design, to);
+    if (target) {
+      const layer = target;
+      this.setHide(layer.id, !layer.hide);
+    } else {
+      this.onChange({
+        selected: {
+          screen: to.screen,
+          component: defaultComponent(design, to.screen),
+        },
+      });
+    }
+  }
+
   renderComponent = (id) => {
     const { design, dropTarget, preview, selected, theme } = this.state;
     const screen = design.screens[selected.screen];
@@ -139,6 +157,16 @@ class App extends Component {
       specialProps.onClickOutside = () => this.setHide(id, true);
       specialProps.onEsc = () => this.setHide(id, true);
     }
+    if (type.name === 'Menu') {
+      // TODO: customize items so linkTo works
+      specialProps.items = (component.props.items || []).map(item => ({
+        ...item,
+        onClick: (event) => {
+          event.stopPropagation();
+          this.followLink(item.linkTo);
+        }
+      }))
+    }
     const droppable = !type.text && type.name !== 'Icon';
     return React.createElement(
       type.component,
@@ -150,18 +178,7 @@ class App extends Component {
             this.onChange({ selected: { ...selected, component: id } });
           } else if (component.linkTo) {
             event.stopPropagation();
-            const target = getComponent(design, component.linkTo);
-            if (target) {
-              const layer = target;
-              this.setHide(layer.id, !layer.hide);
-            } else {
-              this.onChange({
-                selected: {
-                  screen: component.linkTo.screen,
-                  component: defaultComponent(design, component.linkTo.screen),
-                },
-              });
-            }
+            this.followLink(component.linkTo);
           } else if (event.target === event.currentTarget) {
             this.onChange({ selected: { ...selected, component: id } });
           }
