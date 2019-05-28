@@ -220,7 +220,7 @@ class App extends Component {
         ...component.props,
         ...specialProps,
         theme: (type.name === 'Grommet'
-          ? (theme || themes[screen.theme] || grommet) : undefined),
+          ? (theme || themes[screen.theme] || themes[design.theme] || grommet) : undefined),
       },
       component.children
         ? component.children.map(childId => this.renderComponent(childId))
@@ -232,7 +232,7 @@ class App extends Component {
     const rootComponent = defaultComponent(design, selected.screen);
     const selectedComponent = getComponent(design, selected) || rootComponent;
     return (
-      <Grommet full theme={theme || grommet}>
+      <Grommet full theme={theme || themes[design.theme] || grommet}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
             <Keyboard target="document" onKeyDown={this.onKeyDown}>
@@ -246,6 +246,7 @@ class App extends Component {
                   <Tree
                     design={design}
                     selected={selected}
+                    themes={Object.keys(themes)}
                     onChange={this.onChange}
                     onManage={() => this.setState({ managing: true })}
                     onShare={() => this.setState({ sharing: true })}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
-import { Add, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
+import { Box, Button, FormField, Heading, Keyboard, Layer, Select, Stack, Text, TextInput } from 'grommet';
+import { Add, Close, Configure, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import {
   addScreen, defaultComponent, getComponent, getParent, moveComponent,
@@ -278,15 +278,15 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected, onManage, onReset, onShare } = this.props;
-    const { adding, confirmReset } = this.state;
+    const { design, selected, themes, onManage, onReset, onShare } = this.props;
+    const { adding, configuring, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
     const isContainer = !(selectedtype.text || selectedtype.name === 'Icon');
     return (
       <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
         <Box background="light-2" height="100vh">
-          <Box flex={false}>
+          <Box flex={false} direction="row" align="center" justify="between">
             {isContainer ? (
               <Button
                 title="add component"
@@ -297,6 +297,12 @@ class Tree extends Component {
             ) : (
               <Box height="xxsmall" />
             )}
+            <Button
+              title="settings"
+              icon={<Configure />}
+              hoverIndicator
+              onClick={() => this.setState({ configuring: true })}
+            />
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
@@ -345,6 +351,45 @@ class Tree extends Component {
               onAdd={this.onAdd}
               onClose={() => this.setState({ adding: false })}
             />
+          )}
+          {configuring && (
+            <Layer
+              position="center"
+              onEsc={() => this.setState({ configuring: false })}
+              onClickOutside={() => this.setState({ configuring: false })}
+            >
+              <Box direction="row" align="center" justify="between" gap="medium">
+                <Heading level={2} size="small" margin="none">Design</Heading>
+                <Button
+                  icon={<Close />}
+                  hoverIndicator
+                  onClick={() => this.setState({ configuring: false })}
+                />
+              </Box>
+              <FormField label="Name" name="name">
+                <TextInput
+                  value={design.name || ''}
+                  onChange={(event) => {
+                    const { design, onChange } = this.props;
+                    const nextDesign = JSON.parse(JSON.stringify(design));
+                    nextDesign.name = event.target.value;
+                    onChange({ design: nextDesign });
+                  }}
+                />
+              </FormField>
+              <FormField label="Theme" name="theme">
+                <Select
+                  options={[...themes, 'undefined']}
+                  value={design.theme || ''}
+                  onChange={({ option }) => {
+                    const { design, onChange } = this.props;
+                    const nextDesign = JSON.parse(JSON.stringify(design));
+                    nextDesign.theme = option;
+                    onChange({ design: nextDesign });
+                  }}
+                />
+              </FormField>
+            </Layer>
           )}
         </Box>
       </Keyboard>
