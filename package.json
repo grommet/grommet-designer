@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "grommet": "^2.7.0",
+    "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "grommet-icons": "^4.2.0",
     "grommet-theme-aruba": "^0.1.2",
     "grommet-theme-dxc": "^0.1.2",

@@ -52,7 +52,7 @@ export const types = {
       direction: ['column', 'row'],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       fill: ['horizontal', 'vertical'],
-      flex: ['grow', 'shrink'],
+      flex: ['grow', 'shrink', true, false],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       height: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       justify: ['between', 'start', 'center', 'end'],
@@ -338,16 +338,14 @@ export const Adder = ({ onAdd, onClose }) => (
   >
     <Box fill="vertical" overflow="auto">
       {structure.map(({ name, types: sectionTypes }) => (
-        <Fragment key={name}>
-          <Box border="top">
-            <Heading
-              level={4}
-              size="small"
-              margin={{ horizontal: 'small', vertical: 'xsmall' }}
-            >
-              {name}
-            </Heading>
-          </Box>
+        <Box key={name} flex={false} border="top">
+          <Heading
+            level={4}
+            size="small"
+            margin={{ horizontal: 'small', vertical: 'xsmall' }}
+          >
+            {name}
+          </Heading>
           {sectionTypes.map(key => (
             <Button key={key} hoverIndicator onClick={() => onAdd(key)}>
               <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
@@ -355,13 +353,15 @@ export const Adder = ({ onAdd, onClose }) => (
               </Box>
             </Button>
           ))}
-        </Fragment>
-      ))}
-      <Button hoverIndicator onClick={() => onAdd('Screen')}>
-        <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
-          Screen
         </Box>
-      </Button>
+      ))}
+      <Box flex={false}>
+        <Button hoverIndicator onClick={() => onAdd('Screen')}>
+          <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+            Screen
+          </Box>
+        </Button>
+      </Box>
     </Box>
   </Layer>
 );

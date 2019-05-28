@@ -12,6 +12,18 @@ const ColorLabel = ({ color }) => (
   </Box>
 );
 
+const OptionLabel = ({ active, hasColor, name, value }) => {
+  if (hasColor && typeof value === 'string') return <ColorLabel color={value} />;
+  if (name === 'icon' && typeof value === 'string') return <IconLabel icon={value} />;
+  return (
+    <Box pad="small">
+      <Text weight={active ? "bold" : undefined}>
+        {typeof value !== 'string' ? JSON.stringify(value) : value || ''}
+      </Text>
+    </Box>
+  );
+};
+
 export default class Property extends Component {
 
   state = {};
@@ -21,19 +33,15 @@ export default class Property extends Component {
     const { expand, searchText } = this.state;
     const searchExp = searchText && new RegExp(searchText, 'i');
     if (Array.isArray(property)) {
-      const isColor = property.includes('light-1');
-      const isIcon = name === 'icon';
+      const hasColor = property.includes('light-1');
       return (
         <FormField key={name} name={name} label={name} style={{ margin: 0 }}>
           <Select
             options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
               : [...property, 'undefined']}
             value={value || ''}
-            valueLabel={isColor && value ? (
-              <ColorLabel color={value} />
-            ) : (isIcon && value ? (
-              <IconLabel icon={value} />
-            ) : undefined)}
+            valueLabel={
+              <OptionLabel active name={name} hasColor={hasColor} value={value} />}
             onChange={({ option }) => {
               this.setState({ searchText: undefined });
               onChange(option === 'undefined' ? undefined : option);
@@ -42,9 +50,13 @@ export default class Property extends Component {
               this.setState({ searchText })
             } : undefined}
           >
-            {isColor
-              ? (option) => <ColorLabel color={option} />
-              : (isIcon ? (option) => <IconLabel icon={option} /> : null)}
+            {(option) =>
+              <OptionLabel
+                name={name}
+                hasColor={hasColor}
+                value={option}
+                active={option === value}
+              />}
           </Select>
         </FormField>
       );

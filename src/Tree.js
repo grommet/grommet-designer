@@ -230,7 +230,7 @@ class Tree extends Component {
     const id = defaultComponent(design, screen.id);
     const component = screen.components[id];
     return (
-      <Box key={screen.id}>
+      <Box key={screen.id} flex={false}>
         {firstScreen && this.renderScreenDropArea(screenId, 'before')}
         <Stack anchor="right">
           <Button
@@ -267,7 +267,7 @@ class Tree extends Component {
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box>
+          <Box flex={false}>
             {component.children.map((childId) =>
               this.renderComponent({ screen: screen.id, component: childId }))}
           </Box>
