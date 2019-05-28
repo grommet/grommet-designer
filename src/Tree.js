@@ -354,12 +354,24 @@ class Tree extends Component {
           )}
           {configuring && (
             <Layer
-              position="center"
+              position="top"
               onEsc={() => this.setState({ configuring: false })}
               onClickOutside={() => this.setState({ configuring: false })}
             >
-              <Box direction="row" align="center" justify="between" gap="medium">
-                <Heading level={2} size="small" margin="none">Design</Heading>
+              <Box
+                direction="row"
+                align="center"
+                justify="between"
+                gap="medium"
+                width="medium"
+              >
+                <Heading
+                  level={2}
+                  size="small"
+                  margin={{ horizontal: 'small', vertical: 'none' }}
+                >
+                  Design
+                </Heading>
                 <Button
                   icon={<Close />}
                   hoverIndicator
@@ -384,7 +396,7 @@ class Tree extends Component {
                   onChange={({ option }) => {
                     const { design, onChange } = this.props;
                     const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.theme = option;
+                    nextDesign.theme = option === 'undefined' ? undefined : option;
                     onChange({ design: nextDesign });
                   }}
                 />
