@@ -286,7 +286,7 @@ class Tree extends Component {
     return (
       <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
         <Box background="light-2" height="100vh">
-          <Box flex={false} direction="row" align="center" justify="between">
+          <Box flex={false}>
             {isContainer ? (
               <Button
                 title="add component"
@@ -297,12 +297,6 @@ class Tree extends Component {
             ) : (
               <Box height="xxsmall" />
             )}
-            <Button
-              title="settings"
-              icon={<Configure />}
-              hoverIndicator
-              onClick={() => this.setState({ configuring: true })}
-            />
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
@@ -344,6 +338,12 @@ class Tree extends Component {
               icon={<Share />}
               hoverIndicator
               onClick={onShare}
+            />
+            <Button
+              title="settings"
+              icon={<Configure />}
+              hoverIndicator
+              onClick={() => this.setState({ configuring: true })}
             />
           </Box>
           {adding && (

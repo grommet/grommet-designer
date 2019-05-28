@@ -47,7 +47,7 @@ export default class Manage extends Component {
   }
 
   render() {
-    const { onClose } = this.props;
+    const { design, onClose } = this.props;
     const { designs, name, message } = this.state;
     return (
       <Layer onEsc={onClose}>
@@ -64,7 +64,7 @@ export default class Manage extends Component {
           <Button icon={<Close />} hoverIndicator onClick={onClose} />
         </Box>
         <Box pad={{ horizontal: "medium" }}>
-          <Form value={{ name }} onSubmit={this.onSave}>
+          <Form value={{ name: name || design.name }} onSubmit={this.onSave}>
             <FormField
               name="name"
               label="Save your current design with this name"
