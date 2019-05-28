@@ -82,6 +82,7 @@ export default class ScreenDetails extends Component {
                   onChange={event => this.setName(event.target.value)}
                 />
               </FormField>
+              {/* }
               <FormField label="theme">
                 <Select
                   options={['grommet', 'dark', 'hpe', 'aruba', 'hp', 'dxc', 'undefined']}
@@ -94,6 +95,7 @@ export default class ScreenDetails extends Component {
                   }}
                 />
               </FormField>
+              { */}
             </Box>
           </Box>
           <Box flex={false} direction="row" align="center" justify="between">
