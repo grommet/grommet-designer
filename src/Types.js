@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, FormField,
   Grid, Grommet, Heading, Image, Layer,
@@ -143,6 +143,7 @@ export const types = {
     component: Icon,
     name: 'Icon',
     properties: {
+      color: colors,
       icon: iconNames,
       size: ['small', 'medium', 'large'],
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, FormField, Heading, Keyboard, Select, TextInput,
+  Box, Button, FormField, Heading, Keyboard, TextInput,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen, defaultComponent } from './designs';
@@ -62,7 +62,7 @@ export default class ScreenDetails extends Component {
   }
 
   render() {
-    const { design, selected, onChange } = this.props;
+    const { design, selected } = this.props;
     const { confirmDelete } = this.state;
     const screen = design.screens[selected.screen];
     return (

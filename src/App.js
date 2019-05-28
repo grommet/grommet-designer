@@ -35,14 +35,16 @@ class App extends Component {
       const design = JSON.parse(text);
       const screen = Object.keys(design.screens)[0];
       const component = defaultComponent(design, screen);
-      this.setState({ design, selected: { screen, component } });
+      const theme = design.theme ? themes[design.theme] : grommet;
+      this.setState({ design, selected: { screen, component }, theme });
     } else {
       let stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
         // delete any orphan components
         deleteOrphans(design);
-        this.setState({ design });
+        const theme = design.theme ? themes[design.theme] : grommet;
+        this.setState({ design, theme });
         stored = localStorage.getItem('selected');
         if (stored) {
           const selected = JSON.parse(stored);
@@ -61,6 +63,12 @@ class App extends Component {
   }
 
   onChange = (nextState) => {
+    const { design } = nextState;
+    if (design) {
+      const { theme } = this.state;
+      const nextTheme = design.theme ? themes[design.theme] : (theme || grommet);
+      this.setState({ theme: nextTheme });
+    }
     this.setState(nextState);
     clearTimeout(this.storeTimer);
     this.storeTimer = setTimeout(() => {
@@ -219,8 +227,7 @@ class App extends Component {
           : (dropTarget === id ? { outline: '5px dashed blue' } : undefined),
         ...component.props,
         ...specialProps,
-        theme: (type.name === 'Grommet'
-          ? (theme || themes[screen.theme] || themes[design.theme] || grommet) : undefined),
+        theme: (type.name === 'Grommet' ? theme : undefined),
       },
       component.children
         ? component.children.map(childId => this.renderComponent(childId))
@@ -232,7 +239,7 @@ class App extends Component {
     const rootComponent = defaultComponent(design, selected.screen);
     const selectedComponent = getComponent(design, selected) || rootComponent;
     return (
-      <Grommet full theme={theme || themes[design.theme] || grommet}>
+      <Grommet full theme={theme}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
             <Keyboard target="document" onKeyDown={this.onKeyDown}>
