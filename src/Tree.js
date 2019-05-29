@@ -193,7 +193,7 @@ class Tree extends Component {
                 ? 'accent-2'
                 : (selected.screen === ids.screen
                   && selected.component === ids.component
-                  ? 'active' : undefined)
+                  ? 'dark-2' : undefined)
               }
             >
               <Text truncate>
@@ -249,7 +249,7 @@ class Tree extends Component {
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
                 selected.screen === screenId && selected.component === id
-                ? 'active' : undefined
+                ? 'dark-2' : undefined
               }
             >
               <Heading level={3} size="small" margin="none">

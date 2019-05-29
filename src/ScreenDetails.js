@@ -67,7 +67,7 @@ export default class ScreenDetails extends Component {
     const screen = design.screens[selected.screen];
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
-        <Box background="light-2" height="100vh">
+        <Box background="dark-1" height="100vh" border="left">
           <Box flex={false}>
             <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
               {screen.name || `Screen ${screen.id}`}
