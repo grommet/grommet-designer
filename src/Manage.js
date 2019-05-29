@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, Form, FormField, Heading, Layer, Paragraph, Text,
+  Box, Button, Form, FormField, Heading, Layer, Paragraph, Stack, Text,
 } from 'grommet';
-import { Close, Save, Trash } from 'grommet-icons';
+import { Close, Save, Trash, Upload } from 'grommet-icons';
 
 export default class Manage extends Component {
 
@@ -47,7 +47,7 @@ export default class Manage extends Component {
   }
 
   render() {
-    const { design, onClose } = this.props;
+    const { design, onChange, onClose } = this.props;
     const { designs, name, message } = this.state;
     return (
       <Layer onEsc={onClose}>
@@ -105,6 +105,34 @@ export default class Manage extends Component {
               />
             </Box>
           ))}
+        </Box>
+        <Box basis="xxsmall">
+          <Stack fill guidingChild="last" interactiveChild="first">
+            <input
+              style={{ display: 'block', width: '100%', height: '100%' }}
+              type="file"
+              onChange={(event) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  try {
+                    const design = JSON.parse(reader.result);
+                    onChange(design);
+                  } catch {
+                    // this.setState({ });
+                  }
+                };
+                reader.readAsText(event.target.files[0]);
+              }}
+            />
+            <Box
+              height="xxsmall"
+              background="light-2"
+              align="center"
+              justify="center"
+            >
+              <Upload />
+            </Box>
+          </Stack>
         </Box>
       </Layer>
     );

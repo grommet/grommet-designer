@@ -21,7 +21,7 @@ import ScreenDetails from './ScreenDetails';
 const themes = { aruba, dark, dxc, grommet, hp, hpe };
 
 class App extends Component {
-  state = resetState(rich);
+  state = { ...resetState(rich), theme: grommet };
 
   componentDidMount() {
     const { location } = document;
@@ -64,12 +64,9 @@ class App extends Component {
 
   onChange = (nextState) => {
     const { design } = nextState;
-    if (design) {
-      const { theme } = this.state;
-      const nextTheme = design.theme ? themes[design.theme] : (theme || grommet);
-      this.setState({ theme: nextTheme });
-    }
-    this.setState(nextState);
+    const { theme } = this.state;
+    const nextTheme = (design && design.theme && themes[design.theme]) || theme || grommet;
+    this.setState({ ...nextState, theme: nextTheme });
     clearTimeout(this.storeTimer);
     this.storeTimer = setTimeout(() => {
       if (nextState.design) {
@@ -105,7 +102,7 @@ class App extends Component {
   onReset = () => {
     localStorage.removeItem('selected');
     localStorage.removeItem('design');
-    this.setState(resetState(bare));
+    this.setState({ ...resetState(bare), theme: grommet });
   }
 
   moveChild = (dragging, dropTarget) => {

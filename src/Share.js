@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, Heading, Layer, Markdown, Text, TextArea, TextInput
 } from 'grommet';
-import { Close, Copy, Code } from 'grommet-icons';
+import { Close, Copy, Code, Download } from 'grommet-icons';
 import LZString from 'lz-string';
 import { generateJSX } from './designs';
 
@@ -26,12 +26,7 @@ export default class Share extends Component {
     return (
       <Layer onEsc={onClose}>
         <Box pad="medium" gap="medium">
-          <Box
-            direction="row"
-            gap="medium"
-            align="center"
-            justify="between"
-          >
+          <Box direction="row" gap="medium" align="center" justify="between">
             <Heading level={2} margin="none">
               Share
             </Heading>
@@ -41,35 +36,50 @@ export default class Share extends Component {
           <Box>
             <Box direction="row">
               <TextInput ref={this.ref} value={url} />
-              <Button icon={<Copy />} onClick={this.onCopy} />
+              <Button
+                icon={<Copy />}
+                title="Copy URL"
+                hoverIndicator
+                onClick={this.onCopy}
+              />
             </Box>
             <Box>
               <Text textAlign="end">{message}&nbsp;</Text>
             </Box>
           </Box>
-          <Heading level={3} margin="none">Developer</Heading>
-          {code
-            ? (
-              <Box>
-                <Markdown>{`
+          <Box direction="row" align="center" justify="between" gap="medium">
+            <Heading level={3} margin="none">Download</Heading>
+            <Button
+              icon={<Download />}
+              title="Download Design"
+              hoverIndicator
+              href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
+              download={`${design.name || 'design'}.json`}
+            />
+          </Box>
+          <Box direction="row" align="center" justify="between" gap="medium">
+            <Heading level={3} margin="none">Developer</Heading>
+            <Button
+              icon={<Code />}
+              title="Generate Code"
+              hoverIndicator
+              onClick={() => this.setState({ code: generateJSX(design) })}
+            />
+          </Box>
+          {code && (
+            <Box>
+              <Markdown>{`
 * install nodejs, npm, yarn, and create-react-app (if needed)
 * \`# create-react-app my-app\`
 * \`# cd my-app\`
 * \`# yarn add grommet grommet-icons styled-components\`
 * replace the contents of \`src/App.js\` with the text below
 * \`# yarn start\`
-                  `}
-                </Markdown>
-                <TextArea value={code} rows={20} cols={40} readOnly />
-              </Box>
-            ) : (
-              <Button
-                icon={<Code />}
-                label="Generate Code"
-                onClick={() => this.setState({ code: generateJSX(design) })}
-              />
-            )
-          }
+                `}
+              </Markdown>
+              <TextArea value={code} rows={20} cols={40} readOnly />
+            </Box>
+          )}
         </Box>
       </Layer>
     );
