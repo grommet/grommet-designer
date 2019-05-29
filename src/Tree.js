@@ -285,7 +285,7 @@ class Tree extends Component {
     const isContainer = !(selectedtype.text || selectedtype.name === 'Icon');
     return (
       <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
-        <Box background="light-2" height="100vh">
+        <Box background="dark-1" height="100vh" border="right">
           <Box flex={false}>
             {isContainer ? (
               <Button
@@ -354,53 +354,51 @@ class Tree extends Component {
           )}
           {configuring && (
             <Layer
-              position="top"
+              position="center"
               onEsc={() => this.setState({ configuring: false })}
               onClickOutside={() => this.setState({ configuring: false })}
             >
-              <Box
-                direction="row"
-                align="center"
-                justify="between"
-                gap="medium"
-                width="medium"
-              >
-                <Heading
-                  level={2}
-                  size="small"
-                  margin={{ horizontal: 'small', vertical: 'none' }}
+              <Box pad="medium">
+                <Box
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  gap="medium"
+                  width="medium"
                 >
-                  Design
-                </Heading>
-                <Button
-                  icon={<Close />}
-                  hoverIndicator
-                  onClick={() => this.setState({ configuring: false })}
-                />
+                  <Heading level={2} margin="none">
+                    Design
+                  </Heading>
+                  <Button
+                    icon={<Close />}
+                    hoverIndicator
+                    onClick={() => this.setState({ configuring: false })}
+                  />
+                </Box>
+                <FormField label="Name" name="name">
+                  <TextInput
+                    value={design.name || ''}
+                    onChange={(event) => {
+                      const { design, onChange } = this.props;
+                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      nextDesign.name = event.target.value;
+                      onChange({ design: nextDesign });
+                    }}
+                  />
+                </FormField>
+                <FormField label="Theme" name="theme">
+                  <Select
+                    options={[...themes, 'undefined']}
+                    value={design.theme || ''}
+                    onChange={({ option }) => {
+                      const { design, onChange } = this.props;
+                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      nextDesign.theme = option === 'undefined' ? undefined : option;
+                      onChange({ design: nextDesign });
+                    }}
+                  />
+                </FormField>
               </Box>
-              <FormField label="Name" name="name">
-                <TextInput
-                  value={design.name || ''}
-                  onChange={(event) => {
-                    const { design, onChange } = this.props;
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.name = event.target.value;
-                    onChange({ design: nextDesign });
-                  }}
-                />
-              </FormField>
-              <FormField label="Theme" name="theme">
-                <Select
-                  options={[...themes, 'undefined']}
-                  value={design.theme || ''}
-                  onChange={({ option }) => {
-                    const { design, onChange } = this.props;
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.theme = option === 'undefined' ? undefined : option;
-                    onChange({ design: nextDesign });
-                  }}
-                />
-              </FormField>
             </Layer>
           )}
         </Box>

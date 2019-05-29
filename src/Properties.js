@@ -107,7 +107,7 @@ export default class Properties extends Component {
     }
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
-        <Box background="light-2" height="100vh">
+        <Box background="dark-1" height="100vh" border="left">
           <Box flex={false}>
             <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
               {component.name || type.name}
@@ -172,20 +172,39 @@ export default class Properties extends Component {
               )}
               {type.properties && (
                 <Box>
-                  <Heading level={4} size="small" margin="small">
+                  <Heading level={3} size="small" margin="small">
                     Properties
                   </Heading>
-                  {Object.keys(type.properties).map((propName) => (
-                    <Property
-                      key={propName}
-                      design={design}
-                      selected={selected}
-                      name={propName}
-                      property={type.properties[propName]}
-                      value={component.props[propName]}
-                      onChange={value => this.setProp(propName, value)}
-                    />
-                  ))}
+                  {Array.isArray(type.properties) ? (
+                    type.properties.map(({ label, properties }) => (
+                      <Box key={label} flex={false}>
+                        <Heading level={4} size="small" margin="small">{label}</Heading>
+                        {Object.keys(properties).map((propName) => (
+                          <Property
+                            key={propName}
+                            design={design}
+                            selected={selected}
+                            name={propName}
+                            property={properties[propName]}
+                            value={component.props[propName]}
+                            onChange={value => this.setProp(propName, value)}
+                          />
+                        ))}
+                      </Box>
+                    ))
+                  ) :
+                    Object.keys(type.properties).map((propName) => (
+                      <Property
+                        key={propName}
+                        design={design}
+                        selected={selected}
+                        name={propName}
+                        property={type.properties[propName]}
+                        value={component.props[propName]}
+                        onChange={value => this.setProp(propName, value)}
+                      />
+                    ))
+                  }
                 </Box>
               )}
             </Box>
