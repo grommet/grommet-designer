@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Box, Button, Heading, Layer, Markdown, Text, TextArea, TextInput
 } from 'grommet';
-import { Close, Copy, Code, Download } from 'grommet-icons';
-import LZString from 'lz-string';
-import { generateJSX } from './designs';
+import { Close, CloudUpload, Copy, Code, Download } from 'grommet-icons';
+// import LZString from 'lz-string';
+import { bucketPostUrl, bucketKey, generateJSX } from './designs';
 
 export default class Share extends Component {
 
@@ -20,9 +20,9 @@ export default class Share extends Component {
 
   render() {
     const { design, onClose } = this.props;
-    const { code, message } = this.state;
-    const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(design));
-    const url = `${window.location.href.split('?')[0]}?preview=true&d=${encoded}`;
+    const { code, message, uploadUrl } = this.state;
+    // const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(design));
+    // const url = `${window.location.href.split('?')[0]}?preview=true&d=${encoded}`;
     return (
       <Layer onEsc={onClose}>
         <Box pad="medium" gap="medium">
@@ -32,6 +32,7 @@ export default class Share extends Component {
             </Heading>
             <Button icon={<Close />} hoverIndicator onClick={onClose} />
           </Box>
+          {/* }
           <Heading level={3} margin="none">Browser</Heading>
           <Box>
             <Box direction="row">
@@ -47,6 +48,53 @@ export default class Share extends Component {
               <Text textAlign="end">{message}&nbsp;</Text>
             </Box>
           </Box>
+          { */}
+          <Box direction="row" align="center" justify="between" gap="medium">
+            <Heading level={3} margin="none">Publish</Heading>
+            <Button
+              icon={<CloudUpload />}
+              title="Publish Design"
+              hoverIndicator
+              onClick={() => {
+                const name = `${design.name || 'd'}-${(new Date()).toISOString()}`;
+                const body = JSON.stringify(design);
+                fetch(
+                  `${bucketPostUrl}?uploadType=media&name=${name}&${bucketKey}`,
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/javascript; charset=UTF-8',
+                      'Content-Length': body.length,
+                    },
+                    body,
+                  },
+                )
+                .then((response) => {
+                  if (response.ok) {
+                    const uploadUrl =
+                      `${window.location.href.split('?')[0]}?preview=true&n=${name}`;
+                    this.setState({ uploadUrl });
+                  }
+                });
+              }}
+            />
+          </Box>
+          {uploadUrl && (
+            <Fragment>
+              <Box direction="row">
+                <TextInput ref={this.ref} value={uploadUrl} />
+                <Button
+                  icon={<Copy />}
+                  title="Copy URL"
+                  hoverIndicator
+                  onClick={this.onCopy}
+                />
+              </Box>
+              <Box>
+                <Text textAlign="end">{message}&nbsp;</Text>
+              </Box>
+            </Fragment>
+          )}
           <Box direction="row" align="center" justify="between" gap="medium">
             <Heading level={3} margin="none">Download</Heading>
             <Button

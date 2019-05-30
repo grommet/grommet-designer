@@ -14,7 +14,9 @@ import Icon from './Icon';
 import Manage from './Manage';
 import Share from './Share';
 import {
-  defaultComponent, deleteOrphans, getComponent, getParent, resetState, bare, rich,
+  bucketUrl, bucketKey,
+  defaultComponent, deleteOrphans, getComponent, getParent, resetState,
+  bare, rich,
 } from './designs';
 import ScreenDetails from './ScreenDetails';
 
@@ -30,7 +32,16 @@ class App extends Component {
       const [k, v] = p.split('=');
       params[k] = v;
     });
-    if (params.d) {
+    if (params.n) {
+      fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
+      .then(response => response.json())
+      .then((design) => {
+        const screen = Object.keys(design.screens)[0];
+        const component = defaultComponent(design, screen);
+        const theme = design.theme ? themes[design.theme] : grommet;
+        this.setState({ design, selected: { screen, component }, theme });
+      });
+    } else if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
       const screen = Object.keys(design.screens)[0];

@@ -1,4 +1,8 @@
 
+export const bucketUrl = 'https://www.googleapis.com/storage/v1/b/designer-grommet/o';
+export const bucketPostUrl = 'https://www.googleapis.com/upload/storage/v1/b/designer-grommet/o';
+export const bucketKey = `key=${process.env.REACT_APP_API_KEY}`;
+
 export const bare = {
   screens: {
     1: {
