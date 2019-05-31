@@ -56,7 +56,7 @@ export default class Share extends Component {
               title="Publish Design"
               hoverIndicator
               onClick={() => {
-                const name = `${design.name || 'd'}-${(new Date()).toISOString()}`;
+                const name = encodeURIComponent(`${design.name || 'd'}-${(new Date()).toISOString()}`);
                 const body = JSON.stringify(design);
                 fetch(
                   `${bucketPostUrl}?uploadType=media&name=${name}&${bucketKey}`,
