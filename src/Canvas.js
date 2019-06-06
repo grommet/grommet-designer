@@ -15,16 +15,21 @@ class Canvas extends Component {
 
   moveChild = (dragging, dropTarget) => {
     const { design, selected, onChange } = this.props;
+    const { dropAt } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    // remove from old parent
+
     const parent = getParent(nextDesign, { ...selected, component: dragging });
     const index = parent.children.indexOf(dragging);
-    parent.children.splice(index, 1);
-    // add to new parent
+
     const nextParent = getComponent(nextDesign, { ...selected, component: dropTarget });
     if (!nextParent.children) nextParent.children = [];
-    nextParent.children.push(dragging);
-    this.setState({ dragging: undefined, dropTarget: undefined });
+    const nextIndex = dropAt !== undefined
+      ? nextParent.children.indexOf(dropAt) : nextParent.children.length;
+
+    parent.children.splice(index, 1);
+    nextParent.children.splice(nextIndex, 0, dragging);
+
+    this.setState({ dragging: undefined, dropTarget: undefined, dropAt: undefined });
     onChange({ design: nextDesign });
   }
 
@@ -46,12 +51,15 @@ class Canvas extends Component {
 
   renderComponent = (id) => {
     const { design, preview, selected, theme, onChange } = this.props;
-    const { dropTarget  } = this.state;
+    const { dropTarget, dropAt  } = this.state;
     const screen = design.screens[selected.screen];
     const component = screen.components[id];
+
     if (!component || component.hide) {
       return null;
     }
+
+    // set up any properties that need special handling
     const type = types[component.type];
     const specialProps = {};
     if (type.name === 'Button' && component.props.icon) {
@@ -74,6 +82,15 @@ class Canvas extends Component {
       }
     }
     const droppable = !type.text && type.name !== 'Icon';
+    let style;
+    if (dropTarget === id) {
+      style = { outline: '5px dashed blue' };
+    } else if (dropAt === id) {
+      style = { outline: '1px dashed blue' };
+    } else if (!preview && selected.component === id) {
+      style = { outline: '1px dashed red' };
+    }
+
     return React.createElement(
       type.component,
       {
@@ -102,8 +119,12 @@ class Canvas extends Component {
         onDragEnter: preview ? undefined : (event) => {
           if (droppable) event.stopPropagation();
           const { dragging } = this.state;
-          if (dragging && dragging !== id && droppable) {
-            this.setState({ dropTarget: id });
+          if (dragging && dragging !== id) {
+            if (droppable) {
+              this.setState({ dropTarget: id });
+            } else {
+              this.setState({ dropAt: id });
+            }
           }
         },
         onDragOver: preview ? undefined : (event) => {
@@ -116,11 +137,11 @@ class Canvas extends Component {
         onDrop: preview ? undefined : (event) => {
           if (droppable) event.stopPropagation();
           const { dragging, dropTarget } = this.state;
-          this.moveChild(dragging, dropTarget);
+          if (dropTarget) {
+            this.moveChild(dragging, dropTarget);
+          }
         },
-        style: !preview && selected.component === id
-          ? { outline: '1px dashed red' }
-          : (dropTarget === id ? { outline: '5px dashed blue' } : undefined),
+        style,
         ...component.props,
         ...specialProps,
         theme: (type.name === 'Grommet' ? theme : undefined),
