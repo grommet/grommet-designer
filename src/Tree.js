@@ -282,7 +282,8 @@ class Tree extends Component {
     const { adding, configuring, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
     const selectedtype = types[selectedComponent.type];
-    const isContainer = !(selectedtype.text || selectedtype.name === 'Icon');
+    const isContainer =
+      !(selectedtype.text || selectedtype.name === 'Icon' || selectedtype.name === 'Image');
     return (
       <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
         <Box background="dark-1" height="100vh" border="right">
