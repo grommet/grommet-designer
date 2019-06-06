@@ -28,6 +28,7 @@ export const types = {
   Box: {
     component: Box,
     name: 'Box',
+    container: true,
     defaultProps: {
       align: 'center',
       justify: 'center',
@@ -83,6 +84,7 @@ export const types = {
   Grid: {
     component: Grid,
     name: 'Grid',
+    container: true,
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
       alignContent: ['stretch', 'start', 'center', 'end'],
@@ -97,6 +99,7 @@ export const types = {
   Stack: {
     component: Stack,
     name: 'Stack',
+    container: true,
     properties: {
       anchor: ['center', 'top', 'bottom', 'left', 'right'],
       fill: false,
@@ -106,6 +109,7 @@ export const types = {
   Layer: {
     component: Layer,
     name: 'Layer',
+    container: true,
     defaultProps: {
       modal: false,
     },
@@ -118,7 +122,7 @@ export const types = {
       responsive: false,
     },
   },
-  Grommet: { component: Grommet, name: 'Grommet' },
+  Grommet: { component: Grommet, name: 'Grommet', container: true },
   Heading: {
     component: Heading,
     name: 'Heading',
@@ -168,6 +172,7 @@ export const types = {
   Anchor: {
     component: Anchor,
     name: 'Anchor',
+    container: true,
     defaultProps: {
       label: 'anchor',
     },
@@ -181,6 +186,7 @@ export const types = {
   Button: {
     component: Button,
     name: 'Button',
+    container: true,
     defaultProps: {
       label: 'Button',
     },
@@ -324,6 +330,7 @@ export const types = {
   Repeater: {
     component: Repeater,
     name: 'Repeater',
+    container: true,
     help: `Repeater is not a grommet component, it is a special component for
     use with this design tool. It expects a single child component which
     it will repeat 'count' times. Wrap it in a Box or Grid to control

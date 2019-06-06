@@ -281,14 +281,12 @@ class Tree extends Component {
     const { design, selected, themes, onManage, onReset, onShare } = this.props;
     const { adding, configuring, confirmReset } = this.state;
     const selectedComponent = getComponent(design, selected);
-    const selectedtype = types[selectedComponent.type];
-    const isContainer =
-      !(selectedtype.text || selectedtype.name === 'Icon' || selectedtype.name === 'Image');
+    const selectedType = types[selectedComponent.type];
     return (
-      <Keyboard target="document" onKeyDown={isContainer ? this.onKeyDown : undefined}>
+      <Keyboard target="document" onKeyDown={selectedType.container ? this.onKeyDown : undefined}>
         <Box background="dark-1" height="100vh" border="right">
           <Box flex={false}>
-            {isContainer ? (
+            {selectedType.container ? (
               <Button
                 title="add component"
                 icon={<Add />}
