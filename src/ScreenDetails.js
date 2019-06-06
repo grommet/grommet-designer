@@ -32,8 +32,7 @@ export default class ScreenDetails extends Component {
     delete nextDesign.screens[selected.screen];
     const index = nextDesign.screenOrder.indexOf(selected.screen);
     nextDesign.screenOrder.splice(index, 1);
-    let nextScreen = selected.screen - 1;
-    while (nextScreen && !design.screens[nextScreen]) nextScreen -= 1;
+    const nextScreen = nextDesign.screenOrder[index ? index - 1 : index];
     const nextSelected = {
       screen: nextScreen,
       component: defaultComponent(nextDesign, nextScreen),
