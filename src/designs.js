@@ -132,6 +132,19 @@ export const getParent = (design, id) => {
   return result;
 };
 
+export const getScreen = (design, id) => {
+  let result;
+  Object.keys(design.screens).some((sId) => {
+    const screen = design.screens[sId];
+    if (screen.root === id) {
+      result = screen.id;
+      return true;
+    }
+    return false;
+  });
+  return result || getScreen(design, getParent(design, id).id);
+};
+
 // TODO
 export const getLinkOptions = (design, selected) => {
   // options for what a Button or MenuItem should do:

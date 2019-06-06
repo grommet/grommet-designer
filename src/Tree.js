@@ -3,7 +3,7 @@ import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import { Add, Configure, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import DesignSettings from './DesignSettings';
-import { addScreen, getParent } from './designs';
+import { addScreen, getParent, getScreen } from './designs';
 
 class Tree extends Component {
   state = {}
@@ -58,10 +58,10 @@ class Tree extends Component {
         0, dragging);
     }
     this.setState({ dragging: undefined, dropTarget: undefined });
+    const nextScreen = getScreen(nextDesign, dragging);
     onChange({
       design: nextDesign,
-      // TODO: need to determine screen for where we dragged to!
-      selected: { screen: target.screen, component: dragging },
+      selected: { screen: nextScreen , component: dragging },
     });
   }
 
