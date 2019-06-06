@@ -7,6 +7,7 @@ import {
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
 import Repeater from './Repeater';
+import BoxAnimation from './custom/BoxAnimation';
 import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
@@ -59,7 +60,7 @@ export const types = {
       {
         label: 'Style',
         properties: {
-          animation: ['fadeIn', 'slideUp', 'slideDown', 'slideLeft', 'slideRight', 'zoomIn', 'zoomOut'],
+          animation: BoxAnimation,
           background: {
             color: colors,
             dark: false,
