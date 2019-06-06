@@ -23,7 +23,7 @@ const set = (value, index, property, propertyValue) => {
     }
   } else {
     if (property !== 'type') {
-      nextValue = { type: nextValue, [property]: propertyValue };
+      nextValue = { type: value, [property]: propertyValue };
     } else {
       nextValue = propertyValue;
     }
