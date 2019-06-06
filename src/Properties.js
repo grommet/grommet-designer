@@ -6,7 +6,7 @@ import {
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
-import { getComponent, getDisplayName, getLinkOptions, getParent } from './designs';
+import { getDisplayName, getLinkOptions, getParent } from './designs';
 
 export default class Properties extends Component {
 
@@ -25,7 +25,7 @@ export default class Properties extends Component {
   setProp = (propName, option) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     if (option !== undefined) component.props[propName] = option
     else delete component.props[propName];
     onChange({ design: nextDesign });
@@ -34,7 +34,7 @@ export default class Properties extends Component {
   setText = (text) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     component.text = text;
     onChange({ design: nextDesign });
   }
@@ -42,7 +42,7 @@ export default class Properties extends Component {
   setName= (name) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     component.name = name;
     onChange({ design: nextDesign });
   }
@@ -50,7 +50,7 @@ export default class Properties extends Component {
   link = (to) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     component.linkTo = to;
     onChange({ design: nextDesign });
   }
@@ -58,17 +58,17 @@ export default class Properties extends Component {
   setHide = (hide) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     component.hide = hide;
     onChange({ design: nextDesign });
   }
 
   duplicateComponent = (nextDesign, ids) => {
-    const component = getComponent(nextDesign, ids);
+    const component = nextDesign.components[ids.component];
     const newId = nextDesign.nextId;
     nextDesign.nextId += 1;
     const newComponent = { ...component, id: newId };
-    nextDesign.screens[ids.screen].components[newId] = newComponent;
+    nextDesign.components[newId] = newComponent;
     if (newComponent.children) {
       newComponent.children = newComponent.children
         .map(c => this.duplicateComponent(nextDesign, { ...ids, component: c }));

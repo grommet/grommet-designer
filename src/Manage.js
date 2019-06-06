@@ -3,6 +3,7 @@ import {
   Box, Button, Form, FormField, Heading, Layer, Paragraph, Stack, Text,
 } from 'grommet';
 import { Close, Save, Trash, Upload } from 'grommet-icons';
+import { upgradeDesign } from './designs';
 
 export default class Manage extends Component {
 
@@ -21,6 +22,7 @@ export default class Manage extends Component {
     const item = localStorage.getItem(name);
     if (item) {
       const design = JSON.parse(item);
+      upgradeDesign(design);
       onChange(design);
     }
   }

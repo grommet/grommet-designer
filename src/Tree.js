@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Box, Button, FormField, Heading, Keyboard, Layer, Select, Stack, Text, TextInput } from 'grommet';
-import { Add, Close, Configure, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
+import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
+import { Add, Configure, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
-import {
-  addScreen, defaultComponent, getComponent, getParent, moveComponent,
-} from './designs';
+import DesignSettings from './DesignSettings';
+import { addScreen, getParent } from './designs';
 
 class Tree extends Component {
   state = {}
@@ -15,7 +14,7 @@ class Tree extends Component {
     const nextSelected = { ...selected };
     if (typeName === 'Screen') {
       nextSelected.screen = addScreen(nextDesign);
-      nextSelected.component = defaultComponent(nextDesign, nextSelected.screen);
+      nextSelected.component = nextDesign.screens[nextSelected.screen].root;
     } else {
       const type = types[typeName];
       const id = nextDesign.nextId;
@@ -25,8 +24,8 @@ class Tree extends Component {
         id,
         props: type.defaultProps ? { ...type.defaultProps } : {},
       };
-      nextDesign.screens[selected.screen].components[component.id] = component;
-      const parent = getComponent(nextDesign, selected);
+      nextDesign.components[component.id] = component;
+      const parent = nextDesign.components[selected.component];
       if (!parent.children) parent.children = [];
       parent.children.push(component.id);
       nextSelected.component = component.id;
@@ -45,27 +44,24 @@ class Tree extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
     const priorParent = getParent(nextDesign, dragging);
-    const priorIndex = priorParent.children.indexOf(dragging.component);
+    const priorIndex = priorParent.children.indexOf(dragging);
     priorParent.children.splice(priorIndex, 1);
     // insert into new parent
     if (where === 'in') {
-      const nextParent = getComponent(nextDesign, target);
+      const nextParent = nextDesign.components[target];
       if (!nextParent.children) nextParent.children = [];
-      nextParent.children.unshift(dragging.component);
+      nextParent.children.unshift(dragging);
     } else {
       const nextParent = getParent(nextDesign, target);
-      const nextIndex = nextParent.children.indexOf(target.component);
+      const nextIndex = nextParent.children.indexOf(target);
       nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
-        0, dragging.component);
-    }
-    // if we changed screens, move component and all of its children
-    if (dragging.screen !== target.screen) {
-      moveComponent(nextDesign, dragging, target.screen);
+        0, dragging);
     }
     this.setState({ dragging: undefined, dropTarget: undefined });
     onChange({
       design: nextDesign,
-      selected: { screen: target.screen, component: dragging.component },
+      // TODO: need to determine screen for where we dragged to!
+      selected: { screen: target.screen, component: dragging },
     });
   }
 
@@ -84,7 +80,7 @@ class Tree extends Component {
   toggleCollapse = () => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = getComponent(nextDesign, selected);
+    const component = nextDesign.components[selected.component];
     component.collapsed = !component.collapsed;
     onChange({ design: nextDesign });
   }
@@ -98,24 +94,24 @@ class Tree extends Component {
     }
   }
 
-  renderDropArea = (ids, where) => {
+  renderDropArea = (id, where) => {
     const { dragging, dropWhere, dropTarget } = this.state;
     return (
       <Box
         pad="xxsmall"
-        background={dragging && dropTarget && dropTarget.screen === ids.screen
-          && dropTarget.component === ids.component && dropWhere === where
+        background={dragging && dropTarget
+          && dropTarget === id && dropWhere === where
           ? 'accent-2' : undefined}
         onDragEnter={(event) => {
-          if (dragging && dragging.component !== ids.component) {
+          if (dragging && dragging !== id) {
             event.preventDefault();
-            this.setState({ dropTarget: ids, dropWhere: where });
+            this.setState({ dropTarget: id, dropWhere: where });
           } else {
             this.setState({ dropTarget: undefined });
           }
         }}
         onDragOver={(event) => {
-          if (dragging && dragging.component !== ids.component) {
+          if (dragging && dragging !== id) {
             event.preventDefault();
           }
         }}
@@ -151,35 +147,34 @@ class Tree extends Component {
     );
   }
 
-  renderComponent = (ids, firstChild) => {
+  renderComponent = (screen, id, firstChild) => {
     const { design, selected } = this.props;
     const { dragging, dropTarget, dropWhere } = this.state;
-    const component = getComponent(design, ids);
+    const component = design.components[id];
     if (!component) return null;
     const type = types[component.type];
     return (
-      <Box key={ids.component}>
-        {firstChild && this.renderDropArea(ids, 'before')}
+      <Box key={id}>
+        {firstChild && this.renderDropArea(id, 'before')}
         <Stack anchor="right">
           <Button
             fill
             hoverIndicator
-            onClick={() => this.select(ids)}
+            onClick={() => this.select({ screen, component: id })}
             draggable
             onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', 'ignored'); // for Firefox
-              this.setState({ dragging: ids });
+              this.setState({ dragging: id });
             }}
             onDragEnd={() =>
               this.setState({ dragging: undefined, dropTarget: undefined })}
             onDragEnter={() => {
-              if (dragging && dragging.component !== ids.component && !type.text
-                && type.name !== 'Icon') {
-                this.setState({ dropTarget: ids, dropWhere: 'in' });
+              if (dragging && dragging !== id && type.container) {
+                this.setState({ dropTarget: id, dropWhere: 'in' });
               }
             }}
             onDragOver={(event) => {
-              if (dragging && dragging !== ids.component && !type.text) {
+              if (dragging && dragging !== id && type.container) {
                 event.preventDefault();
               }
             }}
@@ -188,12 +183,9 @@ class Tree extends Component {
             <Box
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
-                (dropTarget && dropTarget.screen === ids.screen
-                  && dropTarget.component === ids.component && dropWhere === 'in')
+                (dropTarget && dropTarget === id && dropWhere === 'in')
                 ? 'accent-2'
-                : (selected.screen === ids.screen
-                  && selected.component === ids.component
-                  ? 'dark-2' : undefined)
+                : (selected.component === id ? 'dark-2' : undefined)
               }
             >
               <Text truncate>
@@ -203,9 +195,7 @@ class Tree extends Component {
               </Text>
             </Box>
           </Button>
-          {selected.screen === ids.screen
-            && selected.component === ids.component
-            && component.children && (
+          {selected.component === id && component.children && (
             <Button
               icon={component.collapsed ? <FormDown /> : <FormUp />}
               onClick={this.toggleCollapse}
@@ -215,11 +205,10 @@ class Tree extends Component {
         {!component.collapsed && component.children && (
           <Box pad={{ left: 'small' }}>
             {component.children.map((childId, index) =>
-              this.renderComponent({ screen: ids.screen, component: childId },
-                index === 0))}
+              this.renderComponent(screen, childId, index === 0))}
           </Box>
         )}
-        {this.renderDropArea(ids, 'after')}
+        {this.renderDropArea(id, 'after')}
       </Box>
     )
   }
@@ -227,8 +216,8 @@ class Tree extends Component {
   renderScreen = (screenId, firstScreen) => {
     const { design, selected } = this.props;
     const screen = design.screens[screenId];
-    const id = defaultComponent(design, screen.id);
-    const component = screen.components[id];
+    const id = screen.root;
+    const component = design.components[id];
     return (
       <Box key={screen.id} flex={false}>
         {firstScreen && this.renderScreenDropArea(screenId, 'before')}
@@ -269,7 +258,7 @@ class Tree extends Component {
         {!component.collapsed && component.children && (
           <Box flex={false}>
             {component.children.map((childId) =>
-              this.renderComponent({ screen: screen.id, component: childId }))}
+              this.renderComponent(screen.id, childId))}
           </Box>
         )}
         {this.renderScreenDropArea(screenId, 'after')}
@@ -280,7 +269,7 @@ class Tree extends Component {
   render() {
     const { design, selected, themes, onManage, onReset, onShare } = this.props;
     const { adding, configuring, confirmReset } = this.state;
-    const selectedComponent = getComponent(design, selected);
+    const selectedComponent = design.components[selected.component];
     const selectedType = types[selectedComponent.type];
     return (
       <Keyboard target="document" onKeyDown={selectedType.container ? this.onKeyDown : undefined}>
@@ -299,8 +288,8 @@ class Tree extends Component {
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
-              {(design.screenOrder || Object.keys(design.screens))
-                .map((sId, index) => this.renderScreen(parseInt(sId, 10), index === 0))}
+              {design.screenOrder.map((sId, index) =>
+                  this.renderScreen(parseInt(sId, 10), index === 0))}
             </Box>
           </Box>
           <Box 
@@ -352,53 +341,12 @@ class Tree extends Component {
             />
           )}
           {configuring && (
-            <Layer
-              position="center"
-              onEsc={() => this.setState({ configuring: false })}
-              onClickOutside={() => this.setState({ configuring: false })}
-            >
-              <Box pad="medium">
-                <Box
-                  direction="row"
-                  align="center"
-                  justify="between"
-                  gap="medium"
-                  width="medium"
-                >
-                  <Heading level={2} margin="none">
-                    Design
-                  </Heading>
-                  <Button
-                    icon={<Close />}
-                    hoverIndicator
-                    onClick={() => this.setState({ configuring: false })}
-                  />
-                </Box>
-                <FormField label="Name" name="name">
-                  <TextInput
-                    value={design.name || ''}
-                    onChange={(event) => {
-                      const { design, onChange } = this.props;
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      nextDesign.name = event.target.value;
-                      onChange({ design: nextDesign });
-                    }}
-                  />
-                </FormField>
-                <FormField label="Theme" name="theme">
-                  <Select
-                    options={[...themes, 'undefined']}
-                    value={design.theme || ''}
-                    onChange={({ option }) => {
-                      const { design, onChange } = this.props;
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      nextDesign.theme = option === 'undefined' ? undefined : option;
-                      onChange({ design: nextDesign });
-                    }}
-                  />
-                </FormField>
-              </Box>
-            </Layer>
+            <DesignSettings
+              design={design}
+              themes={themes}
+              onChange={this.onChange}
+              onClose={() => this.setState({ configuring: false })}
+            />
           )}
         </Box>
       </Keyboard>

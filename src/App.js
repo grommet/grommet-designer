@@ -13,9 +13,7 @@ import Tree from './Tree';
 import Manage from './Manage';
 import Share from './Share';
 import {
-  bucketUrl, bucketKey,
-  defaultComponent, deleteOrphans, getComponent, getParent, resetState,
-  bare, rich,
+  bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, rich,
 } from './designs';
 import ScreenDetails from './ScreenDetails';
 
@@ -35,30 +33,31 @@ class App extends Component {
       fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
       .then(response => response.json())
       .then((design) => {
-        const screen = Object.keys(design.screens)[0];
-        const component = defaultComponent(design, screen);
+        upgradeDesign(design);
+        const screen = design.screenOrder[0];
+        const component = design.screens[screen].root;
         const theme = design.theme ? themes[design.theme] : grommet;
         this.setState({ design, selected: { screen, component }, theme });
       });
     } else if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
-      const screen = Object.keys(design.screens)[0];
-      const component = defaultComponent(design, screen);
+      upgradeDesign(design);
+      const screen = design.screenOrder[0];
+      const component = design.screens[screen].root;
       const theme = design.theme ? themes[design.theme] : grommet;
       this.setState({ design, selected: { screen, component }, theme });
     } else {
       let stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
-        // delete any orphan components
-        deleteOrphans(design);
+        upgradeDesign(design);
         const theme = design.theme ? themes[design.theme] : grommet;
         this.setState({ design, theme });
         stored = localStorage.getItem('selected');
         if (stored) {
           const selected = JSON.parse(stored);
-          if (getComponent(design, selected)) {
+          if (design.components[selected.component]) {
             this.setState({ selected });
           }
         }
@@ -77,6 +76,7 @@ class App extends Component {
     const { theme } = this.state;
     const nextTheme = (design && design.theme && themes[design.theme]) || theme || grommet;
     this.setState({ ...nextState, theme: nextTheme });
+    // delay storing it locally so we don't bog down typing
     clearTimeout(this.storeTimer);
     this.storeTimer = setTimeout(() => {
       if (nextState.design) {
@@ -120,8 +120,8 @@ class App extends Component {
 
   render() {
     const { design, managing, preview, selected, sharing, theme } = this.state;
-    const rootComponent = defaultComponent(design, selected.screen);
-    const selectedComponent = getComponent(design, selected) || rootComponent;
+    const rootComponent = design.screens[selected.screen].root;
+    const selectedComponent = design.components[selected.component] || rootComponent;
     return (
       <Grommet full theme={theme}>
         <ResponsiveContext.Consumer>

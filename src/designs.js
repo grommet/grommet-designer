@@ -4,48 +4,41 @@ export const bucketPostUrl = 'https://www.googleapis.com/upload/storage/v1/b/des
 export const bucketKey = `key=${process.env.REACT_APP_API_KEY}`;
 
 export const bare = {
-  screens: {
-    1: {
-      id: 1,
-      components: {
-        1: { id: 1, type: 'Grommet', props: { style: { height: '100vh' } } },
-      },
-    },
-  },
+  screens: { 1: { id: 1, root: 2 } },
   screenOrder: [1],
+  components: {
+    2: { id: 2, type: 'Grommet', props: { style: { height: '100vh' } } },
+  },
 };
 
 export const rich = {
-  screens: {
-    1: {
-      id: 1,
-      components: {
-        1: { id: 1, type: 'Grommet', props: { style: { height: '100vh'} }, children: [2] },
-        2: { id: 2, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [3,6,4] },
-        3: { id: 3, type: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
-        4: { id: 4, type: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [7,9] },
-        5: { id: 5, type: 'Icon', props: { icon: 'LinkPrevious'} },
-        6: { id: 6, type: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
-        7: { id: 7, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [5,8] },
-        8: { id: 8, type: 'Text', props: {}, text: 'add components' },
-        9: { id: 9, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [10,11] },
-        10: { id: 10, type: 'Text', props: {}, text: 'describe components' },
-        11: { id: 11, type: 'Icon', props: { icon: 'LinkNext'} },
-      },
-    },
-  },
+  screens: { 1: { id: 1, root: 2 } },
   screenOrder: [1],
+  components: {
+    2: { id: 2, type: 'Grommet', props: { style: { height: '100vh'} }, children: [3] },
+    3: { id: 3, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', fill: 'vertical', background: 'brand'}, children: [4,7,5] },
+    4: { id: 4, type: 'Heading', props: { size: 'large', margin: 'none' }, text: 'Designer' },
+    5: { id: 5, type: 'Box', props: { align: 'center', justify: 'between', pad: 'small', direction: 'row', alignSelf: 'stretch'}, children: [8,10] },
+    6: { id: 6, type: 'Icon', props: { icon: 'LinkPrevious'} },
+    7: { id: 7, type: 'Paragraph', props:{ size: 'xlarge' }, text: 'Design using real grommet components!'},
+    8: { id: 8, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [6,9] },
+    9: { id: 9, type: 'Text', props: {}, text: 'add components' },
+    10: { id: 10, type: 'Box', props: { align: 'center', justify: 'center', pad: 'small', direction: 'row', gap: 'small' }, children: [11,12] },
+    11: { id: 11, type: 'Text', props: {}, text: 'describe components' },
+    12: { id: 12, type: 'Icon', props: { icon: 'LinkNext'} },
+  },
 };
 
 export const resetState = (starter = bare) => {
   let nextId = 1;
   Object.keys(starter.screens)
-    .forEach(screenId => Object.keys(starter.screens[screenId].components)
-      .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10)))));
+    .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10))));
+  Object.keys(starter.components)
+    .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10))));
   nextId += 1;
   return {
-    design: { ...starter, nextId, version: 1.2 },
-    selected: { screen: 1, component: 1 },
+    design: { ...starter, nextId, version: 2.0 },
+    selected: { screen: 1, component: starter.screens[1].root },
   };
 };
 
@@ -71,7 +64,7 @@ const resetId = (nextDesign, components, id) => {
 export const addScreen = (nextDesign, copyScreen) => {
   delete nextDesign.screenOrder;
   if (!nextDesign.screenOrder) {
-    nextDesign.screenOrder = Object.keys(nextDesign.screens).map(k => parseInt(k, 10));
+    nextDesign.screenOrder = Object.keys(nextDesign.screens).map(id => parseInt(id, 10));
   }
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
@@ -102,49 +95,36 @@ export const addScreen = (nextDesign, copyScreen) => {
   return screenId;
 };
 
-export const getComponent = (design, { screen, component }) =>
-  design.screens[screen].components[component];
+// export const getComponent = (design, { component }) =>
+//   design.components[component];
 
-export const defaultComponent = (design, screen) =>
-  parseInt(Object.keys(design.screens[screen].components)[0], 10);
+// export const moveComponent = (nextDesign, id, toScreenId) => {
+//   const component = getComponent(nextDesign, fromIds);
+//   delete nextDesign.screens[fromIds.screen].components[fromIds.component];
+//   nextDesign.screens[toScreenId].components[fromIds.component] = component;
+//   if (component.children) {
+//     component.children.forEach(childId =>
+//       moveComponent(nextDesign, { ...fromIds, component: childId }, toScreenId));
+//   }
+// }
 
-export const moveComponent = (nextDesign, fromIds, toScreenId) => {
-  const component = getComponent(nextDesign, fromIds);
-  delete nextDesign.screens[fromIds.screen].components[fromIds.component];
-  nextDesign.screens[toScreenId].components[fromIds.component] = component;
-  if (component.children) {
-    component.children.forEach(childId =>
-      moveComponent(nextDesign, { ...fromIds, component: childId }, toScreenId));
-  }
-}
-
-export const deleteOrphans = (design) => {
-  Object.keys(design.screens).map(sId => design.screens[sId]).forEach(screen =>
-    Object.keys(screen.components).map(cId => screen.components[cId])
-      .forEach(component => {
-        if (component.children) {
-          component.children = component.children.filter(childId =>
-            getComponent(design, { screen: screen.id, component: childId }));
-        }
-      }));
-}
-
-export const getDisplayName = (design, ids) => {
-  const component = getComponent(design, ids);
-  if (!component || component.type === 'Grommet') {
-    const screen = design.screens[ids.screen];
+export const getDisplayName = (design, id) => {
+  const component = design.components[id];
+  if (component.type === 'Grommet') {
+    const screen = Object.keys(design.screens)
+      .map(sId => design.screens[sId])
+      .filter(s => s.root === id)[0];
     return screen.name || `Screen ${screen.id}`;
   }
   return component.name || `${component.type} ${component.id}`;
 }
 
-export const getParent = (design, ids) => {
-  const screen = design.screens[ids.screen];
+export const getParent = (design, id) => {
   let result;
-  Object.keys(screen.components).some(id => {
-    const children = screen.components[id].children;
-    if (children && children.includes(ids.component)) {
-      result = screen.components[id];
+  Object.keys(design.components).some(id2 => {
+    const children = design.components[id2].children;
+    if (children && children.includes(id)) {
+      result = design.components[id2];
       return true;
     }
     return false;
@@ -152,6 +132,7 @@ export const getParent = (design, ids) => {
   return result;
 };
 
+// TODO
 export const getLinkOptions = (design, selected) => {
   // options for what a Button or MenuItem should do:
   // open a layer, close the layer it is in, change screens,
@@ -243,8 +224,7 @@ export const generateJSX = (design) => {
     .map(screen => `const ${screenComponentName(screen)} = ({ setScreen}) => {
   const [layer, setLayer] = React.useState()
   return (
-${componentToJSX(design, defaultComponent(design, screen.id), screen,
-  grommetImports, grommetIconImports)}
+${componentToJSX(design, screen.root, screen, grommetImports, grommetIconImports)}
   )
 }`)
     .join("\n\n");
@@ -271,3 +251,31 @@ export default () => {
 }
 `
 };
+
+// Upgrade to latest design structure
+export const upgradeDesign = (design) => {
+  // add screenOrder if it isn't there
+  if (!design.screenOrder) {
+    design.screenOrder = Object.keys(design.screens).map(id => parseInt(id, 10));
+  }
+  // move components out of screens
+  if (!design.components) {
+    design.components = {};
+    Object.keys(design.screens).forEach((id) => {
+      const screen = design.screens[id];
+      screen.root = Object.keys(screen.components)[0];
+      Object.assign(design.components, screen.components);
+      delete screen.components;
+    });
+  }
+  // remove any children where the component doesn't exist anymore
+  Object.keys(design.components).map(id => design.components[id])
+    .forEach(component => {
+      if (component.children) {
+        component.children = component.children.filter(childId =>
+          design.components[childId]);
+      }
+    });
+
+  design.version = 2.0;
+}

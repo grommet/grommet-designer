@@ -3,7 +3,7 @@ import {
   Box, Button, FormField, Heading, Keyboard, TextInput,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen, defaultComponent } from './designs';
+import { addScreen } from './designs';
 
 export default class ScreenDetails extends Component {
 
@@ -35,7 +35,7 @@ export default class ScreenDetails extends Component {
     const nextScreen = nextDesign.screenOrder[index ? index - 1 : index];
     const nextSelected = {
       screen: nextScreen,
-      component: defaultComponent(nextDesign, nextScreen),
+      component: nextDesign.screens[nextScreen].root,
     };
     onChange({ design: nextDesign, selected: nextSelected });
     this.setState({ confirmDelete: false });
@@ -46,7 +46,7 @@ export default class ScreenDetails extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = {};
     nextSelected.screen = addScreen(nextDesign, nextDesign.screens[selected.screen]);
-    nextSelected.component = defaultComponent(nextDesign, nextSelected.screen);
+    nextSelected.component = nextDesign.screens[nextSelected.screen].root;
     onChange({ design: nextDesign, selected: nextSelected });
   }
 

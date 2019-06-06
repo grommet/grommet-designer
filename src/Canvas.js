@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { types } from './Types';
 import Icon from './Icon';
-import { defaultComponent, getComponent, getParent } from './designs';
+import { getParent } from './designs';
 
 class Canvas extends Component {
   state = {}
 
   setHide = (id, hide) => {
-    const { design, selected: { screen }, onChange } = this.props;
+    const { design, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign.screens[screen].components[id].hide = hide;
+    nextDesign.components[id].hide = hide;
     onChange({ design: nextDesign });
   }
 
   moveChild = (dragging, dropTarget) => {
-    const { design, selected, onChange } = this.props;
+    const { design, onChange } = this.props;
     const { dropAt } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
 
-    const parent = getParent(nextDesign, { ...selected, component: dragging });
+    const parent = getParent(nextDesign, dragging);
     const index = parent.children.indexOf(dragging);
 
-    const nextParent = getComponent(nextDesign, { ...selected, component: dropTarget });
+    const nextParent = nextDesign.components[dropTarget];
     if (!nextParent.children) nextParent.children = [];
     const nextIndex = dropAt !== undefined
       ? nextParent.children.indexOf(dropAt) : nextParent.children.length;
@@ -35,15 +35,14 @@ class Canvas extends Component {
 
   followLink = (to) => {
     const { design, onChange } = this.props;
-    const target = getComponent(design, to);
+    const target = design.components[to.component];
     if (target) {
-      const layer = target;
-      this.setHide(layer.id, !layer.hide);
+      this.setHide(target.id, !target.hide);
     } else {
       onChange({
         selected: {
           screen: to.screen,
-          component: defaultComponent(design, to.screen),
+          component: design.screens[to.screen].root,
         },
       });
     }
@@ -52,8 +51,7 @@ class Canvas extends Component {
   renderComponent = (id) => {
     const { design, preview, selected, theme, onChange } = this.props;
     const { dropTarget, dropAt  } = this.state;
-    const screen = design.screens[selected.screen];
-    const component = screen.components[id];
+    const component = design.components[id];
 
     if (!component || component.hide) {
       return null;
@@ -153,7 +151,7 @@ class Canvas extends Component {
 
   render() {
     const { design, selected } = this.props;
-    const rootComponent = defaultComponent(design, selected.screen);
+    const rootComponent = design.screens[selected.screen].root;
     return this.renderComponent(rootComponent);
   }
 }
