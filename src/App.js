@@ -254,7 +254,7 @@ class App extends Component {
               <Grid
                 fill
                 columns={(responsive === 'small' || preview)
-                  ? 'flex' : ['small', 'flex', 'small']}
+                  ? 'flex' : [['small', 'medium'], ['1/2', 'flex'], ['small', 'medium']]}
               >
 
                 {responsive !== 'small' && !preview && (

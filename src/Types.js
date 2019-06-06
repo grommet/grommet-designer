@@ -38,11 +38,12 @@ export const types = {
         label: 'Content layout',
         properties: {
           align: ['stretch', 'start', 'center', 'end'],
-          direction: ['column', 'row'],
+          direction: ['column', 'row', 'row-responsive'],
           gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
           justify: ['between', 'start', 'center', 'end'],
           overflow: ['auto', 'hidden', 'scroll', 'visible'],
           pad: Edge,
+          wrap: false,
         },
       },
       {
