@@ -168,6 +168,7 @@ export default class Share extends Component {
               hoverIndicator
               href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
               download={`${design.name || 'design'}.json`}
+              onClick={onClose}
             />
           </Box>
           <Box direction="row" align="center" justify="between" gap="medium">
