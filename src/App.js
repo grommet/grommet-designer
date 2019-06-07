@@ -191,6 +191,7 @@ class App extends Component {
         {sharing && (
           <Share
             design={design}
+            onChange={this.onChange}
             onClose={() => this.setState({ sharing: false })}
           />
         )}

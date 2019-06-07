@@ -18,12 +18,13 @@ export default class Manage extends Component {
   }
 
   onSelect = (name) => {
-    const { onChange } = this.props;
+    const { onChange, onClose } = this.props;
     const item = localStorage.getItem(name);
     if (item) {
       const design = JSON.parse(item);
       upgradeDesign(design);
       onChange(design);
+      onClose();
     }
   }
 

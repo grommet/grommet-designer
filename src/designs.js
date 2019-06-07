@@ -42,37 +42,32 @@ export const resetState = (starter = bare) => {
   };
 };
 
-const resetId = (nextDesign, components, id) => {
-  const component = components[id];
+const copyComponent = (nextDesign, design, id) => {
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  components[nextId] = component;
+  const component = JSON.parse(JSON.stringify(design.components[id]));
   component.id = nextId;
-  delete components[id];
-  // update children references
-  Object.keys(components).forEach(k => {
-    const component = components[k];
-    if (component.children) {
-      const index = component.children.indexOf(id);
-      if (index !== -1) {
-        component.children.splice(index, 1, nextId);
-      }
-    }
-  })
-};
+  nextDesign.components[nextId] = component;
+  if (component.children) {
+    component.children.forEach(childId =>
+      copyComponent(nextDesign, design, childId));
+  }
+  return nextId;
+}
 
 export const addScreen = (nextDesign, copyScreen) => {
-  delete nextDesign.screenOrder;
-  if (!nextDesign.screenOrder) {
-    nextDesign.screenOrder = Object.keys(nextDesign.screens).map(id => parseInt(id, 10));
-  }
+  // create new screen
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  const screen = JSON.parse(JSON.stringify(copyScreen || bare.screens[1]));
-  screen.id = screenId;
+  const screen = { id: screenId };
   nextDesign.screens[screenId] = screen;
-  Object.keys(screen.components)
-    .forEach(k => resetId(nextDesign, screen.components, parseInt(k, 10)));
+  if (copyScreen) {
+    // duplicate components from the copyScreen
+    screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
+  } else {
+    screen.root = copyComponent(nextDesign, bare, bare.screens[1].root);
+  }
+
   // set a good initial name
   let suffix = 0;
   let available = false;
@@ -94,19 +89,6 @@ export const addScreen = (nextDesign, copyScreen) => {
 
   return screenId;
 };
-
-// export const getComponent = (design, { component }) =>
-//   design.components[component];
-
-// export const moveComponent = (nextDesign, id, toScreenId) => {
-//   const component = getComponent(nextDesign, fromIds);
-//   delete nextDesign.screens[fromIds.screen].components[fromIds.component];
-//   nextDesign.screens[toScreenId].components[fromIds.component] = component;
-//   if (component.children) {
-//     component.children.forEach(childId =>
-//       moveComponent(nextDesign, { ...fromIds, component: childId }, toScreenId));
-//   }
-// }
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
@@ -161,9 +143,9 @@ export const getLinkOptions = (design, selected) => {
   ];
 }
 
-const componentToJSX = (design, id, screen, imports, iconImports, indent = '  ') => {
+const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ') => {
   let result;
-  const component = screen.components[id];
+  const component = design.components[id];
   if (component.type === 'Icon') {
     const { icon, ...rest } = component.props;
     iconImports[icon] = true;
@@ -172,13 +154,13 @@ const componentToJSX = (design, id, screen, imports, iconImports, indent = '  ')
   } else if (component.type === 'Repeater') {
     const childId = component.children && component.children[0];
     result = childId
-      ? componentToJSX(design, childId, screen, imports, iconImports, indent)
+      ? componentToJSX(design, screen, childId, imports, iconImports, indent)
         .repeat(component.props.count)
       : '';
   } else {
     imports[component.type] = true;
     const children = (component.children && component.children.map(cId =>
-      componentToJSX(design, cId, screen, imports, iconImports, indent + '  ')).join("\n"))
+      componentToJSX(design, screen, cId, imports, iconImports, indent + '  ')).join("\n"))
       || (component.text && `${indent}  ${component.text}`);
     result = `${indent}<${component.type}${Object.keys(component.props).map(name => {
       const value = component.props[name];
@@ -237,7 +219,7 @@ export const generateJSX = (design) => {
     .map(screen => `const ${screenComponentName(screen)} = ({ setScreen}) => {
   const [layer, setLayer] = React.useState()
   return (
-${componentToJSX(design, screen.root, screen, grommetImports, grommetIconImports)}
+${componentToJSX(design, screen, screen.root, grommetImports, grommetIconImports)}
   )
 }`)
     .join("\n\n");

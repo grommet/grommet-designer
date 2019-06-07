@@ -267,12 +267,17 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected, themes, onManage, onReset, onShare } = this.props;
+    const {
+      design, selected, themes, onChange, onManage, onReset, onShare,
+    } = this.props;
     const { adding, configuring, confirmReset } = this.state;
     const selectedComponent = design.components[selected.component];
     const selectedType = types[selectedComponent.type];
     return (
-      <Keyboard target="document" onKeyDown={selectedType.container ? this.onKeyDown : undefined}>
+      <Keyboard
+        target="document"
+        onKeyDown={selectedType.container ? this.onKeyDown : undefined}
+      >
         <Box background="dark-1" height="100vh" border="right">
           <Box flex={false}>
             {selectedType.container ? (
@@ -344,7 +349,7 @@ class Tree extends Component {
             <DesignSettings
               design={design}
               themes={themes}
-              onChange={this.onChange}
+              onChange={onChange}
               onClose={() => this.setState({ configuring: false })}
             />
           )}
