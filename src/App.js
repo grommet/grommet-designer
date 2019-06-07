@@ -37,6 +37,7 @@ class App extends Component {
         const screen = design.screenOrder[0];
         const component = design.screens[screen].root;
         const theme = design.theme ? themes[design.theme] : grommet;
+        document.title = design.name;
         this.setState({ design, selected: { screen, component }, theme, preview: true });
       });
     } else if (params.d) {
@@ -78,6 +79,12 @@ class App extends Component {
     this.storeTimer = setTimeout(() => {
       if (nextState.design) {
         localStorage.setItem('design', JSON.stringify(nextState.design));
+        const title = design.name || 'Grommet Designer';
+        document.title = title;
+        if (document.location.search) {
+          // clear current URL, in case we've started editing a published design locally
+          window.history.replaceState({}, title, '/');
+        }
       }
       if (nextState.selected) {
         localStorage.setItem('selected', JSON.stringify(nextState.selected));
