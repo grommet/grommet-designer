@@ -72,128 +72,117 @@ export default class Share extends Component {
     // const url = `${window.location.href.split('?')[0]}?preview=true&d=${encoded}`;
     return (
       <Layer onEsc={onClose}>
-        <Box pad="medium" gap="medium">
-          <Box direction="row" gap="medium" align="center" justify="between">
+        <Box>
+          <Box pad="medium" direction="row" gap="medium" align="center" justify="between">
             <Heading level={2} margin="none">
               Share
             </Heading>
             <Button icon={<Close />} hoverIndicator onClick={onClose} />
           </Box>
-          {/* }
-          <Heading level={3} margin="none">Browser</Heading>
-          <Box>
-            <Box direction="row">
-              <TextInput ref={this.ref} value={url} />
-              <Button
-                icon={<Copy />}
-                title="Copy URL"
-                hoverIndicator
-                onClick={this.onCopy}
-              />
-            </Box>
-            <Box>
-              <Text textAlign="end">{message}&nbsp;</Text>
-            </Box>
-          </Box>
-          { */}
-          <Box direction="row" align="center" justify="between" gap="medium">
-            <Heading level={3} margin="none">Publish</Heading>
-            <Button
-              icon={<CloudUpload />}
-              title="Publish Design"
-              hoverIndicator
-              onClick={() => this.setState({ publish: !publish })}
-            />
-          </Box>
-          {publish && (
-            <Form
-              value={publication}
-              onSubmit={({ value }) => this.onPublish(value)}
-            >
-              <Paragraph>
-                We use your email and PIN # to restrict editing of what you
-                share.
-              </Paragraph>
-              <FormField
-                name="name"
-                label="Name"
-                required
-                validate={{ regexp: /\w+/ }}
-              />
-              <FormField
-                name="email"
-                label="Email"
-                required
-                validate={{ regexp: /\w+@\w+\.\w+/ }}
-              />
-              <FormField
-                name="pin"
-                label="PIN"
-                required
-                validate={{ regexp: /\d{3}/, message: 'three digits' }}
-                component={MaskedInput}
-                type="password"
-                mask={[
-                  {
-                    length: 3,
-                    regexp: /^\d{1,3}$/,
-                    placeholder: '###',
-                  },
-                ]}
-              />
-              <Button type="submit" label="Publish" />
-            </Form>
-          )}
-          {uploadUrl && (
-            <Fragment>
-              <Box direction="row">
-                <TextInput ref={this.ref} value={uploadUrl} />
+          <Box pad="medium" overflow="auto" gap="large">
+            <Box flex={false}>
+              <Box direction="row" align="center" justify="between" gap="medium">
+                <Heading level={3} margin="none">Publish</Heading>
                 <Button
-                  icon={<Copy />}
-                  title="Copy URL"
+                  icon={<CloudUpload />}
+                  title="Publish Design"
                   hoverIndicator
-                  onClick={this.onCopy}
+                  onClick={() => this.setState({ publish: !publish })}
                 />
               </Box>
-              <Box>
-                <Text textAlign="end">{message}&nbsp;</Text>
-              </Box>
-            </Fragment>
-          )}
-          <Box direction="row" align="center" justify="between" gap="medium">
-            <Heading level={3} margin="none">Download</Heading>
-            <Button
-              icon={<Download />}
-              title="Download Design"
-              hoverIndicator
-              href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
-              download={`${design.name || 'design'}.json`}
-              onClick={onClose}
-            />
-          </Box>
-          <Box direction="row" align="center" justify="between" gap="medium">
-            <Heading level={3} margin="none">Developer</Heading>
-            <Button
-              icon={<Code />}
-              title="Generate Code"
-              hoverIndicator
-              onClick={() => this.setState({ code: generateJSX(design) })}
-            />
-          </Box>
-          {code && (
-            <Box>
-              <Markdown>{`
-* install nodejs, npm, yarn, and create-react-app (if needed)
-* \`# create-react-app my-app\`
-* \`# cd my-app\`
-* \`# yarn add grommet grommet-icons styled-components\`
-* replace the contents of \`src/App.js\` with the text below
-* \`# yarn start\`
-                `}
-              </Markdown>
-              <TextArea value={code} rows={20} cols={40} readOnly />
+              {publish && (
+                <Form
+                  value={publication}
+                  onSubmit={({ value }) => this.onPublish(value)}
+                >
+                  <Paragraph>
+                    We use your email and PIN # to restrict editing of what you
+                    share.
+                  </Paragraph>
+                  <FormField
+                    name="name"
+                    label="Name"
+                    required
+                    validate={{ regexp: /\w+/ }}
+                  />
+                  <FormField
+                    name="email"
+                    label="Email"
+                    required
+                    validate={{ regexp: /\w+@\w+\.\w+/ }}
+                  />
+                  <FormField
+                    name="pin"
+                    label="PIN"
+                    required
+                    validate={{ regexp: /\d{3}/, message: 'three digits' }}
+                    component={MaskedInput}
+                    type="password"
+                    mask={[
+                      {
+                        length: 3,
+                        regexp: /^\d{1,3}$/,
+                        placeholder: '###',
+                      },
+                    ]}
+                  />
+                  <Button type="submit" label="Publish" />
+                </Form>
+              )}
+              {uploadUrl && (
+                <Fragment>
+                  <Box direction="row">
+                    <TextInput ref={this.ref} value={uploadUrl} />
+                    <Button
+                      icon={<Copy />}
+                      title="Copy URL"
+                      hoverIndicator
+                      onClick={this.onCopy}
+                    />
+                  </Box>
+                  <Box>
+                    <Text textAlign="end">{message}&nbsp;</Text>
+                  </Box>
+                </Fragment>
+              )}
             </Box>
-          )}
+            <Box flex={false} direction="row" align="center" justify="between" gap="medium">
+              <Heading level={3} margin="none">Download</Heading>
+              <Button
+                icon={<Download />}
+                title="Download Design"
+                hoverIndicator
+                href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
+                download={`${design.name || 'design'}.json`}
+                onClick={onClose}
+              />
+            </Box>
+            <Box flex={false}>
+              <Box direction="row" align="center" justify="between" gap="medium">
+                <Heading level={3} margin="none">Developer</Heading>
+                <Button
+                  icon={<Code />}
+                  title="Generate Code"
+                  hoverIndicator
+                  onClick={() => this.setState({ code: generateJSX(design) })}
+                />
+              </Box>
+              {code && (
+                <Box>
+                  <Markdown>{`
+    * install nodejs, npm, yarn, and create-react-app (if needed)
+    * \`# create-react-app my-app\`
+    * \`# cd my-app\`
+    * \`# yarn add grommet grommet-icons styled-components\`
+    * replace the contents of \`src/App.js\` with the text below
+    * \`# yarn start\`
+                    `}
+                  </Markdown>
+                  <TextArea value={code} rows={20} cols={40} readOnly />
+                </Box>
+              )}
+            </Box>
+          </Box>
         </Box>
       </Layer>
     );
