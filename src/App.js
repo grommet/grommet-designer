@@ -37,7 +37,7 @@ class App extends Component {
         const screen = design.screenOrder[0];
         const component = design.screens[screen].root;
         const theme = design.theme ? themes[design.theme] : grommet;
-        this.setState({ design, selected: { screen, component }, theme });
+        this.setState({ design, selected: { screen, component }, theme, preview: true });
       });
     } else if (params.d) {
       const text = LZString.decompressFromEncodedURIComponent(params.d);
@@ -46,7 +46,7 @@ class App extends Component {
       const screen = design.screenOrder[0];
       const component = design.screens[screen].root;
       const theme = design.theme ? themes[design.theme] : grommet;
-      this.setState({ design, selected: { screen, component }, theme });
+      this.setState({ design, selected: { screen, component }, theme, preview: true });
     } else {
       let stored = localStorage.getItem('design');
       if (stored) {
@@ -65,9 +65,6 @@ class App extends Component {
     }
     if (params.theme) {
       this.setState({ theme: themes[params.theme] });
-    }
-    if (params.preview) {
-      this.setState({ preview: true });
     }
   }
 

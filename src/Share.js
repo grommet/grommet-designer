@@ -58,7 +58,7 @@ export default class Share extends Component {
     .then((response) => {
       if (response.ok) {
         const uploadUrl =
-          `${window.location.href.split('?')[0]}?preview=true&n=${fileName}`;
+          `${window.location.href.split('?')[0]}?n=${fileName}`;
         this.setState({ uploadUrl });
       }
     });
