@@ -92,10 +92,10 @@ class App extends Component {
     const { design, selected } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from the parent
-    const parent = getParent(nextDesign, selected);
+    const parent = getParent(nextDesign, selected.component);
     parent.children = parent.children.filter(i => i !== selected.component);
     // TODO: remove any linkTo references
-    delete nextDesign.screens[selected.screen].components[selected.component];
+    delete nextDesign.components[selected.component];
     this.onChange({
       design: nextDesign,
       selected: { ...selected, component: parent.id },

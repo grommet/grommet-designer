@@ -57,8 +57,8 @@ class Tree extends Component {
       nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
         0, dragging);
     }
-    this.setState({ dragging: undefined, dropTarget: undefined });
     const nextScreen = getScreen(nextDesign, dragging);
+    this.setState({ dragging: undefined, dropTarget: undefined });
     onChange({
       design: nextDesign,
       selected: { screen: nextScreen , component: dragging },

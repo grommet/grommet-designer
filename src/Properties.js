@@ -80,7 +80,7 @@ export default class Properties extends Component {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     const newId = this.duplicateComponent(nextDesign, selected);
-    const parent = getParent(nextDesign, selected);
+    const parent = getParent(nextDesign, selected.component);
     parent.children.push(newId);
     onChange({ design: nextDesign, selected: { ...selected, component: newId } });
   }
