@@ -10,11 +10,13 @@ import Reference from './Reference';
 import ReferenceComponent from './custom/ReferenceComponent';
 import Repeater from './Repeater';
 import BoxAnimation from './custom/BoxAnimation';
+import BoxBackgroundImage from './custom/BoxBackgroundImage';
 import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
 import HeadingMargin from './custom/HeadingMargin';
+import ImageSrc from './custom/ImageSrc';
 import MenuItems from './custom/MenuItems';
 import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
@@ -70,7 +72,7 @@ export const types = {
             dark: false,
             opacity: ['weak', 'medium', 'strong'],
             position: ['center', 'top', 'bottom', 'left', 'right'],
-            image: '',
+            image: BoxBackgroundImage,
           },
           border: {
             color: colors,
@@ -326,7 +328,7 @@ export const types = {
     properties: {
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
-      src: '',
+      src: ImageSrc,
     },
   },
   Repeater: {
