@@ -127,18 +127,28 @@ export const getScreen = (design, id) => {
   return result || getScreen(design, getParent(design, id).id);
 };
 
-// TODO
+const getDescendants = (design, id) => {
+  let result = [];
+  const component = design.components[id];
+  if (component.children) {
+    component.children.forEach(childId => {
+      result = [...result, childId, ...getDescendants(design, childId)];
+    });
+  }
+  return result;
+}
+
 export const getLinkOptions = (design, selected) => {
   // options for what a Button or MenuItem should do:
   // open a layer, close the layer it is in, change screens,
-  const screenComponents = design.screens[selected.screen].components;
+  const screen = design.screens[selected.screen];
+  const screenComponents = getDescendants(design, screen.root);
   return [
     ...Object.keys(screenComponents).map(k => screenComponents[k])
       .filter(c => c.type === 'Layer')
       .map(c => ({ screen: selected.screen, component: c.id })),
     ...Object.keys(design.screens).map(k => design.screens[k])
-      .filter(s => s.id !== selected.screen)
-      .map(s => ({ screen: s.id })),
+      .map(s => ({ screen: s.id, component: s.root })),
     undefined
   ];
 }

@@ -36,15 +36,10 @@ class Canvas extends Component {
   followLink = (to) => {
     const { design, onChange } = this.props;
     const target = design.components[to.component];
-    if (target) {
+    if (target && target.type === 'Layer') {
       this.setHide(target.id, !target.hide);
     } else {
-      onChange({
-        selected: {
-          screen: to.screen,
-          component: design.screens[to.screen].root,
-        },
-      });
+      onChange({ selected: to });
     }
   }
 

@@ -98,7 +98,14 @@ class App extends Component {
     // remove from the parent
     const parent = getParent(nextDesign, selected.component);
     parent.children = parent.children.filter(i => i !== selected.component);
-    // TODO: remove any linkTo references
+    // remove any linkTo references
+    Object.keys(nextDesign.components).forEach(id => {
+      const component = nextDesign.components[id];
+      if (component.linkTo && component.linkTo.component === selected.component) {
+        delete component.linkTo;
+      }
+    });
+    // delete component
     delete nextDesign.components[selected.component];
     this.onChange({
       design: nextDesign,

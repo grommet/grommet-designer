@@ -31,13 +31,13 @@ export default ({ design, selected, value, onChange }) => {
                 }}
                 valueLabel={item.linkTo ? (
                   <Box pad="small">
-                    {getDisplayName(design, item.linkTo)}
+                    {getDisplayName(design, item.linkTo.component)}
                   </Box>
                 ) : undefined}
               >
                 {(option) => (
                   <Box pad="small">
-                    {option ? getDisplayName(design, option) : 'clear'}
+                    {option ? getDisplayName(design, option.component) : 'clear'}
                   </Box>
                 )}
               </Select>

@@ -147,13 +147,13 @@ export default class Properties extends Component {
                       this.link(option ? option : undefined)}
                     valueLabel={component.linkTo ? (
                       <Box pad="small">
-                        {getDisplayName(design, component.linkTo)}
+                        {getDisplayName(design, component.linkTo.component)}
                       </Box>
                     ) : undefined}
                   >
                     {(option) => (
                       <Box pad="small">
-                        {option ? getDisplayName(design, option) : 'clear'}
+                        {option ? getDisplayName(design, option.component) : 'clear'}
                       </Box>
                     )}
                   </Select>
