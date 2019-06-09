@@ -5,6 +5,11 @@ import { types, Adder } from './Types';
 import DesignSettings from './DesignSettings';
 import { addScreen, getParent, getScreen } from './designs';
 
+const treeName = component =>
+  (component.name || component.text
+    || component.props.name || component.props.label
+    || component.type);
+
 class Tree extends Component {
   state = {}
 
@@ -153,6 +158,8 @@ class Tree extends Component {
     const component = design.components[id];
     if (!component) return null;
     const type = types[component.type];
+    const reference = (component.type === 'Reference'
+      && design.components[component.props.component]);
     return (
       <Box key={id}>
         {firstChild && this.renderDropArea(id, 'before')}
@@ -189,9 +196,7 @@ class Tree extends Component {
               }
             >
               <Text truncate>
-                {component.name || component.text
-                  || component.props.name || component.props.label
-                  || type.name}
+                {(reference && treeName(reference)) || treeName(component)}
               </Text>
             </Box>
           </Button>

@@ -120,13 +120,15 @@ export default class Properties extends Component {
                   <Paragraph>{type.help}</Paragraph>
                 </Box>
               )}
-              <FormField label="name">
-                <TextInput
-                  ref={this.textRef}
-                  value={component.name || ''}
-                  onChange={event => this.setName(event.target.value)}
-                />
-              </FormField>
+              {type.name !== 'Reference' && (
+                <FormField label="name">
+                  <TextInput
+                    ref={this.textRef}
+                    value={component.name || ''}
+                    onChange={event => this.setName(event.target.value)}
+                  />
+                </FormField>
+              )}
               {type.text &&
                 <FormField label="text">
                   <TextArea

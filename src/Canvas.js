@@ -51,7 +51,10 @@ class Canvas extends Component {
   renderComponent = (id) => {
     const { design, preview, selected, theme, onChange } = this.props;
     const { dropTarget, dropAt  } = this.state;
-    const component = design.components[id];
+    const designComponent = design.components[id];
+    const reference = (designComponent && designComponent.type === 'Reference'
+      && design.components[designComponent.props.component]);
+    const component = reference || designComponent;
 
     if (!component || component.hide) {
       return null;

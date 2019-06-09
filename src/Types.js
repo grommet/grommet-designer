@@ -6,6 +6,8 @@ import {
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
+import Reference from './Reference';
+import ReferenceComponent from './custom/ReferenceComponent';
 import Repeater from './Repeater';
 import BoxAnimation from './custom/BoxAnimation';
 import GridColumns from './custom/GridColumns';
@@ -341,6 +343,17 @@ export const types = {
     properties: {
       count: [1, 2, 5, 10, 20, 100],
     },
+  },
+  Reference: {
+    component: Reference,
+    name: 'Reference',
+    help: `Reference is not a grommet component, it is a special component for
+    use with this design tool. It has a single property which is a reference
+    to the component that should be used. Changes to that referenced component
+    will be shown for all References to it.`,
+    properties: {
+      component: ReferenceComponent,
+    },
   }
 };
 
@@ -351,7 +364,7 @@ const structure = [
   { name: 'Input', types: ['CheckBox', 'FormField', 'Select', 'TextArea', 'TextInput'] },
   { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
   { name: 'Media', types: ['Image'] },
-  { name: 'Design', types: ['Repeater'] },
+  { name: 'Design', types: ['Repeater', 'Reference'] },
 ];
 
 export const Adder = ({ onAdd, onClose }) => (
