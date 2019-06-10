@@ -55,6 +55,7 @@ export default class Manage extends Component {
     return (
       <Layer onEsc={onClose}>
         <Box
+          flex={false}
           direction="row"
           gap="medium"
           align="center"
@@ -66,7 +67,7 @@ export default class Manage extends Component {
           </Heading>
           <Button icon={<Close />} hoverIndicator onClick={onClose} />
         </Box>
-        <Box pad={{ horizontal: "medium" }}>
+        <Box flex={false} pad={{ horizontal: "medium" }}>
           <Form value={{ name: name || design.name }} onSubmit={this.onSave}>
             <FormField
               name="name"
@@ -81,35 +82,37 @@ export default class Manage extends Component {
         </Box>
         
         <Box flex overflow="auto" pad="medium">
-          {designs.length > 0 && (
-            <Paragraph margin="small">
-              Or, discard your current design and load one you've saved previously
-            </Paragraph>
-          )}
-          {designs.map(designName => (
-            <Box
-              key={designName}
-              direction="row"
-              align="center"
-              justify="between"
-            >
-              <Box flex="grow">
+          <Box flex={false}>
+            {designs.length > 0 && (
+              <Paragraph margin="small">
+                Or, discard your current design and load one you've saved previously
+              </Paragraph>
+            )}
+            {designs.map(designName => (
+              <Box
+                key={designName}
+                direction="row"
+                align="center"
+                justify="between"
+              >
+                <Box flex="grow">
+                  <Button
+                    hoverIndicator
+                    onClick={() => this.onSelect(designName)}
+                  >
+                    <Box pad="small">{designName}</Box>
+                  </Button>
+                </Box>
                 <Button
+                  icon={<Trash />}
                   hoverIndicator
-                  onClick={() => this.onSelect(designName)}
-                >
-                  <Box pad="small">{designName}</Box>
-                </Button>
+                  onClick={() => this.onDelete(designName)}
+                />
               </Box>
-              <Button
-                icon={<Trash />}
-                hoverIndicator
-                onClick={() => this.onDelete(designName)}
-              />
-            </Box>
-          ))}
+            ))}
+          </Box>
         </Box>
-        <Box basis="xxsmall">
+        <Box flex={false} basis="xxsmall">
           <Stack fill guidingChild="last" interactiveChild="first">
             <input
               style={{ display: 'block', width: '100%', height: '100%' }}
