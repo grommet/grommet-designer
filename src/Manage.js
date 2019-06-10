@@ -120,6 +120,7 @@ export default class Manage extends Component {
                   try {
                     const design = JSON.parse(reader.result);
                     onChange(design);
+                    onClose();
                   } catch {
                     // this.setState({ });
                   }
