@@ -30,7 +30,10 @@ class Tree extends Component {
         props: type.defaultProps ? { ...type.defaultProps } : {},
       };
       nextDesign.components[component.id] = component;
-      const parent = nextDesign.components[selected.component];
+      const selectedComponent = nextDesign.components[selected.component];
+      const selectedType = types[selectedComponent.type];
+      const parent = selectedType.container
+        ? selectedComponent : getParent(nextDesign, selected.component)
       if (!parent.children) parent.children = [];
       parent.children.push(component.id);
       nextSelected.component = component.id;
@@ -285,16 +288,12 @@ class Tree extends Component {
       >
         <Box background="dark-1" height="100vh" border="right">
           <Box flex={false}>
-            {selectedType.container ? (
-              <Button
-                title="add component"
-                icon={<Add />}
-                hoverIndicator
-                onClick={() => this.setState({ adding: true })}
-              />
-            ) : (
-              <Box height="xxsmall" />
-            )}
+            <Button
+              title="add component"
+              icon={<Add />}
+              hoverIndicator
+              onClick={() => this.setState({ adding: true })}
+            />
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>

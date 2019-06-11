@@ -263,7 +263,7 @@ export const upgradeDesign = (design) => {
   if (!design.screenOrder) {
     design.screenOrder = Object.keys(design.screens).map(id => parseInt(id, 10));
   }
-  // move components out of screens
+  // move components out of screens (v2.0)
   if (!design.components) {
     design.components = {};
     Object.keys(design.screens).forEach((id) => {
@@ -281,6 +281,22 @@ export const upgradeDesign = (design) => {
           design.components[childId]);
       }
     });
+  // remove any component that isn't a screen root or another component's child
+  const found = {};
+  const descend = (id) => {
+    found[id] = true;
+    const component = design.components[id];
+    if (component.children) {
+      component.children.forEach(childId => descend(childId));
+    }
+  };
+  // record which components we have references to from screen roots
+  Object.keys(design.screens).map(sId => design.screens[sId])
+    .forEach(screen => descend(screen.root));
+  // delete anything unreferenced
+  Object.keys(design.components).forEach((id) => {
+    if (!found[id]) delete design.components[id];
+  });
 
   design.version = 2.0;
 }
