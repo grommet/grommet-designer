@@ -42,6 +42,35 @@ dialog, via the Upload control at the bottom.
 1. Generate the appropriate code for your design such that you
 or a developer could run it as an actual site.
 
+### Design Components
+
+The following components are not part of grommet. They are components
+specific to this tool that come in rather handy for what this tool does.
+
+#### Repeater
+
+Give this component a `count` and it will repeat it's children count times.
+This is super useful when mocking up lists and tiles.
+
+#### Reference
+
+Allows re-using another component in the design. For instance, if every
+screen has the same banner at the top, create it in the first screen and
+then reference it in subsequent screens. Hint: This is easier to use if you
+give the component you want to re-use a `name`.
+
+### Images
+
+You can create SVG images in another tool and then embed them inline in the
+design as either the `src` for an Image or the `background.image` for a Box.
+
+### Theming
+
+You can perform basic theme customization, colors and fonts, in the
+design configuration (wrench). Any font family in quotes will be searched
+for in google's font site and the appropriate face definition will
+automatically be added to the theme.
+
 ## Local development
 
 1. `git clone`
