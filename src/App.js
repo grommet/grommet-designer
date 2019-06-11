@@ -19,6 +19,15 @@ import ScreenDetails from './ScreenDetails';
 
 const themes = { aruba, dark, dxc, grommet, hp, hpe };
 
+const normalizeTheme = (theme) => {
+  if (typeof theme === 'string') {
+    return themes[theme];
+  } else if (typeof theme === 'object') {
+    return theme;
+  }
+  return grommet;
+};
+
 class App extends Component {
   state = { ...resetState(rich), theme: grommet };
 
@@ -36,7 +45,7 @@ class App extends Component {
         upgradeDesign(design);
         const screen = design.screenOrder[0];
         const component = design.screens[screen].root;
-        const theme = design.theme ? themes[design.theme] : grommet;
+        const theme = normalizeTheme(design.theme);
         document.title = design.name;
         this.setState({ design, selected: { screen, component }, theme, preview: true });
       });
@@ -46,14 +55,14 @@ class App extends Component {
       upgradeDesign(design);
       const screen = design.screenOrder[0];
       const component = design.screens[screen].root;
-      const theme = design.theme ? themes[design.theme] : grommet;
+      const theme = normalizeTheme(design.theme);
       this.setState({ design, selected: { screen, component }, theme, preview: true });
     } else {
       let stored = localStorage.getItem('design');
       if (stored) {
         const design = JSON.parse(stored);
         upgradeDesign(design);
-        const theme = design.theme ? themes[design.theme] : grommet;
+        const theme = normalizeTheme(design.theme);
         this.setState({ design, theme });
         stored = localStorage.getItem('selected');
         if (stored) {
@@ -72,7 +81,8 @@ class App extends Component {
   onChange = (nextState) => {
     const { design } = nextState;
     const { theme } = this.state;
-    const nextTheme = (design && design.theme && themes[design.theme]) || theme || grommet;
+    const nextTheme = (design && design.theme && normalizeTheme(design.theme))
+      || theme || grommet;
     this.setState({ ...nextState, theme: nextTheme });
     // delay storing it locally so we don't bog down typing
     clearTimeout(this.storeTimer);
