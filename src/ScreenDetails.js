@@ -81,20 +81,6 @@ export default class ScreenDetails extends Component {
                   onChange={event => this.setName(event.target.value)}
                 />
               </FormField>
-              {/* }
-              <FormField label="theme">
-                <Select
-                  options={['grommet', 'dark', 'hpe', 'aruba', 'hp', 'dxc', 'undefined']}
-                  value={screen.theme || ''}
-                  onChange={({ option: theme }) => {
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.screens[selected.screen].theme =
-                      (theme === 'undefined' ? undefined : theme);
-                    onChange({ design: nextDesign });
-                  }}
-                />
-              </FormField>
-              { */}
             </Box>
           </Box>
           <Box flex={false} direction="row" align="center" justify="between">
@@ -112,12 +98,14 @@ export default class ScreenDetails extends Component {
                 onClick={this.onDelete}
               />
             )}
-            <Button
-              title="delete"
-              icon={<Trash />}
-              hoverIndicator
-              onClick={() => this.setState({ confirmDelete: !confirmDelete })}
-            />
+            {design.screenOrder.length > 1 && (
+              <Button
+                title="delete"
+                icon={<Trash />}
+                hoverIndicator
+                onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+              />
+            )}
           </Box>
         </Box>
       </Keyboard>
