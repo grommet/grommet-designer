@@ -105,7 +105,8 @@ export const types = {
     name: 'Stack',
     container: true,
     properties: {
-      anchor: ['center', 'top', 'bottom', 'left', 'right'],
+      anchor: ['center', 'top', 'bottom', 'left', 'right',
+        'top-left', 'top-right', 'bottom-left', 'bottom-right'],
       fill: false,
       guidingChild: ['first', 'last'],
     },
@@ -217,6 +218,10 @@ export const types = {
     properties: {
       disabled: false,
       dropAlign: DropAlign,
+      dropBackground: {
+        color: colors,
+        opacity: ['weak', 'medium', 'strong'],
+      },
       icon: iconNames,
       items: MenuItems,
       label: 'Actions',
