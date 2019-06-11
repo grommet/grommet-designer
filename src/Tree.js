@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
-import { Add, Configure, Folder, FormDown, FormUp, Share,  Trash } from 'grommet-icons';
+import { Add, Configure, FormDown, FormUp, Save, Share, Trash } from 'grommet-icons';
 import { types, Adder } from './Types';
 import DesignSettings from './DesignSettings';
 import { addScreen, getParent, getScreen } from './designs';
@@ -327,7 +327,7 @@ class Tree extends Component {
             )}
             <Button
               title="all my designs"
-              icon={<Folder />}
+              icon={<Save />}
               hoverIndicator
               onClick={onManage}
             />
