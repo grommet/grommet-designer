@@ -98,7 +98,7 @@ export const duplicateComponent = (nextDesign, id) => {
   nextDesign.components[newId] = newComponent;
   if (newComponent.children) {
     newComponent.children = newComponent.children
-      .map(childId => this.duplicateComponent(nextDesign, childId));
+      .map(childId => duplicateComponent(nextDesign, childId));
   }
   return newId;
 }
