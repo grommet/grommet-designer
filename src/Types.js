@@ -18,6 +18,7 @@ import DataTableData from './custom/DataTableData';
 import HeadingMargin from './custom/HeadingMargin';
 import ImageSrc from './custom/ImageSrc';
 import MenuItems from './custom/MenuItems';
+import SelectOptions from './custom/SelectOptions';
 import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
 
@@ -260,10 +261,18 @@ export const types = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      closeOnChange: true,
       disabled: false,
+      dropAlign: DropAlign,
+      dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      icon: iconNames,
       multiple: false,
+      options: SelectOptions,
       placeholder: '',
+      plain: false,
+      searchPlaceholder: '',
       size: ['small', 'medium', 'large', 'xlarge'],
+      value: '',
     },
   },
   TextArea: {
