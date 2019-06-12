@@ -236,7 +236,7 @@ class Tree extends Component {
             onClick={() => this.select({ screen: screenId, component: id })}
             draggable
             onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', 'ignored'); // for Firefox
+              event.dataTransfer.setData('text/plain', ''); // for Firefox
               this.setState({ draggingScreen: screenId });
             }}
             onDragEnd={() =>
