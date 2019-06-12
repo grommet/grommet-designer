@@ -110,6 +110,7 @@ export const types = {
         'top-left', 'top-right', 'bottom-left', 'bottom-right'],
       fill: false,
       guidingChild: ['first', 'last'],
+      margin: Edge,
     },
   },
   Layer: {
