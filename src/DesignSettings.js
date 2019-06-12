@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {
-  Box, Button, FormField, Heading, Layer, Select, TextInput,
+  Box, Button, FormField, Heading, Layer, Select, TextArea, TextInput,
 } from 'grommet';
 import { Close } from 'grommet-icons';
 
@@ -82,6 +82,23 @@ export default ({ design, themes, onChange, onClose }) => (
                   }}
                 />
               </FormField>
+              {design.theme.global.font.family.match(/'/) && (
+                <FormField
+                  label="face"
+                  name="face"
+                >
+                  <TextArea
+                    cols={40}
+                    rows={8}
+                    value={design.theme.global.font.face || ''}
+                    onChange={(event) => {
+                      let nextDesign = JSON.parse(JSON.stringify(design));
+                      nextDesign.theme.global.font.face = event.target.value;
+                      onChange({ design: nextDesign });
+                    }}
+                  />
+                </FormField>
+              )}
               <Heading level={3}>Colors</Heading>
               {['brand', 'accent-1', 'accent-2', 'accent-3', 'neutral-1', 'neutral-2', 'neutral-3'].map(color => (
                 <FormField key={color} label={color} name={color}>
