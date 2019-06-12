@@ -49,7 +49,7 @@ const copyComponent = (nextDesign, design, id) => {
   component.id = nextId;
   nextDesign.components[nextId] = component;
   if (component.children) {
-    component.children.forEach(childId =>
+    component.children = component.children.map(childId =>
       copyComponent(nextDesign, design, childId));
   }
   return nextId;
@@ -89,6 +89,19 @@ export const addScreen = (nextDesign, copyScreen) => {
 
   return screenId;
 };
+
+export const duplicateComponent = (nextDesign, id) => {
+  const component = nextDesign.components[id];
+  const newId = nextDesign.nextId;
+  nextDesign.nextId += 1;
+  const newComponent = { ...component, id: newId };
+  nextDesign.components[newId] = newComponent;
+  if (newComponent.children) {
+    newComponent.children = newComponent.children
+      .map(childId => this.duplicateComponent(nextDesign, childId));
+  }
+  return newId;
+}
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];

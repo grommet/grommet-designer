@@ -6,7 +6,9 @@ import {
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
 import { types } from './Types';
 import Property from './Property';
-import { getDisplayName, getLinkOptions, getParent } from './designs';
+import {
+  duplicateComponent, getDisplayName, getLinkOptions, getParent,
+} from './designs';
 
 export default class Properties extends Component {
 
@@ -63,23 +65,10 @@ export default class Properties extends Component {
     onChange({ design: nextDesign });
   }
 
-  duplicateComponent = (nextDesign, ids) => {
-    const component = nextDesign.components[ids.component];
-    const newId = nextDesign.nextId;
-    nextDesign.nextId += 1;
-    const newComponent = { ...component, id: newId };
-    nextDesign.components[newId] = newComponent;
-    if (newComponent.children) {
-      newComponent.children = newComponent.children
-        .map(c => this.duplicateComponent(nextDesign, { ...ids, component: c }));
-    }
-    return newId;
-  }
-
   duplicate = () => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const newId = this.duplicateComponent(nextDesign, selected);
+    const newId = duplicateComponent(nextDesign, selected.component);
     const parent = getParent(nextDesign, selected.component);
     parent.children.push(newId);
     onChange({ design: nextDesign, selected: { ...selected, component: newId } });
