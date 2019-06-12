@@ -122,18 +122,22 @@ export default class Property extends Component {
           </Button>
           {expand && (
             <Layer
-              position="top"
+              position="right"
+              margin="medium"
               onEsc={() => this.setState({ expand: false })}
+              onClickOutside={() => this.setState({ expand: false })}
             >
               <Box direction="row" align="center" justify="between" gap="medium">
-                <Heading margin={{ left: "small", vertical: "none" }} level={3}>{name}</Heading>
+                <Heading margin={{ left: "medium", vertical: "small" }} level={3}>{name}</Heading>
                 <Button
                   icon={<Close />}
                   hoverIndicator
                   onClick={() => this.setState({ expand: false })}
                 />
               </Box>
-              <CustomProperty {...this.props} />
+              <Box pad={{ horizontal: 'medium', bottom: 'medium' }}>
+                <CustomProperty {...this.props} />
+              </Box>
             </Layer>
           )}
         </Box>

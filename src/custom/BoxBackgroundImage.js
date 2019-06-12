@@ -9,7 +9,7 @@ const stripToText = value => {
   if (value && value.slice(0, dataUrlPrefix.length) === dataUrlPrefix) {
     const deDataUrl = value.slice(dataUrlPrefix.length).slice(0, -dataUrlSuffix.length);
     if (deDataUrl.slice(0, svgPrefix.length) === svgPrefix) {
-      return deDataUrl.slice(0, svgPrefix.length);
+      return deDataUrl.slice(svgPrefix.length);
     } else {
       return deDataUrl;
     }
@@ -19,12 +19,13 @@ const stripToText = value => {
 
 export default ({ value, onChange }) => {
   return (
-    <Box width="medium">
-      <Paragraph margin={{ horizontal: 'small' }}>
+    <Box>
+      <Paragraph margin="none">
         URL or &lt;svg&gt; markup.
       </Paragraph>
       <TextArea
-        rows={10}
+        rows={4}
+        cols={80}
         value={stripToText(value)}
         onChange={(event) => {
           const nextValue = event.target.value;

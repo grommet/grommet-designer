@@ -12,12 +12,13 @@ const stripPrefix = value => {
 
 export default ({ value, onChange }) => {
   return (
-    <Box width="medium">
-      <Paragraph margin={{ horizontal: 'small' }}>
+    <Box>
+      <Paragraph margin="none">
         URL or &lt;svg&gt; markup.
       </Paragraph>
       <TextArea
-        rows={10}
+        rows={4}
+        cols={80}
         value={stripPrefix(value)}
         onChange={(event) => {
           const nextValue = event.target.value;
