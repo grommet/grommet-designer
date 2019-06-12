@@ -49,7 +49,7 @@ class App extends Component {
         document.title = design.name;
         this.setState({ design, selected: { screen, component }, theme, preview: true });
       });
-    } else if (params.d) {
+    } else if (params.d) { // older method of sharing, deprecated
       const text = LZString.decompressFromEncodedURIComponent(params.d);
       const design = JSON.parse(text);
       upgradeDesign(design);
