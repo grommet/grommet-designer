@@ -160,7 +160,7 @@ export const types = {
     properties: {
       color: colors,
       margin: Edge,
-      size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
       textAlign: ['start', 'center', 'end'],
       truncate: false,
       weight: ['normal', 'bold'],
