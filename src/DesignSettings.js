@@ -83,18 +83,21 @@ export default ({ design, themes, onChange, onClose }) => (
                 />
               </FormField>
               <Heading level={3}>Colors</Heading>
-              {['brand', 'accent-1', 'accent-2', 'accent-3'].map(color => (
+              {['brand', 'accent-1', 'accent-2', 'accent-3', 'neutral-1', 'neutral-2', 'neutral-3'].map(color => (
                 <FormField key={color} label={color} name={color}>
-                  {/* TODO: change these to MaskedInput */}
-                  <TextInput
-                    placeholder="#rrggbb"
-                    value={design.theme.global.colors[color] || ''}
-                    onChange={(event) => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      nextDesign.theme.global.colors[color] = event.target.value;
-                      onChange({ design: nextDesign });
-                    }}
-                  />
+                  <Box direction="row" align="center" gap="small">
+                    <TextInput
+                      placeholder="#rrggbb"
+                      plain
+                      value={design.theme.global.colors[color] || ''}
+                      onChange={(event) => {
+                        const nextDesign = JSON.parse(JSON.stringify(design));
+                        nextDesign.theme.global.colors[color] = event.target.value;
+                        onChange({ design: nextDesign });
+                      }}
+                    />
+                    <Box pad="small" background={color} />
+                  </Box>
                 </FormField>
               ))}
             </Fragment>
