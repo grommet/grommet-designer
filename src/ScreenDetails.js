@@ -18,6 +18,14 @@ export default class ScreenDetails extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.selected.screen !== this.props.selected.screen
+      && this.textRef.current) {
+      this.textRef.current.select();
+      this.textRef.current.focus();
+    }
+  }
+
   setName = (name) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
