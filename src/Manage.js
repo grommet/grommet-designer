@@ -53,7 +53,7 @@ export default class Manage extends Component {
     const { design, onChange, onClose } = this.props;
     const { designs, name, message } = this.state;
     return (
-      <Layer onEsc={onClose}>
+      <Layer onEsc={onClose} onClickOutside={onClose}>
         <Box
           flex={false}
           direction="row"
@@ -62,7 +62,7 @@ export default class Manage extends Component {
           justify="between"
           pad="medium"
         >
-          <Heading level={2} margin={{ left: 'small', vertical: 'none'}}>
+          <Heading level={2} margin="none">
             Designs
           </Heading>
           <Button icon={<Close />} hoverIndicator onClick={onClose} />
