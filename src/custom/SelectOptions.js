@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Button, FormField, Select, TextInput } from 'grommet';
+import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import { getDisplayName } from '../designs';
 
 export default ({ design, selected, value, onChange }) => {
   return (
