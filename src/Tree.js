@@ -13,6 +13,17 @@ const treeName = component =>
 class Tree extends Component {
   state = {}
 
+  selectedRef = React.createRef();
+
+  componentDidUpdate() {
+    if (this.selectedRef.current) {
+      const rect = this.selectedRef.current.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        this.selectedRef.current.scrollIntoView();
+      }
+    }
+  }
+
   onAdd = (typeName) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -191,11 +202,12 @@ class Tree extends Component {
             onDrop={() => this.moveChild(dragging, dropTarget, dropWhere)}
           >
             <Box
+              ref={selected.component === id ? this.selectedRef : undefined}
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
                 (dropTarget && dropTarget === id && dropWhere === 'in')
                 ? 'accent-2'
-                : (selected.component === id ? 'dark-2' : undefined)
+                : (selected.component === id ? 'dark-3' : undefined)
               }
             >
               <Text truncate>
@@ -211,7 +223,7 @@ class Tree extends Component {
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box pad={{ left: 'small' }}>
+          <Box pad={{ left: 'small' }} background={selected.component === id ? 'dark-2' : undefined}>
             {component.children.map((childId, index) =>
               this.renderComponent(screen, childId, index === 0))}
           </Box>
