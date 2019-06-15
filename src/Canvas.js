@@ -1,10 +1,76 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { types } from './Types';
 import Icon from './Icon';
 import { getParent } from './designs';
 
+const arrayExp = /(.+)\[(\d+)\]/;
+// converts something like 'data[0].details' to: ['data', 0, 'details']
+const parsePath = (text) =>
+  text.split('.').map((part) => {
+    const match = part.match(arrayExp);
+    if (match) {
+      return [match[1], parseInt(match[2], 10)];
+    }
+    return part;
+  }).flat();
+
+const find = (data, path) => {
+  const pathParts = (typeof path === 'string') ? parsePath(path) : path;
+  let value;
+  if (typeof data === 'object') {
+    value = data[pathParts[0]];
+  } else if (Array.isArray(data) && typeof pathParts[0] === 'number') {
+    value = data[pathParts[0]];
+  }
+
+  if (value && pathParts.length > 1) {
+    if (Array.isArray(value) || typeof value === 'object') {
+      return find(value, pathParts.slice(1));
+    }
+  }
+  return value;
+};
+
+const replace = (text, data, contextPath) =>
+  text.replace(/\{[^}]*\}/g, (match) => {
+    const dataPath = parsePath(match.slice(1, match.length - 1));
+    return find(data, contextPath ? [...contextPath, ...dataPath] : dataPath) || match;
+  });
+
 class Canvas extends Component {
   state = {}
+
+  componentDidMount() {
+    this.load();
+  }
+
+  componentDidUpdate() {
+    this.load();
+  }
+
+  load() {
+    const { design } = this.props;
+    const { data } = this.state;
+    if (!data && design.data) {
+      const firstData = {};
+      this.setState({ data: firstData });
+      Object.keys(design.data).forEach((key) => {
+        if (design.data[key].slice(0, 4) === 'http') {
+          fetch(design.data[key])
+          .then(response => response.json())
+          .then((response) => {
+            const { data } = this.state;
+            const nextData = { ...data };
+            nextData[key] = response;
+            this.setState({ data: nextData });
+          });
+        } else {
+          firstData[key] = JSON.parse(design.data[key]);
+        }
+      });
+      this.setState({ data: firstData });
+    }
+  }
 
   setHide = (id, hide) => {
     const { design, onChange } = this.props;
@@ -43,29 +109,65 @@ class Canvas extends Component {
     }
   }
 
-  renderComponent = (id) => {
+  renderRepeater = (component, dataContextPath) => {
+    const { data } = this.state;
+    const { children, props: { count, dataPath } } = component;
+    let contents;
+    if (children) {
+      if (data && dataPath) {
+        const path = dataContextPath
+          ? [...dataContextPath, ...parsePath(dataPath)] : parsePath(dataPath);
+        const dataValue = find(data, path);
+        if (dataValue && Array.isArray(dataValue)) {
+          contents = dataValue.map((item, index) => (
+            <Fragment key={index}>
+              {component.children.map(childId =>
+                this.renderComponent(childId, [...path, index]))}
+            </Fragment>
+          ));
+        }
+      }
+      if (!contents) {
+        contents = [];
+        for (let i = 0; i < (count || 1); i += 1) {
+          contents.push(component.children.map(childId =>
+            this.renderComponent(childId, dataContextPath)));
+        }
+      }
+    }
+    return (
+      <Fragment>
+        {contents}
+      </Fragment>
+    );
+  }
+
+  renderComponent = (id, dataContextPath) => {
     const { design, preview, selected, theme, onChange } = this.props;
-    const { dropTarget, dropAt  } = this.state;
+    const { data, dropTarget, dropAt  } = this.state;
     const designComponent = design.components[id];
     const reference = (designComponent && designComponent.type === 'Reference'
       && design.components[designComponent.props.component]);
     const component = reference || designComponent;
+    const type = types[component.type];
+    const contextPath = dataContextPath || selected.dataContextPath;
 
     if (!component || component.hide) {
       return null;
     }
 
+    if (type.name === 'Repeater') {
+      return this.renderRepeater(component, contextPath);
+    }
+
     // set up any properties that need special handling
-    const type = types[component.type];
     const specialProps = {};
     if (type.name === 'Button' && component.props.icon) {
       specialProps.icon = <Icon icon={component.props.icon} />;
-    }
-    if (type.name === 'Layer') {
+    } else if (type.name === 'Layer') {
       specialProps.onClickOutside = () => this.setHide(id, true);
       specialProps.onEsc = () => this.setHide(id, true);
-    }
-    if (type.name === 'Menu') {
+    } else if (type.name === 'Menu') {
       specialProps.items = (component.props.items || []).map(item => ({
         ...item,
         onClick: (event) => {
@@ -76,7 +178,11 @@ class Canvas extends Component {
       if (component.props.icon) {
         specialProps.icon = <Icon icon={component.props.icon} />;
       }
+    } else if (type.name === 'Image') {
+      // get 'src' from data, if needed
+      specialProps.src = replace(component.props.src, data, contextPath);
     }
+
     const droppable = !type.text && type.name !== 'Icon';
     let style;
     if (dropTarget === id) {
@@ -85,6 +191,21 @@ class Canvas extends Component {
       style = { outline: '1px dashed blue' };
     } else if (!preview && selected.component === id) {
       style = { outline: '1px dashed red' };
+    }
+
+    let children;
+    if (component.children) {
+      children = component.children.map(childId =>
+        this.renderComponent(childId, dataContextPath));
+    } else if (component.text) {
+      if (data) {
+        // resolve any data references
+        children = replace(component.text, data, contextPath);
+      } else {
+        children = component.text;
+      }
+    } else {
+      children = type.text;
     }
 
     return React.createElement(
@@ -97,7 +218,7 @@ class Canvas extends Component {
             onChange({ selected: { ...selected, component: id } });
           } else if (component.linkTo) {
             event.stopPropagation();
-            this.followLink(component.linkTo);
+            this.followLink({ ...component.linkTo, dataContextPath });
           } else if (event.target === event.currentTarget) {
             onChange({ selected: { ...selected, component: id } });
           }
@@ -142,9 +263,8 @@ class Canvas extends Component {
         ...specialProps,
         theme: (type.name === 'Grommet' ? theme : undefined),
       },
-      component.children
-        ? component.children.map(childId => this.renderComponent(childId))
-        : component.text || type.text);
+      children,
+    );
   }
 
   render() {

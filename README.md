@@ -71,6 +71,16 @@ design configuration (wrench). Any font family in quotes will be searched
 for in google's font site and the appropriate face definition will
 automatically be added to the theme.
 
+### Data
+
+You can add data sources to a design to make the content more consistent
+and real. A data source can be JSON text or a URL to a REST endpoint that returns JSON. Once you have a data source, you can reference values in it
+in Heading, Paragraph, and Text `text` properties and Image `src`
+by describing the path to the content
+you want inside '{}'. For example: `{data-source-name[0].property-name}`.
+You can also reference data in Repeater `dataPath`, so that Repeater will
+iterate over an array.
+
 ## Local development
 
 1. `git clone`

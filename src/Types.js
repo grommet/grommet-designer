@@ -8,7 +8,6 @@ import {
 import Icon, { names as iconNames } from './Icon';
 import Reference from './Reference';
 import ReferenceComponent from './custom/ReferenceComponent';
-import Repeater from './Repeater';
 import BoxAnimation from './custom/BoxAnimation';
 import BoxBackgroundImage from './custom/BoxBackgroundImage';
 import GridColumns from './custom/GridColumns';
@@ -347,7 +346,6 @@ export const types = {
     },
   },
   Repeater: {
-    component: Repeater,
     name: 'Repeater',
     container: true,
     help: `Repeater is not a grommet component, it is a special component for
@@ -359,6 +357,7 @@ export const types = {
     },
     properties: {
       count: [1, 2, 5, 10, 20, 100],
+      dataPath: '',
     },
   },
   Reference: {
