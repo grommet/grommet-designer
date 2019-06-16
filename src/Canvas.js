@@ -32,7 +32,7 @@ const find = (data, path) => {
 };
 
 const replace = (text, data, contextPath) =>
-  text.replace(/\{[^}]*\}/g, (match) => {
+  (text || '').replace(/\{[^}]*\}/g, (match) => {
     const dataPath = parsePath(match.slice(1, match.length - 1));
     return find(data, contextPath ? [...contextPath, ...dataPath] : dataPath) || match;
   });

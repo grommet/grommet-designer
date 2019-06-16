@@ -199,7 +199,8 @@ export default class Properties extends Component {
                   <FormField name="style" label="style">
                     <TextArea
                       rows={2}
-                      value={JSON.stringify(component.props.style || '', null, 2)}
+                      value={component.props.style
+                        ? JSON.stringify(component.props.style, null, 2) : ''}
                       onChange={(event) => {
                         try {
                           const json = JSON.parse(event.target.value);
