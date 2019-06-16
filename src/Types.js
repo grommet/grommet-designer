@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, FormField,
-  Grid, Grommet, Heading, Image, Layer,
+  Grid, Grommet, Heading, Image, Layer, Markdown,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
@@ -165,6 +165,11 @@ export const types = {
       truncate: false,
       weight: ['normal', 'bold'],
     },
+  },
+  Markdown: {
+    component: Markdown,
+    name: 'Markdown',
+    text: 'Markdown',
   },
   Icon: {
     component: Icon,
@@ -375,7 +380,7 @@ export const types = {
 
 const structure = [
   { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
-  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Icon'] },
+  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
   { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
   { name: 'Input', types: ['CheckBox', 'FormField', 'Select', 'TextArea', 'TextInput'] },
   { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
