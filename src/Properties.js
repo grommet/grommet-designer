@@ -196,6 +196,20 @@ export default class Properties extends Component {
                       />
                     ))
                   }
+                  <FormField name="style" label="style">
+                    <TextArea
+                      rows={2}
+                      value={JSON.stringify(component.props.style || '', null, 2)}
+                      onChange={(event) => {
+                        try {
+                          const json = JSON.parse(event.target.value);
+                          this.setProp('style', json);
+                        } catch (e) {
+                          console.log('!!!', e);
+                        }
+                      }}
+                    />
+                  </FormField>
                 </Box>
               )}
             </Box>
