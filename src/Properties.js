@@ -24,11 +24,11 @@ export default class Properties extends Component {
     }
   }
 
-  setProp = (propName, option) => {
+  setProp = (propName, value) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
-    if (option !== undefined) component.props[propName] = option
+    if (value !== undefined) component.props[propName] = value
     else delete component.props[propName];
     onChange({ design: nextDesign });
   }
@@ -199,14 +199,17 @@ export default class Properties extends Component {
                   <FormField name="style" label="style">
                     <TextArea
                       rows={2}
-                      value={component.props.style
-                        ? JSON.stringify(component.props.style, null, 2) : ''}
+                      value={component.props.styling
+                        || (component.props.style
+                          && JSON.stringify(component.props.style, null, 2))
+                        || ''}
                       onChange={(event) => {
+                        this.setProp('styling', event.target.value);
                         try {
                           const json = JSON.parse(event.target.value);
                           this.setProp('style', json);
                         } catch (e) {
-                          console.log('!!!', e);
+                          // console.log('!!! catch');
                         }
                       }}
                     />

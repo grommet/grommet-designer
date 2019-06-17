@@ -8,7 +8,7 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 ### Command shortcuts
 
-* **command-e**: toggles preview vs. edit modes
+* **command-e** or **windows-E**: toggles preview vs. edit modes
 * **commend-delete**: deletes the currently selected component and all of its children
 
 ### Linking
