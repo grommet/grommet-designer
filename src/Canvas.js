@@ -64,7 +64,7 @@ class Canvas extends Component {
             nextData[key] = response;
             this.setState({ data: nextData });
           });
-        } else {
+        } else if (design.data[key]) {
           firstData[key] = JSON.parse(design.data[key]);
         }
       });
