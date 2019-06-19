@@ -4383,9 +4383,10 @@ grommet-theme-hpe@^0.4.2:
   resolved "https://registry.yarnpkg.com/grommet-theme-hpe/-/grommet-theme-hpe-0.4.2.tgz#f2c4d02341056a34d32f1fbc4f843b523912dce5"
   integrity sha512-3GlnYNBM2DM90hgzrSedm40BsxIJaN6eDr5Ezeyqpp4SvwQnXpaEzlWkXiokTsgDlMhtNI/WoxWG9l/l9+y9oQ==
 
-"grommet@https://github.com/grommet/grommet/tarball/stable":
+grommet@^2.7.1:
   version "2.7.1"
-  resolved "https://github.com/grommet/grommet/tarball/stable#82c951206776f2fe68b22c2d54f9c543c79815f4"
+  resolved "https://registry.yarnpkg.com/grommet/-/grommet-2.7.1.tgz#f05ad25f55c1b846515bab0967e156966b055d00"
+  integrity sha512-1QkupZUg8JeKYP4VR6CC5dPcOnkyzdnZtbk9W+mO27lzGQEfvQS+7HrN9DRzQIGf1gsWmGaXCKmmHm2S9xeJig==
   dependencies:
     css "^2.2.3"
     grommet-icons "^4.2.0"
@@ -5841,6 +5842,11 @@ jsx-ast-utils@^2.0.1:
   integrity sha512-yDGDG2DS4JcqhA6blsuYbtsT09xL8AoLuUR2Gb5exrw7UEM19sBcOTq+YBBhrNbl0PUC4R4LnFu+dHg2HKeVvA==
   dependencies:
     array-includes "^3.0.3"
+
+keycode@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
+  integrity sha1-PQr1bce4uOXLqNCpfxByBO7CKwQ=
 
 killable@^1.0.0:
   version "1.0.1"

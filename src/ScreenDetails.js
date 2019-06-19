@@ -4,6 +4,7 @@ import {
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen } from './designs';
+import isHotkey from './isHotkey';
 
 export default class ScreenDetails extends Component {
 
@@ -60,11 +61,9 @@ export default class ScreenDetails extends Component {
 
   onKeyDown = (event) => {
     const { onDelete } = this.props;
-    if (event.metaKey || event.ctrlKey) {
-      if (event.key === "Delete") {
-        event.preventDefault();
-        onDelete();
-      }
+    if (isHotkey(event, "Meta+Delete")) {
+      event.preventDefault();
+      onDelete();
     }
   }
 

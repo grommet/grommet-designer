@@ -9,6 +9,7 @@ import Property from './Property';
 import {
   duplicateComponent, getDisplayName, getLinkOptions, getParent,
 } from './designs';
+import isHotkey from './isHotkey';
 
 export default class Properties extends Component {
 
@@ -76,11 +77,9 @@ export default class Properties extends Component {
 
   onKeyDown = (event) => {
     const { onDelete } = this.props;
-    if (event.metaKey || event.ctrlKey) {
-      if (event.key === "Delete") {
-        event.preventDefault();
-        onDelete();
-      }
+    if (isHotkey(event, "Meta+Delete")) {
+      event.preventDefault();
+      onDelete();
     }
   }
 

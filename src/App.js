@@ -16,6 +16,7 @@ import {
   bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, rich,
 } from './designs';
 import ScreenDetails from './ScreenDetails';
+import isHotkey from './isHotkey';
 
 const themes = { aruba, dark, dxc, grommet, hp, hpe };
 
@@ -131,11 +132,9 @@ class App extends Component {
 
   onKeyDown = (event) => {
     const { preview } = this.state;
-    if (event.metaKey || event.ctrlKey) {
-      if (event.key === "e") {
-        event.preventDefault();
-        this.setState({ preview: !preview });
-      }
+    if (isHotkey(event, "Meta+e", false)) {
+      event.preventDefault();
+      this.setState({ preview: !preview });
     }
   }
 
