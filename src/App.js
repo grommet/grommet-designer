@@ -131,8 +131,8 @@ class App extends Component {
 
   onKeyDown = (event) => {
     const { preview } = this.state;
-    if (event.metaKey) {
-      if (event.keyCode === 69) { // e
+    if (event.metaKey || event.ctrlKey) {
+      if (event.key === "e") {
         event.preventDefault();
         this.setState({ preview: !preview });
       }

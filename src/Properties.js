@@ -76,8 +76,8 @@ export default class Properties extends Component {
 
   onKeyDown = (event) => {
     const { onDelete } = this.props;
-    if (event.metaKey) {
-      if (event.keyCode === 8) { // delete
+    if (event.metaKey || event.ctrlKey) {
+      if (event.key === "Delete") {
         event.preventDefault();
         onDelete();
       }
