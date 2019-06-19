@@ -4,6 +4,7 @@ import { Add, Configure, FormDown, FormUp, Save, Share, Trash } from 'grommet-ic
 import { types, Adder } from './Types';
 import DesignSettings from './DesignSettings';
 import { addScreen, getParent, getScreen } from './designs';
+import isHotkey from './isHotkey';
 
 const treeName = component =>
   (component.name || component.text
@@ -105,11 +106,9 @@ class Tree extends Component {
   }
 
   onKeyDown = (event) => {
-    if (event.metaKey) {
-      // if (event.keyCode === 65) { // a
+    if (isHotkey(event, "Meta+a")) {
       //   event.preventDefault();
       //   this.setState({ adding: true });
-      // }
     }
   }
 
