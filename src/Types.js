@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, FormField,
+  Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, Form, FormField,
   Grid, Grommet, Heading, Image, Layer, Markdown,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
@@ -249,14 +249,21 @@ export const types = {
       toggle: false,
     },
   },
+  Form: {
+    component: Form,
+    container: true,
+    name: 'Form',
+  },
   FormField: {
     component: FormField,
+    container: true,
     name: 'FormField',
     properties: {
       color: colors,
       error: 'error',
       help: 'help',
       label: 'label',
+      name: 'string',
     },
   },
   Select: {
@@ -283,12 +290,21 @@ export const types = {
   TextArea: {
     component: TextArea,
     name: 'TextArea',
+    properties: {
+      fill: false,
+      plain: false,
+      value: '',
+    }
   },
   TextInput: {
     component: TextInput,
     name: 'TextInput',
     properties: {
       placeholder: '',
+      plain: false,
+      size: ['small', 'medium', 'large', 'xlarge'],
+      type: ['text', 'password'],
+      value: '',
     }
   },
   Calendar: {
@@ -382,7 +398,7 @@ const structure = [
   { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
   { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
   { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
-  { name: 'Input', types: ['CheckBox', 'FormField', 'Select', 'TextArea', 'TextInput'] },
+  { name: 'Input', types: ['CheckBox', 'Form', 'FormField', 'Select', 'TextArea', 'TextInput'] },
   { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
   { name: 'Media', types: ['Image'] },
   { name: 'Design', types: ['Repeater', 'Reference'] },
