@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { types } from './Types';
+import { types } from './types';
 import Icon from './Icon';
 import { getParent } from './designs';
 

@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import {
-  Grommet, Grid, Keyboard, ResponsiveContext, dark, grommet,
-} from 'grommet';
-import { aruba } from 'grommet-theme-aruba';
-import { dxc } from 'grommet-theme-dxc';
-import { hp } from 'grommet-theme-hp';
-import { hpe } from 'grommet-theme-hpe';
+import { Grommet, Grid, Keyboard, ResponsiveContext, grommet } from 'grommet';
 import LZString from 'lz-string';
 import Canvas from './Canvas';
 import Properties from './Properties';
-import Tree from './Tree';
-import Manage from './Manage';
-import Share from './Share';
+import Tree from './Tree/Tree';
 import {
-  bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, rich,
+  bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, welcome,
 } from './designs';
 import ScreenDetails from './ScreenDetails';
-
-const themes = { aruba, dark, dxc, grommet, hp, hpe };
+import themes from './themes';
 
 const normalizeTheme = (theme) => {
   if (typeof theme === 'string') {
@@ -29,7 +20,7 @@ const normalizeTheme = (theme) => {
 };
 
 class App extends Component {
-  state = { ...resetState(rich), theme: grommet };
+  state = { ...resetState(welcome), theme: grommet, changes: [] };
 
   componentDidMount() {
     const { location } = document;
@@ -45,9 +36,17 @@ class App extends Component {
         upgradeDesign(design);
         const screen = design.screenOrder[0];
         const component = design.screens[screen].root;
+        const selected = { screen, component };
         const theme = normalizeTheme(design.theme);
         document.title = design.name;
-        this.setState({ design, selected: { screen, component }, theme, preview: true });
+        this.setState({
+          design,
+          selected,
+          theme,
+          preview: true,
+          changes: [{ design, selected }],
+          changeIndex: 0,
+        });
       });
     } else if (params.d) { // older method of sharing, deprecated
       const text = LZString.decompressFromEncodedURIComponent(params.d);
@@ -55,22 +54,34 @@ class App extends Component {
       upgradeDesign(design);
       const screen = design.screenOrder[0];
       const component = design.screens[screen].root;
+      const selected = { screen, component };
       const theme = normalizeTheme(design.theme);
-      this.setState({ design, selected: { screen, component }, theme, preview: true });
+      this.setState({
+        design,
+        selected,
+        theme,
+        preview: true,
+        changes: [{ design, selected }],
+        changeIndex: 0,
+      });
     } else {
-      let stored = localStorage.getItem('design');
+      let stored = localStorage.getItem('activeDesign');
+      if (stored) {
+        stored = localStorage.getItem(stored) || localStorage.getItem('design');
+      }
       if (stored) {
         const design = JSON.parse(stored);
         upgradeDesign(design);
-        const theme = normalizeTheme(design.theme);
-        this.setState({ design, theme });
         stored = localStorage.getItem('selected');
-        if (stored) {
-          const selected = JSON.parse(stored);
-          if (design.components[selected.component]) {
-            this.setState({ selected });
-          }
-        }
+        const selected = stored ? JSON.parse(stored) : {};
+        const theme = normalizeTheme(design.theme);
+        this.setState({
+          design,
+          selected,
+          theme,
+          changes: [{ design, selected }],
+          changeIndex: 0,
+        });
       }
     }
     if (params.theme) {
@@ -79,29 +90,51 @@ class App extends Component {
   }
 
   onChange = (nextState) => {
-    const { design } = nextState;
-    const { theme } = this.state;
-    const nextTheme = (design && design.theme && normalizeTheme(design.theme))
-      || theme || grommet;
-    this.setState({ ...nextState, theme: nextTheme });
-    // delay storing it locally so we don't bog down typing
-    clearTimeout(this.storeTimer);
-    this.storeTimer = setTimeout(() => {
-      if (nextState.design) {
-        localStorage.setItem('design', JSON.stringify(nextState.design));
-        const title = design.name || 'Grommet Designer';
-        document.title = title;
+    const { theme, changes, changeIndex, selected } = this.state;
+    this.setState(nextState);
+
+    if (nextState.design) {
+      if (!this.debouncing) {
+        this.debouncing = true;
+      }
+      const { design } = nextState;
+      const nextTheme = (design.theme && normalizeTheme(design.theme))
+        || theme || grommet;
+      this.setState({ theme: nextTheme });
+      // delay storing it locally so we don't bog down typing
+      clearTimeout(this.storeTimer);
+      this.storeTimer = setTimeout(() => {
+        document.title = design.name;
+        localStorage.setItem(design.name, JSON.stringify(design));
+        localStorage.setItem('activeDesign', design.name);
         if (document.location.search) {
           // clear current URL, in case we've started editing a published design locally
-          window.history.replaceState({}, title, '/');
+          window.history.replaceState({}, design.name, '/');
         }
-      }
-      if (nextState.selected) {
-        localStorage.setItem('selected', JSON.stringify(nextState.selected));
-      }
-    }, 500);
+        // TODO: refactor how we remove previous design on rename
+        // if (design.name !== previousDesign.name) {
+        //   localStorage.removeItem(previousDesign.name);
+        //   const stored = localStorage.getItem('designs');
+        //   const designs = (stored ? JSON.parse(stored) : [])
+        //     .filter(name => name !== previousDesign.name);
+        //   if (!designs.includes(design.name)) designs.push(design.name);
+        //   localStorage.setItem('designs', JSON.stringify(designs));
+        //   this.setState({ designs });
+        // }
+        let nextChanges = [...changes];
+        nextChanges = nextChanges.slice(changeIndex, 10);
+        nextChanges.unshift({ design, selected });
+        this.setState({ changes: nextChanges, changeIndex: 0 });
+        this.debouncing = false;
+      }, 500);
+    }
+
+    if (nextState.selected) {
+      localStorage.setItem('selected', JSON.stringify(nextState.selected));
+    }
   }
 
+  // TODO: move out of App.js
   onDelete = () => {
     const { design, selected } = this.state;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -125,7 +158,7 @@ class App extends Component {
 
   onReset = () => {
     localStorage.removeItem('selected');
-    localStorage.removeItem('design');
+    localStorage.removeItem('activeDesign');
     this.setState({ ...resetState(bare), theme: grommet });
   }
 
@@ -139,10 +172,30 @@ class App extends Component {
     }
   }
 
+  onUndo = () => {
+    const { changes, changeIndex } = this.state;
+    const nextChangeIndex = Math.min(changeIndex + 1, changes.length - 1);
+    this.setState({
+      ...changes[nextChangeIndex],
+      changeIndex: nextChangeIndex,
+    });
+  }
+
+  onRedo = () => {
+    const { changes, changeIndex } = this.state;
+    const nextChangeIndex = Math.max(changeIndex - 1, 0);
+    this.setState({
+      ...changes[nextChangeIndex],
+      changeIndex: nextChangeIndex,
+    });
+  }
+
   render() {
-    const { design, managing, preview, selected, sharing, theme } = this.state;
-    const rootComponent = design.screens[selected.screen].root;
-    const selectedComponent = design.components[selected.component] || rootComponent;
+    const { design, preview, selected, theme, changes, changeIndex } = this.state;
+    const rootComponent = design.screens[selected.screen
+      || design.screenOrder[0]].root;
+    const selectedComponent = design.components[selected.component]
+      || rootComponent;
     return (
       <Grommet full theme={theme}>
         <ResponsiveContext.Consumer>
@@ -161,11 +214,9 @@ class App extends Component {
                   <Tree
                     design={design}
                     selected={selected}
-                    themes={Object.keys(themes)}
                     onChange={this.onChange}
-                    onManage={() => this.setState({ managing: true })}
-                    onShare={() => this.setState({ sharing: true })}
-                    onReset={this.onReset}
+                    onRedo={changeIndex > 0 && this.onRedo}
+                    onUndo={changeIndex < (changes.length - 1) && this.onUndo}
                   />
                 )}
 
@@ -199,23 +250,6 @@ class App extends Component {
             </Keyboard>
           )}
         </ResponsiveContext.Consumer>
-        {managing && (
-          <Manage
-            design={design}
-            onChange={(design) => {
-              const nextState = resetState(design);
-              this.onChange(nextState);
-            }}
-            onClose={() => this.setState({ managing: false })}
-          />
-        )}
-        {sharing && (
-          <Share
-            design={design}
-            onChange={this.onChange}
-            onClose={() => this.setState({ sharing: false })}
-          />
-        )}
       </Grommet>
     );
   }

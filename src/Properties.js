@@ -4,11 +4,12 @@ import {
   Select, TextArea, TextInput,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
-import { types } from './Types';
+import { types } from './types';
 import Property from './Property';
 import {
   duplicateComponent, getDisplayName, getLinkOptions, getParent,
 } from './designs';
+import ActionButton from './ActionButton';
 
 export default class Properties extends Component {
 
@@ -113,6 +114,7 @@ export default class Properties extends Component {
                 <FormField label="name">
                   <TextInput
                     ref={this.textRef}
+                    name="name"
                     value={component.name || ''}
                     onChange={event => this.setName(event.target.value)}
                   />
@@ -219,35 +221,38 @@ export default class Properties extends Component {
             </Box>
           </Box>
           {type.name !== 'Grommet' &&
-            <Box flex={false} direction="row" align="center" justify="between">
-              <Button
+            <Box
+              flex={false}
+              direction="row"
+              align="center"
+              justify="between"
+              pad="small"
+              border="top"
+            >
+              <ActionButton
                 title="duplicate"
                 icon={<Duplicate />}
-                hoverIndicator
                 onClick={() => this.duplicate()}
               />
-              <Button
+              <ActionButton
                 title="documentation"
                 icon={<CircleInformation />}
-                hoverIndicator
                 target="_blank"
                 href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
               />
               {confirmDelete && (
-                <Button
+                <ActionButton
                   title="confirm delete"
                   icon={<Trash color="status-critical" />}
-                  hoverIndicator
                   onClick={() => {
                     this.setState({ confirmDelete: false });
                     onDelete();
                   }}
                 />
               )}
-              <Button
+              <ActionButton
                 title="delete"
                 icon={<Trash />}
-                hoverIndicator
                 onClick={() => this.setState({ confirmDelete: !confirmDelete })}
               />
             </Box>

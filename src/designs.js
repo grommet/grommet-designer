@@ -11,7 +11,8 @@ export const bare = {
   },
 };
 
-export const rich = {
+export const welcome = {
+  name: 'Welcome',
   screens: { 1: { id: 1, root: 2 } },
   screenOrder: [1],
   components: {
@@ -29,6 +30,10 @@ export const rich = {
   },
 };
 
+export const generateDesignName = () =>
+  `${(new Date()).toLocaleDateString('default',
+    { month: 'short', day: 'numeric'})} Design`;
+
 export const resetState = (starter = bare) => {
   let nextId = 1;
   Object.keys(starter.screens)
@@ -36,8 +41,9 @@ export const resetState = (starter = bare) => {
   Object.keys(starter.components)
     .forEach(id => (nextId = Math.max(nextId, parseInt(id, 10))));
   nextId += 1;
+  const name = starter.name || generateDesignName();
   return {
-    design: { ...starter, nextId, version: 2.0 },
+    design: { ...starter, name, nextId, version: 2.0 },
     selected: { screen: 1, component: starter.screens[1].root },
   };
 };

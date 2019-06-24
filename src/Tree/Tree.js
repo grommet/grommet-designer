@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
-import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
-import { Add, Configure, FormDown, FormUp, Save, Share, Trash } from 'grommet-icons';
-import { types, Adder } from './Types';
-import DesignSettings from './DesignSettings';
-import { addScreen, getParent, getScreen } from './designs';
+import {
+  Box, Button, Heading, Keyboard, Menu, Stack, Text, grommet,
+} from 'grommet';
+import { Add, FormDown, FormUp, Redo, Undo } from 'grommet-icons';
+import { types } from '../types';
+import { getParent, getScreen, resetState, bare } from '../designs';
+import ActionButton from '../ActionButton';
+import AddComponent from './AddComponent';
+import Code from './Code';
+import ConfirmReset from './ConfirmReset';
+import Data from './Data';
+import Designs from './Designs';
+import Publish from './Publish';
+import Rename from './Rename';
+import Theme from './Theme';
+import Import from './Import';
 
 const treeName = component =>
   (component.name || component.text
@@ -22,35 +33,6 @@ class Tree extends Component {
         this.selectedRef.current.scrollIntoView();
       }
     }
-  }
-
-  onAdd = (typeName) => {
-    const { design, selected, onChange } = this.props;
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const nextSelected = { ...selected };
-    if (typeName === 'Screen') {
-      nextSelected.screen = addScreen(nextDesign);
-      nextSelected.component = nextDesign.screens[nextSelected.screen].root;
-    } else {
-      const type = types[typeName];
-      const id = nextDesign.nextId;
-      nextDesign.nextId += 1;
-      const component = {
-        type: typeName,
-        id,
-        props: type.defaultProps ? { ...type.defaultProps } : {},
-      };
-      nextDesign.components[component.id] = component;
-      const selectedComponent = nextDesign.components[selected.component];
-      const selectedType = types[selectedComponent.type];
-      const parent = selectedType.container
-        ? selectedComponent : getParent(nextDesign, selected.component)
-      if (!parent.children) parent.children = [];
-      parent.children.push(component.id);
-      nextSelected.component = component.id;
-    }
-    this.setState({ adding: false });
-    onChange({ design: nextDesign, selected: nextSelected });
   }
 
   select = (selected) => {
@@ -94,6 +76,20 @@ class Tree extends Component {
       0, dragging);
     this.setState({ draggingScreen: undefined, dropScreenTarget: undefined });
     onChange({ design: nextDesign });
+  }
+
+  onDuplicate = () => {
+    const { design, onChange } = this.props;
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    nextDesign.name = `${design.name} - 1`;
+    onChange({ design: nextDesign });
+  }
+
+  onReset = () => {
+    const { onChange } = this.props;
+    localStorage.removeItem('selected');
+    localStorage.removeItem('activeDesign');
+    onChange({ ...resetState(bare), theme: grommet });
   }
 
   toggleCollapse = () => {
@@ -209,6 +205,10 @@ class Tree extends Component {
                 ? 'accent-2'
                 : (selected.component === id ? 'dark-3' : undefined)
               }
+              round={{
+                size: 'small',
+                corner: (component.children ? 'top-left' : 'left'),
+              }}
             >
               <Text truncate>
                 {(reference && treeName(reference)) || treeName(component)}
@@ -223,7 +223,11 @@ class Tree extends Component {
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box pad={{ left: 'small' }} background={selected.component === id ? 'dark-2' : undefined}>
+          <Box
+            pad={{ left: 'small' }}
+            background={selected.component === id ? 'dark-2' : undefined}
+            round={{ size: 'small', corner: 'bottom-left' }}
+          >
             {component.children.map((childId, index) =>
               this.renderComponent(screen, childId, index === 0))}
           </Box>
@@ -258,8 +262,9 @@ class Tree extends Component {
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
                 selected.screen === screenId && selected.component === id
-                ? 'dark-2' : undefined
+                ? 'dark-3' : undefined
               }
+              round={{ size: 'small', corner: 'top-left' }}
             >
               <Heading level={3} size="small" margin="none">
                 {screen.name || `Screen ${screen.id}`}
@@ -276,7 +281,14 @@ class Tree extends Component {
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box flex={false}>
+          <Box
+            flex={false}
+            background={
+              selected.screen === screenId && selected.component === id
+              ? 'dark-2' : undefined
+            }
+            round={{ size: 'small', corner: 'bottom-left' }}
+          >
             {component.children.map((childId) =>
               this.renderComponent(screen.id, childId))}
           </Box>
@@ -286,11 +298,86 @@ class Tree extends Component {
     );
   }
 
-  render() {
+  renderAction() {
+    const { design, selected, onChange } = this.props;
     const {
-      design, selected, themes, onChange, onManage, onReset, onShare,
-    } = this.props;
-    const { adding, configuring, confirmReset } = this.state;
+      adding, changeTheme, code, confirmReset, chooseDesign, editData,
+      importFile, publish, rename,
+    } = this.state;
+    if (adding) return (
+      <AddComponent
+        design={design}
+        selected={selected}
+        onChange={(nextState) => {
+          this.setState({ adding: false });
+          onChange(nextState);
+        }}
+        onClose={() => this.setState({ adding: false })}
+      />
+    );
+    if (rename) return (
+      <Rename
+        design={design}
+        onClose={() => this.setState({ rename: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (changeTheme) return (
+      <Theme
+        design={design}
+        onClose={() => this.setState({ changeTheme: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (editData) return (
+      <Data
+        design={design}
+        onClose={() => this.setState({ editData: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (publish) return (
+      <Publish
+        design={design}
+        onClose={() => this.setState({ publish: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (code) return (
+      <Code
+        design={design}
+        onClose={() => this.setState({ code: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (chooseDesign) return (
+      <Designs
+        design={design}
+        onClose={() => this.setState({ chooseDesign: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (importFile) return (
+      <Import
+        design={design}
+        onClose={() => this.setState({ importFile: undefined })}
+        onChange={onChange}
+      />
+    );
+    if (confirmReset) return (
+      <ConfirmReset
+        onCancel={() => this.setState({ confirmReset: undefined })}
+        onReset={() => {
+          this.setState({ confirmReset: undefined });
+          this.onReset();
+        }}
+      />
+    );
+    return null;
+  }
+
+  render() {
+    const { design, selected, onUndo, onRedo } = this.props;
     const selectedComponent = design.components[selected.component];
     const selectedType = types[selectedComponent.type];
     return (
@@ -299,13 +386,31 @@ class Tree extends Component {
         onKeyDown={selectedType.container ? this.onKeyDown : undefined}
       >
         <Box background="dark-1" height="100vh" border="right">
-          <Box flex={false}>
-            <Button
-              title="add component"
-              icon={<Add />}
-              hoverIndicator
-              onClick={() => this.setState({ adding: true })}
+          <Box flex={false} border="bottom" pad={{ vertical: 'small' }}>
+            <Menu
+              label={design.name || 'design'}
+              dropBackground="brand"
+              items={[
+                { label: 'Rename', onClick: () => this.setState({ rename: true }) },
+                { label: 'Theme', onClick: () => this.setState({ changeTheme: true }) },
+                { label: 'Data', onClick: () => this.setState({ editData: true }) },
+                { label: 'Publish', onClick: () => this.setState({ publish: true }) },
+                { label: 'Code', onClick: () => this.setState({ code: true }) },
+                { label: 'Duplicate', onClick: this.onDuplicate },
+                { label: 'Designs', onClick: () => this.setState({ chooseDesign: true }) },
+                {
+                  label: 'Export',
+                  title: 'Export design to a file',
+                  href: `data:application/json;charset=utf-8,${JSON.stringify(design)}`,
+                  download: `${design.name}.json`,
+                },
+                { label: 'Import', onClick: () => this.setState({ importFile: true }) },
+                { label: 'Reset', onClick: () =>
+                  design.modified ? this.setState({ confirmReset: true }) : this.onReset()
+                },
+              ]}
             />
+            {this.renderAction()}
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
@@ -318,57 +423,30 @@ class Tree extends Component {
             direction="row"
             justify="between"
             align="center"
+            pad="small"
+            border="top"
           >
-            <Button
-              title="empty this design"
-              icon={<Trash />}
-              hoverIndicator
-              onClick={() => this.setState({ confirmReset: !confirmReset })}
-            />
-            {confirmReset && (
-              <Button
-                title="confirm empty"
-                icon={<Trash color="status-critical" />}
-                hoverIndicator
-                onClick={() => {
-                  this.setState({ confirmReset: false });
-                  onReset();
-                }}
+            <Box direction="row">
+              <ActionButton
+                title="undo last change"
+                icon={<Undo />}
+                disabled={!onUndo}
+                onClick={onUndo || undefined}
               />
-            )}
-            <Button
-              title="all my designs"
-              icon={<Save />}
-              hoverIndicator
-              onClick={onManage}
-            />
-            <Button
-              title="share"
-              icon={<Share />}
-              hoverIndicator
-              onClick={onShare}
-            />
-            <Button
-              title="settings"
-              icon={<Configure />}
-              hoverIndicator
-              onClick={() => this.setState({ configuring: true })}
+              <ActionButton
+                title="redo last change"
+                icon={<Redo />}
+                disabled={!onRedo}
+                onClick={onRedo || undefined}
+              />
+            </Box>
+            <ActionButton
+              title="add a component"
+              icon={<Add />}
+              onClick={() => this.setState({ adding: true })}
             />
           </Box>
-          {adding && (
-            <Adder
-              onAdd={this.onAdd}
-              onClose={() => this.setState({ adding: false })}
-            />
-          )}
-          {configuring && (
-            <DesignSettings
-              design={design}
-              themes={themes}
-              onChange={onChange}
-              onClose={() => this.setState({ configuring: false })}
-            />
-          )}
+          
         </Box>
       </Keyboard>
     );

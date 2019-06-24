@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, Form, FormField,
   Grid, Grommet, Heading, Image, Layer, Markdown,
@@ -391,52 +390,8 @@ export const types = {
     properties: {
       component: ReferenceComponent,
     },
-  }
+  },
+  Screen: {
+    name: 'Screen',
+  },
 };
-
-const structure = [
-  { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
-  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
-  { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
-  { name: 'Input', types: ['CheckBox', 'Form', 'FormField', 'Select', 'TextArea', 'TextInput'] },
-  { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
-  { name: 'Media', types: ['Image'] },
-  { name: 'Design', types: ['Repeater', 'Reference'] },
-];
-
-export const Adder = ({ onAdd, onClose }) => (
-  <Layer
-    position="top-left"
-    margin="small"
-    onEsc={onClose}
-    onClickOutside={onClose}
-  >
-    <Box fill="vertical" overflow="auto">
-      {structure.map(({ name, types: sectionTypes }) => (
-        <Box key={name} flex={false} border="top">
-          <Heading
-            level={4}
-            size="small"
-            margin={{ horizontal: 'small', vertical: 'xsmall' }}
-          >
-            {name}
-          </Heading>
-          {sectionTypes.map(key => (
-            <Button key={key} hoverIndicator onClick={() => onAdd(key)}>
-              <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
-                {types[key].name}
-              </Box>
-            </Button>
-          ))}
-        </Box>
-      ))}
-      <Box flex={false}>
-        <Button hoverIndicator onClick={() => onAdd('Screen')}>
-          <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
-            Screen
-          </Box>
-        </Button>
-      </Box>
-    </Box>
-  </Layer>
-);
