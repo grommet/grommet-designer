@@ -98,7 +98,7 @@ export default class Properties extends Component {
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
         <Box background="dark-2" height="100vh" border="left">
-          <Box flex={false}>
+          <Box flex={false} border="bottom">
             <Heading level={2} size="small" margin={{ horizontal: 'medium' }}>
               {component.name || type.name}
             </Heading>

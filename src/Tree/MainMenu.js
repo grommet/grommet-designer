@@ -13,7 +13,7 @@ import Import from './Import';
 
 const MenuButton = ({ label, ...rest }) => (
   <Button hoverIndicator {...rest}>
-    <Box pad={{ vertical: 'xsmall', horizontal: 'medium' }}>
+    <Box pad={{ vertical: 'small', horizontal: 'medium' }}>
       <Text>{label}</Text>
     </Box>
   </Button>
@@ -167,7 +167,7 @@ class MainMenu extends Component {
           )}
         >
           <Box
-            pad={{ vertical: 'small', horizontal: 'small' }}
+            pad="medium"
             direction="row"
             align="center"
             justify="between"
