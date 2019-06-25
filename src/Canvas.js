@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Box, Text } from 'grommet';
 import { types } from './types';
 import Icon from './Icon';
 import { getParent } from './design';
@@ -270,7 +271,15 @@ class Canvas extends Component {
   render() {
     const { design, selected } = this.props;
     const rootComponent = design.screens[selected.screen].root;
-    return this.renderComponent(rootComponent);
+    try {
+      return this.renderComponent(rootComponent);
+    } catch (e) {
+      return (
+        <Box align="center" justify="center" background="white">
+          <Text color="status-critical">{e.toString()}</Text>
+        </Box>
+      );
+    }
   }
 }
 
