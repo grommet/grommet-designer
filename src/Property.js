@@ -4,6 +4,7 @@ import {
 } from 'grommet';
 import { Close, FormDown, FormNext, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
+import ActionButton from './ActionButton';
 
 const ColorLabel = ({ color }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -127,11 +128,18 @@ export default class Property extends Component {
               onEsc={() => this.setState({ expand: false })}
               onClickOutside={() => this.setState({ expand: false })}
             >
-              <Box direction="row" align="center" justify="between" gap="medium">
-                <Heading margin={{ left: "medium", vertical: "small" }} level={3}>{name}</Heading>
-                <Button
+              <Box
+                direction="row"
+                align="center"
+                justify="between"
+                gap="medium"
+                pad="small"
+              >
+                <Heading margin={{ left: "small", vertical: 'none' }} level={3}>
+                  {name}
+                </Heading>
+                <ActionButton
                   icon={<Close />}
-                  hoverIndicator
                   onClick={() => this.setState({ expand: false })}
                 />
               </Box>

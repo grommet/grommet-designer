@@ -1,17 +1,19 @@
 import React from 'react';
 import { Box, Button, Grid, Heading, Layer } from 'grommet';
+import { BarChart, Blank, Bold, Capacity, CheckboxSelected, Image, Navigate } from 'grommet-icons';
 import { Close } from 'grommet-icons';
 import { types } from '../types';
 import { addScreen, getParent } from '../design';
+import ActionButton from '../ActionButton';
 
 const structure = [
-  { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
-  { name: 'Typography', types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
-  { name: 'Controls', types: ['Anchor', 'Button', 'Menu'] },
-  { name: 'Input', types: ['CheckBox', 'Form', 'FormField', 'Select', 'TextArea', 'TextInput'] },
-  { name: 'Visualizations', types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
-  { name: 'Media', types: ['Image'] },
-  { name: 'Design', types: ['Repeater', 'Reference', 'Screen'] },
+  { name: 'Layout', Icon: Capacity, types: ['Box', 'Grid', 'Stack', 'Layer'] },
+  { name: 'Typography', Icon: Bold, types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
+  { name: 'Controls', Icon: Navigate, types: ['Anchor', 'Button', 'Menu'] },
+  { name: 'Input', Icon: CheckboxSelected, types: ['CheckBox', 'Form', 'FormField', 'Select', 'TextArea', 'TextInput'] },
+  { name: 'Visualizations', Icon: BarChart, types: ['Calendar', 'Clock', 'DataTable', 'Meter'] },
+  { name: 'Media', Icon: Image, types: ['Image'] },
+  { name: 'Design', Icon: Blank, types: ['Repeater', 'Reference', 'Screen'] },
 ];
 
 const onAdd = (typeName, design, selected, onChange) => {
@@ -49,29 +51,42 @@ const AddComponent = ({ design, selected, onChange, onClose }) => (
     onClickOutside={onClose}
   >
     <Box flex background="dark-1">
-      <Box flex={false} direction="row" justify="between" align="center">
-        <Box flex >
-          <Button fill icon={<Close />} hoverIndicator onClick={onClose} />
-        </Box>
+      <Box
+        flex={false}
+        direction="row"
+        justify="between"
+        align="center"
+        pad="small"
+      >
+        <ActionButton icon={<Close />} onClick={onClose} />
         <Heading
           level={2}
           size="small"
-          margin={{ vertical: 'none', horizontal: 'medium' }}
+          margin={{ vertical: 'none', horizontal: 'small' }}
         >
           add
         </Heading>
       </Box>
       <Box flex pad="medium" overflow="auto">
         <Grid columns="small" gap="medium">
-          {structure.map(({ name, types: sectionTypes }) => (
+          {structure.map(({ name, Icon, types: sectionTypes }) => (
             <Box key={name} flex={false} border="top">
-              <Heading
-                level={4}
-                size="small"
-                margin={{ horizontal: 'small', vertical: 'xsmall' }}
+              <Box
+                direction="row"
+                gap="medium"
+                align="center"
+                justify="between"
+                pad={{ horizontal: 'small', vertical: 'xsmall' }}
               >
-                {name}
-              </Heading>
+                <Heading
+                  level={4}
+                  size="small"
+                  margin="none"
+                >
+                  {name}
+                </Heading>
+                <Icon color="dark-4" />
+              </Box>
               {sectionTypes.map(key => (
                 <Button
                   key={key}

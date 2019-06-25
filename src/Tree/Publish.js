@@ -73,12 +73,6 @@ const Publish = ({ design, onClose, onChange }) => {
           share.
         </Paragraph>
         <FormField
-          name="name"
-          label="Name"
-          required
-          validate={{ regexp: /\w+/ }}
-        />
-        <FormField
           name="email"
           label="Email"
           required

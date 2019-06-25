@@ -13,7 +13,13 @@ export const resetState = (starter = bare) => {
   nextId += 1;
   const name = starter.name || generateDesignName();
   return {
-    design: { ...starter, name, nextId, version: 2.0 },
+    design: {
+      ...starter,
+      name,
+      nextId,
+      version: 2.0,
+      created: (new Date()).toISOString(),
+    },
     selected: { screen: 1, component: starter.screens[1].root },
   };
 };

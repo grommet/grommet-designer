@@ -39,6 +39,10 @@ export const upgradeDesign = (design) => {
   Object.keys(design.components).forEach((id) => {
     if (!found[id]) delete design.components[id];
   });
+  // make sure it has a created timestamp (2.1)
+  if (!design.created) {
+    design.created = (new Date()).toISOString();
+  }
 
-  design.version = 2.0;
+  design.version = 2.1;
 }

@@ -90,7 +90,9 @@ class App extends Component {
   }
 
   onChange = (nextState) => {
-    const { theme, changes, changeIndex, selected } = this.state;
+    const {
+      design: previousDesign, theme, changes, changeIndex, selected,
+    } = this.state;
     this.setState(nextState);
 
     if (nextState.design) {
@@ -121,8 +123,13 @@ class App extends Component {
         //   localStorage.setItem('designs', JSON.stringify(designs));
         //   this.setState({ designs });
         // }
-        let nextChanges = [...changes];
-        nextChanges = nextChanges.slice(changeIndex, 10);
+        let nextChanges;
+        if (design.created === previousDesign.created) {
+          nextChanges = [...changes];
+          nextChanges = nextChanges.slice(changeIndex, 10);
+        } else {
+          nextChanges = [];
+        }
         nextChanges.unshift({ design, selected });
         this.setState({ changes: nextChanges, changeIndex: 0 });
         this.debouncing = false;
