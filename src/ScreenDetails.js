@@ -75,14 +75,14 @@ export default class ScreenDetails extends Component {
     const screen = design.screens[selected.screen];
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
-        <Box background="dark-1" height="100vh" border="left">
+        <Box background="dark-2" height="100vh" border="left">
           <Box flex={false}>
-            <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
+            <Heading level={2} size="small" margin={{ horizontal: 'medium' }}>
               {screen.name || `Screen ${screen.id}`}
             </Heading>
           </Box>
           <Box flex overflow="auto">
-            <Box flex={false}>
+            <Box flex={false} pad={{ horizontal: 'small' }}>
               <FormField label="name">
                 <TextInput
                   ref={this.textRef}
@@ -92,7 +92,14 @@ export default class ScreenDetails extends Component {
               </FormField>
             </Box>
           </Box>
-          <Box flex={false} direction="row" align="center" justify="between">
+          <Box
+            flex={false}
+            direction="row"
+            align="center"
+            justify="between"
+            pad="small"
+            border="top"
+          >
             <ActionButton
               title="duplicate"
               icon={<Duplicate />}

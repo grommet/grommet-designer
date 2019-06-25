@@ -126,11 +126,23 @@ class MainMenu extends Component {
                 this.setState({ open: false });
               }}
             >
-              <Heading level={3} size="small" margin="small">Customize</Heading>
+              <Heading
+                level={3}
+                size="small"
+                margin={{ horizontal: 'small', vertical: 'small' }}
+              >
+                Customize
+              </Heading>
               <MenuButton label="Rename" onClick={() => this.setState({ rename: true })} />
               <MenuButton label="Change Theme" onClick={() => this.setState({ changeTheme: true })} />
               <MenuButton label="Setup Data" onClick={() => this.setState({ editData: true })} />
-              <Heading level={3} size="small" margin="small">Share</Heading>
+              <Heading
+                level={3}
+                size="small"
+                margin={{ horizontal: 'small', vertical: 'small' }}
+              >
+                Share
+              </Heading>
               <MenuButton label="Publish" onClick={() => this.setState({ publish: true })} />
               <MenuButton label="Generate Code" onClick={() => this.setState({ code: true })} />
               <MenuButton
@@ -140,7 +152,13 @@ class MainMenu extends Component {
                 download={`${design.name}.json`}
               />
               <MenuButton label="Import" onClick={() => this.setState({ importFile: true })} />
-              <Heading level={3} size="small" margin="small">Manage</Heading>
+              <Heading
+                level={3}
+                size="small"
+                margin={{ horizontal: 'small', vertical: 'small' }}
+              >
+                Manage
+              </Heading>
               <MenuButton label="Duplicate" onClick={this.onDuplicate} />
               <MenuButton label="Switch" onClick={() => this.setState({ chooseDesign: true })} />
               <MenuButton label="Reset" onClick={() =>

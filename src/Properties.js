@@ -97,74 +97,72 @@ export default class Properties extends Component {
     }
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
-        <Box background="dark-1" height="100vh" border="left">
+        <Box background="dark-2" height="100vh" border="left">
           <Box flex={false}>
-            <Heading level={2} size="small" margin={{ horizontal: 'small' }}>
+            <Heading level={2} size="small" margin={{ horizontal: 'medium' }}>
               {component.name || type.name}
             </Heading>
           </Box>
           <Box flex overflow="auto">
             <Box flex={false}>
-              {type.help && (
-                <Box pad={{ horizontal: 'small' }}>
-                  <Paragraph>{type.help}</Paragraph>
-                </Box>
-              )}
-              {type.name !== 'Reference' && (
-                <FormField label="name">
-                  <TextInput
-                    ref={this.textRef}
-                    name="name"
-                    value={component.name || ''}
-                    onChange={event => this.setName(event.target.value)}
-                  />
-                </FormField>
-              )}
-              {type.text &&
-                <FormField label="text">
-                  <TextArea
-                    ref={this.textRef}
-                    value={component.text || type.text}
-                    onChange={event => this.setText(event.target.value)}
-                  />
-                </FormField>
-              }
-              {type.name === 'Button' && linkOptions.length > 1 && (
-                <FormField label="link to">
-                  <Select
-                    options={linkOptions}
-                    value={component.linkTo || ''}
-                    onChange={({ option }) =>
-                      this.link(option ? option : undefined)}
-                    valueLabel={component.linkTo ? (
-                      <Box pad="small">
-                        {getDisplayName(design, component.linkTo.component)}
-                      </Box>
-                    ) : undefined}
-                  >
-                    {(option) => (
-                      <Box pad="small">
-                        {option ? getDisplayName(design, option.component) : 'clear'}
-                      </Box>
-                    )}
-                  </Select>
-                </FormField>
-              )}
-              {type.name === 'Layer' && (
-                <FormField>
-                  <Box pad="small">
-                    <CheckBox
-                      toggle
-                      label="hide"
-                      reverse
-                      checked={!!component.hide}
-                      onChange={() => this.setHide(!component.hide)}
+              <Box pad={{ horizontal: 'small' }}>
+                {type.help && <Paragraph>{type.help}</Paragraph>}
+                {type.name !== 'Reference' && (
+                  <FormField label="name">
+                    <TextInput
+                      ref={this.textRef}
+                      name="name"
+                      value={component.name || ''}
+                      onChange={event => this.setName(event.target.value)}
                     />
-                  </Box>
-                </FormField>
-              )}
+                  </FormField>
+                )}
+                {type.text &&
+                  <FormField label="text">
+                    <TextArea
+                      ref={this.textRef}
+                      value={component.text || type.text}
+                      onChange={event => this.setText(event.target.value)}
+                    />
+                  </FormField>
+                }
+                {type.name === 'Button' && linkOptions.length > 1 && (
+                  <FormField label="link to">
+                    <Select
+                      options={linkOptions}
+                      value={component.linkTo || ''}
+                      onChange={({ option }) =>
+                        this.link(option ? option : undefined)}
+                      valueLabel={component.linkTo ? (
+                        <Box pad="small">
+                          {getDisplayName(design, component.linkTo.component)}
+                        </Box>
+                      ) : undefined}
+                    >
+                      {(option) => (
+                        <Box pad="small">
+                          {option ? getDisplayName(design, option.component) : 'clear'}
+                        </Box>
+                      )}
+                    </Select>
+                  </FormField>
+                )}
+                {type.name === 'Layer' && (
+                  <FormField>
+                    <Box pad="small">
+                      <CheckBox
+                        toggle
+                        label="hide"
+                        reverse
+                        checked={!!component.hide}
+                        onChange={() => this.setHide(!component.hide)}
+                      />
+                    </Box>
+                  </FormField>
+                )}
+              </Box>
               {type.properties && (
-                <Box>
+                <Box pad={{ horizontal: 'small' }}>
                   <Heading level={3} size="small" margin="small">
                     Properties
                   </Heading>

@@ -185,8 +185,8 @@ class Tree extends Component {
                 : (selected.component === id ? 'dark-3' : undefined)
               }
               round={{
-                size: 'small',
-                corner: (component.children ? 'top-left' : 'left'),
+                size: 'xsmall',
+                corner: (component.children ? 'top' : undefined),
               }}
             >
               <Text truncate>
@@ -205,7 +205,7 @@ class Tree extends Component {
           <Box
             pad={{ left: 'small' }}
             background={selected.component === id ? 'dark-2' : undefined}
-            round={{ size: 'small', corner: 'bottom-left' }}
+            round={{ size: 'xsmall', corner: 'bottom' }}
           >
             {component.children.map((childId, index) =>
               this.renderComponent(screen, childId, index === 0))}
@@ -222,7 +222,7 @@ class Tree extends Component {
     const id = screen.root;
     const component = design.components[id];
     return (
-      <Box key={screen.id} flex={false}>
+      <Box key={screen.id} flex={false} pad={{ horizontal: 'small' }}>
         {firstScreen && this.renderScreenDropArea(screenId, 'before')}
         <Stack anchor="right">
           <Button
@@ -243,7 +243,7 @@ class Tree extends Component {
                 selected.screen === screenId && selected.component === id
                 ? 'dark-3' : undefined
               }
-              round={{ size: 'xsmall', corner: 'top-left' }}
+              round={{ size: 'xsmall', corner: 'top' }}
             >
               <Heading level={3} size="small" margin="none">
                 {screen.name || `Screen ${screen.id}`}
@@ -266,7 +266,7 @@ class Tree extends Component {
               selected.screen === screenId && selected.component === id
               ? 'dark-2' : undefined
             }
-            round={{ size: 'xsmall', corner: 'bottom-left' }}
+            round={{ size: 'xsmall', corner: 'bottom' }}
           >
             {component.children.map((childId) =>
               this.renderComponent(screen.id, childId))}
