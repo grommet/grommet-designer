@@ -4,7 +4,12 @@ import { Close } from 'grommet-icons';
 import ActionButton from '../ActionButton';
 
 const Action = ({ children, onClose }) => (
-  <Layer position="top-left" onEsc={onClose} onClickOutside={onClose}>
+  <Layer
+    position="top-left"
+    margin="medium"
+    onEsc={onClose}
+    onClickOutside={onClose}
+  >
     <Box flex background="dark-1" pad="small">
       <Box flex={false} align="start">
         <ActionButton icon={<Close />} hoverIndicator onClick={onClose} />
