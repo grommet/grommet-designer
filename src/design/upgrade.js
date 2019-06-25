@@ -32,6 +32,9 @@ export const upgradeDesign = (design) => {
       component.children.forEach(childId => descend(childId));
     }
   };
+  // ensure screen roots are numbers
+  Object.keys(design.screens).map(sId => design.screens[sId])
+    .forEach(screen => (screen.root = parseInt(screen.root, 10)));
   // record which components we have references to from screen roots
   Object.keys(design.screens).map(sId => design.screens[sId])
     .forEach(screen => descend(screen.root));
