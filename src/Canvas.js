@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { types } from './types';
 import Icon from './Icon';
-import { getParent } from './designs';
+import { getParent } from './design';
 
 const arrayExp = /(.+)\[(\d+)\]/;
 // converts something like 'data[0].details' to: ['data', 0, 'details']

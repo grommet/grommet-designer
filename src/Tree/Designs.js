@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button } from 'grommet';
 import { Trash } from 'grommet-icons';
 import Action from './Action';
-import { upgradeDesign } from '../designs';
+import { upgradeDesign } from '../design';
 
 const Designs = ({ design, onClose, onChange }) => {
   const [designs, setDesigns] = React.useState([]);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, FormField, Select, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import { getDisplayName, getLinkOptions } from '../designs';
+import { getDisplayName, getLinkOptions } from '../design';
 
 export default ({ design, selected, value, onChange }) => {
   const linkOptions = getLinkOptions(design, selected);

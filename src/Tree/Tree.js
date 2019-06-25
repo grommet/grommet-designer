@@ -4,7 +4,7 @@ import {
 } from 'grommet';
 import { Add, FormDown, FormUp, Redo, Undo } from 'grommet-icons';
 import { types } from '../types';
-import { getParent, getScreen, resetState, bare } from '../designs';
+import { getParent, getScreen, resetState, bare } from '../design';
 import ActionButton from '../ActionButton';
 import AddComponent from './AddComponent';
 import Code from './Code';

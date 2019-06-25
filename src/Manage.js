@@ -3,7 +3,7 @@ import {
   Box, Button, Form, FormField, Heading, Layer, Paragraph, Stack, Text,
 } from 'grommet';
 import { Close, Save, Trash, Upload } from 'grommet-icons';
-import { upgradeDesign } from './designs';
+import { upgradeDesign } from './design';
 
 export default class Manage extends Component {
 

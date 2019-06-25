@@ -3,7 +3,8 @@ import {
   Box, Button, FormField, Heading, Keyboard, TextInput,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen } from './designs';
+import { addScreen } from './design';
+import ActionButton from './ActionButton';
 
 export default class ScreenDetails extends Component {
 
@@ -92,14 +93,14 @@ export default class ScreenDetails extends Component {
             </Box>
           </Box>
           <Box flex={false} direction="row" align="center" justify="between">
-            <Button
+            <ActionButton
               title="duplicate"
               icon={<Duplicate />}
               hoverIndicator
               onClick={this.onDuplicate}
             />
             {confirmDelete && (
-              <Button
+              <ActionButton
                 title="confirm delete"
                 icon={<Trash color="status-critical" />}
                 hoverIndicator
@@ -107,7 +108,7 @@ export default class ScreenDetails extends Component {
               />
             )}
             {design.screenOrder.length > 1 && (
-              <Button
+              <ActionButton
                 title="delete"
                 icon={<Trash />}
                 hoverIndicator

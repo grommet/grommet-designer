@@ -5,7 +5,7 @@ import {
 } from 'grommet';
 import { Close, CloudUpload, Copy, Code, Download } from 'grommet-icons';
 // import LZString from 'lz-string';
-import { bucketPostUrl, bucketKey, generateJSX } from './designs';
+import { bucketPostUrl, bucketKey, generateJSX } from './design';
 
 export default class Share extends Component {
 

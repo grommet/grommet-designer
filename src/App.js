@@ -6,7 +6,7 @@ import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
   bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, welcome,
-} from './designs';
+} from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
 

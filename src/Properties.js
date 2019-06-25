@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, FormField, Heading, Keyboard, Paragraph,
+  Box, CheckBox, FormField, Heading, Keyboard, Paragraph,
   Select, TextArea, TextInput,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
@@ -8,7 +8,7 @@ import { types } from './types';
 import Property from './Property';
 import {
   duplicateComponent, getDisplayName, getLinkOptions, getParent,
-} from './designs';
+} from './design';
 import ActionButton from './ActionButton';
 
 export default class Properties extends Component {

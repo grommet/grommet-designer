@@ -4,7 +4,7 @@ import {
 } from 'grommet';
 import { Copy } from 'grommet-icons';
 import Action from './Action';
-import { bucketPostUrl, bucketKey } from '../designs';
+import { bucketPostUrl, bucketKey } from '../design';
 
 const Publish = ({ design, onClose, onChange }) => {
 
@@ -64,7 +64,6 @@ const Publish = ({ design, onClose, onChange }) => {
 
   return (
     <Action onClose={onClose}>
-      <MaskedInput name="x" value="" mask={[{ regexp: /^\w*$/ }]} onChange={e => console.log('!!!', e.target, e.target.value)} />
       <Form
         value={publication}
         onSubmit={({ value }) => onPublish(value)}

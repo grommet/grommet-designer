@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Markdown, TextArea } from 'grommet';
 import Action from './Action';
-import { generateJSX } from '../designs';
+import { generateJSX } from '../design';
 
 const Code = ({ design, onChange, onClose }) => {
   const code = generateJSX(design);

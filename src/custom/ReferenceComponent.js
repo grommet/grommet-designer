@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, FormField, Select } from 'grommet';
-import { getDisplayName } from '../designs';
+import { getDisplayName } from '../design';
 
 const isValid = (component) =>
   (component.type !== 'Grommet' && component.type !== 'Reference');

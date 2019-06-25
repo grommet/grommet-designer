@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Grid, Heading, Layer } from 'grommet';
 import { Close } from 'grommet-icons';
 import { types } from '../types';
-import { addScreen, getParent } from '../designs';
+import { addScreen, getParent } from '../design';
 
 const structure = [
   { name: 'Layout', types: ['Box', 'Grid', 'Stack', 'Layer'] },
