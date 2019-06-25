@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, Heading, Keyboard, Stack, Text,
 } from 'grommet';
-import { Add, FormDown, FormUp, Redo, Undo } from 'grommet-icons';
+import { Add, FormDown, FormUp, Redo, Undo, View } from 'grommet-icons';
 import { types } from '../types';
 import { getParent, getScreen } from '../design';
 import ActionButton from '../ActionButton';
@@ -238,6 +238,10 @@ class Tree extends Component {
               this.setState({ draggingScreen: undefined, dropScreenTarget: undefined })}
           >
             <Box
+              direction="row"
+              align="center"
+              justify="between"
+              gap="medium"
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
                 selected.screen === screenId && selected.component === id
@@ -248,6 +252,9 @@ class Tree extends Component {
               <Heading level={3} size="small" margin="none">
                 {screen.name || `Screen ${screen.id}`}
               </Heading>
+              {design.screenOrder.length > 1
+                && selected.screen === screenId && selected.component !== id
+                && <View color="dark-4" />}
             </Box>
           </Button>
           {selected.screen === screenId
