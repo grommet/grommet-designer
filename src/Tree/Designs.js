@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button } from 'grommet';
 import { Trash } from 'grommet-icons';
 import Action from './Action';
-import { upgradeDesign } from '../design';
+import { getInitialSelected, upgradeDesign } from '../design';
 
 const Designs = ({ design, onClose, onChange }) => {
   const [designs, setDesigns] = React.useState([]);
@@ -19,7 +19,10 @@ const Designs = ({ design, onClose, onChange }) => {
     if (item) {
       const nextDesign = JSON.parse(item);
       upgradeDesign(nextDesign);
-      onChange({ design: nextDesign });
+      onChange({
+        design: nextDesign,
+        selected: getInitialSelected(nextDesign),
+      });
       onClose();
     }
   }

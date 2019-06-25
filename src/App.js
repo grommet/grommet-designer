@@ -5,7 +5,8 @@ import Canvas from './Canvas';
 import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
-  bucketUrl, bucketKey, getParent, resetState, upgradeDesign, bare, welcome,
+  bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
+  upgradeDesign, bare, welcome,
 } from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
@@ -73,7 +74,7 @@ class App extends Component {
         const design = JSON.parse(stored);
         upgradeDesign(design);
         stored = localStorage.getItem('selected');
-        const selected = stored ? JSON.parse(stored) : {};
+        const selected = stored ? JSON.parse(stored) : getInitialSelected(design);
         const theme = normalizeTheme(design.theme);
         this.setState({
           design,

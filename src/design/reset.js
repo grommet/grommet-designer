@@ -1,4 +1,5 @@
 import { bare } from './bare';
+import { getInitialSelected } from './get';
 
 export const generateDesignName = () =>
   `${(new Date()).toLocaleDateString('default',
@@ -20,6 +21,6 @@ export const resetState = (starter = bare) => {
       version: 2.0,
       created: (new Date()).toISOString(),
     },
-    selected: { screen: 1, component: starter.screens[1].root },
+    selected: getInitialSelected(starter),
   };
 };

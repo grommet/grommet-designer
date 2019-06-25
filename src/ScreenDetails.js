@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, FormField, Heading, Keyboard, TextInput,
+  Box, FormField, Heading, Keyboard, TextInput,
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen } from './design';

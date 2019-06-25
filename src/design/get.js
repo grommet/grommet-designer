@@ -1,4 +1,9 @@
 
+export const getInitialSelected = (design) => ({
+  screen: design.screenOrder[0],
+  component: design.screens[design.screenOrder[0]].root,
+})
+
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
   if (component.type === 'Grommet') {
