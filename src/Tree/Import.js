@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Paragraph, Stack, Text } from 'grommet';
+import { getInitialSelected } from '../design';
 import Action from './Action';
 
 const Import = ({ onClose, onChange }) => {
@@ -17,7 +18,8 @@ const Import = ({ onClose, onChange }) => {
               reader.onload = () => {
                 try {
                   const design = JSON.parse(reader.result);
-                  onChange({ design });
+                  const selected = getInitialSelected(design);
+                  onChange({ design, selected });
                   onClose();
                 } catch (e) {
                   setError(e.message);
