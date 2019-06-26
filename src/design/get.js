@@ -58,7 +58,7 @@ export const getLinkOptions = (design, selected) => {
   const screen = design.screens[selected.screen];
   const screenComponents = getDescendants(design, screen.root);
   return [
-    ...Object.keys(screenComponents).map(k => screenComponents[k])
+    ...screenComponents.map(k => design.components[k])
       .filter(c => c.type === 'Layer')
       .map(c => ({ screen: selected.screen, component: c.id })),
     ...Object.keys(design.screens).map(k => design.screens[k])
