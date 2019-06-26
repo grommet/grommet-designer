@@ -42,6 +42,15 @@ export const upgradeDesign = (design) => {
   Object.keys(design.components).forEach((id) => {
     if (!found[id]) delete design.components[id];
   });
+  // ensure all linkTo properties have both screen and component
+  Object.keys(design.components).map(id => design.components[id])
+    .filter(component => component.linkTo)
+    .map(component => component.linkTo)
+    .forEach((linkTo) => {
+      if (!linkTo.component) {
+        linkTo.component = design.screens[linkTo.screen].root;
+      }
+    });
   // make sure it has a created timestamp (2.1)
   if (!design.created) {
     design.created = (new Date()).toISOString();
