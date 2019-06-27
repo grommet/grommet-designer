@@ -21,7 +21,7 @@ const normalizeTheme = (theme) => {
 };
 
 class App extends Component {
-  state = { ...resetState(loading), theme: grommet, changes: [] };
+  state = { ...resetState(loading), preview: true, theme: grommet, changes: [] };
 
   componentDidMount() {
     const { location } = document;
@@ -82,6 +82,7 @@ class App extends Component {
           theme,
           changes: [{ design, selected }],
           changeIndex: 0,
+          preview: false,
         });
       }
     }
