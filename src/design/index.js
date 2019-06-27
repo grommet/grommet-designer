@@ -2,6 +2,7 @@ export * from './bare';
 export * from './change';
 export * from './code';
 export * from './get';
+export * from './loading';
 export * from './reset';
 export * from './upgrade';
 export * from './welcome';

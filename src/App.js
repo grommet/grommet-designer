@@ -6,7 +6,7 @@ import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
   bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
-  upgradeDesign, bare, welcome,
+  upgradeDesign, bare, loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
@@ -21,7 +21,7 @@ const normalizeTheme = (theme) => {
 };
 
 class App extends Component {
-  state = { ...resetState(welcome), theme: grommet, changes: [] };
+  state = { ...resetState(loading), theme: grommet, changes: [] };
 
   componentDidMount() {
     const { location } = document;
