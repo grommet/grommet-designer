@@ -20,6 +20,25 @@ const normalizeTheme = (theme) => {
   return grommet;
 };
 
+const getParams = () => {
+  const { location } = window;
+  const params = {};
+  location.search.slice(1).split('&').forEach(p => {
+    const [k, v] = p.split('=');
+    params[k] = v;
+  });
+  return params;
+}
+
+// const setParams = (params) => {
+//   const { history, location: { pathname } } = window;
+//   const search = Object.keys(params)
+//     .map(p => `${p}=${encodeURIComponent(params[p])}`)
+//     .join('&');
+//   const url = `${pathname}?${search}`;
+//   history.pushState(null, '', url);
+// }
+
 class App extends Component {
   state = {
     ...resetState(loading),
@@ -30,18 +49,14 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const { location } = document;
-    const params = {};
-    location.search.slice(1).split('&').forEach(p => {
-      const [k, v] = p.split('=');
-      params[k] = v;
-    });
+    const { location: { hash } } = window;
+    const params = getParams();
     if (params.n) {
       fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
       .then(response => response.json())
       .then((design) => {
         upgradeDesign(design);
-        const screen = design.screenOrder[0];
+        const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
         const component = design.screens[screen].root;
         const selected = { screen, component };
         const theme = normalizeTheme(design.theme);
@@ -97,6 +112,17 @@ class App extends Component {
     }
     const stored = localStorage.getItem('designs');
     this.setState({ designs: stored ? JSON.parse(stored) : [] });
+
+    window.addEventListener('hashchange', () => {
+      const { design } = this.state;
+      const { location: { hash } } = window;
+      if (hash) {
+        const screen = parseInt(hash.slice(1), 10);
+        this.setState({
+          selected: { screen, component: design.screens[screen].root }
+        });
+      }
+    });
   }
 
   onChange = (nextState) => {
@@ -144,6 +170,11 @@ class App extends Component {
 
     if (nextState.selected) {
       localStorage.setItem('selected', JSON.stringify(nextState.selected));
+      if (nextState.selected.screen !== selected.screen) {
+        // track selected screen in browser location, so browser
+        // backward/forward controls work
+        window.location.hash = `#${nextState.selected.screen}`;
+      }
     }
   }
 
