@@ -21,7 +21,13 @@ const normalizeTheme = (theme) => {
 };
 
 class App extends Component {
-  state = { ...resetState(loading), preview: true, theme: grommet, changes: [] };
+  state = {
+    ...resetState(loading),
+    preview: true,
+    theme: grommet,
+    changes: [],
+    designs: [],
+  };
 
   componentDidMount() {
     const { location } = document;
@@ -89,11 +95,14 @@ class App extends Component {
     if (params.theme) {
       this.setState({ theme: themes[params.theme] });
     }
+    const stored = localStorage.getItem('designs');
+    this.setState({ designs: stored ? JSON.parse(stored) : [] });
   }
 
   onChange = (nextState) => {
     const {
-      design: previousDesign, theme, changes, changeIndex, selected,
+      design: previousDesign, designs: previousDesigns, theme,
+      changes, changeIndex, selected,
     } = this.state;
     this.setState(nextState);
 
@@ -115,16 +124,11 @@ class App extends Component {
           // clear current URL, in case we've started editing a published design locally
           window.history.replaceState({}, design.name, '/');
         }
-        // TODO: refactor how we remove previous design on rename
-        // if (design.name !== previousDesign.name) {
-        //   localStorage.removeItem(previousDesign.name);
-        //   const stored = localStorage.getItem('designs');
-        //   const designs = (stored ? JSON.parse(stored) : [])
-        //     .filter(name => name !== previousDesign.name);
-        //   if (!designs.includes(design.name)) designs.push(design.name);
-        //   localStorage.setItem('designs', JSON.stringify(designs));
-        //   this.setState({ designs });
-        // }
+        if (!previousDesigns.includes(design.name)) {
+          const designs = [design.name, ...previousDesigns];
+          localStorage.setItem('designs', JSON.stringify(designs));
+          this.setState({ designs });
+        }
         let nextChanges;
         if (design.created === previousDesign.created) {
           nextChanges = [...changes];
