@@ -188,6 +188,7 @@ export const types = {
     },
     properties: {
       color: colors,
+      href: '',
       label: 'anchor',
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
@@ -206,6 +207,7 @@ export const types = {
       fill: ['horizontal', 'vertical'],
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       hoverIndicator: false,
+      href: '',
       icon: iconNames,
       label: 'Click Me',
       margin: Edge,
