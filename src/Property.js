@@ -144,6 +144,7 @@ export default class Property extends Component {
                 justify="between"
                 gap="medium"
                 pad="small"
+                flex={false}
               >
                 <Heading margin={{ left: "small", vertical: 'none' }} level={3}>
                   {name}
@@ -153,8 +154,13 @@ export default class Property extends Component {
                   onClick={() => this.setState({ expand: false })}
                 />
               </Box>
-              <Box pad={{ horizontal: 'medium', bottom: 'medium' }}>
-                <CustomProperty {...this.props} />
+              <Box
+                overflow="auto"
+                pad={{ horizontal: 'medium', bottom: 'medium' }}
+              >
+                <Box flex={false}>
+                  <CustomProperty {...this.props} />
+                </Box>
               </Box>
             </Layer>
           )}
