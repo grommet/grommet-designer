@@ -5,7 +5,7 @@ const svgPrefix = "data:image/svg+xml;utf8,";
 
 const stripPrefix = value => {
   if (value && value.slice(0, svgPrefix.length) === svgPrefix) {
-    return value.slice(svgPrefix.length);
+    return decodeURIComponent(value.slice(svgPrefix.length));
   }
   return value || '';
 }
@@ -23,7 +23,7 @@ export default ({ value, onChange }) => {
         onChange={(event) => {
           const nextValue = event.target.value;
           if (nextValue[0] === '<') {
-            onChange(`${svgPrefix}${nextValue}`);
+            onChange(`${svgPrefix}${encodeURIComponent(nextValue)}`);
           } else {
             onChange(nextValue);
           }

@@ -9,7 +9,7 @@ const stripToText = value => {
   if (value && value.slice(0, dataUrlPrefix.length) === dataUrlPrefix) {
     const deDataUrl = value.slice(dataUrlPrefix.length).slice(0, -dataUrlSuffix.length);
     if (deDataUrl.slice(0, svgPrefix.length) === svgPrefix) {
-      return deDataUrl.slice(svgPrefix.length);
+      return decodeURIComponent(deDataUrl.slice(svgPrefix.length));
     } else {
       return deDataUrl;
     }
@@ -30,7 +30,7 @@ export default ({ value, onChange }) => {
         onChange={(event) => {
           const nextValue = event.target.value;
           if (nextValue[0] === '<') {
-            onChange(`${dataUrlPrefix}${svgPrefix}${nextValue}${dataUrlSuffix}`);
+            onChange(`${dataUrlPrefix}${svgPrefix}${encodeURIComponent(nextValue)}${dataUrlSuffix}`);
           } else {
             onChange(`${dataUrlPrefix}${nextValue}${dataUrlSuffix}`);
           }
