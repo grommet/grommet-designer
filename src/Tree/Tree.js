@@ -189,7 +189,7 @@ class Tree extends Component {
                 corner: (component.children ? 'top' : undefined),
               }}
             >
-              <Text truncate>
+              <Text truncate weight={type.container ? 'bold' : undefined}>
                 {(reference && treeName(reference)) || treeName(component)}
               </Text>
             </Box>
