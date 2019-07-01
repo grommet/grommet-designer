@@ -105,6 +105,11 @@ class App extends Component {
           changeIndex: 0,
           preview: false,
         });
+      } else {
+        this.setState({
+          ...resetState(bare),
+          preview: false,
+        });
       }
     }
     if (params.theme) {
