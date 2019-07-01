@@ -10,6 +10,7 @@ import {
   duplicateComponent, getDisplayName, getLinkOptions, getParent,
 } from './design';
 import ActionButton from './ActionButton';
+import Field from './components/Field';
 
 export default class Properties extends Component {
 
@@ -104,31 +105,35 @@ export default class Properties extends Component {
             </Heading>
           </Box>
           <Box flex overflow="auto">
-            <Box flex={false}>
-              <Box pad={{ horizontal: 'small' }}>
+            <Box flex="grow">
+              <Box>
                 {type.help && <Paragraph>{type.help}</Paragraph>}
                 {type.name !== 'Reference' && (
-                  <FormField label="name">
+                  <Field label="name">
                     <TextInput
                       ref={this.textRef}
+                      plain
                       name="name"
                       value={component.name || ''}
                       onChange={event => this.setName(event.target.value)}
                     />
-                  </FormField>
+                  </Field>
                 )}
                 {type.text &&
-                  <FormField label="text">
+                  <Field label="text">
                     <TextArea
                       ref={this.textRef}
+                      plain
                       value={component.text || type.text}
                       onChange={event => this.setText(event.target.value)}
                     />
-                  </FormField>
+                  </Field>
                 }
                 {type.name === 'Button' && linkOptions.length > 1 && (
-                  <FormField label="link to">
+                  <Field label="link to">
                     <Select
+                      name="linkTo"
+                      plain
                       options={linkOptions}
                       value={component.linkTo || ''}
                       onChange={({ option }) =>
@@ -145,31 +150,39 @@ export default class Properties extends Component {
                         </Box>
                       )}
                     </Select>
-                  </FormField>
+                  </Field>
                 )}
                 {type.name === 'Layer' && (
-                  <FormField>
+                  <Field label="hide">
                     <Box pad="small">
                       <CheckBox
                         toggle
-                        label="hide"
-                        reverse
                         checked={!!component.hide}
                         onChange={() => this.setHide(!component.hide)}
                       />
                     </Box>
-                  </FormField>
+                  </Field>
                 )}
               </Box>
               {type.properties && (
-                <Box pad={{ horizontal: 'small' }}>
-                  <Heading level={3} size="small" margin="small">
+                <Box flex="grow">
+                  <Heading
+                    level={3}
+                    size="small"
+                    margin={{ horizontal: 'medium', vertical: 'small' }}
+                  >
                     Properties
                   </Heading>
                   {Array.isArray(type.properties) ? (
                     type.properties.map(({ label, properties }) => (
-                      <Box key={label} flex={false}>
-                        <Heading level={4} size="small" margin="small">{label}</Heading>
+                      <Box key={label} flex={false} margin={{ top: 'small' }}>
+                        <Heading
+                          level={4}
+                          size="small"
+                          margin={{ horizontal: 'medium', vertical: 'small' }}
+                        >
+                          {label}
+                        </Heading>
                         {Object.keys(properties).map((propName) => (
                           <Property
                             key={propName}
@@ -196,9 +209,12 @@ export default class Properties extends Component {
                       />
                     ))
                   }
-                  <FormField name="style" label="style">
+                  <Box flex />
+                  <Field label="style">
                     <TextArea
+                      name="style"
                       rows={2}
+                      plain
                       value={component.props.styling
                         || (component.props.style
                           && JSON.stringify(component.props.style, null, 2))
@@ -213,7 +229,7 @@ export default class Properties extends Component {
                         }
                       }}
                     />
-                  </FormField>
+                  </Field>
                 </Box>
               )}
             </Box>

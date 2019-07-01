@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Box, Button, CheckBox, FormField, Heading, Layer, Select, Text, TextInput,
+  Box, Button, CheckBox, Heading, Layer, Select, Text, TextInput,
 } from 'grommet';
 import { Close, FormDown, FormNext, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 import ActionButton from './ActionButton';
+import Field from './components/Field';
 
 const ColorLabel = ({ color }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -36,8 +37,10 @@ export default class Property extends Component {
     if (Array.isArray(property)) {
       const hasColor = property.includes('light-1');
       return (
-        <FormField key={name} name={name} label={name} style={{ margin: 0 }}>
+        <Field key={name} label={name}>
           <Select
+            plain
+            name={name}
             options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
               : [...property, 'undefined']}
             value={value || ''}
@@ -59,67 +62,74 @@ export default class Property extends Component {
                 active={option === value}
               />}
           </Select>
-        </FormField>
+        </Field>
       );
     } else if (typeof property === 'string') {
       return (
-        <FormField key={name} name={name} label={name} style={{ margin: 0 }}>
+        <Field key={name} label={name}>
           <TextInput
+            name={name}
+            plain
             value={value || ''}
             onChange={(event) => onChange(event.target.value)}
           />
-        </FormField>
+        </Field>
       );
     } else if (typeof property === 'boolean') {
       return (
-        <FormField key={name} name={name} style={{ margin: 0 }}>
+        <Field key={name} label={name}>
           <Box pad="small">
             <CheckBox
-              label={name}
+              name={name}
               toggle
-              reverse
               checked={!!value}
               onChange={(event) => onChange(event.target.checked)}
             />
           </Box>
-        </FormField>
+        </Field>
       );
     } else if (typeof property === 'object') {
       return (
-        <Box border="bottom">
+        <Box key={name}>
           <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
-            <Box direction="row" align="center" justify="between" pad="small">
-              <Text>{name}</Text>
-              {expand
-                ? <FormUp color={value ? 'brand' : undefined} />
-                : <FormDown color={value ? 'brand' : undefined} />}
-            </Box>
+            <Field label={name}>
+              <Box pad="small">
+                {expand
+                  ? <FormUp color={value ? 'accent-2' : undefined} />
+                  : <FormDown color={value ? 'accent-2' : undefined} />}
+              </Box>
+            </Field>
           </Button>
-          {expand && Object.keys(property).map((key) => (
-            <Property
-              key={key}
-              name={key}
-              property={property[key]}
-              value={(value || {})[key]}
-              onChange={subValue => {
-                let nextValue = { ...(value || {}) };
-                if (subValue !== undefined && subValue !== '') nextValue[key] = subValue
-                else delete nextValue[key];
-                onChange(Object.keys(nextValue).length > 0 ? nextValue : undefined);
-              }}
-            />
-          ))}
+          {expand && (
+            <Box margin={{ left: 'small' }} background="dark-1">
+              {Object.keys(property).map((key) => (
+                <Property
+                  key={key}
+                  name={key}
+                  property={property[key]}
+                  value={(value || {})[key]}
+                  onChange={subValue => {
+                    let nextValue = { ...(value || {}) };
+                    if (subValue !== undefined && subValue !== '') nextValue[key] = subValue
+                    else delete nextValue[key];
+                    onChange(Object.keys(nextValue).length > 0 ? nextValue : undefined);
+                  }}
+                />
+              ))}
+            </Box>
+          )}
         </Box>
       );
     } else if (typeof property === 'function') {
       const CustomProperty = property;
       return (
-        <Box border="bottom">
+        <Box key={name} border="bottom">
           <Button hoverIndicator onClick={() => this.setState({ expand: !expand })}>
-            <Box direction="row" align="center" justify="between" pad="small">
-              <Text>{name}</Text>
-              <FormNext color={value ? 'brand' : undefined} />
-            </Box>
+            <Field label={name}>
+              <Box pad="small">
+                <FormNext color={value ? 'accent-2' : undefined} />
+              </Box>
+            </Field>
           </Button>
           {expand && (
             <Layer
