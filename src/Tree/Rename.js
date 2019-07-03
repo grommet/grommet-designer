@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField, Keyboard, TextInput } from 'grommet';
-import Action from './Action';
+import Action from '../components/Action';
 
 const Rename = ({ design, onClose, onChange }) => {
   const ref = React.useRef();

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Box, Button, DropButton, Heading, Text, grommet } from 'grommet';
-import { FormDown } from 'grommet-icons';
+import { Apps, FormDown, Share } from 'grommet-icons';
 import { resetState, bare } from '../design';
+import ActionButton from '../components/ActionButton';
 import Code from './Code';
 import ConfirmReset from './ConfirmReset';
 import Data from './Data';
@@ -10,6 +11,7 @@ import Publish from './Publish';
 import Rename from './Rename';
 import Theme from './Theme';
 import Import from './Import';
+import Sharing from './Share';
 
 const MenuButton = ({ label, ...rest }) => (
   <Button hoverIndicator {...rest}>
@@ -39,8 +41,8 @@ class MainMenu extends Component {
   renderAction() {
     const { design, onChange } = this.props;
     const {
-      changeTheme, code, confirmReset, chooseDesign, editData,
-      importFile, publish, rename,
+      changeTheme, choose, code, confirmReset, editData,
+      importFile, publish, rename, share,
     } = this.state;
     if (rename) return (
       <Rename
@@ -63,6 +65,13 @@ class MainMenu extends Component {
         onChange={onChange}
       />
     );
+    if (share) return (
+      <Sharing
+        design={design}
+        onClose={() => this.setState({ share: undefined })}
+        onChange={onChange}
+      />
+    );
     if (publish) return (
       <Publish
         design={design}
@@ -77,10 +86,10 @@ class MainMenu extends Component {
         onChange={onChange}
       />
     );
-    if (chooseDesign) return (
+    if (choose) return (
       <Designs
         design={design}
-        onClose={() => this.setState({ chooseDesign: undefined })}
+        onClose={() => this.setState({ choose: undefined })}
         onChange={onChange}
       />
     );
@@ -107,7 +116,18 @@ class MainMenu extends Component {
     const { design } = this.props;
     const { open } = this.state;
     return (
-      <Box flex={false}>
+      <Box
+        flex={false}
+        direction="row"
+        align="start"
+        justify="between"
+        pad="small"
+        border="bottom"
+      >
+        <ActionButton
+          icon={<Apps />}
+          onClick={() => this.setState({ choose: true })}
+        />
         <DropButton
           hoverIndicator
           open={open}
@@ -160,7 +180,7 @@ class MainMenu extends Component {
                 Manage
               </Heading>
               <MenuButton label="Duplicate" onClick={this.onDuplicate} />
-              <MenuButton label="Switch" onClick={() => this.setState({ chooseDesign: true })} />
+              <MenuButton label="Switch" onClick={() => this.setState({ choose: true })} />
               <MenuButton label="Reset" onClick={() =>
                 design.modified ? this.setState({ confirmReset: true }) : this.onReset()} />
             </Box>
@@ -171,12 +191,15 @@ class MainMenu extends Component {
             direction="row"
             align="center"
             justify="between"
-            border="bottom"
           >
             <Heading size="22px" margin="none">{design.name}</Heading>
             <FormDown />
           </Box>
         </DropButton>
+        <ActionButton
+          icon={<Share />}
+          onClick={() => this.setState({ share: true })}
+        />
         {this.renderAction()}
       </Box>
     );

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import {
   Box, Button, Heading, Keyboard, Stack, Text,
 } from 'grommet';
-import { Add, FormDown, FormUp, Redo, Undo, View } from 'grommet-icons';
+import { Add, Apps, FormDown, FormUp, Redo, Share, Undo, View } from 'grommet-icons';
 import { types } from '../types';
 import { getParent, getScreen } from '../design';
-import ActionButton from '../ActionButton';
+import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
-import MainMenu from './MainMenu';
+import DesignSettings from '../DesignSettings';
+import Designs from './Designs';
+import Sharing from './Share';
 
 const treeName = component =>
   (component.name || component.text
@@ -286,7 +288,7 @@ class Tree extends Component {
 
   render() {
     const { design, selected, onChange, onUndo, onRedo } = this.props;
-    const { adding } = this.state;
+    const { adding, choosing, editing, sharing } = this.state;
     const selectedComponent = design.components[selected.component];
     const selectedType = types[selectedComponent.type];
     return (
@@ -295,7 +297,55 @@ class Tree extends Component {
         onKeyDown={selectedType.container ? this.onKeyDown : undefined}
       >
         <Box background="dark-1" height="100vh" border="right">
-          <MainMenu design={design} onChange={onChange} />
+          <Box flex={false} border="bottom">
+            <Box
+              flex={false}
+              direction="row"
+              align="start"
+              justify="between"
+              pad="small"
+              border="bottom"
+            >
+              <ActionButton
+                icon={<Apps />}
+                onClick={() => this.setState({ choosing: true })}
+              />
+              {choosing && (
+                <Designs
+                  design={design}
+                  onChange={onChange}
+                  onClose={() => this.setState({ choosing: undefined })}
+                />
+              )}
+              <ActionButton
+                icon={<Share />}
+                onClick={() => this.setState({ sharing: true })}
+              />
+              {sharing && (
+                <Sharing
+                  design={design}
+                  onChange={onChange}
+                  onClose={() => this.setState({ sharing: undefined })}
+                />
+              )}
+            </Box>
+            <Button
+              hoverIndicator
+              onClick={() => this.setState({ editing: true })}
+            >
+              <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
+                <Heading size="22px" margin="none">{design.name}</Heading>
+              </Box>
+            </Button>
+            {editing && (
+              <DesignSettings
+                design={design}
+                onChange={onChange}
+                onClose={() => this.setState({ editing: false })}
+              />
+            )}
+          </Box>
+
           <Box flex overflow="auto">
             <Box flex={false}>
               {design.screenOrder.map((sId, index) =>
@@ -334,10 +384,7 @@ class Tree extends Component {
             <AddComponent
               design={design}
               selected={selected}
-              onChange={(nextState) => {
-                this.setState({ adding: false });
-                onChange(nextState);
-              }}
+              onChange={onChange}
               onClose={() => this.setState({ adding: false })}
             />
           )}

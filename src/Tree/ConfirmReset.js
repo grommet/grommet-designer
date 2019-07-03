@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Paragraph } from 'grommet';
-import Action from './Action';
+import Action from '../components/Action';
 
 const ConfirmReset = ({ onCancel, onReset }) => (
   <Action onClose={onCancel}>

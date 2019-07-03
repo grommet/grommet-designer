@@ -4,7 +4,7 @@ import { BarChart, Blank, Bold, Capacity, CheckboxSelected, Image, Navigate } fr
 import { Close } from 'grommet-icons';
 import { types } from '../types';
 import { addScreen, getParent } from '../design';
-import ActionButton from '../ActionButton';
+import ActionButton from '../components/ActionButton';
 
 const structure = [
   { name: 'Layout', Icon: Capacity, types: ['Box', 'Grid', 'Stack', 'Layer'] },
@@ -16,7 +16,7 @@ const structure = [
   { name: 'Design', Icon: Blank, types: ['Repeater', 'Reference', 'Screen'] },
 ];
 
-const onAdd = (typeName, design, selected, onChange) => {
+const onAdd = (typeName, design, selected, onChange, onClose) => {
   const nextDesign = JSON.parse(JSON.stringify(design));
   const nextSelected = { ...selected };
   if (typeName === 'Screen') {
@@ -41,6 +41,7 @@ const onAdd = (typeName, design, selected, onChange) => {
     nextSelected.component = component.id;
   }
   onChange({ design: nextDesign, selected: nextSelected });
+  onClose();
 }
 
 const AddComponent = ({ design, selected, onChange, onClose }) => (
@@ -91,7 +92,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => (
                 <Button
                   key={key}
                   hoverIndicator
-                  onClick={() => onAdd(key, design, selected, onChange)}
+                  onClick={() => onAdd(key, design, selected, onChange, onClose)}
                 >
                   <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
                     {types[key].name}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Paragraph, Stack, Text } from 'grommet';
 import { getInitialSelected } from '../design';
-import Action from './Action';
+import Action from '../components/Action';
 
 const Import = ({ onClose, onChange }) => {
   const [error, setError] = React.useState();

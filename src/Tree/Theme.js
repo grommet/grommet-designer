@@ -3,7 +3,7 @@ import {
   Box, FormField, Heading, Select, TextArea, TextInput,
 } from 'grommet';
 import themes from '../themes';
-import Action from './Action';
+import Action from '../components/Action';
 
 const Theme = ({ design, onChange, onClose }) => (
   <Action onClose={onClose}>

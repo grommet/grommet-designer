@@ -3,7 +3,7 @@ import {
   Box, Button, FormField, Paragraph, TextArea, TextInput,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import Action from './Action';
+import Action from '../components/Action';
 
 const Data = ({ design, onChange, onClose }) => (
   <Action onClose={onClose}>

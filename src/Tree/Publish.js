@@ -3,7 +3,7 @@ import {
   Box, Button, Form, FormField, MaskedInput, Paragraph, Text, TextInput,
 } from 'grommet';
 import { Copy } from 'grommet-icons';
-import Action from './Action';
+import Action from '../components/Action';
 import { bucketPostUrl, bucketKey } from '../design';
 
 const Publish = ({ design, onClose, onChange }) => {

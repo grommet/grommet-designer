@@ -4,7 +4,7 @@ import {
 } from 'grommet';
 import { Close, FormDown, FormNext, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
-import ActionButton from './ActionButton';
+import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
 const ColorLabel = ({ color }) => (
@@ -37,9 +37,10 @@ export default class Property extends Component {
     if (Array.isArray(property)) {
       const hasColor = property.includes('light-1');
       return (
-        <Field key={name} label={name}>
+        <Field key={name} label={name} htmlFor={name}>
           <Select
             plain
+            id={name}
             name={name}
             options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
               : [...property, 'undefined']}
@@ -66,20 +67,23 @@ export default class Property extends Component {
       );
     } else if (typeof property === 'string') {
       return (
-        <Field key={name} label={name}>
+        <Field key={name} label={name} htmlFor={name}>
           <TextInput
+            id={name}
             name={name}
             plain
             value={value || ''}
             onChange={(event) => onChange(event.target.value)}
+            style={{ textAlign: 'end' }}
           />
         </Field>
       );
     } else if (typeof property === 'boolean') {
       return (
-        <Field key={name} label={name}>
+        <Field key={name} label={name} htmlFor={name}>
           <Box pad="small">
             <CheckBox
+              id={name}
               name={name}
               toggle
               checked={!!value}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Box, CheckBox, FormField, Heading, Keyboard, Paragraph,
+  Box, CheckBox, Heading, Keyboard, Paragraph,
   Select, TextArea, TextInput,
 } from 'grommet';
 import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
@@ -9,7 +9,7 @@ import Property from './Property';
 import {
   duplicateComponent, getDisplayName, getLinkOptions, getParent,
 } from './design';
-import ActionButton from './ActionButton';
+import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
 export default class Properties extends Component {
@@ -116,6 +116,7 @@ export default class Properties extends Component {
                       name="name"
                       value={component.name || ''}
                       onChange={event => this.setName(event.target.value)}
+                      style={{ textAlign: 'end' }}
                     />
                   </Field>
                 )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Markdown, TextArea } from 'grommet';
-import Action from './Action';
+import Action from '../components/Action';
 import { generateJSX } from '../design';
 
 const Code = ({ design, onChange, onClose }) => {

@@ -4,7 +4,7 @@ import {
 } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen } from './design';
-import ActionButton from './ActionButton';
+import ActionButton from './components/ActionButton';
 
 export default class ScreenDetails extends Component {
 
