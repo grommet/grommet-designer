@@ -25,7 +25,7 @@ const getParams = () => {
   const params = {};
   location.search.slice(1).split('&').forEach(p => {
     const [k, v] = p.split('=');
-    params[k] = v;
+    params[k] = decodeURIComponent(v);
   });
   return params;
 }

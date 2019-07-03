@@ -58,8 +58,13 @@ const Publish = ({ design, onChange }) => {
     )
     .then((response) => {
       if (response.ok) {
-        const nextUploadUrl =
-          `${window.location.href.split('?')[0]}?n=${fileName}`;
+        const nextUploadUrl = [
+          window.location.protocol,
+          window.location.host,
+          window.location.pathname,
+          `?n=${encodeURIComponent(fileName)}`,
+          window.location.hash,
+        ].join('');
         setUploadUrl(nextUploadUrl);
       }
     });
