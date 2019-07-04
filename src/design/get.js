@@ -66,3 +66,83 @@ export const getLinkOptions = (design, selected) => {
     undefined
   ];
 }
+
+export const childSelected = (design, selected) => {
+  const component = design.components[selected.component];
+  if (!component.collapsed && component.children
+    && component.children.length > 0) {
+    return { ...selected, component: component.children[0] };
+  }
+}
+
+export const parentSelected = (design, selected) => {
+  const parent = getParent(design, selected.component);
+  return { ...selected, component: parent.id };
+}
+
+export const nextSiblingSelected = (design, selected) => {
+  const screen = design.screens[selected.screen];
+  if (screen.root === selected.component) {
+    // next screen
+    const screenIndex = design.screenOrder.indexOf(selected.screen);
+    if (screenIndex < (design.screenOrder.length - 1)) {
+      const nextScreen = design.screens[design.screenOrder[screenIndex + 1]];
+      return { ...selected, screen: nextScreen.id, component: nextScreen.root };
+    }
+    return undefined;
+  }
+  // next sibling
+  const parent = getParent(design, selected.component);
+  let childIndex = parent.children.indexOf(selected.component);
+  if (childIndex < (parent.children.length - 1)) {
+    return { ...selected, component: parent.children[childIndex + 1] };
+  }
+  return undefined;
+}
+
+export const previousSiblingSelected = (design, selected) => {
+  const screen = design.screens[selected.screen];
+  if (screen.root === selected.component) {
+    // previous screen
+    const screenIndex = design.screenOrder.indexOf(selected.screen);
+    if (screenIndex > 0) {
+      const previousScreen = design.screens[design.screenOrder[screenIndex - 1]];
+      return { ...selected, screen: previousScreen.id, component: previousScreen.root };
+    }
+    return undefined;
+  }
+  // previous sibling
+  const parent = getParent(design, selected.component);
+  let childIndex = parent.children.indexOf(selected.component);
+  if (childIndex > 0) {
+    return { ...selected, component: parent.children[childIndex - 1] };
+  }
+  return undefined;
+}
+
+// export const nextSelected = (design, selected, descend = true) => {
+//   const component = design.components[selected.component];
+//   // children
+//   if (descend && !component.collapsed && component.children
+//     && component.children.length > 0) {
+//     return { ...selected, component: component.children[0] };
+//   }
+//   // siblings
+//   const parent = getParent(design, selected.component);
+//   let childIndex = parent.children.indexOf(selected.component);
+//   if (childIndex < (parent.children.length - 1)) {
+//     return { ...selected, component: parent.children[childIndex + 1] };
+//   }
+//   // screen
+//   if (parent.id === design.screens[selected.screen].root) {
+//     const screenIndex = design.screenOrder.indexOf(selected.screen);
+//     if (screenIndex < (design.screenOrder.length - 1)) {
+//       const nextScreen = design.screens[design.screenOrder[childIndex + 1]];
+//       return { ...selected, screen: nextScreen.id, component: nextScreen.root };
+//     } else {
+//       return undefined;
+//     }
+//   }
+//   // aunts, uncles, etc.
+//   return nextSelected(design, { ...selected, component: parent.id }, false);
+// }

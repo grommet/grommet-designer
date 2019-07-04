@@ -4,7 +4,10 @@ import {
 } from 'grommet';
 import { Add, Apps, FormDown, FormUp, Redo, Share, Undo, View } from 'grommet-icons';
 import { types } from '../types';
-import { getParent, getScreen } from '../design';
+import {
+  childSelected, getParent, getScreen, nextSiblingSelected,
+  parentSelected, previousSiblingSelected,
+} from '../design';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignSettings from '../DesignSettings';
@@ -73,19 +76,31 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
-  toggleCollapse = () => {
+  toggleCollapse = (id) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
+    const component = nextDesign.components[id];
     component.collapsed = !component.collapsed;
-    onChange({ design: nextDesign });
+    onChange({ design: nextDesign, selected: { ...selected, component: id } });
   }
 
   onKey = (event) => {
+    const { design, selected, onChange } = this.props;
     if (document.activeElement === document.body) {
       if (event.key === 'a') {
-        event.preventDefault();
         this.setState({ adding: true });
+      }
+      if (event.key === 'ArrowDown') {
+        onChange({ selected: (nextSiblingSelected(design, selected) || selected) });
+      }
+      if (event.key === 'ArrowUp') {
+        onChange({ selected: (previousSiblingSelected(design, selected) || selected) });
+      }
+      if (event.key === 'ArrowLeft') {
+        onChange({ selected: (parentSelected(design, selected) || selected) });
+      }
+      if (event.key === 'ArrowRight') {
+        onChange({ selected: (childSelected(design, selected) || selected) });
       }
     }
   }
@@ -199,7 +214,13 @@ class Tree extends Component {
           {selected.component === id && component.children && (
             <Button
               icon={component.collapsed ? <FormDown /> : <FormUp />}
-              onClick={this.toggleCollapse}
+              onClick={() => this.toggleCollapse(id)}
+            />
+          )}
+          {selected.component !== id && component.children && component.collapsed && (
+            <Button
+              icon={<FormDown color="dark-4" />}
+              onClick={() => this.toggleCollapse(id)}
             />
           )}
         </Stack>
@@ -240,6 +261,7 @@ class Tree extends Component {
               this.setState({ draggingScreen: undefined, dropScreenTarget: undefined })}
           >
             <Box
+              ref={selected.component === screen.root ? this.selectedRef : undefined}
               direction="row"
               align="center"
               justify="between"
