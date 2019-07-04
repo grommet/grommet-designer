@@ -16,16 +16,6 @@ export default class Properties extends Component {
 
   state = {};
 
-  textRef = React.createRef();
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.component.id !== this.props.component.id
-      && this.textRef.current) {
-      this.textRef.current.select();
-      this.textRef.current.focus();
-    }
-  }
-
   setProp = (propName, value) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -111,7 +101,6 @@ export default class Properties extends Component {
                 {type.name !== 'Reference' && (
                   <Field label="name">
                     <TextInput
-                      ref={this.textRef}
                       plain
                       name="name"
                       value={component.name || ''}
@@ -123,7 +112,6 @@ export default class Properties extends Component {
                 {type.text &&
                   <Field label="text">
                     <TextArea
-                      ref={this.textRef}
                       plain
                       value={component.text || type.text}
                       onChange={event => this.setText(event.target.value)}

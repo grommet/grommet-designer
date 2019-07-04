@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Grid, Heading, Layer } from 'grommet';
+import { Box, Button, Heading, Keyboard, Layer, TextInput } from 'grommet';
 import { BarChart, Blank, Bold, Capacity, CheckboxSelected, Image, Navigate } from 'grommet-icons';
 import { Close } from 'grommet-icons';
 import { types } from '../types';
@@ -44,67 +44,113 @@ const onAdd = (typeName, design, selected, onChange, onClose) => {
   onClose();
 }
 
-const AddComponent = ({ design, selected, onChange, onClose }) => (
-  <Layer
-    full
-    margin="medium"
-    onEsc={onClose}
-    onClickOutside={onClose}
-  >
-    <Box flex background="dark-1">
-      <Box
-        flex={false}
-        direction="row"
-        justify="between"
-        align="center"
-        pad="small"
-      >
-        <ActionButton icon={<Close />} onClick={onClose} />
-        <Heading
-          level={2}
-          size="small"
-          margin={{ vertical: 'none', horizontal: 'small' }}
+const AddComponent = ({ design, selected, onChange, onClose }) => {
+  const [search, setSearch] = React.useState('');
+  const [searchTypes, setSearchTypes] = React.useState();
+
+  const inputRef = React.useRef();
+
+  React.useLayoutEffect(() => {
+    setTimeout(() => (inputRef.current && inputRef.current.focus()), 1);
+  });
+
+  return (
+    <Layer
+      position="bottom-left"
+      margin="medium"
+      onEsc={onClose}
+      onClickOutside={onClose}
+    >
+      <Box flex background="dark-1">
+        <Box
+          flex={false}
+          direction="row"
+          justify="between"
+          align="center"
+          pad="small"
         >
-          add
-        </Heading>
-      </Box>
-      <Box flex pad="medium" overflow="auto">
-        <Grid columns="small" gap="medium">
-          {structure.map(({ name, Icon, types: sectionTypes }) => (
-            <Box key={name} flex={false} border="top">
-              <Box
-                direction="row"
-                gap="medium"
-                align="center"
-                justify="between"
-                pad={{ horizontal: 'small', vertical: 'xsmall' }}
-              >
-                <Heading
-                  level={4}
-                  size="small"
-                  margin="none"
+          <ActionButton icon={<Close />} onClick={onClose} />
+          <Heading
+            level={2}
+            size="small"
+            margin={{ vertical: 'none', horizontal: 'small' }}
+          >
+            add
+          </Heading>
+        </Box>
+        <Box flex={false} pad={{ horizontal: 'medium' }}>
+          <Keyboard
+            onEnter={() => {
+              if (searchTypes) {
+                onAdd(searchTypes[0], design, selected, onChange, onClose)
+              }
+            }}
+          >
+            <TextInput
+              ref={inputRef}
+              value={search}
+              onChange={(event) => {
+                const nextSearch = event.target.value;
+                setSearch(nextSearch);
+                if (nextSearch) {
+                  const exp = new RegExp(`^${nextSearch}`, 'i');
+                  setSearchTypes(Object.keys(types).filter(k => k.match(exp)));
+                } else {
+                  setSearchTypes(undefined);
+                }
+              }}
+            />
+          </Keyboard>
+        </Box>
+        <Box flex pad="medium" overflow="auto">
+          <Box flex={false} gap="medium">
+            {!searchTypes && structure.map(({ name, Icon, types: sectionTypes }) => (
+              <Box key={name} flex={false} border="top">
+                <Box
+                  direction="row"
+                  gap="medium"
+                  align="center"
+                  justify="between"
+                  pad={{ horizontal: 'small', vertical: 'xsmall' }}
                 >
-                  {name}
-                </Heading>
-                <Icon color="dark-4" />
+                  <Heading
+                    level={4}
+                    size="small"
+                    margin="none"
+                  >
+                    {name}
+                  </Heading>
+                  <Icon color="dark-4" />
+                </Box>
+                {sectionTypes.map(key => (
+                  <Button
+                    key={key}
+                    hoverIndicator
+                    onClick={() => onAdd(key, design, selected, onChange, onClose)}
+                  >
+                    <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                      {types[key].name}
+                    </Box>
+                  </Button>
+                ))}
               </Box>
-              {sectionTypes.map(key => (
-                <Button
-                  key={key}
-                  hoverIndicator
-                  onClick={() => onAdd(key, design, selected, onChange, onClose)}
-                >
-                  <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                    {types[key].name}
-                  </Box>
-                </Button>
-              ))}
-            </Box>
-          ))}
-        </Grid>
+            ))}
+            {searchTypes && searchTypes.map(key => (
+              <Button
+                key={key}
+                hoverIndicator
+                onClick={() => onAdd(key, design, selected, onChange, onClose)}
+              >
+                <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                  {types[key].name}
+                </Box>
+              </Button>
+            ))}
+          </Box>
+        </Box>
       </Box>
-    </Box>
-  </Layer>
-);
+    </Layer>
+  );
+}
 
 export default AddComponent;

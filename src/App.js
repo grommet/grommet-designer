@@ -211,10 +211,10 @@ class App extends Component {
     this.setState({ ...resetState(bare), theme: grommet });
   }
 
-  onKeyDown = (event) => {
+  onKey = (event) => {
     const { preview } = this.state;
     if (event.metaKey) {
-      if (event.keyCode === 69) { // e
+      if (event.key === 'e') {
         event.preventDefault();
         this.setState({ preview: !preview });
       }
@@ -249,7 +249,7 @@ class App extends Component {
       <Grommet full theme={theme}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
-            <Keyboard target="document" onKeyDown={this.onKeyDown}>
+            <Keyboard target="document" onKeyDown={this.onKey}>
               <Grid
                 fill
                 columns={

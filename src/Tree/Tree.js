@@ -81,12 +81,12 @@ class Tree extends Component {
     onChange({ design: nextDesign });
   }
 
-  onKeyDown = (event) => {
-    if (event.metaKey) {
-      // if (event.keyCode === 65) { // a
-      //   event.preventDefault();
-      //   this.setState({ adding: true });
-      // }
+  onKey = (event) => {
+    if (document.activeElement === document.body) {
+      if (event.key === 'a') {
+        event.preventDefault();
+        this.setState({ adding: true });
+      }
     }
   }
 
@@ -289,13 +289,8 @@ class Tree extends Component {
   render() {
     const { design, selected, onChange, onUndo, onRedo } = this.props;
     const { adding, choosing, editing, sharing } = this.state;
-    const selectedComponent = design.components[selected.component];
-    const selectedType = types[selectedComponent.type];
     return (
-      <Keyboard
-        target="document"
-        onKeyDown={selectedType.container ? this.onKeyDown : undefined}
-      >
+      <Keyboard target="document" onKeyDown={this.onKey}>
         <Box background="dark-1" height="100vh" border="right">
           <Box flex={false} border="bottom">
             <Box

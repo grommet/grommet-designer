@@ -10,23 +10,6 @@ export default class ScreenDetails extends Component {
 
   state = {};
 
-  textRef = React.createRef();
-
-  componentDidMount(prevProps) {
-    if (this.textRef.current) {
-      this.textRef.current.select();
-      this.textRef.current.focus();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.selected.screen !== this.props.selected.screen
-      && this.textRef.current) {
-      this.textRef.current.select();
-      this.textRef.current.focus();
-    }
-  }
-
   setName = (name) => {
     const { design, selected, onChange } = this.props;
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -85,7 +68,6 @@ export default class ScreenDetails extends Component {
             <Box flex={false} pad={{ horizontal: 'small' }}>
               <FormField label="name">
                 <TextInput
-                  ref={this.textRef}
                   value={screen.name || ''}
                   onChange={event => this.setName(event.target.value)}
                 />
