@@ -13,6 +13,8 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 * **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
 * **a**: opens the add component dialog
 * **commend-delete**: deletes the currently selected component and all of its children
+* **z**: undo the most recent change
+* **Z**: redo the most recently undone change
 
 ### Linking
 

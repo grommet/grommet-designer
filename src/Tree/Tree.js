@@ -85,7 +85,7 @@ class Tree extends Component {
   }
 
   onKey = (event) => {
-    const { design, selected, onChange } = this.props;
+    const { design, selected, onChange, onUndo, onRedo } = this.props;
     if (document.activeElement === document.body) {
       if (event.key === 'a') {
         this.setState({ adding: true });
@@ -101,6 +101,12 @@ class Tree extends Component {
       }
       if (event.key === 'ArrowRight') {
         onChange({ selected: (childSelected(design, selected) || selected) });
+      }
+      if (onUndo && event.key === 'z') {
+        onUndo();
+      }
+      if (onRedo && event.key === 'Z') {
+        onRedo();
       }
     }
   }
