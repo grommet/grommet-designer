@@ -11,8 +11,9 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 * **command-e** or **windows-E**: toggles preview vs. edit modes
 * **ArrowUp** and **ArrowDown**: traverses the selection across siblings
 * **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
+* **p**: initiates searching of the currently selected component's properties
 * **a**: opens the add component dialog
-* **commend-delete**: deletes the currently selected component and all of its children
+* **command-delete** or **windows-backspace**: deletes the currently selected component and all of its children
 * **z**: undo the most recent change
 * **Z**: redo the most recently undone change
 
