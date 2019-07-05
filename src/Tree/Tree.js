@@ -292,7 +292,7 @@ class Tree extends Component {
             && component.children && (
             <Button
               icon={component.collapsed ? <FormDown /> : <FormUp />}
-              onClick={this.toggleCollapse}
+              onClick={() => this.toggleCollapse(id)}
             />
           )}
         </Stack>
