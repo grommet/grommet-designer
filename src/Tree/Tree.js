@@ -108,6 +108,9 @@ class Tree extends Component {
       if (onRedo && event.key === 'Z') {
         onRedo();
       }
+      if (event.key === 'c') {
+        this.toggleCollapse(selected.component);
+      }
     }
   }
 
