@@ -6,7 +6,7 @@ import { Add, Apps, FormDown, FormUp, Redo, Share, Undo, View } from 'grommet-ic
 import { types } from '../types';
 import {
   childSelected, getParent, getScreen, nextSiblingSelected,
-  parentSelected, previousSiblingSelected,
+  parentSelected, previousSiblingSelected, isDescendent,
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
@@ -45,6 +45,12 @@ class Tree extends Component {
     const priorParent = getParent(nextDesign, dragging);
     const priorIndex = priorParent.children.indexOf(dragging);
     priorParent.children.splice(priorIndex, 1);
+    // if we're moving within children, promote children first
+    if (isDescendent(design, target, dragging)) {
+      const component = nextDesign.components[dragging];
+      priorParent.children = [...priorParent.children, ...component.children];
+      component.children = undefined;
+    }
     // insert into new parent
     if (where === 'in') {
       const nextParent = nextDesign.components[target];

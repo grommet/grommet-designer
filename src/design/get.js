@@ -41,6 +41,13 @@ export const getScreen = (design, id) => {
   return result || getScreen(design, getParent(design, id).id);
 };
 
+export const isDescendent = (design, id, checkId) => {
+  const parent = getParent(design, id);
+  if (!parent) return false;
+  if (parent.id === checkId) return true;
+  return isDescendent(design, parent.id, checkId);
+}
+
 const getDescendants = (design, id) => {
   let result = [];
   const component = design.components[id];

@@ -43,11 +43,10 @@ export default class ScreenDetails extends Component {
   }
 
   onKeyDown = (event) => {
-    const { onDelete } = this.props;
     if (event.metaKey) {
       if (event.keyCode === 8) { // delete
         event.preventDefault();
-        onDelete();
+        this.onDelete();
       }
     }
   }
