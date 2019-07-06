@@ -33,7 +33,11 @@ export default ({ value, onChange }) => {
               <Box flex="grow">
                 <FormField label="size">
                   <Select
-                    options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'min/max']}
+                    options={[
+                      'xsmall', 'small', 'medium', 'large', 'xlarge',
+                      '1/2', '1/3', '2/3', '1/4', '3/4',
+                      'full', 'flex', 'auto', 'min/max',
+                    ]}
                     value={(c || {}).size || (Array.isArray(c) && 'min/max') || c || ''}
                     onChange={({ option }) => {
                       const nextValue = JSON.parse(JSON.stringify(value));
@@ -54,7 +58,11 @@ export default ({ value, onChange }) => {
                   <Fragment>
                     <FormField label="min">
                       <Select
-                        options={['xsmall', 'small', 'medium', 'large', 'xlarge']}
+                        options={[
+                          'xsmall', 'small', 'medium', 'large', 'xlarge',
+                          '1/2', '1/3', '2/3', '1/4', '3/4',
+                          'full', 'flex', 'auto',
+                        ]}
                         value={c[0] || ''}
                         onChange={({ option }) => {
                           const nextValue = JSON.parse(JSON.stringify(value));
@@ -65,7 +73,11 @@ export default ({ value, onChange }) => {
                     </FormField>
                     <FormField label="max">
                       <Select
-                        options={['xsmall', 'small', 'medium', 'large', 'xlarge']}
+                        options={[
+                          'xsmall', 'small', 'medium', 'large', 'xlarge',
+                          '1/2', '1/3', '2/3', '1/4', '3/4',
+                          'full', 'flex', 'auto',
+                        ]}
                         value={c[1] || ''}
                         onChange={({ option }) => {
                           const nextValue = JSON.parse(JSON.stringify(value));

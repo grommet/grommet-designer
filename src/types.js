@@ -9,6 +9,7 @@ import Reference from './Reference';
 import ReferenceComponent from './custom/ReferenceComponent';
 import BoxAnimation from './custom/BoxAnimation';
 import BoxBackgroundImage from './custom/BoxBackgroundImage';
+import GridAreas from './custom/GridAreas';
 import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
 import DataTableColumns from './custom/DataTableColumns';
@@ -57,6 +58,7 @@ export const types = {
           basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
           fill: ['horizontal', 'vertical'],
           flex: ['grow', 'shrink', true, false],
+          gridArea: '',
           height: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
           margin: Edge,
           width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
@@ -91,6 +93,7 @@ export const types = {
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
       alignContent: ['stretch', 'start', 'center', 'end'],
+      areas: GridAreas,
       columns: GridColumns,
       fill: ['horizontal', 'vertical'],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],

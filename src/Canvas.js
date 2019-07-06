@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Box, Text } from 'grommet';
+import { Alert } from 'grommet-icons';
 import { types } from './types';
 import Icon from './Icon';
 import { getParent } from './design';
@@ -39,6 +40,13 @@ const replace = (text, data, contextPath) =>
   });
 
 class Canvas extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.error && prevState.error !== nextProps.design) {
+      return { error: undefined };
+    }
+    return null;
+  }
+
   state = {}
 
   componentDidMount() {
@@ -47,6 +55,11 @@ class Canvas extends Component {
 
   componentDidUpdate() {
     this.load();
+  }
+
+  componentDidCatch(error) {
+    const { design } = this.props;
+    this.setState({ error: design });
   }
 
   load() {
@@ -270,16 +283,17 @@ class Canvas extends Component {
 
   render() {
     const { design, selected } = this.props;
-    const rootComponent = design.screens[selected.screen].root;
-    try {
-      return this.renderComponent(rootComponent);
-    } catch (e) {
+    const { error } = this.state;
+    if (error) {
       return (
-        <Box align="center" justify="center" background="white">
-          <Text color="status-critical">{e.toString()}</Text>
+        <Box align="center" justify="center" background="white" gap="medium">
+          <Alert color="status-critical" size="large" />
+          <Text color="status-critical" size="large">something broke</Text>
         </Box>
       );
     }
+    const rootComponent = design.screens[selected.screen].root;
+    return this.renderComponent(rootComponent);
   }
 }
 
