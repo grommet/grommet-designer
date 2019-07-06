@@ -192,6 +192,7 @@ export default ({ design, onChange, onClose }) => (
                 </Field>
               </Box>
               <ActionButton
+                title="delete data source"
                 icon={<Trash />}
                 hoverIndicator
                 onClick={() => {
@@ -207,6 +208,7 @@ export default ({ design, onChange, onClose }) => (
           ))}
           <Box alignSelf="start">
             <ActionButton
+              title="add a data source"
               icon={<Add />}
               hoverIndicator
               onClick={() => {

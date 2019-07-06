@@ -339,6 +339,7 @@ class Tree extends Component {
               border="bottom"
             >
               <ActionButton
+                title="choose another design"
                 icon={<Apps />}
                 onClick={() => this.setState({ choosing: true })}
               />
@@ -350,6 +351,7 @@ class Tree extends Component {
                 />
               )}
               <ActionButton
+                title="share design"
                 icon={<Share />}
                 onClick={() => this.setState({ sharing: true })}
               />

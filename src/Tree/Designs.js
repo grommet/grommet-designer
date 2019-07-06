@@ -84,12 +84,14 @@ const Designs = ({ design, onClose, onChange }) => {
             <Box direction="row" gap="small">
               {confirmDelete === name && (
                 <ActionButton
+                  title="confirm delete"
                   icon={<Trash color="status-critical" />}
                   hoverIndicator
                   onClick={() => onDelete(name)}
                 />
               )}
               <ActionButton
+                title="delete design"
                 icon={<Trash color="dark-3" />}
                 hoverIndicator
                 onClick={() => setConfirmDelete(name)}

@@ -154,6 +154,7 @@ const Property = React.forwardRef((props, ref) => {
                 {name}
               </Heading>
               <ActionButton
+                title="close"
                 icon={<Close />}
                 onClick={() => setExpand(false)}
               />

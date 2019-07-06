@@ -13,7 +13,12 @@ const Action = ({ children, label, onClose, ...rest }) => (
   >
     <Box flex background="dark-1" pad="small">
       <Box flex={false} direction="row" align="start" justify="between">
-        <ActionButton icon={<Close />} hoverIndicator onClick={onClose} />
+        <ActionButton
+          title='close'
+          icon={<Close />}
+          hoverIndicator
+          onClick={onClose}
+        />
         {label && (
           <Heading
             level={2}

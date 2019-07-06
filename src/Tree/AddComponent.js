@@ -69,7 +69,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
           align="center"
           pad="small"
         >
-          <ActionButton icon={<Close />} onClick={onClose} />
+          <ActionButton title="close" icon={<Close />} onClick={onClose} />
           <Heading
             level={2}
             size="small"
