@@ -308,8 +308,8 @@ class Tree extends Component {
             }
             round={{ size: 'xsmall', corner: 'bottom' }}
           >
-            {component.children.map((childId) =>
-              this.renderComponent(screen.id, childId))}
+            {component.children.map((childId, index) =>
+              this.renderComponent(screen.id, childId, index === 0))}
           </Box>
         )}
         {this.renderScreenDropArea(screenId, 'after')}
