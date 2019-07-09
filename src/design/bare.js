@@ -5,4 +5,5 @@ export const bare = {
   components: {
     2: { id: 2, type: 'Grommet', props: { style: { height: '100vh' } } },
   },
+  theme: 'grommet',
 };

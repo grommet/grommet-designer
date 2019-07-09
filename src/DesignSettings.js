@@ -31,17 +31,15 @@ export default ({ design, onChange, onClose }) => (
           id="theme"
           name="theme"
           plain
-          options={[...Object.keys(themes), 'custom', 'undefined']}
+          options={[...Object.keys(themes), 'custom']}
           value={(design.theme
             && ((typeof design.theme === 'object' && 'custom') || design.theme))
-            || ''
+            || 'grommet'
           }
           onChange={({ option }) => {
             const nextDesign = JSON.parse(JSON.stringify(design));
             if (option === 'custom') {
               nextDesign.theme = { global: { colors: {}, font: {} } };
-            } else if (option === 'undefined') {
-              delete nextDesign.theme;
             } else {
               nextDesign.theme = option;
             }
