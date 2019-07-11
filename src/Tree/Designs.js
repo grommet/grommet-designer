@@ -59,7 +59,7 @@ const Designs = ({ design, onClose, onChange }) => {
   }
 
   return (
-    <Action label="designs" onClose={onClose} full>
+    <Action label="designs" onClose={onClose} full="horizontal">
       <Grid fill="horizontal" columns="small" rows="small" gap="large">
         <Box fill round="medium" >
           <Button fill label="New" onClick={onReset} />

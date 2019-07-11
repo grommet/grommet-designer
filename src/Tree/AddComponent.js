@@ -56,12 +56,15 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
 
   return (
     <Layer
-      position="bottom-left"
+      position="top-left"
       margin="medium"
+      plain
+      full="vertical"
+      animate={false}
       onEsc={onClose}
       onClickOutside={onClose}
     >
-      <Box flex background="dark-1">
+      <Box flex background="white" round="small" overflow="hidden" elevation="medium">
         <Box
           flex={false}
           direction="row"

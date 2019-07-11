@@ -192,7 +192,7 @@ export default class Share extends Component {
   render() {
     const { design, onChange, onClose } = this.props;
     return (
-      <Action label="share" onClose={onClose} full>
+      <Action label="share" onClose={onClose} full="horizontal">
         <Grid
           fill="horizontal"
           columns={{ count: 'fit', size: "small" }}

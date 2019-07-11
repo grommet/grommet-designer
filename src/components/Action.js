@@ -5,13 +5,14 @@ import ActionButton from '../components/ActionButton';
 
 const Action = ({ children, label, onClose, ...rest }) => (
   <Layer
-    position="top-left"
+    position="top"
     margin="medium"
+    plain
     {...rest}
     onEsc={onClose}
     onClickOutside={onClose}
   >
-    <Box flex background="dark-1" pad="small">
+    <Box flex background="dark-1" pad="small" round="small" overflow="hidden" elevation="medium">
       <Box flex={false} direction="row" align="start" justify="between">
         <ActionButton
           title='close'
