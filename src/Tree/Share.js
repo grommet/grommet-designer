@@ -4,8 +4,7 @@ import {
   Text, TextArea, TextInput
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-// import LZString from 'lz-string';
-import { bucketPostUrl, bucketKey, generateJSX } from '../design';
+import { apiUrl, /* bucketPostUrl, bucketKey, */ generateJSX } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -20,12 +19,13 @@ const Publish = ({ design, onChange }) => {
   const [publication, setPublication] = React.useState();
   const [uploadUrl, setUploadUrl] = React.useState();
   const [message, setMessage] = React.useState();
+  const [error, setError] = React.useState();
   const inputRef = React.useRef();
 
   React.useEffect(() => {
-    const json = localStorage.getItem('identity');
-    if (json) {
-      const identity = JSON.parse(json);
+    const stored = localStorage.getItem('identity');
+    if (stored) {
+      const identity = JSON.parse(stored);
       setPublication({ ...identity, name: design.name });
     } else {
       setPublication({ name: design.name });
@@ -43,31 +43,34 @@ const Publish = ({ design, onChange }) => {
     date.setMilliseconds(pin);
     nextDesign.date = date.toISOString();
 
-    const fileName = encodeURIComponent(`${design.name}.${email.replace('@', '.')}`);
-    const body = JSON.stringify(design);
-    fetch(
-      `${bucketPostUrl}?uploadType=media&name=${fileName}&${bucketKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/javascript; charset=UTF-8',
-          'Content-Length': body.length,
-        },
-        body,
+    const body = JSON.stringify(nextDesign);
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Length': body.length,
       },
-    )
+      body,
+    })
     .then((response) => {
       if (response.ok) {
-        const nextUploadUrl = [
-          window.location.protocol,
-          window.location.host,
-          window.location.pathname,
-          `?n=${encodeURIComponent(fileName)}`,
-          window.location.hash,
-        ].join('');
-        setUploadUrl(nextUploadUrl);
+        setError(undefined);
+        return response.text()
+          .then(id => {
+            const nextUploadUrl = [
+              window.location.protocol,
+              window.location.host,
+              window.location.pathname,
+              `?id=${encodeURIComponent(id)}`,
+              window.location.hash,
+            ].join('');
+            setUploadUrl(nextUploadUrl);
+          });
       }
-    });
+      return response.text().then(setError);
+    })
+    .catch(e => setError(e.message));
+
     onChange({ design: nextDesign });
   }
 
@@ -97,6 +100,7 @@ const Publish = ({ design, onChange }) => {
           label="PIN"
           required
           validate={{ regexp: /\d{3}/, message: 'three digits' }}
+          error={error}
           component={MaskedInput}
           type="password"
           mask={[
@@ -107,7 +111,7 @@ const Publish = ({ design, onChange }) => {
             },
           ]}
         />
-        <Box align="center">
+        <Box align="center" margin="medium">
           <Button type="submit" label="Publish" />
         </Box>
       </Form>

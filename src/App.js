@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Grommet, Grid, Keyboard, ResponsiveContext, grommet } from 'grommet';
-import LZString from 'lz-string';
 import Canvas from './Canvas';
 import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
-  bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
+  apiUrl, bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
   upgradeDesign, bare, loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';
@@ -51,7 +50,27 @@ class App extends Component {
   componentDidMount() {
     const { location: { hash } } = window;
     const params = getParams();
-    if (params.n) {
+    if (params.id) {
+      fetch(`${apiUrl}/${params.id}`)
+      .then(response => response.json())
+      .then((design) => {
+        upgradeDesign(design);
+        const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
+        const component = design.screens[screen].root;
+        const selected = { screen, component };
+        const theme = normalizeTheme(design.theme);
+        document.title = design.name;
+        this.setState({
+          design,
+          selected,
+          theme,
+          preview: true,
+          changes: [{ design, selected }],
+          changeIndex: 0,
+        });
+      });
+    } else if (params.n) {
+      // older, direct access to storage method, deprecated
       fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
       .then(response => response.json())
       .then((design) => {
@@ -70,22 +89,23 @@ class App extends Component {
           changeIndex: 0,
         });
       });
-    } else if (params.d) { // older method of sharing, deprecated
-      const text = LZString.decompressFromEncodedURIComponent(params.d);
-      const design = JSON.parse(text);
-      upgradeDesign(design);
-      const screen = design.screenOrder[0];
-      const component = design.screens[screen].root;
-      const selected = { screen, component };
-      const theme = normalizeTheme(design.theme);
-      this.setState({
-        design,
-        selected,
-        theme,
-        preview: true,
-        changes: [{ design, selected }],
-        changeIndex: 0,
-      });
+    // } else if (params.d) {
+    //   // older method of sharing inline, deprecated
+    //   const text = LZString.decompressFromEncodedURIComponent(params.d);
+    //   const design = JSON.parse(text);
+    //   upgradeDesign(design);
+    //   const screen = design.screenOrder[0];
+    //   const component = design.screens[screen].root;
+    //   const selected = { screen, component };
+    //   const theme = normalizeTheme(design.theme);
+    //   this.setState({
+    //     design,
+    //     selected,
+    //     theme,
+    //     preview: true,
+    //     changes: [{ design, selected }],
+    //     changeIndex: 0,
+    //   });
     } else {
       let stored = localStorage.getItem('activeDesign');
       if (stored) {
