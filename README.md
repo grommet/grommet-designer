@@ -30,15 +30,16 @@ when selecting a Layer.
 ### Saving
 
 Your latest design edits are saved in your browser's local storage. So,
-you can refresh your window without fear of losing anything.
+you can refresh your window without fear of losing anything. But, if you
+clear your local storage, you'll lose whatever you've done.
 
-You can save separate designs locally via the Folder control in the lower left.
-Give them a name and click the Save control to keep it separate. This allows you
-to park that design and switch to another one or start a new one.
+If you change the name of a design, it will create a new design with that name.
+The control in the top left let's you browse your designs, create a new one,
+or import a design file you've exported.
 
 ### Sharing
 
-The Share control in the lower left provides three methods of sharing.
+The Share control near the upper left provides three methods of sharing.
 
 1. Publish your design. This will generate a unique URL you can send
 to someone. When they open that URL, they will see your work. They will not be
