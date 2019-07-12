@@ -139,6 +139,7 @@ const Property = React.forwardRef((props, ref) => {
           <Layer
             position="right"
             margin="medium"
+            animation="fadeIn"
             onEsc={() => setExpand(false)}
             onClickOutside={() => setExpand(false)}
           >

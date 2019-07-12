@@ -60,7 +60,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
       margin="medium"
       plain
       full="vertical"
-      animate={false}
+      animation="fadeIn"
       onEsc={onClose}
       onClickOutside={onClose}
     >

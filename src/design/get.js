@@ -84,7 +84,9 @@ export const childSelected = (design, selected) => {
 
 export const parentSelected = (design, selected) => {
   const parent = getParent(design, selected.component);
-  return { ...selected, component: parent.id };
+  if (parent) {
+    return { ...selected, component: parent.id };
+  }
 }
 
 export const nextSiblingSelected = (design, selected) => {
