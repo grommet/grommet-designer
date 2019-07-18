@@ -83,6 +83,10 @@ export default ({ component, design, selected, onChange, onDelete }) => {
           searchRef.current.focus();
         }
       }
+      if (event.key === 'd') {
+        event.preventDefault();
+        duplicate();
+      }
     } else if (document.activeElement === searchRef.current) {
       if (event.key === 'Enter' && search && defaultRef.current) {
         event.preventDefault(); // so we don't put the Enter in the input
@@ -302,7 +306,7 @@ export default ({ component, design, selected, onChange, onDelete }) => {
             <ActionButton
               title="duplicate"
               icon={<Duplicate />}
-              onClick={() => duplicate()}
+              onClick={duplicate}
             />
             <ActionButton
               title="documentation"

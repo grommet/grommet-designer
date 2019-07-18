@@ -13,6 +13,7 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 * **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
 * **c**: toggles collapsing the currently selected component
 * **p**: initiates searching of the currently selected component's properties
+* **d**: duplicate the current component, and all of its children
 * **a**: opens the add component dialog
 * **command-delete** or **windows-backspace**: deletes the currently selected component and all of its children
 * **z**: undo the most recent change
