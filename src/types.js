@@ -151,7 +151,7 @@ export const types = {
     text: 'Paragraph',
     properties: {
       color: colors,
-      margin: Edge,
+      margin: HeadingMargin,
       size: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       textAlign: ['start', 'center', 'end'],
     },
