@@ -13,7 +13,7 @@ const Action = ({ children, label, onClose, ...rest }) => (
     onClickOutside={onClose}
   >
     <Box flex background="dark-1" pad="small" round="small" overflow="hidden" elevation="medium">
-      <Box flex={false} direction="row" align="start" justify="between">
+      <Box flex={false} direction="row" align="center" justify="between">
         <ActionButton
           title='close'
           icon={<Close />}

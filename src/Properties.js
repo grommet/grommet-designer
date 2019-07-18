@@ -224,9 +224,8 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                       {Object.keys(properties)
                       .filter(propName => (!searchExp || searchExp.test(propName)))
                       .map((propName, index) => (
-                        <Fragment>
+                        <Fragment key={propName}>
                           <Property
-                            key={propName}
                             ref={(searchExp && !firstRef) ? defaultRef : undefined}
                             design={design}
                             selected={selected}
@@ -245,9 +244,8 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                   Object.keys(type.properties)
                   .filter(propName => (!searchExp || searchExp.test(propName)))
                   .map((propName, index) => (
-                    <Fragment>
+                    <Fragment key={propName}>
                       <Property
-                        key={propName}
                         ref={(searchExp && !firstRef) ? defaultRef : undefined}
                         design={design}
                         selected={selected}
