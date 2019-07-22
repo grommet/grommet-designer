@@ -9,6 +9,7 @@ import Reference from './Reference';
 import ReferenceComponent from './custom/ReferenceComponent';
 import BoxAnimation from './custom/BoxAnimation';
 import BoxBackgroundImage from './custom/BoxBackgroundImage';
+import BoxRound from './custom/BoxRound';
 import BoxGridArea from './custom/BoxGridArea';
 import GridAreas from './custom/GridAreas';
 import GridColumns from './custom/GridColumns';
@@ -82,7 +83,7 @@ export const types = {
             side: ['all', 'horizontal', 'vertical', 'top', 'left', 'bottom', 'right' ],
           },
           elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-          round: ['xsmall', 'small', 'medium', 'large', 'full'],
+          round: BoxRound,
         },
       },
     ],
@@ -151,7 +152,7 @@ export const types = {
     text: 'Paragraph',
     properties: {
       color: colors,
-      margin: HeadingMargin,
+      margin: Edge,
       size: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       textAlign: ['start', 'center', 'end'],
     },
