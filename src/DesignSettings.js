@@ -75,9 +75,9 @@ export default ({ design, onChange, onClose }) => (
                     fetch(`https://fonts.googleapis.com/css?family=${encodeURIComponent(match[1])}`)
                     .then(response => response.text())
                     .then(face => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      nextDesign.theme.global.font.face = face;
-                      onChange({ design: nextDesign });
+                      const nextDesign2 = JSON.parse(JSON.stringify(nextDesign));
+                      nextDesign2.theme.global.font.face = face;
+                      onChange({ design: nextDesign2 });
                     })
                   }
                 })
@@ -134,7 +134,7 @@ export default ({ design, onChange, onClose }) => (
             id="data"
             name="data"
             toggle
-            checked={design.data || ''}
+            checked={design.data || false}
             onChange={(event) => {
               const nextDesign = JSON.parse(JSON.stringify(design));
               nextDesign.data = event.target.checked ? { data: '' } : undefined;
