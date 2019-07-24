@@ -5,19 +5,10 @@ import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
   apiUrl, bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
-  upgradeDesign, bare, loading,
+  upgradeDesign, themeApiUrl, bare, loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
-
-const normalizeTheme = (theme) => {
-  if (typeof theme === 'string') {
-    return themes[theme];
-  } else if (typeof theme === 'object') {
-    return theme;
-  }
-  return grommet;
-};
 
 const getParams = () => {
   const { location } = window;
@@ -28,15 +19,6 @@ const getParams = () => {
   });
   return params;
 }
-
-// const setParams = (params) => {
-//   const { history, location: { pathname } } = window;
-//   const search = Object.keys(params)
-//     .map(p => `${p}=${encodeURIComponent(params[p])}`)
-//     .join('&');
-//   const url = `${pathname}?${search}`;
-//   history.pushState(null, '', url);
-// }
 
 class App extends Component {
   state = {
@@ -58,7 +40,7 @@ class App extends Component {
         const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
         const component = design.screens[screen].root;
         const selected = { screen, component };
-        const theme = normalizeTheme(design.theme);
+        const theme = this.normalizeTheme(design.theme);
         document.title = design.name;
         this.setState({
           design,
@@ -70,7 +52,7 @@ class App extends Component {
         });
       });
     } else if (params.n) {
-      // older, direct access to storage method, deprecated
+      // older, direct access to storage method, deprecated, remove August 2019
       fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
       .then(response => response.json())
       .then((design) => {
@@ -78,7 +60,7 @@ class App extends Component {
         const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
         const component = design.screens[screen].root;
         const selected = { screen, component };
-        const theme = normalizeTheme(design.theme);
+        const theme = this.normalizeTheme(design.theme);
         document.title = design.name;
         this.setState({
           design,
@@ -89,23 +71,6 @@ class App extends Component {
           changeIndex: 0,
         });
       });
-    // } else if (params.d) {
-    //   // older method of sharing inline, deprecated
-    //   const text = LZString.decompressFromEncodedURIComponent(params.d);
-    //   const design = JSON.parse(text);
-    //   upgradeDesign(design);
-    //   const screen = design.screenOrder[0];
-    //   const component = design.screens[screen].root;
-    //   const selected = { screen, component };
-    //   const theme = normalizeTheme(design.theme);
-    //   this.setState({
-    //     design,
-    //     selected,
-    //     theme,
-    //     preview: true,
-    //     changes: [{ design, selected }],
-    //     changeIndex: 0,
-    //   });
     } else {
       let stored = localStorage.getItem('activeDesign');
       if (stored) {
@@ -116,7 +81,7 @@ class App extends Component {
         upgradeDesign(design);
         stored = localStorage.getItem('selected');
         const selected = stored ? JSON.parse(stored) : getInitialSelected(design);
-        const theme = normalizeTheme(design.theme);
+        const theme = this.normalizeTheme(design.theme);
         this.setState({
           design,
           selected,
@@ -132,9 +97,9 @@ class App extends Component {
         });
       }
     }
-    if (params.theme) {
-      this.setState({ theme: themes[params.theme] });
-    }
+    // if (params.theme) {
+    //   this.setState({ theme: themes[params.theme] });
+    // }
     const stored = localStorage.getItem('designs');
     this.setState({ designs: stored ? JSON.parse(stored) : [] });
 
@@ -150,6 +115,27 @@ class App extends Component {
     });
   }
 
+  normalizeTheme = (theme) => {
+    if (typeof theme === 'string') {
+      if (theme.slice(0, 6) === 'https:') {
+        this.loadTheme(theme);
+        return undefined;
+      }
+      return themes[theme];
+    } else if (typeof theme === 'object') {
+      return theme;
+    }
+    return grommet;
+  };
+
+  loadTheme = (url) => {
+    // extract id from URL
+    const id = url.split('id=')[1];
+    fetch(`${themeApiUrl}/${id}`)
+      .then(response => response.json())
+      .then((theme) => this.setState({ theme }));
+  }
+
   onChange = (nextState) => {
     const {
       design: previousDesign, designs: previousDesigns, theme,
@@ -162,7 +148,7 @@ class App extends Component {
         this.debouncing = true;
       }
       const { design } = nextState;
-      const nextTheme = (design.theme && normalizeTheme(design.theme))
+      const nextTheme = (design.theme && this.normalizeTheme(design.theme))
         || theme || grommet;
       this.setState({ theme: nextTheme });
       // delay storing it locally so we don't bog down typing

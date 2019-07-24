@@ -31,15 +31,21 @@ export default ({ design, onChange, onClose }) => (
           id="theme"
           name="theme"
           plain
-          options={[...Object.keys(themes), 'custom']}
-          value={(design.theme
-            && ((typeof design.theme === 'object' && 'custom') || design.theme))
+          options={['published', ...Object.keys(themes), 'custom']}
+          value={
+            (design.theme && (
+              (typeof design.theme === 'object' && 'custom')
+              || (design.theme.slice(0, 6) === 'https:' && 'published')
+              || design.theme
+            ))
             || 'grommet'
           }
           onChange={({ option }) => {
             const nextDesign = JSON.parse(JSON.stringify(design));
             if (option === 'custom') {
               nextDesign.theme = { global: { colors: {}, font: {} } };
+            } else if (option === 'published') {
+              nextDesign.theme = 'https://';
             } else {
               nextDesign.theme = option;
             }
@@ -48,6 +54,24 @@ export default ({ design, onChange, onClose }) => (
           style={{ textAlign: 'end' }}
         />
       </Field>
+      {design.theme && typeof design.theme === 'string'
+        && design.theme.slice(0, 6) === 'https:' && (
+        <Field label="Theme url" htmlFor="themeUrl" align="start">
+          <TextInput
+            id="themeUrl"
+            name="themeUrl"
+            plain
+            value={design.theme || ''}
+            onChange={(event) => {
+              const themeUrl = event.target.value;
+              const nextDesign = JSON.parse(JSON.stringify(design));
+              nextDesign.theme = themeUrl;
+              onChange({ design: nextDesign });
+            }}
+            style={{ textAlign: 'end' }}
+          />
+        </Field>
+      )}
       {design.theme && typeof design.theme === 'object' && (
         <Box margin={{ left: 'medium' }} background="dark-2">
           <Field

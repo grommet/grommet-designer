@@ -75,10 +75,8 @@ design as either the `src` for an Image or the `background.image` for a Box.
 
 ### Theming
 
-You can perform basic theme customization, colors and fonts, in the
-design configuration (wrench). Any font family in quotes will be searched
-for in google's font site and the appropriate face definition will
-automatically be added to the theme.
+You can use either one of the official themes or a theme published via theme-designer.grommet.io. Just choose "published" as the theme and then
+provide the theme sharing URL.
 
 ### Data
 
