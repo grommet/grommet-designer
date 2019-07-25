@@ -21,6 +21,7 @@ import ImageSrc from './custom/ImageSrc';
 import MaskedInputMask from './custom/MaskedInputMask';
 import MenuItems from './custom/MenuItems';
 import SelectOptions from './custom/SelectOptions';
+import TextInputSuggestions from './custom/TextInputSuggestions';
 import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
 
@@ -320,6 +321,7 @@ export const types = {
       placeholder: '',
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
+      suggestions: TextInputSuggestions,
       type: ['text', 'password'],
       value: '',
     }
