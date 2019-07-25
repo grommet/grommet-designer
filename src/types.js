@@ -1,6 +1,6 @@
 import {
   Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, Form, FormField,
-  Grid, Grommet, Heading, Image, Layer, Markdown,
+  Grid, Grommet, Heading, Image, Layer, Markdown, MaskedInput,
   Menu, Meter, Paragraph,
   Select, Stack, Text, TextArea, TextInput, base, grommet,
 } from 'grommet';
@@ -18,6 +18,7 @@ import DataTableColumns from './custom/DataTableColumns';
 import DataTableData from './custom/DataTableData';
 import HeadingMargin from './custom/HeadingMargin';
 import ImageSrc from './custom/ImageSrc';
+import MaskedInputMask from './custom/MaskedInputMask';
 import MenuItems from './custom/MenuItems';
 import SelectOptions from './custom/SelectOptions';
 import DropAlign from './custom/DropAlign';
@@ -270,6 +271,16 @@ export const types = {
       help: 'help',
       label: 'label',
       name: 'string',
+    },
+  },
+  MaskedInput: {
+    component: MaskedInput,
+    name: 'MaskedInput',
+    properties: {
+      mask: MaskedInputMask,
+      plain: false,
+      size: ['small', 'medium', 'large', 'xlarge'],
+      value: '',
     },
   },
   Select: {
