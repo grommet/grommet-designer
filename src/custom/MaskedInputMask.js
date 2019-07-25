@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import { Box, Button, FormField, MaskedInput, Text, TextInput } from 'grommet';
+import {
+  Box, Button, FormField, MaskedInput, Text, TextArea, TextInput,
+} from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
 export default ({ value, onChange }) => {
@@ -59,6 +61,16 @@ export default ({ value, onChange }) => {
                       />
                     </Box>
                   </Box>
+                </FormField>
+                <FormField label="options" help="one per line">
+                  <TextArea
+                    value={element.options ? element.options.join('\n') : ''}
+                    onChange={(event) => {
+                      const nextValue = JSON.parse(JSON.stringify(value || [{}]));
+                      nextValue[index].options = event.target.value.split('\n');
+                      onChange(nextValue);
+                    }}
+                  />
                 </FormField>
                 <FormField label="placeholder">
                   <TextInput
