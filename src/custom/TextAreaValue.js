@@ -5,7 +5,7 @@ export default ({ value, onChange }) => {
   return (
     <Box>
       <TextArea
-        rows={4}
+        rows={20}
         cols={80}
         value={value}
         onChange={(event) => {
