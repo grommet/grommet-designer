@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box, CheckBox, Paragraph, Select, TextArea, TextInput,
+  Anchor, Box, CheckBox, Paragraph, Select, TextArea, TextInput,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 import Action from './components/Action';
@@ -26,7 +26,19 @@ export default ({ design, onChange, onClose }) => (
         />
       </Field>
 
-      <Field label="Theme" htmlFor="theme">
+      <Field
+        label="Theme"
+        htmlFor="theme"
+        help={(
+          <Anchor
+            href="https://theme-designer.grommet.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            theme designer
+          </Anchor>
+        )}
+      >
         <Select
           id="theme"
           name="theme"
