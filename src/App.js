@@ -30,9 +30,14 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const { location: { hash } } = window;
+    const { location: { pathname, hash } } = window;
     const params = getParams();
-    if (params.id) {
+    if (pathname === '/new') {
+      this.setState({
+        ...resetState(bare),
+        preview: false,
+      });
+    } else if (params.id) {
       fetch(`${apiUrl}/${params.id}`)
       .then(response => response.json())
       .then((design) => {
