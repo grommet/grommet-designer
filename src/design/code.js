@@ -18,7 +18,16 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
     const children = (component.children && component.children.map(cId =>
       componentToJSX(design, screen, cId, imports, iconImports, indent + '  ')).join("\n"))
       || (component.text && `${indent}  ${component.text}`);
-    result = `${indent}<${component.type}${Object.keys(component.props).map(name => {
+    result = `${indent}<${component.type}${Object.keys(component.props)
+      .filter((name) => {
+        const value = component.props[name];
+        return !(
+          (typeof value === 'object' && Object.keys(value).length === 0) ||
+          value === '' ||
+          value === undefined
+        );
+      })
+      .map(name => {
       const value = component.props[name];
       if (typeof value === 'string') {
         if (name === 'icon') {
