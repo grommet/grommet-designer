@@ -21,6 +21,7 @@ import ImageSrc from './custom/ImageSrc';
 import MaskedInputMask from './custom/MaskedInputMask';
 import MenuItems from './custom/MenuItems';
 import SelectOptions from './custom/SelectOptions';
+import TextAreaValue from './custom/TextAreaValue';
 import TextInputSuggestions from './custom/TextInputSuggestions';
 import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
@@ -310,8 +311,11 @@ export const types = {
     name: 'TextArea',
     properties: {
       fill: false,
+      placeholder: '',
       plain: false,
-      value: '',
+      resize: ['vertical', 'horizontal', true, false],
+      size: ['small', 'medium', 'large', 'xlarge'],
+      value: TextAreaValue,
     }
   },
   TextInput: {
