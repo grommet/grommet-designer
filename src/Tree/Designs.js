@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Button, Grid, Heading, Stack, Text, grommet } from 'grommet';
+import { Box, Button, Grid, Heading, Meter, Stack, Text, grommet } from 'grommet';
 import { Trash } from 'grommet-icons';
+import styled, { keyframes } from 'styled-components';
 import {
   apiUrl, bare, getInitialSelected, resetState, upgradeDesign,
 } from '../design';
@@ -18,6 +19,14 @@ const standardDesigns = [
   }
 ];
 
+const Spinner = styled(Meter)`
+  animation: ${keyframes`from {
+    transform: rotate(0deg);
+} to {
+    transform: rotate(360deg);
+}`} 3s infinite;
+`;
+
 const nameToBackground = (name) => {
   let num = 0;
   for (let i = 0; i < name.length; i++) {
@@ -27,20 +36,37 @@ const nameToBackground = (name) => {
 };
 
 const Design = ({ name, loading, onClick }) => (
-  <Box fill round="medium" overflow="hidden" animation={loading ? 'pulse' : undefined}>
-    <Button fill plain onClick={onClick}>
-      {({ hover }) => (
-        <Box
-          fill
-          pad="medium"
-          background={hover ? 'light-1' : nameToBackground(name)}
-          align="center"
-          justify="center"
-        >
-          <Text textAlign="center" weight="bold">{name}</Text>
-        </Box>
-      )}
-    </Button>
+  <Box fill round="medium" overflow="hidden">
+    {loading ? (
+      <Box
+        fill
+        align="center"
+        justify="center"
+        pad="medium"
+        background={{ color: nameToBackground(name), opacity: 'medium' }}
+      >
+        <Spinner
+          type="circle"
+          size="full"
+          thickness="xlarge"
+          values={[{ value: 50, color: nameToBackground(name) }]}
+        />
+      </Box>
+    ) : (
+      <Button fill plain onClick={onClick}>
+        {({ hover }) => (
+          <Box
+            fill
+            pad="medium"
+            background={hover ? 'light-1' : nameToBackground(name)}
+            align="center"
+            justify="center"
+          >
+            <Text textAlign="center" weight="bold">{name}</Text>
+          </Box>
+        )}
+      </Button>
+    )}
   </Box>
 );
 
