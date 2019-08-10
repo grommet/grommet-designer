@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import {
-  Box, CheckBox, Heading, Keyboard, Paragraph,
+  Box, Button, CheckBox, Heading, Keyboard, Paragraph,
   Select, TextArea, TextInput,
 } from 'grommet';
-import { CircleInformation, Duplicate, Trash } from 'grommet-icons';
+import { Duplicate, Trash } from 'grommet-icons';
 import { types } from './types';
 import Property from './Property';
 import {
@@ -12,7 +12,7 @@ import {
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
-export default ({ component, design, selected, onChange, onDelete }) => {
+export default ({ colorMode, component, design, selected, onChange, onDelete }) => {
   const [confirmDelete, setConfirmDelete] = React.useState()
   const [search, setSearch] = React.useState()
 
@@ -109,18 +109,65 @@ export default ({ component, design, selected, onChange, onDelete }) => {
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box background="dark-2" height="100vh" border="left">
+      <Box
+        background={colorMode === 'dark' ? 'dark-1' : 'white'}
+        height="100vh"
+        border="left"
+      >
 
-        <Box flex={false} border="bottom">
-          <Heading level={2} size="small" margin={{ horizontal: 'medium' }}>
-            {component.name || type.name}
-          </Heading>
+        <Box
+          flex={false}
+          direction="row"
+          align="center"
+          justify="between"
+          border="bottom"
+        >
+          <Box flex alignSelf="stretch">
+            <Button
+              title="documentation"
+              fill
+              hoverIndicator
+              target="_blank"
+              href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
+            >
+              <Box fill pad="small">
+                <Heading level={2} size="18px" margin="none" truncate>
+                  {type.name}
+                </Heading>
+              </Box>
+            </Button>
+          </Box>
+          {type.name !== 'Grommet' &&
+            <Box flex={false} direction="row" align="center">
+              <ActionButton
+                title="duplicate"
+                icon={<Duplicate />}
+                onClick={duplicate}
+              />
+              {confirmDelete && (
+                <ActionButton
+                  title="confirm delete"
+                  icon={<Trash color="status-critical" />}
+                  onClick={() => {
+                    setConfirmDelete(false);
+                    onDelete();
+                  }}
+                />
+              )}
+              <ActionButton
+                title="delete"
+                icon={<Trash />}
+                onClick={() => setConfirmDelete(!confirmDelete)}
+              />
+            </Box>
+          }
         </Box>
 
         {search !== undefined && (
-          <Box flex={false} pad="small" border="bottom">
+          <Box flex={false} border="bottom">
             <TextInput
               ref={searchRef}
+              placeholder="search properties ..."
               value={search}
               onChange={event => setSearch(event.target.value)}
             />
@@ -131,7 +178,11 @@ export default ({ component, design, selected, onChange, onDelete }) => {
           <Box flex="grow">
 
             <Box>
-              {type.help && <Paragraph>{type.help}</Paragraph>}
+              {type.help && (
+                <Box pad={{ horizontal: 'medium' }} border="bottom">
+                  <Paragraph>{type.help}</Paragraph>
+                </Box>
+              )}
               {type.name !== 'Reference'
                 && (!searchExp || searchExp.test('name'))
                 && (
@@ -161,9 +212,10 @@ export default ({ component, design, selected, onChange, onDelete }) => {
               {type.name === 'Button' && linkOptions.length > 1
                 && (!searchExp || searchExp.test('link to'))
                 && (
-                <Field label="link to">
+                <Field label="link to" htmlFor="linkTo">
                   <Select
                     ref={(searchExp && !firstRef) ? defaultRef : undefined}
+                    id="linkTo"
                     name="linkTo"
                     plain
                     options={linkOptions}
@@ -203,13 +255,15 @@ export default ({ component, design, selected, onChange, onDelete }) => {
 
             {type.properties && (
               <Box flex="grow">
-                <Heading
-                  level={3}
-                  size="small"
-                  margin={{ horizontal: 'medium', vertical: 'small' }}
-                >
-                  Properties
-                </Heading>
+                {!Array.isArray(type.properties) && (
+                  <Heading
+                    level={3}
+                    size="small"
+                    margin={{ horizontal: 'medium', vertical: 'medium' }}
+                  >
+                    Properties
+                  </Heading>
+                )}
                 {Array.isArray(type.properties) ? (
                   type.properties
                   .filter(({ properties }) =>
@@ -221,7 +275,7 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                       <Heading
                         level={4}
                         size="small"
-                        margin={{ horizontal: 'medium', vertical: 'small' }}
+                        margin={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}
                       >
                         {label}
                       </Heading>
@@ -231,6 +285,7 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                         <Fragment key={propName}>
                           <Property
                             ref={(searchExp && !firstRef) ? defaultRef : undefined}
+                            first={index === 0}
                             design={design}
                             selected={selected}
                             name={propName}
@@ -251,6 +306,7 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                     <Fragment key={propName}>
                       <Property
                         ref={(searchExp && !firstRef) ? defaultRef : undefined}
+                        first={index === 0}
                         design={design}
                         selected={selected}
                         name={propName}
@@ -266,7 +322,7 @@ export default ({ component, design, selected, onChange, onDelete }) => {
                 <Box flex />
 
                 {(!searchExp || searchExp.test('style')) && (
-                  <Field label="style">
+                  <Field label="style" first margin={{ top: 'large' }}>
                     <TextArea
                       ref={(searchExp && !firstRef) ? defaultRef : undefined}
                       name="style"
@@ -293,44 +349,6 @@ export default ({ component, design, selected, onChange, onDelete }) => {
             )}
           </Box>
         </Box>
-
-        {type.name !== 'Grommet' &&
-          <Box
-            flex={false}
-            direction="row"
-            align="center"
-            justify="between"
-            pad="small"
-            border="top"
-          >
-            <ActionButton
-              title="duplicate"
-              icon={<Duplicate />}
-              onClick={duplicate}
-            />
-            <ActionButton
-              title="documentation"
-              icon={<CircleInformation />}
-              target="_blank"
-              href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
-            />
-            {confirmDelete && (
-              <ActionButton
-                title="confirm delete"
-                icon={<Trash color="status-critical" />}
-                onClick={() => {
-                  setConfirmDelete(false);
-                  onDelete();
-                }}
-              />
-            )}
-            <ActionButton
-              title="delete"
-              icon={<Trash />}
-              onClick={() => setConfirmDelete(!confirmDelete)}
-            />
-          </Box>
-        }
       </Box>
     </Keyboard>
   )

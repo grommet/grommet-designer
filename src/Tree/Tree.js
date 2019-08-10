@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Box, Button, Heading, Keyboard, Stack, Text,
 } from 'grommet';
-import { Add, Apps, FormDown, FormUp, Redo, Share, Undo, View } from 'grommet-icons';
+import { Add, Apps, FormDown, FormNext, Redo, Share, Undo } from 'grommet-icons';
 import { types } from '../types';
 import {
   childSelected, getParent, getScreen, nextSiblingSelected,
@@ -181,10 +181,11 @@ class Tree extends Component {
     const type = types[component.type];
     const reference = (component.type === 'Reference'
       && design.components[component.props.component]);
+    const collapserColor = { light: 'light-4', dark: 'dark-3' };
     return (
       <Box key={id}>
         {firstChild && this.renderDropArea(id, 'before')}
-        <Stack anchor="right">
+        <Stack anchor="left">
           <Button
             fill
             hoverIndicator
@@ -210,41 +211,29 @@ class Tree extends Component {
           >
             <Box
               ref={selected.component === id ? this.selectedRef : undefined}
-              pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
               background={
                 (dropTarget && dropTarget === id && dropWhere === 'in')
                 ? 'accent-2'
-                : (selected.component === id ? 'dark-3' : undefined)
+                : (selected.component === id ? 'accent-1' : undefined)
               }
-              round={{
-                size: 'xsmall',
-                corner: (component.children ? 'top' : undefined),
-              }}
             >
-              <Text truncate weight={type.container ? 'bold' : undefined}>
+              <Text size="medium" truncate>
                 {(reference && treeName(reference)) || treeName(component)}
               </Text>
             </Box>
           </Button>
-          {selected.component === id && component.children && (
+          {component.children && (
             <Button
-              icon={component.collapsed ? <FormDown /> : <FormUp />}
-              onClick={() => this.toggleCollapse(id)}
-            />
-          )}
-          {selected.component !== id && component.children && component.collapsed && (
-            <Button
-              icon={<FormDown color="dark-4" />}
+              icon={component.collapsed
+                ? <FormNext color={collapserColor} />
+                : <FormDown color={collapserColor} />}
               onClick={() => this.toggleCollapse(id)}
             />
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box
-            pad={{ left: 'small' }}
-            background={selected.component === id ? 'dark-2' : undefined}
-            round={{ size: 'xsmall', corner: 'bottom' }}
-          >
+          <Box pad={{ left: 'small' }}>
             {component.children.map((childId, index) =>
               this.renderComponent(screen, childId, index === 0))}
           </Box>
@@ -254,15 +243,20 @@ class Tree extends Component {
     )
   }
 
-  renderScreen = (screenId, firstScreen) => {
+  renderScreen = (screenId, firstScreen, onlyScreen) => {
     const { design, selected } = this.props;
     const screen = design.screens[screenId];
     const id = screen.root;
     const component = design.components[id];
+    const collapserColor = { light: 'light-4', dark: 'dark-3' };
     return (
-      <Box key={screen.id} flex={false} pad={{ horizontal: 'small' }}>
+      <Box
+        key={screen.id}
+        flex={false}
+        border={firstScreen ? undefined : 'top'}
+      >
         {firstScreen && this.renderScreenDropArea(screenId, 'before')}
-        <Stack anchor="right">
+        <Stack anchor="left">
           <Button
             fill
             hoverIndicator
@@ -281,39 +275,25 @@ class Tree extends Component {
               align="center"
               justify="between"
               gap="medium"
-              pad={{ vertical: 'xsmall', horizontal: 'small' }}
-              background={
-                selected.screen === screenId && selected.component === id
-                ? 'dark-3' : undefined
-              }
-              round={{ size: 'xsmall', corner: 'top' }}
+              pad={{ vertical: 'small', left: 'large', right: 'small' }}
+              background={selected.component === id ? 'accent-1' : undefined}
             >
-              <Heading level={3} size="small" margin="none">
-                {screen.name || `Screen ${screen.id}`}
+              <Heading level={3} size="xsmall" margin="none">
+                {screen.name || (onlyScreen ? 'Screen' : `Screen ${screen.id}`)}
               </Heading>
-              {design.screenOrder.length > 1
-                && selected.screen === screenId && selected.component !== id
-                && <View color="dark-4" />}
             </Box>
           </Button>
-          {selected.screen === screenId
-            && selected.component === id
-            && component.children && (
+          {component.children && (
             <Button
-              icon={component.collapsed ? <FormDown /> : <FormUp />}
+              icon={component.collapsed
+                ? <FormNext color={collapserColor} />
+                : <FormDown color={collapserColor} />}
               onClick={() => this.toggleCollapse(id)}
             />
           )}
         </Stack>
         {!component.collapsed && component.children && (
-          <Box
-            flex={false}
-            background={
-              selected.screen === screenId && selected.component === id
-              ? 'dark-2' : undefined
-            }
-            round={{ size: 'xsmall', corner: 'bottom' }}
-          >
+          <Box flex={false}>
             {component.children.map((childId, index) =>
               this.renderComponent(screen.id, childId, index === 0))}
           </Box>
@@ -324,18 +304,21 @@ class Tree extends Component {
   }
 
   render() {
-    const { design, selected, onChange, onUndo, onRedo } = this.props;
+    const { colorMode, design, selected, onChange, onUndo, onRedo } = this.props;
     const { adding, choosing, editing, sharing } = this.state;
     return (
       <Keyboard target="document" onKeyDown={this.onKey}>
-        <Box background="dark-1" height="100vh" border="right">
+        <Box
+          background={colorMode === 'dark' ? 'dark-1' : 'white'}
+          height="100vh"
+          border="right"
+        >
           <Box flex={false} border="bottom">
             <Box
               flex={false}
               direction="row"
               align="start"
               justify="between"
-              pad="small"
               border="bottom"
             >
               <ActionButton
@@ -346,10 +329,24 @@ class Tree extends Component {
               {choosing && (
                 <Designs
                   design={design}
+                  colorMode={colorMode}
                   onChange={onChange}
                   onClose={() => this.setState({ choosing: undefined })}
                 />
               )}
+              <Box flex alignSelf="stretch">
+                <Button
+                  fill
+                  hoverIndicator
+                  onClick={() => this.setState({ editing: true })}
+                >
+                  <Box fill pad="small">
+                    <Heading size="18px" margin="none" truncate>
+                      {design.name}
+                    </Heading>
+                  </Box>
+                </Button>
+              </Box>
               <ActionButton
                 title="share design"
                 icon={<Share />}
@@ -363,14 +360,40 @@ class Tree extends Component {
                 />
               )}
             </Box>
-            <Button
-              hoverIndicator
-              onClick={() => this.setState({ editing: true })}
+            <Box 
+              flex={false}
+              direction="row"
+              justify="between"
+              align="center"
             >
-              <Box pad={{ horizontal: 'medium', vertical: 'small' }}>
-                <Heading size="22px" margin="none">{design.name}</Heading>
+              <Box direction="row">
+                <ActionButton
+                  title="undo last change"
+                  icon={<Undo />}
+                  disabled={!onUndo}
+                  onClick={onUndo || undefined}
+                />
+                <ActionButton
+                  title="redo last change"
+                  icon={<Redo />}
+                  disabled={!onRedo}
+                  onClick={onRedo || undefined}
+                />
               </Box>
-            </Button>
+              <ActionButton
+                title="add a component"
+                icon={<Add />}
+                onClick={() => this.setState({ adding: true })}
+              />
+            </Box>
+            {adding && (
+              <AddComponent
+                design={design}
+                selected={selected}
+                onChange={onChange}
+                onClose={() => this.setState({ adding: false })}
+              />
+            )}
             {editing && (
               <DesignSettings
                 design={design}
@@ -383,45 +406,10 @@ class Tree extends Component {
           <Box flex overflow="auto">
             <Box flex={false}>
               {design.screenOrder.map((sId, index) =>
-                  this.renderScreen(parseInt(sId, 10), index === 0))}
+                this.renderScreen(parseInt(sId, 10), index === 0,
+                  design.screenOrder.length === 1))}
             </Box>
           </Box>
-          <Box 
-            flex={false}
-            direction="row"
-            justify="between"
-            align="center"
-            pad="small"
-            border="top"
-          >
-            <Box direction="row">
-              <ActionButton
-                title="undo last change"
-                icon={<Undo />}
-                disabled={!onUndo}
-                onClick={onUndo || undefined}
-              />
-              <ActionButton
-                title="redo last change"
-                icon={<Redo />}
-                disabled={!onRedo}
-                onClick={onRedo || undefined}
-              />
-            </Box>
-            <ActionButton
-              title="add a component"
-              icon={<Add />}
-              onClick={() => this.setState({ adding: true })}
-            />
-          </Box>
-          {adding && (
-            <AddComponent
-              design={design}
-              selected={selected}
-              onChange={onChange}
-              onClose={() => this.setState({ adding: false })}
-            />
-          )}
         </Box>
       </Keyboard>
     );

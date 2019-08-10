@@ -25,6 +25,7 @@ class App extends Component {
     ...resetState(loading),
     preview: true,
     theme: grommet,
+    colorMode: 'dark',
     changes: [],
     designs: [],
   };
@@ -107,6 +108,8 @@ class App extends Component {
     // }
     const stored = localStorage.getItem('designs');
     this.setState({ designs: stored ? JSON.parse(stored) : [] });
+
+    this.setState({ colorMode: (localStorage.getItem('colorMode') || 'dark') });
 
     window.addEventListener('hashchange', () => {
       const { design } = this.state;
@@ -192,6 +195,10 @@ class App extends Component {
         window.location.hash = `#${nextState.selected.screen}`;
       }
     }
+
+    if (nextState.colorMode) {
+      localStorage.setItem('colorMode', nextState.colorMode);
+    }
   }
 
   // TODO: move out of App.js
@@ -251,13 +258,15 @@ class App extends Component {
   }
 
   render() {
-    const { design, preview, selected, theme, changes, changeIndex } = this.state;
+    const {
+      colorMode, design, preview, selected, theme, changes, changeIndex,
+    } = this.state;
     const rootComponent = design.screens[selected.screen
       || design.screenOrder[0]].root;
     const selectedComponent = design.components[selected.component]
       || rootComponent;
     return (
-      <Grommet full theme={theme}>
+      <Grommet full theme={grommet}>
         <ResponsiveContext.Consumer>
           {(responsive) => (
             <Keyboard target="document" onKeyDown={this.onKey}>
@@ -266,7 +275,7 @@ class App extends Component {
                 columns={
                   (responsive === 'small' || preview)
                   ? 'flex'
-                  : [['small', 'medium'], ['1/2', 'flex'], ['small', 'medium']]
+                  : [['small', '288px'], ['1/2', 'flex'], ['small', 'medium']]
                 }
               >
 
@@ -274,6 +283,7 @@ class App extends Component {
                   <Tree
                     design={design}
                     selected={selected}
+                    colorMode={colorMode}
                     onChange={this.onChange}
                     onRedo={changeIndex > 0 && this.onRedo}
                     onUndo={changeIndex < (changes.length - 1) && this.onUndo}
@@ -293,6 +303,7 @@ class App extends Component {
                     <ScreenDetails
                       design={design}
                       selected={selected}
+                      colorMode={colorMode}
                       onChange={this.onChange}
                     />
                   ) : (
@@ -300,6 +311,7 @@ class App extends Component {
                       design={design}
                       selected={selected}
                       component={selectedComponent}
+                      colorMode={colorMode}
                       onChange={this.onChange}
                       onDelete={this.onDelete}
                     />

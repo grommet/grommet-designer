@@ -8,7 +8,7 @@ import { apiUrl, /* bucketPostUrl, bucketKey, */ generateJSX } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
-  <Box align="center" gap="small">
+  <Box align="center" gap="small" margin={{ top: 'medium' }}>
     <Icon size="large" />
     <Heading level={3} margin="none">{label}</Heading>
     <Paragraph textAlign="center">{guidance}</Paragraph>
@@ -111,7 +111,7 @@ const Publish = ({ design, onChange }) => {
             },
           ]}
         />
-        <Box align="center" margin="medium">
+        <Box align="center" margin={{ top: 'medium' }}>
           <Button type="submit" label="Publish" />
         </Box>
       </Form>

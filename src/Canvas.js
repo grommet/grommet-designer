@@ -209,8 +209,10 @@ class Canvas extends Component {
 
     let children;
     if (component.children) {
-      children = component.children.map(childId =>
-        this.renderComponent(childId, dataContextPath));
+      if (component.children.length > 0) {
+        children = component.children.map(childId =>
+          this.renderComponent(childId, dataContextPath));
+      }
     } else if (component.text) {
       if (data) {
         // resolve any data references

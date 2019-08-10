@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Paragraph, Text } from 'grommet';
 
-export default ({ children, label, help, htmlFor, ...rest }) => (
+const Field = React.forwardRef(({ children, first, label, help, htmlFor, ...rest }, ref) => (
   <Box
+    ref={ref}
     direction="row"
     align="center"
     justify="between"
-    border="bottom"
+    border={first ? 'horizontal' : 'bottom'}
     pad={{ right: 'small' }}
     {...rest}
   >
@@ -20,4 +21,6 @@ export default ({ children, label, help, htmlFor, ...rest }) => (
     </Box>
     {children}
   </Box>
-);
+));
+
+export default Field;

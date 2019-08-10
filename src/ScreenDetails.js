@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import {
-  Box, FormField, Heading, Keyboard, TextInput,
-} from 'grommet';
+import { Box, Heading, Keyboard, TextInput } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen } from './design';
 import ActionButton from './components/ActionButton';
+import Field from './components/Field';
 
 export default class ScreenDetails extends Component {
 
@@ -52,57 +51,66 @@ export default class ScreenDetails extends Component {
   }
 
   render() {
-    const { design, selected } = this.props;
+    const { colorMode, design, selected } = this.props;
     const { confirmDelete } = this.state;
     const screen = design.screens[selected.screen];
     return (
       <Keyboard target="document" onKeyDown={this.onKeyDown}>
-        <Box background="dark-2" height="100vh" border="left">
-          <Box flex={false} border="bottom">
-            <Heading level={2} size="small" margin={{ horizontal: 'medium' }}>
-              {screen.name || `Screen ${screen.id}`}
-            </Heading>
-          </Box>
-          <Box flex overflow="auto">
-            <Box flex={false} pad={{ horizontal: 'small' }}>
-              <FormField label="name">
-                <TextInput
-                  value={screen.name || ''}
-                  onChange={event => this.setName(event.target.value)}
-                />
-              </FormField>
-            </Box>
-          </Box>
+        <Box
+          background={colorMode === 'dark' ? 'dark-1' : 'white'}
+          height="100vh"
+          border="left"
+        >
           <Box
             flex={false}
             direction="row"
             align="center"
             justify="between"
-            pad="small"
-            border="top"
+            border="bottom"
           >
-            <ActionButton
-              title="duplicate"
-              icon={<Duplicate />}
-              hoverIndicator
-              onClick={this.onDuplicate}
-            />
-            {confirmDelete && (
+            <Box flex pad="small">
+              <Heading level={2} size="18px" margin="none" truncate>
+                Screen
+              </Heading>
+            </Box>
+            <Box flex={false} direction="row" align="center">
               <ActionButton
-                title="confirm delete"
-                icon={<Trash color="status-critical" />}
+                title="duplicate"
+                icon={<Duplicate />}
                 hoverIndicator
-                onClick={this.onDelete}
+                onClick={this.onDuplicate}
               />
-            )}
-            {design.screenOrder.length > 1 && (
-              <ActionButton
-                title="delete"
-                icon={<Trash />}
-                hoverIndicator
-                onClick={() => this.setState({ confirmDelete: !confirmDelete })}
-              />
-            )}
+              {confirmDelete && (
+                <ActionButton
+                  title="confirm delete"
+                  icon={<Trash color="status-critical" />}
+                  hoverIndicator
+                  onClick={this.onDelete}
+                />
+              )}
+              {design.screenOrder.length > 1 && (
+                <ActionButton
+                  title="delete"
+                  icon={<Trash />}
+                  hoverIndicator
+                  onClick={() => this.setState({ confirmDelete: !confirmDelete })}
+                />
+              )}
+            </Box>
+          </Box>
+          <Box flex overflow="auto">
+            <Box flex={false}>
+              <Field label="name" htmlFor="name">
+                <TextInput
+                  id="name"
+                  name="name"
+                  plain
+                  value={screen.name || ''}
+                  onChange={event => this.setName(event.target.value)}
+                  style={{ textAlign: 'end' }}
+                />
+              </Field>
+            </Box>
           </Box>
         </Box>
       </Keyboard>

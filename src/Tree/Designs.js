@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, Button, Grid, Heading, Meter, Stack, Text, grommet } from 'grommet';
+import {
+  Box, Button, CheckBox, Grid, Heading, Meter, Stack, Text, grommet,
+} from 'grommet';
 import { Trash } from 'grommet-icons';
 import styled, { keyframes } from 'styled-components';
 import {
@@ -70,7 +72,7 @@ const Design = ({ name, loading, onClick }) => (
   </Box>
 );
 
-const Designs = ({ design, onClose, onChange }) => {
+const Designs = ({ colorMode, design, onClose, onChange }) => {
   const [designs, setDesigns] = React.useState([]);
   const [error, setError] = React.useState();
   const [confirmDelete, setConfirmDelete] = React.useState();
@@ -132,7 +134,7 @@ const Designs = ({ design, onClose, onChange }) => {
   }
 
   return (
-    <Action label="designs" onClose={onClose} full="horizontal">
+    <Action label="designs" colorMode={colorMode} onClose={onClose} full="horizontal">
       <Heading level={2}>My Designs</Heading>
       <Grid fill="horizontal" columns="small" rows="xsmall" gap="large">
         <Box fill round="medium" >
@@ -188,7 +190,7 @@ const Designs = ({ design, onClose, onChange }) => {
             />
             <Box
               fill
-              background="dark-1"
+              background={colorMode === 'dark' ? 'dark-1' : 'white'}
               align="center"
               justify="center"
             >
@@ -214,6 +216,17 @@ const Designs = ({ design, onClose, onChange }) => {
             />
           ))}
         </Grid>
+      </Box>
+      <Box alignSelf="stretch" direction="row" justify="end" margin={{ top: 'medium' }}>
+        <CheckBox
+          label="dark"
+          toggle
+          checked={colorMode === 'dark'}
+          onChange={() => {
+            onChange({ colorMode: colorMode === 'dark' ? 'light' : 'dark' })
+            onClose();
+          }}
+        />
       </Box>
     </Action>
   );

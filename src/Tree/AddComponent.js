@@ -58,19 +58,17 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
     <Layer
       position="top-left"
       margin="medium"
-      plain
       full="vertical"
       animation="fadeIn"
       onEsc={onClose}
       onClickOutside={onClose}
     >
-      <Box flex background="white" round="small" overflow="hidden" elevation="medium">
+      <Box flex elevation="medium">
         <Box
           flex={false}
           direction="row"
           justify="between"
           align="center"
-          pad="small"
         >
           <ActionButton title="close" icon={<Close />} onClick={onClose} />
           <Heading
@@ -81,7 +79,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
             add
           </Heading>
         </Box>
-        <Box flex={false} pad={{ horizontal: 'medium' }}>
+        <Box flex={false} pad="small">
           <Keyboard
             onEnter={() => {
               if (searchTypes) {
@@ -105,10 +103,10 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
             />
           </Keyboard>
         </Box>
-        <Box flex pad="medium" overflow="auto">
-          <Box flex={false} gap="medium">
+        <Box flex overflow="auto">
+          <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
             {!searchTypes && structure.map(({ name, Icon, types: sectionTypes }) => (
-              <Box key={name} flex={false} border="top">
+              <Box key={name} flex={false}>
                 <Box
                   direction="row"
                   gap="medium"

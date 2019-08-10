@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Box, Button, CheckBox, Heading, Layer, Select, Text, TextInput,
 } from 'grommet';
-import { Close, FormDown, FormNext, FormUp } from 'grommet-icons';
+import { Close, FormDown, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
@@ -26,19 +26,29 @@ const OptionLabel = ({ active, hasColor, name, value }) => {
   );
 }
 
+const jsonValue = (value) => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  return JSON.stringify(value);
+}
+
 const Property = React.forwardRef((props, ref) => {
-  const { name, property, value, onChange } = props;
+  const { first, name, property, value, onChange } = props;
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
+  const [dropTarget, setDropTarget] = React.useState();
+  const fieldRef = React.useCallback(node => setDropTarget(node), []);
 
   const searchExp = searchText && new RegExp(searchText, 'i');
   if (Array.isArray(property)) {
     const hasColor = property.includes('light-1');
     return (
-      <Field key={name} label={name} htmlFor={name}>
+      <Field key={name} ref={fieldRef} first={first} label={name} htmlFor={name}>
         <Select
           ref={ref}
           plain
+          dropTarget={dropTarget}
           id={name}
           name={name}
           options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
@@ -65,7 +75,7 @@ const Property = React.forwardRef((props, ref) => {
     );
   } else if (typeof property === 'string') {
     return (
-      <Field key={name} label={name} htmlFor={name}>
+      <Field key={name} first={first} label={name} htmlFor={name}>
         <TextInput
           ref={ref}
           id={name}
@@ -79,7 +89,7 @@ const Property = React.forwardRef((props, ref) => {
     );
   } else if (typeof property === 'boolean') {
     return (
-      <Field key={name} label={name} htmlFor={name}>
+      <Field key={name} first={first} label={name} htmlFor={name}>
         <Box pad="small">
           <CheckBox
             ref={ref}
@@ -96,16 +106,19 @@ const Property = React.forwardRef((props, ref) => {
     return (
       <Box key={name}>
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field label={name}>
-            <Box pad="small">
+          <Field label={name} first={first}>
+            <Box direction="row" align="center" gap="small">
+              {value && <Text weight="bold" truncate>{jsonValue(value)}</Text>}
+              <Box flex={false} pad="small">
               {expand
-                ? <FormUp color={value ? 'accent-2' : undefined} />
-                : <FormDown color={value ? 'accent-2' : undefined} />}
+                ? <FormUp color="control" />
+                : <FormDown color="control" />}
+              </Box>
             </Box>
           </Field>
         </Button>
         {expand && (
-          <Box margin={{ left: 'small' }} background="dark-1">
+          <Box pad={{ left: 'medium' }} background="dark-1" border="bottom">
             {Object.keys(property).map((key) => (
               <Property
                 key={key}
@@ -127,11 +140,14 @@ const Property = React.forwardRef((props, ref) => {
   } else if (typeof property === 'function') {
     const CustomProperty = property;
     return (
-      <Box key={name} border="bottom">
+      <Box key={name}>
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field label={name}>
-            <Box pad="small">
-              <FormNext color={value ? 'accent-2' : undefined} />
+          <Field label={name} first={first}>
+            <Box direction="row" align="center" gap="small">
+              {value && <Text weight="bold" truncate>{jsonValue(value)}</Text>}
+              <Box flex={false} pad="small">
+                <FormDown color="control" />
+              </Box>
             </Box>
           </Field>
         </Button>
