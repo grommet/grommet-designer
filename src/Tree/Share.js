@@ -190,12 +190,13 @@ const Developer = ({ design }) => {
 
 export default class Share extends Component {
   render() {
-    const { design, onChange, onClose } = this.props;
+    const { colorMode, design, onChange, onClose } = this.props;
     return (
       <Action
         label="share"
         full="horizontal"
         animation="fadeIn"
+        colorMode={colorMode}
         onClose={onClose}
       >
         <Grid

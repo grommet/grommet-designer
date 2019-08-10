@@ -355,6 +355,7 @@ class Tree extends Component {
               {sharing && (
                 <Sharing
                   design={design}
+                  colorMode={colorMode}
                   onChange={onChange}
                   onClose={() => this.setState({ sharing: undefined })}
                 />
