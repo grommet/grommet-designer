@@ -4,8 +4,8 @@ import Canvas from './Canvas';
 import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
-  apiUrl, bucketUrl, bucketKey, getInitialSelected, getParent, resetState,
-  upgradeDesign, themeApiUrl, bare, loading,
+  apiUrl, bucketUrl, bucketKey, getInitialSelected, getScreenByPath, getParent,
+  resetState, upgradeDesign, themeApiUrl, bare, loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
@@ -33,7 +33,7 @@ class App extends Component {
   componentDidMount() {
     const { location: { pathname, hash } } = window;
     const params = getParams();
-    if (pathname === '/new') {
+    if (pathname === '/_new') {
       this.setState({
         ...resetState(bare),
         preview: false,
@@ -43,27 +43,8 @@ class App extends Component {
       .then(response => response.json())
       .then((design) => {
         upgradeDesign(design);
-        const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
-        const component = design.screens[screen].root;
-        const selected = { screen, component };
-        const theme = this.normalizeTheme(design.theme);
-        document.title = design.name;
-        this.setState({
-          design,
-          selected,
-          theme,
-          preview: true,
-          changes: [{ design, selected }],
-          changeIndex: 0,
-        });
-      });
-    } else if (params.n) {
-      // older, direct access to storage method, deprecated, remove August 2019
-      fetch(`${bucketUrl}/${params.n}?alt=media&${bucketKey}`)
-      .then(response => response.json())
-      .then((design) => {
-        upgradeDesign(design);
-        const screen = hash ? parseInt(hash.slice(1), 10) : design.screenOrder[0];
+        const screen = hash ? parseInt(hash.slice(1), 10)
+          : (getScreenByPath(design, pathname) || design.screenOrder[0]);
         const component = design.screens[screen].root;
         const selected = { screen, component };
         const theme = this.normalizeTheme(design.theme);
@@ -111,16 +92,33 @@ class App extends Component {
 
     this.setState({ colorMode: (localStorage.getItem('colorMode') || 'dark') });
 
-    window.addEventListener('hashchange', () => {
-      const { design } = this.state;
-      const { location: { hash } } = window;
-      if (hash) {
-        const screen = parseInt(hash.slice(1), 10);
-        this.setState({
-          selected: { screen, component: design.screens[screen].root }
-        });
-      }
-    });
+    window.addEventListener('popstate', this.onPopState);
+    window.addEventListener('hashchange', this.onHashChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+    window.removeEventListener('hashchange', this.onHashChange);
+  }
+
+  onPopState = () => {
+    const { design } = this.state;
+    const { location: { pathname } } = document;
+    const screen = getScreenByPath(design, pathname);
+    if (screen) {
+      this.setState({ screen, component: design.screens[screen].root });
+    }
+  };
+
+  onHashChange = () => {
+    const { design } = this.state;
+    const { location: { hash } } = document;
+    if (hash) {
+      const screen = parseInt(hash.slice(1), 10);
+      this.setState({
+        selected: { screen, component: design.screens[screen].root }
+      });
+    }
   }
 
   normalizeTheme = (theme) => {
@@ -192,7 +190,13 @@ class App extends Component {
       if (nextState.selected.screen !== selected.screen) {
         // track selected screen in browser location, so browser
         // backward/forward controls work
-        window.location.hash = `#${nextState.selected.screen}`;
+        const screen = (nextState.design || previousDesign)
+          .screens[nextState.selected.screen];
+        if (screen.path) {
+          window.history.pushState(undefined, undefined, screen.path);
+        } else {
+          window.location.hash = `#${nextState.selected.screen}`;
+        }
       }
     }
 

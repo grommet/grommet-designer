@@ -38,6 +38,7 @@ export const addScreen = (nextDesign, copyScreen) => {
     available = suffixAvailable(suffix)
   }
   nextDesign.screens[screenId].name = `Screen ${suffix}`;
+  nextDesign.screens[screenId].path = `/screen-${suffix}`;
   if (copyScreen) {
     const index = nextDesign.screenOrder.indexOf(copyScreen.id);
     nextDesign.screenOrder.splice(index + 1, 0, screenId);

@@ -28,7 +28,7 @@ export const getParent = (design, id) => {
   return result;
 };
 
-export const getScreen = (design, id) => {
+export const getScreenForComponent = (design, id) => {
   let result;
   Object.keys(design.screens).some((sId) => {
     const screen = design.screens[sId];
@@ -38,8 +38,21 @@ export const getScreen = (design, id) => {
     }
     return false;
   });
-  return result || getScreen(design, getParent(design, id).id);
+  return result || getScreenForComponent(design, getParent(design, id).id);
 };
+
+export const getScreenByPath = (design, path) => {
+  let result;
+  Object.keys(design.screens).some((sId) => {
+    const screen = design.screens[sId];
+    if (screen.path === path) {
+      result = screen.id;
+      return true;
+    }
+    return false;
+  })
+  return result;
+}
 
 export const isDescendent = (design, id, checkId) => {
   const parent = getParent(design, id);

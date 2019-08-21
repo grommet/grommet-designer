@@ -5,7 +5,7 @@ import {
 import { Add, Apps, FormDown, FormNext, Redo, Share, Undo } from 'grommet-icons';
 import { types } from '../types';
 import {
-  childSelected, getParent, getScreen, nextSiblingSelected,
+  childSelected, getParent, getScreenForComponent, nextSiblingSelected,
   parentSelected, previousSiblingSelected, isDescendent,
 } from '../design';
 import ActionButton from '../components/ActionButton';
@@ -62,7 +62,7 @@ class Tree extends Component {
       nextParent.children.splice(where === 'before' ? nextIndex : nextIndex + 1,
         0, dragging);
     }
-    const nextScreen = getScreen(nextDesign, dragging);
+    const nextScreen = getScreenForComponent(nextDesign, dragging);
     this.setState({ dragging: undefined, dropTarget: undefined });
     onChange({
       design: nextDesign,
