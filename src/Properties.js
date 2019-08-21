@@ -12,7 +12,9 @@ import {
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
-export default ({ colorMode, component, design, selected, onChange, onDelete }) => {
+export default ({
+  colorMode, component, design, selected, theme, onChange, onDelete,
+}) => {
   const [confirmDelete, setConfirmDelete] = React.useState()
   const [search, setSearch] = React.useState()
 
@@ -287,6 +289,7 @@ export default ({ colorMode, component, design, selected, onChange, onDelete }) 
                             ref={(searchExp && !firstRef) ? defaultRef : undefined}
                             first={index === 0}
                             design={design}
+                            theme={theme}
                             selected={selected}
                             name={propName}
                             property={properties[propName]}
@@ -308,6 +311,7 @@ export default ({ colorMode, component, design, selected, onChange, onDelete }) 
                         ref={(searchExp && !firstRef) ? defaultRef : undefined}
                         first={index === 0}
                         design={design}
+                        theme={theme}
                         selected={selected}
                         name={propName}
                         property={type.properties[propName]}

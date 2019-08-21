@@ -182,7 +182,7 @@ class App extends Component {
         nextChanges.unshift({ design, selected });
         this.setState({ changes: nextChanges, changeIndex: 0 });
         this.debouncing = false;
-      }, 500);
+      }, 1000);
     }
 
     if (nextState.selected) {
@@ -313,6 +313,7 @@ class App extends Component {
                   ) : (
                     <Properties
                       design={design}
+                      theme={theme}
                       selected={selected}
                       component={selectedComponent}
                       colorMode={colorMode}

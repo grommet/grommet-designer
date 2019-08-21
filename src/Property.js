@@ -1,21 +1,25 @@
 import React from 'react';
 import {
-  Box, Button, CheckBox, Heading, Layer, Select, Text, TextInput,
+  Box, Button, CheckBox, Heading, Layer, Select, Text, TextInput, ThemeContext,
 } from 'grommet';
 import { Close, FormDown, FormUp } from 'grommet-icons';
 import { SelectLabel as IconLabel } from './Icon';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
-const ColorLabel = ({ color }) => (
+const ColorLabel = ({ color, theme }) => (
   <Box pad="small" direction="row" gap="small" align="center">
-    <Box pad="small" background={color} />
+    <ThemeContext.Extend value={theme}>
+      <Box pad="small" background={color} />
+    </ThemeContext.Extend>
     <Text weight="bold">{color}</Text>
   </Box>
 )
 
-const OptionLabel = ({ active, hasColor, name, value }) => {
-  if (hasColor && typeof value === 'string') return <ColorLabel color={value} />;
+const OptionLabel = ({ active, hasColor, theme, name, value }) => {
+  if (hasColor && typeof value === 'string') {
+    return <ColorLabel color={value} theme={theme} />;
+  }
   if (name === 'icon' && typeof value === 'string') return <IconLabel icon={value} />;
   return (
     <Box pad="small">
@@ -34,7 +38,7 @@ const jsonValue = (value) => {
 }
 
 const Property = React.forwardRef((props, ref) => {
-  const { first, name, property, value, onChange } = props;
+  const { first, name, property, theme, value, onChange } = props;
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
   const [dropTarget, setDropTarget] = React.useState();
@@ -54,8 +58,15 @@ const Property = React.forwardRef((props, ref) => {
           options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
             : [...property, 'undefined']}
           value={value || ''}
-          valueLabel={
-            <OptionLabel active name={name} hasColor={hasColor} value={value} />}
+          valueLabel={(
+            <OptionLabel
+              active
+              name={name}
+              hasColor={hasColor}
+              theme={theme}
+              value={value}
+            />
+          )}
           onChange={({ option }) => {
             setSearchText(undefined);
             onChange(option === 'undefined' ? undefined : option);
@@ -67,6 +78,7 @@ const Property = React.forwardRef((props, ref) => {
             <OptionLabel
               name={name}
               hasColor={hasColor}
+              theme={theme}
               value={option}
               active={option === value}
             />}
@@ -124,6 +136,7 @@ const Property = React.forwardRef((props, ref) => {
                 key={key}
                 name={key}
                 property={property[key]}
+                theme={theme}
                 value={(value || {})[key]}
                 onChange={subValue => {
                   let nextValue = { ...(value || {}) };
