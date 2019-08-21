@@ -163,12 +163,13 @@ class Canvas extends Component {
     const reference = (designComponent && designComponent.type === 'Reference'
       && design.components[designComponent.props.component]);
     const component = reference || designComponent;
-    const type = types[component.type];
-    const contextPath = dataContextPath || selected.dataContextPath;
 
     if (!component || component.hide) {
       return null;
     }
+
+    const type = types[component.type];
+    const contextPath = dataContextPath || selected.dataContextPath;
 
     if (type.name === 'Repeater') {
       return this.renderRepeater(component, contextPath);
@@ -176,8 +177,17 @@ class Canvas extends Component {
 
     // set up any properties that need special handling
     const specialProps = {};
-    if (type.name === 'Button' && component.props.icon) {
-      specialProps.icon = <Icon icon={component.props.icon} />;
+    if (type.name === 'Button') {
+      if (component.props.icon) {
+        specialProps.icon = <Icon icon={component.props.icon} />;
+      }
+    } else if (type.name === 'DropButton') {
+      if (component.props.icon) {
+        specialProps.icon = <Icon icon={component.props.icon} />;
+      }
+      specialProps.dropContentId = undefined;
+      specialProps.dropContent =
+        this.renderComponent(component.props.dropContentId, dataContextPath);
     } else if (type.name === 'Layer') {
       specialProps.onClickOutside = () => this.setHide(id, true);
       specialProps.onEsc = () => this.setHide(id, true);
@@ -210,8 +220,13 @@ class Canvas extends Component {
     let children;
     if (component.children) {
       if (component.children.length > 0) {
-        children = component.children.map(childId =>
-          this.renderComponent(childId, dataContextPath));
+        children = component.children
+          // don't render dropContent child here
+          .filter(childId => (type.name !== 'DropButton'
+            || childId !== component.props.dropContentId))
+          .map(childId =>
+            this.renderComponent(childId, dataContextPath));
+        if (children.length === 0) children = undefined;
       }
     } else if (component.text) {
       if (data) {

@@ -118,7 +118,7 @@ const Property = React.forwardRef((props, ref) => {
           </Field>
         </Button>
         {expand && (
-          <Box pad={{ left: 'medium' }} background="dark-1" border="bottom">
+          <Box pad={{ left: 'medium' }} border="bottom">
             {Object.keys(property).map((key) => (
               <Property
                 key={key}

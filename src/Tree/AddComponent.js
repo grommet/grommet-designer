@@ -39,6 +39,25 @@ const onAdd = (typeName, design, selected, onChange, onClose) => {
     if (!parent.children) parent.children = [];
     parent.children.push(component.id);
     nextSelected.component = component.id;
+
+    // Special case DropButton dropContent as a child in the Tree
+    // but not in the Canvas. We handle this by putting the id of the
+    // dropContent component in the DropButton's dropContentId property value.
+    // Canvas knows what to do.
+    if (typeName === 'DropButton') {
+      const boxType = types.Box;
+      const dropContentId = nextDesign.nextId;
+      nextDesign.nextId += 1;
+      const dropContent = {
+        type: boxType.name,
+        id: dropContentId,
+        props: { ...boxType.defaultProps, name: 'dropContent' },
+      };
+      nextDesign.components[dropContent.id] = dropContent;
+      component.children = [dropContentId];
+      component.props.dropContentId = dropContentId;
+    }
+
   }
   onChange({ design: nextDesign, selected: nextSelected });
   onClose();

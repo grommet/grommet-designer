@@ -6,6 +6,7 @@ export const getInitialSelected = (design) => ({
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
+  if (!component) return '';
   if (component.type === 'Grommet') {
     const screen = Object.keys(design.screens)
       .map(sId => design.screens[sId])

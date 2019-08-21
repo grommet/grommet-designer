@@ -4,7 +4,7 @@ import Canvas from './Canvas';
 import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
-  apiUrl, bucketUrl, bucketKey, getInitialSelected, getScreenByPath, getParent,
+  apiUrl, getInitialSelected, getScreenByPath, getParent,
   resetState, upgradeDesign, themeApiUrl, bare, loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';

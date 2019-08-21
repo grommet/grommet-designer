@@ -15,9 +15,13 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
       : '';
   } else {
     imports[component.type] = true;
-    const children = (component.children && component.children.map(cId =>
+    let children = (component.children && component.children
+      .filter(cId => (component.type !== 'DropButton'
+        || cId !== component.props.dropContentId))
+      .map(cId =>
       componentToJSX(design, screen, cId, imports, iconImports, indent + '  ')).join("\n"))
       || (component.text && `${indent}  ${component.text}`);
+    if (children && children.length === 0) children = undefined;
     result = `${indent}<${component.type}${Object.keys(component.props)
       .filter((name) => {
         const value = component.props[name];
@@ -28,23 +32,29 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
         );
       })
       .map(name => {
-      const value = component.props[name];
-      if (typeof value === 'string') {
-        if (name === 'icon') {
-          iconImports[value] = true;
-          return ` ${name}={<${value} />}`;
+        const value = component.props[name];
+        if (component.type === 'DropButton' && name === 'dropContentId') {
+          return `  dropContent={(\n${
+            componentToJSX(design, screen, value, imports, iconImports, indent + '  ')
+          }\n${indent})}\n${indent}`;
         }
-        return ` ${name}="${value}"`;
-      }
-      return ` ${name}={${JSON.stringify(value)}}`;
-    }).join('')}${component.linkTo
-      ? (` onClick={() => ${component.linkTo.component
-        ? `setLayer(layer ? undefined : ${component.linkTo.component})`
-        : `setScreen(${component.linkTo.screen})`}}`)
-      : ''}${component.type === 'Grommet' && (screen.theme || design.theme)
-      ? ` theme={${screen.theme || design.theme}}`
-      : '' }${children ? '' :  ' /'}>${children ?
-      `\n${children}\n${indent}</${component.type}>` : ''}`;
+        if (typeof value === 'string') {
+          if (name === 'icon') {
+            iconImports[value] = true;
+            return ` ${name}={<${value} />}`;
+          }
+          return ` ${name}="${value}"`;
+        }
+        return ` ${name}={${JSON.stringify(value)}}`;
+      })
+      .join('')}${component.linkTo
+        ? (` onClick={() => ${component.linkTo.component
+          ? `setLayer(layer ? undefined : ${component.linkTo.component})`
+          : `setScreen(${component.linkTo.screen})`}}`)
+        : ''}${component.type === 'Grommet' && (screen.theme || design.theme)
+        ? ` theme={${screen.theme || design.theme}}`
+        : '' }${children ? '' :  ' /'}>${children ?
+        `\n${children}\n${indent}</${component.type}>` : ''}`;
   }
   if (component.type === 'Layer') {
     result = `${indent}{layer === ${component.id} && (
