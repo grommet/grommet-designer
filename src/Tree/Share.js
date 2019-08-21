@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import {
   Box, Button, Form, FormField, Grid, Heading, Markdown, MaskedInput, Paragraph,
   Text, TextArea, TextInput
@@ -188,27 +188,24 @@ const Developer = ({ design }) => {
   );
 };
 
-export default class Share extends Component {
-  render() {
-    const { colorMode, design, onChange, onClose } = this.props;
-    return (
-      <Action
-        label="share"
-        full="horizontal"
-        animation="fadeIn"
-        colorMode={colorMode}
-        onClose={onClose}
-      >
-        <Grid
-          fill="horizontal"
-          columns={{ count: 'fit', size: "small" }}
-          gap="large"
-        >
-          <Publish design={design} onChange={onChange} />
-          <SaveLocally design={design} onClose={onClose} />
-          <Developer design={design} />
-        </Grid>
-      </Action>
-    );
-  }
-}
+const Share = ({ colorMode, design, onChange, onClose }) => (
+  <Action
+    label="share"
+    full="horizontal"
+    animation="fadeIn"
+    colorMode={colorMode}
+    onClose={onClose}
+  >
+    <Grid
+      fill="horizontal"
+      columns={{ count: 'fit', size: "small" }}
+      gap="large"
+    >
+      <Publish design={design} onChange={onChange} />
+      <SaveLocally design={design} onClose={onClose} />
+      <Developer design={design} />
+    </Grid>
+  </Action>
+);
+
+export default Share;
