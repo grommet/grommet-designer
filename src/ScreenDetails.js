@@ -7,6 +7,7 @@ import Field from './components/Field';
 
 const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
   const [confirmDelete, setConfirmDelete] = React.useState();
+  let debounceTimer;
 
   const onDelete = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -39,22 +40,30 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
     }
   }
 
-  const PropertyField = ({name}) => (
-    <Field label={name} htmlFor={name}>
-      <TextInput
-        id={name}
-        name={name}
-        plain
-        value={screen[name] || ''}
-        onChange={(event) => {
-          const nextDesign = JSON.parse(JSON.stringify(design));
-          nextDesign.screens[selected.screen][name] = event.target.value;
-          onChange({ design: nextDesign });
-        }}
-        style={{ textAlign: 'end' }}
-      />
-    </Field>
-  )
+  const PropertyField = ({name}) => {
+    const [value, setValue] = React.useState(screen[name] || '');
+    return (
+      <Field label={name} htmlFor={name}>
+        <TextInput
+          id={name}
+          name={name}
+          plain
+          value={value}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            setValue(nextValue);
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              const nextDesign = JSON.parse(JSON.stringify(design));
+              nextDesign.screens[selected.screen][name] = nextValue;
+              onChange({ design: nextDesign });
+            }, 500);
+          }}
+          style={{ textAlign: 'end' }}
+        />
+      </Field>
+    )
+}
 
   const screen = design.screens[selected.screen];
   return (
