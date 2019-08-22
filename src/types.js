@@ -230,6 +230,9 @@ export const types = {
     component: DropButton,
     name: 'DropButton',
     container: true,
+    help: `The dropContent of DropButton can be seen by setting the 'open'
+    property to 'true', allowing you to populate the contents. You can then
+    restore 'open' to 'undefined', so the button is interactive again.`,
     defaultProps: {
       label: 'Drop Button',
     },
