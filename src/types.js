@@ -1,5 +1,5 @@
 import {
-  Anchor, Box, Button, Calendar, CheckBox, Clock, DataTable, DropButton,
+  Anchor, Box, Button, Calendar, Chart, CheckBox, Clock, DataTable, DropButton,
   Form, FormField,
   Grid, Grommet, Heading, Image, Layer, Markdown, MaskedInput,
   Menu, Meter, Paragraph,
@@ -12,6 +12,8 @@ import BoxAnimation from './custom/BoxAnimation';
 import BoxBackgroundImage from './custom/BoxBackgroundImage';
 import BoxRound from './custom/BoxRound';
 import BoxGridArea from './custom/BoxGridArea';
+import ChartBounds from './custom/ChartBounds';
+import ChartValues from './custom/ChartValues';
 import GridAreas from './custom/GridAreas';
 import GridColumns from './custom/GridColumns';
 import GridRows from './custom/GridRows';
@@ -373,6 +375,24 @@ export const types = {
       daysOfWeek: false,
       range: false,
       size: ['small', 'medium', 'large'],
+    },
+  },
+  Chart: {
+    component: Chart,
+    name: 'Chart',
+    defaultProps: {
+      type: 'bar',
+    },
+    properties: {
+      bounds: ChartBounds,
+      color: colors,
+      margin: Edge,
+      overflow: false,
+      round: false,
+      size: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      thickness: ['hair', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      type: ['bar', 'line', 'area'],
+      values: ChartValues,
     },
   },
   Clock: {
