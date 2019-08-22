@@ -1,14 +1,21 @@
 import { bare } from './bare';
 
 const copyComponent = (nextDesign, design, id) => {
+  const component = design.components[id];
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  const component = JSON.parse(JSON.stringify(design.components[id]));
-  component.id = nextId;
-  nextDesign.components[nextId] = component;
+  const nextComponent = JSON.parse(JSON.stringify(design.components[id]));
+  nextComponent.id = nextId;
+  nextDesign.components[nextId] = nextComponent;
   if (component.children) {
-    component.children = component.children.map(childId =>
-      copyComponent(nextDesign, design, childId));
+    nextComponent.children = component.children.map((childId) => {
+      const nextChildId = copyComponent(nextDesign, design, childId);
+      // special case DropButton dropContentId
+      if (childId === component.props.dropContentId) {
+        nextComponent.props.dropContentId = nextChildId;
+      }
+      return nextChildId;
+    });
   }
   return nextId;
 }
@@ -20,7 +27,7 @@ export const addScreen = (nextDesign, copyScreen) => {
   const screen = { id: screenId };
   nextDesign.screens[screenId] = screen;
   if (copyScreen) {
-    // duplicate components from the copyScreen
+    // copy components from the copyScreen
     screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
   } else {
     screen.root = copyComponent(nextDesign, bare, bare.screens[1].root);
@@ -50,14 +57,5 @@ export const addScreen = (nextDesign, copyScreen) => {
 };
 
 export const duplicateComponent = (nextDesign, id) => {
-  const component = nextDesign.components[id];
-  const newId = nextDesign.nextId;
-  nextDesign.nextId += 1;
-  const newComponent = { ...component, id: newId };
-  nextDesign.components[newId] = newComponent;
-  if (newComponent.children) {
-    newComponent.children = newComponent.children
-      .map(childId => duplicateComponent(nextDesign, childId));
-  }
-  return newId;
+  return copyComponent(nextDesign, nextDesign, id);
 }
