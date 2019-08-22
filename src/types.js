@@ -223,6 +223,7 @@ export const types = {
       plain: false,
       primary: false,
       reverse: false,
+      type: ['button', 'reset', 'submit'],
     },
   },
   DropButton: {
