@@ -21,6 +21,7 @@ import HeadingMargin from './custom/HeadingMargin';
 import ImageSrc from './custom/ImageSrc';
 import MaskedInputMask from './custom/MaskedInputMask';
 import MenuItems from './custom/MenuItems';
+import MeterValues from './custom/MeterValues';
 import SelectOptions from './custom/SelectOptions';
 import TextAreaValue from './custom/TextAreaValue';
 import TextInputSuggestions from './custom/TextInputSuggestions';
@@ -28,7 +29,7 @@ import DropAlign from './custom/DropAlign';
 import Edge from './custom/Edge';
 
 const internalColors = ['active', 'background', 'focus', 'icon', 'placeholder', 'selected', 'text' ]
-const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
+export const colors = Object.keys({ ...base.global.colors, ...grommet.global.colors })
   // prune out colors we tend to use internally
   .filter(color => (typeof base.global.colors[color] === 'string'
     && !internalColors.includes(color)))
@@ -412,6 +413,7 @@ export const types = {
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       type: ['bar', 'circle'],
+      values: MeterValues,
     },
   },
   Image: {

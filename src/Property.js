@@ -194,7 +194,7 @@ const Property = React.forwardRef((props, ref) => {
               pad={{ horizontal: 'medium', bottom: 'medium' }}
             >
               <Box flex={false}>
-                <CustomProperty {...props} />
+                <CustomProperty theme={theme} {...props} />
               </Box>
             </Box>
           </Layer>
