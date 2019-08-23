@@ -2,10 +2,18 @@ import React from 'react';
 import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { Add, Next, Previous, Trash } from 'grommet-icons';
 
+const debounce = (func, delay) => {
+  let timeout;
+  return (nextValue) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(nextValue), delay);
+  }
+}
+
 export default ({ value, onChange }) => {
   const [columns, setColumns] = React.useState(value);
-  let debounceTimer;
   React.useEffect(() => setColumns(value), [value]);
+  const debounceOnChange = React.useCallback(debounce(onChange, 500), []);
 
   return (
     <Box direction="row" gap="medium">
@@ -16,13 +24,10 @@ export default ({ value, onChange }) => {
               <TextInput
                 value={c.property || ''}
                 onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
+                  const nextValue = JSON.parse(JSON.stringify(columns));
                   nextValue[i].property = event.target.value;
                   setColumns(nextValue);
-                  clearTimeout(debounceTimer);
-                  debounceTimer = setTimeout(() => {
-                    onChange(nextValue);
-                  }, 500);
+                  debounceOnChange(nextValue);
                 }}
               />
             </FormField>
@@ -33,10 +38,7 @@ export default ({ value, onChange }) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].header = event.target.value;
                   setColumns(nextValue);
-                  clearTimeout(debounceTimer);
-                  debounceTimer = setTimeout(() => {
-                    onChange(nextValue);
-                  }, 500);
+                  debounceOnChange(nextValue);
                 }}
               />
             </FormField>
@@ -100,7 +102,7 @@ export default ({ value, onChange }) => {
               onClick={() => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 delete nextValue[i];
-                onChange(nextValue);
+                onChange(nextValue.filter(c => c));
               }}
             />
             <Box direction="row">
