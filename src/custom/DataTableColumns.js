@@ -29,11 +29,11 @@ export default ({ value, onChange }) => (
           </FormField>
           <FormField label="align">
             <Select
-              options={['start', 'center', 'end']}
+              options={['start', 'center', 'end', 'undefined']}
               value={c.align || ''}
               onChange={({ option }) => {
                 const nextValue = JSON.parse(JSON.stringify(value));
-                nextValue[i].align = option;
+                nextValue[i].align = option === 'undefined' ? undefined : option;
                 onChange(nextValue);
               }}
             />
