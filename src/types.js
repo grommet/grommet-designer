@@ -64,13 +64,13 @@ export const types = {
         label: 'Layout in container',
         properties: {
           alignSelf: ['stretch', 'start', 'center', 'end'],
-          basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
+          basis: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'full', '1/2', '1/3', '2/3', '1/4', '3/4', 'auto'],
           fill: ['horizontal', 'vertical'],
           flex: ['grow', 'shrink', true, false],
           gridArea: BoxGridArea,
-          height: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+          height: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
           margin: Edge,
-          width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+          width: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
         },
       },
       {

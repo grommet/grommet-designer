@@ -34,7 +34,7 @@ export default ({ value, onChange }) => {
                 <FormField label="size">
                   <Select
                     options={[
-                      'xsmall', 'small', 'medium', 'large', 'xlarge',
+                      'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
                       '1/2', '1/3', '2/3', '1/4', '3/4',
                       'full', 'flex', 'auto', 'min/max'
                     ]}
@@ -59,7 +59,7 @@ export default ({ value, onChange }) => {
                     <FormField label="min">
                       <Select
                         options={[
-                          'xsmall', 'small', 'medium', 'large', 'xlarge',
+                          'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
                           '1/2', '1/3', '2/3', '1/4', '3/4',
                           'full', 'flex', 'auto',
                         ]}
@@ -74,7 +74,7 @@ export default ({ value, onChange }) => {
                     <FormField label="max">
                       <Select
                         options={[
-                          'xsmall', 'small', 'medium', 'large', 'xlarge',
+                          'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
                           '1/2', '1/3', '2/3', '1/4', '3/4',
                           'full', 'flex', 'auto',
                         ]}
@@ -116,7 +116,7 @@ export default ({ value, onChange }) => {
         <Box>
           <FormField label="size">
             <Select
-              options={['xsmall', 'small', 'medium', 'large', 'xlarge']}
+              options={['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge']}
               value={(value && value.size) || value || ''}
               onChange={({ option }) => onChange(option)}
             />
