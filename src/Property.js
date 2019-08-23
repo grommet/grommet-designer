@@ -39,10 +39,12 @@ const jsonValue = (value) => {
 
 const Property = React.forwardRef((props, ref) => {
   const { first, name, property, theme, value, onChange } = props;
+  const [stringValue, setStringValue] = React.useState(value || '');
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
   const [dropTarget, setDropTarget] = React.useState();
   const fieldRef = React.useCallback(node => setDropTarget(node), []);
+  let debounceTimer;
 
   const searchExp = searchText && new RegExp(searchText, 'i');
   if (Array.isArray(property)) {
@@ -93,8 +95,13 @@ const Property = React.forwardRef((props, ref) => {
           id={name}
           name={name}
           plain
-          value={value || ''}
-          onChange={(event) => onChange(event.target.value)}
+          value={stringValue}
+          onChange={(event) => {
+            const nextValue = event.target.value;
+            setStringValue(nextValue);
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => onChange(nextValue), 500);
+          }}
           style={{ textAlign: 'end' }}
         />
       </Field>
