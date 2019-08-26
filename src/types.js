@@ -3,7 +3,7 @@ import {
   Form, FormField,
   Grid, Grommet, Heading, Image, Layer, Markdown, MaskedInput,
   Menu, Meter, Paragraph,
-  Select, Stack, Text, TextArea, TextInput, base, grommet,
+  Select, Stack, Text, TextArea, TextInput, Video, base, grommet,
 } from 'grommet';
 import Icon, { names as iconNames } from './Icon';
 import Reference from './Reference';
@@ -444,6 +444,17 @@ export const types = {
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
+    },
+  },
+  Video: {
+    component: Video,
+    name: 'Video',
+    properties: {
+      autoPlay: false,
+      controls: [false, 'over', 'below'],
+      fit: ['cover', 'contain'],
+      loop: false,
+      src: '',
     },
   },
   Repeater: {

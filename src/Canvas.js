@@ -205,6 +205,8 @@ class Canvas extends Component {
     } else if (type.name === 'Image') {
       // get 'src' from data, if needed
       specialProps.src = replace(component.props.src, data, contextPath);
+    } else if (type.name === 'Video') {
+      specialProps.src = undefined;
     }
 
     const droppable = !type.text && type.name !== 'Icon';
@@ -237,6 +239,9 @@ class Canvas extends Component {
       }
     } else {
       children = type.text;
+    }
+    if (type.name === 'Video') {
+      children = [<source src={component.props.src} />];
     }
 
     return React.createElement(
