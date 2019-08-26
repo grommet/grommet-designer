@@ -88,6 +88,7 @@ export const types = {
             color: colors,
             size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
             side: ['all', 'horizontal', 'vertical', 'top', 'left', 'bottom', 'right' ],
+            style: ['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset', 'hidden']
           },
           elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
           round: BoxRound,
