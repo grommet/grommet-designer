@@ -33,7 +33,7 @@ when selecting a Layer.
 
 Your latest design edits are saved in your browser's local storage. So,
 you can refresh your window without fear of losing anything. But, if you
-clear your local storage, you'll lose whatever you've done.
+clear your browser's local storage, you'll lose whatever you've done.
 
 If you change the name of a design, it will create a new design with that name.
 The control in the top left let's you browse your designs, create a new one,
@@ -45,10 +45,10 @@ The Share control near the upper left provides three methods of sharing.
 
 1. Publish your design. This will generate a unique URL you can send
 to someone. When they open that URL, they will see your work. They will not be
-able to modify it.
+able to modify the published version.
 1. Download the design as a JSON file. You can save or send this
-however you like. You can upload one of these files using the Folder control
-dialog, via the Upload control at the bottom.
+however you like. You can upload one of these files using the Designs
+dialog, via the Import control.
 1. Generate the appropriate code for your design such that you
 or a developer could run it as an actual site.
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Box, Button, Heading, Keyboard, Stack, Text,
 } from 'grommet';
-import { Add, Apps, FormDown, FormNext, Redo, Share, Undo } from 'grommet-icons';
+import { Add, Folder, FormDown, FormNext, Redo, Share, Undo } from 'grommet-icons';
 import { types } from '../types';
 import {
   childSelected, getParent, getScreenForComponent, nextSiblingSelected,
@@ -327,7 +327,7 @@ const Tree = ({ colorMode, design, selected, onChange, onUndo, onRedo }) => {
           >
             <ActionButton
               title="choose another design"
-              icon={<Apps />}
+              icon={<Folder />}
               onClick={() => setChoosing(true)}
             />
             {choosing && (

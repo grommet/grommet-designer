@@ -217,7 +217,13 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
           ))}
         </Grid>
       </Box>
-      <Box alignSelf="stretch" direction="row" justify="end" margin={{ top: 'medium' }}>
+      <Box
+        alignSelf="stretch"
+        direction="row"
+        justify="end"
+        gap="medium"
+        margin={{ top: 'medium' }}
+      >
         <CheckBox
           label="dark"
           toggle
@@ -226,6 +232,10 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
             onChange({ colorMode: colorMode === 'dark' ? 'light' : 'dark' })
             onClose();
           }}
+        />
+        <Button
+          label="help"
+          href="https://github.com/grommet/grommet-designer/blob/master/README.md"
         />
       </Box>
     </Action>
