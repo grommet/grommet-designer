@@ -770,10 +770,10 @@ export const types = {
       },
       {
         name: 'Marketing',
-        root: 53,
+        root: 143,
         components: {
-          "53": {
-            "id": 53,
+          "143": {
+            "id": 143,
             "type": "Grommet",
             "props": {
               "style": {
@@ -781,16 +781,16 @@ export const types = {
               }
             },
             "children": [
-              72
+              144
             ]
           },
-          "72": {
+          "144": {
             "type": "Box",
-            "id": 72,
+            "id": 144,
             "props": {
               "styling": "{\"minHeight\": \"100vh}",
               "background": {
-                "color": "dark-2"
+                "color": "dark-1"
               },
               "style": {
                 "minHeight": "100vh"
@@ -799,216 +799,331 @@ export const types = {
               "overflow": "auto"
             },
             "children": [
-              73,
-              80,
-              84,
-              88
+              169,
+              152,
+              156,
+              165,
+              170
             ]
           },
-          "73": {
+          "145": {
             "type": "Box",
-            "id": 73,
+            "id": 145,
             "props": {
               "align": "center",
               "justify": "between",
               "pad": "medium",
               "flex": false,
-              "direction": "row"
+              "direction": "row",
+              "gridArea": "center"
             },
             "children": [
-              74,
-              77
+              146,
+              149
             ],
-            "name": "header"
+            "name": "",
+            "collapsed": true
           },
-          "74": {
+          "146": {
             "type": "Box",
-            "id": 74,
+            "id": 146,
             "props": {
               "align": "center",
               "direction": "row",
               "gap": "medium"
             },
             "children": [
-              75,
-              76
+              147,
+              148
             ],
             "collapsed": true
           },
-          "75": {
+          "147": {
             "type": "Icon",
-            "id": 75,
+            "id": 147,
             "props": {
               "icon": "Ad"
             }
           },
-          "76": {
+          "148": {
             "type": "Text",
-            "id": 76,
+            "id": 148,
             "props": {
               "size": "large"
             },
             "text": "Title"
           },
-          "77": {
+          "149": {
             "type": "Box",
-            "id": 77,
+            "id": 149,
             "props": {
               "align": "center",
               "direction": "row",
               "gap": "small"
             },
             "children": [
-              78
+              150
             ],
             "name": "menu",
             "collapsed": true
           },
-          "78": {
+          "150": {
             "type": "Repeater",
-            "id": 78,
+            "id": 150,
             "props": {
               "count": 2
             },
             "children": [
-              79
+              151
             ]
           },
-          "79": {
+          "151": {
             "type": "Anchor",
-            "id": 79,
+            "id": 151,
             "props": {
               "label": "section",
               "margin": "small"
             }
           },
-          "80": {
+          "152": {
             "type": "Box",
-            "id": 80,
+            "id": 152,
             "props": {
               "align": "center",
               "justify": "center",
               "pad": "medium",
               "basis": "medium",
+              "flex": false,
               "background": {
-                "color": "accent-2"
-              },
-              "flex": false
+                "image": "url('http://www.textures.com/system/gallery/photos/Buildings/High Rise/Night/56310/HighRiseNight0077_600.jpg?v=4')"
+              }
             },
             "children": [
-              81,
-              82,
-              83
+              153,
+              154,
+              155
             ],
             "name": "section",
             "collapsed": true
           },
-          "81": {
+          "153": {
             "type": "Heading",
-            "id": 81,
+            "id": 153,
             "props": {},
             "text": "Section One"
           },
-          "82": {
+          "154": {
             "type": "Paragraph",
-            "id": 82,
+            "id": 154,
             "props": {}
           },
-          "83": {
+          "155": {
             "type": "Button",
-            "id": 83,
+            "id": 155,
             "props": {
               "label": "Button"
             }
           },
-          "84": {
+          "156": {
             "type": "Box",
-            "id": 84,
+            "id": 156,
             "props": {
               "align": "center",
               "justify": "center",
               "pad": "medium",
               "basis": "medium",
+              "flex": false,
               "background": {
-                "color": "accent-3"
-              },
-              "flex": false
+                "image": "url('http://www.textures.com/system/gallery/photos/Landscapes/City Night/112551/LandscapesCityNight0042_1_600.jpg?v=4')"
+              }
             },
             "children": [
-              85,
-              86,
-              87
+              157,
+              158,
+              159
             ],
             "name": "section",
             "collapsed": true
           },
-          "85": {
+          "157": {
             "type": "Heading",
-            "id": 85,
+            "id": 157,
             "props": {},
             "text": "Section Two"
           },
-          "86": {
+          "158": {
             "type": "Paragraph",
-            "id": 86,
+            "id": 158,
             "props": {}
           },
-          "87": {
+          "159": {
             "type": "Button",
-            "id": 87,
+            "id": 159,
             "props": {
               "label": "Button"
             }
           },
-          "88": {
+          "160": {
             "type": "Box",
-            "id": 88,
+            "id": 160,
             "props": {
               "align": "center",
               "justify": "between",
               "pad": "medium",
-              "direction": "row"
+              "direction": "row",
+              "flex": false,
+              "gridArea": "center"
             },
-            "name": "footer",
+            "name": "",
             "children": [
-              89,
-              90
-            ]
+              161,
+              162
+            ],
+            "collapsed": true
           },
-          "89": {
+          "161": {
             "type": "Text",
-            "id": 89,
+            "id": 161,
             "props": {},
             "text": "© Copyright"
           },
-          "90": {
+          "162": {
             "type": "Box",
-            "id": 90,
+            "id": 162,
             "props": {
               "align": "center",
               "direction": "row"
             },
             "children": [
-              91
+              163
             ]
           },
-          "91": {
+          "163": {
             "type": "Repeater",
-            "id": 91,
+            "id": 163,
             "props": {
               "count": 2
             },
             "children": [
-              92
+              164
             ]
           },
-          "92": {
+          "164": {
             "type": "Anchor",
-            "id": 92,
+            "id": 164,
             "props": {
               "label": "anchor",
               "margin": "small"
             }
+          },
+          "165": {
+            "type": "Box",
+            "id": 165,
+            "props": {
+              "align": "center",
+              "justify": "center",
+              "pad": "medium",
+              "basis": "medium",
+              "flex": false,
+              "background": {
+                "image": "url('http://www.textures.com/system/gallery/photos/Buildings/High Rise/Night/56329/HighRiseNight0086_600.jpg?v=5')"
+              }
+            },
+            "children": [
+              166,
+              167,
+              168
+            ],
+            "name": "section",
+            "collapsed": true
+          },
+          "166": {
+            "type": "Heading",
+            "id": 166,
+            "props": {},
+            "text": "Section Three"
+          },
+          "167": {
+            "type": "Paragraph",
+            "id": 167,
+            "props": {}
+          },
+          "168": {
+            "type": "Button",
+            "id": 168,
+            "props": {
+              "label": "Button"
+            }
+          },
+          "169": {
+            "type": "Grid",
+            "id": 169,
+            "props": {
+              "columns": [
+                "flex",
+                [
+                  "large",
+                  "xlarge"
+                ],
+                "flex"
+              ],
+              "rows": [
+                "auto"
+              ],
+              "areas": [
+                {
+                  "name": "center",
+                  "start": [
+                    1,
+                    0
+                  ],
+                  "end": [
+                    1,
+                    0
+                  ]
+                }
+              ]
+            },
+            "children": [
+              145
+            ],
+            "name": "header",
+            "collapsed": true
+          },
+          "170": {
+            "type": "Grid",
+            "id": 170,
+            "props": {
+              "columns": [
+                "flex",
+                [
+                  "large",
+                  "xlarge"
+                ],
+                "flex"
+              ],
+              "rows": [
+                "auto"
+              ],
+              "areas": [
+                {
+                  "name": "center",
+                  "start": [
+                    1,
+                    0
+                  ],
+                  "end": [
+                    1,
+                    0
+                  ]
+                }
+              ]
+            },
+            "children": [
+              160
+            ],
+            "name": "footer",
+            "collapsed": true
           }
         },
       },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Heading, Keyboard, TextInput } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen } from './design';
+import { addScreen, upgradeDesign } from './design';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
@@ -14,6 +14,8 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
     delete nextDesign.screens[selected.screen];
     const index = nextDesign.screenOrder.indexOf(selected.screen);
     nextDesign.screenOrder.splice(index, 1);
+    // clean out unused components
+    upgradeDesign(nextDesign);
     const nextScreen = nextDesign.screenOrder[index ? index - 1 : index];
     const nextSelected = {
       screen: nextScreen,
