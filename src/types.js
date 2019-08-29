@@ -95,6 +95,24 @@ export const types = {
         },
       },
     ],
+    starters: [
+      {
+        name: 'header',
+        root: 213,
+        "components": {
+          "213": {
+            "type": "Box",
+            "id": 213,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "direction": "row",
+              "flex": false,
+            }
+          }
+        },
+      },
+    ],
   },
   Grid: {
     component: Grid,

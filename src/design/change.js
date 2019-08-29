@@ -1,6 +1,6 @@
 import { bare } from './bare';
 
-const copyComponent = (nextDesign, design, id) => {
+export const copyComponent = (nextDesign, design, id) => {
   const component = design.components[id];
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;

@@ -3,11 +3,12 @@ import { Box, Button, Heading, Keyboard, Layer, TextInput } from 'grommet';
 import { BarChart, Blank, Bold, Capacity, CheckboxSelected, Domain, Image, Navigate } from 'grommet-icons';
 import { Close } from 'grommet-icons';
 import { types } from '../types';
-import { addScreen, getParent } from '../design';
+import { addScreen, copyComponent, getParent } from '../design';
 import ActionButton from '../components/ActionButton';
 
 const structure = [
   { name: 'Screens', Icon: Domain, starters: ['Screen'] },
+  { name: 'Boxes', Icon: Domain, starters: ['Box'] },
   { name: 'Layout', Icon: Capacity, types: ['Box', 'Grid', 'Stack', 'Layer'] },
   { name: 'Typography', Icon: Bold, types: ['Heading', 'Paragraph', 'Text', 'Markdown', 'Icon'] },
   { name: 'Controls', Icon: Navigate, types: ['Anchor', 'Button', 'Menu'] },
@@ -19,7 +20,7 @@ const structure = [
 
 const AddComponent = ({ design, selected, onChange, onClose }) => {
   const [search, setSearch] = React.useState('');
-  const [searchTypes, setSearchTypes] = React.useState();
+  const [searchMatches, setSearchMatches] = React.useState();
 
   const inputRef = React.useRef();
 
@@ -34,22 +35,29 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
       nextSelected.screen = addScreen(nextDesign, starter, selected);
       nextSelected.component = nextDesign.screens[nextSelected.screen].root;
     } else {
-      const type = types[typeName];
-      const id = nextDesign.nextId;
-      nextDesign.nextId += 1;
-      const component = {
-        type: typeName,
-        id,
-        props: type.defaultProps ? { ...type.defaultProps } : {},
-      };
-      nextDesign.components[component.id] = component;
+      let id;
+      if (starter) {
+        id = copyComponent(nextDesign, starter, starter.root);
+        nextDesign.components[id].name = starter.name;
+      } else {
+        const type = types[typeName];
+        id = nextDesign.nextId;
+        nextDesign.nextId += 1;
+        const component = {
+          type: typeName,
+          id,
+          props: type.defaultProps ? { ...type.defaultProps } : {},
+        };
+        nextDesign.components[component.id] = component;
+      }
+
       const selectedComponent = nextDesign.components[selected.component];
       const selectedType = types[selectedComponent.type];
       const parent = selectedType.container
         ? selectedComponent : getParent(nextDesign, selected.component)
       if (!parent.children) parent.children = [];
-      parent.children.push(component.id);
-      nextSelected.component = component.id;
+      parent.children.push(id);
+      nextSelected.component = id;
 
       // Special case DropButton dropContent as a child in the Tree
       // but not in the Canvas. We handle this by putting the id of the
@@ -65,6 +73,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
           props: { ...boxType.defaultProps, name: 'dropContent' },
         };
         nextDesign.components[dropContent.id] = dropContent;
+        const component = nextDesign.components[id];
         component.children = [dropContentId];
         component.props.dropContentId = dropContentId;
       }
@@ -100,7 +109,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
         </Box>
         <Box flex={false} pad="small">
           <Keyboard
-            onEnter={searchTypes ? () => onAdd(searchTypes[0]) : undefined}
+            onEnter={searchMatches ? () => onAdd(searchMatches[0]) : undefined}
           >
             <TextInput
               ref={inputRef}
@@ -110,75 +119,112 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
                 setSearch(nextSearch);
                 if (nextSearch) {
                   const exp = new RegExp(`^${nextSearch}`, 'i');
-                  setSearchTypes(Object.keys(types).filter(k => k.match(exp)));
+                  setSearchMatches(
+                    Object.keys(types).map(type => types[type])
+                    .filter(type => type.starters
+                      && type.starters.some(s => s.name.match(exp)))
+                    .map(type => {
+                      return {
+                        type: type.name,
+                        starters: type.starters.filter(s => s.name.match(exp)),
+                      };
+                    })
+                    .concat(
+                      Object.keys(types)
+                      .filter(type => type.match(exp))
+                      .map(type => ({ type }))
+                    )
+                  );
                 } else {
-                  setSearchTypes(undefined);
+                  setSearchMatches(undefined);
                 }
               }}
             />
           </Keyboard>
         </Box>
         <Box flex overflow="auto">
-          <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
-            {!searchTypes && structure.map(
-              ({ name, Icon, starters, types: sectionTypes }) => (
-              <Box key={name} flex={false}>
-                <Box
-                  direction="row"
-                  gap="medium"
-                  align="center"
-                  justify="between"
-                  pad={{ horizontal: 'small', vertical: 'xsmall' }}
-                >
-                  <Heading
-                    level={4}
-                    size="small"
-                    margin="none"
+          {!searchMatches && (
+            <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
+              {structure.map(
+                ({ name, Icon, starters, types: sectionTypes }) => (
+                <Box key={name} flex={false}>
+                  <Box
+                    direction="row"
+                    gap="medium"
+                    align="center"
+                    justify="between"
+                    pad={{ horizontal: 'small', vertical: 'xsmall' }}
                   >
-                    {name}
-                  </Heading>
-                  <Icon color="dark-4" />
+                    <Heading
+                      level={4}
+                      size="small"
+                      margin="none"
+                    >
+                      {name}
+                    </Heading>
+                    <Icon color="dark-4" />
+                  </Box>
+                  {sectionTypes && sectionTypes.map(key => (
+                    <Button
+                      key={key}
+                      hoverIndicator
+                      onClick={() => onAdd(key)}
+                    >
+                      <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                        {types[key].name}
+                      </Box>
+                    </Button>
+                  ))}
+                  {starters && starters.map(key => (
+                    <Fragment key={key}>
+                      {types[key].starters.map(starter => (
+                        <Button
+                          key={starter.name}
+                          hoverIndicator
+                          onClick={() => onAdd(key, starter)}
+                        >
+                          <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                            {starter.name}
+                          </Box>
+                        </Button>
+                      ))}
+                    </Fragment>
+                  ))}
                 </Box>
-                {sectionTypes && sectionTypes.map(key => (
-                  <Button
-                    key={key}
-                    hoverIndicator
-                    onClick={() => onAdd(key)}
-                  >
-                    <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                      {types[key].name}
-                    </Box>
-                  </Button>
-                ))}
-                {starters && starters.map(key => (
-                  <Fragment key={key}>
-                    {types[key].starters.map(starter => (
-                      <Button
-                        key={starter.name}
-                        hoverIndicator
-                        onClick={() => onAdd(key, starter)}
-                      >
-                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                          {starter.name}
-                        </Box>
-                      </Button>
-                    ))}
-                  </Fragment>
-                ))}
-              </Box>
-            ))}
-            {searchTypes && searchTypes.map(key => (
-              <Button
-                key={key}
-                hoverIndicator
-                onClick={() => onAdd(key)}
-              >
-                <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                  {types[key].name}
-                </Box>
-              </Button>
-            ))}
-          </Box>
+              ))}
+            </Box>
+          )}
+          {searchMatches && (
+            <Box flex={false}>
+              {searchMatches.map(({ type, starters }) => {
+                if (starters) {
+                  return starters.map(starter => (
+                    <Button
+                      key={starter.name}
+                      hoverIndicator
+                      onClick={() => onAdd(type, starter)}
+                    >
+                      <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                        {starter.name}
+                      </Box>
+                    </Button>
+                  ));
+                } else {
+                  return (
+                    <Button
+                      key={type}
+                      hoverIndicator
+                      onClick={() => onAdd(type)}
+                    >
+                      <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                        {types[type].name}
+                      </Box>
+                    </Button>
+                  );
+                }
+              })}
+            </Box>
+          )}
         </Box>
       </Box>
     </Layer>
