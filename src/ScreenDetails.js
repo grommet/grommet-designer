@@ -26,7 +26,8 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
   const onDuplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = {};
-    nextSelected.screen = addScreen(nextDesign, nextDesign.screens[selected.screen]);
+    nextSelected.screen =
+      addScreen(nextDesign, nextDesign.screens[selected.screen], selected);
     nextSelected.component = nextDesign.screens[nextSelected.screen].root;
     onChange({ design: nextDesign, selected: nextSelected });
   }

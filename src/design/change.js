@@ -20,7 +20,7 @@ const copyComponent = (nextDesign, design, id) => {
   return nextId;
 }
 
-export const addScreen = (nextDesign, copyScreen) => {
+export const addScreen = (nextDesign, copyScreen, selected) => {
   // create new screen
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
@@ -28,30 +28,31 @@ export const addScreen = (nextDesign, copyScreen) => {
   nextDesign.screens[screenId] = screen;
   if (copyScreen) {
     // copy components from the copyScreen
-    screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
+    if (copyScreen.id) { // screen in nextDesign
+      screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
+    } else { // starter
+      screen.root = copyComponent(nextDesign, copyScreen, copyScreen.root);
+    }
   } else {
     screen.root = copyComponent(nextDesign, bare, bare.screens[1].root);
   }
 
   // set a good initial name
-  let suffix = 0;
-  let available = false;
-  const suffixAvailable = suffix =>
+  const baseName = copyScreen ? copyScreen.name : 'Screen';
+  const nameAvailable = name =>
     !Object.keys(nextDesign.screens)
     .map(sId => nextDesign.screens[sId])
-    .some(screen => (screen.name === `Screen ${suffix}` || screen.id === suffix));
-  while (!available) {
+    .some(screen => (screen.name === name)) && name;
+  let name = nameAvailable(baseName);
+  let suffix = 0;
+  while (!name) {
     suffix += 1;
-    available = suffixAvailable(suffix)
+    name = nameAvailable(`${baseName} ${suffix}`);
   }
-  nextDesign.screens[screenId].name = `Screen ${suffix}`;
+  nextDesign.screens[screenId].name = name;
   nextDesign.screens[screenId].path = `/screen-${suffix}`;
-  if (copyScreen) {
-    const index = nextDesign.screenOrder.indexOf(copyScreen.id);
-    nextDesign.screenOrder.splice(index + 1, 0, screenId);
-  } else {
-    nextDesign.screenOrder.push(screenId);
-  }
+  const index = nextDesign.screenOrder.indexOf(selected.screen);
+  nextDesign.screenOrder.splice(index + 1, 0, screenId);
 
   return screenId;
 };

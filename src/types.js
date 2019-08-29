@@ -485,5 +485,533 @@ export const types = {
   },
   Screen: {
     name: 'Screen',
+    starters: [
+      {
+        name: 'Splash',
+        root: 2,
+        components: {
+          "2": {
+            "id": 2,
+            "type": "Grommet",
+            "props": {
+              "style": {
+                "height": "100vh"
+              }
+            },
+            "children": [
+              4
+            ]
+          },
+          "4": {
+            "type": "Box",
+            "id": 4,
+            "props": {
+              "align": "center",
+              "justify": "center",
+              "pad": "small",
+              "fill": "vertical",
+              "background": {
+                "image": "url('http://bgfons.com/uploads/drops/drops_texture523.jpg')"
+              }
+            },
+            "children": [
+              5
+            ]
+          },
+          "5": {
+            "type": "Box",
+            "id": 5,
+            "props": {
+              "align": "center",
+              "justify": "center",
+              "pad": {
+                "horizontal": "xlarge",
+                "vertical": "large"
+              },
+              "background": {
+                "color": "accent-1",
+                "opacity": "strong"
+              },
+              "round": "medium",
+              "gap": "medium"
+            },
+            "children": [
+              6,
+              7
+            ]
+          },
+          "6": {
+            "type": "Heading",
+            "id": 6,
+            "props": {
+              "margin": "none"
+            },
+            "text": "Hello "
+          },
+          "7": {
+            "type": "Icon",
+            "id": 7,
+            "props": {
+              "icon": "Favorite",
+              "size": "large",
+              "color": "brand"
+            }
+          }
+        },
+      },
+      {
+        name: '2Column',
+        root: 36,
+        components: {
+          "36": {
+            "id": 36,
+            "type": "Grommet",
+            "props": {
+              "style": {
+                "height": "100vh"
+              }
+            },
+            "children": [
+              37
+            ]
+          },
+          "37": {
+            "type": "Grid",
+            "id": 37,
+            "props": {
+              "fill": "vertical",
+              "columns": [
+                [
+                  "small",
+                  "medium"
+                ],
+                [
+                  "medium",
+                  "flex"
+                ]
+              ]
+            },
+            "children": [
+              38,
+              47
+            ]
+          },
+          "38": {
+            "type": "Box",
+            "id": 38,
+            "props": {
+              "justify": "between",
+              "background": {
+                "color": "light-2"
+              }
+            },
+            "children": [
+              39,
+              41,
+              45
+            ],
+            "name": "sidebar",
+            "collapsed": false
+          },
+          "39": {
+            "type": "Box",
+            "id": 39,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "pad": "small",
+              "direction": "row"
+            },
+            "children": [
+              40
+            ],
+            "name": "heading",
+            "collapsed": true
+          },
+          "40": {
+            "type": "Text",
+            "id": 40,
+            "props": {
+              "size": "large"
+            },
+            "text": "App Name"
+          },
+          "41": {
+            "type": "Box",
+            "id": 41,
+            "props": {
+              "flex": true,
+              "overflow": "auto"
+            },
+            "name": "menu",
+            "children": [
+              42
+            ],
+            "collapsed": true
+          },
+          "42": {
+            "type": "Button",
+            "id": 42,
+            "props": {
+              "label": "",
+              "hoverIndicator": true
+            },
+            "children": [
+              43
+            ]
+          },
+          "43": {
+            "type": "Box",
+            "id": 43,
+            "props": {
+              "pad": {
+                "horizontal": "small",
+                "vertical": "xsmall"
+              },
+              "direction": "row"
+            },
+            "children": [
+              44
+            ]
+          },
+          "44": {
+            "type": "Text",
+            "id": 44,
+            "props": {
+              "weight": "bold"
+            },
+            "text": "section"
+          },
+          "45": {
+            "type": "Box",
+            "id": 45,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "direction": "row"
+            },
+            "name": "footer",
+            "children": [
+              46
+            ],
+            "collapsed": true
+          },
+          "46": {
+            "type": "Menu",
+            "id": 46,
+            "props": {
+              "label": "",
+              "icon": "User",
+              "items": [
+                {
+                  "label": "Sign out"
+                }
+              ],
+              "dropAlign": {
+                "bottom": "top",
+                "left": "left"
+              }
+            }
+          },
+          "47": {
+            "type": "Box",
+            "id": 47,
+            "props": {},
+            "name": "main",
+            "children": [
+              48,
+              51
+            ]
+          },
+          "48": {
+            "type": "Box",
+            "id": 48,
+            "props": {
+              "align": "center",
+              "pad": "small",
+              "direction": "row",
+              "justify": "between",
+              "flex": false
+            },
+            "children": [
+              49,
+              50
+            ],
+            "name": "header",
+            "collapsed": true
+          },
+          "49": {
+            "type": "Heading",
+            "id": 49,
+            "props": {
+              "margin": "none",
+              "size": "small"
+            }
+          },
+          "50": {
+            "type": "Button",
+            "id": 50,
+            "props": {
+              "label": "Action",
+              "primary": true
+            }
+          },
+          "51": {
+            "type": "Box",
+            "id": 51,
+            "props": {
+              "pad": "small",
+              "flex": true,
+              "overflow": "auto"
+            },
+            "name": "content"
+          }
+        },
+      },
+      {
+        name: 'Marketing',
+        root: 53,
+        components: {
+          "53": {
+            "id": 53,
+            "type": "Grommet",
+            "props": {
+              "style": {
+                "height": "100vh"
+              }
+            },
+            "children": [
+              72
+            ]
+          },
+          "72": {
+            "type": "Box",
+            "id": 72,
+            "props": {
+              "styling": "{\"minHeight\": \"100vh}",
+              "background": {
+                "color": "dark-2"
+              },
+              "style": {
+                "minHeight": "100vh"
+              },
+              "fill": "vertical",
+              "overflow": "auto"
+            },
+            "children": [
+              73,
+              80,
+              84,
+              88
+            ]
+          },
+          "73": {
+            "type": "Box",
+            "id": 73,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "pad": "medium",
+              "flex": false,
+              "direction": "row"
+            },
+            "children": [
+              74,
+              77
+            ],
+            "name": "header"
+          },
+          "74": {
+            "type": "Box",
+            "id": 74,
+            "props": {
+              "align": "center",
+              "direction": "row",
+              "gap": "medium"
+            },
+            "children": [
+              75,
+              76
+            ],
+            "collapsed": true
+          },
+          "75": {
+            "type": "Icon",
+            "id": 75,
+            "props": {
+              "icon": "Ad"
+            }
+          },
+          "76": {
+            "type": "Text",
+            "id": 76,
+            "props": {
+              "size": "large"
+            },
+            "text": "Title"
+          },
+          "77": {
+            "type": "Box",
+            "id": 77,
+            "props": {
+              "align": "center",
+              "direction": "row",
+              "gap": "small"
+            },
+            "children": [
+              78
+            ],
+            "name": "menu",
+            "collapsed": true
+          },
+          "78": {
+            "type": "Repeater",
+            "id": 78,
+            "props": {
+              "count": 2
+            },
+            "children": [
+              79
+            ]
+          },
+          "79": {
+            "type": "Anchor",
+            "id": 79,
+            "props": {
+              "label": "section",
+              "margin": "small"
+            }
+          },
+          "80": {
+            "type": "Box",
+            "id": 80,
+            "props": {
+              "align": "center",
+              "justify": "center",
+              "pad": "medium",
+              "basis": "medium",
+              "background": {
+                "color": "accent-2"
+              },
+              "flex": false
+            },
+            "children": [
+              81,
+              82,
+              83
+            ],
+            "name": "section",
+            "collapsed": true
+          },
+          "81": {
+            "type": "Heading",
+            "id": 81,
+            "props": {},
+            "text": "Section One"
+          },
+          "82": {
+            "type": "Paragraph",
+            "id": 82,
+            "props": {}
+          },
+          "83": {
+            "type": "Button",
+            "id": 83,
+            "props": {
+              "label": "Button"
+            }
+          },
+          "84": {
+            "type": "Box",
+            "id": 84,
+            "props": {
+              "align": "center",
+              "justify": "center",
+              "pad": "medium",
+              "basis": "medium",
+              "background": {
+                "color": "accent-3"
+              },
+              "flex": false
+            },
+            "children": [
+              85,
+              86,
+              87
+            ],
+            "name": "section",
+            "collapsed": true
+          },
+          "85": {
+            "type": "Heading",
+            "id": 85,
+            "props": {},
+            "text": "Section Two"
+          },
+          "86": {
+            "type": "Paragraph",
+            "id": 86,
+            "props": {}
+          },
+          "87": {
+            "type": "Button",
+            "id": 87,
+            "props": {
+              "label": "Button"
+            }
+          },
+          "88": {
+            "type": "Box",
+            "id": 88,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "pad": "medium",
+              "direction": "row"
+            },
+            "name": "footer",
+            "children": [
+              89,
+              90
+            ]
+          },
+          "89": {
+            "type": "Text",
+            "id": 89,
+            "props": {},
+            "text": "© Copyright"
+          },
+          "90": {
+            "type": "Box",
+            "id": 90,
+            "props": {
+              "align": "center",
+              "direction": "row"
+            },
+            "children": [
+              91
+            ]
+          },
+          "91": {
+            "type": "Repeater",
+            "id": 91,
+            "props": {
+              "count": 2
+            },
+            "children": [
+              92
+            ]
+          },
+          "92": {
+            "type": "Anchor",
+            "id": 92,
+            "props": {
+              "label": "anchor",
+              "margin": "small"
+            }
+          }
+        },
+      },
+    ],
   },
 };
