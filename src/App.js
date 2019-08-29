@@ -179,7 +179,7 @@ class App extends Component {
         } else {
           nextChanges = [];
         }
-        nextChanges.unshift({ design, selected });
+        nextChanges.unshift({ design, selected: nextState.selected || selected });
         this.setState({ changes: nextChanges, changeIndex: 0 });
         this.debouncing = false;
       }, 1000);
