@@ -112,6 +112,72 @@ export const types = {
           }
         },
       },
+      {
+        name: 'list',
+        root: 4,
+        components: {
+          "4": {
+            "type": "Box",
+            "id": 4,
+            "props": {},
+            "children": [
+              5
+            ],
+            "name": "list"
+          },
+          "5": {
+            "type": "Repeater",
+            "id": 5,
+            "props": {
+              "count": 5
+            },
+            "children": [
+              9
+            ]
+          },
+          "6": {
+            "type": "Box",
+            "id": 6,
+            "props": {
+              "align": "center",
+              "justify": "between",
+              "pad": {
+                "horizontal": "medium",
+                "vertical": "small"
+              },
+              "direction": "row"
+            },
+            "children": [
+              7,
+              8
+            ]
+          },
+          "7": {
+            "type": "Text",
+            "id": 7,
+            "props": {
+              "weight": "bold"
+            },
+            "text": "name"
+          },
+          "8": {
+            "type": "Text",
+            "id": 8,
+            "props": {},
+            "text": "detail"
+          },
+          "9": {
+            "type": "Button",
+            "id": 9,
+            "props": {
+              "hoverIndicator": true
+            },
+            "children": [
+              6
+            ]
+          }
+        },
+      },
     ],
   },
   Grid: {
@@ -778,7 +844,6 @@ export const types = {
             "type": "Box",
             "id": 51,
             "props": {
-              "pad": "small",
               "flex": true,
               "overflow": "auto"
             },
