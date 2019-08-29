@@ -120,8 +120,11 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
         <Box flex={false} pad="small">
           <Keyboard
             onEnter={searchMatches
-              ? () => onAdd(searchMatches[0].type, searchMatches[0].starter)
-              : undefined
+              ? () => onAdd(
+                searchMatches[0].type,
+                false,
+                searchMatches[0].starters && searchMatches[0].starters[0]
+              ) : undefined
             }
           >
             <TextInput
