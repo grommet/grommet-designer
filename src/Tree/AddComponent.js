@@ -28,9 +28,10 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
     setTimeout(() => (inputRef.current && inputRef.current.focus()), 1);
   });
 
-  const onAdd = (typeName, starter) => {
+  const onAdd = (typeName, containSelected, starter) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
+    const type = types[typeName];
     if (typeName === 'Screen') {
       nextSelected.screen = addScreen(nextDesign, starter, selected);
       nextSelected.component = nextDesign.screens[nextSelected.screen].root;
@@ -40,7 +41,6 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
         id = copyComponent(nextDesign, starter, starter.root);
         nextDesign.components[id].name = starter.name;
       } else {
-        const type = types[typeName];
         id = nextDesign.nextId;
         nextDesign.nextId += 1;
         const component = {
@@ -50,13 +50,24 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
         };
         nextDesign.components[component.id] = component;
       }
+      const component = nextDesign.components[id];
 
       const selectedComponent = nextDesign.components[selected.component];
-      const selectedType = types[selectedComponent.type];
-      const parent = selectedType.container
-        ? selectedComponent : getParent(nextDesign, selected.component)
-      if (!parent.children) parent.children = [];
-      parent.children.push(id);
+      if (containSelected && type.container) {
+        const parent = getParent(nextDesign, selected.component);
+        const index = parent.children.indexOf(selected.component);
+        parent.children[index] = id;
+        component.children = [selected.component];
+        if (component.type === 'Button') {
+          delete component.props.label; // so contents are revealed
+        }
+      } else {
+        const selectedType = types[selectedComponent.type];
+        const parent = selectedType.container
+          ? selectedComponent : getParent(nextDesign, selected.component)
+        if (!parent.children) parent.children = [];
+        parent.children.push(id);
+      }
       nextSelected.component = id;
 
       // Special case DropButton dropContent as a child in the Tree
@@ -73,7 +84,6 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
           props: { ...boxType.defaultProps, name: 'dropContent' },
         };
         nextDesign.components[dropContent.id] = dropContent;
-        const component = nextDesign.components[id];
         component.children = [dropContentId];
         component.props.dropContentId = dropContentId;
       }
@@ -109,7 +119,10 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
         </Box>
         <Box flex={false} pad="small">
           <Keyboard
-            onEnter={searchMatches ? () => onAdd(searchMatches[0]) : undefined}
+            onEnter={searchMatches
+              ? () => onAdd(searchMatches[0].type, searchMatches[0].starter)
+              : undefined
+            }
           >
             <TextInput
               ref={inputRef}
@@ -168,7 +181,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
                     <Button
                       key={key}
                       hoverIndicator
-                      onClick={() => onAdd(key)}
+                      onClick={(event) => onAdd(key, event.metaKey)}
                     >
                       <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
                         {types[key].name}
@@ -181,7 +194,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
                         <Button
                           key={starter.name}
                           hoverIndicator
-                          onClick={() => onAdd(key, starter)}
+                          onClick={(event) => onAdd(key, event.metaKey, starter)}
                         >
                           <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
                             {starter.name}
@@ -202,7 +215,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
                     <Button
                       key={starter.name}
                       hoverIndicator
-                      onClick={() => onAdd(type, starter)}
+                      onClick={(event) => onAdd(type, event.metaKey, starter)}
                     >
                       <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
                         {starter.name}
@@ -214,7 +227,7 @@ const AddComponent = ({ design, selected, onChange, onClose }) => {
                     <Button
                       key={type}
                       hoverIndicator
-                      onClick={() => onAdd(type)}
+                      onClick={(event) => onAdd(type, event.metaKey)}
                     >
                       <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
                         {types[type].name}

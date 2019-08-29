@@ -15,6 +15,7 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 * **p**: initiates searching of the currently selected component's properties
 * **d**: duplicate the current component, and all of its children
 * **a**: opens the add component dialog
+* **command-click** or **windows-click**: when adding a component, it will be added as the parent of the currently selected component
 * **command-delete** or **windows-backspace**: deletes the currently selected component and all of its children
 * **z**: undo the most recent change
 * **Z**: redo the most recently undone change
