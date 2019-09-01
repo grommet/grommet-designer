@@ -153,7 +153,7 @@ const SaveLocally = ({ design, onClose }) => (
   </Box>
 );
 
-const Developer = ({ design }) => {
+const Developer = ({ design, theme }) => {
   const [code, setCode] = React.useState();
 
   return (
@@ -167,7 +167,7 @@ const Developer = ({ design }) => {
         <Button
           label="Generate Code"
           hoverIndicator
-          onClick={() => setCode(generateJSX(design))}
+          onClick={() => setCode(generateJSX(design, theme))}
         />
       )}
       {code && (
@@ -188,7 +188,7 @@ const Developer = ({ design }) => {
   );
 };
 
-const Share = ({ colorMode, design, onChange, onClose }) => (
+const Share = ({ colorMode, design, theme, onChange, onClose }) => (
   <Action
     label="share"
     full="horizontal"
@@ -203,7 +203,7 @@ const Share = ({ colorMode, design, onChange, onClose }) => (
     >
       <Publish design={design} onChange={onChange} />
       <SaveLocally design={design} onClose={onClose} />
-      <Developer design={design} />
+      <Developer design={design} theme={theme} />
     </Grid>
   </Action>
 );

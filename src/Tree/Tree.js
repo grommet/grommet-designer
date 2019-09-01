@@ -19,7 +19,9 @@ const treeName = component =>
     || component.props.name || component.props.label
     || component.type);
 
-const Tree = ({ colorMode, design, selected, onChange, onUndo, onRedo }) => {
+const Tree = ({
+  colorMode, design, selected, theme, onChange, onUndo, onRedo,
+}) => {
 
   const [dragging, setDragging] = React.useState();
   const [dropTarget, setDropTarget] = React.useState();
@@ -359,6 +361,7 @@ const Tree = ({ colorMode, design, selected, onChange, onUndo, onRedo }) => {
             {sharing && (
               <Sharing
                 design={design}
+                theme={theme}
                 colorMode={colorMode}
                 onChange={onChange}
                 onClose={() => setSharing(false)}

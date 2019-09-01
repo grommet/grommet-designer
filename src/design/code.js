@@ -1,5 +1,7 @@
 
-const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ') => {
+const componentToJSX = (
+  design, screen, theme, id, imports, iconImports, indent = '  ',
+) => {
   let result;
   const component = design.components[id];
   if (component.type === 'Icon') {
@@ -10,7 +12,8 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
   } else if (component.type === 'Repeater') {
     const childId = component.children && component.children[0];
     result = childId
-      ? componentToJSX(design, screen, childId, imports, iconImports, indent)
+      ? componentToJSX(design, screen, theme,
+        childId, imports, iconImports, indent)
         .repeat(component.props.count)
       : '';
   } else {
@@ -19,7 +22,8 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
       .filter(cId => (component.type !== 'DropButton'
         || cId !== component.props.dropContentId))
       .map(cId =>
-      componentToJSX(design, screen, cId, imports, iconImports, indent + '  ')).join("\n"))
+      componentToJSX(design, screen, theme, cId, imports,
+        iconImports, indent + '  ')).join("\n"))
       || (component.text && `${indent}  ${component.text}`);
     if (children && children.length === 0) children = undefined;
     result = `${indent}<${component.type}${Object.keys(component.props)
@@ -35,7 +39,8 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
         const value = component.props[name];
         if (component.type === 'DropButton' && name === 'dropContentId') {
           return `  dropContent={(\n${
-            componentToJSX(design, screen, value, imports, iconImports, indent + '  ')
+            componentToJSX(design, screen, theme, value,
+              imports, iconImports, indent + '  ')
           }\n${indent})}\n${indent}`;
         }
         if (typeof value === 'string') {
@@ -51,8 +56,8 @@ const componentToJSX = (design, screen, id, imports, iconImports, indent = '  ')
         ? (` onClick={() => ${component.linkTo.component
           ? `setLayer(layer ? undefined : ${component.linkTo.component})`
           : `setScreen(${component.linkTo.screen})`}}`)
-        : ''}${component.type === 'Grommet' && (screen.theme || design.theme)
-        ? ` theme={${screen.theme || design.theme}}`
+        : ''}${component.type === 'Grommet' && theme
+        ? ` theme={${theme}}`
         : '' }${children ? '' :  ' /'}>${children ?
         `\n${children}\n${indent}</${component.type}>` : ''}`;
   }
@@ -69,13 +74,20 @@ const screenComponentName = ({ id, name }) =>
     ? `${name.charAt(0).toUpperCase()}${name.replace(' ', '').slice(1)}`
     : `Screen${id}`);
 
-export const generateJSX = (design) => {
+export const generateJSX = (design, theme) => {
   const grommetImports = {};
   const grommetIconImports = {};
   const themeImports = {};
   const screenNames = {};
+  let publishedTheme;
 
-  if (design.theme) themeImports[design.theme] = true;
+  if (design.theme) {
+    if (design.theme.startsWith('https:')) {
+      publishedTheme = `const theme = ${JSON.stringify(theme, null, 2)}`;
+    } else {
+      themeImports[design.theme] = true;
+    }
+  }
 
   Object.keys(design.screens).forEach(sId => {
     const screen = design.screens[sId];
@@ -94,7 +106,9 @@ export const generateJSX = (design) => {
     .map(screen => `const ${screenComponentName(screen)} = ({ setScreen}) => {
   const [layer, setLayer] = React.useState()
   return (
-${componentToJSX(design, screen, screen.root, grommetImports, grommetIconImports)}
+${componentToJSX(design, screen,
+  publishedTheme ? 'theme' : (screen.theme || design.theme), screen.root,
+  grommetImports, grommetIconImports)}
   )
 }`)
     .join("\n\n");
@@ -106,6 +120,8 @@ ${Object.keys(grommetIconImports).length > 0
   : ''}
 ${Object.keys(themeImports).map(theme =>
   `import { ${theme} } from 'grommet-theme-${theme}'`).join('\n')}
+
+${publishedTheme}
 
 ${screens}
 

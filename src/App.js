@@ -287,6 +287,7 @@ class App extends Component {
                   <Tree
                     design={design}
                     selected={selected}
+                    theme={theme}
                     colorMode={colorMode}
                     onChange={this.onChange}
                     onRedo={changeIndex > 0 && this.onRedo}
