@@ -44,7 +44,7 @@ export const types = {
     container: true,
     defaultProps: {
       align: 'center',
-      justify: 'stretch',
+      justify: 'center',
       pad: 'small',
     },
     properties: [
@@ -54,7 +54,7 @@ export const types = {
           align: ['stretch', 'start', 'center', 'end', 'baseline'],
           direction: ['column', 'row', 'row-responsive'],
           gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-          justify: ['around', 'between', 'center', 'end', 'evenly', 'start', 'stretch'],
+          justify: ['stretch', 'start', 'between', 'around', 'evenly', 'center', 'end'],
           overflow: ['auto', 'hidden', 'scroll', 'visible'],
           pad: Edge,
           wrap: false,
