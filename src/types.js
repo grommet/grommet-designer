@@ -54,7 +54,7 @@ export const types = {
           align: ['stretch', 'start', 'center', 'end'],
           direction: ['column', 'row', 'row-responsive'],
           gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-          justify: ['between', 'start', 'center', 'end'],
+          justify: ['around', 'between', 'start', 'center', 'end', 'evenly'],
           overflow: ['auto', 'hidden', 'scroll', 'visible'],
           pad: Edge,
           wrap: false,
