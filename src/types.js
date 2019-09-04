@@ -51,10 +51,10 @@ export const types = {
       {
         label: 'Content layout',
         properties: {
-          align: ['stretch', 'start', 'center', 'end'],
+          align: ['stretch', 'start', 'center', 'end', 'baseline'],
           direction: ['column', 'row', 'row-responsive'],
           gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-          justify: ['around', 'between', 'start', 'center', 'end', 'evenly'],
+          justify: ['stretch', 'start', 'between', 'around', 'evenly', 'center', 'end'],
           overflow: ['auto', 'hidden', 'scroll', 'visible'],
           pad: Edge,
           wrap: false,
