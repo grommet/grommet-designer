@@ -4,21 +4,33 @@ import Canvas from './Canvas';
 import Properties from './Properties';
 import Tree from './Tree/Tree';
 import {
-  apiUrl, getInitialSelected, getScreenByPath, getParent,
-  resetState, upgradeDesign, themeApiUrl, bare, loading,
+  apiUrl,
+  getInitialSelected,
+  getScreenByPath,
+  getParent,
+  resetState,
+  upgradeDesign,
+  themeApiUrl,
+  bare,
+  loading,
 } from './design';
 import ScreenDetails from './ScreenDetails';
 import themes from './themes';
+import Analytics from './Analytics';
+import { Router } from './Router';
 
 const getParams = () => {
   const { location } = window;
   const params = {};
-  location.search.slice(1).split('&').forEach(p => {
-    const [k, v] = p.split('=');
-    params[k] = decodeURIComponent(v);
-  });
+  location.search
+    .slice(1)
+    .split('&')
+    .forEach((p) => {
+      const [k, v] = p.split('=');
+      params[k] = decodeURIComponent(v);
+    });
   return params;
-}
+};
 
 class App extends Component {
   state = {
@@ -31,7 +43,9 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const { location: { pathname, hash } } = window;
+    const {
+      location: { pathname, hash },
+    } = window;
     const params = getParams();
     if (pathname === '/_new') {
       this.setState({
@@ -40,24 +54,25 @@ class App extends Component {
       });
     } else if (params.id) {
       fetch(`${apiUrl}/${params.id}`)
-      .then(response => response.json())
-      .then((design) => {
-        upgradeDesign(design);
-        const screen = hash ? parseInt(hash.slice(1), 10)
-          : (getScreenByPath(design, pathname) || design.screenOrder[0]);
-        const component = design.screens[screen].root;
-        const selected = { screen, component };
-        const theme = this.normalizeTheme(design.theme);
-        document.title = design.name;
-        this.setState({
-          design,
-          selected,
-          theme,
-          preview: true,
-          changes: [{ design, selected }],
-          changeIndex: 0,
+        .then(response => response.json())
+        .then((design) => {
+          upgradeDesign(design);
+          const screen = hash
+            ? parseInt(hash.slice(1), 10)
+            : getScreenByPath(design, pathname) || design.screenOrder[0];
+          const component = design.screens[screen].root;
+          const selected = { screen, component };
+          const theme = this.normalizeTheme(design.theme);
+          document.title = design.name;
+          this.setState({
+            design,
+            selected,
+            theme,
+            preview: true,
+            changes: [{ design, selected }],
+            changeIndex: 0,
+          });
         });
-      });
     } else {
       let stored = localStorage.getItem('activeDesign');
       if (stored) {
@@ -67,7 +82,9 @@ class App extends Component {
         const design = JSON.parse(stored);
         upgradeDesign(design);
         stored = localStorage.getItem('selected');
-        const selected = stored ? JSON.parse(stored) : getInitialSelected(design);
+        const selected = stored
+          ? JSON.parse(stored)
+          : getInitialSelected(design);
         const theme = this.normalizeTheme(design.theme);
         this.setState({
           design,
@@ -90,7 +107,7 @@ class App extends Component {
     const stored = localStorage.getItem('designs');
     this.setState({ designs: stored ? JSON.parse(stored) : [] });
 
-    this.setState({ colorMode: (localStorage.getItem('colorMode') || 'dark') });
+    this.setState({ colorMode: localStorage.getItem('colorMode') || 'dark' });
 
     window.addEventListener('popstate', this.onPopState);
     window.addEventListener('hashchange', this.onHashChange);
@@ -103,7 +120,9 @@ class App extends Component {
 
   onPopState = () => {
     const { design } = this.state;
-    const { location: { pathname } } = document;
+    const {
+      location: { pathname },
+    } = document;
     const screen = getScreenByPath(design, pathname);
     if (screen) {
       this.setState({ screen, component: design.screens[screen].root });
@@ -112,14 +131,16 @@ class App extends Component {
 
   onHashChange = () => {
     const { design } = this.state;
-    const { location: { hash } } = document;
+    const {
+      location: { hash },
+    } = document;
     if (hash) {
       const screen = parseInt(hash.slice(1), 10);
       this.setState({
-        selected: { screen, component: design.screens[screen].root }
+        selected: { screen, component: design.screens[screen].root },
       });
     }
-  }
+  };
 
   normalizeTheme = (theme) => {
     if (typeof theme === 'string') {
@@ -138,14 +159,18 @@ class App extends Component {
     // extract id from URL
     const id = url.split('id=')[1];
     fetch(`${themeApiUrl}/${id}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((theme) => this.setState({ theme }));
-  }
+  };
 
   onChange = (nextState) => {
     const {
-      design: previousDesign, designs: previousDesigns, theme,
-      changes, changeIndex, selected,
+      design: previousDesign,
+      designs: previousDesigns,
+      theme,
+      changes,
+      changeIndex,
+      selected,
     } = this.state;
     this.setState(nextState);
 
@@ -154,8 +179,8 @@ class App extends Component {
         this.debouncing = true;
       }
       const { design } = nextState;
-      const nextTheme = (design.theme && this.normalizeTheme(design.theme))
-        || theme || grommet;
+      const nextTheme =
+        (design.theme && this.normalizeTheme(design.theme)) || theme || grommet;
       this.setState({ theme: nextTheme });
       // delay storing it locally so we don't bog down typing
       clearTimeout(this.storeTimer);
@@ -179,7 +204,10 @@ class App extends Component {
         } else {
           nextChanges = [];
         }
-        nextChanges.unshift({ design, selected: nextState.selected || selected });
+        nextChanges.unshift({
+          design,
+          selected: nextState.selected || selected,
+        });
         this.setState({ changes: nextChanges, changeIndex: 0 });
         this.debouncing = false;
       }, 1000);
@@ -190,8 +218,9 @@ class App extends Component {
       if (nextState.selected.screen !== selected.screen) {
         // track selected screen in browser location, so browser
         // backward/forward controls work
-        const screen = (nextState.design || previousDesign)
-          .screens[nextState.selected.screen];
+        const screen = (nextState.design || previousDesign).screens[
+          nextState.selected.screen
+        ];
         if (screen.path) {
           window.history.pushState(undefined, undefined, screen.path);
         } else {
@@ -203,7 +232,7 @@ class App extends Component {
     if (nextState.colorMode) {
       localStorage.setItem('colorMode', nextState.colorMode);
     }
-  }
+  };
 
   // TODO: move out of App.js
   onDelete = () => {
@@ -211,11 +240,14 @@ class App extends Component {
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from the parent
     const parent = getParent(nextDesign, selected.component);
-    parent.children = parent.children.filter(i => i !== selected.component);
+    parent.children = parent.children.filter((i) => i !== selected.component);
     // remove any linkTo references
-    Object.keys(nextDesign.components).forEach(id => {
+    Object.keys(nextDesign.components).forEach((id) => {
       const component = nextDesign.components[id];
-      if (component.linkTo && component.linkTo.component === selected.component) {
+      if (
+        component.linkTo &&
+        component.linkTo.component === selected.component
+      ) {
         delete component.linkTo;
       }
     });
@@ -225,13 +257,13 @@ class App extends Component {
       design: nextDesign,
       selected: { ...selected, component: parent.id },
     });
-  }
+  };
 
   onReset = () => {
     localStorage.removeItem('selected');
     localStorage.removeItem('activeDesign');
     this.setState({ ...resetState(bare), theme: grommet });
-  }
+  };
 
   onKey = (event) => {
     const { preview } = this.state;
@@ -241,7 +273,7 @@ class App extends Component {
         this.setState({ preview: !preview });
       }
     }
-  }
+  };
 
   onUndo = () => {
     const { changes, changeIndex } = this.state;
@@ -250,7 +282,7 @@ class App extends Component {
       ...changes[nextChangeIndex],
       changeIndex: nextChangeIndex,
     });
-  }
+  };
 
   onRedo = () => {
     const { changes, changeIndex } = this.state;
@@ -259,76 +291,88 @@ class App extends Component {
       ...changes[nextChangeIndex],
       changeIndex: nextChangeIndex,
     });
-  }
+  };
 
   render() {
     const {
-      colorMode, design, preview, selected, theme, changes, changeIndex,
+      colorMode,
+      design,
+      preview,
+      selected,
+      theme,
+      changes,
+      changeIndex,
     } = this.state;
-    const rootComponent = design.screens[selected.screen
-      || design.screenOrder[0]].root;
-    const selectedComponent = design.components[selected.component]
-      || rootComponent;
+    const rootComponent =
+      design.screens[selected.screen || design.screenOrder[0]].root;
+    const selectedComponent =
+      design.components[selected.component] || rootComponent;
     return (
-      <Grommet full theme={grommet}>
-        <ResponsiveContext.Consumer>
-          {(responsive) => (
-            <Keyboard target="document" onKeyDown={this.onKey}>
-              <Grid
-                fill
-                columns={
-                  (responsive === 'small' || preview)
-                  ? 'flex'
-                  : [['small', '288px'], ['1/2', 'flex'], ['small', 'medium']]
-                }
-              >
+      <Router>
+        <Analytics>
+          <Grommet full theme={grommet}>
+            <ResponsiveContext.Consumer>
+              {(responsive) => (
+                <Keyboard target='document' onKeyDown={this.onKey}>
+                  <Grid
+                    fill
+                    columns={
+                      responsive === 'small' || preview
+                        ? 'flex'
+                        : [
+                            ['small', '288px'],
+                            ['1/2', 'flex'],
+                            ['small', 'medium'],
+                          ]
+                    }
+                  >
+                    {responsive !== 'small' && !preview && (
+                      <Tree
+                        design={design}
+                        selected={selected}
+                        theme={theme}
+                        colorMode={colorMode}
+                        onChange={this.onChange}
+                        onRedo={changeIndex > 0 && this.onRedo}
+                        onUndo={changeIndex < changes.length - 1 && this.onUndo}
+                      />
+                    )}
 
-                {responsive !== 'small' && !preview && (
-                  <Tree
-                    design={design}
-                    selected={selected}
-                    theme={theme}
-                    colorMode={colorMode}
-                    onChange={this.onChange}
-                    onRedo={changeIndex > 0 && this.onRedo}
-                    onUndo={changeIndex < (changes.length - 1) && this.onUndo}
-                  />
-                )}
-
-                <Canvas
-                  design={design}
-                  selected={selected}
-                  preview={preview}
-                  theme={theme}
-                  onChange={this.onChange}
-                />
-
-                {responsive !== 'small' && !preview && (
-                  selectedComponent.type === 'Grommet' ? (
-                    <ScreenDetails
+                    <Canvas
                       design={design}
                       selected={selected}
-                      colorMode={colorMode}
-                      onChange={this.onChange}
-                    />
-                  ) : (
-                    <Properties
-                      design={design}
+                      preview={preview}
                       theme={theme}
-                      selected={selected}
-                      component={selectedComponent}
-                      colorMode={colorMode}
                       onChange={this.onChange}
-                      onDelete={this.onDelete}
                     />
-                  )
-                )}
 
-              </Grid>
-            </Keyboard>
-          )}
-        </ResponsiveContext.Consumer>
-      </Grommet>
+                    {responsive !== 'small' &&
+                      !preview &&
+                      (selectedComponent.type === 'Grommet' ? (
+                        <ScreenDetails
+                          design={design}
+                          selected={selected}
+                          colorMode={colorMode}
+                          onChange={this.onChange}
+                        />
+                      ) : (
+                        <Properties
+                          design={design}
+                          theme={theme}
+                          selected={selected}
+                          component={selectedComponent}
+                          colorMode={colorMode}
+                          onChange={this.onChange}
+                          onDelete={this.onDelete}
+                        />
+                      ))}
+                  </Grid>
+                </Keyboard>
+              )}
+            </ResponsiveContext.Consumer>
+          </Grommet>
+        </Analytics>
+      </Router>
     );
   }
 }

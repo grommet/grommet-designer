@@ -12,6 +12,7 @@
     "lz-string": "^1.4.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.6.0",
     "react-scripts": "3.0.1",
     "styled-components": "^4.2.0"
   },

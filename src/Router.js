@@ -1,32 +1,36 @@
 // NOTE: our routing needs are so simple, we roll our own
 // to avoid dependencies on react-router, to stay leaner.
 
-import React, { Children } from 'react';
+import React, { Children, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export const RouterContext = React.createContext({});
+const RouterContext = React.createContext({});
 
 export const Router = ({ children }) => {
   const [path, setPath] = React.useState();
   const [search, setSearch] = React.useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onPopState = () => {
       const { location } = document;
       setPath(location.pathname);
       setSearch(location.search);
-    }
-
+    };
     window.addEventListener('popstate', onPopState);
-    return (() => window.removeEventListener('popstate', onPopState));
+    onPopState();
+    return () => window.removeEventListener('popstate', onPopState);
   }, [])
 
-  const onPush = nextPath => {
+  const onPush = (nextPath) => {
     if (nextPath !== path) {
       if (nextPath.startsWith('http')) {
         window.location = nextPath;
       } else {
-        window.history.pushState(undefined, undefined, `${nextPath}${search || ''}`);
+        window.history.pushState(
+          undefined,
+          undefined,
+          `${nextPath}${search || ''}`,
+        );
         setPath(nextPath);
         window.scrollTo(0, 0);
       }
@@ -49,14 +53,15 @@ export const Routes = ({ children, notFoundRedirect }) => (
     {({ path: currentPath }) => {
       const preHash = currentPath && currentPath.split('#')[0];
       let found;
-      Children.forEach(children, child => {
+      Children.forEach(children, (child) => {
         if (found || !child) return;
         const { path, exact } = child.props;
         const prefix = path ? path.split(':')[0] : '';
         if (
           !found &&
           currentPath &&
-          ((exact && preHash === path) || (!exact && preHash.startsWith(prefix)))
+          ((exact && preHash === path) ||
+            (!exact && preHash.startsWith(prefix)))
         ) {
           found = child;
         }
@@ -79,10 +84,10 @@ export const Route = ({ component: Comp, exact, path, redirect }) => (
     {({ path: currentPath }) => {
       const preHash = currentPath.split('#')[0];
       const prefix = !exact && path.split(':')[0];
-      if (currentPath && (
-        (exact && preHash === path)
-        || (!exact && preHash.startsWith(prefix))
-      )) {
+      if (
+        currentPath &&
+        ((exact && preHash === path) || (!exact && preHash.startsWith(prefix)))
+      ) {
         if (redirect) {
           window.history.replace(redirect);
         } else if (Comp) {
@@ -112,4 +117,12 @@ Route.defaultProps = {
   redirect: undefined,
 };
 
-export default Router;
+export const Watcher = ({ children }) => (
+  <RouterContext.Consumer>
+    {({ path }) => children(path)}
+  </RouterContext.Consumer>
+);
+
+Watcher.propTypes = {
+  children: PropTypes.func.isRequired,
+};
