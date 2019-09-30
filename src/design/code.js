@@ -154,7 +154,7 @@ ${componentToJSX(
     )
     .join('\n\n');
 
-  return `import React, { Component } from 'react'
+  return `import React from 'react'
 import { ${Object.keys(grommetImports).join(', ')}${
     themeImports.grommet ? ' , grommet' : ''
   } } from 'grommet'
