@@ -236,7 +236,7 @@ class App extends Component {
   onKey = (event) => {
     const { preview } = this.state;
     if (event.metaKey) {
-      if (event.key === 'e') {
+      if (event.key === 'e' || event.key === 'E') {
         event.preventDefault();
         this.setState({ preview: !preview });
       }
