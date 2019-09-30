@@ -5,6 +5,7 @@ const componentToJSX = (
   id,
   imports,
   iconImports,
+  layers,
   indent = '  ',
 ) => {
   let result;
@@ -25,10 +26,14 @@ const componentToJSX = (
           childId,
           imports,
           iconImports,
-          indent,
+          layers,
+          `${indent}  `,
         ).repeat(component.props.count)
       : '';
   } else {
+    if (component.type === 'Layer') {
+      layers[id] = true;
+    }
     imports[component.type] = true;
     let children =
       (component.children &&
@@ -46,7 +51,8 @@ const componentToJSX = (
               cId,
               imports,
               iconImports,
-              indent + '  ',
+              layers,
+              `${indent}  `,
             ),
           )
           .join('\n')) ||
@@ -71,7 +77,8 @@ const componentToJSX = (
             value,
             imports,
             iconImports,
-            indent + '  ',
+            layers,
+            `${indent}  `,
           )}\n${indent})}\n${indent}`;
         }
         if (typeof value === 'string') {
@@ -86,7 +93,7 @@ const componentToJSX = (
       .join('')}${
       component.linkTo
         ? ` onClick={() => ${
-            component.linkTo.component
+            component.linkTo.type === 'Layer'
               ? `setLayer(layer ? undefined : ${component.linkTo.component})`
               : `setScreen(${component.linkTo.screen})`
           }}`
@@ -119,7 +126,11 @@ export const generateJSX = (design, theme) => {
     if (design.theme.startsWith('https:')) {
       publishedTheme = `const theme = ${JSON.stringify(theme, null, 2)}`;
     } else {
-      themeImports[design.theme] = true;
+      if (design.theme === 'grommet' || design.theme === 'dark') {
+        grommetImports[design.theme] = true;
+      } else {
+        themeImports[design.theme] = true;
+      }
     }
   }
 
@@ -135,29 +146,38 @@ export const generateJSX = (design, theme) => {
     }
   });
 
+  const single = Object.keys(design.screens).length === 1;
   const screens = Object.keys(design.screens)
     .map(sKey => design.screens[sKey])
-    .map(
-      screen => `const ${screenComponentName(screen)} = ({ setScreen}) => {
-  const [layer, setLayer] = React.useState()
+    .map(screen => {
+      const layers = {};
+      const root = componentToJSX(
+        design,
+        screen,
+        publishedTheme ? 'theme' : screen.theme || design.theme,
+        screen.root,
+        grommetImports,
+        grommetIconImports,
+        layers,
+        '    ',
+      );
+      return `${
+        single ? 'export default' : `const ${screenComponentName(screen)} =`
+      } (${!single ? '{ setScreen }' : ''}) => {
+  ${
+    Object.keys(layers).length > 0
+      ? 'const [layer, setLayer] = React.useState()'
+      : ''
+  }
   return (
-${componentToJSX(
-  design,
-  screen,
-  publishedTheme ? 'theme' : screen.theme || design.theme,
-  screen.root,
-  grommetImports,
-  grommetIconImports,
-)}
+${root}
   )
-}`,
-    )
+}`;
+    })
     .join('\n\n');
 
   return `import React from 'react'
-import { ${Object.keys(grommetImports).join(', ')}${
-    themeImports.grommet ? ' , grommet' : ''
-  } } from 'grommet'
+import { ${Object.keys(grommetImports).join(', ')} } from 'grommet'
 ${
   Object.keys(grommetIconImports).length > 0
     ? `import { ${Object.keys(grommetIconImports).join(
@@ -166,14 +186,13 @@ ${
     : ''
 }
 ${Object.keys(themeImports)
-  .filter(t => t !== 'grommet')
   .map(theme => `import { ${theme} } from 'grommet-theme-${theme}'`)
   .join('\n')}
-
 ${publishedTheme || ''}
-
 ${screens}
-
+${
+  !single
+    ? `
 const screens = {
 ${Object.keys(design.screens)
   .map(sId => `  ${sId}: ${screenComponentName(design.screens[sId])}`)
@@ -185,5 +204,7 @@ export default () => {
   const Screen = screens[screen]
   return <Screen setScreen={setScreen} />
 }
-`;
+`
+    : ''
+}`;
 };
