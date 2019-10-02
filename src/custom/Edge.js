@@ -24,7 +24,7 @@ export default ({ name, value, onChange }) => {
             {['horizontal', 'vertical', 'top', 'bottom', 'left', 'right'].map(side => (
               <FormField key={side} label={side}>
                 <Select
-                  options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
+                  options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'auto', 'undefined']}
                   value={(value || {})[side] || ''}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
@@ -42,7 +42,7 @@ export default ({ name, value, onChange }) => {
         ) : (
           <FormField label={name}>
             <Select
-              options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
+              options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'auto', 'undefined']}
               value={value || ''}
               onChange={({ option }) =>
                 onChange(option === 'undefined' ? undefined : option)}
