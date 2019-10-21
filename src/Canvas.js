@@ -45,6 +45,7 @@ const replace = (text, data, contextPath) =>
     );
   });
 
+// have to use a class because we use componentDidCatch()
 class Canvas extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.error && prevState.error !== nextProps.design) {
@@ -221,11 +222,7 @@ class Canvas extends Component {
         }
       }
     });
-    if (type.name === 'DropButton') {
-      // specialProps.dropContentId = undefined;
-      // specialProps.dropContent =
-      //   this.renderComponent(component.props.dropContentId, dataContextPath);
-    } else if (type.name === 'Layer') {
+    if (type.name === 'Layer') {
       specialProps.onClickOutside = () => this.setHide(id, true);
       specialProps.onEsc = () => this.setHide(id, true);
     } else if (type.name === 'Menu') {
@@ -256,11 +253,9 @@ class Canvas extends Component {
     let children;
     if (component.children) {
       if (component.children.length > 0) {
-        children = component.children
-          // // don't render dropContent child here
-          // .filter(childId => (type.name !== 'DropButton'
-          //   || childId !== component.props.dropContentId))
-          .map(childId => this.renderComponent(childId, dataContextPath));
+        children = component.children.map(childId =>
+          this.renderComponent(childId, dataContextPath),
+        );
         if (children.length === 0) children = undefined;
       }
     } else if (component.text) {

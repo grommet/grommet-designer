@@ -12,13 +12,10 @@ export const copyComponent = (nextDesign, design, id) => {
   if (component.children) {
     nextComponent.children = component.children.map(childId => {
       const nextChildId = copyComponent(nextDesign, design, childId);
-      // special case DropButton dropContentId
-      if (childId === component.props.dropContentId) {
-        nextComponent.props.dropContentId = nextChildId;
-      }
       return nextChildId;
     });
   }
+  // TODO: handle propComponents
   return nextId;
 };
 

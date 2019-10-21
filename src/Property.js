@@ -103,7 +103,7 @@ const Property = React.forwardRef((props, ref) => {
               ? [...options.filter(p => searchExp.test(p)), 'undefined']
               : [...options, 'undefined']
           }
-          value={value || ''}
+          value={typeof value === 'boolean' ? value.toString() : value || ''}
           valueLabel={
             <OptionLabel
               active

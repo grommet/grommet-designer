@@ -96,9 +96,10 @@ const App = () => {
       upgradeDesign(nextDesign);
 
       if (!nextSelected) {
-        const screen = pathname
-          ? getScreenByPath(nextDesign, pathname)
-          : nextDesign.screenOrder[0];
+        const screen =
+          pathname && pathname !== '/_new'
+            ? getScreenByPath(nextDesign, pathname)
+            : nextDesign.screenOrder[0];
         const component = nextDesign.screens[screen].root;
         nextSelected = { screen, component };
       }
@@ -166,7 +167,7 @@ const App = () => {
     if (screen.path !== pathname) {
       window.history.pushState(undefined, undefined, screen.path);
     }
-  }, [design, selected]);
+  }, [design, selected.screen]);
 
   // store design
   React.useEffect(() => {
@@ -213,9 +214,9 @@ const App = () => {
   React.useEffect(() => {
     // do this stuff lazily to ride out typing sprees
     const timer = setTimeout(() => {
-      // If we already have this selected object, we must be doing an undo or
+      // If we already have this design object, we must be doing an undo or
       // redo, and therefore no need to add a change
-      if (!changes.some(c => c.selected === selected)) {
+      if (!changes.some(c => c.design === design)) {
         let nextChanges;
         nextChanges = [...changes];
         nextChanges = nextChanges.slice(changeIndex, 10);

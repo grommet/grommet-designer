@@ -96,8 +96,8 @@ export default ({
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const parentId = deleteComponent(nextDesign, selected.component);
-    setDesign(nextDesign);
     setSelected({ ...selected, component: parentId });
+    setDesign(nextDesign);
   };
 
   const onKey = event => {

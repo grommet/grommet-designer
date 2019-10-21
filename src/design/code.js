@@ -38,11 +38,6 @@ const componentToJSX = (
     let children =
       (component.children &&
         component.children
-          .filter(
-            cId =>
-              component.type !== 'DropButton' ||
-              cId !== component.props.dropContentId,
-          )
           .map(cId =>
             componentToJSX(
               design,
@@ -69,6 +64,7 @@ const componentToJSX = (
       })
       .map(name => {
         const value = component.props[name];
+        // TODO: handle -component- props
         if (component.type === 'DropButton' && name === 'dropContentId') {
           return `  dropContent={(\n${componentToJSX(
             design,

@@ -26,13 +26,17 @@ export const upgradeDesign = design => {
         );
       }
     });
-  // remove any component that isn't a screen root or another component's child
+  // remove any component that isn't a screen root, another component's child,
+  // or another component propComponent
   const found = {};
   const descend = id => {
     found[id] = true;
     const component = design.components[id];
     if (component.children) {
       component.children.forEach(childId => descend(childId));
+    }
+    if (component.propComponents) {
+      component.propComponents.forEach(compId => descend(compId));
     }
   };
   // ensure screen roots are numbers
