@@ -9,7 +9,7 @@ export default ({ value, onChange }) => {
       <TextArea
         rows={20}
         value={text}
-        onChange={(event) => {
+        onChange={event => {
           setText(event.target.value);
           try {
             const t = JSON.parse(event.target.value);
@@ -23,4 +23,4 @@ export default ({ value, onChange }) => {
       {error && <Text color="status-critical">{error}</Text>}
     </Box>
   );
-}
+};

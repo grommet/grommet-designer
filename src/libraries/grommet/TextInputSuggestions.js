@@ -9,11 +9,11 @@ export default ({ value, onChange }) => {
         rows={4}
         cols={20}
         value={value ? value.join('\n') : ''}
-        onChange={(event) => {
+        onChange={event => {
           const nextValue = event.target.value;
           onChange(nextValue.split('\n'));
         }}
       />
     </Box>
   );
-}
+};

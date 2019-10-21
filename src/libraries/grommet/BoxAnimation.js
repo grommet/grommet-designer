@@ -33,19 +33,26 @@ const set = (value, index, property, propertyValue) => {
 
 export default ({ value, onChange }) => (
   <Box direction="row" gap="medium">
-    {((value && Array.isArray(value) && value)
-      || (value && typeof value === 'object' && [value])
-      || (value && [{ type: value }])
-      || [{}]).map((c, i) => (
+    {(
+      (value && Array.isArray(value) && value) ||
+      (value && typeof value === 'object' && [value]) ||
+      (value && [{ type: value }]) || [{}]
+    ).map((c, i) => (
       <Box flex="grow" key={i}>
         <Box flex="grow">
           <FormField label="type">
             <Select
               options={[
-                'fadeIn', 'fadeOut',
-                'slideUp', 'slideDown', 'slideLeft', 'slideRight',
-                'zoomIn', 'zoomOut',
-                'jiggle', 'pulse',
+                'fadeIn',
+                'fadeOut',
+                'slideUp',
+                'slideDown',
+                'slideLeft',
+                'slideRight',
+                'zoomIn',
+                'zoomOut',
+                'jiggle',
+                'pulse',
               ]}
               value={c.type || ''}
               onChange={({ option }) => {
@@ -57,9 +64,13 @@ export default ({ value, onChange }) => (
           <FormField label="delay">
             <TextInput
               value={c.delay || ''}
-              onChange={(event) => {
-                const nextValue = set(value, i, 'delay',
-                  parseInt(event.target.value, 10) || undefined);
+              onChange={event => {
+                const nextValue = set(
+                  value,
+                  i,
+                  'delay',
+                  parseInt(event.target.value, 10) || undefined,
+                );
                 onChange(nextValue);
               }}
             />
@@ -67,20 +78,35 @@ export default ({ value, onChange }) => (
           <FormField label="duration">
             <TextInput
               value={c.duration || ''}
-              onChange={(event) => {
-                const nextValue = set(value, i, 'duration',
-                  parseInt(event.target.value, 10) || undefined);
+              onChange={event => {
+                const nextValue = set(
+                  value,
+                  i,
+                  'duration',
+                  parseInt(event.target.value, 10) || undefined,
+                );
                 onChange(nextValue);
               }}
             />
           </FormField>
           <FormField label="size">
             <Select
-              options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
+              options={[
+                'xsmall',
+                'small',
+                'medium',
+                'large',
+                'xlarge',
+                'undefined',
+              ]}
               value={c.size || ''}
               onChange={({ option }) => {
-                const nextValue = set(value, i, 'size',
-                option === 'undefined' ? undefined : option);
+                const nextValue = set(
+                  value,
+                  i,
+                  'size',
+                  option === 'undefined' ? undefined : option,
+                );
                 onChange(nextValue);
               }}
             />

@@ -8,11 +8,11 @@ export default ({ value, onChange }) => {
         rows={20}
         cols={80}
         value={value}
-        onChange={(event) => {
+        onChange={event => {
           const nextValue = event.target.value;
           onChange(nextValue);
         }}
       />
     </Box>
   );
-}
+};

@@ -1,11 +1,32 @@
 import React from 'react';
 import {
-  Box, Button, CheckBox, Heading, Layer, Select, Text, TextInput, ThemeContext,
+  Box,
+  Button,
+  CheckBox,
+  Heading,
+  Layer,
+  Select,
+  Text,
+  TextInput,
+  ThemeContext,
 } from 'grommet';
 import { Close, FormDown, FormUp } from 'grommet-icons';
-import { SelectLabel as IconLabel } from './Icon';
+import {
+  names as iconNames,
+  SelectLabel as IconLabel,
+} from './libraries/designer/Icon';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
+
+const internalColors = [
+  'active',
+  'background',
+  'focus',
+  'icon',
+  'placeholder',
+  'selected',
+  'text',
+];
 
 const ColorLabel = ({ color, theme }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -14,30 +35,33 @@ const ColorLabel = ({ color, theme }) => (
     </ThemeContext.Extend>
     <Text weight="bold">{color}</Text>
   </Box>
-)
+);
 
-const OptionLabel = ({ active, hasColor, theme, name, value }) => {
-  if (hasColor && typeof value === 'string') {
+const OptionLabel = ({ active, isColor, isIcon, theme, name, value }) => {
+  if (isColor && typeof value === 'string') {
     return <ColorLabel color={value} theme={theme} />;
   }
-  if (name === 'icon' && typeof value === 'string') return <IconLabel icon={value} />;
+  if (isIcon && typeof value === 'string') {
+    return <IconLabel icon={value} />;
+  }
   return (
     <Box pad="small">
-      <Text weight={active ? "bold" : undefined}>
+      <Text weight={active ? 'bold' : undefined}>
         {typeof value !== 'string' ? JSON.stringify(value) : value || ''}
       </Text>
     </Box>
   );
-}
+};
 
-const jsonValue = (value) => {
+const jsonValue = value => {
   if (typeof value === 'string') {
     return value;
   }
   return JSON.stringify(value);
-}
+};
 
 const Property = React.forwardRef((props, ref) => {
+  const baseTheme = React.useContext(ThemeContext);
   const { first, name, property, theme, value, onChange } = props;
   const [stringValue, setStringValue] = React.useState(value || '');
   const [expand, setExpand] = React.useState();
@@ -48,42 +72,68 @@ const Property = React.forwardRef((props, ref) => {
 
   const searchExp = searchText && new RegExp(searchText, 'i');
   if (Array.isArray(property)) {
-    const hasColor = property.includes('light-1');
+    const isColor = property.includes('-color-');
+    let options = property;
+    if (isColor) {
+      const merged = { ...baseTheme.global.colors, ...theme.global.colors };
+      options = Object.keys(merged)
+        .filter(c => !internalColors.includes(c))
+        .sort();
+    }
+    const isIcon = property.includes('-Icon-');
+    if (isIcon) {
+      options = iconNames;
+    }
     return (
-      <Field key={name} ref={fieldRef} first={first} label={name} htmlFor={name}>
+      <Field
+        key={name}
+        ref={fieldRef}
+        first={first}
+        label={name}
+        htmlFor={name}
+      >
         <Select
           ref={ref}
           plain
           dropTarget={dropTarget}
           id={name}
           name={name}
-          options={searchExp ? [...property.filter(p => searchExp.test(p)), 'undefined']
-            : [...property, 'undefined']}
+          options={
+            searchExp
+              ? [...options.filter(p => searchExp.test(p)), 'undefined']
+              : [...options, 'undefined']
+          }
           value={value || ''}
-          valueLabel={(
+          valueLabel={
             <OptionLabel
               active
               name={name}
-              hasColor={hasColor}
+              isColor={isColor}
+              isIcon={isIcon}
               theme={theme}
               value={value}
             />
-          )}
+          }
           onChange={({ option }) => {
             setSearchText(undefined);
             onChange(option === 'undefined' ? undefined : option);
           }}
-          onSearch={property.length > 20
-            ? (nextSearchText) => setSearchText(nextSearchText) : undefined}
+          onSearch={
+            options.length > 20
+              ? nextSearchText => setSearchText(nextSearchText)
+              : undefined
+          }
         >
-          {(option) =>
+          {option => (
             <OptionLabel
               name={name}
-              hasColor={hasColor}
+              isColor={isColor}
+              isIcon={isIcon}
               theme={theme}
               value={option}
               active={option === value}
-            />}
+            />
+          )}
         </Select>
       </Field>
     );
@@ -96,7 +146,7 @@ const Property = React.forwardRef((props, ref) => {
           name={name}
           plain
           value={stringValue}
-          onChange={(event) => {
+          onChange={event => {
             const nextValue = event.target.value;
             setStringValue(nextValue);
             clearTimeout(debounceTimer);
@@ -116,7 +166,7 @@ const Property = React.forwardRef((props, ref) => {
             name={name}
             toggle
             checked={!!value}
-            onChange={(event) => onChange(event.target.checked)}
+            onChange={event => onChange(event.target.checked)}
           />
         </Box>
       </Field>
@@ -127,18 +177,24 @@ const Property = React.forwardRef((props, ref) => {
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
           <Field label={name} first={first}>
             <Box direction="row" align="center" gap="small">
-              {value && <Text weight="bold" truncate>{jsonValue(value)}</Text>}
+              {value && (
+                <Text weight="bold" truncate>
+                  {jsonValue(value)}
+                </Text>
+              )}
               <Box flex={false} pad="small">
-              {expand
-                ? <FormUp color="control" />
-                : <FormDown color="control" />}
+                {expand ? (
+                  <FormUp color="control" />
+                ) : (
+                  <FormDown color="control" />
+                )}
               </Box>
             </Box>
           </Field>
         </Button>
         {expand && (
           <Box pad={{ left: 'medium' }} border="bottom">
-            {Object.keys(property).map((key) => (
+            {Object.keys(property).map(key => (
               <Property
                 key={key}
                 name={key}
@@ -147,9 +203,12 @@ const Property = React.forwardRef((props, ref) => {
                 value={(value || {})[key]}
                 onChange={subValue => {
                   let nextValue = { ...(value || {}) };
-                  if (subValue !== undefined && subValue !== '') nextValue[key] = subValue
+                  if (subValue !== undefined && subValue !== '')
+                    nextValue[key] = subValue;
                   else delete nextValue[key];
-                  onChange(Object.keys(nextValue).length > 0 ? nextValue : undefined);
+                  onChange(
+                    Object.keys(nextValue).length > 0 ? nextValue : undefined,
+                  );
                 }}
               />
             ))}
@@ -164,7 +223,11 @@ const Property = React.forwardRef((props, ref) => {
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
           <Field label={name} first={first}>
             <Box direction="row" align="center" gap="small">
-              {value && <Text weight="bold" truncate>{jsonValue(value)}</Text>}
+              {value && (
+                <Text weight="bold" truncate>
+                  {jsonValue(value)}
+                </Text>
+              )}
               <Box flex={false} pad="small">
                 <FormDown color="control" />
               </Box>
@@ -187,7 +250,7 @@ const Property = React.forwardRef((props, ref) => {
               pad="small"
               flex={false}
             >
-              <Heading margin={{ left: "small", vertical: 'none' }} level={3}>
+              <Heading margin={{ left: 'small', vertical: 'none' }} level={3}>
                 {name}
               </Heading>
               <ActionButton
@@ -210,6 +273,6 @@ const Property = React.forwardRef((props, ref) => {
     );
   }
   return null;
-})
+});
 
-export default Property
+export default Property;

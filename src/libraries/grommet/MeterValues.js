@@ -1,9 +1,18 @@
 import React from 'react';
 import {
-  Box, Button, CheckBox, FormField, Select, Text, TextInput, ThemeContext,
+  Box,
+  Button,
+  CheckBox,
+  FormField,
+  Select,
+  Text,
+  TextInput,
+  ThemeContext,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import { colors } from '../types';
+// TOOD: fix
+// import { colors } from '../types';
+const colors = [];
 
 const ColorLabel = ({ color, theme }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -12,7 +21,7 @@ const ColorLabel = ({ color, theme }) => (
     </ThemeContext.Extend>
     <Text weight="bold">{color}</Text>
   </Box>
-)
+);
 
 export default ({ value, theme, onChange }) => {
   const [searchText, setSearchText] = React.useState('');
@@ -27,19 +36,25 @@ export default ({ value, theme, onChange }) => {
                 plain
                 id="color"
                 name="color"
-                options={searchExp
-                  ? [...colors.filter(c => searchExp.test(c)), 'undefined']
-                  : [...colors, 'undefined']}
+                options={
+                  searchExp
+                    ? [...colors.filter(c => searchExp.test(c)), 'undefined']
+                    : [...colors, 'undefined']
+                }
                 value={item.color || ''}
                 valueLabel={<ColorLabel color={item.color} theme={theme} />}
                 onChange={({ option }) => {
                   setSearchText(undefined);
                   const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].color = option === 'undefined' ? undefined : option;
+                  nextValue[i].color =
+                    option === 'undefined' ? undefined : option;
                   onChange(nextValue);
                 }}
-                onSearch={colors.length > 20
-                  ? (nextSearchText) => setSearchText(nextSearchText) : undefined}
+                onSearch={
+                  colors.length > 20
+                    ? nextSearchText => setSearchText(nextSearchText)
+                    : undefined
+                }
               >
                 {option => <ColorLabel color={option} theme={theme} />}
               </Select>
@@ -48,7 +63,7 @@ export default ({ value, theme, onChange }) => {
               <Box pad="small">
                 <CheckBox
                   checked={item.highlight || false}
-                  onChange={(event) => {
+                  onChange={event => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].highlight = event.target.checked;
                     onChange(nextValue);
@@ -59,7 +74,7 @@ export default ({ value, theme, onChange }) => {
             <FormField label="label">
               <TextInput
                 value={item.label || ''}
-                onChange={(event) => {
+                onChange={event => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].label = event.target.value;
                   onChange(nextValue);
@@ -69,7 +84,7 @@ export default ({ value, theme, onChange }) => {
             <FormField label="value">
               <TextInput
                 value={item.value || ''}
-                onChange={(event) => {
+                onChange={event => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].value = parseInt(event.target.value, 10);
                   onChange(nextValue);
@@ -98,4 +113,4 @@ export default ({ value, theme, onChange }) => {
       />
     </Box>
   );
-}
+};

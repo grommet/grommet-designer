@@ -11,25 +11,26 @@ import {
   TextInput,
 } from 'grommet';
 import { Duplicate, Refresh, Trash } from 'grommet-icons';
-import { types } from './types';
 import Property from './Property';
 import {
+  deleteComponent,
   duplicateComponent,
   getDisplayName,
   getLinkOptions,
-  getParent,
 } from './design';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
+import { getComponentType } from './utils';
 
 export default ({
   colorMode,
   component,
   design,
+  libraries,
   selected,
   theme,
-  onChange,
-  onDelete,
+  setDesign,
+  setSelected,
 }) => {
   const [search, setSearch] = React.useState();
 
@@ -47,60 +48,63 @@ export default ({
     const component = nextDesign.components[selected.component];
     if (value !== undefined) component.props[propName] = value;
     else delete component.props[propName];
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const setText = text => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.text = text;
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const setName = name => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.name = name;
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const link = to => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.linkTo = to;
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const setHide = hide => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.hide = hide;
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const reset = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.props = {};
-    onChange({ design: nextDesign });
+    setDesign(nextDesign);
   };
 
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const newId = duplicateComponent(nextDesign, selected.component);
-    const parent = getParent(nextDesign, selected.component);
-    parent.children.push(newId);
-    onChange({
-      design: nextDesign,
-      selected: { ...selected, component: newId },
-    });
+    setDesign(nextDesign);
+    setSelected({ ...selected, component: newId });
+  };
+
+  const delet = () => {
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const parentId = deleteComponent(nextDesign, selected.component);
+    setDesign(nextDesign);
+    setSelected({ ...selected, component: parentId });
   };
 
   const onKey = event => {
     if (document.activeElement === document.body) {
       if (event.key === 'Backspace' && event.metaKey) {
         event.preventDefault();
-        onDelete();
+        delet();
       }
       if (event.key === 'p') {
         event.preventDefault(); // so we don't put the 'p' in the search input
@@ -123,7 +127,7 @@ export default ({
     }
   };
 
-  const type = types[component.type];
+  const type = getComponentType(libraries, component.type) || {};
   let linkOptions;
   if (type.name === 'Button') {
     // options for what the button should do:
@@ -154,7 +158,7 @@ export default ({
               fill
               hoverIndicator
               target="_blank"
-              href={`https://v2.grommet.io/${type.name.toLowerCase()}`}
+              href={type.documentation}
             >
               <Box fill pad="small">
                 <Heading level={2} size="18px" margin="none" truncate>
@@ -163,7 +167,7 @@ export default ({
               </Box>
             </Button>
           </Box>
-          {type.name !== 'Grommet' && (
+          {component.deletable !== false && (
             <Box flex={false} direction="row" align="center">
               <ActionButton title="reset" icon={<Refresh />} onClick={reset} />
               <ActionButton
@@ -171,11 +175,7 @@ export default ({
                 icon={<Duplicate />}
                 onClick={duplicate}
               />
-              <ActionButton
-                title="delete"
-                icon={<Trash />}
-                onClick={onDelete}
-              />
+              <ActionButton title="delete" icon={<Trash />} onClick={delet} />
             </Box>
           )}
         </Box>
@@ -312,6 +312,11 @@ export default ({
                               propName =>
                                 !searchExp || searchExp.test(propName),
                             )
+                            .filter(
+                              propName =>
+                                typeof properties[propName] !== 'string' ||
+                                !properties[propName].startsWith('-component-'),
+                            )
                             .map((propName, index) => (
                               <Fragment key={propName}>
                                 <Property
@@ -338,6 +343,11 @@ export default ({
                   : Object.keys(type.properties)
                       .filter(
                         propName => !searchExp || searchExp.test(propName),
+                      )
+                      .filter(
+                        propName =>
+                          typeof type.properties[propName] !== 'string' ||
+                          !type.properties[propName].startsWith('-component-'),
                       )
                       .map((propName, index) => (
                         <Fragment key={propName}>

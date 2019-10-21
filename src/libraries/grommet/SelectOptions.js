@@ -10,7 +10,7 @@ export default ({ design, selected, value, onChange }) => {
           <FormField>
             <TextInput
               value={item || ''}
-              onChange={(event) => {
+              onChange={event => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue[i] = event.target.value;
                 onChange(nextValue);
@@ -38,4 +38,4 @@ export default ({ design, selected, value, onChange }) => {
       />
     </Box>
   );
-}
+};

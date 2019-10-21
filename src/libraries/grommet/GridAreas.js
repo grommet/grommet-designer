@@ -1,22 +1,32 @@
 import React, { Fragment } from 'react';
 import {
-  Box, Button, FormField, Markdown, MaskedInput, Paragraph, TextInput,
+  Box,
+  Button,
+  FormField,
+  Markdown,
+  MaskedInput,
+  Paragraph,
+  TextInput,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-const CoordinateInput = ({value, index, name, max, onChange}) => (
+const CoordinateInput = ({ value, index, name, max, onChange }) => (
   <MaskedInput
     mask={[
-      { regexp: new RegExp(`^[0-${max[0]}]$`), length: 1, placeholder: 'column' },
+      {
+        regexp: new RegExp(`^[0-${max[0]}]$`),
+        length: 1,
+        placeholder: 'column',
+      },
       { fixed: ',' },
       { regexp: new RegExp(`^[0-${max[1]}]$`), length: 1, placeholder: 'row' },
     ]}
     value={value[index][name].map(v => (v === undefined ? '' : v)).join(',')}
-    onChange={(event) => {
+    onChange={event => {
       const nextValue = JSON.parse(JSON.stringify(value));
-      nextValue[index][name] =
-        event.target.value.split(',')
-          .map(v => (v === '' ? undefined : parseInt(v, 10)));
+      nextValue[index][name] = event.target.value
+        .split(',')
+        .map(v => (v === '' ? undefined : parseInt(v, 10)));
       onChange(nextValue);
     }}
   />
@@ -25,7 +35,7 @@ const CoordinateInput = ({value, index, name, max, onChange}) => (
 export default ({ design, selected, value, onChange }) => {
   const component = design.components[selected.component];
   const { columns, rows } = component.props;
-  const missing = (!Array.isArray(rows) || !Array.isArray(columns));
+  const missing = !Array.isArray(rows) || !Array.isArray(columns);
   const max = !missing && [columns.length - 1, rows.length - 1];
   return (
     <Box>
@@ -36,8 +46,7 @@ export default ({ design, selected, value, onChange }) => {
       ) : (
         <Fragment>
           <Paragraph>
-            You have {max[0] + 1} columns and {max[1] + 1} rows
-            to work with.
+            You have {max[0] + 1} columns and {max[1] + 1} rows to work with.
           </Paragraph>
           {Array.isArray(value) && (
             <Box direction="row" gap="medium">
@@ -47,7 +56,7 @@ export default ({ design, selected, value, onChange }) => {
                     <FormField label="name">
                       <TextInput
                         value={area.name}
-                        onChange={(event) => {
+                        onChange={event => {
                           const nextValue = JSON.parse(JSON.stringify(value));
                           nextValue[index].name = event.target.value;
                           onChange(nextValue);
@@ -99,4 +108,4 @@ export default ({ design, selected, value, onChange }) => {
       )}
     </Box>
   );
-}
+};

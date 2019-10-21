@@ -1,28 +1,49 @@
 import React from 'react';
+import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import {
-  Box, Button, Heading, Keyboard, Stack, Text,
-} from 'grommet';
-import { Add, Folder, FormDown, FormNext, Redo, Share, Undo } from 'grommet-icons';
-import { types } from '../types';
+  Add,
+  Folder,
+  FormDown,
+  FormNext,
+  Redo,
+  Share,
+  Undo,
+} from 'grommet-icons';
 import {
-  childSelected, getParent, getScreenForComponent, nextSiblingSelected,
-  parentSelected, previousSiblingSelected, isDescendent,
+  childSelected,
+  getParent,
+  getScreenForComponent,
+  nextSiblingSelected,
+  parentSelected,
+  previousSiblingSelected,
+  isDescendent,
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignSettings from '../DesignSettings';
 import Designs from './Designs';
 import Sharing from './Share';
+import { getComponentType } from '../utils';
 
 const treeName = component =>
-  (component.name || component.text
-    || component.props.name || component.props.label
-    || component.type);
+  component.name ||
+  component.text ||
+  component.props.name ||
+  component.props.label ||
+  component.type.split('.')[1] ||
+  component.type;
 
 const Tree = ({
-  colorMode, design, selected, theme, onChange, onUndo, onRedo,
+  colorMode,
+  design,
+  libraries,
+  selected,
+  theme,
+  setDesign,
+  setSelected,
+  onUndo,
+  onRedo,
 }) => {
-
   const [dragging, setDragging] = React.useState();
   const [dropTarget, setDropTarget] = React.useState();
   const [dropWhere, setDropWhere] = React.useState();
@@ -41,9 +62,7 @@ const Tree = ({
         selectedRef.current.scrollIntoView();
       }
     }
-  }, [selectedRef])
-
-  const select = (selected) => onChange({ selected })
+  }, [selectedRef]);
 
   const moveChild = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -65,55 +84,58 @@ const Tree = ({
     } else {
       const nextParent = getParent(nextDesign, dropTarget);
       const nextIndex = nextParent.children.indexOf(dropTarget);
-      nextParent.children.splice(dropWhere === 'before'
-        ? nextIndex : nextIndex + 1, 0, dragging);
+      nextParent.children.splice(
+        dropWhere === 'before' ? nextIndex : nextIndex + 1,
+        0,
+        dragging,
+      );
     }
     const nextScreen = getScreenForComponent(nextDesign, dragging);
     setDragging(undefined);
     setDropTarget(undefined);
-    onChange({
-      design: nextDesign,
-      selected: { screen: nextScreen , component: dragging },
-    });
-  }
+    setDesign(nextDesign);
+    setSelected({ screen: nextScreen, component: dragging });
+  };
 
   const moveScreen = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const moveIndex = nextDesign.screenOrder.indexOf(dragging);
     nextDesign.screenOrder.splice(moveIndex, 1);
     const targetIndex = nextDesign.screenOrder.indexOf(dropScreenTarget);
-    nextDesign.screenOrder.splice(dropWhere === 'before'
-      ? targetIndex : targetIndex + 1, 0, dragging);
+    nextDesign.screenOrder.splice(
+      dropWhere === 'before' ? targetIndex : targetIndex + 1,
+      0,
+      dragging,
+    );
     setDraggingScreen(undefined);
     setDropScreenTarget(undefined);
-    onChange({ design: nextDesign });
-  }
+    setDesign(nextDesign);
+  };
 
-  const toggleCollapse = (id) => {
+  const toggleCollapse = id => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[id];
     component.collapsed = !component.collapsed;
-    onChange({ design: nextDesign, selected: { ...selected, component: id } });
-  }
+    setDesign(nextDesign);
+    setSelected({ ...selected, component: id });
+  };
 
-  const onKey = (event) => {
+  const onKey = event => {
     if (document.activeElement === document.body) {
       if (event.key === 'a') {
         setAdding(true);
       }
       if (event.key === 'ArrowDown') {
-        onChange({ selected:
-          (nextSiblingSelected(design, selected) || selected) });
+        setSelected(nextSiblingSelected(design, selected) || selected);
       }
       if (event.key === 'ArrowUp') {
-        onChange({ selected:
-          (previousSiblingSelected(design, selected) || selected) });
+        setSelected(previousSiblingSelected(design, selected) || selected);
       }
       if (event.key === 'ArrowLeft') {
-        onChange({ selected: (parentSelected(design, selected) || selected) });
+        setSelected(parentSelected(design, selected) || selected);
       }
       if (event.key === 'ArrowRight') {
-        onChange({ selected: (childSelected(design, selected) || selected) });
+        setSelected(childSelected(design, selected) || selected);
       }
       if (onUndo && event.key === 'z') {
         onUndo();
@@ -125,16 +147,18 @@ const Tree = ({
         toggleCollapse(selected.component);
       }
     }
-  }
+  };
 
   const renderDropArea = (id, where) => {
     return (
       <Box
         pad="xxsmall"
-        background={dragging && dropTarget
-          && dropTarget === id && dropWhere === where
-          ? 'accent-2' : undefined}
-        onDragEnter={(event) => {
+        background={
+          dragging && dropTarget && dropTarget === id && dropWhere === where
+            ? 'accent-2'
+            : undefined
+        }
+        onDragEnter={event => {
           if (dragging && dragging !== id) {
             event.preventDefault();
             setDropTarget(id);
@@ -143,7 +167,7 @@ const Tree = ({
             setDropTarget(undefined);
           }
         }}
-        onDragOver={(event) => {
+        onDragOver={event => {
           if (dragging && dragging !== id) {
             event.preventDefault();
           }
@@ -151,17 +175,21 @@ const Tree = ({
         onDrop={moveChild}
       />
     );
-  }
+  };
 
   const renderScreenDropArea = (screenId, where) => {
     return (
       <Box
         pad="xxsmall"
-        background={draggingScreen
-          && dropScreenTarget && dropScreenTarget === screenId
-          && dropWhere === where
-          ? 'accent-2' : undefined}
-        onDragEnter={(event) => {
+        background={
+          draggingScreen &&
+          dropScreenTarget &&
+          dropScreenTarget === screenId &&
+          dropWhere === where
+            ? 'accent-2'
+            : undefined
+        }
+        onDragEnter={event => {
           if (draggingScreen && draggingScreen !== screenId) {
             event.preventDefault();
             setDropScreenTarget(screenId);
@@ -170,7 +198,7 @@ const Tree = ({
             setDropScreenTarget(undefined);
           }
         }}
-        onDragOver={(event) => {
+        onDragOver={event => {
           if (draggingScreen && draggingScreen !== screenId) {
             event.preventDefault();
           }
@@ -178,14 +206,15 @@ const Tree = ({
         onDrop={moveScreen}
       />
     );
-  }
+  };
 
   const renderComponent = (screen, id, firstChild) => {
     const component = design.components[id];
     if (!component) return null;
-    const type = types[component.type];
-    const reference = (component.type === 'Reference'
-      && design.components[component.props.component]);
+    const type = getComponentType(libraries, component.type);
+    const reference =
+      component.type === 'Reference' &&
+      design.components[component.props.component];
     const collapserColor = { light: 'light-4', dark: 'dark-3' };
     return (
       <Box key={id}>
@@ -194,9 +223,9 @@ const Tree = ({
           <Button
             fill
             hoverIndicator
-            onClick={() => select({ screen, component: id })}
+            onClick={() => setSelected({ screen, component: id })}
             draggable
-            onDragStart={(event) => {
+            onDragStart={event => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
               setDragging(id);
             }}
@@ -210,7 +239,7 @@ const Tree = ({
                 setDropWhere('in');
               }
             }}
-            onDragOver={(event) => {
+            onDragOver={event => {
               if (dragging && dragging !== id && type.container) {
                 event.preventDefault();
               }
@@ -221,9 +250,11 @@ const Tree = ({
               ref={selected.component === id ? selectedRef : undefined}
               pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
               background={
-                (dropTarget && dropTarget === id && dropWhere === 'in')
-                ? 'accent-2'
-                : (selected.component === id ? 'accent-1' : undefined)
+                dropTarget && dropTarget === id && dropWhere === 'in'
+                  ? 'accent-2'
+                  : selected.component === id
+                  ? 'accent-1'
+                  : undefined
               }
             >
               <Text size="medium" truncate>
@@ -231,11 +262,15 @@ const Tree = ({
               </Text>
             </Box>
           </Button>
-          {component.children && (
+          {(component.children || component.propComponents) && (
             <Button
-              icon={component.collapsed
-                ? <FormNext color={collapserColor} />
-                : <FormDown color={collapserColor} />}
+              icon={
+                component.collapsed ? (
+                  <FormNext color={collapserColor} />
+                ) : (
+                  <FormDown color={collapserColor} />
+                )
+              }
               onClick={() => toggleCollapse(id)}
             />
           )}
@@ -243,13 +278,21 @@ const Tree = ({
         {!component.collapsed && component.children && (
           <Box pad={{ left: 'small' }}>
             {component.children.map((childId, index) =>
-              renderComponent(screen, childId, index === 0))}
+              renderComponent(screen, childId, index === 0),
+            )}
+          </Box>
+        )}
+        {!component.collapsed && component.propComponents && (
+          <Box pad={{ left: 'small' }}>
+            {component.propComponents.map((propId, index) =>
+              renderComponent(screen, propId, index === 0),
+            )}
           </Box>
         )}
         {renderDropArea(id, 'after')}
       </Box>
-    )
-  }
+    );
+  };
 
   const renderScreen = (screenId, firstScreen, onlyScreen) => {
     const screen = design.screens[screenId];
@@ -267,9 +310,9 @@ const Tree = ({
           <Button
             fill
             hoverIndicator
-            onClick={() => select({ screen: screenId, component: id })}
+            onClick={() => setSelected({ screen: screenId, component: id })}
             draggable
-            onDragStart={(event) => {
+            onDragStart={event => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
               setDraggingScreen(screenId);
             }}
@@ -294,9 +337,13 @@ const Tree = ({
           </Button>
           {component.children && (
             <Button
-              icon={component.collapsed
-                ? <FormNext color={collapserColor} />
-                : <FormDown color={collapserColor} />}
+              icon={
+                component.collapsed ? (
+                  <FormNext color={collapserColor} />
+                ) : (
+                  <FormDown color={collapserColor} />
+                )
+              }
               onClick={() => toggleCollapse(id)}
             />
           )}
@@ -304,13 +351,14 @@ const Tree = ({
         {!component.collapsed && component.children && (
           <Box flex={false}>
             {component.children.map((childId, index) =>
-              renderComponent(screen.id, childId, index === 0))}
+              renderComponent(screen.id, childId, index === 0),
+            )}
           </Box>
         )}
         {renderScreenDropArea(screenId, 'after')}
       </Box>
     );
-  }
+  };
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
@@ -336,16 +384,13 @@ const Tree = ({
               <Designs
                 design={design}
                 colorMode={colorMode}
-                onChange={onChange}
+                setDesign={setDesign}
+                setSelected={setSelected}
                 onClose={() => setChoosing(false)}
               />
             )}
             <Box flex alignSelf="stretch">
-              <Button
-                fill
-                hoverIndicator
-                onClick={() => setEditing(true)}
-              >
+              <Button fill hoverIndicator onClick={() => setEditing(true)}>
                 <Box fill pad="small">
                   <Heading size="18px" margin="none" truncate>
                     {design.name}
@@ -363,17 +408,12 @@ const Tree = ({
                 design={design}
                 theme={theme}
                 colorMode={colorMode}
-                onChange={onChange}
+                setDesign={setDesign}
                 onClose={() => setSharing(false)}
               />
             )}
           </Box>
-          <Box 
-            flex={false}
-            direction="row"
-            justify="between"
-            align="center"
-          >
+          <Box flex={false} direction="row" justify="between" align="center">
             <Box direction="row">
               <ActionButton
                 title="undo last change"
@@ -397,15 +437,17 @@ const Tree = ({
           {adding && (
             <AddComponent
               design={design}
+              libraries={libraries}
               selected={selected}
-              onChange={onChange}
+              setDesign={setDesign}
+              setSelected={setSelected}
               onClose={() => setAdding(false)}
             />
           )}
           {editing && (
             <DesignSettings
               design={design}
-              onChange={onChange}
+              setDesign={setDesign}
               onClose={() => setEditing(false)}
             />
           )}
@@ -414,13 +456,17 @@ const Tree = ({
         <Box flex overflow="auto">
           <Box flex={false}>
             {design.screenOrder.map((sId, index) =>
-              renderScreen(parseInt(sId, 10), index === 0,
-                design.screenOrder.length === 1))}
+              renderScreen(
+                parseInt(sId, 10),
+                index === 0,
+                design.screenOrder.length === 1,
+              ),
+            )}
           </Box>
         </Box>
       </Box>
     </Keyboard>
   );
-}
+};
 
 export default Tree;

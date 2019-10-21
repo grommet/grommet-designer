@@ -1,11 +1,22 @@
 import React from 'react';
 import {
-  Box, Button, CheckBox, Grid, Heading, Meter, Stack, Text, grommet,
+  Box,
+  Button,
+  CheckBox,
+  Grid,
+  Heading,
+  Meter,
+  Stack,
+  Text,
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import styled, { keyframes } from 'styled-components';
 import {
-  apiUrl, bare, getInitialSelected, resetState, upgradeDesign,
+  apiUrl,
+  bare,
+  getInitialSelected,
+  setupDesign,
+  upgradeDesign,
 } from '../design';
 import Action from '../components/Action';
 import ActionButton from '../components/ActionButton';
@@ -18,7 +29,7 @@ const standardDesigns = [
   {
     name: 'Card',
     id: 'Card-eric-soderberg-hpe-com',
-  }
+  },
 ];
 
 const Spinner = styled(Meter)`
@@ -29,7 +40,7 @@ const Spinner = styled(Meter)`
 }`} 3s infinite;
 `;
 
-const nameToBackground = (name) => {
+const nameToBackground = name => {
   let num = 0;
   for (let i = 0; i < name.length; i++) {
     num += name.charCodeAt(i);
@@ -64,7 +75,9 @@ const Design = ({ name, loading, onClick }) => (
             align="center"
             justify="center"
           >
-            <Text textAlign="center" weight="bold">{name}</Text>
+            <Text textAlign="center" weight="bold">
+              {name}
+            </Text>
           </Box>
         )}
       </Button>
@@ -72,7 +85,14 @@ const Design = ({ name, loading, onClick }) => (
   </Box>
 );
 
-const Designs = ({ colorMode, design, onClose, onChange }) => {
+const Designs = ({
+  colorMode,
+  design,
+  onClose,
+  setColorMode,
+  setDesign,
+  setSelected,
+}) => {
   const [designs, setDesigns] = React.useState([]);
   const [error, setError] = React.useState();
   const [confirmDelete, setConfirmDelete] = React.useState();
@@ -85,27 +105,27 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
     }
   }, []);
 
-  const onSelect = (name) => {
+  const select = name => {
     const item = localStorage.getItem(name);
     if (item) {
       const nextDesign = JSON.parse(item);
       upgradeDesign(nextDesign);
-      onChange({
-        design: nextDesign,
-        selected: getInitialSelected(nextDesign),
-      });
+      setDesign(nextDesign);
+      setSelected(getInitialSelected(nextDesign));
       onClose();
     }
-  }
+  };
 
-  const onReset = () => {
+  const reset = () => {
     localStorage.removeItem('selected');
     localStorage.removeItem('activeDesign');
-    onChange({ ...resetState(bare), theme: grommet });
+    const nextDesign = setupDesign(bare);
+    setDesign(nextDesign);
+    setSelected(getInitialSelected(nextDesign));
     onClose();
-  }
+  };
 
-  const onDelete = (name) => {
+  const delet = name => {
     setConfirmDelete(undefined);
     const nextDesigns = designs.filter(n => n !== name);
     localStorage.setItem('designs', JSON.stringify(nextDesigns));
@@ -114,42 +134,47 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
     if (design.name === name) {
       localStorage.removeItem('selected');
       localStorage.removeItem('activeDesign');
-      onChange({ ...resetState(bare), theme: grommet });
+      const nextDesign = setupDesign(bare);
+      setDesign(nextDesign);
+      setSelected(getInitialSelected(nextDesign));
     }
-  }
+  };
 
-  const onLoad = (id) => {
+  const load = id => {
     setLoading(id);
     fetch(`${apiUrl}/${id}`)
       .then(response => response.json())
-      .then((nextDesign) => {
+      .then(nextDesign => {
         upgradeDesign(nextDesign);
-        onChange({
-          design: nextDesign,
-          selected: getInitialSelected(nextDesign),
-        });
+        setDesign(nextDesign);
+        setSelected(getInitialSelected(nextDesign));
         onClose();
       })
       .catch(() => setLoading(undefined));
-  }
+  };
 
   return (
-    <Action label="designs" colorMode={colorMode} onClose={onClose} full="horizontal">
+    <Action
+      label="designs"
+      colorMode={colorMode}
+      onClose={onClose}
+      full="horizontal"
+    >
       <Heading level={2}>My Designs</Heading>
       <Grid fill="horizontal" columns="small" rows="xsmall" gap="large">
-        <Box fill round="medium" >
-          <Button fill label="New" onClick={onReset} />
+        <Box fill round="medium">
+          <Button fill label="New" onClick={reset} />
         </Box>
         {designs.map(name => (
           <Stack key={name} fill anchor="bottom-right">
-            <Design name={name} onClick={() => onSelect(name)} />
+            <Design name={name} onClick={() => select(name)} />
             <Box direction="row" gap="small">
               {confirmDelete === name && (
                 <ActionButton
                   title="confirm delete"
                   icon={<Trash color="status-critical" />}
                   hoverIndicator
-                  onClick={() => onDelete(name)}
+                  onClick={() => delet(name)}
                 />
               )}
               <ActionButton
@@ -157,7 +182,8 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
                 icon={<Trash color="dark-3" />}
                 hoverIndicator
                 onClick={() =>
-                  setConfirmDelete(confirmDelete === name ? undefined : name)}
+                  setConfirmDelete(confirmDelete === name ? undefined : name)
+                }
               />
             </Box>
           </Stack>
@@ -172,14 +198,15 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
             <input
               style={{ display: 'block', width: '100%', height: '100%' }}
               type="file"
-              onChange={(event) => {
+              onChange={event => {
                 setError(undefined);
                 const reader = new FileReader();
                 reader.onload = () => {
                   try {
-                    const design = JSON.parse(reader.result);
-                    const selected = getInitialSelected(design);
-                    onChange({ design, selected });
+                    const nextDesign = JSON.parse(reader.result);
+                    const nextSelected = getInitialSelected(design);
+                    setDesign(nextDesign);
+                    setSelected(nextSelected);
                     onClose();
                   } catch (e) {
                     setError(e.message);
@@ -212,7 +239,7 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
               key={id}
               name={name}
               loading={loading === id}
-              onClick={() => onLoad(id)}
+              onClick={() => load(id)}
             />
           ))}
         </Grid>
@@ -229,7 +256,7 @@ const Designs = ({ colorMode, design, onClose, onChange }) => {
           toggle
           checked={colorMode === 'dark'}
           onChange={() => {
-            onChange({ colorMode: colorMode === 'dark' ? 'light' : 'dark' })
+            setColorMode(colorMode === 'dark' ? 'light' : 'dark');
             onClose();
           }}
         />

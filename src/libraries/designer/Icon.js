@@ -14,7 +14,7 @@ export const SelectLabel = ({ icon }) => (
 
 const Icon = ({ icon, ...rest }) => {
   const Icon = icons[icon || 'Add'] || icons.Blank;
-  return <Icon {...rest} />
+  return <Icon {...rest} />;
 };
 
 export default Icon;

@@ -1,4 +1,6 @@
 import { bare } from './bare';
+import { getParent } from './get';
+import { upgradeDesign } from './upgrade';
 
 export const copyComponent = (nextDesign, design, id) => {
   const component = design.components[id];
@@ -8,7 +10,7 @@ export const copyComponent = (nextDesign, design, id) => {
   nextComponent.id = nextId;
   nextDesign.components[nextId] = nextComponent;
   if (component.children) {
-    nextComponent.children = component.children.map((childId) => {
+    nextComponent.children = component.children.map(childId => {
       const nextChildId = copyComponent(nextDesign, design, childId);
       // special case DropButton dropContentId
       if (childId === component.props.dropContentId) {
@@ -18,7 +20,7 @@ export const copyComponent = (nextDesign, design, id) => {
     });
   }
   return nextId;
-}
+};
 
 export const addScreen = (nextDesign, copyScreen, selected) => {
   // create new screen
@@ -28,9 +30,11 @@ export const addScreen = (nextDesign, copyScreen, selected) => {
   nextDesign.screens[screenId] = screen;
   if (copyScreen) {
     // copy components from the copyScreen
-    if (copyScreen.id) { // screen in nextDesign
+    if (copyScreen.id) {
+      // screen in nextDesign
       screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
-    } else { // starter
+    } else {
+      // starter
       screen.root = copyComponent(nextDesign, copyScreen, copyScreen.root);
     }
   } else {
@@ -41,10 +45,10 @@ export const addScreen = (nextDesign, copyScreen, selected) => {
   const baseName = copyScreen ? copyScreen.name : 'Screen';
   const nameAvailable = name =>
     !Object.keys(nextDesign.screens)
-    .map(sId => nextDesign.screens[sId])
-    .some(screen => (screen.name === name)) && name;
+      .map(sId => nextDesign.screens[sId])
+      .some(screen => screen.name === name) && name;
   let name = nameAvailable(baseName);
-  let suffix = 0;
+  let suffix = 1;
   while (!name) {
     suffix += 1;
     name = nameAvailable(`${baseName} ${suffix}`);
@@ -57,6 +61,35 @@ export const addScreen = (nextDesign, copyScreen, selected) => {
   return screenId;
 };
 
+export const deleteScreen = (nextDesign, id) => {
+  delete nextDesign.screens[id];
+  const index = nextDesign.screenOrder.indexOf(id);
+  nextDesign.screenOrder.splice(index, 1);
+  // clean out unused components
+  upgradeDesign(nextDesign);
+  const nextScreenId = nextDesign.screenOrder[index ? index - 1 : index];
+  return nextScreenId;
+};
+
 export const duplicateComponent = (nextDesign, id) => {
-  return copyComponent(nextDesign, nextDesign, id);
-}
+  const newId = copyComponent(nextDesign, nextDesign, id);
+  const parent = getParent(nextDesign, id);
+  parent.children.push(newId);
+  return newId;
+};
+
+export const deleteComponent = (nextDesign, id) => {
+  // remove from the parent
+  const parent = getParent(nextDesign, id);
+  parent.children = parent.children.filter(i => i !== id);
+  // remove any linkTo references
+  Object.keys(nextDesign.components).forEach(id => {
+    const component = nextDesign.components[id];
+    if (component.linkTo && component.linkTo.component === id) {
+      delete component.linkTo;
+    }
+  });
+  // delete component
+  delete nextDesign.components[id];
+  return parent.id;
+};

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Box, Button, FormField, Select, RadioButtonGroup } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-const flavors = ["all the same size", "different sizes"];
+const flavors = ['all the same size', 'different sizes'];
 
 export default ({ value, onChange }) => {
   return (
@@ -12,7 +12,7 @@ export default ({ value, onChange }) => {
           name="flavor"
           options={flavors}
           value={Array.isArray(value) ? flavors[1] : flavors[0]}
-          onChange={(event) => {
+          onChange={event => {
             const choice = event.target.value;
             let nextValue;
             if (choice === flavors[1]) {
@@ -34,15 +34,35 @@ export default ({ value, onChange }) => {
                 <FormField label="size">
                   <Select
                     options={[
-                      'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
-                      '1/2', '1/3', '2/3', '1/4', '3/4',
-                      'full', 'flex', 'auto', 'min/max',
+                      'xxsmall',
+                      'xsmall',
+                      'small',
+                      'medium',
+                      'large',
+                      'xlarge',
+                      'xxlarge',
+                      '1/2',
+                      '1/3',
+                      '2/3',
+                      '1/4',
+                      '3/4',
+                      'full',
+                      'flex',
+                      'auto',
+                      'min/max',
                     ]}
-                    value={(c || {}).size || (Array.isArray(c) && 'min/max') || c || ''}
+                    value={
+                      (c || {}).size ||
+                      (Array.isArray(c) && 'min/max') ||
+                      c ||
+                      ''
+                    }
                     onChange={({ option }) => {
                       const nextValue = JSON.parse(JSON.stringify(value));
                       if (option === 'min/max') {
-                        nextValue[i] = [(typeof nextValue[i] === 'string' ? nextValue[i] : '')];
+                        nextValue[i] = [
+                          typeof nextValue[i] === 'string' ? nextValue[i] : '',
+                        ];
                       } else {
                         if (nextValue[i].size) {
                           nextValue[i].size = option;
@@ -59,9 +79,21 @@ export default ({ value, onChange }) => {
                     <FormField label="min">
                       <Select
                         options={[
-                          'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
-                          '1/2', '1/3', '2/3', '1/4', '3/4',
-                          'full', 'flex', 'auto',
+                          'xxsmall',
+                          'xsmall',
+                          'small',
+                          'medium',
+                          'large',
+                          'xlarge',
+                          'xxlarge',
+                          '1/2',
+                          '1/3',
+                          '2/3',
+                          '1/4',
+                          '3/4',
+                          'full',
+                          'flex',
+                          'auto',
                         ]}
                         value={c[0] || ''}
                         onChange={({ option }) => {
@@ -74,9 +106,21 @@ export default ({ value, onChange }) => {
                     <FormField label="max">
                       <Select
                         options={[
-                          'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge',
-                          '1/2', '1/3', '2/3', '1/4', '3/4',
-                          'full', 'flex', 'auto',
+                          'xxsmall',
+                          'xsmall',
+                          'small',
+                          'medium',
+                          'large',
+                          'xlarge',
+                          'xxlarge',
+                          '1/2',
+                          '1/3',
+                          '2/3',
+                          '1/4',
+                          '3/4',
+                          'full',
+                          'flex',
+                          'auto',
                         ]}
                         value={c[1] || ''}
                         onChange={({ option }) => {
@@ -116,14 +160,40 @@ export default ({ value, onChange }) => {
         <Box>
           <FormField label="size">
             <Select
-              options={['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'undefined']}
+              options={[
+                'xxsmall',
+                'xsmall',
+                'small',
+                'medium',
+                'large',
+                'xlarge',
+                'xxlarge',
+              ]}
               value={(value && value.size) || value || ''}
-              onChange={({ option }) =>
-                onChange(option === 'undefined' ? undefined : option)}
+              onChange={({ option }) => onChange(option)}
+            />
+          </FormField>
+          <FormField label="count">
+            <Select
+              options={['fit', 'fill', 'undefined']}
+              value={(value && value.count) || ''}
+              onChange={({ option }) => {
+                let nextValue;
+                if (option === 'undefined') {
+                  nextValue = value.size || value;
+                } else {
+                  if (typeof value === 'string') {
+                    nextValue = { size: value, count: option };
+                  } else {
+                    nextValue = { ...value, count: option };
+                  }
+                }
+                onChange(nextValue);
+              }}
             />
           </FormField>
         </Box>
       )}
     </Box>
   );
-}
+};

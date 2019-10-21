@@ -1,30 +1,38 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Box, FormField, Select, RadioButtonGroup } from 'grommet';
 
-const flavors = ["all sides the same", "varied"];
+const flavors = ['all sides the same', 'varied'];
 
 export default ({ name, value, onChange }) => {
   return (
     <Box>
-      <Box margin={{ vertical: "medium" }}>
+      <Box pad="small">
         <RadioButtonGroup
           name="flavor"
           options={flavors}
           value={typeof value === 'object' ? flavors[1] : flavors[0]}
-          onChange={(event) => {
+          onChange={event => {
             const choice = event.target.value;
-            const nextValue = (choice === flavors[1] ? {} : undefined);
+            const nextValue = choice === flavors[1] ? {} : undefined;
             onChange(nextValue);
           }}
         />
       </Box>
-      <Box>
-        {typeof value === 'object' ? (
-          <Fragment>
-            {['horizontal', 'vertical', 'top', 'bottom', 'left', 'right'].map(side => (
+      {typeof value === 'object' ? (
+        <Box>
+          {['horizontal', 'vertical', 'top', 'bottom', 'left', 'right'].map(
+            side => (
               <FormField key={side} label={side}>
                 <Select
-                  options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
+                  options={[
+                    'none',
+                    'xsmall',
+                    'small',
+                    'medium',
+                    'large',
+                    'xlarge',
+                    'undefined',
+                  ]}
                   value={(value || {})[side] || ''}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
@@ -37,19 +45,30 @@ export default ({ name, value, onChange }) => {
                   }}
                 />
               </FormField>
-            ))}
-          </Fragment>
-        ) : (
+            ),
+          )}
+        </Box>
+      ) : (
+        <Box>
           <FormField label={name}>
             <Select
-              options={['xsmall', 'small', 'medium', 'large', 'xlarge', 'undefined']}
+              options={[
+                'none',
+                'xsmall',
+                'small',
+                'medium',
+                'large',
+                'xlarge',
+                'undefined',
+              ]}
               value={value || ''}
               onChange={({ option }) =>
-                onChange(option === 'undefined' ? undefined : option)}
+                onChange(option === 'undefined' ? undefined : option)
+              }
             />
           </FormField>
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
-}
+};

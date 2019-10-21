@@ -4,11 +4,11 @@ import { Add, Next, Previous, Trash } from 'grommet-icons';
 
 const debounce = (func, delay) => {
   let timeout;
-  return (nextValue) => {
+  return nextValue => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(nextValue), delay);
-  }
-}
+  };
+};
 
 export default ({ value, onChange }) => {
   const [columns, setColumns] = React.useState(value);
@@ -23,7 +23,7 @@ export default ({ value, onChange }) => {
             <FormField label="property">
               <TextInput
                 value={c.property || ''}
-                onChange={(event) => {
+                onChange={event => {
                   const nextValue = JSON.parse(JSON.stringify(columns));
                   nextValue[i].property = event.target.value;
                   setColumns(nextValue);
@@ -34,7 +34,7 @@ export default ({ value, onChange }) => {
             <FormField label="header">
               <TextInput
                 value={c.header || ''}
-                onChange={(event) => {
+                onChange={event => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].header = event.target.value;
                   setColumns(nextValue);
@@ -48,7 +48,8 @@ export default ({ value, onChange }) => {
                 value={c.align || ''}
                 onChange={({ option }) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].align = option === 'undefined' ? undefined : option;
+                  nextValue[i].align =
+                    option === 'undefined' ? undefined : option;
                   onChange(nextValue);
                 }}
               />
@@ -59,7 +60,7 @@ export default ({ value, onChange }) => {
                   <CheckBox
                     label={subProp}
                     checked={c[subProp] || false}
-                    onChange={(event) => {
+                    onChange={event => {
                       const nextValue = JSON.parse(JSON.stringify(value));
                       nextValue[i][subProp] = event.target.checked;
                       onChange(nextValue);
@@ -74,7 +75,8 @@ export default ({ value, onChange }) => {
                 value={c.aggregate || ''}
                 onChange={({ option }) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].aggregate = option === 'undefined' ? undefined : option;
+                  nextValue[i].aggregate =
+                    option === 'undefined' ? undefined : option;
                   onChange(nextValue);
                 }}
               />
@@ -85,9 +87,11 @@ export default ({ value, onChange }) => {
                   <CheckBox
                     label="footer aggregate"
                     checked={!!c.footer || false}
-                    onChange={(event) => {
+                    onChange={event => {
                       const nextValue = JSON.parse(JSON.stringify(value));
-                      nextValue[i].footer = event.target.checked ? { aggregate: true } : undefined;
+                      nextValue[i].footer = event.target.checked
+                        ? { aggregate: true }
+                        : undefined;
                       onChange(nextValue);
                     }}
                   />
@@ -113,20 +117,20 @@ export default ({ value, onChange }) => {
                 onClick={() => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   const tmpColumn = nextValue[i];
-                  nextValue[i] = nextValue[i-1];
-                  nextValue[i-1] = tmpColumn;
+                  nextValue[i] = nextValue[i - 1];
+                  nextValue[i - 1] = tmpColumn;
                   onChange(nextValue);
                 }}
               />
               <Button
                 icon={<Next />}
                 hoverIndicator
-                disabled={i === (value.length - 1)}
+                disabled={i === value.length - 1}
                 onClick={() => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   const tmpColumn = nextValue[i];
-                  nextValue[i] = nextValue[i+1];
-                  nextValue[i+1] = tmpColumn;
+                  nextValue[i] = nextValue[i + 1];
+                  nextValue[i + 1] = tmpColumn;
                   onChange(nextValue);
                 }}
               />
@@ -145,4 +149,4 @@ export default ({ value, onChange }) => {
       />
     </Box>
   );
-}
+};

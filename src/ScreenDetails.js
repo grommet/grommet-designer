@@ -1,49 +1,54 @@
 import React from 'react';
 import { Box, Heading, Keyboard, TextInput } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen, upgradeDesign } from './design';
+import { addScreen, deleteScreen } from './design';
 import ActionButton from './components/ActionButton';
 import Field from './components/Field';
 
-const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
-  const [confirmDelete, setConfirmDelete] = React.useState();
+const ScreenDetails = ({
+  colorMode,
+  design,
+  selected,
+  setDesign,
+  setSelected,
+}) => {
   let debounceTimer;
 
-  const onDelete = () => {
+  const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
-    delete nextDesign.screens[selected.screen];
-    const index = nextDesign.screenOrder.indexOf(selected.screen);
-    nextDesign.screenOrder.splice(index, 1);
-    // clean out unused components
-    upgradeDesign(nextDesign);
-    const nextScreen = nextDesign.screenOrder[index ? index - 1 : index];
+    const nextScreen = deleteScreen(nextDesign, selected.screen);
     const nextSelected = {
       screen: nextScreen,
       component: nextDesign.screens[nextScreen].root,
     };
-    onChange({ design: nextDesign, selected: nextSelected });
-    setConfirmDelete(false);
-  }
+    setSelected(nextSelected);
+    setDesign(nextDesign);
+  };
 
-  const onDuplicate = () => {
+  const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = {};
-    nextSelected.screen =
-      addScreen(nextDesign, nextDesign.screens[selected.screen], selected);
+    nextSelected.screen = addScreen(
+      nextDesign,
+      nextDesign.screens[selected.screen],
+      selected,
+    );
     nextSelected.component = nextDesign.screens[nextSelected.screen].root;
-    onChange({ design: nextDesign, selected: nextSelected });
-  }
+    setDesign(nextDesign);
+    setSelected(nextSelected);
+  };
 
-  const onKeyDown = (event) => {
+  const onKeyDown = event => {
     if (event.metaKey) {
-      if (event.keyCode === 8) { // delete
+      if (event.keyCode === 8) {
+        // delete
         event.preventDefault();
-        onDelete();
+        delet();
       }
     }
-  }
+  };
 
-  const PropertyField = ({name}) => {
+  const PropertyField = ({ name }) => {
     const [value, setValue] = React.useState(screen[name] || '');
     return (
       <Field label={name} htmlFor={name}>
@@ -52,21 +57,21 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
           name={name}
           plain
           value={value}
-          onChange={(event) => {
+          onChange={event => {
             const nextValue = event.target.value;
             setValue(nextValue);
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
               const nextDesign = JSON.parse(JSON.stringify(design));
               nextDesign.screens[selected.screen][name] = nextValue;
-              onChange({ design: nextDesign });
+              setDesign(nextDesign);
             }, 500);
           }}
           style={{ textAlign: 'end' }}
         />
       </Field>
-    )
-}
+    );
+  };
 
   const screen = design.screens[selected.screen];
   return (
@@ -93,22 +98,14 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
               title="duplicate"
               icon={<Duplicate />}
               hoverIndicator
-              onClick={onDuplicate}
+              onClick={duplicate}
             />
-            {confirmDelete && (
-              <ActionButton
-                title="confirm delete"
-                icon={<Trash color="status-critical" />}
-                hoverIndicator
-                onClick={onDelete}
-              />
-            )}
             {design.screenOrder.length > 1 && (
               <ActionButton
                 title="delete"
                 icon={<Trash />}
                 hoverIndicator
-                onClick={() => setConfirmDelete(!confirmDelete)}
+                onClick={delet}
               />
             )}
           </Box>
@@ -122,6 +119,6 @@ const ScreenDetails = ({ colorMode, design, selected, onChange }) => {
       </Box>
     </Keyboard>
   );
-}
+};
 
 export default ScreenDetails;

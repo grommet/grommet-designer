@@ -40,4 +40,4 @@ export default ({ name, value, onChange }) => {
       ))}
     </Box>
   );
-}
+};

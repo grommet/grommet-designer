@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, FormField, Paragraph, Select } from 'grommet';
-import { getParent } from '../design';
+import { getParent } from '../../design'; // TODO: fix
 
 export default ({ value, onChange, design, selected }) => {
   const parent = getParent(design, selected.component);
@@ -36,4 +36,4 @@ export default ({ value, onChange, design, selected }) => {
       )}
     </Box>
   );
-}
+};

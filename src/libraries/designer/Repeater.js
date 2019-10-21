@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-const Reference = ({ children, count }) => {
+const Repeater = ({ children, count }) => {
   let contents = [];
   if (React.Children.count(children) === 1) {
     const child = React.Children.toArray(children)[0];
@@ -11,11 +11,7 @@ const Reference = ({ children, count }) => {
   } else {
     contents = children;
   }
-  return (
-    <Fragment>
-      {contents}
-    </Fragment>
-  );
+  return contents;
 };
 
-export default Reference;
+export default Repeater;

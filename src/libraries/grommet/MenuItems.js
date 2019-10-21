@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, FormField, Select, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import { getDisplayName, getLinkOptions } from '../design';
+import { getDisplayName, getLinkOptions } from '../../design'; // TODO: fix
 
 export default ({ design, selected, value, onChange }) => {
   const linkOptions = getLinkOptions(design, selected);
@@ -13,7 +13,7 @@ export default ({ design, selected, value, onChange }) => {
             <FormField label="label">
               <TextInput
                 value={item.label || ''}
-                onChange={(event) => {
+                onChange={event => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].label = event.target.value;
                   onChange(nextValue);
@@ -29,15 +29,21 @@ export default ({ design, selected, value, onChange }) => {
                   nextValue[i].linkTo = option;
                   onChange(nextValue);
                 }}
-                valueLabel={item.linkTo ? (
-                  <Box pad="small">
-                    {getDisplayName(design, item.linkTo.component)}
-                  </Box>
-                ) : undefined}
+                valueLabel={
+                  item.linkTo ? (
+                    <Box pad="small">
+                      {getDisplayName(design, item.linkTo.component)}
+                    </Box>
+                  ) : (
+                    undefined
+                  )
+                }
               >
-                {(option) => (
+                {option => (
                   <Box pad="small">
-                    {option ? getDisplayName(design, option.component) : 'clear'}
+                    {option
+                      ? getDisplayName(design, option.component)
+                      : 'clear'}
                   </Box>
                 )}
               </Select>
@@ -64,4 +70,4 @@ export default ({ design, selected, value, onChange }) => {
       />
     </Box>
   );
-}
+};
