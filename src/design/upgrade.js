@@ -1,14 +1,15 @@
-
 // Upgrade to latest design structure
-export const upgradeDesign = (design) => {
+export const upgradeDesign = design => {
   // add screenOrder if it isn't there
   if (!design.screenOrder) {
-    design.screenOrder = Object.keys(design.screens).map(id => parseInt(id, 10));
+    design.screenOrder = Object.keys(design.screens).map(id =>
+      parseInt(id, 10),
+    );
   }
   // move components out of screens (v2.0)
   if (!design.components) {
     design.components = {};
-    Object.keys(design.screens).forEach((id) => {
+    Object.keys(design.screens).forEach(id => {
       const screen = design.screens[id];
       screen.root = Object.keys(screen.components)[0];
       Object.assign(design.components, screen.components);
@@ -16,16 +17,18 @@ export const upgradeDesign = (design) => {
     });
   }
   // remove any children where the component doesn't exist anymore
-  Object.keys(design.components).map(id => design.components[id])
+  Object.keys(design.components)
+    .map(id => design.components[id])
     .forEach(component => {
       if (component.children) {
-        component.children = component.children.filter(childId =>
-          design.components[childId]);
+        component.children = component.children.filter(
+          childId => design.components[childId],
+        );
       }
     });
   // remove any component that isn't a screen root or another component's child
   const found = {};
-  const descend = (id) => {
+  const descend = id => {
     found[id] = true;
     const component = design.components[id];
     if (component.children) {
@@ -33,28 +36,45 @@ export const upgradeDesign = (design) => {
     }
   };
   // ensure screen roots are numbers
-  Object.keys(design.screens).map(sId => design.screens[sId])
+  Object.keys(design.screens)
+    .map(sId => design.screens[sId])
     .forEach(screen => (screen.root = parseInt(screen.root, 10)));
   // record which components we have references to from screen roots
-  Object.keys(design.screens).map(sId => design.screens[sId])
+  Object.keys(design.screens)
+    .map(sId => design.screens[sId])
     .forEach(screen => descend(screen.root));
   // delete anything unreferenced
-  Object.keys(design.components).forEach((id) => {
+  Object.keys(design.components).forEach(id => {
     if (!found[id]) delete design.components[id];
   });
   // ensure all linkTo properties have both screen and component
-  Object.keys(design.components).map(id => design.components[id])
+  Object.keys(design.components)
+    .map(id => design.components[id])
     .filter(component => component.linkTo)
     .map(component => component.linkTo)
-    .forEach((linkTo) => {
+    .forEach(linkTo => {
       if (!linkTo.component) {
         linkTo.component = design.screens[linkTo.screen].root;
       }
     });
   // make sure it has a created timestamp (2.1)
   if (!design.created) {
-    design.created = (new Date()).toISOString();
+    design.created = new Date().toISOString();
   }
+  // upgrade DropButton content (3.0)
+  // before, DropButton had dropContentId property
+  // after, DropButton has propComponents
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.props.dropContentId)
+    .forEach(component => {
+      component.propComponents = [component.props.dropContentId];
+      component.props.dropContent = component.props.dropContentId;
+      component.children = component.children.filter(
+        id => id !== component.props.dropContentId,
+      );
+      delete component.props.dropContentId;
+    });
 
-  design.version = 2.1;
-}
+  design.version = 3.0;
+};
