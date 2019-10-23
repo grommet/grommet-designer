@@ -20,7 +20,7 @@ export const setupDesign = (starter = bare) => {
     ...starter,
     name,
     nextId,
-    version: 3.0,
+    version: 3.1,
     created: new Date().toISOString(),
   };
 };

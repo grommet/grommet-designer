@@ -5,6 +5,7 @@ import {
   CheckBox,
   Heading,
   Layer,
+  MaskedInput,
   Select,
   Text,
   TextInput,
@@ -14,9 +15,9 @@ import { Close, FormDown, FormUp } from 'grommet-icons';
 import {
   names as iconNames,
   SelectLabel as IconLabel,
-} from './libraries/designer/Icon';
-import ActionButton from './components/ActionButton';
-import Field from './components/Field';
+} from '../libraries/designer/Icon';
+import ActionButton from '../components/ActionButton';
+import Field from '../components/Field';
 
 const internalColors = [
   'active',
@@ -28,30 +29,30 @@ const internalColors = [
   'text',
 ];
 
-const ColorLabel = ({ color, theme }) => (
+const ColorLabel = theme => ({ active, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <ThemeContext.Extend value={theme}>
-      <Box pad="small" background={color} />
+      <Box pad="small" background={value} />
     </ThemeContext.Extend>
-    <Text weight="bold">{color}</Text>
+    <Text weight={active ? 'bold' : undefined}>{value}</Text>
   </Box>
 );
 
-const OptionLabel = ({ active, isColor, isIcon, theme, name, value }) => {
-  if (isColor && typeof value === 'string') {
-    return <ColorLabel color={value} theme={theme} />;
-  }
-  if (isIcon && typeof value === 'string') {
-    return <IconLabel icon={value} />;
-  }
-  return (
-    <Box pad="small">
-      <Text weight={active ? 'bold' : undefined}>
-        {typeof value !== 'string' ? JSON.stringify(value) : value || ''}
-      </Text>
-    </Box>
-  );
-};
+const LinkLabel = design => ({ active, value }) => (
+  <Box pad="small">
+    <Text weight={active ? 'bold' : undefined}>
+      {(value === 'undefined' && 'undefined') || (value && value.label) || ''}
+    </Text>
+  </Box>
+);
+
+const OptionLabel = ({ active, value }) => (
+  <Box pad="small">
+    <Text weight={active ? 'bold' : undefined}>
+      {(typeof value !== 'string' ? JSON.stringify(value) : value) || ''}
+    </Text>
+  </Box>
+);
 
 const jsonValue = value => {
   if (typeof value === 'string') {
@@ -61,29 +62,51 @@ const jsonValue = value => {
 };
 
 const Property = React.forwardRef((props, ref) => {
+  const {
+    design,
+    first,
+    linkOptions,
+    name,
+    property,
+    theme,
+    value,
+    onChange,
+  } = props; // need props for CustomProperty
   const baseTheme = React.useContext(ThemeContext);
-  const { first, name, property, theme, value, onChange } = props;
   const [stringValue, setStringValue] = React.useState(value || '');
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
+  const searchExp = React.useMemo(
+    () => searchText && new RegExp(`^${searchText}`, 'i'),
+    [searchText],
+  );
   const [dropTarget, setDropTarget] = React.useState();
   const fieldRef = React.useCallback(node => setDropTarget(node), []);
   let debounceTimer;
 
-  const searchExp = searchText && new RegExp(searchText, 'i');
   if (Array.isArray(property)) {
     const isColor = property.includes('-color-');
     let options = property;
+    let Label;
     if (isColor) {
       const merged = { ...baseTheme.global.colors, ...theme.global.colors };
       options = Object.keys(merged)
         .filter(c => !internalColors.includes(c))
         .sort();
+      Label = ColorLabel(theme);
     }
     const isIcon = property.includes('-Icon-');
     if (isIcon) {
       options = iconNames;
+      Label = IconLabel;
     }
+    const isLink = property.includes('-link-');
+    if (isLink) {
+      options = linkOptions;
+      Label = LinkLabel(design);
+    }
+    if (!Label) Label = OptionLabel;
+
     return (
       <Field
         key={name}
@@ -104,16 +127,7 @@ const Property = React.forwardRef((props, ref) => {
               : [...options, 'undefined']
           }
           value={typeof value === 'boolean' ? value.toString() : value || ''}
-          valueLabel={
-            <OptionLabel
-              active
-              name={name}
-              isColor={isColor}
-              isIcon={isIcon}
-              theme={theme}
-              value={value}
-            />
-          }
+          valueLabel={<Label value={value} active />}
           onChange={({ option }) => {
             setSearchText(undefined);
             onChange(option === 'undefined' ? undefined : option);
@@ -124,16 +138,7 @@ const Property = React.forwardRef((props, ref) => {
               : undefined
           }
         >
-          {option => (
-            <OptionLabel
-              name={name}
-              isColor={isColor}
-              isIcon={isIcon}
-              theme={theme}
-              value={option}
-              active={option === value}
-            />
-          )}
+          {option => <Label value={option} active={option === value} />}
         </Select>
       </Field>
     );
@@ -145,6 +150,30 @@ const Property = React.forwardRef((props, ref) => {
           id={name}
           name={name}
           plain
+          value={stringValue}
+          onChange={event => {
+            const nextValue = event.target.value;
+            setStringValue(nextValue);
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => onChange(nextValue), 500);
+          }}
+          style={{ textAlign: 'end' }}
+        />
+      </Field>
+    );
+  } else if (typeof property === 'number') {
+    return (
+      <Field key={name} first={first} label={name} htmlFor={name}>
+        <MaskedInput
+          ref={ref}
+          id={name}
+          name={name}
+          plain
+          mask={[
+            {
+              regexp: /^\d*$/,
+            },
+          ]}
           value={stringValue}
           onChange={event => {
             const nextValue = event.target.value;
@@ -264,7 +293,11 @@ const Property = React.forwardRef((props, ref) => {
               pad={{ horizontal: 'medium', bottom: 'medium' }}
             >
               <Box flex={false}>
-                <CustomProperty theme={theme} {...props} />
+                <CustomProperty
+                  theme={theme}
+                  linkOptions={linkOptions}
+                  {...props}
+                />
               </Box>
             </Box>
           </Layer>

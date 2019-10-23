@@ -6,21 +6,15 @@ import {
   Heading,
   Keyboard,
   Paragraph,
-  Select,
   TextArea,
   TextInput,
 } from 'grommet';
 import { Duplicate, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
-import {
-  deleteComponent,
-  duplicateComponent,
-  getDisplayName,
-  getLinkOptions,
-} from './design';
-import ActionButton from './components/ActionButton';
-import Field from './components/Field';
-import { getComponentType } from './utils';
+import { deleteComponent, duplicateComponent, getLinkOptions } from '../design';
+import ActionButton from '../components/ActionButton';
+import Field from '../components/Field';
+import { getComponentType } from '../utils';
 
 export default ({
   colorMode,
@@ -32,7 +26,19 @@ export default ({
   setDesign,
   setSelected,
 }) => {
+  const type = React.useMemo(
+    () => getComponentType(libraries, component.type) || {},
+    [component, libraries],
+  );
   const [search, setSearch] = React.useState();
+  const searchExp = React.useMemo(
+    () => search && new RegExp(`^${search}`, 'i'),
+    [search],
+  );
+  const linkOptions = React.useMemo(
+    () => getLinkOptions(design, libraries, selected),
+    [design, libraries, selected],
+  );
 
   const searchRef = React.useRef();
   const defaultRef = React.useRef();
@@ -46,8 +52,14 @@ export default ({
   const setProp = (propName, value) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
-    if (value !== undefined) component.props[propName] = value;
-    else delete component.props[propName];
+    let props;
+    if (type.properties[propName] !== undefined) props = component.props;
+    else if (type.designProperties[propName] !== undefined) {
+      if (!component.designProps) component.designProps = {};
+      props = component.designProps;
+    }
+    if (value !== undefined) props[propName] = value;
+    else delete props[propName];
     setDesign(nextDesign);
   };
 
@@ -62,13 +74,6 @@ export default ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.name = name;
-    setDesign(nextDesign);
-  };
-
-  const link = to => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    component.linkTo = to;
     setDesign(nextDesign);
   };
 
@@ -127,16 +132,33 @@ export default ({
     }
   };
 
-  const type = getComponentType(libraries, component.type) || {};
-  let linkOptions;
-  if (type.name === 'Button') {
-    // options for what the button should do:
-    // open a layer, close the layer it is in, change screens,
-    linkOptions = getLinkOptions(design, selected);
-  }
-
-  const searchExp = search && new RegExp(`^${search}`, 'i');
   let firstRef = false;
+
+  const renderProperties = (properties, props) =>
+    Object.keys(properties)
+      .filter(propName => !searchExp || searchExp.test(propName))
+      .filter(
+        propName =>
+          typeof properties[propName] !== 'string' ||
+          !properties[propName].startsWith('-component-'),
+      )
+      .map((propName, index) => (
+        <Fragment key={propName}>
+          <Property
+            ref={searchExp && !firstRef ? defaultRef : undefined}
+            first={index === 0}
+            design={design}
+            theme={theme}
+            selected={selected}
+            linkOptions={linkOptions}
+            name={propName}
+            property={properties[propName]}
+            value={props ? props[propName] : undefined}
+            onChange={value => setProp(propName, value)}
+          />
+          {(firstRef = true)}
+        </Fragment>
+      ));
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
@@ -199,20 +221,19 @@ export default ({
                   <Paragraph>{type.help}</Paragraph>
                 </Box>
               )}
-              {type.name !== 'Reference' &&
-                (!searchExp || searchExp.test('name')) && (
-                  <Field label="name">
-                    <TextInput
-                      ref={searchExp && !firstRef ? defaultRef : undefined}
-                      plain
-                      name="name"
-                      value={component.name || ''}
-                      onChange={event => setName(event.target.value)}
-                      style={{ textAlign: 'end' }}
-                    />
-                    {(firstRef = true)}
-                  </Field>
-                )}
+              {(!searchExp || searchExp.test('name')) && (
+                <Field label="name">
+                  <TextInput
+                    ref={searchExp && !firstRef ? defaultRef : undefined}
+                    plain
+                    name="name"
+                    value={component.name || ''}
+                    onChange={event => setName(event.target.value)}
+                    style={{ textAlign: 'end' }}
+                  />
+                  {(firstRef = true)}
+                </Field>
+              )}
               {type.text && (!searchExp || searchExp.test('text')) && (
                 <Field label="text">
                   <TextArea
@@ -224,42 +245,7 @@ export default ({
                   {(firstRef = true)}
                 </Field>
               )}
-              {type.name === 'Button' &&
-                linkOptions.length > 1 &&
-                (!searchExp || searchExp.test('link to')) && (
-                  <Field label="link to" htmlFor="linkTo">
-                    <Select
-                      ref={searchExp && !firstRef ? defaultRef : undefined}
-                      id="linkTo"
-                      name="linkTo"
-                      plain
-                      options={linkOptions}
-                      value={component.linkTo || ''}
-                      onChange={({ option }) =>
-                        link(option ? option : undefined)
-                      }
-                      valueLabel={
-                        component.linkTo ? (
-                          <Box pad="small">
-                            {getDisplayName(design, component.linkTo.component)}
-                          </Box>
-                        ) : (
-                          undefined
-                        )
-                      }
-                    >
-                      {option => (
-                        <Box pad="small">
-                          {option
-                            ? getDisplayName(design, option.component)
-                            : 'clear'}
-                        </Box>
-                      )}
-                    </Select>
-                    {(firstRef = true)}
-                  </Field>
-                )}
-              {type.name === 'Layer' && (!searchExp || searchExp.test('hide')) && (
+              {type.hideable && (!searchExp || searchExp.test('hide')) && (
                 <Field label="hide">
                   <Box pad="small">
                     <CheckBox
@@ -272,29 +258,34 @@ export default ({
                   </Box>
                 </Field>
               )}
+              {type.designProperties && (
+                <Box flex="grow">
+                  {renderProperties(
+                    type.designProperties,
+                    component.designProps,
+                  )}
+                </Box>
+              )}
             </Box>
 
             {type.properties && (
               <Box flex="grow">
-                {!Array.isArray(type.properties) && (
-                  <Heading
-                    level={3}
-                    size="small"
-                    margin={{ horizontal: 'medium', vertical: 'medium' }}
-                  >
-                    Properties
-                  </Heading>
-                )}
-                {Array.isArray(type.properties)
-                  ? type.properties
-                      .filter(
-                        ({ properties }) =>
-                          !searchExp ||
-                          Object.keys(properties).some(propName =>
-                            searchExp.test(propName),
-                          ),
-                      )
-                      .map(({ label, properties }) => (
+                {type.structure ? (
+                  type.structure
+                    .filter(
+                      ({ properties }) =>
+                        !searchExp ||
+                        Object.keys(properties).some(propName =>
+                          searchExp.test(propName),
+                        ),
+                    )
+                    .map(({ label, properties: propertyNames }) => {
+                      const sectionProperties = {};
+                      propertyNames.forEach(
+                        name =>
+                          (sectionProperties[name] = type.properties[name]),
+                      );
+                      return (
                         <Box key={label} flex={false} margin={{ top: 'small' }}>
                           <Heading
                             level={4}
@@ -307,68 +298,23 @@ export default ({
                           >
                             {label}
                           </Heading>
-                          {Object.keys(properties)
-                            .filter(
-                              propName =>
-                                !searchExp || searchExp.test(propName),
-                            )
-                            .filter(
-                              propName =>
-                                typeof properties[propName] !== 'string' ||
-                                !properties[propName].startsWith('-component-'),
-                            )
-                            .map((propName, index) => (
-                              <Fragment key={propName}>
-                                <Property
-                                  ref={
-                                    searchExp && !firstRef
-                                      ? defaultRef
-                                      : undefined
-                                  }
-                                  first={index === 0}
-                                  design={design}
-                                  theme={theme}
-                                  selected={selected}
-                                  name={propName}
-                                  property={properties[propName]}
-                                  value={component.props[propName]}
-                                  onChange={value => setProp(propName, value)}
-                                />
-                                {(firstRef = true)}
-                              </Fragment>
-                            ))}
+                          {renderProperties(sectionProperties, component.props)}
                           {(firstRef = true)}
                         </Box>
-                      ))
-                  : Object.keys(type.properties)
-                      .filter(
-                        propName => !searchExp || searchExp.test(propName),
-                      )
-                      .filter(
-                        propName =>
-                          typeof type.properties[propName] !== 'string' ||
-                          !type.properties[propName].startsWith('-component-'),
-                      )
-                      .map((propName, index) => (
-                        <Fragment key={propName}>
-                          <Property
-                            ref={
-                              searchExp && !firstRef ? defaultRef : undefined
-                            }
-                            first={index === 0}
-                            design={design}
-                            theme={theme}
-                            selected={selected}
-                            name={propName}
-                            property={type.properties[propName]}
-                            value={component.props[propName]}
-                            onChange={value => setProp(propName, value)}
-                          />
-                          {(firstRef = true)}
-                        </Fragment>
-                      ))}
-
-                <Box flex />
+                      );
+                    })
+                ) : (
+                  <Box>
+                    <Heading
+                      level={3}
+                      size="small"
+                      margin={{ horizontal: 'medium', vertical: 'medium' }}
+                    >
+                      Properties
+                    </Heading>
+                    {renderProperties(type.properties, component.props)}
+                  </Box>
+                )}
 
                 {(!searchExp || searchExp.test('style')) && (
                   <Field label="style" first margin={{ top: 'large' }}>

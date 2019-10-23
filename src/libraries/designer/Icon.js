@@ -5,10 +5,10 @@ import * as icons from 'grommet-icons';
 const exp = new RegExp(/^[A-Z]/);
 export const names = Object.keys(icons).filter(n => exp.test(n));
 
-export const SelectLabel = ({ icon }) => (
+export const SelectLabel = ({ active, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
-    <Icon icon={icon} />
-    <Text weight="bold">{icon}</Text>
+    <Icon icon={value} />
+    <Text weight={active ? 'bold' : undefined}>{value}</Text>
   </Box>
 );
 

@@ -1,10 +1,16 @@
 import React from 'react';
-import { Box, Button, FormField, Select, TextInput } from 'grommet';
+import { Box, Button, FormField, Select, Text, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import { getDisplayName, getLinkOptions } from '../../design'; // TODO: fix
 
-export default ({ design, selected, value, onChange }) => {
-  const linkOptions = getLinkOptions(design, selected);
+export default ({ linkOptions, value, onChange }) => {
+  const LinkLabel = ({ active, value }) => (
+    <Box pad="small">
+      <Text weight={active ? 'bold' : undefined}>
+        {(value === 'undefined' && 'undefined') || (value && value.label) || ''}
+      </Text>
+    </Box>
+  );
+
   return (
     <Box direction="row" gap="medium">
       {(value || []).map((item, i) => (
@@ -20,31 +26,22 @@ export default ({ design, selected, value, onChange }) => {
                 }}
               />
             </FormField>
-            <FormField label="link to">
+            <FormField label="link">
               <Select
                 options={linkOptions}
-                value={item.linkTo || ''}
+                value={item.link || ''}
                 onChange={({ option }) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].linkTo = option;
+                  nextValue[i].link = option;
                   onChange(nextValue);
                 }}
-                valueLabel={
-                  item.linkTo ? (
-                    <Box pad="small">
-                      {getDisplayName(design, item.linkTo.component)}
-                    </Box>
-                  ) : (
-                    undefined
-                  )
-                }
+                valueLabel={<LinkLabel active value={item.link} />}
               >
                 {option => (
-                  <Box pad="small">
-                    {option
-                      ? getDisplayName(design, option.component)
-                      : 'clear'}
-                  </Box>
+                  <LinkLabel
+                    active={option.component === value.component}
+                    value={option}
+                  />
                 )}
               </Select>
             </FormField>
@@ -53,8 +50,8 @@ export default ({ design, selected, value, onChange }) => {
             icon={<Trash />}
             onClick={() => {
               const nextValue = JSON.parse(JSON.stringify(value));
-              delete nextValue[i];
-              onChange(nextValue);
+              nextValue.splice(i, 1);
+              onChange(nextValue.length ? nextValue : undefined);
             }}
           />
         </Box>

@@ -1,6 +1,5 @@
 import Icon, { names as iconNames } from './Icon';
 import ReferenceComponent from './ReferenceComponent';
-import Repeater from './Repeater';
 
 export const components = {
   Icon: {
@@ -13,7 +12,6 @@ export const components = {
     },
   },
   Repeater: {
-    component: Repeater,
     name: 'Repeater',
     container: true,
     help: `Repeater is a designer specific component for
@@ -24,13 +22,15 @@ export const components = {
       count: 2,
     },
     properties: {
-      count: [1, 2, 5, 10, 20, 100],
+      count: 2,
+    },
+    designProperties: {
       dataPath: '',
     },
   },
   Reference: {
     name: 'Reference',
-    help: `Reference is a designer specific componen for
+    help: `Reference is a designer specific component for
     use with this design tool. It has a single property which is a reference
     to the component that should be used. Changes to that referenced component
     will be shown for all References to it.`,

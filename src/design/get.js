@@ -1,3 +1,5 @@
+import { getComponentType } from '../utils';
+
 export const getInitialSelected = design => ({
   screen: design.screenOrder[0],
   component: design.screens[design.screenOrder[0]].root,
@@ -6,7 +8,8 @@ export const getInitialSelected = design => ({
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
   if (!component) return '';
-  if (component.type === 'Grommet') {
+  // TODO: library
+  if (component.type === 'grommet.Grommet' || component.type === 'Grommet') {
     const screen = Object.keys(design.screens)
       .map(sId => design.screens[sId])
       .filter(s => s.root === id)[0];
@@ -72,7 +75,7 @@ const getDescendants = (design, id) => {
   return result;
 };
 
-export const getLinkOptions = (design, selected) => {
+export const getLinkOptions = (design, libraries, selected) => {
   // options for what a Button or MenuItem should do:
   // open a layer, close the layer it is in, change screens,
   const screen = design.screens[selected.screen];
@@ -80,12 +83,23 @@ export const getLinkOptions = (design, selected) => {
   return [
     ...screenComponents
       .map(k => design.components[k])
-      .filter(c => c.type === 'Layer')
-      .map(c => ({ screen: selected.screen, component: c.id, type: c.type })),
+      .filter(c => {
+        const type = getComponentType(libraries, c.type);
+        return type.hideable;
+      })
+      .map(c => ({
+        screen: selected.screen,
+        component: c.id,
+        type: c.type,
+        label: getDisplayName(design, c.id),
+      })),
     ...Object.keys(design.screens)
       .map(k => design.screens[k])
-      .map(s => ({ screen: s.id, component: s.root })),
-    undefined,
+      .map(s => ({
+        screen: s.id,
+        component: s.root,
+        label: getDisplayName(design, s.root),
+      })),
   ];
 };
 

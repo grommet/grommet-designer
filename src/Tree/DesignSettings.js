@@ -9,10 +9,10 @@ import {
   TextInput,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-import Action from './components/Action';
-import ActionButton from './components/ActionButton';
-import Field from './components/Field';
-import themes from './themes';
+import Action from '../components/Action';
+import ActionButton from '../components/ActionButton';
+import Field from '../components/Field';
+import themes from '../themes';
 
 export default ({ design, onClose, setDesign }) => (
   <Action label="design" onClose={onClose}>

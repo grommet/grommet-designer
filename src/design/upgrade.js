@@ -26,6 +26,7 @@ export const upgradeDesign = design => {
         );
       }
     });
+
   // remove any component that isn't a screen root, another component's child,
   // or another component propComponent
   const found = {};
@@ -39,10 +40,12 @@ export const upgradeDesign = design => {
       component.propComponents.forEach(compId => descend(compId));
     }
   };
+
   // ensure screen roots are numbers
   Object.keys(design.screens)
     .map(sId => design.screens[sId])
     .forEach(screen => (screen.root = parseInt(screen.root, 10)));
+
   // record which components we have references to from screen roots
   Object.keys(design.screens)
     .map(sId => design.screens[sId])
@@ -51,6 +54,7 @@ export const upgradeDesign = design => {
   Object.keys(design.components).forEach(id => {
     if (!found[id]) delete design.components[id];
   });
+
   // ensure all linkTo properties have both screen and component
   Object.keys(design.components)
     .map(id => design.components[id])
@@ -61,10 +65,12 @@ export const upgradeDesign = design => {
         linkTo.component = design.screens[linkTo.screen].root;
       }
     });
+
   // make sure it has a created timestamp (2.1)
   if (!design.created) {
     design.created = new Date().toISOString();
   }
+
   // upgrade DropButton content (3.0)
   // before, DropButton had dropContentId property
   // after, DropButton has propComponents
@@ -80,5 +86,28 @@ export const upgradeDesign = design => {
       delete component.props.dropContentId;
     });
 
-  design.version = 3.0;
+  // 3.1
+  // upgrade Button links to use design props
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.linkTo)
+    .forEach(component => {
+      if (!component.designProps) component.designProps = {};
+      component.designProps.link = component.linkTo;
+      delete component.linkTo;
+    });
+  // upgrade Menu items links to use design props
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.props.items && component.props.items[0])
+    .forEach(component => {
+      component.props.items.forEach(item => {
+        if (item.linkTo) {
+          item.link = item.linkTo;
+          delete item.linkTo;
+        }
+      });
+    });
+
+  design.version = 3.1;
 };

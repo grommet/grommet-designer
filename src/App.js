@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grommet, Grid, Keyboard, ResponsiveContext, grommet } from 'grommet';
+import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
-import Properties from './Properties';
+import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 import {
   apiUrl,
@@ -13,7 +14,7 @@ import {
   bare,
   loading,
 } from './design';
-import ScreenDetails from './ScreenDetails';
+import ScreenDetails from './Properties/ScreenDetails';
 import themes from './themes';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
@@ -282,15 +283,17 @@ const App = () => {
             />
           )}
 
-          <Canvas
-            design={design}
-            libraries={libraries}
-            selected={selected}
-            preview={preview}
-            setDesign={setDesign}
-            setSelected={setSelected}
-            theme={theme}
-          />
+          <ErrorCatcher>
+            <Canvas
+              design={design}
+              libraries={libraries}
+              selected={selected}
+              preview={preview}
+              setDesign={setDesign}
+              setSelected={setSelected}
+              theme={theme}
+            />
+          </ErrorCatcher>
 
           {responsive !== 'small' &&
             !preview &&

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Heading, Keyboard, TextInput } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen, deleteScreen } from './design';
-import ActionButton from './components/ActionButton';
-import Field from './components/Field';
+import { addScreen, deleteScreen } from '../design';
+import ActionButton from '../components/ActionButton';
+import Field from '../components/Field';
 
 const ScreenDetails = ({
   colorMode,

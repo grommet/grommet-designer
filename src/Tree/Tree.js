@@ -20,7 +20,7 @@ import {
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
-import DesignSettings from '../DesignSettings';
+import DesignSettings from './DesignSettings';
 import Designs from './Designs';
 import Sharing from './Share';
 import { getComponentType } from '../utils';

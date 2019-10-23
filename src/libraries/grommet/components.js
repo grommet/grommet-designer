@@ -60,109 +60,125 @@ export const components = {
       justify: 'center',
       pad: 'small',
     },
-    properties: [
+    properties: {
+      align: ['stretch', 'start', 'center', 'end', 'baseline'],
+      alignSelf: ['stretch', 'start', 'center', 'end'],
+      animation: BoxAnimation,
+      background: {
+        color: ['-color-'],
+        dark: false,
+        opacity: ['weak', 'medium', 'strong'],
+        position: ['center', 'top', 'bottom', 'left', 'right'],
+        image: BoxBackgroundImage,
+      },
+      basis: [
+        'xxsmall',
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+        'full',
+        '1/2',
+        '1/3',
+        '2/3',
+        '1/4',
+        '3/4',
+        'auto',
+      ],
+      border: {
+        color: ['-color-'],
+        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        side: [
+          'all',
+          'horizontal',
+          'vertical',
+          'top',
+          'left',
+          'bottom',
+          'right',
+        ],
+        style: [
+          'solid',
+          'dashed',
+          'dotted',
+          'double',
+          'groove',
+          'ridge',
+          'inset',
+          'outset',
+          'hidden',
+        ],
+      },
+      direction: ['column', 'row', 'row-responsive'],
+      elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      fill: ['horizontal', 'vertical'],
+      flex: ['grow', 'shrink', true, false],
+      gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      gridArea: BoxGridArea,
+      height: [
+        'xxsmall',
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+      ],
+      justify: [
+        'stretch',
+        'start',
+        'between',
+        'around',
+        'evenly',
+        'center',
+        'end',
+      ],
+      margin: Edge,
+      overflow: ['auto', 'hidden', 'scroll', 'visible'],
+      pad: Edge,
+      round: BoxRound,
+      width: [
+        'xxsmall',
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+      ],
+      wrap: false,
+    },
+    structure: [
       {
         label: 'Content layout',
-        properties: {
-          align: ['stretch', 'start', 'center', 'end', 'baseline'],
-          direction: ['column', 'row', 'row-responsive'],
-          gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-          justify: [
-            'stretch',
-            'start',
-            'between',
-            'around',
-            'evenly',
-            'center',
-            'end',
-          ],
-          overflow: ['auto', 'hidden', 'scroll', 'visible'],
-          pad: Edge,
-          wrap: false,
-        },
+        properties: [
+          'align',
+          'direction',
+          'gap',
+          'justify',
+          'overflow',
+          'pad',
+          'wrap',
+        ],
       },
       {
         label: 'Layout in container',
-        properties: {
-          alignSelf: ['stretch', 'start', 'center', 'end'],
-          basis: [
-            'xxsmall',
-            'xsmall',
-            'small',
-            'medium',
-            'large',
-            'xlarge',
-            'xxlarge',
-            'full',
-            '1/2',
-            '1/3',
-            '2/3',
-            '1/4',
-            '3/4',
-            'auto',
-          ],
-          fill: ['horizontal', 'vertical'],
-          flex: ['grow', 'shrink', true, false],
-          gridArea: BoxGridArea,
-          height: [
-            'xxsmall',
-            'xsmall',
-            'small',
-            'medium',
-            'large',
-            'xlarge',
-            'xxlarge',
-          ],
-          margin: Edge,
-          width: [
-            'xxsmall',
-            'xsmall',
-            'small',
-            'medium',
-            'large',
-            'xlarge',
-            'xxlarge',
-          ],
-        },
+        properties: [
+          'alignSelf',
+          'basis',
+          'fill',
+          'flex',
+          'gridArea',
+          'height',
+          'margin',
+          'width',
+        ],
       },
       {
         label: 'Style',
-        properties: {
-          animation: BoxAnimation,
-          background: {
-            color: ['-color-'],
-            dark: false,
-            opacity: ['weak', 'medium', 'strong'],
-            position: ['center', 'top', 'bottom', 'left', 'right'],
-            image: BoxBackgroundImage,
-          },
-          border: {
-            color: ['-color-'],
-            size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-            side: [
-              'all',
-              'horizontal',
-              'vertical',
-              'top',
-              'left',
-              'bottom',
-              'right',
-            ],
-            style: [
-              'solid',
-              'dashed',
-              'dotted',
-              'double',
-              'groove',
-              'ridge',
-              'inset',
-              'outset',
-              'hidden',
-            ],
-          },
-          elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-          round: BoxRound,
-        },
+        properties: ['animation', 'background', 'border', 'elevation', 'round'],
       },
     ],
   },
@@ -209,8 +225,10 @@ export const components = {
     component: Layer,
     name: 'Layer',
     container: true,
+    hideable: true,
     documentation: 'https://v2.grommet.io/layer',
     defaultProps: {
+      animate: true,
       modal: false,
     },
     properties: {
@@ -220,6 +238,12 @@ export const components = {
       plain: false,
       position: ['center', 'top', 'bottom', 'left', 'right'],
       responsive: false,
+    },
+    override: (_, { setHide }) => {
+      const result = {};
+      result.onClickOutside = () => setHide(true);
+      result.onEsc = () => setHide(true);
+      return result;
     },
   },
   Grommet: { component: Grommet, name: 'Grommet', container: true },
@@ -303,6 +327,20 @@ export const components = {
       reverse: false,
       type: ['button', 'reset', 'submit'],
     },
+    designProperties: {
+      link: ['-link-'],
+    },
+    override: ({ designProps }, { dataContextPath, followLink }) => {
+      return {
+        onClick:
+          designProps && designProps.link
+            ? event => {
+                event.stopPropagation();
+                followLink({ ...designProps.link, dataContextPath });
+              }
+            : undefined,
+      };
+    },
   },
   DropButton: {
     component: DropButton,
@@ -358,6 +396,17 @@ export const components = {
       label: 'Actions',
       open: false,
       size: ['small', 'medium', 'large', 'xlarge'],
+    },
+    override: ({ props }, { followLink }) => {
+      const result = {};
+      result.items = (props.items || []).map(item => ({
+        ...item,
+        onClick: event => {
+          event.stopPropagation();
+          followLink(item.link);
+        },
+      }));
+      return result;
     },
   },
   CheckBox: {
@@ -522,6 +571,9 @@ export const components = {
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
+    },
+    override: ({ props }, { replaceData }) => {
+      return { src: replaceData(props.src) };
     },
   },
   Video: {
