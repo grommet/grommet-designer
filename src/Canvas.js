@@ -84,7 +84,7 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const moveChild = (dragging, dropTarget) => {
+  const moveChild = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
 
     const parent = getParent(nextDesign, dragging);
@@ -164,13 +164,11 @@ const Canvas = ({
     ) {
       component = design.components[component.props.component];
     }
-
-    if (!component || component.hide) {
-      return null;
-    }
+    if (!component || component.hide) return null;
 
     const type = getComponentType(libraries, component.type);
     if (!type) return null;
+
     const contextPath = dataContextPath || selected.dataContextPath;
 
     if (
