@@ -16,6 +16,8 @@ import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getComponentType } from '../utils';
 
+const parseStyle = style => (style ? JSON.stringify(style, null, 2) : '');
+
 export default ({
   colorMode,
   component,
@@ -35,6 +37,7 @@ export default ({
     () => search && new RegExp(`^${search}`, 'i'),
     [search],
   );
+  const [style, setStyle] = React.useState(parseStyle(component.props.style));
   const linkOptions = React.useMemo(
     () => getLinkOptions(design, libraries, selected),
     [design, libraries, selected],
@@ -44,6 +47,9 @@ export default ({
   const defaultRef = React.useRef();
 
   React.useEffect(() => setSearch(undefined), [component.id]);
+  React.useEffect(() => setStyle(parseStyle(component.props.style)), [
+    component.props.style,
+  ]);
 
   React.useEffect(() => {
     if (search !== undefined) searchRef.current.focus();
@@ -54,9 +60,15 @@ export default ({
     const component = nextDesign.components[selected.component];
     let props;
     if (type.properties[propName] !== undefined) props = component.props;
-    else if (type.designProperties[propName] !== undefined) {
+    else if (
+      type.designProperties &&
+      type.designProperties[propName] !== undefined
+    ) {
       if (!component.designProps) component.designProps = {};
       props = component.designProps;
+    } else {
+      console.error('unexpected prop', propName);
+      props = component.props;
     }
     if (value !== undefined) props[propName] = value;
     else delete props[propName];
@@ -323,14 +335,9 @@ export default ({
                       name="style"
                       rows={2}
                       plain
-                      value={
-                        component.props.styling ||
-                        (component.props.style &&
-                          JSON.stringify(component.props.style, null, 2)) ||
-                        ''
-                      }
+                      value={style}
                       onChange={event => {
-                        setProp('styling', event.target.value);
+                        setStyle(event.target.value);
                         try {
                           const json = JSON.parse(event.target.value);
                           setProp('style', json);

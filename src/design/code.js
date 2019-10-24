@@ -18,13 +18,16 @@ export const generateJSX = (design, libraries, themeArg) => {
     let result;
     const component = design.components[id];
     const type = getComponentType(libraries, component.type);
-    if (component.type === 'designer.Icon') {
+    if (component.type === 'designer.Icon' || component.type === 'Icon') {
       const { icon, ...rest } = component.props;
       iconImports[icon] = true;
       result = `${indent}<${icon} ${Object.keys(rest)
         .map(k => `${k}="${rest[k]}"`)
         .join(' ')} />`;
-    } else if (component.type === 'designer.Repeater') {
+    } else if (
+      component.type === 'designer.Repeater' ||
+      component.type === 'Repeater'
+    ) {
       const childId = component.children && component.children[0];
       result = childId
         ? (
@@ -32,7 +35,10 @@ export const generateJSX = (design, libraries, themeArg) => {
             '\n'
           ).repeat(component.props.count)
         : '';
-    } else if (component.type === 'designer.Reference') {
+    } else if (
+      component.type === 'designer.Reference' ||
+      component.type === 'Reference'
+    ) {
       result = componentToJSX({
         screen,
         id: component.props.component,

@@ -108,6 +108,11 @@ export const upgradeDesign = design => {
         }
       });
     });
+  // remove styling property
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.props.styling)
+    .forEach(component => delete component.props.styling);
 
   design.version = 3.1;
 };
