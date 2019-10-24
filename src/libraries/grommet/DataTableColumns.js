@@ -105,7 +105,7 @@ export default ({ value, onChange }) => {
               hoverIndicator
               onClick={() => {
                 const nextValue = JSON.parse(JSON.stringify(value));
-                delete nextValue[i];
+                nextValue.splice(i, 1);
                 onChange(nextValue.filter(c => c));
               }}
             />

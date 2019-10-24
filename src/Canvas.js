@@ -236,8 +236,11 @@ const Canvas = ({
       } else {
         children = component.text;
       }
-    } else {
+    } else if (type.text) {
       children = type.text;
+    } else if (specialProps && specialProps.children) {
+      children = specialProps.children;
+      delete specialProps.children;
     }
     // TODO: library override
     // if (type.name === 'Video') {

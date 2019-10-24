@@ -35,7 +35,7 @@ export default ({ value, onChange }) => {
               icon={<Trash />}
               onClick={() => {
                 const nextValue = JSON.parse(JSON.stringify(value));
-                delete nextValue[i];
+                nextValue.splice(i, 1);
                 // prune empty values
                 onChange(nextValue.filter(i => i));
               }}

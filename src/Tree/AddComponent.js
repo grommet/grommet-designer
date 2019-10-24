@@ -123,7 +123,7 @@ const AddComponent = ({
           <Keyboard
             onEnter={
               searchExp
-                ? () => {
+                ? event => {
                     // find first match
                     let typeName;
                     libraries.some(({ name, components }) => {
@@ -133,7 +133,7 @@ const AddComponent = ({
                       if (first) typeName = `${name}.${first}`;
                       return !!typeName;
                     });
-                    onAdd(typeName, false);
+                    onAdd(typeName, event.metaKey);
                   }
                 : undefined
             }

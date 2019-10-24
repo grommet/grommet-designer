@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Anchor,
   Box,
@@ -584,7 +585,16 @@ export const components = {
       controls: [false, 'over', 'below'],
       fit: ['cover', 'contain'],
       loop: false,
-      src: '',
+    },
+    designProperties: {
+      source: '',
+    },
+    override: ({ designProps }, { replaceData }) => {
+      if (designProps && designProps.source) {
+        const source = replaceData(designProps.source);
+        return { children: [<source src={source} />] };
+      }
+      return null;
     },
   },
 };

@@ -44,7 +44,7 @@ const structure = [
   {
     name: 'Media',
     Icon: Image,
-    components: ['Image'],
+    components: ['Image', 'Video'],
   },
 ];
 
