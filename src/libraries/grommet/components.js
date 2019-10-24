@@ -592,7 +592,7 @@ export const components = {
     override: ({ designProps }, { replaceData }) => {
       if (designProps && designProps.source) {
         const source = replaceData(designProps.source);
-        return { children: [<source src={source} />] };
+        return { children: <source src={source} /> };
       }
       return null;
     },
