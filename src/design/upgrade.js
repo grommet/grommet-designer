@@ -28,16 +28,18 @@ export const upgradeDesign = design => {
     });
 
   // remove any component that isn't a screen root, another component's child,
-  // or another component propComponent
+  // or another component's propComponent
   const found = {};
   const descend = id => {
-    found[id] = true;
     const component = design.components[id];
-    if (component.children) {
-      component.children.forEach(childId => descend(childId));
-    }
-    if (component.propComponents) {
-      component.propComponents.forEach(compId => descend(compId));
+    if (component) {
+      found[id] = true;
+      if (component.children) {
+        component.children.forEach(childId => descend(childId));
+      }
+      if (component.propComponents) {
+        component.propComponents.forEach(compId => descend(compId));
+      }
     }
   };
 

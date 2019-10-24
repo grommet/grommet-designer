@@ -112,7 +112,8 @@ const Canvas = ({
       target && getComponentType(libraries, target.type).hideable;
     if (hideable) {
       setHide(target.id, !target.hide);
-    } else {
+    } else if (target) {
+      // might not have anymore
       setSelected(to);
     }
   };
@@ -206,11 +207,6 @@ const Canvas = ({
       }
     });
 
-    // TODO: library
-    // if (type.name === 'Video') {
-    //   specialProps.src = undefined;
-    // }
-
     const droppable = !type.text && type.name !== 'Icon';
     let style;
     if (dropTarget === id) {
@@ -242,10 +238,6 @@ const Canvas = ({
       children = specialProps.children;
       delete specialProps.children;
     }
-    // TODO: library override
-    // if (type.name === 'Video') {
-    //   children = [<source src={component.props.src} />];
-    // }
 
     const dragProps = {};
     if (!preview) {

@@ -78,16 +78,17 @@ export const duplicateComponent = (nextDesign, id) => {
 export const deleteComponent = (nextDesign, id) => {
   // remove from the parent
   const parent = getParent(nextDesign, id);
-  parent.children = parent.children.filter(i => i !== id);
-  // TODO: library
-  // remove any linkTo references
-  Object.keys(nextDesign.components).forEach(id => {
-    const component = nextDesign.components[id];
-    if (component.linkTo && component.linkTo.component === id) {
-      delete component.linkTo;
-    }
-  });
+  if (parent) parent.children = parent.children.filter(i => i !== id);
+  // remove propComponents
+  const component = nextDesign.components[id];
+  if (component.propComponents) {
+    component.propComponents.forEach(i => deleteComponent(nextDesign, i));
+  }
+
+  // NOTE: We might still have references in Button and Menu.items links or
+  // Reference. We leave them alone and let upgrade() clean up eventually.
+
   // delete component
   delete nextDesign.components[id];
-  return parent.id;
+  return parent ? parent.id : undefined;
 };
