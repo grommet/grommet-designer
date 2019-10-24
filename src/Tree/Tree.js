@@ -406,6 +406,7 @@ const Tree = ({
             {sharing && (
               <Sharing
                 design={design}
+                libraries={libraries}
                 theme={theme}
                 colorMode={colorMode}
                 setDesign={setDesign}

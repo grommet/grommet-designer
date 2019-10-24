@@ -79,6 +79,7 @@ export const deleteComponent = (nextDesign, id) => {
   // remove from the parent
   const parent = getParent(nextDesign, id);
   parent.children = parent.children.filter(i => i !== id);
+  // TODO: library
   // remove any linkTo references
   Object.keys(nextDesign.components).forEach(id => {
     const component = nextDesign.components[id];
