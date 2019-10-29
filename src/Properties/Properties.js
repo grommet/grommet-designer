@@ -119,7 +119,11 @@ export default ({
 
   const onKey = event => {
     if (document.activeElement === document.body) {
-      if (event.key === 'Backspace' && event.metaKey) {
+      if (
+        (event.key === 'Backspace' && event.metaKey) || // osx
+        (event.key === 'Delete' && event.ctrlKey)
+      ) {
+        // windows
         event.preventDefault();
         delet();
       }
