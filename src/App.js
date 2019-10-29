@@ -18,6 +18,8 @@ import ScreenDetails from './Properties/ScreenDetails';
 import themes from './themes';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
+import Analytics from './Analytics';
+import { Router } from './Router';
 
 const getParams = () => {
   const { location } = window;
@@ -260,67 +262,71 @@ const App = () => {
   }, [changes, changeIndex]);
 
   return (
-    <Grommet full theme={grommet}>
-      <Keyboard target="document" onKeyDown={onKey}>
-        <Grid
-          fill
-          columns={
-            responsive === 'small' || preview
-              ? 'flex'
-              : [['small', '288px'], ['1/2', 'flex'], ['small', 'medium']]
-          }
-        >
-          {responsive !== 'small' && !preview && (
-            <Tree
-              design={design}
-              libraries={libraries}
-              selected={selected}
-              theme={theme}
-              colorMode={colorMode}
-              setDesign={setDesign}
-              setSelected={setSelected}
-              onRedo={changeIndex > 0 && onRedo}
-              onUndo={changeIndex < changes.length - 1 && onUndo}
-            />
-          )}
+    <Router>
+      <Analytics>
+        <Grommet full theme={grommet}>
+          <Keyboard target="document" onKeyDown={onKey}>
+            <Grid
+              fill
+              columns={
+                responsive === 'small' || preview
+                  ? 'flex'
+                  : [['small', '288px'], ['1/2', 'flex'], ['small', 'medium']]
+              }
+            >
+              {responsive !== 'small' && !preview && (
+                <Tree
+                  design={design}
+                  libraries={libraries}
+                  selected={selected}
+                  theme={theme}
+                  colorMode={colorMode}
+                  setDesign={setDesign}
+                  setSelected={setSelected}
+                  onRedo={changeIndex > 0 && onRedo}
+                  onUndo={changeIndex < changes.length - 1 && onUndo}
+                />
+              )}
 
-          <ErrorCatcher>
-            <Canvas
-              design={design}
-              libraries={libraries}
-              selected={selected}
-              preview={preview}
-              setDesign={setDesign}
-              setSelected={setSelected}
-              theme={theme}
-            />
-          </ErrorCatcher>
+              <ErrorCatcher>
+                <Canvas
+                  design={design}
+                  libraries={libraries}
+                  selected={selected}
+                  preview={preview}
+                  setDesign={setDesign}
+                  setSelected={setSelected}
+                  theme={theme}
+                />
+              </ErrorCatcher>
 
-          {responsive !== 'small' &&
-            !preview &&
-            (!selectedComponent ? (
-              <ScreenDetails
-                design={design}
-                selected={selected}
-                colorMode={colorMode}
-                setDesign={setDesign}
-                setSelected={setSelected}
-              />
-            ) : (
-              <Properties
-                design={design}
-                libraries={libraries}
-                theme={theme}
-                selected={selected}
-                component={selectedComponent}
-                colorMode={colorMode}
-                setDesign={setDesign}
-                setSelected={setSelected}
-              />
-            ))}
-        </Grid>
-      </Keyboard>
-    </Grommet>
+              {responsive !== 'small' &&
+                !preview &&
+                (!selectedComponent ? (
+                  <ScreenDetails
+                    design={design}
+                    selected={selected}
+                    colorMode={colorMode}
+                    setDesign={setDesign}
+                    setSelected={setSelected}
+                  />
+                ) : (
+                  <Properties
+                    design={design}
+                    libraries={libraries}
+                    theme={theme}
+                    selected={selected}
+                    component={selectedComponent}
+                    colorMode={colorMode}
+                    setDesign={setDesign}
+                    setSelected={setSelected}
+                  />
+                ))}
+            </Grid>
+          </Keyboard>
+        </Grommet>
+      </Analytics>
+    </Router>
   );
 };
 

@@ -1,16 +1,17 @@
 // NOTE: our routing needs are so simple, we roll our own
 // to avoid dependencies on react-router, to stay leaner.
 
-import React, { Children } from 'react';
+import React, { Children, useEffect } from 'react';
 
-export const RouterContext = React.createContext({});
+const RouterContext = React.createContext({});
 
 export const Router = ({ children }) => {
   const [path, setPath] = React.useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onPopState = () => setPath(document.location.pathname);
     window.addEventListener('popstate', onPopState);
+    onPopState();
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
@@ -42,5 +43,11 @@ export const Route = ({ Component, path }) => {
   const { path: contextPath } = React.useContext(RouterContext);
   return contextPath === path ? <Component /> : null;
 };
+
+export const Watcher = ({ children }) => (
+  <RouterContext.Consumer>
+    {({ path }) => children(path)}
+  </RouterContext.Consumer>
+);
 
 export default Router;
