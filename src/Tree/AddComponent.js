@@ -44,25 +44,27 @@ const AddComponent = ({
       }
       const component = nextDesign.components[id];
 
-      const selectedComponent = nextDesign.components[selected.component];
-      if (containSelected && type.container) {
-        const parent = getParent(nextDesign, selected.component);
-        const index = parent.children.indexOf(selected.component);
-        parent.children[index] = id;
-        component.children = [selected.component];
-        // if (component.type === 'Button') {
-        //   delete component.props.label; // so contents are revealed
-        // }
+      if (selected.component) {
+        const selectedComponent = nextDesign.components[selected.component];
+        if (containSelected && type.container) {
+          const parent = getParent(nextDesign, selected.component);
+          const index = parent.children.indexOf(selected.component);
+          parent.children[index] = id;
+          component.children = [selected.component];
+        } else {
+          const selectedType = getComponentType(
+            libraries,
+            selectedComponent.type,
+          );
+          const parent = selectedType.container
+            ? selectedComponent
+            : getParent(nextDesign, selected.component);
+          if (!parent.children) parent.children = [];
+          parent.children.push(id);
+        }
       } else {
-        const selectedType = getComponentType(
-          libraries,
-          selectedComponent.type,
-        );
-        const parent = selectedType.container
-          ? selectedComponent
-          : getParent(nextDesign, selected.component);
-        if (!parent.children) parent.children = [];
-        parent.children.push(id);
+        const screen = nextDesign.screens[selected.screen];
+        screen.root = id;
       }
       nextSelected.component = id;
 

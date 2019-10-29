@@ -48,8 +48,7 @@ const App = () => {
   ]);
   const selectedComponent = React.useMemo(
     () =>
-      design.components[selected.component] ||
-      design.screens[selected.screen || design.screenOrder[0]].root,
+      selected.component ? design.components[selected.component] : undefined,
     [design, selected],
   );
 
@@ -68,8 +67,7 @@ const App = () => {
           const screen = pathname
             ? getScreenByPath(nextDesign, pathname)
             : nextDesign.screenOrder[0];
-          const component = nextDesign.screens[screen].root;
-          const nextSelected = { screen, component };
+          const nextSelected = { screen };
           setDesign(nextDesign);
           setSelected(nextSelected);
           setChanges([{ design: nextDesign, selected: nextSelected }]);
@@ -165,7 +163,7 @@ const App = () => {
     // track selected screen in browser location, so browser
     // backward/forward controls work
     const screen = design.screens[selected.screen];
-    if (screen.path !== pathname) {
+    if (screen && screen.path !== pathname) {
       window.history.pushState(undefined, undefined, screen.path);
     }
   }, [design, selected.screen]);
@@ -229,16 +227,19 @@ const App = () => {
     return () => clearTimeout(timer);
   }, [changes, changeIndex, design, selected]);
 
-  const onKey = event => {
-    if (event.metaKey) {
-      if (event.key === 'e' || event.key === 'E') {
-        event.preventDefault();
-        setPreview(!preview);
+  const onKey = React.useCallback(
+    event => {
+      if (event.metaKey) {
+        if (event.key === 'e' || event.key === 'E') {
+          event.preventDefault();
+          setPreview(!preview);
+        }
       }
-    }
-  };
+    },
+    [preview],
+  );
 
-  const onUndo = () => {
+  const onUndo = React.useCallback(() => {
     const nextChangeIndex = Math.min(changeIndex + 1, changes.length - 1);
     const { design: nextDesign, selected: nextSelected } = changes[
       nextChangeIndex
@@ -246,9 +247,9 @@ const App = () => {
     setDesign(nextDesign);
     setSelected(nextSelected);
     setChangeIndex(nextChangeIndex);
-  };
+  }, [changes, changeIndex]);
 
-  const onRedo = () => {
+  const onRedo = React.useCallback(() => {
     const nextChangeIndex = Math.max(changeIndex - 1, 0);
     const { design: nextDesign, selected: nextSelected } = changes[
       nextChangeIndex
@@ -256,7 +257,7 @@ const App = () => {
     setDesign(nextDesign);
     setSelected(nextSelected);
     setChangeIndex(nextChangeIndex);
-  };
+  }, [changes, changeIndex]);
 
   return (
     <Grommet full theme={grommet}>
@@ -297,7 +298,7 @@ const App = () => {
 
           {responsive !== 'small' &&
             !preview &&
-            (selectedComponent.type === 'Grommet' ? (
+            (!selectedComponent ? (
               <ScreenDetails
                 design={design}
                 selected={selected}

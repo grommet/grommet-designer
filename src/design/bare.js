@@ -4,10 +4,9 @@ export const bare = {
   components: {
     2: {
       id: 2,
-      type: 'Grommet',
-      props: { style: { height: '100vh' } },
+      type: 'grommet.Box',
+      props: { pad: 'large' },
       children: [3],
-      deletable: false,
     },
     3: {
       id: 3,

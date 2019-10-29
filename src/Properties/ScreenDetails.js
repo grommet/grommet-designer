@@ -74,6 +74,7 @@ const ScreenDetails = ({
   };
 
   const screen = design.screens[selected.screen];
+  if (!screen) return null;
   return (
     <Keyboard target="document" onKeyDown={onKeyDown}>
       <Box

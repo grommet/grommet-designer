@@ -116,5 +116,45 @@ export const upgradeDesign = design => {
     .filter(component => component.props.styling)
     .forEach(component => delete component.props.styling);
 
-  design.version = 3.1;
+  // 3.2
+  // remove component from screen links
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .forEach(component => {
+      const link = component.designProps && component.designProps.link;
+      if (
+        link &&
+        link.component &&
+        design.screens[link.screen] &&
+        design.screens[link.screen].root === link.component
+      ) {
+        delete link.component;
+      }
+    });
+  // remove screen root Grommet components
+  Object.keys(design.screens)
+    .map(id => design.screens[id])
+    .forEach(screen => {
+      if (screen.root) {
+        const root = design.components[screen.root];
+        if (root && root.type === 'Grommet') {
+          if (root.children && root.children.length > 0) {
+            if (root.children.length === 1) {
+              // if there's only one child, make it the root
+              delete design.components[screen.root];
+              screen.root = root.children[0];
+            } else {
+              // more than one child, substitute a Box
+              root.type = 'grommet.Box';
+              root.props = {};
+            }
+          } else {
+            delete design.components[screen.root];
+            delete screen.root;
+          }
+        }
+      }
+    });
+
+  design.version = 3.2;
 };

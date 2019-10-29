@@ -204,7 +204,8 @@ const Designs = ({
                 reader.onload = () => {
                   try {
                     const nextDesign = JSON.parse(reader.result);
-                    const nextSelected = getInitialSelected(design);
+                    upgradeDesign(nextDesign);
+                    const nextSelected = getInitialSelected(nextDesign);
                     setDesign(nextDesign);
                     setSelected(nextSelected);
                     onClose();

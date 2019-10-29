@@ -112,6 +112,16 @@ const Tree = ({
     setDesign(nextDesign);
   };
 
+  const toggleScreenCollapse = id => {
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const screen = nextDesign.screens[id];
+    screen.collapsed = !screen.collapsed;
+    setDesign(nextDesign);
+    const nextSelected = { ...selected };
+    delete nextSelected.component;
+    setSelected(nextSelected);
+  };
+
   const toggleCollapse = id => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[id];
@@ -294,10 +304,9 @@ const Tree = ({
     );
   };
 
-  const renderScreen = (screenId, firstScreen, onlyScreen) => {
+  const renderScreen = (screenId, firstScreen) => {
     const screen = design.screens[screenId];
-    const id = screen.root;
-    const component = design.components[id];
+    const active = selected.screen === screenId && !selected.component;
     const collapserColor = { light: 'light-4', dark: 'dark-3' };
     return (
       <Box
@@ -310,7 +319,7 @@ const Tree = ({
           <Button
             fill
             hoverIndicator
-            onClick={() => setSelected({ screen: screenId, component: id })}
+            onClick={() => setSelected({ screen: screenId })}
             draggable
             onDragStart={event => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
@@ -328,32 +337,28 @@ const Tree = ({
               justify="between"
               gap="medium"
               pad={{ vertical: 'small', left: 'large', right: 'small' }}
-              background={selected.component === id ? 'accent-1' : undefined}
+              background={active ? 'accent-1' : undefined}
             >
               <Heading level={3} size="xsmall" margin="none">
-                {screen.name || (onlyScreen ? 'Screen' : `Screen ${screen.id}`)}
+                {screen.name || `Screen ${screenId}`}
               </Heading>
             </Box>
           </Button>
-          {component.children && (
+          {screen.root && (
             <Button
               icon={
-                component.collapsed ? (
+                screen.collapsed ? (
                   <FormNext color={collapserColor} />
                 ) : (
                   <FormDown color={collapserColor} />
                 )
               }
-              onClick={() => toggleCollapse(id)}
+              onClick={() => toggleScreenCollapse(screenId)}
             />
           )}
         </Stack>
-        {!component.collapsed && component.children && (
-          <Box flex={false}>
-            {component.children.map((childId, index) =>
-              renderComponent(screen.id, childId, index === 0),
-            )}
-          </Box>
+        {!screen.collapsed && screen.root && (
+          <Box flex={false}>{renderComponent(screen.id, screen.root)}</Box>
         )}
         {renderScreenDropArea(screenId, 'after')}
       </Box>

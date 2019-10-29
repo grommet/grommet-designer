@@ -1,20 +1,14 @@
 import { getComponentType } from '../utils';
 
-export const getInitialSelected = design => ({
-  screen: design.screenOrder[0],
-  component: design.screens[design.screenOrder[0]].root,
-});
+export const getInitialSelected = design => ({ screen: design.screenOrder[0] });
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
   if (!component) return '';
-  // TODO: library
-  if (component.type === 'grommet.Grommet' || component.type === 'Grommet') {
-    const screen = Object.keys(design.screens)
-      .map(sId => design.screens[sId])
-      .filter(s => s.root === id)[0];
-    return screen.name || `Screen ${screen.id}`;
-  }
+  const screen = Object.keys(design.screens)
+    .map(sId => design.screens[sId])
+    .filter(s => s.root === id)[0];
+  if (screen) return screen.name || `Screen ${screen.id}`;
   return component.name || `${component.type} ${component.id}`;
 };
 
@@ -97,8 +91,7 @@ export const getLinkOptions = (design, libraries, selected) => {
       .map(k => design.screens[k])
       .map(s => ({
         screen: s.id,
-        component: s.root,
-        label: getDisplayName(design, s.root),
+        label: s.name || `Screen ${screen.id}`,
       })),
   ];
 };

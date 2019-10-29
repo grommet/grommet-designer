@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grommet } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
 import { getComponentType } from './utils';
@@ -107,14 +108,21 @@ const Canvas = ({
   };
 
   const followLink = to => {
-    const target = design.components[to.component];
-    const hideable =
-      target && getComponentType(libraries, target.type).hideable;
-    if (hideable) {
-      setHide(target.id, !target.hide);
-    } else if (target) {
-      // might not have anymore
-      setSelected(to);
+    if (to.component) {
+      const target = design.components[to.component];
+      const hideable =
+        target && getComponentType(libraries, target.type).hideable;
+      if (hideable) {
+        setHide(target.id, !target.hide);
+      } else if (target) {
+        // might not have anymore
+        setSelected(to);
+      }
+    } else {
+      if (design.screens[to.screen]) {
+        // might not have anymore
+        setSelected(to);
+      }
     }
   };
 
@@ -292,14 +300,17 @@ const Canvas = ({
         style,
         ...component.props,
         ...specialProps,
-        theme: type.name === 'Grommet' ? theme : undefined,
       },
       children,
     );
   };
 
-  const rootComponent = design.screens[selected.screen].root;
-  return renderComponent(rootComponent);
+  const screen = design.screens[selected.screen];
+  return (
+    <Grommet theme={theme} style={{ height: '100vh' }}>
+      {screen && screen.root && renderComponent(screen.root)}
+    </Grommet>
+  );
 };
 
 export default Canvas;
