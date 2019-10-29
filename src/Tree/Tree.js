@@ -64,6 +64,21 @@ const Tree = ({
     }
   }, [selectedRef]);
 
+  // ensure selected component is visible in the tree
+  React.useEffect(() => {
+    if (selected.component) {
+      let parent = getParent(design, selected.component);
+      while (parent && !parent.collapsed) {
+        parent = getParent(design, parent.id);
+      }
+      if (parent) {
+        const nextDesign = JSON.parse(JSON.stringify(design));
+        nextDesign.components[parent.id].collapsed = false;
+        setDesign(nextDesign);
+      }
+    }
+  }, [design, selected.component, setDesign]);
+
   const moveChild = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
