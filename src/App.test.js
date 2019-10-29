@@ -1,9 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { cleanup, render, fireEvent } from '@testing-library/react';
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('App', () => {
+  afterEach(cleanup);
+
+  test('empty', () => {
+    const { getByTitle, container } = render(<App />);
+    expect(container.firstChild).toMatchSnapshot();
+
+    fireEvent.click(getByTitle('choose another design'));
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });

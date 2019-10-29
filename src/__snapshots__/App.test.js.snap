@@ -1,0 +1,2975 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App empty 1`] = `
+<div
+  class="StyledGrommet-sc-19lkkz7-0 iQFOBe"
+>
+  <div
+    class="StyledGrid-sc-1wofa1l-0 ckkYVQ"
+  >
+    <div
+      class="StyledBox-sc-13pk1d4-0 MEEyk"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 cBXAVd"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 fTGeOj"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="choose another design"
+              type="button"
+            >
+              <svg
+                aria-label="Folder"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M2,10 L2,6 L2,2 L10,2 L13,6 L22,6 L22,10 L2,10 Z M2,10 L22,10 L22,22 L2,22 L2,10 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cJRVek"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 fWyiSX"
+              type="button"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 gHNga"
+              >
+                <h1
+                  class="StyledHeading-sc-1rdh4aw-0 bAsNSm"
+                >
+                  Oct 29 Design
+                </h1>
+              </div>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="share design"
+              type="button"
+            >
+              <svg
+                aria-label="Share"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19,13 L19,23 L1,23 L1,5 L1,5 L11,5 M14,1 L23,1 L23,10 M10,14 L22.9999998,1 L10,14 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          class="StyledBox-sc-13pk1d4-0 gkptUi"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 ekjAwv"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <button
+                class="StyledButton-sc-323bzc-0 bKzFKP"
+                disabled=""
+                title="undo last change"
+                type="button"
+              >
+                <svg
+                  aria-label="Undo"
+                  class="StyledIcon-ofa7kd-0 jAaLrm"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7.18,4,8.6,5.44,6.06,8h9.71a6,6,0,0,1,0,12h-2V18h2a4,4,0,0,0,0-8H6.06L8.6,12.51,7.18,13.92,2.23,9Z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <button
+                class="StyledButton-sc-323bzc-0 bKzFKP"
+                disabled=""
+                title="redo last change"
+                type="button"
+              >
+                <svg
+                  aria-label="Redo"
+                  class="StyledIcon-ofa7kd-0 jAaLrm"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.82,4,15.4,5.44,17.94,8H8.23a6,6,0,0,0,0,12h2V18h-2a4,4,0,0,1,0-8h9.71L15.4,12.51l1.41,1.41L21.77,9Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="add a component"
+              type="button"
+            >
+              <svg
+                aria-label="Add"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12,22 L12,2 M2,12 L22,12"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledBox-sc-13pk1d4-0 SigNg"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 hqGUhX"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 dVJCsK"
+            />
+            <div
+              class="StyledStack-ajspsk-0 cBSAEZ"
+            >
+              <div
+                class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 fWyiSX"
+                  draggable="true"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 lnimva"
+                  >
+                    <h3
+                      class="StyledHeading-sc-1rdh4aw-0 gdvYza"
+                    >
+                      Screen
+                    </h3>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledStack__StyledStackLayer-ajspsk-1 hWwUdl"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 lgwBfH"
+                  type="button"
+                >
+                  <svg
+                    aria-label="FormDown"
+                    class="StyledIcon-ofa7kd-0 fDZBFh"
+                    viewBox="0 0 24 24"
+                  >
+                    <polyline
+                      fill="none"
+                      points="18 9 12 15 6 9"
+                      stroke="#000"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <div
+                  class="StyledStack-ajspsk-0 cBSAEZ"
+                >
+                  <div
+                    class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+                  >
+                    <button
+                      class="StyledButton-sc-323bzc-0 fWyiSX"
+                      draggable="true"
+                      type="button"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 gwaXwj"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 jOAXsc"
+                        >
+                          Box
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                  <div
+                    class="StyledStack__StyledStackLayer-ajspsk-1 hWwUdl"
+                  >
+                    <button
+                      class="StyledButton-sc-323bzc-0 lgwBfH"
+                      type="button"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 fDZBFh"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 blybhB"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 fWrrBh"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                    />
+                    <div
+                      class="StyledStack-ajspsk-0 cBSAEZ"
+                    >
+                      <div
+                        class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+                      >
+                        <button
+                          class="StyledButton-sc-323bzc-0 fWyiSX"
+                          draggable="true"
+                          type="button"
+                        >
+                          <div
+                            class="StyledBox-sc-13pk1d4-0 pdeKq"
+                          >
+                            <span
+                              class="StyledText-sc-1sadyjn-0 jOAXsc"
+                            >
+                              blank page
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                />
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 dVJCsK"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="StyledGrommet-sc-19lkkz7-0 cxdnGv"
+      style="height: 100vh;"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 eqXmZd"
+        draggable="true"
+        style="outline: 1px dashed red;"
+      >
+        <h1
+          class="StyledHeading-sc-1rdh4aw-0 bAMRUm"
+          draggable="true"
+        >
+          blank page
+        </h1>
+      </div>
+    </div>
+    <div
+      class="StyledBox-sc-13pk1d4-0 efsQjx"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 iITCJM"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 cJRVek"
+        >
+          <a
+            class="StyledButton-sc-323bzc-0 fWyiSX"
+            href="https://v2.grommet.io/box"
+            target="_blank"
+            title="documentation"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 gHNga"
+            >
+              <h2
+                class="StyledHeading-sc-1rdh4aw-0 loRthD"
+              >
+                Box
+              </h2>
+            </div>
+          </a>
+        </div>
+        <div
+          class="StyledBox-sc-13pk1d4-0 dPgcUV"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="reset"
+              type="button"
+            >
+              <svg
+                aria-label="Refresh"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M20,8 C18.5974037,5.04031171 15.536972,3 12,3 C7.02943725,3 3,7.02943725 3,12 C3,16.9705627 7.02943725,21 12,21 L12,21 C16.9705627,21 21,16.9705627 21,12 M21,3 L21,9 L15,9"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="duplicate"
+              type="button"
+            >
+              <svg
+                aria-label="Duplicate"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4.5,17 L1,17 L1,1 L1,1 L17,1 L17,4.5 M7,7 L23,7 L23,23 L7,23 L7,7 Z M15,11 L15,19 L15,11 Z M11,15 L19,15 L11,15 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="delete"
+              type="button"
+            >
+              <svg
+                aria-label="Trash"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4,5 L20,5 L20,23 L4,23 L4,5 Z M1,5 L23,5 M9,1 L15,1 L15,5 L9,5 L9,1 Z M9,1 L15,1 L15,5 L9,5 L9,1 Z M15,9 L15,19 M9,9 L9,19"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledBox-sc-13pk1d4-0 SigNg"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 EjEHK"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 fWrrBh"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 ejHWPw"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 kOPDca"
+              >
+                <label
+                  class="StyledText-sc-1sadyjn-0 fWSbXS"
+                >
+                  name
+                </label>
+              </div>
+              <div
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kYQCpm"
+              >
+                <input
+                  autocomplete="off"
+                  class="StyledTextInput-sc-1x30a0s-0 ebFsnl"
+                  name="name"
+                  style="text-align: end;"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 EjEHK"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Content layout
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 flXjZA"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="align"
+                  >
+                    align
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="align"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="direction"
+                  >
+                    direction
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="direction"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="gap"
+                  >
+                    gap
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="gap"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="justify"
+                  >
+                    justify
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="justify"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="overflow"
+                  >
+                    overflow
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="overflow"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        pad
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <span
+                        class="StyledText-sc-1sadyjn-0 FOsUB"
+                      >
+                        large
+                      </span>
+                      <div
+                        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iChEkS"
+                      />
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="wrap"
+                  >
+                    wrap
+                  </label>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 hduLqL"
+                >
+                  <label
+                    class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 ipLeku"
+                    for="wrap"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hZaesx StyledCheckBox-sc-1dbk5ju-6 jXdLin"
+                    >
+                      <input
+                        class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 hGzAHj"
+                        id="wrap"
+                        name="wrap"
+                        type="checkbox"
+                      />
+                      <span
+                        class="StyledCheckBox__StyledCheckBoxToggle-sc-1dbk5ju-4 kdvELP"
+                      >
+                        <span
+                          class="StyledCheckBox__StyledCheckBoxKnob-sc-1dbk5ju-5 cUXtfC"
+                        />
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Layout in container
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 flXjZA"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="alignSelf"
+                  >
+                    alignSelf
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="alignSelf"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="basis"
+                  >
+                    basis
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="basis"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="fill"
+                  >
+                    fill
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="fill"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="flex"
+                  >
+                    flex
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="flex"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        gridArea
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="height"
+                  >
+                    height
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="height"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        margin
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="width"
+                  >
+                    width
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="width"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Style
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 flXjZA"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        animation
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        background
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        border
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="elevation"
+                  >
+                    elevation
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="elevation"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        round
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 iZKQlF"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 kOPDca"
+              >
+                <label
+                  class="StyledText-sc-1sadyjn-0 fWSbXS"
+                >
+                  style
+                </label>
+              </div>
+              <textarea
+                class="StyledTextArea-sc-17i3mwp-0 eBXmws"
+                name="style"
+                rows="2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`App empty 2`] = `
+<div
+  class="StyledGrommet-sc-19lkkz7-0 iQFOBe"
+>
+  <div
+    class="StyledGrid-sc-1wofa1l-0 ckkYVQ"
+  >
+    <div
+      class="StyledBox-sc-13pk1d4-0 MEEyk"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 cBXAVd"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 fTGeOj"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="choose another design"
+              type="button"
+            >
+              <svg
+                aria-label="Folder"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M2,10 L2,6 L2,2 L10,2 L13,6 L22,6 L22,10 L2,10 Z M2,10 L22,10 L22,22 L2,22 L2,10 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cJRVek"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 fWyiSX"
+              type="button"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 gHNga"
+              >
+                <h1
+                  class="StyledHeading-sc-1rdh4aw-0 bAsNSm"
+                >
+                  Oct 29 Design
+                </h1>
+              </div>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="share design"
+              type="button"
+            >
+              <svg
+                aria-label="Share"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19,13 L19,23 L1,23 L1,5 L1,5 L11,5 M14,1 L23,1 L23,10 M10,14 L22.9999998,1 L10,14 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          class="StyledBox-sc-13pk1d4-0 gkptUi"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 ekjAwv"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <button
+                class="StyledButton-sc-323bzc-0 bKzFKP"
+                disabled=""
+                title="undo last change"
+                type="button"
+              >
+                <svg
+                  aria-label="Undo"
+                  class="StyledIcon-ofa7kd-0 jAaLrm"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7.18,4,8.6,5.44,6.06,8h9.71a6,6,0,0,1,0,12h-2V18h2a4,4,0,0,0,0-8H6.06L8.6,12.51,7.18,13.92,2.23,9Z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <button
+                class="StyledButton-sc-323bzc-0 bKzFKP"
+                disabled=""
+                title="redo last change"
+                type="button"
+              >
+                <svg
+                  aria-label="Redo"
+                  class="StyledIcon-ofa7kd-0 jAaLrm"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.82,4,15.4,5.44,17.94,8H8.23a6,6,0,0,0,0,12h2V18h-2a4,4,0,0,1,0-8h9.71L15.4,12.51l1.41,1.41L21.77,9Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="add a component"
+              type="button"
+            >
+              <svg
+                aria-label="Add"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12,22 L12,2 M2,12 L22,12"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledBox-sc-13pk1d4-0 SigNg"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 hqGUhX"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 dVJCsK"
+            />
+            <div
+              class="StyledStack-ajspsk-0 cBSAEZ"
+            >
+              <div
+                class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 fWyiSX"
+                  draggable="true"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 lnimva"
+                  >
+                    <h3
+                      class="StyledHeading-sc-1rdh4aw-0 gdvYza"
+                    >
+                      Screen
+                    </h3>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledStack__StyledStackLayer-ajspsk-1 hWwUdl"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 lgwBfH"
+                  type="button"
+                >
+                  <svg
+                    aria-label="FormDown"
+                    class="StyledIcon-ofa7kd-0 fDZBFh"
+                    viewBox="0 0 24 24"
+                  >
+                    <polyline
+                      fill="none"
+                      points="18 9 12 15 6 9"
+                      stroke="#000"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 hqGUhX"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <div
+                  class="StyledStack-ajspsk-0 cBSAEZ"
+                >
+                  <div
+                    class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+                  >
+                    <button
+                      class="StyledButton-sc-323bzc-0 fWyiSX"
+                      draggable="true"
+                      type="button"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 gwaXwj"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 jOAXsc"
+                        >
+                          Box
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                  <div
+                    class="StyledStack__StyledStackLayer-ajspsk-1 hWwUdl"
+                  >
+                    <button
+                      class="StyledButton-sc-323bzc-0 lgwBfH"
+                      type="button"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 fDZBFh"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 blybhB"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 fWrrBh"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                    />
+                    <div
+                      class="StyledStack-ajspsk-0 cBSAEZ"
+                    >
+                      <div
+                        class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
+                      >
+                        <button
+                          class="StyledButton-sc-323bzc-0 fWyiSX"
+                          draggable="true"
+                          type="button"
+                        >
+                          <div
+                            class="StyledBox-sc-13pk1d4-0 pdeKq"
+                          >
+                            <span
+                              class="StyledText-sc-1sadyjn-0 jOAXsc"
+                            >
+                              blank page
+                            </span>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 dVJCsK"
+                />
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 dVJCsK"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="StyledGrommet-sc-19lkkz7-0 cxdnGv"
+      style="height: 100vh;"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 eqXmZd"
+        draggable="true"
+        style="outline: 1px dashed red;"
+      >
+        <h1
+          class="StyledHeading-sc-1rdh4aw-0 bAMRUm"
+          draggable="true"
+        >
+          blank page
+        </h1>
+      </div>
+    </div>
+    <div
+      class="StyledBox-sc-13pk1d4-0 efsQjx"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 iITCJM"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 cJRVek"
+        >
+          <a
+            class="StyledButton-sc-323bzc-0 fWyiSX"
+            href="https://v2.grommet.io/box"
+            target="_blank"
+            title="documentation"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 gHNga"
+            >
+              <h2
+                class="StyledHeading-sc-1rdh4aw-0 loRthD"
+              >
+                Box
+              </h2>
+            </div>
+          </a>
+        </div>
+        <div
+          class="StyledBox-sc-13pk1d4-0 dPgcUV"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="reset"
+              type="button"
+            >
+              <svg
+                aria-label="Refresh"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M20,8 C18.5974037,5.04031171 15.536972,3 12,3 C7.02943725,3 3,7.02943725 3,12 C3,16.9705627 7.02943725,21 12,21 L12,21 C16.9705627,21 21,16.9705627 21,12 M21,3 L21,9 L15,9"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="duplicate"
+              type="button"
+            >
+              <svg
+                aria-label="Duplicate"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4.5,17 L1,17 L1,1 L1,1 L17,1 L17,4.5 M7,7 L23,7 L23,23 L7,23 L7,7 Z M15,11 L15,19 L15,11 Z M11,15 L19,15 L11,15 Z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 hqGUhX"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 esrnCr"
+              title="delete"
+              type="button"
+            >
+              <svg
+                aria-label="Trash"
+                class="StyledIcon-ofa7kd-0 jAaLrm"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4,5 L20,5 L20,23 L4,23 L4,5 Z M1,5 L23,5 M9,1 L15,1 L15,5 L9,5 L9,1 Z M9,1 L15,1 L15,5 L9,5 L9,1 Z M15,9 L15,19 M9,9 L9,19"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledBox-sc-13pk1d4-0 SigNg"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 EjEHK"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 fWrrBh"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 ejHWPw"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 kOPDca"
+              >
+                <label
+                  class="StyledText-sc-1sadyjn-0 fWSbXS"
+                >
+                  name
+                </label>
+              </div>
+              <div
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kYQCpm"
+              >
+                <input
+                  autocomplete="off"
+                  class="StyledTextInput-sc-1x30a0s-0 ebFsnl"
+                  name="name"
+                  style="text-align: end;"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 EjEHK"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Content layout
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 flXjZA"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="align"
+                  >
+                    align
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="align"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="direction"
+                  >
+                    direction
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="direction"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="gap"
+                  >
+                    gap
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="gap"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="justify"
+                  >
+                    justify
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="justify"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="overflow"
+                  >
+                    overflow
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="overflow"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        pad
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <span
+                        class="StyledText-sc-1sadyjn-0 FOsUB"
+                      >
+                        large
+                      </span>
+                      <div
+                        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iChEkS"
+                      />
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="wrap"
+                  >
+                    wrap
+                  </label>
+                </div>
+                <div
+                  class="StyledBox-sc-13pk1d4-0 hduLqL"
+                >
+                  <label
+                    class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 ipLeku"
+                    for="wrap"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hZaesx StyledCheckBox-sc-1dbk5ju-6 jXdLin"
+                    >
+                      <input
+                        class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 hGzAHj"
+                        id="wrap"
+                        name="wrap"
+                        type="checkbox"
+                      />
+                      <span
+                        class="StyledCheckBox__StyledCheckBoxToggle-sc-1dbk5ju-4 kdvELP"
+                      >
+                        <span
+                          class="StyledCheckBox__StyledCheckBoxKnob-sc-1dbk5ju-5 cUXtfC"
+                        />
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Layout in container
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 flXjZA"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="alignSelf"
+                  >
+                    alignSelf
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="alignSelf"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="basis"
+                  >
+                    basis
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="basis"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="fill"
+                  >
+                    fill
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="fill"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="flex"
+                  >
+                    flex
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="flex"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        gridArea
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="height"
+                  >
+                    height
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="height"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        margin
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="width"
+                  >
+                    width
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="width"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 ecLvST"
+            >
+              <h4
+                class="StyledHeading-sc-1rdh4aw-0 hGysuX"
+              >
+                Style
+              </h4>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 flXjZA"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        animation
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        background
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        border
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 ejHWPw"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 kOPDca"
+                >
+                  <label
+                    class="StyledText-sc-1sadyjn-0 fWSbXS"
+                    for="elevation"
+                  >
+                    elevation
+                  </label>
+                </div>
+                <button
+                  aria-label="Open Drop"
+                  class="StyledButton-sc-323bzc-0 jfbKsv Select__StyledSelectDropButton-sc-17idtfo-1 cvpccN"
+                  id="elevation"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFIMGw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hxmgAG"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 hduLqL"
+                      >
+                        <span
+                          class="StyledText-sc-1sadyjn-0 bnqisW"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bSuKKc"
+                      style="min-width: auto;"
+                    >
+                      <svg
+                        aria-label="FormDown"
+                        class="StyledIcon-ofa7kd-0 ildldD"
+                        viewBox="0 0 24 24"
+                      >
+                        <polyline
+                          fill="none"
+                          points="18 9 12 15 6 9"
+                          stroke="#000"
+                          stroke-width="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                class="StyledBox-sc-13pk1d4-0 fWrrBh"
+              >
+                <button
+                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  type="button"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 ejHWPw"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 kOPDca"
+                    >
+                      <label
+                        class="StyledText-sc-1sadyjn-0 fWSbXS"
+                      >
+                        round
+                      </label>
+                    </div>
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 hfsUvK"
+                    >
+                      <div
+                        class="StyledBox-sc-13pk1d4-0 kAXqcX"
+                      >
+                        <svg
+                          aria-label="FormDown"
+                          class="StyledIcon-ofa7kd-0 ildldD"
+                          viewBox="0 0 24 24"
+                        >
+                          <polyline
+                            fill="none"
+                            points="18 9 12 15 6 9"
+                            stroke="#000"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 iZKQlF"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 kOPDca"
+              >
+                <label
+                  class="StyledText-sc-1sadyjn-0 fWSbXS"
+                >
+                  style
+                </label>
+              </div>
+              <textarea
+                class="StyledTextArea-sc-17i3mwp-0 eBXmws"
+                name="style"
+                rows="2"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
