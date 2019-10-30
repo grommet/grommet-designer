@@ -58,7 +58,7 @@ const App = () => {
     const {
       location: { pathname },
     } = window;
-    ReactGA.initialize('UA-148924637-1');
+    ReactGA.initialize('UA-99690204-4');
     ReactGA.pageview(pathname);
   }, []);
 
