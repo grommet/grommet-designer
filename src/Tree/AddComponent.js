@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { Box, Button, Heading, Keyboard, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
 import { addScreen, copyComponent, getParent } from '../design';
@@ -24,6 +25,7 @@ const AddComponent = ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
     const type = getComponentType(libraries, typeName);
+
     if (type.name === 'Screen') {
       nextSelected.screen = addScreen(nextDesign, starter, selected);
       nextSelected.component = nextDesign.screens[nextSelected.screen].root;
@@ -94,9 +96,16 @@ const AddComponent = ({
         }
       });
     }
+
     setDesign(nextDesign);
     setSelected(nextSelected);
     onClose();
+
+    ReactGA.event({
+      category: 'edit',
+      action: 'add component',
+      label: typeName,
+    });
   };
 
   const searchExp = search ? new RegExp(`^${search}`, 'i') : undefined;

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { Grommet, Grid, Keyboard, ResponsiveContext, grommet } from 'grommet';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
@@ -52,6 +53,15 @@ const App = () => {
     [design, selected],
   );
 
+  // initialize analytics
+  React.useEffect(() => {
+    const {
+      location: { pathname },
+    } = window;
+    ReactGA.initialize('UA-148924637-1');
+    ReactGA.pageview(pathname);
+  }, []);
+
   // load initial design
   React.useEffect(() => {
     const {
@@ -72,12 +82,20 @@ const App = () => {
           setSelected(nextSelected);
           setChanges([{ design: nextDesign, selected: nextSelected }]);
           setChangeIndex(0);
+          ReactGA.event({
+            category: 'switch',
+            action: 'published design',
+          });
         });
     } else {
       let nextDesign;
       let nextSelected;
       if (pathname === '/_new') {
         nextDesign = setupDesign(bare);
+        ReactGA.event({
+          category: 'switch',
+          action: 'force new design',
+        });
       } else {
         let stored = localStorage.getItem('activeDesign');
         if (stored) {
@@ -87,8 +105,16 @@ const App = () => {
           nextDesign = JSON.parse(stored);
           stored = localStorage.getItem('selected');
           if (stored) nextSelected = JSON.parse(stored);
+          ReactGA.event({
+            category: 'switch',
+            action: 'previous design',
+          });
         } else {
           nextDesign = setupDesign(bare);
+          ReactGA.event({
+            category: 'switch',
+            action: 'new design',
+          });
         }
       }
 

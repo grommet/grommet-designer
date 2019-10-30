@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import ReactGA from 'react-ga';
 import {
   Box,
   Button,
@@ -76,6 +77,11 @@ const Publish = ({ design, setDesign }) => {
               window.location.hash,
             ].join('');
             setUploadUrl(nextUploadUrl);
+
+            ReactGA.event({
+              category: 'share',
+              action: 'publish design',
+            });
           });
         }
         return response.text().then(setError);
@@ -167,7 +173,13 @@ const SaveLocally = ({ design, onClose }) => (
       hoverIndicator
       href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
       download={`${design.name || 'design'}.json`}
-      onClick={onClose}
+      onClick={() => {
+        onClose();
+        ReactGA.event({
+          category: 'share',
+          action: 'download design',
+        });
+      }}
     />
   </Box>
 );
@@ -190,7 +202,13 @@ const Developer = ({ design, libraries, theme }) => {
         <Button
           label="Generate Code"
           hoverIndicator
-          onClick={() => setCode(generateJSX(design, libraries, theme))}
+          onClick={() => {
+            setCode(generateJSX(design, libraries, theme));
+            ReactGA.event({
+              category: 'share',
+              action: 'generate code',
+            });
+          }}
         />
       )}
       {code && (

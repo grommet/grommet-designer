@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import { Box, Text } from 'grommet';
 import { Alert } from 'grommet-icons';
 
@@ -15,6 +16,9 @@ class ErrorCatcher extends Component {
 
   componentDidCatch() {
     this.setState({ error: this.props.design });
+    ReactGA.exception({
+      description: 'failed to render design',
+    });
   }
 
   render() {
