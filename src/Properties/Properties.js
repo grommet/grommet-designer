@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import ReactGA from 'react-ga';
 import {
   Box,
   Button,
@@ -101,6 +102,11 @@ export default ({
     const component = nextDesign.components[selected.component];
     component.props = {};
     setDesign(nextDesign);
+
+    ReactGA.event({
+      category: 'edit',
+      action: 'reset component',
+    });
   };
 
   const duplicate = () => {
@@ -108,6 +114,11 @@ export default ({
     const newId = duplicateComponent(nextDesign, selected.component);
     setDesign(nextDesign);
     setSelected({ ...selected, component: newId });
+
+    ReactGA.event({
+      category: 'edit',
+      action: 'duplicate component',
+    });
   };
 
   const delet = () => {
@@ -115,6 +126,11 @@ export default ({
     const parentId = deleteComponent(nextDesign, selected.component);
     setSelected({ ...selected, component: parentId });
     setDesign(nextDesign);
+
+    ReactGA.event({
+      category: 'edit',
+      action: 'delete component',
+    });
   };
 
   const onKey = event => {

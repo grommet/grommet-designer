@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import {
   Box,
   Button,
@@ -113,6 +114,11 @@ const Designs = ({
       setDesign(nextDesign);
       setSelected(getInitialSelected(nextDesign));
       onClose();
+
+      ReactGA.event({
+        category: 'switch',
+        action: 'change design',
+      });
     }
   };
 
@@ -123,6 +129,11 @@ const Designs = ({
     setDesign(nextDesign);
     setSelected(getInitialSelected(nextDesign));
     onClose();
+
+    ReactGA.event({
+      category: 'switch',
+      action: 'new design',
+    });
   };
 
   const delet = name => {
@@ -138,6 +149,11 @@ const Designs = ({
       setDesign(nextDesign);
       setSelected(getInitialSelected(nextDesign));
     }
+
+    ReactGA.event({
+      category: 'switch',
+      action: 'delete design',
+    });
   };
 
   const load = id => {
@@ -149,6 +165,11 @@ const Designs = ({
         setDesign(nextDesign);
         setSelected(getInitialSelected(nextDesign));
         onClose();
+
+        ReactGA.event({
+          category: 'switch',
+          action: 'load starter design',
+        });
       })
       .catch(() => setLoading(undefined));
   };
@@ -209,6 +230,11 @@ const Designs = ({
                     setDesign(nextDesign);
                     setSelected(nextSelected);
                     onClose();
+
+                    ReactGA.event({
+                      category: 'switch',
+                      action: 'import design',
+                    });
                   } catch (e) {
                     setError(e.message);
                   }
