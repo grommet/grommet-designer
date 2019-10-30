@@ -71,6 +71,7 @@ const Publish = ({ design, setDesign }) => {
           return response.text().then(id => {
             const nextUploadUrl = [
               window.location.protocol,
+              '//',
               window.location.host,
               window.location.pathname,
               `?id=${encodeURIComponent(id)}`,
