@@ -184,6 +184,7 @@ export default ({ design, onClose, setDesign }) => (
         </Box>
       )}
 
+      {/*}
       <Field label="Library" htmlFor="library">
         <TextInput
           id="library"
@@ -198,6 +199,7 @@ export default ({ design, onClose, setDesign }) => (
           style={{ textAlign: 'end' }}
         />
       </Field>
+      {*/}
 
       <Field label="Data" htmlFor="data">
         <Box pad="small">
@@ -205,7 +207,7 @@ export default ({ design, onClose, setDesign }) => (
             id="data"
             name="data"
             toggle
-            checked={design.data || false}
+            checked={!!design.data || false}
             onChange={event => {
               const nextDesign = JSON.parse(JSON.stringify(design));
               nextDesign.data = event.target.checked ? { data: '' } : undefined;
