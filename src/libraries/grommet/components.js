@@ -305,6 +305,20 @@ export const components = {
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
     },
+    designProperties: {
+      link: ['-link-'],
+    },
+    override: ({ designProps }, { dataContextPath, followLink }) => {
+      return {
+        onClick:
+          designProps && designProps.link
+            ? event => {
+                event.stopPropagation();
+                followLink({ ...designProps.link, dataContextPath });
+              }
+            : undefined,
+      };
+    },
   },
   Button: {
     component: Button,
