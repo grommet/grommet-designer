@@ -32,6 +32,23 @@ export default ({ design, onClose, setDesign }) => (
         />
       </Field>
 
+      <Field label="Base" htmlFor="base">
+        <TextInput
+          id="base"
+          name="base"
+          plain
+          placeholder="https://designer.grommet.io?id="
+          value={design.base || ''}
+          onChange={event => {
+            const base = event.target.value;
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            nextDesign.base = base;
+            setDesign(nextDesign);
+          }}
+          style={{ textAlign: 'end' }}
+        />
+      </Field>
+
       <Field
         label="Theme"
         htmlFor="theme"
@@ -49,7 +66,7 @@ export default ({ design, onClose, setDesign }) => (
           id="theme"
           name="theme"
           plain
-          options={['published', ...Object.keys(themes), 'custom']}
+          options={['published', ...Object.keys(themes)]}
           value={
             (design.theme &&
               ((typeof design.theme === 'object' && 'custom') ||
@@ -59,9 +76,7 @@ export default ({ design, onClose, setDesign }) => (
           }
           onChange={({ option }) => {
             const nextDesign = JSON.parse(JSON.stringify(design));
-            if (option === 'custom') {
-              nextDesign.theme = { global: { colors: {}, font: {} } };
-            } else if (option === 'published') {
+            if (option === 'published') {
               nextDesign.theme = 'https://';
             } else {
               nextDesign.theme = option;
@@ -71,6 +86,7 @@ export default ({ design, onClose, setDesign }) => (
           style={{ textAlign: 'end' }}
         />
       </Field>
+
       {design.theme &&
         typeof design.theme === 'string' &&
         design.theme.slice(0, 6) === 'https:' && (
@@ -90,6 +106,8 @@ export default ({ design, onClose, setDesign }) => (
             />
           </Field>
         )}
+
+      {/* deprecated, use theme designer instead */}
       {design.theme && typeof design.theme === 'object' && (
         <Box margin={{ left: 'medium' }} background="dark-2">
           <Field
@@ -133,6 +151,7 @@ export default ({ design, onClose, setDesign }) => (
               style={{ textAlign: 'end' }}
             />
           </Field>
+
           {design.theme.global.font.family &&
             design.theme.global.font.family.match(/'/) && (
               <Field label="face" htmlFor="face" align="start">
@@ -152,6 +171,7 @@ export default ({ design, onClose, setDesign }) => (
                 />
               </Field>
             )}
+
           {[
             'brand',
             'accent-1',

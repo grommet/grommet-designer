@@ -5,7 +5,7 @@ export const bare = {
     2: {
       id: 2,
       type: 'grommet.Box',
-      props: { pad: 'large' },
+      props: { pad: 'large', fill: 'vertical', overflow: 'auto' },
       children: [3],
     },
     3: {

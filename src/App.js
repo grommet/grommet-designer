@@ -37,6 +37,7 @@ const App = () => {
   const responsive = React.useContext(ResponsiveContext);
   const [design, setDesign] = React.useState(setupDesign(loading));
   const [selected, setSelected] = React.useState(getInitialSelected(design));
+  const [base, setBase] = React.useState();
   const [theme, setTheme] = React.useState(grommet);
   const [colorMode, setColorMode] = React.useState('dark');
   const [preview, setPreview] = React.useState(true);
@@ -212,6 +213,23 @@ const App = () => {
     return () => clearTimeout(timer);
   }, [design, designs]);
 
+  // setup base
+  React.useEffect(() => {
+    if (design.base && !base) {
+      const id = design.base.split('id=')[1];
+      fetch(`${apiUrl}/${id}`)
+        .then(response => response.json())
+        .then(nextBase => {
+          setBase(nextBase);
+          const nextDesign = JSON.parse(JSON.stringify(design));
+          nextDesign.theme = nextBase.theme;
+          setDesign(nextDesign);
+        });
+    } else if (base && !design.base) {
+      setBase(undefined);
+    }
+  }, [base, design]);
+
   // setup theme
   React.useEffect(() => {
     const nextTheme = design.theme;
@@ -300,6 +318,7 @@ const App = () => {
             <Tree
               design={design}
               libraries={libraries}
+              base={base}
               selected={selected}
               theme={theme}
               colorMode={colorMode}

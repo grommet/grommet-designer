@@ -11,6 +11,7 @@ import {
 import ActionButton from '../components/ActionButton';
 
 const AddComponent = ({
+  base,
   design,
   libraries,
   selected,
@@ -21,23 +22,32 @@ const AddComponent = ({
   const [search, setSearch] = React.useState('');
   const inputRef = React.useRef();
   const templates = React.useMemo(() => {
-    const result = {};
-    Object.keys(design.components)
-      .map(id => design.components[id])
-      .filter(component => component.name)
-      .forEach(component => {
-        if (!result[component.name]) {
-          result[component.name] = component;
-        }
-      });
+    const buildTemplates = design => {
+      const templates = {};
+      Object.keys(design.components)
+        .map(id => design.components[id])
+        .filter(component => component.name)
+        .forEach(component => {
+          if (!templates[component.name]) {
+            templates[component.name] = component;
+          }
+        });
+      return { design, name: design.name, templates };
+    };
+
+    const result = [];
+    if (base) {
+      result.push(buildTemplates(base));
+    }
+    result.push(buildTemplates(design));
     return result;
-  }, [design]);
+  }, [base, design]);
 
   React.useLayoutEffect(() => {
     setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
   });
 
-  const onAdd = ({ typeName, containSelected, template }) => {
+  const onAdd = ({ typeName, containSelected, template, templateDesign }) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
 
@@ -48,7 +58,7 @@ const AddComponent = ({
         addComponent(nextDesign, libraries, nextSelected, typeName);
       }
     } else if (template) {
-      const id = copyComponent(nextDesign, nextDesign, template.id);
+      const id = copyComponent(nextDesign, templateDesign, template.id);
       nextDesign.components[id].name = template.name;
       nextSelected.component = id;
     }
@@ -169,23 +179,39 @@ const AddComponent = ({
                 )),
             )}
 
-            {Object.keys(templates)
-              .filter(name => !searchExp || name.match(searchExp))
-              .map(name => (
-                <Button
-                  key={name}
-                  hoverIndicator
-                  onClick={event =>
-                    onAdd({
-                      containSelected: event.metaKey,
-                      template: templates[name],
-                    })
-                  }
-                >
+            {templates
+              .filter(
+                ({ templates }) =>
+                  !searchExp ||
+                  Object.keys(templates).some(name => name.match(searchExp)),
+              )
+              .map(({ name, design: tempDesign, templates: temps }) => (
+                <Box key={name} flex={false}>
                   <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                    {name}
+                    <Heading level="3" size="small" margin="none">
+                      {name}
+                    </Heading>
                   </Box>
-                </Button>
+                  {Object.keys(temps)
+                    .filter(name => !searchExp || name.match(searchExp))
+                    .map(name => (
+                      <Button
+                        key={name}
+                        hoverIndicator
+                        onClick={event =>
+                          onAdd({
+                            containSelected: event.metaKey,
+                            templateDesign: tempDesign,
+                            template: temps[name],
+                          })
+                        }
+                      >
+                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                          {name}
+                        </Box>
+                      </Button>
+                    ))}
+                </Box>
               ))}
           </Box>
         </Box>

@@ -34,6 +34,7 @@ const treeName = component =>
   component.type;
 
 const Tree = ({
+  base,
   colorMode,
   design,
   libraries,
@@ -459,6 +460,7 @@ const Tree = ({
             <AddComponent
               design={design}
               libraries={libraries}
+              base={base}
               selected={selected}
               setDesign={setDesign}
               setSelected={setSelected}
