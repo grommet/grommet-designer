@@ -2,9 +2,13 @@ import React from 'react';
 import ReactGA from 'react-ga';
 import { Box, Button, Heading, Keyboard, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
-import { addScreen, copyComponent, getParent } from '../design';
+import {
+  addComponent,
+  addScreen,
+  copyComponent,
+  insertComponent,
+} from '../design';
 import ActionButton from '../components/ActionButton';
-import { getComponentType } from '../utils';
 
 const AddComponent = ({
   design,
@@ -16,85 +20,47 @@ const AddComponent = ({
 }) => {
   const [search, setSearch] = React.useState('');
   const inputRef = React.useRef();
+  const templates = React.useMemo(() => {
+    const result = {};
+    Object.keys(design.components)
+      .map(id => design.components[id])
+      .filter(component => component.name)
+      .forEach(component => {
+        if (!result[component.name]) {
+          result[component.name] = component;
+        }
+      });
+    return result;
+  }, [design]);
 
   React.useLayoutEffect(() => {
     setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
   });
 
-  const onAdd = (typeName, containSelected, starter) => {
+  const onAdd = ({ typeName, containSelected, template }) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
-    const type = getComponentType(libraries, typeName);
 
-    if (type.name === 'Screen') {
-      nextSelected.screen = addScreen(nextDesign, starter, selected);
-      nextSelected.component = nextDesign.screens[nextSelected.screen].root;
-    } else {
-      let id;
-      if (starter) {
-        id = copyComponent(nextDesign, starter, starter.root);
-        nextDesign.components[id].name = starter.name;
+    if (typeName) {
+      if (typeName === 'designer.Screen') {
+        addScreen(nextDesign, nextSelected);
       } else {
-        id = nextDesign.nextId;
-        nextDesign.nextId += 1;
-        const component = {
-          type: typeName,
-          id,
-          props: type.defaultProps ? { ...type.defaultProps } : {},
-        };
-        nextDesign.components[component.id] = component;
+        addComponent(nextDesign, libraries, nextSelected, typeName);
       }
-      const component = nextDesign.components[id];
-
-      if (selected.component) {
-        const selectedComponent = nextDesign.components[selected.component];
-        if (containSelected && type.container) {
-          const parent = getParent(nextDesign, selected.component);
-          const index = parent.children.indexOf(selected.component);
-          parent.children[index] = id;
-          component.children = [selected.component];
-        } else {
-          const selectedType = getComponentType(
-            libraries,
-            selectedComponent.type,
-          );
-          const parent = selectedType.container
-            ? selectedComponent
-            : getParent(nextDesign, selected.component);
-          if (!parent.children) parent.children = [];
-          parent.children.push(id);
-        }
-      } else {
-        const screen = nextDesign.screens[selected.screen];
-        screen.root = id;
-      }
+    } else if (template) {
+      const id = copyComponent(nextDesign, nextDesign, template.id);
+      nextDesign.components[id].name = template.name;
       nextSelected.component = id;
+    }
 
-      // Special case any -component- properties by adding separate components
-      // for them. Canvas will take care of rendering them.
-      // Tree will show them so the user can select them.
-      Object.keys(type.properties).forEach(prop => {
-        if (
-          typeof type.properties[prop] === 'string' &&
-          type.properties[prop].startsWith('-component-')
-        ) {
-          const [, propTypeName] = type.properties[prop].split(' ');
-          const propType = getComponentType(libraries, propTypeName);
-          const propId = nextDesign.nextId;
-          nextDesign.nextId += 1;
-          const propComponent = {
-            type: propTypeName,
-            name: prop,
-            id: propId,
-            props: { ...propType.defaultProps, name: prop },
-            deletable: false,
-          };
-          nextDesign.components[propComponent.id] = propComponent;
-          if (!component.propComponents) component.propComponents = [];
-          component.propComponents.push(propId);
-          component.props[prop] = propId;
-        }
-      });
+    if (nextSelected.component) {
+      insertComponent(
+        nextDesign,
+        libraries,
+        selected,
+        nextSelected.component,
+        containSelected,
+      );
     }
 
     setDesign(nextDesign);
@@ -186,7 +152,10 @@ const AddComponent = ({
                             key={name}
                             hoverIndicator
                             onClick={event =>
-                              onAdd(`${libraryName}.${name}`, event.metaKey)
+                              onAdd({
+                                typeName: `${libraryName}.${name}`,
+                                containSelected: event.metaKey,
+                              })
                             }
                           >
                             <Box
@@ -196,26 +165,28 @@ const AddComponent = ({
                             </Box>
                           </Button>
                         ))}
-                    {/* }
-                {starters && starters.map(key => (
-                  <Fragment key={key}>
-                    {types[key].starters.map(starter => (
-                      <Button
-                        key={starter.name}
-                        hoverIndicator
-                        onClick={(event) => onAdd(key, event.metaKey, starter)}
-                      >
-                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                          {starter.name}
-                        </Box>
-                      </Button>
-                    ))}
-                  </Fragment>
-                ))}
-                { */}
                   </Box>
                 )),
             )}
+
+            {Object.keys(templates)
+              .filter(name => !searchExp || name.match(searchExp))
+              .map(name => (
+                <Button
+                  key={name}
+                  hoverIndicator
+                  onClick={event =>
+                    onAdd({
+                      containSelected: event.metaKey,
+                      template: templates[name],
+                    })
+                  }
+                >
+                  <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                    {name}
+                  </Box>
+                </Button>
+              ))}
           </Box>
         </Box>
       </Box>

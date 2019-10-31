@@ -17,23 +17,15 @@ const ScreenDetails = ({
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextScreen = deleteScreen(nextDesign, selected.screen);
-    const nextSelected = {
-      screen: nextScreen,
-      component: nextDesign.screens[nextScreen].root,
-    };
+    const nextSelected = { screen: nextScreen };
     setSelected(nextSelected);
     setDesign(nextDesign);
   };
 
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const nextSelected = {};
-    nextSelected.screen = addScreen(
-      nextDesign,
-      nextDesign.screens[selected.screen],
-      selected,
-    );
-    nextSelected.component = nextDesign.screens[nextSelected.screen].root;
+    const nextSelected = { ...selected };
+    addScreen(nextDesign, nextSelected, nextDesign.screens[selected.screen]);
     setDesign(nextDesign);
     setSelected(nextSelected);
   };
