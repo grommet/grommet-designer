@@ -307,7 +307,11 @@ const Canvas = ({
 
   const screen = design.screens[selected.screen];
   return (
-    <Grommet theme={theme} style={{ height: '100vh' }}>
+    <Grommet
+      theme={theme}
+      themeMode={design.themeMode}
+      style={{ height: '100vh' }}
+    >
       {screen && screen.root && renderComponent(screen.root)}
     </Grommet>
   );

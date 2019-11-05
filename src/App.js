@@ -234,12 +234,14 @@ const App = () => {
   React.useEffect(() => {
     const nextTheme = design.theme;
     if (typeof nextTheme === 'string') {
-      if (nextTheme.slice(0, 6) === 'https:') {
+      if (nextTheme.slice(0, 4) === 'http') {
         // extract id from URL
         const id = nextTheme.split('id=')[1];
-        fetch(`${themeApiUrl}/${id}`)
-          .then(response => response.json())
-          .then(setTheme);
+        if (id) {
+          fetch(`${themeApiUrl}/${id}`)
+            .then(response => response.json())
+            .then(setTheme);
+        }
       } else setTheme(themes[nextTheme] || grommet);
     } else if (typeof nextTheme === 'object') {
       setTheme(nextTheme);

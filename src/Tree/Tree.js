@@ -470,6 +470,7 @@ const Tree = ({
           {editing && (
             <DesignSettings
               design={design}
+              theme={theme}
               setDesign={setDesign}
               onClose={() => setEditing(false)}
             />

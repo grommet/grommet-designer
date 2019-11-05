@@ -5,6 +5,7 @@ import {
   CheckBox,
   Paragraph,
   Select,
+  Text,
   TextArea,
   TextInput,
 } from 'grommet';
@@ -14,7 +15,7 @@ import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import themes from '../themes';
 
-export default ({ design, onClose, setDesign }) => (
+export default ({ design, onClose, setDesign, theme }) => (
   <Action label="design" onClose={onClose}>
     <Box flex={false}>
       <Field label="Name" htmlFor="name">
@@ -70,7 +71,7 @@ export default ({ design, onClose, setDesign }) => (
           value={
             (design.theme &&
               ((typeof design.theme === 'object' && 'custom') ||
-                (design.theme.slice(0, 6) === 'https:' && 'published') ||
+                (design.theme.slice(0, 4) === 'http' && 'published') ||
                 design.theme)) ||
             'grommet'
           }
@@ -89,7 +90,7 @@ export default ({ design, onClose, setDesign }) => (
 
       {design.theme &&
         typeof design.theme === 'string' &&
-        design.theme.slice(0, 6) === 'https:' && (
+        design.theme.slice(0, 4) === 'http' && (
           <Field label="Theme url" htmlFor="themeUrl" align="start">
             <TextInput
               id="themeUrl"
@@ -106,6 +107,26 @@ export default ({ design, onClose, setDesign }) => (
             />
           </Field>
         )}
+
+      {theme && typeof theme.global.colors.background === 'object' && (
+        <Field label="Theme mode" htmlFor="themeMode" align="start">
+          <Box pad="small" direction="row" gap="small">
+            <Text>light</Text>
+            <CheckBox
+              id="themeMode"
+              name="themeMode"
+              toggle
+              checked={design.themeMode === 'dark'}
+              onChange={event => {
+                const nextDesign = JSON.parse(JSON.stringify(design));
+                nextDesign.themeMode = event.target.checked ? 'dark' : 'light';
+                setDesign(nextDesign);
+              }}
+            />
+            <Text>dark</Text>
+          </Box>
+        </Field>
+      )}
 
       {/* deprecated, use theme designer instead */}
       {design.theme && typeof design.theme === 'object' && (

@@ -19,15 +19,7 @@ import {
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 
-const internalColors = [
-  'active',
-  'background',
-  'focus',
-  'icon',
-  'placeholder',
-  'selected',
-  'text',
-];
+const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
 
 const ColorLabel = theme => ({ active, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
