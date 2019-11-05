@@ -328,6 +328,7 @@ export const components = {
       label: 'Button',
     },
     properties: {
+      active: false,
       color: ['-color-'],
       disabled: false,
       fill: ['horizontal', 'vertical'],
