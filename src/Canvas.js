@@ -200,7 +200,11 @@ const Canvas = ({
       if (type.properties) {
         const property = type.properties[prop];
         // use designer Icon for icons
-        if (Array.isArray(property) && property.includes('-Icon-')) {
+        if (
+          Array.isArray(property) &&
+          component.type !== 'designer.Icon' &&
+          property.includes('-Icon-')
+        ) {
           specialProps[prop] = <Icon icon={component.props[prop]} />;
         }
         if (

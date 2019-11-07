@@ -7,7 +7,7 @@ export const components = {
     name: 'Icon',
     properties: {
       color: ['-color-'],
-      icon: iconNames,
+      icon: ['-Icon-'],
       size: ['small', 'medium', 'large'],
     },
   },
