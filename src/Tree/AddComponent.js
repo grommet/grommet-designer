@@ -47,7 +47,7 @@ const AddComponent = ({
     setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
   });
 
-  const onAdd = ({ typeName, containSelected, template, templateDesign }) => {
+  const add = ({ typeName, containSelected, template, templateDesign }) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
 
@@ -120,7 +120,12 @@ const AddComponent = ({
                       if (first) typeName = `${name}.${first}`;
                       return !!typeName;
                     });
-                    onAdd(typeName, event.metaKey);
+                    if (typeName) {
+                      add({
+                        typeName,
+                        containSelected: event.metaKey,
+                      });
+                    }
                   }
                 : undefined
             }
@@ -162,7 +167,7 @@ const AddComponent = ({
                             key={name}
                             hoverIndicator
                             onClick={event =>
-                              onAdd({
+                              add({
                                 typeName: `${libraryName}.${name}`,
                                 containSelected: event.metaKey,
                               })
@@ -199,7 +204,7 @@ const AddComponent = ({
                         key={name}
                         hoverIndicator
                         onClick={event =>
-                          onAdd({
+                          add({
                             containSelected: event.metaKey,
                             templateDesign: tempDesign,
                             template: temps[name],
