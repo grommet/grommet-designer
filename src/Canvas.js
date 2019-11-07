@@ -129,7 +129,8 @@ const Canvas = ({
   const renderRepeater = (component, dataContextPath) => {
     const {
       children,
-      props: { count, dataPath },
+      designProps: { dataPath },
+      props: { count },
     } = component;
     let contents;
     if (children && children.length === 1) {
@@ -188,14 +189,28 @@ const Canvas = ({
     }
 
     // set up any properties that need special handling
-    const specialProps = type.override
-      ? type.override(component, {
-          dataContextPath,
-          followLink,
-          replaceData: text => replace(text, data, contextPath),
-          setHide: value => setHide(id, value),
-        })
-      : {};
+    let specialProps;
+    if (type.override) {
+      let dataValue;
+      if (component.designProps && component.designProps.dataPath) {
+        const { dataPath } = component.designProps;
+        dataValue = find(
+          data,
+          dataContextPath
+            ? [...dataContextPath, ...parsePath(dataPath)]
+            : parsePath(dataPath),
+        );
+      }
+      specialProps = type.override(component, {
+        dataContextPath,
+        followLink,
+        replaceData: text => replace(text, data, contextPath),
+        setHide: value => setHide(id, value),
+        data: dataValue || undefined,
+      });
+    } else {
+      specialProps = {};
+    }
     Object.keys(component.props).forEach(prop => {
       if (type.properties) {
         const property = type.properties[prop];

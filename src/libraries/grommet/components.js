@@ -567,6 +567,13 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       sortable: false,
     },
+    designProperties: {
+      dataPath: '',
+    },
+    override: (_, { data }) => {
+      // need to use retrieved data for data property
+      return { data };
+    },
   },
   Meter: {
     component: Meter,

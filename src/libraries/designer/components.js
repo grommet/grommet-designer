@@ -1,4 +1,4 @@
-import Icon, { names as iconNames } from './Icon';
+import Icon from './Icon';
 import ReferenceComponent from './ReferenceComponent';
 
 export const components = {

@@ -155,6 +155,15 @@ export const upgradeDesign = design => {
         }
       }
     });
+  // move dataPath to designProperties
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.props.dataPath)
+    .forEach(component => {
+      if (!component.designProps) component.designProps = {};
+      component.designProps.dataPath = component.props.dataPath;
+      delete component.props.dataPath;
+    });
 
   design.version = 3.2;
 };
