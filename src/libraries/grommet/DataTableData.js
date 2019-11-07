@@ -10,13 +10,18 @@ export default ({ value, onChange }) => {
         rows={20}
         value={text}
         onChange={event => {
-          setText(event.target.value);
-          try {
-            const t = JSON.parse(event.target.value);
-            setError(false);
-            onChange(t);
-          } catch (e) {
-            setError(e.message);
+          const value = event.target.value;
+          setText(value);
+          if (value) {
+            try {
+              const t = JSON.parse(value);
+              setError(false);
+              onChange(t);
+            } catch (e) {
+              setError(e.message);
+            }
+          } else {
+            onChange(undefined);
           }
         }}
       />
