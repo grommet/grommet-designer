@@ -563,6 +563,9 @@ export const components = {
     properties: {
       columns: DataTableColumns,
       data: DataTableData,
+      groupBy: '',
+      onClickRow: ['-link-'],
+      replace: false,
       resizeable: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       sortable: false,
@@ -570,9 +573,17 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (_, { data }) => {
+    override: ({ props }, { data, dataContextPath, followLink }) => {
+      const result = {};
       // need to use retrieved data for data property
-      return { data };
+      if (data) result.data = data;
+      if (props.onClickRow) {
+        result.onClickRow = event => {
+          event.stopPropagation();
+          followLink({ ...props.onClickRow, dataContextPath });
+        };
+      }
+      return result;
     },
   },
   Meter: {
