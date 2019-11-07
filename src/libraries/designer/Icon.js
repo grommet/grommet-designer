@@ -13,7 +13,7 @@ export const SelectLabel = ({ active, value }) => (
 );
 
 const Icon = ({ icon, ...rest }) => {
-  const Icon = icons[icon || 'Add'] || icons.Blank;
+  const Icon = icons[icon] || icons.Blank;
   return <Icon {...rest} />;
 };
 
