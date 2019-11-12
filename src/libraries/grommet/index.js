@@ -39,7 +39,7 @@ const structure = [
   {
     name: 'Visualizations',
     Icon: BarChart,
-    components: ['Calendar', 'Clock', 'DataTable', 'Meter'],
+    components: ['Calendar', 'Clock', 'DataTable', 'List', 'Meter'],
   },
   {
     name: 'Media',

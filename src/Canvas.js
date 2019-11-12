@@ -129,9 +129,10 @@ const Canvas = ({
   const renderRepeater = (component, dataContextPath) => {
     const {
       children,
-      designProps: { dataPath },
+      designProps,
       props: { count },
     } = component;
+    const dataPath = designProps ? designProps.dataPath : undefined;
     let contents;
     if (children && children.length === 1) {
       if (data && dataPath) {

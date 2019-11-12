@@ -16,6 +16,7 @@ import {
   Heading,
   Image,
   Layer,
+  List,
   Markdown,
   MaskedInput,
   Menu,
@@ -558,7 +559,10 @@ export const components = {
         { header: 'Name', property: 'name', primary: true },
         { header: 'Count', property: 'count' },
       ],
-      data: [{ name: 'Eric', count: 5 }, { name: 'Shimi', count: 7 }],
+      data: [
+        { name: 'Eric', count: 5 },
+        { name: 'Shimi', count: 7 },
+      ],
     },
     properties: {
       columns: DataTableColumns,
@@ -581,6 +585,37 @@ export const components = {
         result.onClickRow = event => {
           event.stopPropagation();
           followLink({ ...props.onClickRow, dataContextPath });
+        };
+      }
+      return result;
+    },
+  },
+  List: {
+    component: List,
+    name: 'List',
+    defaultProps: {
+      data: [
+        { name: 'Eric', count: 5 },
+        { name: 'Shimi', count: 7 },
+      ],
+    },
+    properties: {
+      data: DataTableData,
+      onClickItem: ['-link-'],
+      primaryKey: '',
+      secondaryKey: '',
+    },
+    designProperties: {
+      dataPath: '',
+    },
+    override: ({ props }, { data, dataContextPath, followLink }) => {
+      const result = {};
+      // need to use retrieved data for data property
+      if (data) result.data = data;
+      if (props.onClickItem) {
+        result.onClickItem = event => {
+          event.stopPropagation();
+          followLink({ ...props.onClickItem, dataContextPath });
         };
       }
       return result;
