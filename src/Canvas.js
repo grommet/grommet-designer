@@ -219,6 +219,7 @@ const Canvas = ({
         if (
           Array.isArray(property) &&
           component.type !== 'designer.Icon' &&
+          component.type !== 'Icon' &&
           property.includes('-Icon-')
         ) {
           specialProps[prop] = <Icon icon={component.props[prop]} />;
