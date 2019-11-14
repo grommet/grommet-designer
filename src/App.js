@@ -75,9 +75,9 @@ const App = () => {
         .then(response => response.json())
         .then(nextDesign => {
           upgradeDesign(nextDesign);
-          const screen = pathname
-            ? getScreenByPath(nextDesign, pathname)
-            : nextDesign.screenOrder[0];
+          const screen =
+            (pathname && getScreenByPath(nextDesign, pathname)) ||
+            nextDesign.screenOrder[0];
           const nextSelected = { screen };
           setDesign(nextDesign);
           setSelected(nextSelected);
@@ -169,6 +169,8 @@ const App = () => {
   }, []);
 
   // browser navigation
+
+  // react when user uses browser back and forward buttons
   React.useEffect(() => {
     const onPopState = () => {
       const {
@@ -183,6 +185,7 @@ const App = () => {
     return () => window.removeEventListener('popstate', onPopState);
   }, [design]);
 
+  // push state when the user navigates
   React.useEffect(() => {
     const {
       location: { pathname },
@@ -313,7 +316,11 @@ const App = () => {
           columns={
             responsive === 'small' || preview
               ? 'flex'
-              : [['small', '288px'], ['1/2', 'flex'], ['small', 'medium']]
+              : [
+                  ['small', '288px'],
+                  ['1/2', 'flex'],
+                  ['small', 'medium'],
+                ]
           }
         >
           {responsive !== 'small' && !preview && (

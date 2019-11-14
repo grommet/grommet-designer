@@ -115,7 +115,7 @@ export const components = {
       },
       direction: ['column', 'row', 'row-responsive'],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      fill: ['horizontal', 'vertical'],
+      fill: ['horizontal', 'vertical', true, false],
       flex: ['grow', 'shrink', true, false],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       gridArea: BoxGridArea,
