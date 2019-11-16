@@ -365,6 +365,10 @@ const Canvas = ({
       type.component,
       {
         key: key || id,
+        ...dragProps,
+        style,
+        ...component.props,
+        ...specialProps,
         onClick: event => {
           if (!preview && event.target === event.currentTarget) {
             if (selected.component !== id) {
@@ -374,11 +378,8 @@ const Canvas = ({
               setInlineEdit(id);
             }
           }
+          if (specialProps.onClick) specialProps.onClick(event);
         },
-        ...dragProps,
-        style,
-        ...component.props,
-        ...specialProps,
       },
       children,
     );
