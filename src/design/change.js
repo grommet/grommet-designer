@@ -15,32 +15,34 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
   nextDesign.components[component.id] = component;
   nextSelected.component = id;
 
-  // Special case any -component- properties by adding separate components
-  // for them. Canvas will take care of rendering them.
-  // Tree will show them so the user can select them.
-  Object.keys(type.properties).forEach(prop => {
-    if (
-      typeof type.properties[prop] === 'string' &&
-      type.properties[prop].startsWith('-component-')
-    ) {
-      const [, propTypeName] = type.properties[prop].split(' ');
-      const propType = getComponentType(libraries, propTypeName);
-      const propId = nextDesign.nextId;
-      nextDesign.nextId += 1;
-      const propComponent = {
-        type: propTypeName,
-        name: prop,
-        id: propId,
-        props: { ...propType.defaultProps, name: prop },
-        deletable: false,
-      };
-      nextDesign.components[propComponent.id] = propComponent;
-      const component = nextDesign.components[id];
-      if (!component.propComponents) component.propComponents = [];
-      component.propComponents.push(propId);
-      component.props[prop] = propId;
-    }
-  });
+  if (type.properties) {
+    // Special case any -component- properties by adding separate components
+    // for them. Canvas will take care of rendering them.
+    // Tree will show them so the user can select them.
+    Object.keys(type.properties).forEach(prop => {
+      if (
+        typeof type.properties[prop] === 'string' &&
+        type.properties[prop].startsWith('-component-')
+      ) {
+        const [, propTypeName] = type.properties[prop].split(' ');
+        const propType = getComponentType(libraries, propTypeName);
+        const propId = nextDesign.nextId;
+        nextDesign.nextId += 1;
+        const propComponent = {
+          type: propTypeName,
+          name: prop,
+          id: propId,
+          props: { ...propType.defaultProps, name: prop },
+          deletable: false,
+        };
+        nextDesign.components[propComponent.id] = propComponent;
+        const component = nextDesign.components[id];
+        if (!component.propComponents) component.propComponents = [];
+        component.propComponents.push(propId);
+        component.props[prop] = propId;
+      }
+    });
+  }
 };
 
 export const copyComponent = (nextDesign, design, id) => {

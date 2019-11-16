@@ -1,3 +1,5 @@
+import React from 'react';
+import { Paragraph } from 'grommet';
 import Icon from './Icon';
 import ReferenceComponent from './ReferenceComponent';
 
@@ -14,6 +16,12 @@ export const components = {
   Repeater: {
     name: 'Repeater',
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Repeater is currently empty. Add some components to it so it can
+        repeat them.
+      </Paragraph>
+    ),
     help: `Repeater is a designer specific component for
     use with this design tool. It expects a single child component which
     it will repeat 'count' times. Wrap it in a Box or Grid to control

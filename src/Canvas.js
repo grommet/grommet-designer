@@ -159,7 +159,7 @@ const Canvas = ({
     }
   };
 
-  const renderRepeater = (component, dataContextPath) => {
+  const renderRepeater = (component, type, dataContextPath) => {
     const {
       children,
       designProps,
@@ -195,6 +195,8 @@ const Canvas = ({
           );
         }
       }
+    } else if (!children || children.length === 0) {
+      contents = type.placeholder;
     }
     return contents || null;
   };
@@ -219,7 +221,7 @@ const Canvas = ({
       component.type === 'designer.Repeater' ||
       component.type === 'Repeater'
     ) {
-      return renderRepeater(component, contextPath);
+      return renderRepeater(component, type, contextPath);
     }
 
     // set up any properties that need special handling
@@ -282,7 +284,7 @@ const Canvas = ({
     }
 
     let children;
-    if (component.children) {
+    if (component.children && component.children.length > 0) {
       if (component.children.length > 0) {
         children = component.children.map(childId =>
           renderComponent(childId, dataContextPath),
@@ -319,6 +321,8 @@ const Canvas = ({
     } else if (specialProps && specialProps.children) {
       children = specialProps.children;
       delete specialProps.children;
+    } else if (type.placeholder) {
+      children = type.placeholder;
     }
 
     // We don't drag when editing so that the user can use text selection.

@@ -56,6 +56,12 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Box is currently empty. Add components to it, so it can do its
+        layout thing.
+      </Paragraph>
+    ),
     documentation: 'https://v2.grommet.io/box',
     defaultProps: {
       align: 'center',
@@ -188,6 +194,11 @@ export const components = {
     component: Grid,
     name: 'Grid',
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Grid is currently empty. Define columns and add components to it.
+      </Paragraph>
+    ),
     documentation: 'https://v2.grommet.io/grid',
     properties: {
       align: ['stretch', 'start', 'center', 'end'],
@@ -205,6 +216,12 @@ export const components = {
     component: Stack,
     name: 'Stack',
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Stack is currently empty. Add some components to it so they can be
+        stacked.
+      </Paragraph>
+    ),
     documentation: 'https://v2.grommet.io/stack',
     properties: {
       anchor: [
@@ -228,6 +245,12 @@ export const components = {
     name: 'Layer',
     container: true,
     hideable: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Layer is currently empty. Add components to it, so it can show
+        something.
+      </Paragraph>
+    ),
     documentation: 'https://v2.grommet.io/layer',
     defaultProps: {
       animate: true,
@@ -443,12 +466,27 @@ export const components = {
   Form: {
     component: Form,
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Form is currently empty. Add some FormField components to it so it
+        can group them.
+      </Paragraph>
+    ),
     name: 'Form',
   },
   FormField: {
     component: FormField,
     container: true,
+    placeholder: (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This FormField is currently empty. Add an input component to it so it
+        can decorate it.
+      </Paragraph>
+    ),
     name: 'FormField',
+    defaultProps: {
+      label: 'FormField',
+    },
     properties: {
       color: ['-color-'],
       error: 'error',
