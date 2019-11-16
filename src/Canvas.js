@@ -1,8 +1,31 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Grommet } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
 import { getComponentType } from './utils';
+
+const InlineInput = styled.input`
+  box-sizing: border-box;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  border: none;
+  -webkit-appearance: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  resize: none;
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+`;
 
 const arrayExp = /(.+)\[(\d+)\]/;
 // converts something like 'data[0].details' to: ['data', 0, 'details']
@@ -54,9 +77,11 @@ const Canvas = ({
   setSelected,
 }) => {
   const [data, setData] = React.useState();
+  const [inlineEdit, setInlineEdit] = React.useState();
   const [dragging, setDragging] = React.useState();
   const [dropTarget, setDropTarget] = React.useState();
   const [dropAt, setDropAt] = React.useState();
+  const inputRef = React.useRef();
 
   // load data, if needed
   React.useEffect(() => {
@@ -78,6 +103,14 @@ const Canvas = ({
       setData(nextData);
     }
   }, [design.data]);
+
+  // set Input height based on contents
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+    }
+  });
 
   const setHide = (id, hide) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -242,6 +275,8 @@ const Canvas = ({
       style = { outline: '5px dashed blue' };
     } else if (dropAt === id) {
       style = { outline: '1px dashed blue' };
+    } else if (inlineEdit === id) {
+      style = { outline: '2px dashed red' };
     } else if (!preview && selected.component === id) {
       style = { outline: '1px dashed red' };
     }
@@ -254,6 +289,23 @@ const Canvas = ({
         );
         if (children.length === 0) children = undefined;
       }
+    } else if (inlineEdit === id) {
+      children = (
+        <InlineInput
+          ref={type.name === 'Paragraph' ? inputRef : undefined}
+          as={type.name === 'Paragraph' ? 'textarea' : undefined}
+          placeholder={type.text}
+          value={component.text || ''}
+          size={component.text ? component.text.length : 4}
+          onChange={event => {
+            const text = event.target.value;
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            const component = nextDesign.components[selected.component];
+            component.text = text;
+            setDesign(nextDesign);
+          }}
+        />
+      );
     } else if (component.text) {
       if (data) {
         // resolve any data references
@@ -268,8 +320,9 @@ const Canvas = ({
       delete specialProps.children;
     }
 
+    // We don't drag when editing so that the user can use text selection.
     const dragProps = {};
-    if (!preview) {
+    if (!preview && !inlineEdit) {
       dragProps.draggable = true;
       dragProps.onDragStart = event => {
         event.stopPropagation();
@@ -313,8 +366,13 @@ const Canvas = ({
       {
         key: key || id,
         onClick: event => {
-          if (event.target === event.currentTarget) {
-            setSelected({ ...selected, component: id });
+          if (!preview && event.target === event.currentTarget) {
+            if (selected.component !== id) {
+              setSelected({ ...selected, component: id });
+              setInlineEdit(undefined);
+            } else if (type.text) {
+              setInlineEdit(id);
+            }
           }
         },
         ...dragProps,
