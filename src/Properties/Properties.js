@@ -101,6 +101,7 @@ export default ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.props = {};
+    if (!component.text) component.text = undefined;
     setDesign(nextDesign);
 
     ReactGA.event({
@@ -271,7 +272,9 @@ export default ({
                   <TextArea
                     ref={searchExp && !firstRef ? defaultRef : undefined}
                     plain
-                    value={component.text || type.text}
+                    value={
+                      component.text === undefined ? type.text : component.text
+                    }
                     onChange={event => setText(event.target.value)}
                   />
                   {(firstRef = true)}

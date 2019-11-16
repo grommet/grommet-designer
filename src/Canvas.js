@@ -306,13 +306,14 @@ const Canvas = ({
           }}
         />
       );
-    } else if (component.text) {
+    } else if (component.text !== undefined) {
       if (data) {
         // resolve any data references
         children = replace(component.text, data, contextPath);
       } else {
         children = component.text;
       }
+      if (!children) children = <>&nbsp;</>;
     } else if (type.text) {
       children = type.text;
     } else if (specialProps && specialProps.children) {
