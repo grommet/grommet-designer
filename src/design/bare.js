@@ -5,14 +5,12 @@ export const bare = {
     2: {
       id: 2,
       type: 'grommet.Box',
-      props: { pad: 'large', fill: 'vertical', overflow: 'auto' },
-      children: [3],
-    },
-    3: {
-      id: 3,
-      type: 'grommet.Heading',
-      props: { textAlign: 'center' },
-      text: 'blank page',
+      props: {
+        pad: 'large',
+        fill: 'vertical',
+        overflow: 'auto',
+        align: 'center',
+      },
     },
   },
   theme: 'grommet',

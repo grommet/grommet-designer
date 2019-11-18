@@ -63,7 +63,7 @@ const AddComponent = ({
       nextSelected.component = id;
     }
 
-    if (nextSelected.component) {
+    if (selected.screen === nextSelected.screen) {
       insertComponent(
         nextDesign,
         libraries,

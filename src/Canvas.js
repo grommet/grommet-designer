@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Grommet } from 'grommet';
+import { Box, Grommet, Paragraph } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
 import { getComponentType } from './utils';
@@ -398,6 +398,14 @@ const Canvas = ({
       style={{ height: '100vh' }}
     >
       {screen && screen.root && renderComponent(screen.root)}
+      {screen && !screen.root && (
+        <Box align="center">
+          <Paragraph size="large" textAlign="center" color="placeholder">
+            This Screen is currently empty. Add a layout component to it to to
+            start building it out.
+          </Paragraph>
+        </Box>
+      )}
     </Grommet>
   );
 };

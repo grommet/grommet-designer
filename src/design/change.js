@@ -49,7 +49,7 @@ export const copyComponent = (nextDesign, design, id) => {
   const component = design.components[id];
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;
-  const nextComponent = JSON.parse(JSON.stringify(design.components[id]));
+  const nextComponent = JSON.parse(JSON.stringify(component));
   nextComponent.id = nextId;
   nextDesign.components[nextId] = nextComponent;
   if (component.children) {
@@ -99,7 +99,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
   nextDesign.screenOrder.splice(index + 1, 0, screenId);
 
   nextSelected.screen = screenId;
-  delete nextSelected.component;
+  nextSelected.component = screen.root;
 };
 
 export const deleteScreen = (nextDesign, id) => {
@@ -128,6 +128,12 @@ export const deleteComponent = (nextDesign, id) => {
   if (component.propComponents) {
     component.propComponents.forEach(i => deleteComponent(nextDesign, i));
   }
+  // remove Screen root, if any
+  Object.keys(nextDesign.screens)
+    .map(sId => nextDesign.screens[sId])
+    .forEach(screen => {
+      if (screen.root === id) delete screen.root;
+    });
 
   // NOTE: We might still have references in Button and Menu.items links or
   // Reference. We leave them alone and let upgrade() clean up eventually.

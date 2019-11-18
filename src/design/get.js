@@ -73,7 +73,9 @@ export const getLinkOptions = (design, libraries, selected) => {
   // options for what a Button or MenuItem should do:
   // open a layer, close the layer it is in, change screens,
   const screen = design.screens[selected.screen];
-  const screenComponents = getDescendants(design, screen.root);
+  const screenComponents = screen.root
+    ? getDescendants(design, screen.root)
+    : [];
   return [
     ...screenComponents
       .map(k => design.components[k])
