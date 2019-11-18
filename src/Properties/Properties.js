@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactGA from 'react-ga';
 import {
+  Anchor,
   Box,
   Button,
   CheckBox,
@@ -12,7 +13,12 @@ import {
 } from 'grommet';
 import { Duplicate, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
-import { deleteComponent, duplicateComponent, getLinkOptions } from '../design';
+import {
+  deleteComponent,
+  duplicateComponent,
+  getLinkOptions,
+  getParent,
+} from '../design';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getComponentType } from '../utils';
@@ -165,6 +171,8 @@ export default ({
     }
   };
 
+  const parent = getParent(design, component.id);
+  const parentType = parent && getComponentType(libraries, parent.type);
   let firstRef = false;
 
   const renderProperties = (properties, props) =>
@@ -348,6 +356,23 @@ export default ({
                       Properties
                     </Heading>
                     {renderProperties(type.properties, component.props)}
+                    {!type.container && (
+                      <Box pad="medium">
+                        <Paragraph size="small" color="light-4">
+                          adjust the layout of this {type.name} via its
+                          containing{' '}
+                          <Anchor
+                            label={parentType.name}
+                            onClick={() => {
+                              setSelected({
+                                ...selected,
+                                component: parent.id,
+                              });
+                            }}
+                          />
+                        </Paragraph>
+                      </Box>
+                    )}
                   </Box>
                 )}
 
