@@ -339,7 +339,7 @@ export default ({
                       );
                     })
                 ) : (
-                  <Box>
+                  <Box flex="grow">
                     <Heading
                       level={3}
                       size="small"
