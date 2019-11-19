@@ -163,10 +163,12 @@ const Tree = ({
       if (event.key === 'ArrowRight') {
         setSelected(childSelected(design, selected) || selected);
       }
-      if (onUndo && event.key === 'z') {
+      if (onUndo && event.key === 'z' && !event.shiftKey) {
+        event.preventDefault();
         onUndo();
       }
-      if (onRedo && event.key === 'Z') {
+      if (onRedo && event.key === 'z' && event.shiftKey) {
+        event.preventDefault();
         onRedo();
       }
       if (event.key === 'c') {
