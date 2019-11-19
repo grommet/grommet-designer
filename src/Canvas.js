@@ -27,6 +27,10 @@ const InlineInput = styled.input`
   }
 `;
 
+const Placeholder = styled.div`
+  pointer-events: none;
+`;
+
 const arrayExp = /(.+)\[(\d+)\]/;
 // converts something like 'data[0].details' to: ['data', 0, 'details']
 const parsePath = text =>
@@ -322,7 +326,7 @@ const Canvas = ({
       children = specialProps.children;
       delete specialProps.children;
     } else if (type.placeholder) {
-      children = type.placeholder(component.props);
+      children = <Placeholder>{type.placeholder(component.props)}</Placeholder>;
     }
 
     // We don't drag when editing so that the user can use text selection.
