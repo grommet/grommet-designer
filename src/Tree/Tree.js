@@ -45,6 +45,17 @@ const Tree = ({
   onUndo,
   onRedo,
 }) => {
+  const selectedAncestors = React.useMemo(() => {
+    const result = [];
+    if (selected.component) {
+      let parent = getParent(design, selected.component);
+      while (parent) {
+        result.push(parent.id);
+        parent = getParent(design, parent.id);
+      }
+    }
+    return result;
+  }, [design, selected]);
   const [dragging, setDragging] = React.useState();
   const [dropTarget, setDropTarget] = React.useState();
   const [dropWhere, setDropWhere] = React.useState();
@@ -243,7 +254,9 @@ const Tree = ({
     const reference =
       component.type === 'Reference' &&
       design.components[component.props.component];
-    const collapserColor = { light: 'light-4', dark: 'dark-3' };
+    const collapserColor = selectedAncestors.includes(id)
+      ? 'accent-1'
+      : { light: 'light-4', dark: 'dark-3' };
     return (
       <Box key={id}>
         {firstChild && renderDropArea(id, 'before')}
