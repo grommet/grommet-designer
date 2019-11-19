@@ -263,11 +263,12 @@ export default ({
                 </Box>
               )}
               {(!searchExp || searchExp.test('name')) && (
-                <Field label="name">
+                <Field label="name" htmlFor="name">
                   <TextInput
                     ref={searchExp && !firstRef ? defaultRef : undefined}
-                    plain
+                    id="name"
                     name="name"
+                    plain
                     value={component.name || ''}
                     onChange={event => setName(event.target.value)}
                     style={{ textAlign: 'end' }}
@@ -276,9 +277,11 @@ export default ({
                 </Field>
               )}
               {type.text && (!searchExp || searchExp.test('text')) && (
-                <Field label="text">
+                <Field label="text" htmlFor="text">
                   <TextArea
                     ref={searchExp && !firstRef ? defaultRef : undefined}
+                    id="text"
+                    name="text"
                     plain
                     value={
                       component.text === undefined ? type.text : component.text
@@ -289,10 +292,12 @@ export default ({
                 </Field>
               )}
               {type.hideable && (!searchExp || searchExp.test('hide')) && (
-                <Field label="hide">
+                <Field label="hide" htmlFor="hide">
                   <Box pad="small">
                     <CheckBox
                       ref={searchExp && !firstRef ? defaultRef : undefined}
+                      id="hide"
+                      name="hide"
                       toggle
                       checked={!!component.hide}
                       onChange={() => setHide(!component.hide)}

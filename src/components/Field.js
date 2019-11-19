@@ -12,10 +12,13 @@ const Field = React.forwardRef(
       pad={{ right: 'small' }}
       {...rest}
     >
-      <Box flex={false} pad={{ vertical: 'small', horizontal: 'medium' }}>
-        <Text as="label" htmlFor={htmlFor}>
-          {label}
-        </Text>
+      <Box
+        as="label"
+        flex={false}
+        pad={{ vertical: 'small', horizontal: 'medium' }}
+        htmlFor={htmlFor}
+      >
+        <Text>{label}</Text>
         {help && (
           <Box>
             <Paragraph color="dark-4" margin="none">
