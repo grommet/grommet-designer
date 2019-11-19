@@ -322,7 +322,7 @@ const Canvas = ({
       children = specialProps.children;
       delete specialProps.children;
     } else if (type.placeholder) {
-      children = type.placeholder;
+      children = type.placeholder(component.props);
     }
 
     // We don't drag when editing so that the user can use text selection.

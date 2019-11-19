@@ -16,7 +16,7 @@ export const components = {
   Repeater: {
     name: 'Repeater',
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Repeater is currently empty. Add some components to it so it can
         repeat them.

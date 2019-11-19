@@ -56,7 +56,7 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Box is currently empty. Add components to it, so it can do its
         layout thing.
@@ -194,7 +194,7 @@ export const components = {
     component: Grid,
     name: 'Grid',
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Grid is currently empty. Define columns and add components to it.
       </Paragraph>
@@ -216,7 +216,7 @@ export const components = {
     component: Stack,
     name: 'Stack',
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Stack is currently empty. Add some components to it so they can be
         stacked.
@@ -245,7 +245,7 @@ export const components = {
     name: 'Layer',
     container: true,
     hideable: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Layer is currently empty. Add components to it, so it can show
         something.
@@ -466,7 +466,7 @@ export const components = {
   Form: {
     component: Form,
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Form is currently empty. Add some FormField components to it so it
         can group them.
@@ -477,7 +477,7 @@ export const components = {
   FormField: {
     component: FormField,
     container: true,
-    placeholder: (
+    placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This FormField is currently empty. Add an input component to it so it
         can decorate it.
@@ -674,6 +674,10 @@ export const components = {
   Image: {
     component: Image,
     name: 'Image',
+    defaultProps: {
+      src:
+        'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
+    },
     properties: {
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
