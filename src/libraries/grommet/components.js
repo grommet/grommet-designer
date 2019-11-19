@@ -56,17 +56,18 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
-    placeholder: () => (
-      <Paragraph size="large" textAlign="center" color="placeholder">
-        This Box is currently empty. Add components to it, so it can do its
-        layout thing.
-      </Paragraph>
-    ),
+    placeholder: ({ background, pad }) =>
+      !background &&
+      !pad && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Box is currently empty. Add components to it, so it can do its
+          layout thing.
+        </Paragraph>
+      ),
     documentation: 'https://v2.grommet.io/box',
     defaultProps: {
       align: 'center',
       justify: 'center',
-      pad: 'small',
     },
     properties: {
       align: ['stretch', 'start', 'center', 'end', 'baseline'],
