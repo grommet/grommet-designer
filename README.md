@@ -8,17 +8,19 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 ### Command shortcuts
 
-* **command-e** or **windows-E**: toggles preview vs. edit modes
-* **ArrowUp** and **ArrowDown**: traverses the selection across siblings
-* **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
-* **c**: toggles collapsing the currently selected component
-* **p**: initiates searching of the currently selected component's properties
-* **d**: duplicate the current component, and all of its children
-* **a**: opens the add component dialog
-* **command-click** or **windows-click**: when adding a component, it will be added as the parent of the currently selected component
-* **command-delete** or **windows-backspace**: deletes the currently selected component and all of its children
-* **z**: undo the most recent change
-* **Z**: redo the most recently undone change
+- **command-e** or **windows-E**: toggles preview vs. edit modes
+- **ArrowUp** and **ArrowDown**: traverses the selection across siblings
+- **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
+- **c**: toggles collapsing the currently selected component
+- **p**: initiates searching of the currently selected component's properties
+- **d**: duplicate the current component, and all of its children
+- **a**: opens the add component dialog
+- **command-click** or **windows-click**: when adding a component, it
+  will be added as the parent of the currently selected component
+- **command-delete** or **windows-backspace**: deletes the currently
+  selected component and all of its children
+- **z**: undo the most recent change
+- **Z**: redo the most recently undone change
 
 ### Linking
 
@@ -44,13 +46,13 @@ or import a design file you've exported.
 The Share control near the upper left provides three methods of sharing.
 
 1. Publish your design. This will generate a unique URL you can send
-to someone. When they open that URL, they will see your work. They will not be
-able to modify the published version.
+   to someone. When they open that URL, they will see your work. They will not be
+   able to modify the published version. Also see "base" below.
 1. Download the design as a JSON file. You can save or send this
-however you like. You can upload one of these files using the Designs
-dialog, via the Import control.
+   however you like. You can upload one of these files using the Designs
+   dialog, via the Import control.
 1. Generate the appropriate code for your design such that you
-or a developer could run it as an actual site.
+   or a developer could run it as an actual site.
 
 ### Design Components
 
@@ -76,18 +78,29 @@ design as either the `src` for an Image or the `background.image` for a Box.
 
 ### Theming
 
-You can use either one of the official themes or a theme published via theme-designer.grommet.io. Just choose "published" as the theme and then
+You can use either one of the official themes or a theme published
+via theme-designer.grommet.io. Just choose "published" as the theme and then
 provide the theme sharing URL.
 
 ### Data
 
 You can add data sources to a design to make the content more consistent
-and real. A data source can be JSON text or a URL to a REST endpoint that returns JSON. Once you have a data source, you can reference values in it
+and real. A data source can be JSON text or a URL to a REST endpoint that
+returns JSON. Once you have a data source, you can reference values in it
 in Heading, Paragraph, and Text `text` properties and Image `src`
 by describing the path to the content
 you want inside '{}'. For example: `{data-source-name[0].property-name}`.
 You can also reference data in Repeater `dataPath`, so that Repeater will
 iterate over an array.
+
+### Base design
+
+Any published design can be used as a "base" for another design. Any
+components in the base design that have been explicitly given a name will
+be shown in the list of components that can be added. When added, these will
+be copied into the current design by value. In other words, any changes
+published to the base design will not be reflected in components already
+added in the design using it.
 
 ## Local development
 
