@@ -623,7 +623,9 @@ export const components = {
       if (props.onClickRow) {
         result.onClickRow = event => {
           event.stopPropagation();
-          followLink({ ...props.onClickRow, dataContextPath });
+          const { index } = event;
+          const path = dataContextPath ? [...dataContextPath, index] : [index];
+          followLink({ ...props.onClickRow, dataContextPath: path });
         };
       }
       return result;
@@ -654,7 +656,9 @@ export const components = {
       if (props.onClickItem) {
         result.onClickItem = event => {
           event.stopPropagation();
-          followLink({ ...props.onClickItem, dataContextPath });
+          const { index } = event;
+          const path = dataContextPath ? [...dataContextPath, index] : [index];
+          followLink({ ...props.onClickItem, dataContextPath: path });
         };
       }
       return result;

@@ -80,6 +80,7 @@ const Canvas = ({
   setDesign,
   setSelected,
 }) => {
+  const [dataSources, setDataSources] = React.useState();
   const [data, setData] = React.useState();
   const [inlineEdit, setInlineEdit] = React.useState();
   const [dragging, setDragging] = React.useState();
@@ -90,23 +91,32 @@ const Canvas = ({
   // load data, if needed
   React.useEffect(() => {
     if (design.data) {
-      const nextData = {};
-      setData(nextData);
+      const nextDataSources = dataSources
+        ? JSON.parse(JSON.stringify(dataSources))
+        : {};
+      let changed = false;
       Object.keys(design.data).forEach(key => {
-        if (design.data[key].slice(0, 4) === 'http') {
-          fetch(design.data[key])
-            .then(response => response.json())
-            .then(response => {
-              nextData[key] = response;
-              setData(nextData);
-            });
-        } else if (design.data[key]) {
-          nextData[key] = JSON.parse(design.data[key]);
+        if (nextDataSources[key] !== design.data[key]) {
+          nextDataSources[key] = design.data[key];
+          changed = true;
+          if (design.data[key].slice(0, 4) === 'http') {
+            fetch(design.data[key])
+              .then(response => response.json())
+              .then(response => {
+                const nextData = JSON.parse(JSON.stringify(data || {}));
+                nextData[key] = response;
+                setData(nextData);
+              });
+          } else if (design.data[key]) {
+            const nextData = JSON.parse(JSON.stringify(data || {}));
+            nextData[key] = JSON.parse(design.data[key]);
+            setData(nextData);
+          }
         }
       });
-      setData(nextData);
+      if (changed) setDataSources(nextDataSources);
     }
-  }, [design.data]);
+  }, [design.data, data, dataSources]);
 
   // set Input height based on contents
   React.useEffect(() => {
@@ -151,6 +161,7 @@ const Canvas = ({
         target && getComponentType(libraries, target.type).hideable;
       if (hideable) {
         setHide(target.id, !target.hide);
+        setSelected(to);
       } else if (target) {
         // might not have anymore
         setSelected(to);
@@ -232,17 +243,16 @@ const Canvas = ({
     let specialProps;
     if (type.override) {
       let dataValue;
+      let dataPath = dataContextPath;
       if (component.designProps && component.designProps.dataPath) {
-        const { dataPath } = component.designProps;
-        dataValue = find(
-          data,
-          dataContextPath
-            ? [...dataContextPath, ...parsePath(dataPath)]
-            : parsePath(dataPath),
-        );
+        ({ dataPath } = component.designProps);
+        dataPath = dataContextPath
+          ? [...dataContextPath, ...parsePath(dataPath)]
+          : parsePath(dataPath);
+        dataValue = find(data, dataPath);
       }
       specialProps = type.override(component, {
-        dataContextPath,
+        dataContextPath: dataPath,
         followLink,
         replaceData: text => replace(text, data, contextPath),
         setHide: value => setHide(id, value),

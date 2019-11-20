@@ -128,103 +128,6 @@ export default ({ design, onClose, setDesign, theme }) => (
         </Field>
       )}
 
-      {/* deprecated, use theme designer instead */}
-      {design.theme && typeof design.theme === 'object' && (
-        <Box margin={{ left: 'medium' }} background="dark-2">
-          <Field
-            label="font.family"
-            htmlFor="family"
-            help="Double quotes use Google fonts. Single quotes prompt for face."
-            align="start"
-          >
-            <TextInput
-              id="family"
-              name="family"
-              plain
-              placeholder="Arial, sans-serif"
-              value={design.theme.global.font.family || ''}
-              onChange={event => {
-                const family = event.target.value;
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                nextDesign.theme.global.font.family = family;
-                setDesign(nextDesign);
-                // see if we need a face for any of the fonts
-                const names = family.split(',').map(f => f.trim());
-                names.forEach(name => {
-                  const match = name.match(/^"(.+)"/);
-                  if (match) {
-                    fetch(
-                      `https://fonts.googleapis.com/css?family=${encodeURIComponent(
-                        match[1],
-                      )}`,
-                    )
-                      .then(response => response.text())
-                      .then(face => {
-                        const nextDesign2 = JSON.parse(
-                          JSON.stringify(nextDesign),
-                        );
-                        nextDesign2.theme.global.font.face = face;
-                        setDesign(nextDesign2);
-                      });
-                  }
-                });
-              }}
-              style={{ textAlign: 'end' }}
-            />
-          </Field>
-
-          {design.theme.global.font.family &&
-            design.theme.global.font.family.match(/'/) && (
-              <Field label="face" htmlFor="face" align="start">
-                <TextArea
-                  id="face"
-                  name="face"
-                  plain
-                  cols={20}
-                  rows={8}
-                  value={design.theme.global.font.face || ''}
-                  onChange={event => {
-                    const face = event.target.value;
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.theme.global.font.face = face;
-                    setDesign(nextDesign);
-                  }}
-                />
-              </Field>
-            )}
-
-          {[
-            'brand',
-            'accent-1',
-            'accent-2',
-            'accent-3',
-            'neutral-1',
-            'neutral-2',
-            'neutral-3',
-          ].map(color => (
-            <Field key={color} label={`colors.${color}`} htmlFor={color}>
-              <Box direction="row" align="center" gap="small">
-                <TextInput
-                  id={color}
-                  name={color}
-                  placeholder="#rrggbb"
-                  plain
-                  value={design.theme.global.colors[color] || ''}
-                  onChange={event => {
-                    const colorValue = event.target.value;
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    nextDesign.theme.global.colors[color] = colorValue;
-                    setDesign(nextDesign);
-                  }}
-                  style={{ textAlign: 'end' }}
-                />
-                <Box pad="small" background={color} />
-              </Box>
-            </Field>
-          ))}
-        </Box>
-      )}
-
       {/*}
       <Field label="Library" htmlFor="library">
         <TextInput
@@ -273,7 +176,7 @@ export default ({ design, onClose, setDesign, theme }) => (
                     id={`name-${index}`}
                     name={`name-${index}`}
                     plain
-                    value={key}
+                    value={key || ''}
                     onChange={event => {
                       if (event.target.value !== key) {
                         const nextDesign = JSON.parse(JSON.stringify(design));
