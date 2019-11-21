@@ -168,6 +168,11 @@ const App = () => {
     if (stored) setColorMode(stored);
   }, []);
 
+  React.useEffect(() => {
+    const stored = localStorage.getItem('preview');
+    if (stored) setPreview(JSON.parse(stored));
+  }, []);
+
   // browser navigation
 
   // react when user uses browser back and forward buttons
@@ -275,6 +280,11 @@ const App = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [changes, changeIndex, design, selected]);
+
+  // persist preview state when it changes
+  React.useEffect(() => {
+    localStorage.setItem('preview', JSON.stringify(preview));
+  }, [preview]);
 
   const onKey = React.useCallback(
     event => {
