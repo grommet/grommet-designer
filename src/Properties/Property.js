@@ -99,6 +99,13 @@ const Property = React.forwardRef((props, ref) => {
     }
     if (!Label) Label = OptionLabel;
 
+    if (searchExp) {
+      options = options.filter(p => searchExp.test(p));
+    }
+    if (value) {
+      options = [...options, 'undefined'];
+    }
+
     return (
       <Field
         key={name}
@@ -113,11 +120,7 @@ const Property = React.forwardRef((props, ref) => {
           dropTarget={dropTarget}
           id={name}
           name={name}
-          options={
-            searchExp
-              ? [...options.filter(p => searchExp.test(p)), 'undefined']
-              : [...options, 'undefined']
-          }
+          options={options}
           value={typeof value === 'boolean' ? value.toString() : value || ''}
           valueLabel={<Label value={value} active />}
           onChange={({ option }) => {
@@ -125,7 +128,7 @@ const Property = React.forwardRef((props, ref) => {
             onChange(option === 'undefined' ? undefined : option);
           }}
           onSearch={
-            options.length > 20
+            options.length > 20 || searchExp
               ? nextSearchText => setSearchText(nextSearchText)
               : undefined
           }
