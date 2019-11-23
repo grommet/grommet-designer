@@ -3,7 +3,7 @@ import { Blank } from 'grommet-icons';
 import InlineOption from './InlineOption';
 
 const contentCoords = ({ align, direction, justify }) => {
-  if (direction === 'row') {
+  if (direction === 'row' || direction === 'row-responsive') {
     let x;
     let y;
     if (justify === 'start' || !justify) x = [3, 10];
@@ -15,6 +15,11 @@ const contentCoords = ({ align, direction, justify }) => {
     else if (align === 'start') y = [3, 11];
     else if (align === 'center') y = [8, 17];
     else if (align === 'end') y = [13, 21];
+    else if (align === 'baseline')
+      return [
+        [x[0], 10, x[0], 12],
+        [x[1], 7, x[1], 12],
+      ];
     else y = [3, 3];
     return [
       [x[0], y[0], x[0], y[1]],
@@ -29,7 +34,7 @@ const contentCoords = ({ align, direction, justify }) => {
     else if (justify === 'between') y = [4, 20];
     else y = [4, 4];
     if (align === 'stretch' || !align) x = [4, 20];
-    else if (align === 'start') x = [4, 11];
+    else if (align === 'start' || align === 'baseline') x = [4, 11];
     else if (align === 'center') x = [8, 17];
     else if (align === 'end') x = [13, 20];
     else x = [4, 4];
