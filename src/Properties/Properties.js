@@ -194,6 +194,7 @@ export default ({
             linkOptions={linkOptions}
             name={propName}
             property={properties[propName]}
+            props={props}
             value={props ? props[propName] : undefined}
             onChange={value => setProp(propName, value)}
           />

@@ -29,12 +29,16 @@ import {
   TextInput,
   Video,
 } from 'grommet';
+import BoxAlign from './BoxAlign';
 import BoxAnimation from './BoxAnimation';
 import BoxBackgroundImage from './BoxBackgroundImage';
-import BoxRound from './BoxRound';
+import BoxDirection from './BoxDirection';
 import BoxGridArea from './BoxGridArea';
+import BoxJustify from './BoxJustify';
+import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
+import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
 import GridColumns from './GridColumns';
 import GridRows from './GridRows';
@@ -70,7 +74,7 @@ export const components = {
       justify: 'center',
     },
     properties: {
-      align: ['stretch', 'start', 'center', 'end', 'baseline'],
+      align: BoxAlign,
       alignSelf: ['stretch', 'start', 'center', 'end'],
       animation: BoxAnimation,
       background: {
@@ -120,11 +124,13 @@ export const components = {
           'hidden',
         ],
       },
-      direction: ['column', 'row', 'row-responsive'],
+      direction: BoxDirection,
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       fill: ['horizontal', 'vertical', true, false],
       flex: ['grow', 'shrink', true, false],
-      gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
       gridArea: BoxGridArea,
       height: [
         'xxsmall',
@@ -135,15 +141,7 @@ export const components = {
         'xlarge',
         'xxlarge',
       ],
-      justify: [
-        'stretch',
-        'start',
-        'between',
-        'around',
-        'evenly',
-        'center',
-        'end',
-      ],
+      justify: BoxJustify,
       margin: Edge,
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
       pad: Edge,
@@ -163,26 +161,26 @@ export const components = {
       {
         label: 'Content layout',
         properties: [
-          'align',
           'direction',
-          'gap',
           'justify',
-          'overflow',
+          'align',
           'pad',
+          'gap',
+          'overflow',
           'wrap',
         ],
       },
       {
         label: 'Layout in container',
         properties: [
-          'alignSelf',
-          'basis',
-          'fill',
           'flex',
-          'gridArea',
-          'height',
+          'fill',
           'margin',
+          'height',
           'width',
+          'basis',
+          'alignSelf',
+          'gridArea',
         ],
       },
       {
@@ -208,7 +206,8 @@ export const components = {
       columns: GridColumns,
       fill: ['horizontal', 'vertical'],
       gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-      justify: ['between', 'start', 'center', 'end'],
+      justify: ['stretch', 'start', 'center', 'end'],
+      justifyContent: ['stretch', 'start', 'center', 'end', 'between'],
       margin: Edge,
       rows: GridRows,
     },

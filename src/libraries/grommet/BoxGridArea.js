@@ -3,21 +3,29 @@ import { Box, FormField, Paragraph, Select } from 'grommet';
 import { getParent } from '../../design'; // TODO: fix
 
 export default ({ value, onChange, design, selected }) => {
-  const parent = getParent(design, selected.component);
-  const areas = parent.props.areas && parent.props.areas.map(a => a.name);
   let message;
-  if (parent.type !== 'Grid') {
+  const parent = getParent(design, selected.component);
+  let areas;
+  if (!parent) {
     message = `
       Well, gridArea only does anything when the parent component is a Grid.
-      Currently, the parent of this component is a ${parent.type}
-    `;
-  } else if (!areas) {
-    message = `
-      Alas, no areas have been defined in the parent component.
-      You will have to define some there first in order to set a gridArea.
+      Currently, this Box has no parent.
     `;
   } else {
-    areas.push('undefined');
+    areas = parent.props.areas && parent.props.areas.map(a => a.name);
+    if (parent.type !== 'Grid') {
+      message = `
+        Well, gridArea only does anything when the parent component is a Grid.
+        Currently, the parent of this component is a ${parent.type}
+      `;
+    } else if (!areas) {
+      message = `
+        Alas, no areas have been defined in the parent component.
+        You will have to define some there first in order to set a gridArea.
+      `;
+    } else {
+      areas.push('undefined');
+    }
   }
   return (
     <Box>
