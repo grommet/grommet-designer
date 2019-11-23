@@ -44,12 +44,15 @@ import GridColumns from './GridColumns';
 import GridRows from './GridRows';
 import DataTableColumns from './DataTableColumns';
 import DataTableData from './DataTableData';
+import HeadingLevel from './HeadingLevel';
 import HeadingMargin from './HeadingMargin';
 import ImageSrc from './ImageSrc';
 import MaskedInputMask from './MaskedInputMask';
 import MenuItems from './MenuItems';
 import MeterValues from './MeterValues';
 import SelectOptions from './SelectOptions';
+import SizeOptions from './SizeOptions';
+import TextAlign from './TextAlign';
 import TextAreaValue from './TextAreaValue';
 import TextInputSuggestions from './TextInputSuggestions';
 import DropAlign from './DropAlign';
@@ -252,6 +255,11 @@ export const components = {
       </Paragraph>
     ),
     documentation: 'https://v2.grommet.io/layer',
+    help: `The Layer can be seen by setting 'hide' to 'true',
+    allowing you to populate its contents. Wire up a Layer so it can be
+    dynamically shown via a Button link, List onClickItem,
+    or DataTable onClickRow.
+    `,
     defaultProps: {
       animate: true,
       modal: false,
@@ -278,12 +286,14 @@ export const components = {
     text: 'Heading',
     documentation: 'https://v2.grommet.io/heading',
     properties: {
-      color: ['-color-'],
-      level: ['1', '2', '3', '4'],
-      margin: HeadingMargin,
-      size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-      textAlign: ['start', 'center', 'end'],
+      level: HeadingLevel,
+      size: SizeOptions({
+        options: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
+      textAlign: TextAlign,
       truncate: false,
+      margin: HeadingMargin,
+      color: ['-color-'],
     },
   },
   Paragraph: {
@@ -291,10 +301,12 @@ export const components = {
     name: 'Paragraph',
     text: 'Paragraph',
     properties: {
-      color: ['-color-'],
+      size: SizeOptions({
+        options: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
+      }),
+      textAlign: TextAlign,
       margin: Edge,
-      size: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
-      textAlign: ['start', 'center', 'end'],
+      color: ['-color-'],
     },
   },
   Text: {
@@ -302,12 +314,14 @@ export const components = {
     name: 'Text',
     text: 'Text',
     properties: {
-      color: ['-color-'],
-      margin: Edge,
-      size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
-      textAlign: ['start', 'center', 'end'],
+      size: SizeOptions({
+        options: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
+      }),
+      textAlign: TextAlign,
       truncate: false,
       weight: ['normal', 'bold'],
+      margin: Edge,
+      color: ['-color-'],
     },
   },
   Markdown: {
@@ -323,9 +337,9 @@ export const components = {
       label: 'anchor',
     },
     properties: {
+      label: 'anchor',
       color: ['-color-'],
       href: '',
-      label: 'anchor',
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
     },
@@ -352,6 +366,8 @@ export const components = {
       label: 'Button',
     },
     properties: {
+      label: 'Click Me',
+      icon: ['-Icon-'],
       active: false,
       color: ['-color-'],
       disabled: false,
@@ -359,8 +375,6 @@ export const components = {
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       hoverIndicator: false,
       href: '',
-      icon: ['-Icon-'],
-      label: 'Click Me',
       margin: Edge,
       plain: false,
       primary: false,

@@ -4,9 +4,9 @@ import EdgeSizeState from './EdgeSizeState';
 
 export default ({ options, direction }) => {
   const EdgeSizeOptions = props => {
-    const adjustedOption = props.value ? options.concat('undefined') : options;
+    const adjustedOptions = props.value ? options.concat('undefined') : options;
     return (
-      <InlineOptions name="gap" options={adjustedOption} {...props}>
+      <InlineOptions name={props.name} options={adjustedOptions} {...props}>
         {(option, { checked, hover }) => (
           <EdgeSizeState
             size={option}

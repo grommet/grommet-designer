@@ -1,13 +1,13 @@
 import React from 'react';
 import { RadioButtonGroup } from 'grommet';
 
-const InlineOptions = ({ children, name, options, value, onChange }) => {
+const InlineOptions = ({ children, name, options, value, onChange, gap }) => {
   return (
     <RadioButtonGroup
       id={name}
       name={name}
       direction="row"
-      gap="none"
+      gap={gap || 'none'}
       margin={{ horizontal: 'small' }}
       options={options.map(o => ({ value: o, id: `${name}-${o}` }))}
       value={typeof value === 'boolean' ? value.toString() : value || ''}

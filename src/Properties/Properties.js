@@ -370,7 +370,7 @@ export default ({
                       Properties
                     </Heading>
                     {renderProperties(type.properties, component.props)}
-                    {!type.container && (
+                    {parentType.container && (
                       <Box pad="medium">
                         <Paragraph size="small" color="light-4">
                           adjust the layout of this {type.name} via its

@@ -1,16 +1,17 @@
 import React from 'react';
 import { Box, Drop, Text } from 'grommet';
 
-const InlineOption = ({ checked, children, hover, label }) => {
+const InlineOption = ({ border, checked, children, hover, label, pad }) => {
   const ref = React.useRef();
   return (
     <Box
       ref={ref}
-      pad="xsmall"
+      border={border}
+      pad={pad || 'xsmall'}
       background={hover && !checked ? 'dark-2' : undefined}
     >
       {children}
-      {hover && (
+      {hover && label && (
         <Drop target={ref.current} align={{ top: 'bottom' }} plain>
           <Box
             margin="xsmall"
