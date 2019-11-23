@@ -1,5 +1,12 @@
 import React, { Fragment } from 'react';
-import { Box, Button, FormField, Select, RadioButtonGroup } from 'grommet';
+import {
+  Box,
+  Button,
+  FormField,
+  Paragraph,
+  Select,
+  RadioButtonGroup,
+} from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
 const flavors = ['all the same size', 'different sizes'];
@@ -7,6 +14,10 @@ const flavors = ['all the same size', 'different sizes'];
 export default ({ value, onChange }) => {
   return (
     <Box>
+      <Paragraph>
+        For an adaptive grid with identical columns, set a single column size
+        and all children will have the same size.
+      </Paragraph>
       <Box pad="small">
         <RadioButtonGroup
           name="flavor"

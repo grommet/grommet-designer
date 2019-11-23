@@ -7,11 +7,12 @@ import {
   CheckBox,
   Heading,
   Keyboard,
+  Markdown,
   Paragraph,
   TextArea,
   TextInput,
 } from 'grommet';
-import { Duplicate, Refresh, Trash } from 'grommet-icons';
+import { Duplicate, Help, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
 import {
   deleteComponent,
@@ -224,10 +225,17 @@ export default ({
               target="_blank"
               href={type.documentation}
             >
-              <Box fill pad="small">
+              <Box
+                fill
+                pad="small"
+                direction="row"
+                align="center"
+                justify="between"
+              >
                 <Heading level={2} size="18px" margin="none" truncate>
                   {type.name}
                 </Heading>
+                <Help size="small" />
               </Box>
             </Button>
           </Box>
@@ -260,7 +268,7 @@ export default ({
             <Box>
               {type.help && (
                 <Box pad={{ horizontal: 'medium' }} border="bottom">
-                  <Paragraph>{type.help}</Paragraph>
+                  <Markdown>{type.help}</Markdown>
                 </Box>
               )}
               {(!searchExp || searchExp.test('name')) && (
