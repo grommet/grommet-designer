@@ -63,8 +63,7 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
-    placeholder: ({ background, pad }) =>
-      !background &&
+    placeholder: ({ pad }) =>
       !pad && (
         <Paragraph size="large" textAlign="center" color="placeholder">
           This Box is currently empty. Add components to it, so it can do its
