@@ -126,13 +126,13 @@ const Tree = ({
 
   const moveScreen = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const moveIndex = nextDesign.screenOrder.indexOf(dragging);
+    const moveIndex = nextDesign.screenOrder.indexOf(draggingScreen);
     nextDesign.screenOrder.splice(moveIndex, 1);
     const targetIndex = nextDesign.screenOrder.indexOf(dropScreenTarget);
     nextDesign.screenOrder.splice(
       dropWhere === 'before' ? targetIndex : targetIndex + 1,
       0,
-      dragging,
+      draggingScreen,
     );
     setDraggingScreen(undefined);
     setDropScreenTarget(undefined);
