@@ -7,12 +7,12 @@ export default ({ title, ...rest }) => {
 
   React.useEffect(() => {
     if (!hover) return;
-    const timer = setTimeout(() => setHover(false), 3000);
+    const timer = setTimeout(() => setHover(false), 2000);
     return () => clearTimeout(timer);
   }, [hover]);
 
   return (
-    <Box flex={false}>
+    <>
       <Button
         ref={ref}
         hoverIndicator
@@ -22,16 +22,11 @@ export default ({ title, ...rest }) => {
       />
       {hover && (
         <Drop target={ref.current} align={{ top: 'bottom' }} plain>
-          <Box
-            margin="xsmall"
-            animation="fadeIn"
-            background={{ color: 'light-1', opacity: 'strong' }}
-            pad="xsmall"
-          >
+          <Box margin="xsmall" background={{ color: 'light-1' }} pad="xsmall">
             <Text>{title}</Text>
           </Box>
         </Drop>
       )}
-    </Box>
+    </>
   );
 };

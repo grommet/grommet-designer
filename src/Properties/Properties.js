@@ -3,7 +3,6 @@ import ReactGA from 'react-ga';
 import {
   Anchor,
   Box,
-  Button,
   CheckBox,
   Heading,
   Keyboard,
@@ -210,15 +209,9 @@ export default ({
         height="100vh"
         border="left"
       >
-        <Box
-          flex={false}
-          direction="row"
-          align="center"
-          justify="between"
-          border="bottom"
-        >
-          <Box flex alignSelf="stretch">
-            <Button
+        <Box flex={false} direction="row" justify="between" border="bottom">
+          <Box flex direction="row">
+            <ActionButton
               title="documentation"
               fill
               hoverIndicator
@@ -237,7 +230,7 @@ export default ({
                 </Heading>
                 <Help size="small" />
               </Box>
-            </Button>
+            </ActionButton>
           </Box>
           {component.deletable !== false && (
             <Box flex={false} direction="row" align="center">
