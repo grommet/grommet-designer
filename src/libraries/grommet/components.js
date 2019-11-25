@@ -578,6 +578,13 @@ export const components = {
     name: 'Chart',
     defaultProps: {
       type: 'bar',
+      values: [
+        { value: [0, 10] },
+        { value: [1, 20] },
+        { value: [2, 25] },
+        { value: [3, 40] },
+        { value: [4, 35] },
+      ],
     },
     properties: {
       bounds: ChartBounds,
