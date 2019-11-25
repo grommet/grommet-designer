@@ -10,9 +10,6 @@ import {
   ThemeContext,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
-// TOOD: fix
-// import { colors } from '../types';
-const colors = [];
 
 const ColorLabel = ({ color, theme }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -24,8 +21,14 @@ const ColorLabel = ({ color, theme }) => (
 );
 
 export default ({ value, theme, onChange }) => {
+  const baseTheme = React.useContext(ThemeContext);
   const [searchText, setSearchText] = React.useState('');
   const searchExp = searchText && new RegExp(searchText, 'i');
+  const colors = Object.keys({
+    ...baseTheme.global.colors,
+    ...theme.global.colors,
+  }).sort();
+
   return (
     <Box direction="row" gap="medium">
       {(value || []).map((item, i) => (
