@@ -281,7 +281,7 @@ const Tree = ({
               }
             }}
             onDragOver={event => {
-              if (dragging && dragging !== id && type.container) {
+              if (dragging && dragging !== id) {
                 event.preventDefault();
               }
             }}
@@ -360,6 +360,12 @@ const Tree = ({
               setDraggingScreen(undefined);
               setDropScreenTarget(undefined);
             }}
+            onDragOver={event => {
+              if (draggingScreen && draggingScreen !== screenId) {
+                event.preventDefault();
+              }
+            }}
+            onDrop={moveScreen}
           >
             <Box
               ref={selected.component === screen.root ? selectedRef : undefined}
