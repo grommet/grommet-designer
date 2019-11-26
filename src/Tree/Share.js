@@ -30,6 +30,7 @@ const Summary = ({ Icon, label, guidance }) => (
 
 const Publish = ({ design, setDesign }) => {
   const [publication, setPublication] = React.useState();
+  const [publishing, setPublishing] = React.useState();
   const [uploadUrl, setUploadUrl] = React.useState();
   const [message, setMessage] = React.useState();
   const [error, setError] = React.useState();
@@ -46,6 +47,7 @@ const Publish = ({ design, setDesign }) => {
   }, [design]);
 
   const onPublish = ({ value: { name, email, pin } }) => {
+    setPublishing(true);
     // remember email and pin in local storage so we can use later
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
 
@@ -78,6 +80,7 @@ const Publish = ({ design, setDesign }) => {
               window.location.hash,
             ].join('');
             setUploadUrl(nextUploadUrl);
+            setPublishing(false);
 
             ReactGA.event({
               category: 'share',
@@ -85,9 +88,13 @@ const Publish = ({ design, setDesign }) => {
             });
           });
         }
+        setPublishing(false);
         return response.text().then(setError);
       })
-      .catch(e => setError(e.message));
+      .catch(e => {
+        setError(e.message);
+        setPublishing(false);
+      });
 
     setDesign(nextDesign);
   };
@@ -133,10 +140,15 @@ const Publish = ({ design, setDesign }) => {
             },
           ]}
         />
-        <Box align="center" margin={{ top: 'medium' }}>
-          <Button type="submit" label="Publish" />
+        <Box align="center" margin="medium">
+          <Button type="submit" label="Publish" disabled={publishing} />
         </Box>
       </Form>
+      {publishing && (
+        <Box alignSelf="center" animation="pulse">
+          <Text size="large">...</Text>
+        </Box>
+      )}
       {uploadUrl && (
         <Fragment>
           <Box direction="row">
