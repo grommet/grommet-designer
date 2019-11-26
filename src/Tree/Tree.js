@@ -11,6 +11,7 @@ import {
 } from 'grommet-icons';
 import {
   childSelected,
+  duplicateComponent,
   getParent,
   getScreenForComponent,
   nextSiblingSelected,
@@ -65,6 +66,7 @@ const Tree = ({
   const [choosing, setChoosing] = React.useState();
   const [editing, setEditing] = React.useState();
   const [sharing, setSharing] = React.useState();
+  const [copied, setCopied] = React.useState();
   const selectedRef = React.useRef();
 
   React.useEffect(() => {
@@ -182,8 +184,20 @@ const Tree = ({
         event.preventDefault();
         onRedo();
       }
-      if (event.key === 'c') {
+      if (event.key === 'c' && event.metaKey) {
+        setCopied(selected);
+      } else if (event.key === 'c') {
         toggleCollapse(selected.component);
+      }
+      if (event.key === 'v' && event.metaKey) {
+        const nextDesign = JSON.parse(JSON.stringify(design));
+        const newId = duplicateComponent(
+          nextDesign,
+          copied.component,
+          selected.component,
+        );
+        setDesign(nextDesign);
+        setSelected({ ...selected, component: newId });
       }
     }
   };

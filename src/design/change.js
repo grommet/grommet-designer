@@ -112,9 +112,11 @@ export const deleteScreen = (nextDesign, id) => {
   return nextScreenId;
 };
 
-export const duplicateComponent = (nextDesign, id) => {
+export const duplicateComponent = (nextDesign, id, parentId) => {
   const newId = copyComponent(nextDesign, nextDesign, id);
-  const parent = getParent(nextDesign, id);
+  const parent = parentId
+    ? nextDesign.components[parentId]
+    : getParent(nextDesign, id);
   parent.children.push(newId);
   return newId;
 };
