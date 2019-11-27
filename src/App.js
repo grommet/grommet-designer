@@ -284,6 +284,8 @@ const App = () => {
   // persist preview state when it changes
   React.useEffect(() => {
     localStorage.setItem('preview', JSON.stringify(preview));
+    // trigger resize so rendered elements can respond accordingly
+    window.dispatchEvent(new Event('resize'));
   }, [preview]);
 
   const onKey = React.useCallback(
