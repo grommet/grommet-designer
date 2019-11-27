@@ -272,6 +272,7 @@ const Designs = ({
         </Grid>
       </Box>
       <Box
+        flex={false}
         alignSelf="stretch"
         direction="row"
         justify="end"

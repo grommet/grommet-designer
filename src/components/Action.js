@@ -19,7 +19,7 @@ const Action = ({ children, colorMode, label, onClose, ...rest }) => (
     >
       <Box flex={false} direction="row" align="center" justify="between">
         <ActionButton
-          title='close'
+          title="close"
           icon={<Close />}
           hoverIndicator
           onClick={onClose}
@@ -34,13 +34,8 @@ const Action = ({ children, colorMode, label, onClose, ...rest }) => (
           </Heading>
         )}
       </Box>
-      <Box
-        flex
-        pad={{ horizontal: 'large', bottom: 'large' }}
-        align="start"
-        overflow="auto"
-      >
-        {children}
+      <Box flex pad={{ horizontal: 'large', bottom: 'large' }} overflow="auto">
+        <Box flex={false}>{children}</Box>
       </Box>
     </Box>
   </Layer>

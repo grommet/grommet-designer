@@ -343,6 +343,7 @@ const App = () => {
               selected={selected}
               theme={theme}
               colorMode={colorMode}
+              setColorMode={setColorMode}
               setDesign={setDesign}
               setSelected={setSelected}
               onRedo={changeIndex > 0 && onRedo}
