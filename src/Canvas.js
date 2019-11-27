@@ -375,6 +375,21 @@ const Canvas = ({
       };
     }
 
+    const selectProps = {};
+    if (!preview) {
+      selectProps.onClick = event => {
+        if (event.target === event.currentTarget) {
+          if (selected.component !== id) {
+            setSelected({ ...selected, component: id });
+            setInlineEdit(undefined);
+          } else if (type.text) {
+            setInlineEdit(id);
+          }
+        }
+        if (specialProps.onClick) specialProps.onClick(event);
+      };
+    }
+
     if (!type.component) {
       console.error('missing component', component, type);
       return null;
@@ -388,17 +403,7 @@ const Canvas = ({
         style,
         ...component.props,
         ...specialProps,
-        onClick: event => {
-          if (!preview && event.target === event.currentTarget) {
-            if (selected.component !== id) {
-              setSelected({ ...selected, component: id });
-              setInlineEdit(undefined);
-            } else if (type.text) {
-              setInlineEdit(id);
-            }
-          }
-          if (specialProps.onClick) specialProps.onClick(event);
-        },
+        ...selectProps,
       },
       children,
     );
