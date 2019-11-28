@@ -143,8 +143,10 @@ export const components = {
         'xlarge',
         'xxlarge',
       ],
+      hoverIndicator: false,
       justify: BoxJustify,
       margin: Edge,
+      onClick: ['-link-'],
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
       pad: Edge,
       round: BoxRound,
@@ -188,6 +190,10 @@ export const components = {
       {
         label: 'Style',
         properties: ['animation', 'background', 'border', 'elevation', 'round'],
+      },
+      {
+        label: 'Interaction',
+        properties: ['onClick', 'hoverIndicator'],
       },
     ],
   },
