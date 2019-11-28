@@ -55,6 +55,7 @@ import SizeOptions from './SizeOptions';
 import TextAlign from './TextAlign';
 import TextAreaValue from './TextAreaValue';
 import TextInputSuggestions from './TextInputSuggestions';
+import WeightOptions from './WeightOptions';
 import DropAlign from './DropAlign';
 import Edge from './Edge';
 
@@ -326,7 +327,7 @@ export const components = {
       }),
       textAlign: TextAlign,
       truncate: false,
-      weight: ['normal', 'bold'],
+      weight: WeightOptions({ options: ['normal', 'bold'] }),
       margin: Edge,
       color: ['-color-'],
     },
