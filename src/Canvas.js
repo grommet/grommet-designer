@@ -218,11 +218,15 @@ const Canvas = ({
 
   const renderComponent = (id, dataContextPath, key) => {
     let component = design.components[id];
+    let parent;
     if (
       component &&
       (component.type === 'designer.Reference' ||
         component.type === 'Reference')
     ) {
+      if (component && component.props.includeChildren === false) {
+        parent = component;
+      }
       component = design.components[component.props.component];
     }
     if (!component || component.hide) return null;
@@ -297,10 +301,11 @@ const Canvas = ({
       style = { outline: '1px dashed red' };
     }
 
+    if (!parent) parent = component;
     let children;
-    if (component.children && component.children.length > 0) {
-      if (component.children.length > 0) {
-        children = component.children.map(childId =>
+    if (parent.children && parent.children.length > 0) {
+      if (parent.children.length > 0) {
+        children = parent.children.map(childId =>
           renderComponent(childId, dataContextPath),
         );
         if (children.length === 0) children = undefined;

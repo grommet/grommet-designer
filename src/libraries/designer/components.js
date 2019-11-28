@@ -42,8 +42,12 @@ export const components = {
     use with this design tool. It has a single property which is a reference
     to the component that should be used. Changes to that referenced component
     will be shown for all References to it.`,
+    defaultProps: {
+      includeChildren: true,
+    },
     properties: {
       component: ReferenceComponent,
+      includeChildren: true,
     },
   },
   Screen: {

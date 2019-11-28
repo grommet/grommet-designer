@@ -1,6 +1,6 @@
 import { getComponentType } from '../utils';
 import { bare } from './bare';
-import { getParent } from './get';
+import { canParent, getParent } from './get';
 import { upgradeDesign } from './upgrade';
 
 export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
@@ -162,8 +162,7 @@ export const insertComponent = (
       parent.children[index] = id;
       component.children = [selected.component];
     } else {
-      const selectedType = getComponentType(libraries, selectedComponent.type);
-      const parent = selectedType.container
+      const parent = canParent(nextDesign, libraries, selectedComponent)
         ? selectedComponent
         : getParent(nextDesign, selected.component);
       if (!parent.children) parent.children = [];

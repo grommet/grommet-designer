@@ -10,6 +10,7 @@ import {
   Undo,
 } from 'grommet-icons';
 import {
+  canParent,
   childSelected,
   duplicateComponent,
   getParent,
@@ -290,7 +291,11 @@ const Tree = ({
               setDropTarget(undefined);
             }}
             onDragEnter={() => {
-              if (dragging && dragging !== id && type.container) {
+              if (
+                dragging &&
+                dragging !== id &&
+                canParent(design, libraries, component)
+              ) {
                 setDropTarget(id);
                 setDropWhere('in');
               }

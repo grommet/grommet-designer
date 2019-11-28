@@ -187,3 +187,14 @@ export const previousSiblingSelected = (design, selected) => {
 //   // aunts, uncles, etc.
 //   return nextSelected(design, { ...selected, component: parent.id }, false);
 // }
+
+export const canParent = (design, libraries, component) => {
+  const type = getComponentType(libraries, component.type);
+  let result = type.container;
+  if (type.name === 'Reference' && component.props.includeChildren === false) {
+    const reference = design.components[component.props.component];
+    const referenceType = getComponentType(libraries, reference.type);
+    result = referenceType.container;
+  }
+  return result;
+};
