@@ -213,7 +213,9 @@ export const components = {
       areas: GridAreas,
       columns: GridColumns,
       fill: ['horizontal', 'vertical'],
-      gap: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
       justify: ['stretch', 'start', 'center', 'end'],
       justifyContent: ['stretch', 'start', 'center', 'end', 'between'],
       margin: Edge,
