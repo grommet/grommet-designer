@@ -197,6 +197,17 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
+    override: ({ props }, { dataContextPath, followLink }) => {
+      return {
+        onClick:
+          props && props.onClick
+            ? event => {
+                event.stopPropagation();
+                followLink({ ...props.onClick, dataContextPath });
+              }
+            : undefined,
+      };
+    },
   },
   Grid: {
     component: Grid,
