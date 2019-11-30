@@ -64,8 +64,9 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
-    placeholder: ({ pad }) =>
-      !pad && (
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
         <Paragraph size="large" textAlign="center" color="placeholder">
           This Box is currently empty. Add components to it, so it can do its
           layout thing.
@@ -287,6 +288,7 @@ export const components = {
       animate: false,
       full: ['horizontal', 'vertical'],
       margin: ['none', 'xsmall', 'small', 'medium', 'large'],
+      modal: false,
       plain: false,
       position: ['center', 'top', 'bottom', 'left', 'right'],
       responsive: false,

@@ -25,7 +25,6 @@ import AddComponent from './AddComponent';
 import DesignSettings from './DesignSettings';
 import Designs from './Designs';
 import Sharing from './Share';
-import { getComponentType } from '../utils';
 
 const treeName = component =>
   component.name ||
@@ -266,7 +265,6 @@ const Tree = ({
   const renderComponent = (screen, id, firstChild) => {
     const component = design.components[id];
     if (!component) return null;
-    const type = getComponentType(libraries, component.type);
     const reference =
       component.type === 'Reference' &&
       design.components[component.props.component];
