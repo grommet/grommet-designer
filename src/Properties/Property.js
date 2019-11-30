@@ -12,7 +12,7 @@ import {
   TextInput,
   ThemeContext,
 } from 'grommet';
-import { Close, FormDown, FormUp } from 'grommet-icons';
+import { Close, FormClose, FormDown, FormUp } from 'grommet-icons';
 import {
   names as iconNames,
   SelectLabel as IconLabel,
@@ -227,15 +227,25 @@ const Property = React.forwardRef((props, ref) => {
   } else if (typeof property === 'boolean') {
     return (
       <Field key={name} first={first} label={name} htmlFor={name}>
-        <Box pad="small">
+        <Box pad="small" direction="row" gap="small">
           <CheckBox
             ref={ref}
             id={name}
             name={name}
-            toggle
             checked={!!value}
             onChange={event => onChange(event.target.checked)}
           />
+          {value === false && (
+            <Box
+              title="undefine"
+              pad={{ horizontal: 'xxsmall' }}
+              round="xsmall"
+              hoverIndicator
+              onClick={() => onChange(undefined)}
+            >
+              <FormClose />
+            </Box>
+          )}
         </Box>
       </Field>
     );

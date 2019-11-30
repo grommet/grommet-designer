@@ -300,7 +300,6 @@ export default ({
                       ref={searchExp && !firstRef ? defaultRef : undefined}
                       id="hide"
                       name="hide"
-                      toggle
                       checked={!!component.hide}
                       onChange={() => setHide(!component.hide)}
                     />
