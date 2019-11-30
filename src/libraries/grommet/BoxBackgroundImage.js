@@ -11,7 +11,7 @@ const stripToText = value => {
       .slice(dataUrlPrefix.length)
       .slice(0, -dataUrlSuffix.length);
     if (deDataUrl.slice(0, svgPrefix.length) === svgPrefix) {
-      return decodeURIComponent(deDataUrl.slice(svgPrefix.length));
+      return deDataUrl.slice(svgPrefix.length);
     } else {
       return deDataUrl;
     }
@@ -31,9 +31,7 @@ export default ({ value, onChange }) => {
           const nextValue = event.target.value;
           if (nextValue[0] === '<') {
             onChange(
-              `${dataUrlPrefix}${svgPrefix}${encodeURIComponent(
-                nextValue,
-              )}${dataUrlSuffix}`,
+              `${dataUrlPrefix}${svgPrefix}${nextValue}${dataUrlSuffix}`,
             );
           } else {
             onChange(`${dataUrlPrefix}${nextValue}${dataUrlSuffix}`);
