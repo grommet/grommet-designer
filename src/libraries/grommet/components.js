@@ -64,6 +64,7 @@ export const components = {
     component: Box,
     name: 'Box',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (

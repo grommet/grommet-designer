@@ -293,20 +293,22 @@ export default ({
                   {(firstRef = true)}
                 </Field>
               )}
-              {type.hideable && (!searchExp || searchExp.test('hide')) && (
-                <Field label="hide" htmlFor="hide">
-                  <Box pad="small">
-                    <CheckBox
-                      ref={searchExp && !firstRef ? defaultRef : undefined}
-                      id="hide"
-                      name="hide"
-                      checked={!!component.hide}
-                      onChange={() => setHide(!component.hide)}
-                    />
-                    {(firstRef = true)}
-                  </Box>
-                </Field>
-              )}
+              {type.hideable &&
+                component.name &&
+                (!searchExp || searchExp.test('hide')) && (
+                  <Field label="hide" htmlFor="hide">
+                    <Box pad="small">
+                      <CheckBox
+                        ref={searchExp && !firstRef ? defaultRef : undefined}
+                        id="hide"
+                        name="hide"
+                        checked={!!component.hide}
+                        onChange={() => setHide(!component.hide)}
+                      />
+                      {(firstRef = true)}
+                    </Box>
+                  </Field>
+                )}
               {type.designProperties && (
                 <Box flex="grow">
                   {renderProperties(

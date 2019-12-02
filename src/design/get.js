@@ -81,7 +81,7 @@ export const getLinkOptions = (design, libraries, selected) => {
       .map(k => design.components[k])
       .filter(c => {
         const type = getComponentType(libraries, c.type);
-        return type.hideable;
+        return type.hideable && c.name; // must have a name
       })
       .map(c => ({
         screen: selected.screen,
