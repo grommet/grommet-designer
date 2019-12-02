@@ -108,9 +108,13 @@ const Canvas = ({
                 setData(nextData);
               });
           } else if (design.data[key]) {
-            const nextData = JSON.parse(JSON.stringify(data || {}));
-            nextData[key] = JSON.parse(design.data[key]);
-            setData(nextData);
+            try {
+              const nextData = JSON.parse(JSON.stringify(data || {}));
+              nextData[key] = JSON.parse(design.data[key]);
+              setData(nextData);
+            } catch (e) {
+              console.warn(e.message);
+            }
           }
         }
       });

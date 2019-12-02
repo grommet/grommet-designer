@@ -623,6 +623,15 @@ export const components = {
       type: ['bar', 'line', 'area', 'point'],
       values: ChartValues,
     },
+    designProperties: {
+      dataPath: '',
+    },
+    override: (_, { data }) => {
+      const result = {};
+      // need to use retrieved data for values property
+      if (data) result.values = data;
+      return result;
+    },
   },
   Clock: {
     component: Clock,
