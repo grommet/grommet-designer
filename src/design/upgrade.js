@@ -164,6 +164,15 @@ export const upgradeDesign = design => {
       component.designProps.dataPath = component.props.dataPath;
       delete component.props.dataPath;
     });
+  // mark any dropContent components coupled
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(component => component.propComponents)
+    .forEach(component => {
+      component.propComponents.forEach(
+        id => (design.components[id].coupled = true),
+      );
+    });
 
-  design.version = 3.2;
+  design.version = 3.3;
 };

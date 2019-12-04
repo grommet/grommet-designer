@@ -232,7 +232,7 @@ export default ({
               </Box>
             </ActionButton>
           </Box>
-          {component.deletable !== false && (
+          {!component.coupled && (
             <Box flex={false} direction="row" align="center">
               <ActionButton title="reset" icon={<Refresh />} onClick={reset} />
               <ActionButton

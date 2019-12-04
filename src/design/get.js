@@ -15,8 +15,15 @@ export const getDisplayName = (design, id) => {
 export const getParent = (design, id) => {
   let result;
   Object.keys(design.components).some(id2 => {
-    const children = design.components[id2].children;
+    const component = design.components[id2];
+    // does this component have id as a child?
+    const children = component.children;
     if (children && children.includes(id)) {
+      result = design.components[id2];
+      return true;
+    }
+    // does this component have id as a prop component
+    if (component.propComponents && component.propComponents.includes(id)) {
       result = design.components[id2];
       return true;
     }
@@ -35,7 +42,8 @@ export const getScreenForComponent = (design, id) => {
     }
     return false;
   });
-  return result || getScreenForComponent(design, getParent(design, id).id);
+  const parent = getParent(design, id);
+  return result || getScreenForComponent(design, parent.id);
 };
 
 export const getScreenByPath = (design, path) => {

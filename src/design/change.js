@@ -33,7 +33,7 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
           name: prop,
           id: propId,
           props: { ...propType.defaultProps, name: prop },
-          deletable: false,
+          coupled: true,
         };
         nextDesign.components[propComponent.id] = propComponent;
         const component = nextDesign.components[id];
@@ -58,7 +58,18 @@ export const copyComponent = (nextDesign, design, id) => {
       return nextChildId;
     });
   }
-  // TODO: handle propComponents
+  if (component.propComponents) {
+    nextComponent.propComponents = component.propComponents.map(childId => {
+      const nextChildId = copyComponent(nextDesign, design, childId);
+      // update corresponding property
+      Object.keys(nextComponent.props).forEach(prop => {
+        if (nextComponent.props[prop] === childId) {
+          nextComponent.props[prop] = nextChildId;
+        }
+      });
+      return nextChildId;
+    });
+  }
   return nextId;
 };
 

@@ -279,7 +279,7 @@ const Tree = ({
             fill
             hoverIndicator
             onClick={() => setSelected({ screen, component: id })}
-            draggable
+            draggable={!component.coupled}
             onDragStart={event => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
               setDragging(id);
