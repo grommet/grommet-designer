@@ -34,6 +34,14 @@ const treeName = component =>
   component.type.split('.')[1] ||
   component.type;
 
+const treeSubName = component =>
+  !component.name &&
+  !component.text &&
+  !component.props.name &&
+  !component.props.label
+    ? undefined
+    : component.type.split('.')[1] || component.type;
+
 const Tree = ({
   base,
   colorMode,
@@ -307,6 +315,9 @@ const Tree = ({
           >
             <Box
               ref={selected.component === id ? selectedRef : undefined}
+              direction="row"
+              align="center"
+              gap="medium"
               pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
               background={
                 dropTarget && dropTarget === id && dropWhere === 'in'
@@ -317,7 +328,10 @@ const Tree = ({
               }
             >
               <Text size="medium" truncate>
-                {(reference && treeName(reference)) || treeName(component)}
+                {treeName(reference || component)}
+              </Text>
+              <Text size="small" color="dark-4" truncate>
+                {treeSubName(reference || component)}
               </Text>
             </Box>
           </Button>
