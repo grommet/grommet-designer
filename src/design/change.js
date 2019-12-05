@@ -135,7 +135,8 @@ export const duplicateComponent = (nextDesign, id, parentId) => {
 export const deleteComponent = (nextDesign, id) => {
   // remove from the parent
   const parent = getParent(nextDesign, id);
-  if (parent) parent.children = parent.children.filter(i => i !== id);
+  if (parent && parent.children)
+    parent.children = parent.children.filter(i => i !== id);
   // remove propComponents
   const component = nextDesign.components[id];
   if (component.propComponents) {
