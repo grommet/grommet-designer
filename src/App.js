@@ -56,11 +56,13 @@ const App = () => {
 
   // initialize analytics
   React.useEffect(() => {
-    const {
-      location: { pathname },
-    } = window;
-    ReactGA.initialize('UA-99690204-4');
-    ReactGA.pageview(pathname);
+    if (window.location.host !== 'localhost') {
+      const {
+        location: { pathname },
+      } = window;
+      ReactGA.initialize('UA-99690204-4');
+      ReactGA.pageview(pathname);
+    }
   }, []);
 
   // load initial design

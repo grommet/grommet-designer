@@ -18,6 +18,7 @@ export default ({ title, ...rest }) => {
         hoverIndicator
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
+        title={hover ? undefined : title}
         {...rest}
       />
       {hover && (

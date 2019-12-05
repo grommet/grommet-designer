@@ -10,9 +10,6 @@
     "grommet-theme-hp": "^0.1.2",
     "grommet-theme-hpe": "^0.4.2",
     "lz-string": "^1.4.4",
-    "pre-commit": "^1.2.2",
-    "prettier": "^1.18.2",
-    "pretty-quick": "^1.11.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-ga": "^2.7.0",
@@ -23,10 +20,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:nowatch": "react-scripts test --watchAll=false",
     "prettier": "pretty-quick --staged"
   },
   "pre-commit": [
-    "prettier"
+    "prettier",
+    "test:nowatch"
   ],
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +43,9 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/react": "^9.3.0"
+    "@testing-library/react": "^9.3.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
   }
 }
