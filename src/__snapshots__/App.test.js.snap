@@ -17,7 +17,7 @@ exports[`App empty 1`] = `
           class="StyledBox-sc-13pk1d4-0 IpuYg"
         >
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="choose another design"
             type="button"
           >
@@ -38,7 +38,7 @@ exports[`App empty 1`] = `
             class="StyledBox-sc-13pk1d4-0 cDUdEO"
           >
             <button
-              class="StyledButton-sc-323bzc-0 fWyiSX"
+              class="StyledButton-sc-323bzc-0 eBVZBp"
               type="button"
             >
               <div
@@ -47,13 +47,13 @@ exports[`App empty 1`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 bAsNSm"
                 >
-                  Dec 5 Design
+                  Dec 11 Design
                 </h1>
               </div>
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="share design"
             type="button"
           >
@@ -111,7 +111,7 @@ exports[`App empty 1`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="add a component"
             type="button"
           >
@@ -149,7 +149,7 @@ exports[`App empty 1`] = `
                 class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 fWyiSX"
+                  class="StyledButton-sc-323bzc-0 eBVZBp"
                   draggable="true"
                   type="button"
                 >
@@ -199,7 +199,7 @@ exports[`App empty 1`] = `
                     class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
                   >
                     <button
-                      class="StyledButton-sc-323bzc-0 fWyiSX"
+                      class="StyledButton-sc-323bzc-0 eBVZBp"
                       draggable="true"
                       type="button"
                     >
@@ -264,7 +264,7 @@ exports[`App empty 1`] = `
           class="StyledBox-sc-13pk1d4-0 hWhqQd"
         >
           <a
-            class="StyledButton-sc-323bzc-0 fWyiSX"
+            class="StyledButton-sc-323bzc-0 eBVZBp"
             href="https://v2.grommet.io/box"
             target="_blank"
             title="documentation"
@@ -296,7 +296,7 @@ exports[`App empty 1`] = `
           class="StyledBox-sc-13pk1d4-0 eYEAJT"
         >
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="reset"
             type="button"
           >
@@ -314,7 +314,7 @@ exports[`App empty 1`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="duplicate"
             type="button"
           >
@@ -332,7 +332,7 @@ exports[`App empty 1`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="delete"
             type="button"
           >
@@ -1231,7 +1231,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -1779,7 +1779,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2033,7 +2033,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2084,7 +2084,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2126,7 +2126,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2168,7 +2168,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2263,7 +2263,7 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -2443,7 +2443,7 @@ exports[`App empty 2`] = `
           class="StyledBox-sc-13pk1d4-0 IpuYg"
         >
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="choose another design"
             type="button"
           >
@@ -2464,7 +2464,7 @@ exports[`App empty 2`] = `
             class="StyledBox-sc-13pk1d4-0 cDUdEO"
           >
             <button
-              class="StyledButton-sc-323bzc-0 fWyiSX"
+              class="StyledButton-sc-323bzc-0 eBVZBp"
               type="button"
             >
               <div
@@ -2473,13 +2473,13 @@ exports[`App empty 2`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 bAsNSm"
                 >
-                  Dec 5 Design
+                  Dec 11 Design
                 </h1>
               </div>
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="share design"
             type="button"
           >
@@ -2537,7 +2537,7 @@ exports[`App empty 2`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="add a component"
             type="button"
           >
@@ -2575,7 +2575,7 @@ exports[`App empty 2`] = `
                 class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 fWyiSX"
+                  class="StyledButton-sc-323bzc-0 eBVZBp"
                   draggable="true"
                   type="button"
                 >
@@ -2625,7 +2625,7 @@ exports[`App empty 2`] = `
                     class="StyledStack__StyledStackLayer-ajspsk-1 zZZtW"
                   >
                     <button
-                      class="StyledButton-sc-323bzc-0 fWyiSX"
+                      class="StyledButton-sc-323bzc-0 eBVZBp"
                       draggable="true"
                       type="button"
                     >
@@ -2690,7 +2690,7 @@ exports[`App empty 2`] = `
           class="StyledBox-sc-13pk1d4-0 hWhqQd"
         >
           <a
-            class="StyledButton-sc-323bzc-0 fWyiSX"
+            class="StyledButton-sc-323bzc-0 eBVZBp"
             href="https://v2.grommet.io/box"
             target="_blank"
             title="documentation"
@@ -2722,7 +2722,7 @@ exports[`App empty 2`] = `
           class="StyledBox-sc-13pk1d4-0 eYEAJT"
         >
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="reset"
             type="button"
           >
@@ -2740,7 +2740,7 @@ exports[`App empty 2`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="duplicate"
             type="button"
           >
@@ -2758,7 +2758,7 @@ exports[`App empty 2`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 esrnCr"
+            class="StyledButton-sc-323bzc-0 kQcSJk"
             title="delete"
             type="button"
           >
@@ -3657,7 +3657,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4205,7 +4205,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4459,7 +4459,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4510,7 +4510,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4552,7 +4552,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4594,7 +4594,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div
@@ -4689,7 +4689,7 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 koruWX"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 cHvPFc"
+                  class="StyledButton-sc-323bzc-0 hybzZB"
                   type="button"
                 >
                   <div

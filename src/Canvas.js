@@ -397,6 +397,7 @@ const Canvas = ({
         }
         if (specialProps.onClick) specialProps.onClick(event);
       };
+      selectProps.focusIndicator = false;
     }
 
     if (!type.component) {
