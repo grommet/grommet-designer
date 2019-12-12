@@ -322,38 +322,47 @@ export default ({
             {type.properties && (
               <Box flex="grow">
                 {type.structure ? (
-                  type.structure
-                    .filter(
-                      ({ properties }) =>
-                        !searchExp ||
-                        Object.keys(properties).some(propName =>
-                          searchExp.test(propName),
-                        ),
-                    )
-                    .map(({ label, properties: propertyNames }) => {
-                      const sectionProperties = {};
-                      propertyNames.forEach(
-                        name =>
-                          (sectionProperties[name] = type.properties[name]),
-                      );
-                      return (
-                        <Box key={label} flex={false} margin={{ top: 'small' }}>
-                          <Heading
-                            level={4}
-                            size="small"
-                            margin={{
-                              horizontal: 'medium',
-                              top: 'small',
-                              bottom: 'medium',
-                            }}
+                  <Box flex="grow">
+                    {type.structure
+                      .filter(
+                        ({ properties }) =>
+                          !searchExp ||
+                          Object.keys(properties).some(propName =>
+                            searchExp.test(propName),
+                          ),
+                      )
+                      .map(({ label, properties: propertyNames }) => {
+                        const sectionProperties = {};
+                        propertyNames.forEach(
+                          name =>
+                            (sectionProperties[name] = type.properties[name]),
+                        );
+                        return (
+                          <Box
+                            key={label}
+                            flex={false}
+                            margin={{ top: 'small' }}
                           >
-                            {label}
-                          </Heading>
-                          {renderProperties(sectionProperties, component.props)}
-                          {(firstRef = true)}
-                        </Box>
-                      );
-                    })
+                            <Heading
+                              level={4}
+                              size="small"
+                              margin={{
+                                horizontal: 'medium',
+                                top: 'small',
+                                bottom: 'medium',
+                              }}
+                            >
+                              {label}
+                            </Heading>
+                            {renderProperties(
+                              sectionProperties,
+                              component.props,
+                            )}
+                            {(firstRef = true)}
+                          </Box>
+                        );
+                      })}
+                  </Box>
                 ) : (
                   <Box flex="grow">
                     <Heading

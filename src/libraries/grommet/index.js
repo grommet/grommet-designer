@@ -12,7 +12,7 @@ const structure = [
   {
     name: 'Layout',
     Icon: Capacity,
-    components: ['Box', 'Grid', 'Stack', 'Layer'],
+    components: ['Box', 'Grid', 'Main', 'Header', 'Footer', 'Stack', 'Layer'],
   },
   {
     name: 'Typography',

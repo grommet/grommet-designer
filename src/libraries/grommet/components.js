@@ -9,14 +9,17 @@ import {
   Clock,
   DataTable,
   DropButton,
+  Footer,
   Form,
   FormField,
   Grid,
   Grommet,
   Heading,
+  Header,
   Image,
   Layer,
   List,
+  Main,
   Markdown,
   MaskedInput,
   Menu,
@@ -210,6 +213,241 @@ export const components = {
             : undefined,
       };
     },
+  },
+  Main: {
+    component: Main,
+    name: 'Main',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Main is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/main',
+    defaultProps: {
+      fill: 'vertical',
+      flex: 'grow',
+      overflow: 'auto',
+    },
+    properties: {
+      align: BoxAlign,
+      background: {
+        color: ['-color-'],
+        dark: false,
+        opacity: ['weak', 'medium', 'strong'],
+        position: ['center', 'top', 'bottom', 'left', 'right'],
+        image: BoxBackgroundImage,
+      },
+      border: {
+        color: ['-color-'],
+        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        side: [
+          'all',
+          'horizontal',
+          'vertical',
+          'top',
+          'left',
+          'bottom',
+          'right',
+        ],
+        style: [
+          'solid',
+          'dashed',
+          'dotted',
+          'double',
+          'groove',
+          'ridge',
+          'inset',
+          'outset',
+          'hidden',
+        ],
+      },
+      direction: BoxDirection,
+      fill: ['horizontal', 'vertical', true, false],
+      flex: ['grow', 'shrink', true, false],
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
+      gridArea: BoxGridArea,
+      justify: BoxJustify,
+      margin: Edge,
+      overflow: ['auto', 'hidden', 'scroll', 'visible'],
+      pad: Edge,
+    },
+    structure: [
+      {
+        label: 'Content layout',
+        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
+      },
+      {
+        label: 'Layout in container',
+        properties: ['flex', 'fill', 'margin', 'gridArea'],
+      },
+      {
+        label: 'Style',
+        properties: ['animation', 'background', 'border'],
+      },
+    ],
+  },
+  Header: {
+    component: Header,
+    name: 'Header',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Header is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/header',
+    defaultProps: {
+      align: 'center',
+      direction: 'row',
+      flex: false,
+      justify: 'between',
+      gap: 'medium',
+    },
+    properties: {
+      align: BoxAlign,
+      background: {
+        color: ['-color-'],
+        dark: false,
+        opacity: ['weak', 'medium', 'strong'],
+        position: ['center', 'top', 'bottom', 'left', 'right'],
+        image: BoxBackgroundImage,
+      },
+      border: {
+        color: ['-color-'],
+        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        side: [
+          'all',
+          'horizontal',
+          'vertical',
+          'top',
+          'left',
+          'bottom',
+          'right',
+        ],
+        style: [
+          'solid',
+          'dashed',
+          'dotted',
+          'double',
+          'groove',
+          'ridge',
+          'inset',
+          'outset',
+          'hidden',
+        ],
+      },
+      direction: BoxDirection,
+      fill: ['horizontal', 'vertical', true, false],
+      flex: ['grow', 'shrink', true, false],
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
+      gridArea: BoxGridArea,
+      justify: BoxJustify,
+      margin: Edge,
+      overflow: ['auto', 'hidden', 'scroll', 'visible'],
+      pad: Edge,
+    },
+    structure: [
+      {
+        label: 'Content layout',
+        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
+      },
+      {
+        label: 'Layout in container',
+        properties: ['flex', 'fill', 'margin', 'gridArea'],
+      },
+      {
+        label: 'Style',
+        properties: ['animation', 'background', 'border'],
+      },
+    ],
+  },
+  Footer: {
+    component: Footer,
+    name: 'Footer',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Footer is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/header',
+    defaultProps: {
+      align: 'center',
+      direction: 'row',
+      flex: false,
+      justify: 'between',
+      gap: 'medium',
+    },
+    properties: {
+      align: BoxAlign,
+      background: {
+        color: ['-color-'],
+        dark: false,
+        opacity: ['weak', 'medium', 'strong'],
+        position: ['center', 'top', 'bottom', 'left', 'right'],
+        image: BoxBackgroundImage,
+      },
+      border: {
+        color: ['-color-'],
+        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        side: [
+          'all',
+          'horizontal',
+          'vertical',
+          'top',
+          'left',
+          'bottom',
+          'right',
+        ],
+        style: [
+          'solid',
+          'dashed',
+          'dotted',
+          'double',
+          'groove',
+          'ridge',
+          'inset',
+          'outset',
+          'hidden',
+        ],
+      },
+      direction: BoxDirection,
+      fill: ['horizontal', 'vertical', true, false],
+      flex: ['grow', 'shrink', true, false],
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
+      gridArea: BoxGridArea,
+      justify: BoxJustify,
+      margin: Edge,
+      overflow: ['auto', 'hidden', 'scroll', 'visible'],
+      pad: Edge,
+    },
+    structure: [
+      {
+        label: 'Content layout',
+        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
+      },
+      {
+        label: 'Layout in container',
+        properties: ['flex', 'fill', 'margin', 'gridArea'],
+      },
+      {
+        label: 'Style',
+        properties: ['animation', 'background', 'border'],
+      },
+    ],
   },
   Grid: {
     component: Grid,
