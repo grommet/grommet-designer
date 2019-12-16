@@ -4,14 +4,16 @@ import WeightState from './WeightState';
 
 export default ({ options }) => {
   const WeightOptions = props => {
-    const adjustedOptions = props.value ? options.concat('undefined') : options;
+    const adjustedOptions = props.value
+      ? options.concat({ label: 'undefined', value: undefined, domValue: '-' })
+      : options;
     return (
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
         {(option, { checked, hover }) => {
           return (
             <WeightState
               {...props.props}
-              weight={option}
+              weight={option.value}
               checked={checked}
               hover={hover}
             />

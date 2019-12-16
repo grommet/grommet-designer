@@ -60,7 +60,8 @@ const Property = React.forwardRef((props, ref) => {
     first,
     linkOptions,
     name,
-    property,
+    property: propertyArg,
+    sub,
     theme,
     value,
     onChange,
@@ -76,6 +77,11 @@ const Property = React.forwardRef((props, ref) => {
   const [dropTarget, setDropTarget] = React.useState();
   const fieldRef = React.useCallback(node => setDropTarget(node), []);
   let debounceTimer;
+
+  let property =
+    propertyArg && propertyArg.dynamicProperty
+      ? propertyArg.dynamicProperty({ value })
+      : propertyArg;
 
   if (Array.isArray(property)) {
     const isColor = property.includes('-color-');
@@ -153,6 +159,7 @@ const Property = React.forwardRef((props, ref) => {
     return (
       <Field
         key={name}
+        sub={sub}
         ref={fieldRef}
         first={first}
         label={name}
@@ -183,7 +190,7 @@ const Property = React.forwardRef((props, ref) => {
     );
   } else if (typeof property === 'string') {
     return (
-      <Field key={name} first={first} label={name} htmlFor={name}>
+      <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
         <TextInput
           ref={ref}
           id={name}
@@ -202,7 +209,7 @@ const Property = React.forwardRef((props, ref) => {
     );
   } else if (typeof property === 'number') {
     return (
-      <Field key={name} first={first} label={name} htmlFor={name}>
+      <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
         <MaskedInput
           ref={ref}
           id={name}
@@ -226,7 +233,7 @@ const Property = React.forwardRef((props, ref) => {
     );
   } else if (typeof property === 'boolean') {
     return (
-      <Field key={name} first={first} label={name} htmlFor={name}>
+      <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
         <Box pad="small" direction="row" gap="small">
           <CheckBox
             ref={ref}
@@ -253,7 +260,7 @@ const Property = React.forwardRef((props, ref) => {
     return (
       <Box key={name}>
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field label={name} first={first}>
+          <Field sub={sub} label={name} first={first}>
             <Box direction="row" align="center" gap="small">
               {value && (
                 <Text weight="bold" truncate>
@@ -271,10 +278,11 @@ const Property = React.forwardRef((props, ref) => {
           </Field>
         </Button>
         {expand && (
-          <Box pad={{ left: 'medium' }} border="bottom">
+          <Box pad={{ left: 'small' }} border="bottom">
             {Object.keys(property).map(key => (
               <Property
                 key={key}
+                sub
                 name={key}
                 property={property[key]}
                 theme={theme}
@@ -300,6 +308,7 @@ const Property = React.forwardRef((props, ref) => {
       return (
         <Field
           key={name}
+          sub={sub}
           ref={fieldRef}
           first={first}
           label={name}
@@ -312,7 +321,7 @@ const Property = React.forwardRef((props, ref) => {
     return (
       <Box key={name}>
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field label={name} first={first}>
+          <Field sub={sub} label={name} first={first}>
             <Box direction="row" align="center" gap="small">
               {value && (
                 <Text weight="bold" truncate>

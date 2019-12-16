@@ -168,6 +168,13 @@ const App = () => {
   React.useEffect(() => {
     const stored = localStorage.getItem('colorMode');
     if (stored) setColorMode(stored);
+    else if (window.matchMedia) {
+      setColorMode(
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light',
+      );
+    }
   }, []);
 
   React.useEffect(() => {

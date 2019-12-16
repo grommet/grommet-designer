@@ -10,11 +10,11 @@ const GridAlign = ({ props, ...rest }) => {
     <InlineOptions name="align" options={options} {...rest}>
       {(option, { checked, hover }) => (
         <LayoutState
-          align={option}
+          align={option.value}
           axis="cross"
           direction="column"
           justify={justify}
-          label={option}
+          label={option.label}
           checked={checked}
           hover={hover}
         />

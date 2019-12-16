@@ -10,11 +10,12 @@ const TextAlign = props => {
     <InlineOptions name={props.name} options={options} {...props}>
       {(option, { checked, hover }) => {
         const pad = {};
-        if (option === 'start') pad.right = 'small';
-        else if (option === 'center') pad.horizontal = 'xsmall';
-        else if (option === 'end') pad.left = 'small';
+        const { label, value } = option;
+        if (value === 'start') pad.right = 'small';
+        else if (value === 'center') pad.horizontal = 'xsmall';
+        else if (value === 'end') pad.left = 'small';
         return (
-          <InlineOption checked={checked} hover={hover} label={option}>
+          <InlineOption checked={checked} hover={hover} label={label}>
             <Box pad={pad} border="vertical">
               <Text
                 weight={checked ? 'bold' : undefined}

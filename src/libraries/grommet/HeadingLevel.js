@@ -23,11 +23,11 @@ const HeadingLevel = props => {
             pad={{ vertical: 'xsmall', horizontal: 'small' }}
           >
             <Text
-              size={size[option]}
+              size={size[option.value]}
               weight={checked ? 'bold' : undefined}
               color={checked ? 'white' : 'dark-4'}
             >
-              {option}
+              {option.label}
             </Text>
           </InlineOption>
         );

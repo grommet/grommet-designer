@@ -13,8 +13,8 @@ const BoxJustify = ({ props, ...rest }) => {
           align={align}
           axis="main"
           direction={direction}
-          justify={option}
-          label={option}
+          justify={option.value}
+          label={option.value}
           checked={checked}
           hover={hover}
         />

@@ -12,9 +12,9 @@ const BoxDirection = ({ props, ...rest }) => {
         <LayoutState
           align={align}
           axis="main"
-          direction={option}
+          direction={option.value}
           justify={justify}
-          label={option}
+          label={option.label}
           checked={checked}
           hover={hover}
         />

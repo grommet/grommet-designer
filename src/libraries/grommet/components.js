@@ -38,6 +38,7 @@ import BoxBackgroundImage from './BoxBackgroundImage';
 import BoxDirection from './BoxDirection';
 import BoxGridArea from './BoxGridArea';
 import BoxJustify from './BoxJustify';
+import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
@@ -154,7 +155,7 @@ export const components = {
       margin: Edge,
       onClick: ['-link-'],
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: Edge,
+      pad: BoxPad,
       round: BoxRound,
       width: [
         'xxsmall',
@@ -274,7 +275,7 @@ export const components = {
       justify: BoxJustify,
       margin: Edge,
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: Edge,
+      pad: BoxPad,
     },
     structure: [
       {
@@ -353,7 +354,7 @@ export const components = {
       justify: BoxJustify,
       margin: Edge,
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: Edge,
+      pad: BoxPad,
     },
     structure: [
       {
@@ -432,7 +433,7 @@ export const components = {
       justify: BoxJustify,
       margin: Edge,
       overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: Edge,
+      pad: BoxPad,
     },
     structure: [
       {

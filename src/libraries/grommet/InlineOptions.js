@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RadioButtonGroup } from 'grommet';
 
 const InlineOptions = ({ children, name, options, value, onChange, gap }) => {
+  const buttonGroupOptions = useMemo(
+    () =>
+      options.map(o => {
+        const label = o.label || o;
+        let val = o.domValue || o.value || o;
+        if (typeof val === 'boolean') val = val.toString();
+        return { label, value: val, id: `${name}-${label}` };
+      }),
+    [name, options],
+  );
+  const valueIndex = options.findIndex(
+    o => (typeof o === 'object' ? o.value : o) === value,
+  );
+  const buttonGroupOption = buttonGroupOptions[valueIndex];
+
   return (
     <RadioButtonGroup
       id={name}
@@ -9,14 +24,17 @@ const InlineOptions = ({ children, name, options, value, onChange, gap }) => {
       direction="row"
       gap={gap || 'none'}
       margin={{ horizontal: 'small' }}
-      options={options.map(o => ({ value: o, id: `${name}-${o}` }))}
-      value={typeof value === 'boolean' ? value.toString() : value || ''}
+      options={buttonGroupOptions}
+      value={buttonGroupOption ? buttonGroupOption.value : ''}
       onChange={event => {
-        const option = event.target.value;
-        onChange(option === 'undefined' ? undefined : option);
+        const index = buttonGroupOptions.findIndex(
+          o => o.value === event.target.value,
+        );
+        const option = options[index];
+        onChange(typeof option === 'object' ? option.value : option);
       }}
     >
-      {(option, state) => children(option.value, state)}
+      {(option, state) => children(option, state)}
     </RadioButtonGroup>
   );
 };
