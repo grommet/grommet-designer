@@ -25,11 +25,6 @@ const stroke = {
   strokeLinecap: 'square',
 };
 
-const dash = {
-  strokeDasharray: '2',
-  strokeLinecap: 'butt',
-};
-
 const PadState = ({ checked, hover, name, option }) => {
   let content;
   if (option.label === 'undefined') {
