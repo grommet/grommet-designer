@@ -901,6 +901,7 @@ export const components = {
       data: DataTableData,
       groupBy: '',
       onClickRow: ['-link-'],
+      pad: BoxPad,
       replace: false,
       resizeable: false,
       size: ['small', 'medium', 'large', 'xlarge'],
@@ -936,6 +937,7 @@ export const components = {
     properties: {
       data: DataTableData,
       onClickItem: ['-link-'],
+      pad: BoxPad,
       primaryKey: '',
       secondaryKey: '',
     },
