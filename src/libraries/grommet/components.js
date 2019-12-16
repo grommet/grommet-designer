@@ -549,7 +549,7 @@ export const components = {
     properties: {
       level: HeadingLevel,
       size: SizeOptions({
-        options: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+        options: ['small', 'medium', 'large', 'xlarge'],
       }),
       textAlign: TextAlign,
       truncate: false,
