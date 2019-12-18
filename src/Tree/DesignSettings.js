@@ -2,10 +2,10 @@ import React from 'react';
 import {
   Anchor,
   Box,
-  CheckBox,
+  Heading,
   Paragraph,
+  RadioButtonGroup,
   Select,
-  Text,
   TextArea,
   TextInput,
 } from 'grommet';
@@ -33,7 +33,7 @@ export default ({ design, onClose, setDesign, theme }) => (
         />
       </Field>
 
-      <Field label="Base" htmlFor="base">
+      <Field label="Based on" htmlFor="base">
         <TextInput
           id="base"
           name="base"
@@ -50,19 +50,91 @@ export default ({ design, onClose, setDesign, theme }) => (
         />
       </Field>
 
-      <Field
-        label="Theme"
-        htmlFor="theme"
-        help={
-          <Anchor
-            href="https://theme-designer.grommet.io"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            theme designer
-          </Anchor>
-        }
-      >
+      <Box direction="row" justify="between" align="center">
+        <Heading level={3}>Libraries</Heading>
+        <ActionButton
+          title="add a library"
+          icon={<Add />}
+          hoverIndicator
+          onClick={() => {
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            if (!nextDesign.library) {
+              nextDesign.library = { '': '' };
+            } else {
+              nextDesign.library[''] = '';
+            }
+            setDesign(nextDesign);
+          }}
+        />
+      </Box>
+      {design.library && (
+        <Box flex={false}>
+          {Object.keys(design.library).map((key, index) => (
+            <Box key={key} direction="row" align="start" justify="between">
+              <Box flex="grow">
+                <Field label="Name" htmlFor={`name-${index}`}>
+                  <TextInput
+                    id={`name-${index}`}
+                    name={`name-${index}`}
+                    plain
+                    value={key || ''}
+                    onChange={event => {
+                      if (event.target.value !== key) {
+                        const nextDesign = JSON.parse(JSON.stringify(design));
+                        nextDesign.library[event.target.value] =
+                          nextDesign.library[key];
+                        delete nextDesign.library[key];
+                        setDesign(nextDesign);
+                      }
+                    }}
+                    style={{ textAlign: 'end' }}
+                  />
+                </Field>
+                <Field label="URL" htmlFor={`url-${index}`}>
+                  <TextInput
+                    id={`url-${index}`}
+                    name={`url-${index}`}
+                    plain
+                    value={design.library[key]}
+                    onChange={event => {
+                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      nextDesign.library[key] = event.target.value;
+                      setDesign(nextDesign);
+                    }}
+                    style={{ textAlign: 'end' }}
+                  />
+                </Field>
+              </Box>
+              <ActionButton
+                title="delete library"
+                icon={<Trash />}
+                hoverIndicator
+                onClick={() => {
+                  const nextDesign = JSON.parse(JSON.stringify(design));
+                  delete nextDesign.library[key];
+                  if (Object.keys(nextDesign.library).length === 0) {
+                    delete nextDesign.library;
+                  }
+                  setDesign(nextDesign);
+                }}
+              />
+            </Box>
+          ))}
+        </Box>
+      )}
+
+      <Box direction="row" justify="between" align="center">
+        <Heading level={3}>Theme</Heading>
+        <Anchor
+          href="https://theme-designer.grommet.io"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          theme designer
+        </Anchor>
+      </Box>
+
+      <Field label="Theme" htmlFor="theme">
         <Select
           id="theme"
           name="theme"
@@ -109,57 +181,41 @@ export default ({ design, onClose, setDesign, theme }) => (
         )}
 
       {theme && typeof theme.global.colors.background === 'object' && (
-        <Field label="Theme mode" htmlFor="themeMode" align="start">
-          <Box pad="small" direction="row" gap="small">
-            <Text>light</Text>
-            <CheckBox
-              id="themeMode"
-              name="themeMode"
-              toggle
-              checked={design.themeMode === 'dark'}
-              onChange={event => {
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                nextDesign.themeMode = event.target.checked ? 'dark' : 'light';
-                setDesign(nextDesign);
-              }}
-            />
-            <Text>dark</Text>
-          </Box>
-        </Field>
-      )}
-
-      {/*}
-      <Field label="Library" htmlFor="library">
-        <TextInput
-          id="library"
-          name="library"
-          plain
-          value={design.library || ''}
-          onChange={event => {
-            const nextDesign = JSON.parse(JSON.stringify(design));
-            nextDesign.library = event.target.value;
-            setDesign(nextDesign);
-          }}
-          style={{ textAlign: 'end' }}
-        />
-      </Field>
-      {*/}
-
-      <Field label="Data" htmlFor="data">
-        <Box pad="small">
-          <CheckBox
-            id="data"
-            name="data"
-            toggle
-            checked={!!design.data || false}
+        <Field label="Theme mode" htmlFor="themeMode">
+          <RadioButtonGroup
+            id="themeMode"
+            name="themeMode"
+            direction="row"
+            gap="medium"
+            options={['dark', 'light']}
+            value={design.themeMode}
             onChange={event => {
               const nextDesign = JSON.parse(JSON.stringify(design));
-              nextDesign.data = event.target.checked ? { data: '' } : undefined;
+              nextDesign.themeMode = event.target.value;
               setDesign(nextDesign);
             }}
           />
-        </Box>
-      </Field>
+        </Field>
+      )}
+
+      <Box direction="row" justify="between" align="center">
+        <Heading level={3}>Data</Heading>
+        <ActionButton
+          title="add a data source"
+          icon={<Add />}
+          hoverIndicator
+          onClick={() => {
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            if (!nextDesign.data) {
+              nextDesign.data = { data: '' };
+            } else {
+              nextDesign.data[`data-${Object.keys(nextDesign.data).length}`] =
+                '';
+            }
+            setDesign(nextDesign);
+          }}
+        />
+      </Box>
       {design.data && (
         <Box flex={false}>
           <Paragraph margin={{ horizontal: 'medium' }}>
@@ -221,24 +277,6 @@ export default ({ design, onClose, setDesign, theme }) => (
               />
             </Box>
           ))}
-          <Box alignSelf="start">
-            <ActionButton
-              title="add a data source"
-              icon={<Add />}
-              hoverIndicator
-              onClick={() => {
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                if (!nextDesign.data) {
-                  nextDesign.data = { data: '' };
-                } else {
-                  nextDesign.data[
-                    `data-${Object.keys(nextDesign.data).length}`
-                  ] = '';
-                }
-                setDesign(nextDesign);
-              }}
-            />
-          </Box>
         </Box>
       )}
     </Box>

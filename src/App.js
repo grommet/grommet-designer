@@ -38,13 +38,13 @@ const App = () => {
   const [design, setDesign] = React.useState(setupDesign(loading));
   const [selected, setSelected] = React.useState(getInitialSelected(design));
   const [base, setBase] = React.useState();
-  const [theme, setTheme] = React.useState(grommet);
+  const [theme, setTheme] = React.useState();
   const [colorMode, setColorMode] = React.useState('dark');
   const [preview, setPreview] = React.useState(true);
   const [changes, setChanges] = React.useState([]);
   const [changeIndex, setChangeIndex] = React.useState();
   const [designs, setDesigns] = React.useState([]);
-  const [libraries /* setLibraries */] = React.useState([
+  const [libraries, setLibraries] = React.useState([
     grommetLibrary,
     designerLibrary,
   ]);
@@ -138,26 +138,6 @@ const App = () => {
       setChanges([{ design: nextDesign, selected: nextSelected }]);
       setChangeIndex(0);
     }
-
-    // if (design.library) {
-    //   // load design library
-
-    //   const t = document.createElement('script');
-    //   // t.setAttribute('src', design.library);
-    //   t.setAttribute('type', 'module');
-    //   const s = document.getElementsByTagName('script')[0];
-    //   t.appendChild(document.createTextNode(`
-    //     import lib from '${design.library}';
-    //     window.lib = lib;
-    //   `));
-    //   s ? s.parentNode.insertBefore(t, s) : document.head.appendChild(t);
-    //   setTimeout(() => {
-    //     console.log('!!!', window.lib);
-    //     if (window.lib) {
-    //       this.setState({ libraries: [window.lib, ...this.state.libraries]});
-    //     }
-    //   }, 1000);
-    // }
   }, []);
 
   React.useEffect(() => {
@@ -229,6 +209,24 @@ const App = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [design, designs]);
+
+  // setup libraries
+  React.useEffect(() => {
+    if (design.library) {
+      Object.keys(design.library).forEach(name => {
+        const url = design.library[name];
+        if (name && url && !document.getElementById(name)) {
+          // add library
+          const script = document.createElement('script');
+          script.src = url;
+          script.id = name;
+          document.body.appendChild(script);
+          script.onload = () =>
+            setLibraries([window[name].designer, ...libraries]);
+        }
+      });
+    }
+  }, [design.library, libraries]);
 
   // setup base
   React.useEffect(() => {
@@ -362,7 +360,7 @@ const App = () => {
 
           <ErrorCatcher>
             <Canvas
-              design={design}
+              design={theme ? design : setupDesign(loading)}
               libraries={libraries}
               selected={selected}
               preview={preview}
