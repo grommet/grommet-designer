@@ -8,7 +8,7 @@ exports[`App empty 1`] = `
     class="StyledGrid-sc-1wofa1l-0 ckkYVQ"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 ejJDly"
+      class="StyledBox-sc-13pk1d4-0 lhUJls"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 lfcqsb"
@@ -255,7 +255,7 @@ exports[`App empty 1`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 couwcF"
+      class="StyledBox-sc-13pk1d4-0 AYJdk"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 vYtDR"
@@ -2667,7 +2667,7 @@ exports[`App empty 2`] = `
     class="StyledGrid-sc-1wofa1l-0 ckkYVQ"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 ejJDly"
+      class="StyledBox-sc-13pk1d4-0 lhUJls"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 lfcqsb"
@@ -2914,7 +2914,7 @@ exports[`App empty 2`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 couwcF"
+      class="StyledBox-sc-13pk1d4-0 AYJdk"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 vYtDR"
