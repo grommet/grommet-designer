@@ -47,10 +47,12 @@ const Tree = ({
   colorMode,
   design,
   libraries,
+  rtl,
   selected,
   theme,
   setColorMode,
   setDesign,
+  setRTL,
   setSelected,
   onUndo,
   onRedo,
@@ -458,8 +460,10 @@ const Tree = ({
               <Designs
                 design={design}
                 colorMode={colorMode}
+                rtl={rtl}
                 setColorMode={setColorMode}
                 setDesign={setDesign}
+                setRTL={setRTL}
                 setSelected={setSelected}
                 onClose={() => setChoosing(false)}
               />

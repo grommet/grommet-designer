@@ -40,6 +40,7 @@ const App = () => {
   const [base, setBase] = React.useState();
   const [theme, setTheme] = React.useState();
   const [colorMode, setColorMode] = React.useState('dark');
+  const [rtl, setRTL] = React.useState();
   const [preview, setPreview] = React.useState(true);
   const [changes, setChanges] = React.useState([]);
   const [changeIndex, setChangeIndex] = React.useState();
@@ -328,7 +329,7 @@ const App = () => {
   }, [changes, changeIndex]);
 
   return (
-    <Grommet full theme={grommet}>
+    <Grommet full theme={grommet} dir={rtl ? 'rtl' : undefined}>
       <Keyboard target="document" onKeyDown={onKey}>
         <Grid
           fill
@@ -347,11 +348,13 @@ const App = () => {
               design={design}
               libraries={libraries}
               base={base}
+              rtl={rtl}
               selected={selected}
               theme={theme}
               colorMode={colorMode}
               setColorMode={setColorMode}
               setDesign={setDesign}
+              setRTL={setRTL}
               setSelected={setSelected}
               onRedo={changeIndex > 0 && onRedo}
               onUndo={changeIndex < changes.length - 1 && onUndo}

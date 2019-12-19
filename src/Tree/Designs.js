@@ -7,6 +7,7 @@ import {
   Grid,
   Heading,
   Meter,
+  RadioButtonGroup,
   Stack,
   Text,
 } from 'grommet';
@@ -89,9 +90,11 @@ const Design = ({ name, loading, onClick }) => (
 const Designs = ({
   colorMode,
   design,
+  rtl,
   onClose,
   setColorMode,
   setDesign,
+  setRTL,
   setSelected,
 }) => {
   const [designs, setDesigns] = React.useState([]);
@@ -279,14 +282,21 @@ const Designs = ({
         gap="medium"
         margin={{ top: 'medium' }}
       >
-        <CheckBox
-          label="dark"
-          toggle
-          checked={colorMode === 'dark'}
-          onChange={() => {
-            setColorMode(colorMode === 'dark' ? 'light' : 'dark');
-            onClose();
+        <RadioButtonGroup
+          id="themeMode"
+          name="themeMode"
+          direction="row"
+          gap="medium"
+          options={['dark', 'light']}
+          value={colorMode || ''}
+          onChange={event => {
+            setColorMode(event.target.value);
           }}
+        />
+        <CheckBox
+          label="right to left"
+          checked={rtl || false}
+          onChange={() => setRTL(!rtl)}
         />
         <Button
           label="help"
