@@ -44,7 +44,7 @@ const Route = ({ Component, path }) => {
 
 const screenComponentName = ({ id, name }) =>
   name
-    ? `${name.charAt(0).toUpperCase()}${name.replace(' ', '').slice(1)}`
+    ? `${name.charAt(0).toUpperCase()}${name.replace(/\s/g, '').slice(1)}`
     : `Screen${id}`;
 
 export const generateJSX = (design, libraries, themeArg) => {
