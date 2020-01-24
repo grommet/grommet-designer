@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  Accordion,
+  AccordionPanel,
   Anchor,
   Box,
   Button,
@@ -589,6 +591,28 @@ export const components = {
     component: Markdown,
     name: 'Markdown',
     text: 'Markdown',
+  },
+  Accordion: {
+    component: Accordion,
+    name: 'Accordion',
+    container: true,
+    documentation: 'https://v2.grommet.io/accordion',
+    properties: {
+      animate: true,
+      multiple: false,
+    },
+  },
+  AccordionPanel: {
+    component: AccordionPanel,
+    name: 'AccordionPanel',
+    container: true,
+    documentation: 'https://v2.grommet.io/accordion',
+    defaultProps: {
+      label: 'panel',
+    },
+    properties: {
+      label: 'panel',
+    },
   },
   Anchor: {
     component: Anchor,

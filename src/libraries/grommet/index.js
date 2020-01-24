@@ -22,7 +22,14 @@ const structure = [
   {
     name: 'Controls',
     Icon: Navigate,
-    components: ['Anchor', 'Button', 'DropButton', 'Menu'],
+    components: [
+      'Accordion',
+      'AccordionPanel',
+      'Anchor',
+      'Button',
+      'DropButton',
+      'Menu',
+    ],
   },
   {
     name: 'Input',
