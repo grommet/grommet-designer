@@ -988,6 +988,7 @@ export const components = {
     name: 'Meter',
     properties: {
       background: ['-color-'],
+      max: 100,
       round: false,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
