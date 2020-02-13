@@ -80,16 +80,21 @@ const Tree = ({
   const [copied, setCopied] = React.useState();
   const selectedRef = React.useRef();
 
+  // ensure selected component is visible in the tree
   React.useEffect(() => {
-    if (selectedRef.current) {
-      const rect = selectedRef.current.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) {
-        selectedRef.current.scrollIntoView();
+    // we use a timeout to give any expansion a chance to complete first
+    const timer = setTimeout(() => {
+      if (selectedRef.current) {
+        const rect = selectedRef.current.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) {
+          selectedRef.current.scrollIntoView();
+        }
       }
-    }
+    }, 20);
+    return () => clearTimeout(timer);
   }, [selected]);
 
-  // ensure selected component is visible in the tree
+  // ensure selected component is expanded in the tree
   React.useEffect(() => {
     if (selected.component) {
       let parent = getParent(design, selected.component);
