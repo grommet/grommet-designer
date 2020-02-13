@@ -1,6 +1,15 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { Box, Button, Heading, Keyboard, Layer, TextInput } from 'grommet';
+import {
+  Box,
+  Button,
+  Heading,
+  Keyboard,
+  Layer,
+  Select,
+  Text,
+  TextInput,
+} from 'grommet';
 import { Close } from 'grommet-icons';
 import {
   addComponent,
@@ -8,7 +17,10 @@ import {
   copyComponent,
   insertComponent,
 } from '../design';
+import { displayName, getComponentType } from '../utils';
 import ActionButton from '../components/ActionButton';
+
+const allLocations = ['within', 'containing', 'before', 'after'];
 
 const AddComponent = ({
   base,
@@ -19,8 +31,22 @@ const AddComponent = ({
   setSelected,
   onClose,
 }) => {
+  const selectedComponent = design.components[selected.component];
+  const selectedType = React.useMemo(
+    () => getComponentType(libraries, selectedComponent.type),
+    [libraries, selectedComponent.type],
+  );
+  const locations = React.useMemo(() => {
+    if (selectedType.container) return allLocations;
+    return allLocations.filter(l => l !== 'within');
+  }, [selectedType]);
+  const [location, setLocation] = React.useState();
+  React.useEffect(() => setLocation(locations[0]), [locations]);
+
   const [search, setSearch] = React.useState('');
+
   const inputRef = React.useRef();
+
   const templates = React.useMemo(() => {
     const buildTemplates = design => {
       const templates = {};
@@ -47,7 +73,7 @@ const AddComponent = ({
     setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
   });
 
-  const add = ({ typeName, containSelected, template, templateDesign }) => {
+  const add = ({ typeName, template, templateDesign }) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
 
@@ -64,13 +90,13 @@ const AddComponent = ({
     }
 
     if (selected.screen === nextSelected.screen) {
-      insertComponent(
+      insertComponent({
         nextDesign,
         libraries,
         selected,
-        nextSelected.component,
-        containSelected,
-      );
+        id: nextSelected.component,
+        location,
+      });
     }
 
     setDesign(nextDesign);
@@ -105,6 +131,19 @@ const AddComponent = ({
           >
             add
           </Heading>
+        </Box>
+        <Box flex={false} pad="small">
+          <Select
+            name="add-location"
+            options={locations}
+            value={location}
+            onChange={event => setLocation(event.value)}
+            valueLabel={
+              <Box pad="small">
+                <Text>{`${location} ${displayName(selectedComponent)}`}</Text>
+              </Box>
+            }
+          />
         </Box>
         <Box flex={false} pad="small">
           <Keyboard

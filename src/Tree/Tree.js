@@ -20,19 +20,12 @@ import {
   previousSiblingSelected,
   isDescendent,
 } from '../design';
+import { displayName } from '../utils';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignSettings from './DesignSettings';
 import Designs from './Designs';
 import Sharing from './Share';
-
-const treeName = component =>
-  component.name ||
-  component.text ||
-  component.props.name ||
-  component.props.label ||
-  component.type.split('.')[1] ||
-  component.type;
 
 const treeSubName = component =>
   !component.name &&
@@ -335,7 +328,7 @@ const Tree = ({
               }
             >
               <Text size="medium" truncate>
-                {treeName(reference || component)}
+                {displayName(reference || component)}
               </Text>
               <Text size="small" color="dark-4" truncate>
                 {treeSubName(reference || component)}

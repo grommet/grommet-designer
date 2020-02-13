@@ -9,3 +9,11 @@ export const getComponentType = (libraries, typeName) => {
   });
   return component || undefined;
 };
+
+export const displayName = component =>
+  component.name ||
+  component.text ||
+  component.props.name ||
+  component.props.label ||
+  component.type.split('.')[1] ||
+  component.type;

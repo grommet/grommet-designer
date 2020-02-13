@@ -157,22 +157,30 @@ export const deleteComponent = (nextDesign, id) => {
   return parent ? parent.id : undefined;
 };
 
-export const insertComponent = (
+export const insertComponent = ({
   nextDesign,
   libraries,
   selected,
   id,
-  containSelected,
-) => {
+  location,
+}) => {
   const component = nextDesign.components[id];
   if (selected.component) {
     const selectedComponent = nextDesign.components[selected.component];
     const type = getComponentType(libraries, component.type);
-    if (containSelected && type.container) {
+    if (location === 'containing' && type.container) {
       const parent = getParent(nextDesign, selected.component);
       const index = parent.children.indexOf(selected.component);
       parent.children[index] = id;
       component.children = [selected.component];
+    } else if (location === 'before') {
+      const parent = getParent(nextDesign, selected.component);
+      const index = parent.children.indexOf(selected.component);
+      parent.children.splice(index, 0, id);
+    } else if (location === 'after') {
+      const parent = getParent(nextDesign, selected.component);
+      const index = parent.children.indexOf(selected.component);
+      parent.children.splice(index + 1, 0, id);
     } else {
       const parent = canParent(nextDesign, libraries, selectedComponent)
         ? selectedComponent
