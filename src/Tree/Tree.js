@@ -87,7 +87,7 @@ const Tree = ({
         selectedRef.current.scrollIntoView();
       }
     }
-  }, [selectedRef]);
+  }, [selected]);
 
   // ensure selected component is visible in the tree
   React.useEffect(() => {
