@@ -14,6 +14,7 @@ import {
 } from 'grommet';
 import { Close, FormClose, FormDown, FormUp } from 'grommet-icons';
 import {
+  aliases as iconAliases,
   names as iconNames,
   SelectLabel as IconLabel,
 } from '../libraries/designer/Icon';
@@ -95,8 +96,10 @@ const Property = React.forwardRef((props, ref) => {
       Label = ColorLabel(theme);
     }
     const isIcon = property.includes('-Icon-');
+    let aliases;
     if (isIcon) {
       options = iconNames;
+      aliases = iconAliases;
       Label = IconLabel;
     }
     const isLink = property.includes('-link-');
@@ -150,7 +153,13 @@ const Property = React.forwardRef((props, ref) => {
     // }
 
     if (searchExp) {
-      options = options.filter(p => searchExp.test(p));
+      options = options.filter(
+        o =>
+          searchExp.test(o) ||
+          (aliases &&
+            aliases[o] &&
+            aliases[o].filter(a => searchExp.test(a)).length > 0),
+      );
     }
     if (value) {
       options = [...options, 'undefined'];

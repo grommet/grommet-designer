@@ -1,9 +1,11 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import * as icons from 'grommet-icons';
+import metadata from 'grommet-icons/metadata';
 
 const exp = new RegExp(/^[A-Z]/);
 export const names = Object.keys(icons).filter(n => exp.test(n));
+export const aliases = metadata;
 
 export const SelectLabel = ({ active, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
