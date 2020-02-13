@@ -15,12 +15,13 @@ import {
   addComponent,
   addScreen,
   copyComponent,
+  getParent,
   insertComponent,
 } from '../design';
 import { displayName, getComponentType } from '../utils';
 import ActionButton from '../components/ActionButton';
 
-const allLocations = ['within', 'containing', 'before', 'after'];
+const allLocations = ['within', 'after', 'before', 'containing'];
 
 const AddComponent = ({
   base,
@@ -37,9 +38,11 @@ const AddComponent = ({
     [libraries, selectedComponent.type],
   );
   const locations = React.useMemo(() => {
+    const parent = getParent(design, selected.component);
+    if (!parent) return allLocations.filter(l => l === 'within');
     if (selectedType.container) return allLocations;
     return allLocations.filter(l => l !== 'within');
-  }, [selectedType]);
+  }, [design, selected.component, selectedType]);
   const [location, setLocation] = React.useState();
   React.useEffect(() => setLocation(locations[0]), [locations]);
 
@@ -136,6 +139,7 @@ const AddComponent = ({
           <Select
             name="add-location"
             options={locations}
+            disabled={locations.length === 1}
             value={location}
             onChange={event => setLocation(event.value)}
             valueLabel={
