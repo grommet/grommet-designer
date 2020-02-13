@@ -99,7 +99,7 @@ const LayoutState = ({
   const e = edgeCoords({ axis, direction });
   return (
     <InlineOption checked={checked} hover={hover} label={label}>
-      <Blank color={checked ? 'white' : 'dark-4'}>
+      <Blank color={checked ? 'selected-text' : 'border'}>
         <Edge coords={e[0]} />
         <Edge coords={e[1]} />
         <Line coords={c[0]} />
