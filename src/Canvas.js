@@ -387,7 +387,12 @@ const Canvas = ({
     const selectProps = {};
     if (!preview) {
       selectProps.onClick = event => {
-        if (event.target === event.currentTarget) {
+        // we test for 'svg' so we can select Meter
+        if (
+          event.target === event.currentTarget ||
+          event.currentTarget.nodeName === 'svg'
+        ) {
+          event.stopPropagation(); // stop once we match
           if (selected.component !== id) {
             setSelected({ ...selected, component: id });
             setInlineEdit(undefined);
