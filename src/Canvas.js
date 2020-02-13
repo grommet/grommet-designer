@@ -387,18 +387,12 @@ const Canvas = ({
     const selectProps = {};
     if (!preview) {
       selectProps.onClick = event => {
-        // we test for 'svg' so we can select Meter
-        if (
-          event.target === event.currentTarget ||
-          event.currentTarget.nodeName === 'svg'
-        ) {
-          event.stopPropagation(); // stop once we match
-          if (selected.component !== id) {
-            setSelected({ ...selected, component: id });
-            setInlineEdit(undefined);
-          } else if (type.text) {
-            setInlineEdit(id);
-          }
+        event.stopPropagation();
+        if (selected.component !== id) {
+          setSelected({ ...selected, component: id });
+          setInlineEdit(undefined);
+        } else if (type.text) {
+          setInlineEdit(id);
         }
         if (specialProps.onClick) specialProps.onClick(event);
       };
