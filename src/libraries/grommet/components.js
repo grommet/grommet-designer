@@ -122,6 +122,7 @@ export const components = {
           'left',
           'bottom',
           'right',
+          'between',
         ],
         style: [
           'solid',
