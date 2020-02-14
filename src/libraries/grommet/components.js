@@ -475,6 +475,7 @@ export const components = {
       justify: ['stretch', 'start', 'center', 'end'],
       justifyContent: ['stretch', 'start', 'center', 'end', 'between'],
       margin: Edge,
+      pad: BoxPad,
       rows: GridRows,
     },
   },

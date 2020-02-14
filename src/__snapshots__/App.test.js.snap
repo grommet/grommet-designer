@@ -5,7 +5,7 @@ exports[`App empty 1`] = `
   class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 ggEeFp"
+    class="StyledGrid-sc-1wofa1l-0 cosHcc"
   >
     <div
       class="StyledBox-sc-13pk1d4-0 cSrMOs"
@@ -47,7 +47,7 @@ exports[`App empty 1`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Feb 13 Design
+                  Feb 14 Design
                 </h1>
               </div>
             </button>
@@ -2664,7 +2664,7 @@ exports[`App empty 2`] = `
   class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 ggEeFp"
+    class="StyledGrid-sc-1wofa1l-0 cosHcc"
   >
     <div
       class="StyledBox-sc-13pk1d4-0 cSrMOs"
@@ -2706,7 +2706,7 @@ exports[`App empty 2`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Feb 13 Design
+                  Feb 14 Design
                 </h1>
               </div>
             </button>
