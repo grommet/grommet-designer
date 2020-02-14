@@ -35,7 +35,7 @@ export const loading = {
       props: {
         size: 'xlarge',
         weight: 'bold',
-        color: 'dark-4',
+        color: 'text-xweak',
       },
       text: 'Loading ...',
     },

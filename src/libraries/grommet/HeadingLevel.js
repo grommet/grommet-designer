@@ -25,7 +25,7 @@ const HeadingLevel = props => {
             <Text
               size={size[option.value]}
               weight={checked ? 'bold' : undefined}
-              color={checked ? 'white' : 'dark-4'}
+              color={checked ? 'selected-text' : 'border'}
             >
               {option.label}
             </Text>

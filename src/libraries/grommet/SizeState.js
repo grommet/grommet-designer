@@ -18,7 +18,7 @@ const SizeState = ({ checked, hover, size }) => {
       <Text
         size={size}
         weight={checked ? 'bold' : undefined}
-        color={checked ? 'white' : 'dark-4'}
+        color={checked ? 'selected-text' : 'border'}
       >
         {short[size] || 'x'}
       </Text>

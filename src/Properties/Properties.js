@@ -26,7 +26,6 @@ import { getComponentType } from '../utils';
 const parseStyle = style => (style ? JSON.stringify(style, null, 2) : '');
 
 export default ({
-  colorMode,
   component,
   design,
   libraries,
@@ -204,11 +203,7 @@ export default ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box
-        background={colorMode === 'dark' ? 'dark-1' : 'white'}
-        height="100vh"
-        border="left"
-      >
+      <Box height="100vh" border="left">
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
             <ActionButton
@@ -375,7 +370,7 @@ export default ({
                     {renderProperties(type.properties, component.props)}
                     {parentType && parentType.container && (
                       <Box pad="medium">
-                        <Paragraph size="small" color="light-4">
+                        <Paragraph size="small" color="text-xweak">
                           adjust the layout of this {type.name} via its
                           containing{' '}
                           <Anchor

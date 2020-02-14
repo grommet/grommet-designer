@@ -3,7 +3,7 @@ import { Box, Heading, Layer } from 'grommet';
 import { Close } from 'grommet-icons';
 import ActionButton from '../components/ActionButton';
 
-const Action = ({ children, colorMode, label, onClose, ...rest }) => (
+const Action = ({ children, label, onClose, ...rest }) => (
   <Layer
     position="top"
     margin="medium"
@@ -12,11 +12,7 @@ const Action = ({ children, colorMode, label, onClose, ...rest }) => (
     onEsc={onClose}
     onClickOutside={onClose}
   >
-    <Box
-      flex
-      background={colorMode === 'dark' ? 'dark-1' : 'white'}
-      elevation="medium"
-    >
+    <Box flex elevation="medium">
       <Box flex={false} direction="row" align="center" justify="between">
         <ActionButton
           title="close"

@@ -278,7 +278,7 @@ const Tree = ({
       design.components[component.props.component];
     const collapserColor = selectedAncestors.includes(id)
       ? 'accent-1'
-      : { light: 'light-4', dark: 'dark-3' };
+      : 'border';
     return (
       <Box key={id}>
         {firstChild && renderDropArea(id, 'before')}
@@ -330,7 +330,7 @@ const Tree = ({
               <Text size="medium" truncate>
                 {displayName(reference || component)}
               </Text>
-              <Text size="small" color="dark-4" truncate>
+              <Text size="small" truncate>
                 {treeSubName(reference || component)}
               </Text>
             </Box>
@@ -370,7 +370,7 @@ const Tree = ({
   const renderScreen = (screenId, firstScreen) => {
     const screen = design.screens[screenId];
     const active = selected.screen === screenId && !selected.component;
-    const collapserColor = { light: 'light-4', dark: 'dark-3' };
+    const collapserColor = 'border';
     return (
       <Box
         key={screen.id}
@@ -436,11 +436,7 @@ const Tree = ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box
-        background={colorMode === 'dark' ? 'dark-1' : 'white'}
-        height="100vh"
-        border="right"
-      >
+      <Box height="100vh" border="right">
         <Box flex={false} border="bottom">
           <Box
             flex={false}

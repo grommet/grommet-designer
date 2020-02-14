@@ -5,13 +5,7 @@ import { addScreen, deleteScreen } from '../design';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 
-const ScreenDetails = ({
-  colorMode,
-  design,
-  selected,
-  setDesign,
-  setSelected,
-}) => {
+const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
   let debounceTimer;
 
   const delet = () => {
@@ -69,11 +63,7 @@ const ScreenDetails = ({
   if (!screen) return null;
   return (
     <Keyboard target="document" onKeyDown={onKeyDown}>
-      <Box
-        background={colorMode === 'dark' ? 'dark-1' : 'white'}
-        height="100vh"
-        border="left"
-      >
+      <Box height="100vh" border="left">
         <Box
           flex={false}
           direction="row"

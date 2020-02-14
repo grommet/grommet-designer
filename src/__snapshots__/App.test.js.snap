@@ -2,13 +2,13 @@
 
 exports[`App empty 1`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 cQKRXe"
+  class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
     class="StyledGrid-sc-1wofa1l-0 ggEeFp"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 bSfCdJ"
+      class="StyledBox-sc-13pk1d4-0 cSrMOs"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 pkgkY"
@@ -47,7 +47,7 @@ exports[`App empty 1`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Feb 12 Design
+                  Feb 13 Design
                 </h1>
               </div>
             </button>
@@ -173,7 +173,7 @@ exports[`App empty 1`] = `
                 >
                   <svg
                     aria-label="FormDown"
-                    class="StyledIcon-ofa7kd-0 jgTcbT"
+                    class="StyledIcon-ofa7kd-0 kPaBKb"
                     viewBox="0 0 24 24"
                   >
                     <polyline
@@ -215,7 +215,7 @@ exports[`App empty 1`] = `
                           class="StyledBox__StyledBoxGap-sc-13pk1d4-1 bmrRmF"
                         />
                         <span
-                          class="StyledText-sc-1sadyjn-0 jTbQZc"
+                          class="StyledText-sc-1sadyjn-0 hObItf"
                         />
                       </div>
                     </button>
@@ -255,7 +255,7 @@ exports[`App empty 1`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 cFxwOF"
+      class="StyledBox-sc-13pk1d4-0 iirumc"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 fiFliE"
@@ -1266,7 +1266,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1305,7 +1305,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1344,7 +1344,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1383,7 +1383,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1422,7 +1422,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1461,7 +1461,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -1535,7 +1535,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -1582,7 +1582,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -1629,7 +1629,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -1676,7 +1676,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -1723,7 +1723,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -1770,7 +1770,7 @@ exports[`App empty 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -2661,13 +2661,13 @@ exports[`App empty 1`] = `
 
 exports[`App empty 2`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 cQKRXe"
+  class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
     class="StyledGrid-sc-1wofa1l-0 ggEeFp"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 bSfCdJ"
+      class="StyledBox-sc-13pk1d4-0 cSrMOs"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 pkgkY"
@@ -2706,7 +2706,7 @@ exports[`App empty 2`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Feb 12 Design
+                  Feb 13 Design
                 </h1>
               </div>
             </button>
@@ -2832,7 +2832,7 @@ exports[`App empty 2`] = `
                 >
                   <svg
                     aria-label="FormDown"
-                    class="StyledIcon-ofa7kd-0 jgTcbT"
+                    class="StyledIcon-ofa7kd-0 kPaBKb"
                     viewBox="0 0 24 24"
                   >
                     <polyline
@@ -2874,7 +2874,7 @@ exports[`App empty 2`] = `
                           class="StyledBox__StyledBoxGap-sc-13pk1d4-1 bmrRmF"
                         />
                         <span
-                          class="StyledText-sc-1sadyjn-0 jTbQZc"
+                          class="StyledText-sc-1sadyjn-0 hObItf"
                         />
                       </div>
                     </button>
@@ -2914,7 +2914,7 @@ exports[`App empty 2`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 cFxwOF"
+      class="StyledBox-sc-13pk1d4-0 iirumc"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 fiFliE"
@@ -3925,7 +3925,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -3964,7 +3964,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -4003,7 +4003,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -4042,7 +4042,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -4081,7 +4081,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -4120,7 +4120,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <g
@@ -4194,7 +4194,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -4241,7 +4241,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -4288,7 +4288,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -4335,7 +4335,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -4382,7 +4382,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line
@@ -4429,7 +4429,7 @@ exports[`App empty 2`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="StyledIcon-ofa7kd-0 jlHPqX"
+                            class="StyledIcon-ofa7kd-0 kPaBKb"
                             viewBox="0 0 24 24"
                           >
                             <line

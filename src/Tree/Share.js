@@ -243,14 +243,8 @@ const Developer = ({ design, libraries, theme }) => {
   );
 };
 
-const Share = ({ colorMode, design, libraries, theme, onClose, setDesign }) => (
-  <Action
-    label="share"
-    full="horizontal"
-    animation="fadeIn"
-    colorMode={colorMode}
-    onClose={onClose}
-  >
+const Share = ({ design, libraries, theme, onClose, setDesign }) => (
+  <Action label="share" full="horizontal" animation="fadeIn" onClose={onClose}>
     <Grid
       fill="horizontal"
       columns={{ count: 'fit', size: 'small' }}

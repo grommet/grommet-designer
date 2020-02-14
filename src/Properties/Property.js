@@ -109,49 +109,6 @@ const Property = React.forwardRef((props, ref) => {
     }
     if (!Label) Label = OptionLabel;
 
-    // if (options.length <= 5) {
-    //   // use a RadioButtonGroup
-    //   return (
-    //     <Field
-    //       key={name}
-    //       ref={fieldRef}
-    //       first={first}
-    //       label={name}
-    //       htmlFor={name}
-    //     >
-    //       <RadioButtonGroup
-    //         ref={ref}
-    //         id={name}
-    //         name={name}
-    //         flex="shrink"
-    //         direction="row"
-    //         gap="none"
-    //         margin={{ horizontal: 'small' }}
-    //         options={options}
-    //         value={typeof value === 'boolean' ? value.toString() : value || ''}
-    //         onChange={(event) => {
-    //           const option = event.target.value;
-    //           onChange(option === 'undefined' ? undefined : option);
-    //         }}
-    //       >
-    //         {(option, { checked, hover }) => (
-    //           <Box
-    //             pad="xsmall"
-    //             background={(hover && !checked) ? 'dark-2' : undefined}
-    //           >
-    //             <Text
-    //               truncate
-    //               color={checked ? 'brand' : (hover ? 'white' : 'dark-4')}
-    //             >
-    //               {option}
-    //             </Text>
-    //           </Box>
-    //         )}
-    //       </RadioButtonGroup>
-    //     </Field>
-    //   );
-    // }
-
     if (searchExp) {
       options = options.filter(
         o =>

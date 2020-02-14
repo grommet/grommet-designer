@@ -22,8 +22,8 @@ export default ({ title, ...rest }) => {
         {...rest}
       />
       {hover && (
-        <Drop target={ref.current} align={{ top: 'bottom' }} plain>
-          <Box margin="xsmall" background={{ color: 'light-1' }} pad="xsmall">
+        <Drop target={ref.current} align={{ top: 'bottom' }}>
+          <Box margin="xsmall" pad="xsmall">
             <Text>{title}</Text>
           </Box>
         </Drop>

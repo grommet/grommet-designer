@@ -21,7 +21,7 @@ const Field = React.forwardRef(
         <Text>{label}</Text>
         {help && (
           <Box>
-            <Paragraph color="dark-4" margin="none">
+            <Paragraph color="text-xweak" margin="none">
               {help}
             </Paragraph>
           </Box>

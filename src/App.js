@@ -20,6 +20,14 @@ import themes from './themes';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
 
+const designerTheme = {
+  ...grommet,
+  global: {
+    ...grommet.global,
+    colors: { background: { dark: '#282828', light: '#f8f8f8' } },
+  },
+};
+
 const getParams = () => {
   const { location } = window;
   const params = {};
@@ -329,7 +337,12 @@ const App = () => {
   }, [changes, changeIndex]);
 
   return (
-    <Grommet full theme={grommet} dir={rtl ? 'rtl' : undefined}>
+    <Grommet
+      full
+      theme={designerTheme}
+      themeMode={colorMode}
+      dir={rtl ? 'rtl' : undefined}
+    >
       <Keyboard target="document" onKeyDown={onKey}>
         <Grid
           fill
@@ -379,7 +392,6 @@ const App = () => {
               <ScreenDetails
                 design={design}
                 selected={selected}
-                colorMode={colorMode}
                 setDesign={setDesign}
                 setSelected={setSelected}
               />
@@ -390,7 +402,6 @@ const App = () => {
                 theme={theme}
                 selected={selected}
                 component={selectedComponent}
-                colorMode={colorMode}
                 setDesign={setDesign}
                 setSelected={setSelected}
               />

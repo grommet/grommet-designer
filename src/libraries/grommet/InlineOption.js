@@ -8,15 +8,14 @@ const InlineOption = ({ border, checked, children, hover, label, pad }) => {
       ref={ref}
       border={border}
       pad={pad || 'xsmall'}
-      background={hover && !checked ? 'dark-2' : undefined}
+      background={hover && !checked ? { color: 'active' } : undefined}
     >
       {children}
       {hover && label && (
-        <Drop target={ref.current} align={{ top: 'bottom' }} plain>
+        <Drop target={ref.current} align={{ top: 'bottom' }}>
           <Box
             margin="xsmall"
             animation={{ type: 'fadeIn', duration: 100 }}
-            background={{ color: 'light-1' }}
             pad="xsmall"
           >
             <Text>{label}</Text>

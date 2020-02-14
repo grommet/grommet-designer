@@ -200,7 +200,7 @@ const AddComponent = ({
                       <Heading level={4} size="small" margin="none">
                         {name}
                       </Heading>
-                      {Icon && <Icon color="dark-4" />}
+                      {Icon && <Icon color="text-xweak" />}
                     </Box>
                     {names &&
                       names

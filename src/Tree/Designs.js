@@ -51,7 +51,7 @@ const nameToBackground = name => {
 };
 
 const Design = ({ name, loading, onClick }) => (
-  <Box fill round="medium" overflow="hidden">
+  <Box fill round="small" overflow="hidden">
     {loading ? (
       <Box
         fill
@@ -73,7 +73,7 @@ const Design = ({ name, loading, onClick }) => (
           <Box
             fill
             pad="medium"
-            background={hover ? 'light-1' : nameToBackground(name)}
+            background={hover ? 'active' : nameToBackground(name)}
             align="center"
             justify="center"
           >
@@ -178,15 +178,10 @@ const Designs = ({
   };
 
   return (
-    <Action
-      label="designs"
-      colorMode={colorMode}
-      onClose={onClose}
-      full="horizontal"
-    >
+    <Action label="designs" onClose={onClose} full="horizontal">
       <Heading level={2}>My Designs</Heading>
       <Grid fill="horizontal" columns="small" rows="xsmall" gap="large">
-        <Box fill round="medium">
+        <Box fill round="small">
           <Button fill label="New" onClick={reset} />
         </Box>
         {designs.map(name => (
@@ -203,7 +198,7 @@ const Designs = ({
               )}
               <ActionButton
                 title="delete design"
-                icon={<Trash color="dark-3" />}
+                icon={<Trash color="border" />}
                 hoverIndicator
                 onClick={() =>
                   setConfirmDelete(confirmDelete === name ? undefined : name)
@@ -214,9 +209,9 @@ const Designs = ({
         ))}
         <Box
           fill
-          round="medium"
+          round="small"
           overflow="hidden"
-          border={{ side: 'all', color: 'dark-3', size: 'medium' }}
+          border={{ side: 'all', size: 'medium' }}
         >
           <Stack fill guidingChild="last" interactiveChild="first">
             <input
@@ -245,12 +240,7 @@ const Designs = ({
                 reader.readAsText(event.target.files[0]);
               }}
             />
-            <Box
-              fill
-              background={colorMode === 'dark' ? 'dark-1' : 'white'}
-              align="center"
-              justify="center"
-            >
+            <Box fill background="background" align="center" justify="center">
               <Text>Import</Text>
               {error && (
                 <Box background="status-critical" pad="medium">

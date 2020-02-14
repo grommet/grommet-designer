@@ -19,7 +19,7 @@ const TextAlign = props => {
             <Box pad={pad} border="vertical">
               <Text
                 weight={checked ? 'bold' : undefined}
-                color={checked ? 'white' : 'dark-4'}
+                color={checked ? 'selected-text' : 'border'}
               >
                 a
               </Text>
