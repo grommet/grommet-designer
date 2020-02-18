@@ -5,7 +5,7 @@ import {
   Heading,
   Paragraph,
   RadioButtonGroup,
-  Select,
+  Text,
   TextArea,
   TextInput,
 } from 'grommet';
@@ -134,51 +134,38 @@ export default ({ design, onClose, setDesign, theme }) => (
         </Anchor>
       </Box>
 
-      <Field label="Theme" htmlFor="theme">
-        <Select
+      <Field label="Theme" htmlFor="theme" align="start" help="published URL">
+        <TextInput
           id="theme"
           name="theme"
           plain
-          options={['published', ...Object.keys(themes)]}
-          value={
-            (design.theme &&
-              ((typeof design.theme === 'object' && 'custom') ||
-                (design.theme.slice(0, 4) === 'http' && 'published') ||
-                design.theme)) ||
-            'grommet'
-          }
-          onChange={({ option }) => {
+          value={design.theme || ''}
+          suggestions={Object.keys(themes).map(k => ({
+            label: (
+              <Box
+                pad={{ horizontal: 'small', vertical: 'xsmall' }}
+                gap="xsmall"
+              >
+                <Text weight="bold">{k}</Text>
+                <Text>{themes[k]}</Text>
+              </Box>
+            ),
+            value: themes[k],
+          }))}
+          onChange={event => {
+            const theme = event.target.value;
             const nextDesign = JSON.parse(JSON.stringify(design));
-            if (option === 'published') {
-              nextDesign.theme = 'https://';
-            } else {
-              nextDesign.theme = option;
-            }
+            nextDesign.theme = theme;
+            setDesign(nextDesign);
+          }}
+          onSelect={({ suggestion }) => {
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            nextDesign.theme = suggestion.value;
             setDesign(nextDesign);
           }}
           style={{ textAlign: 'end' }}
         />
       </Field>
-
-      {design.theme &&
-        typeof design.theme === 'string' &&
-        design.theme.slice(0, 4) === 'http' && (
-          <Field label="Theme url" htmlFor="themeUrl" align="start">
-            <TextInput
-              id="themeUrl"
-              name="themeUrl"
-              plain
-              value={design.theme || ''}
-              onChange={event => {
-                const themeUrl = event.target.value;
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                nextDesign.theme = themeUrl;
-                setDesign(nextDesign);
-              }}
-              style={{ textAlign: 'end' }}
-            />
-          </Field>
-        )}
 
       {theme && typeof theme.global.colors.background === 'object' && (
         <Field label="Theme mode" htmlFor="themeMode">

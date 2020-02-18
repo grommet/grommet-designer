@@ -6,19 +6,15 @@ import Canvas from './Canvas';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 import {
-  apiUrl,
   getInitialSelected,
   getScreenByPath,
   setupDesign,
-  upgradeDesign,
-  themeApiUrl,
-  bare,
   loading,
 } from './design';
 import ScreenDetails from './Properties/ScreenDetails';
-import themes from './themes';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
+import { loadDesign, loadLibraries, loadTheme } from './design/load';
 
 const designerTheme = {
   ...grommet,
@@ -43,10 +39,14 @@ const getParams = () => {
 
 const App = () => {
   const responsive = React.useContext(ResponsiveContext);
+  // In the worst case, we need to load a published design, a published theme,
+  // a base design, and any libraries. We load theme as we go into the 'load'
+  // state. When they're all ready, we update all of the necessary states.
+  const [load, setLoad] = React.useState({});
   const [design, setDesign] = React.useState(setupDesign(loading));
   const [selected, setSelected] = React.useState(getInitialSelected(design));
   const [base, setBase] = React.useState();
-  const [theme, setTheme] = React.useState();
+  const [theme, setTheme] = React.useState(grommet);
   const [colorMode, setColorMode] = React.useState('dark');
   const [rtl, setRTL] = React.useState();
   const [preview, setPreview] = React.useState(true);
@@ -80,74 +80,76 @@ const App = () => {
       location: { pathname },
     } = window;
     const params = getParams();
-
-    if (params.id) {
-      fetch(`${apiUrl}/${params.id}`)
-        .then(response => response.json())
-        .then(nextDesign => {
-          upgradeDesign(nextDesign);
+    loadDesign(
+      pathname === '/_new' ? '_new' : params.id,
+      nextDesign => {
+        let nextSelected;
+        if (params.id) {
           const screen =
             (pathname && getScreenByPath(nextDesign, pathname)) ||
             nextDesign.screenOrder[0];
-          const nextSelected = { screen };
-          setDesign(nextDesign);
-          setSelected(nextSelected);
-          setChanges([{ design: nextDesign, selected: nextSelected }]);
-          setChangeIndex(0);
-          ReactGA.event({
-            category: 'switch',
-            action: 'published design',
-          });
-        });
-    } else {
-      let nextDesign;
-      let nextSelected;
-      if (pathname === '/_new') {
-        nextDesign = setupDesign(bare);
-        ReactGA.event({
-          category: 'switch',
-          action: 'force new design',
-        });
-      } else {
-        let stored = localStorage.getItem('activeDesign');
-        if (stored) {
-          stored = localStorage.getItem(stored);
-        }
-        if (stored) {
-          nextDesign = JSON.parse(stored);
-          stored = localStorage.getItem('selected');
+          nextSelected = { screen };
+        } else {
+          const stored = localStorage.getItem('selected');
           if (stored) nextSelected = JSON.parse(stored);
-          ReactGA.event({
-            category: 'switch',
-            action: 'previous design',
+          else {
+            const screen =
+              pathname && pathname !== '/_new'
+                ? getScreenByPath(nextDesign, pathname)
+                : nextDesign.screenOrder[0];
+            const component = nextDesign.screens[screen].root;
+            nextSelected = { screen, component };
+          }
+        }
+        setLoad(prevLoad => ({
+          ...prevLoad,
+          design: nextDesign,
+          selected: nextSelected,
+        }));
+
+        loadTheme(nextDesign.theme, nextTheme => {
+          setLoad(prevLoad => ({ ...prevLoad, theme: nextTheme }));
+        });
+
+        if (nextDesign.base) {
+          const id = nextDesign.base.split('id=')[1];
+          loadDesign(id, nextBase => {
+            setLoad(prevLoad => ({ ...prevLoad, base: nextBase }));
           });
         } else {
-          nextDesign = setupDesign(bare);
-          ReactGA.event({
-            category: 'switch',
-            action: 'new design',
-          });
+          setLoad(prevLoad => ({ ...prevLoad, base: true }));
         }
-      }
 
-      upgradeDesign(nextDesign);
-
-      if (!nextSelected) {
-        const screen =
-          pathname && pathname !== '/_new'
-            ? getScreenByPath(nextDesign, pathname)
-            : nextDesign.screenOrder[0];
-        const component = nextDesign.screens[screen].root;
-        nextSelected = { screen, component };
-      }
-
-      setDesign(nextDesign);
-      setSelected(nextSelected);
-      setPreview(false);
-      setChanges([{ design: nextDesign, selected: nextSelected }]);
-      setChangeIndex(0);
-    }
+        loadLibraries(nextDesign.library, nextLibraries => {
+          setLoad(prevLoad => ({ ...prevLoad, libraries: nextLibraries }));
+        });
+      },
+      true,
+    );
   }, []);
+
+  // finish loading
+  React.useEffect(() => {
+    if (
+      load &&
+      load.design &&
+      load.selected &&
+      load.theme &&
+      load.base &&
+      load.libraries
+    ) {
+      const params = getParams();
+      if (load.base && load.base !== true) setBase(load.base);
+      setLibraries(prevLibraries => [...load.libraries, ...prevLibraries]);
+      setTheme(load.theme);
+      setDesign(load.design);
+      setSelected(load.selected);
+      setPreview(!!params.id);
+      setChanges([{ design: load.design, selected: load.selected }]);
+      setChangeIndex(0);
+      setLoad(undefined);
+    }
+  }, [load]);
 
   React.useEffect(() => {
     const stored = localStorage.getItem('designs');
@@ -190,89 +192,64 @@ const App = () => {
 
   // push state when the user navigates
   React.useEffect(() => {
-    const {
-      location: { pathname },
-    } = document;
-    // track selected screen in browser location, so browser
-    // backward/forward controls work
-    const screen = design.screens[selected.screen];
-    if (screen && screen.path !== pathname) {
-      window.history.pushState(undefined, undefined, screen.path);
+    if (!load) {
+      const {
+        location: { pathname },
+      } = document;
+      // track selected screen in browser location, so browser
+      // backward/forward controls work
+      const screen = design.screens[selected.screen];
+      if (screen && screen.path !== pathname) {
+        window.history.pushState(undefined, undefined, screen.path);
+      }
     }
-  }, [design, selected.screen]);
+  }, [design, load, selected.screen]);
 
   // store design
   React.useEffect(() => {
-    // do this stuff lazily, so we don't bog down the UI
-    const timer = setTimeout(() => {
-      document.title = design.name;
+    if (!load) {
+      // do this stuff lazily, so we don't bog down the UI
+      const timer = setTimeout(() => {
+        document.title = design.name;
 
-      localStorage.setItem(design.name, JSON.stringify(design));
-      localStorage.setItem('activeDesign', design.name);
+        localStorage.setItem(design.name, JSON.stringify(design));
+        localStorage.setItem('activeDesign', design.name);
 
-      if (!designs.includes(design.name)) {
-        const nextDesigns = [design.name, ...designs];
-        localStorage.setItem('designs', JSON.stringify(nextDesigns));
-        setDesigns(nextDesigns);
+        if (!designs.includes(design.name)) {
+          const nextDesigns = [design.name, ...designs];
+          localStorage.setItem('designs', JSON.stringify(nextDesigns));
+          setDesigns(nextDesigns);
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [design, designs, load]);
+
+  // update libraries
+  React.useEffect(() => {
+    if (!load) {
+      loadLibraries(design.library, nextLibraries =>
+        setLibraries(prevLibraries => [...nextLibraries, ...prevLibraries]),
+      );
+    }
+  }, [design.library, load]);
+
+  // update base
+  React.useEffect(() => {
+    if (!load) {
+      if (design.base && !base) {
+        const id = design.base.split('id=')[1];
+        loadDesign(id, setBase);
+      } else if (base && !design.base) {
+        setBase(undefined);
       }
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [design, designs]);
-
-  // setup libraries
-  React.useEffect(() => {
-    if (design.library) {
-      Object.keys(design.library).forEach(name => {
-        const url = design.library[name];
-        if (name && url && !document.getElementById(name)) {
-          // add library
-          const script = document.createElement('script');
-          script.src = url;
-          script.id = name;
-          document.body.appendChild(script);
-          script.onload = () =>
-            setLibraries([window[name].designer, ...libraries]);
-        }
-      });
     }
-  }, [design.library, libraries]);
+  }, [base, design.base, load]);
 
-  // setup base
+  // update theme
   React.useEffect(() => {
-    if (design.base && !base) {
-      const id = design.base.split('id=')[1];
-      fetch(`${apiUrl}/${id}`)
-        .then(response => response.json())
-        .then(nextBase => {
-          setBase(nextBase);
-          const nextDesign = JSON.parse(JSON.stringify(design));
-          nextDesign.theme = nextBase.theme;
-          setDesign(nextDesign);
-        });
-    } else if (base && !design.base) {
-      setBase(undefined);
-    }
-  }, [base, design]);
-
-  // setup theme
-  React.useEffect(() => {
-    const nextTheme = design.theme;
-    if (typeof nextTheme === 'string') {
-      if (nextTheme.slice(0, 4) === 'http') {
-        // extract id from URL
-        const id = nextTheme.split('id=')[1];
-        if (id) {
-          fetch(`${themeApiUrl}/${id}`)
-            .then(response => response.json())
-            .then(setTheme);
-        }
-      } else setTheme(themes[nextTheme] || grommet);
-    } else if (typeof nextTheme === 'object') {
-      setTheme(nextTheme);
-    } else {
-      setTheme(grommet);
-    }
-  }, [design.theme]);
+    if (!load) loadTheme(design.theme, setTheme);
+  }, [design.theme, load]);
 
   // store selected
   React.useEffect(() => {
@@ -281,21 +258,23 @@ const App = () => {
 
   // add to changes, if needed
   React.useEffect(() => {
-    // do this stuff lazily to ride out typing sprees
-    const timer = setTimeout(() => {
-      // If we already have this design object, we must be doing an undo or
-      // redo, and therefore no need to add a change
-      if (!changes.some(c => c.design === design)) {
-        let nextChanges;
-        nextChanges = [...changes];
-        nextChanges = nextChanges.slice(changeIndex, 10);
-        nextChanges.unshift({ design, selected });
-        setChanges(nextChanges);
-        setChangeIndex(0);
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [changes, changeIndex, design, selected]);
+    if (!load) {
+      // do this stuff lazily to ride out typing sprees
+      const timer = setTimeout(() => {
+        // If we already have this design object, we must be doing an undo or
+        // redo, and therefore no need to add a change
+        if (!changes.some(c => c.design === design)) {
+          let nextChanges;
+          nextChanges = [...changes];
+          nextChanges = nextChanges.slice(changeIndex, 10);
+          nextChanges.unshift({ design, selected });
+          setChanges(nextChanges);
+          setChangeIndex(0);
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [changes, changeIndex, design, load, selected]);
 
   // persist preview state when it changes
   React.useEffect(() => {
@@ -376,7 +355,7 @@ const App = () => {
 
           <ErrorCatcher>
             <Canvas
-              design={theme ? design : setupDesign(loading)}
+              design={design}
               libraries={libraries}
               selected={selected}
               preview={preview}
