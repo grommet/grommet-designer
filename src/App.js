@@ -283,6 +283,16 @@ const App = () => {
     window.dispatchEvent(new Event('resize'));
   }, [preview]);
 
+  // set body editing class when preview changes, so we can use some
+  // custom CSS for Layer. Yes, this is a bit of a hack :(
+  React.useEffect(() => {
+    if (preview) {
+      document.body.classList.remove('editing');
+    } else {
+      document.body.classList.add('editing');
+    }
+  }, [preview]);
+
   const onKey = React.useCallback(
     event => {
       if (event.metaKey) {
@@ -329,7 +339,7 @@ const App = () => {
             responsive === 'small' || preview
               ? 'flex'
               : [
-                  ['small', '288px'],
+                  ['small', 'medium'],
                   ['1/2', 'flex'],
                   ['small', 'medium'],
                 ]

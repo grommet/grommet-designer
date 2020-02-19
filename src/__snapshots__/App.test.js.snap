@@ -5,7 +5,7 @@ exports[`App empty 1`] = `
   class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 cosHcc"
+    class="StyledGrid-sc-1wofa1l-0 bKMVmx"
   >
     <div
       class="StyledBox-sc-13pk1d4-0 cSrMOs"
@@ -2664,7 +2664,7 @@ exports[`App empty 2`] = `
   class="StyledGrommet-sc-19lkkz7-0 krBCge"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 cosHcc"
+    class="StyledGrid-sc-1wofa1l-0 bKMVmx"
   >
     <div
       class="StyledBox-sc-13pk1d4-0 cSrMOs"
