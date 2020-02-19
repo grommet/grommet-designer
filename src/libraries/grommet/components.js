@@ -520,8 +520,8 @@ export const components = {
       </Paragraph>
     ),
     documentation: 'https://v2.grommet.io/layer',
-    help: `The Layer can be seen by giving it a name and setting 'hide' to
-    'true', allowing you to populate its contents. Wire up a Layer so it can be
+    help: `The Layer can be seen by giving it a name and turning off 'hide',
+    allowing you to populate its contents. Wire up a Layer so it can be
     dynamically shown via a Button link, List onClickItem,
     or DataTable onClickRow.
     `,
