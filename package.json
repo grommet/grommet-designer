@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "grommet-theme-aruba": "^0.1.2",
-    "grommet-theme-dxc": "^0.1.2",
-    "grommet-theme-hp": "^0.1.2",
-    "grommet-theme-hpe": "^0.4.2",
     "lz-string": "^1.4.4",
     "react-ga": "^2.7.0"
   },
@@ -49,7 +45,7 @@
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.12.0",
     "react-is": "16.12.0",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.0",
     "styled-components": "^5.0.0"
   }
 }

@@ -17,7 +17,7 @@ exports[`App empty 1`] = `
           class="StyledBox-sc-13pk1d4-0 jsUGed"
         >
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="choose another design"
             type="button"
           >
@@ -53,7 +53,7 @@ exports[`App empty 1`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="share design"
             type="button"
           >
@@ -78,7 +78,7 @@ exports[`App empty 1`] = `
             class="StyledBox-sc-13pk1d4-0 eitMOG"
           >
             <button
-              class="StyledButton-sc-323bzc-0 gmWuiT"
+              class="StyledButton-sc-323bzc-0 jeaTYv"
               disabled=""
               title="undo last change"
               type="button"
@@ -94,7 +94,7 @@ exports[`App empty 1`] = `
               </svg>
             </button>
             <button
-              class="StyledButton-sc-323bzc-0 gmWuiT"
+              class="StyledButton-sc-323bzc-0 jeaTYv"
               disabled=""
               title="redo last change"
               type="button"
@@ -111,7 +111,7 @@ exports[`App empty 1`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="add a component"
             type="button"
           >
@@ -168,7 +168,7 @@ exports[`App empty 1`] = `
                 class="StyledStack__StyledStackLayer-ajspsk-1 AJRUK"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 OoUjl"
+                  class="StyledButton-sc-323bzc-0 jvkqEN"
                   type="button"
                 >
                   <svg
@@ -296,7 +296,7 @@ exports[`App empty 1`] = `
           class="StyledBox-sc-13pk1d4-0 kDGHLb"
         >
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="reset"
             type="button"
           >
@@ -314,7 +314,7 @@ exports[`App empty 1`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="duplicate"
             type="button"
           >
@@ -332,7 +332,7 @@ exports[`App empty 1`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="delete"
             type="button"
           >
@@ -2676,7 +2676,7 @@ exports[`App empty 2`] = `
           class="StyledBox-sc-13pk1d4-0 jsUGed"
         >
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="choose another design"
             type="button"
           >
@@ -2712,7 +2712,7 @@ exports[`App empty 2`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="share design"
             type="button"
           >
@@ -2737,7 +2737,7 @@ exports[`App empty 2`] = `
             class="StyledBox-sc-13pk1d4-0 eitMOG"
           >
             <button
-              class="StyledButton-sc-323bzc-0 gmWuiT"
+              class="StyledButton-sc-323bzc-0 jeaTYv"
               disabled=""
               title="undo last change"
               type="button"
@@ -2753,7 +2753,7 @@ exports[`App empty 2`] = `
               </svg>
             </button>
             <button
-              class="StyledButton-sc-323bzc-0 gmWuiT"
+              class="StyledButton-sc-323bzc-0 jeaTYv"
               disabled=""
               title="redo last change"
               type="button"
@@ -2770,7 +2770,7 @@ exports[`App empty 2`] = `
             </button>
           </div>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="add a component"
             type="button"
           >
@@ -2827,7 +2827,7 @@ exports[`App empty 2`] = `
                 class="StyledStack__StyledStackLayer-ajspsk-1 AJRUK"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 OoUjl"
+                  class="StyledButton-sc-323bzc-0 jvkqEN"
                   type="button"
                 >
                   <svg
@@ -2955,7 +2955,7 @@ exports[`App empty 2`] = `
           class="StyledBox-sc-13pk1d4-0 kDGHLb"
         >
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="reset"
             type="button"
           >
@@ -2973,7 +2973,7 @@ exports[`App empty 2`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="duplicate"
             type="button"
           >
@@ -2991,7 +2991,7 @@ exports[`App empty 2`] = `
             </svg>
           </button>
           <button
-            class="StyledButton-sc-323bzc-0 bVzYEh"
+            class="StyledButton-sc-323bzc-0 hzPhWp"
             title="delete"
             type="button"
           >
