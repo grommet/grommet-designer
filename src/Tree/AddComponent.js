@@ -34,13 +34,16 @@ const AddComponent = ({
 }) => {
   const selectedComponent = design.components[selected.component];
   const selectedType = React.useMemo(
-    () => getComponentType(libraries, selectedComponent.type),
-    [libraries, selectedComponent.type],
+    () =>
+      selectedComponent
+        ? getComponentType(libraries, selectedComponent.type)
+        : undefined,
+    [libraries, selectedComponent],
   );
   const locations = React.useMemo(() => {
     const parent = getParent(design, selected.component);
     if (!parent) return allLocations.filter(l => l === 'within');
-    if (selectedType.container) return allLocations;
+    if (selectedType && selectedType.container) return allLocations;
     return allLocations.filter(l => l !== 'within');
   }, [design, selected.component, selectedType]);
   const [location, setLocation] = React.useState();
@@ -144,7 +147,9 @@ const AddComponent = ({
             onChange={event => setLocation(event.value)}
             valueLabel={
               <Box pad="small">
-                <Text>{`${location} ${displayName(selectedComponent)}`}</Text>
+                <Text>{`${location} ${
+                  selectedComponent ? displayName(selectedComponent) : ''
+                }`}</Text>
               </Box>
             }
           />
