@@ -21,7 +21,7 @@ import {
 import { displayName, getComponentType } from '../utils';
 import ActionButton from '../components/ActionButton';
 
-const allLocations = ['within', 'after', 'before', 'containing'];
+const allLocations = ['within', 'after', 'before', 'container of'];
 
 const AddComponent = ({
   base,

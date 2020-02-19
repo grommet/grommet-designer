@@ -168,7 +168,7 @@ export const insertComponent = ({
   if (selected.component) {
     const selectedComponent = nextDesign.components[selected.component];
     const type = getComponentType(libraries, component.type);
-    if (location === 'containing' && type.container) {
+    if (location === 'container of' && type.container) {
       const parent = getParent(nextDesign, selected.component);
       const index = parent.children.indexOf(selected.component);
       parent.children[index] = id;
