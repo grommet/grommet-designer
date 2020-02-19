@@ -38,6 +38,7 @@ const structure = [
       'CheckBox',
       'Form',
       'FormField',
+      'RadioButtonGroup',
       'Select',
       'TextArea',
       'TextInput',

@@ -27,6 +27,7 @@ import {
   Menu,
   Meter,
   Paragraph,
+  RadioButtonGroup,
   Select,
   Stack,
   Text,
@@ -803,6 +804,18 @@ export const components = {
       mask: MaskedInputMask,
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
+      value: '',
+    },
+  },
+  RadioButtonGroup: {
+    component: RadioButtonGroup,
+    name: 'RadioButtonGroup',
+    defaultProps: {
+      options: ['option 1', 'option 2'],
+    },
+    properties: {
+      disabled: false,
+      options: SelectOptions,
       value: '',
     },
   },
