@@ -128,7 +128,10 @@ export const duplicateComponent = (nextDesign, id, parentId) => {
   const parent = parentId
     ? nextDesign.components[parentId]
     : getParent(nextDesign, id);
-  parent.children.push(newId);
+  if (!parent.children) parent.children = [];
+  const index = parent.children.indexOf(id);
+  if (index !== -1) parent.children.splice(index + 1, 0, newId);
+  else parent.children.push(newId);
   return newId;
 };
 
