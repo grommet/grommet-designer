@@ -12,7 +12,7 @@ import {
   TextInput,
   ThemeContext,
 } from 'grommet';
-import { Close, FormClose, FormDown, FormUp } from 'grommet-icons';
+import { Close, FormClose, FormDown, FormUp, Location } from 'grommet-icons';
 import {
   aliases as iconAliases,
   names as iconNames,
@@ -73,6 +73,8 @@ const Property = React.forwardRef((props, ref) => {
     linkOptions,
     name,
     property: propertyArg,
+    selected,
+    setSelected,
     sub,
     theme,
     value,
@@ -154,6 +156,18 @@ const Property = React.forwardRef((props, ref) => {
         label={name}
         htmlFor={name}
       >
+        {isRef && value && (
+          <Button
+            icon={<Location />}
+            hoverIndicator
+            onClick={() => {
+              setSelected({
+                ...selected,
+                component: parseInt(value, 10),
+              });
+            }}
+          />
+        )}
         <Select
           ref={ref}
           plain

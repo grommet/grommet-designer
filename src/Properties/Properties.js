@@ -170,11 +170,12 @@ export default ({
             first={index === 0}
             design={design}
             theme={theme}
-            selected={selected}
             linkOptions={linkOptions}
             name={propName}
             property={properties[propName]}
             props={props}
+            selected={selected}
+            setSelected={setSelected}
             value={props ? props[propName] : undefined}
             onChange={value => setProp(propName, value)}
           />
