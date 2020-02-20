@@ -135,6 +135,7 @@ const Property = React.forwardRef((props, ref) => {
       options = options.filter(
         o =>
           searchExp.test(o.label || o) ||
+          (isRef && searchExp.test(getDisplayName(design, o))) ||
           (aliases &&
             aliases[o] &&
             aliases[o].filter(a => searchExp.test(a)).length > 0),
