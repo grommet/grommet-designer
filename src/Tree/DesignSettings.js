@@ -126,7 +126,7 @@ export default ({ design, onClose, setDesign, theme }) => (
       <Box direction="row" justify="between" align="center">
         <Heading level={3}>Theme</Heading>
         <Anchor
-          href="https://theme-designer.grommet.io"
+          href={design.theme || 'https://theme-designer.grommet.io'}
           target="_blank"
           rel="noopener noreferrer"
         >
