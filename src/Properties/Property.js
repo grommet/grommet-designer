@@ -69,6 +69,7 @@ const Property = React.forwardRef((props, ref) => {
   } = props; // need props for CustomProperty
   const baseTheme = React.useContext(ThemeContext);
   const [stringValue, setStringValue] = React.useState(value || '');
+  React.useEffect(() => setStringValue(value || ''), [value]);
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
   const searchExp = React.useMemo(
@@ -188,7 +189,10 @@ const Property = React.forwardRef((props, ref) => {
           ]}
           value={stringValue}
           onChange={event => {
-            const nextValue = event.target.value;
+            const nextValue =
+              event.target.value === ''
+                ? undefined
+                : parseInt(event.target.value, 10);
             setStringValue(nextValue);
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => onChange(nextValue), 500);
