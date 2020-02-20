@@ -291,6 +291,7 @@ const Designs = ({
         <Button
           label="help"
           href="https://github.com/grommet/grommet-designer/blob/master/README.md"
+          target="_blank"
         />
       </Box>
     </Action>
