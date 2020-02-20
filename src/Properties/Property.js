@@ -20,6 +20,7 @@ import {
 } from '../libraries/designer/Icon';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
+import { getDisplayName } from '../design';
 
 const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
 
@@ -36,6 +37,16 @@ const LinkLabel = design => ({ active, value }) => (
   <Box pad="small">
     <Text weight={active ? 'bold' : undefined}>
       {(value === 'undefined' && 'undefined') || (value && value.label) || ''}
+    </Text>
+  </Box>
+);
+
+const ReferenceLabel = design => ({ active, value }) => (
+  <Box pad="small">
+    <Text weight={active ? 'bold' : undefined}>
+      {(value === 'undefined' && 'undefined') ||
+        (value && getDisplayName(design, value)) ||
+        ''}
     </Text>
   </Box>
 );
@@ -107,6 +118,16 @@ const Property = React.forwardRef((props, ref) => {
     if (isLink) {
       options = linkOptions;
       Label = LinkLabel(design);
+    }
+    if (!Label) Label = OptionLabel;
+    const isRef = property.includes('-reference-');
+    if (isRef) {
+      const isReferenceable = component =>
+        component.type !== 'Grommet' && component.type !== 'Reference';
+      options = Object.keys(design.components).filter(id =>
+        isReferenceable(design.components[id]),
+      );
+      Label = ReferenceLabel(design);
     }
     if (!Label) Label = OptionLabel;
 

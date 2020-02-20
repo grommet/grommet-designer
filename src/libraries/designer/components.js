@@ -1,7 +1,6 @@
 import React from 'react';
 import { Paragraph } from 'grommet';
 import Icon from './Icon';
-import ReferenceComponent from './ReferenceComponent';
 
 export const components = {
   Icon: {
@@ -46,7 +45,7 @@ export const components = {
       includeChildren: true,
     },
     properties: {
-      component: ReferenceComponent,
+      component: ['-reference-'],
       includeChildren: true,
     },
   },
