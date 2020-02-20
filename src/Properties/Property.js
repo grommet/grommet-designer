@@ -108,7 +108,6 @@ const Property = React.forwardRef((props, ref) => {
       Label = LinkLabel(design);
     }
     if (!Label) Label = OptionLabel;
-    if (name === 'link') console.log('!!!', options);
 
     if (searchExp) {
       options = options.filter(
