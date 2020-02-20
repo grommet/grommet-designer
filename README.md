@@ -8,19 +8,22 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 ### Command shortcuts
 
-- **command-e** or **windows-E**: toggles preview vs. edit modes
+- **command-e** or **control-E**: toggles preview vs. edit modes
 - **ArrowUp** and **ArrowDown**: traverses the selection across siblings
 - **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
 - **c**: toggles collapsing the currently selected component
 - **p**: initiates searching of the currently selected component's properties
 - **d**: duplicate the current component, and all of its children
 - **a**: opens the add component dialog
-- **command-click** or **windows-click**: when adding a component, it
+- **command-click** or **control-click**: when adding a component, it
   will be added as the parent of the currently selected component
-- **command-delete** or **windows-backspace**: deletes the currently
+- **command-delete** or **control-backspace**: deletes the currently
   selected component and all of its children
 - **z**: undo the most recent change
 - **Z**: redo the most recently undone change
+- **command-c** or **control-c**: copies the selected component
+- **command-v** or **control-v**: pastes the previously copied component
+  into the selected component
 
 ### Linking
 

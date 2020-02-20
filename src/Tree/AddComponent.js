@@ -171,7 +171,7 @@ const AddComponent = ({
                     if (typeName) {
                       add({
                         typeName,
-                        containSelected: event.metaKey,
+                        containSelected: event.metaKey || event.ctrlKey,
                       });
                     }
                   }
@@ -217,7 +217,7 @@ const AddComponent = ({
                             onClick={event =>
                               add({
                                 typeName: `${libraryName}.${name}`,
-                                containSelected: event.metaKey,
+                                containSelected: event.metaKey || event.ctrlKey,
                               })
                             }
                           >
@@ -253,7 +253,7 @@ const AddComponent = ({
                         hoverIndicator
                         onClick={event =>
                           add({
-                            containSelected: event.metaKey,
+                            containSelected: event.metaKey || event.ctrlKey,
                             templateDesign: tempDesign,
                             template: temps[name],
                           })

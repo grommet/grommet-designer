@@ -193,12 +193,12 @@ const Tree = ({
         event.preventDefault();
         onRedo();
       }
-      if (event.key === 'c' && event.metaKey) {
+      if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
         setCopied(selected);
       } else if (event.key === 'c') {
         toggleCollapse(selected.component);
       }
-      if (event.key === 'v' && event.metaKey) {
+      if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
         const nextDesign = JSON.parse(JSON.stringify(design));
         const newId = duplicateComponent(
           nextDesign,

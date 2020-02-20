@@ -295,7 +295,7 @@ const App = () => {
 
   const onKey = React.useCallback(
     event => {
-      if (event.metaKey) {
+      if (event.metaKey || event.ctrlKey) {
         if (event.key === 'e' || event.key === 'E') {
           event.preventDefault();
           setPreview(!preview);

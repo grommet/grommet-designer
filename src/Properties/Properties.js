@@ -124,7 +124,7 @@ export default ({
     if (document.activeElement === document.body) {
       if (
         (event.key === 'Backspace' && event.metaKey) || // osx
-        (event.key === 'Delete' && event.ctrlKey)
+        ((event.key === 'Backspace' || event.key === 'Delete') && event.ctrlKey)
       ) {
         // windows
         event.preventDefault();
