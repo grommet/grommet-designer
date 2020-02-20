@@ -2634,10 +2634,11 @@ exports[`App empty 1`] = `
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 hNUzGV"
+              class="StyledBox-sc-13pk1d4-0 iptkul"
             >
               <label
                 class="StyledBox-sc-13pk1d4-0 cacHrb"
+                for="style"
               >
                 <span
                   class="StyledText-sc-1sadyjn-0 hUokoe"
@@ -2647,8 +2648,9 @@ exports[`App empty 1`] = `
               </label>
               <textarea
                 class="StyledTextArea-sc-17i3mwp-0 ioQuPU"
+                id="style"
                 name="style"
-                rows="2"
+                style="text-align: end;"
               />
             </div>
           </div>
@@ -5293,10 +5295,11 @@ exports[`App empty 2`] = `
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 hNUzGV"
+              class="StyledBox-sc-13pk1d4-0 iptkul"
             >
               <label
                 class="StyledBox-sc-13pk1d4-0 cacHrb"
+                for="style"
               >
                 <span
                   class="StyledText-sc-1sadyjn-0 hUokoe"
@@ -5306,8 +5309,9 @@ exports[`App empty 2`] = `
               </label>
               <textarea
                 class="StyledTextArea-sc-17i3mwp-0 ioQuPU"
+                id="style"
                 name="style"
-                rows="2"
+                style="text-align: end;"
               />
             </div>
           </div>

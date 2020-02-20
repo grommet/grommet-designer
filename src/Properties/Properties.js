@@ -8,11 +8,12 @@ import {
   Keyboard,
   Markdown,
   Paragraph,
-  TextArea,
   TextInput,
 } from 'grommet';
 import { Duplicate, Help, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
+import TextInputField from './TextInputField';
+import TextAreaField from './TextAreaField';
 import {
   deleteComponent,
   duplicateComponent,
@@ -22,8 +23,6 @@ import {
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getComponentType } from '../utils';
-
-const parseStyle = style => (style ? JSON.stringify(style, null, 2) : '');
 
 export default ({
   component,
@@ -43,7 +42,6 @@ export default ({
     () => search && new RegExp(`^${search}`, 'i'),
     [search],
   );
-  const [style, setStyle] = React.useState(parseStyle(component.props.style));
   const linkOptions = React.useMemo(
     () => getLinkOptions(design, libraries, selected),
     [design, libraries, selected],
@@ -53,9 +51,6 @@ export default ({
   const defaultRef = React.useRef();
 
   React.useEffect(() => setSearch(undefined), [component.id]);
-  React.useEffect(() => setStyle(parseStyle(component.props.style)), [
-    component.props.style,
-  ]);
 
   React.useEffect(() => {
     if (search !== undefined) searchRef.current.focus();
@@ -78,20 +73,6 @@ export default ({
     }
     if (value !== undefined) props[propName] = value;
     else delete props[propName];
-    setDesign(nextDesign);
-  };
-
-  const setText = text => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    component.text = text;
-    setDesign(nextDesign);
-  };
-
-  const setName = name => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    component.name = name;
     setDesign(nextDesign);
   };
 
@@ -260,33 +241,30 @@ export default ({
                 </Box>
               )}
               {(!searchExp || searchExp.test('name')) && (
-                <Field label="name" htmlFor="name">
-                  <TextInput
-                    ref={searchExp && !firstRef ? defaultRef : undefined}
-                    id="name"
-                    name="name"
-                    plain
-                    value={component.name || ''}
-                    onChange={event => setName(event.target.value)}
-                    style={{ textAlign: 'end' }}
-                  />
-                  {(firstRef = true)}
-                </Field>
+                <TextInputField
+                  name="name"
+                  value={component.name}
+                  onChange={value => {
+                    const nextDesign = JSON.parse(JSON.stringify(design));
+                    const component = nextDesign.components[selected.component];
+                    component.name = value;
+                    setDesign(nextDesign);
+                  }}
+                />
               )}
               {type.text && (!searchExp || searchExp.test('text')) && (
-                <Field label="text" htmlFor="text">
-                  <TextArea
-                    ref={searchExp && !firstRef ? defaultRef : undefined}
-                    id="text"
-                    name="text"
-                    plain
-                    value={
-                      component.text === undefined ? type.text : component.text
-                    }
-                    onChange={event => setText(event.target.value)}
-                  />
-                  {(firstRef = true)}
-                </Field>
+                <TextAreaField
+                  name="text"
+                  value={
+                    component.text === undefined ? type.text : component.text
+                  }
+                  onChange={value => {
+                    const nextDesign = JSON.parse(JSON.stringify(design));
+                    const component = nextDesign.components[selected.component];
+                    component.text = value;
+                    setDesign(nextDesign);
+                  }}
+                />
               )}
               {type.hideable &&
                 component.name &&
@@ -389,25 +367,22 @@ export default ({
                 )}
 
                 {(!searchExp || searchExp.test('style')) && (
-                  <Field label="style" first margin={{ top: 'large' }}>
-                    <TextArea
-                      ref={searchExp && !firstRef ? defaultRef : undefined}
-                      name="style"
-                      rows={2}
-                      plain
-                      value={style}
-                      onChange={event => {
-                        setStyle(event.target.value);
-                        try {
-                          const json = JSON.parse(event.target.value);
-                          setProp('style', json);
-                        } catch (e) {
-                          // console.log('!!! catch');
-                        }
-                      }}
-                    />
-                    {(firstRef = true)}
-                  </Field>
+                  <TextAreaField
+                    name="style"
+                    value={
+                      component.style
+                        ? JSON.stringify(component.style, null, 2)
+                        : ''
+                    }
+                    onChange={value => {
+                      try {
+                        const json = JSON.parse(value);
+                        setProp('style', json);
+                      } catch (e) {
+                        // console.log('!!! catch');
+                      }
+                    }}
+                  />
                 )}
               </Box>
             )}
