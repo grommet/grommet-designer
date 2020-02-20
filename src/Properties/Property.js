@@ -72,7 +72,7 @@ const Property = React.forwardRef((props, ref) => {
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
   const searchExp = React.useMemo(
-    () => searchText && new RegExp(`^${searchText}`, 'i'),
+    () => searchText && new RegExp(`${searchText}`, 'i'),
     [searchText],
   );
   const [dropTarget, setDropTarget] = React.useState();
@@ -108,11 +108,12 @@ const Property = React.forwardRef((props, ref) => {
       Label = LinkLabel(design);
     }
     if (!Label) Label = OptionLabel;
+    if (name === 'link') console.log('!!!', options);
 
     if (searchExp) {
       options = options.filter(
         o =>
-          searchExp.test(o) ||
+          searchExp.test(o.label || o) ||
           (aliases &&
             aliases[o] &&
             aliases[o].filter(a => searchExp.test(a)).length > 0),
