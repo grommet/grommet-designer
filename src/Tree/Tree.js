@@ -275,7 +275,7 @@ const Tree = ({
     const component = design.components[id];
     if (!component) return null;
     const reference =
-      component.type === 'Reference' &&
+      component.type === 'designer.Reference' &&
       design.components[component.props.component];
     const collapserColor = selectedAncestors.includes(id)
       ? 'accent-1'
@@ -332,7 +332,7 @@ const Tree = ({
                 {displayName(reference || component)}
               </Text>
               <Text size="small" truncate>
-                {treeSubName(reference || component)}
+                {reference ? 'Reference' : treeSubName(component)}
               </Text>
             </Box>
           </Button>
