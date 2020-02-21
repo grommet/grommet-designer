@@ -159,7 +159,11 @@ const Canvas = ({
   };
 
   const followLink = to => {
-    if (to.component) {
+    if (to.control === 'toggleThemeMode') {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
+      setDesign(nextDesign);
+    } else if (to.component) {
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;

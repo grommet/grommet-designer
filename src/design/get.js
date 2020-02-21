@@ -103,6 +103,7 @@ export const getLinkOptions = (design, libraries, selected) => {
         screen: s.id,
         label: s.name || `Screen ${screen.id}`,
       })),
+    { control: 'toggleThemeMode', label: '-toggle theme mode-' },
   ];
 };
 
