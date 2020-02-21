@@ -6,6 +6,7 @@ import {
   Heading,
   Keyboard,
   Layer,
+  Paragraph,
   Select,
   Text,
   TextInput,
@@ -51,6 +52,7 @@ const AddComponent = ({
   React.useEffect(() => setLocation(locations[0]), [locations]);
 
   const [search, setSearch] = React.useState('');
+  const [addMode, setAddMode] = React.useState('copy');
 
   const inputRef = React.useRef();
 
@@ -91,9 +93,15 @@ const AddComponent = ({
         addComponent(nextDesign, libraries, nextSelected, typeName);
       }
     } else if (template) {
-      const id = copyComponent(nextDesign, templateDesign, template.id);
-      nextDesign.components[id].name = template.name;
-      nextSelected.component = id;
+      if (addMode === 'copy') {
+        const id = copyComponent(nextDesign, templateDesign, template.id);
+        nextDesign.components[id].name = template.name;
+        nextSelected.component = id;
+      } else if (addMode === 'reference') {
+        addComponent(nextDesign, libraries, nextSelected, 'designer.Reference');
+        nextDesign.components[nextSelected.component].props.component =
+          template.id;
+      }
     }
 
     if (selected.screen === nextSelected.screen) {
@@ -240,8 +248,11 @@ const AddComponent = ({
                   Object.keys(templates).some(name => name.match(searchExp)),
               )
               .map(({ name, design: tempDesign, templates: temps }) => (
-                <Box key={name} flex={false}>
-                  <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                <Box key={name} flex={false} border="top">
+                  <Box
+                    pad={{ horizontal: 'small', vertical: 'xsmall' }}
+                    margin={{ top: 'small' }}
+                  >
                     <Heading level="3" size="small" margin="none">
                       {name}
                     </Heading>
@@ -265,6 +276,18 @@ const AddComponent = ({
                         </Box>
                       </Button>
                     ))}
+                  <Box pad="small">
+                    <Select
+                      name="addMode"
+                      options={['copy', 'reference']}
+                      value={addMode}
+                      onChange={({ option }) => setAddMode(option)}
+                    />
+                    <Paragraph size="small" color="text-xweak">
+                      For named components in your design, you can add a copy of
+                      it or a Reference to it.
+                    </Paragraph>
+                  </Box>
                 </Box>
               ))}
           </Box>
