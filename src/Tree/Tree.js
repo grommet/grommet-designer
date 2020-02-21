@@ -31,7 +31,8 @@ const treeSubName = component =>
   !component.name &&
   !component.text &&
   !component.props.name &&
-  !component.props.label
+  !component.props.label &&
+  !component.props.icon
     ? undefined
     : component.type.split('.')[1] || component.type;
 

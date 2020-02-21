@@ -15,5 +15,6 @@ export const displayName = component =>
   component.text ||
   component.props.name ||
   component.props.label ||
+  component.props.icon ||
   component.type.split('.')[1] ||
   component.type;
