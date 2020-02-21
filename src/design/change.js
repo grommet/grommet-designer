@@ -173,8 +173,14 @@ export const insertComponent = ({
     const type = getComponentType(libraries, component.type);
     if (location === 'container of' && type.container) {
       const parent = getParent(nextDesign, selected.component);
-      const index = parent.children.indexOf(selected.component);
-      parent.children[index] = id;
+      if (!parent) {
+        // no parent means we want to be the screen root
+        const screen = nextDesign.screens[selected.screen];
+        screen.root = id;
+      } else {
+        const index = parent.children.indexOf(selected.component);
+        parent.children[index] = id;
+      }
       component.children = [selected.component];
     } else if (location === 'before') {
       const parent = getParent(nextDesign, selected.component);

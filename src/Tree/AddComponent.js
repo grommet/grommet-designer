@@ -42,7 +42,8 @@ const AddComponent = ({
   );
   const locations = React.useMemo(() => {
     const parent = getParent(design, selected.component);
-    if (!parent) return allLocations.filter(l => l === 'within');
+    if (!parent)
+      return allLocations.filter(l => l === 'within' || l === 'container of');
     if (selectedType && selectedType.container) return allLocations;
     return allLocations.filter(l => l !== 'within');
   }, [design, selected.component, selectedType]);
