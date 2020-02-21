@@ -20,7 +20,7 @@ import {
 } from '../libraries/designer/Icon';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
-import { getDisplayName } from '../design';
+import { getDisplayName, getScreenForComponent } from '../design';
 
 const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
 
@@ -123,6 +123,7 @@ const Property = React.forwardRef((props, ref) => {
     }
     if (!Label) Label = OptionLabel;
     const isRef = property.includes('-reference-');
+    let referenceSelected;
     if (isRef) {
       const isReferenceable = component =>
         component.type !== 'Grommet' && component.type !== 'Reference';
@@ -130,6 +131,12 @@ const Property = React.forwardRef((props, ref) => {
         isReferenceable(design.components[id]),
       );
       Label = ReferenceLabel(design);
+      const referenceComponentId = parseInt(value, 10);
+      referenceSelected = {
+        ...selected,
+        screen: getScreenForComponent(design, referenceComponentId),
+        component: referenceComponentId,
+      };
     }
     if (!Label) Label = OptionLabel;
 
@@ -160,12 +167,7 @@ const Property = React.forwardRef((props, ref) => {
           <Button
             icon={<Location />}
             hoverIndicator
-            onClick={() => {
-              setSelected({
-                ...selected,
-                component: parseInt(value, 10),
-              });
-            }}
+            onClick={() => setSelected(referenceSelected)}
           />
         )}
         <Select
