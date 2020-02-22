@@ -21,6 +21,7 @@ import {
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getDisplayName, getScreenForComponent } from '../design';
+import useDebounce from './useDebounce';
 
 const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
 
@@ -68,6 +69,7 @@ const jsonValue = value => {
 
 const Property = React.forwardRef((props, ref) => {
   const {
+    componentId,
     design,
     first,
     linkOptions,
@@ -77,12 +79,11 @@ const Property = React.forwardRef((props, ref) => {
     setSelected,
     sub,
     theme,
-    value,
+    value: valueProp,
     onChange,
   } = props; // need props for CustomProperty
   const baseTheme = React.useContext(ThemeContext);
-  const [stringValue, setStringValue] = React.useState(value || '');
-  React.useEffect(() => setStringValue(value || ''), [value]);
+  const [value, setValue] = useDebounce(componentId, valueProp, onChange);
   const [expand, setExpand] = React.useState();
   const [searchText, setSearchText] = React.useState('');
   const searchExp = React.useMemo(
@@ -91,7 +92,6 @@ const Property = React.forwardRef((props, ref) => {
   );
   const [dropTarget, setDropTarget] = React.useState();
   const fieldRef = React.useCallback(node => setDropTarget(node), []);
-  let debounceTimer;
 
   let property =
     propertyArg && propertyArg.dynamicProperty
@@ -201,13 +201,8 @@ const Property = React.forwardRef((props, ref) => {
           id={name}
           name={name}
           plain
-          value={stringValue}
-          onChange={event => {
-            const nextValue = event.target.value;
-            setStringValue(nextValue);
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => onChange(nextValue), 500);
-          }}
+          value={value || ''}
+          onChange={event => setValue(event.target.value)}
           style={{ textAlign: 'end' }}
         />
       </Field>
@@ -225,15 +220,13 @@ const Property = React.forwardRef((props, ref) => {
               regexp: /^\d*$/,
             },
           ]}
-          value={stringValue}
+          value={value || ''}
           onChange={event => {
             const nextValue =
               event.target.value === ''
                 ? undefined
                 : parseInt(event.target.value, 10);
-            setStringValue(nextValue);
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => onChange(nextValue), 500);
+            setValue(nextValue);
           }}
           style={{ textAlign: 'end' }}
         />

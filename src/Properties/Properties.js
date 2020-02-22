@@ -155,7 +155,7 @@ export default ({
   const parentType = parent && getComponentType(libraries, parent.type);
   let firstRef = false;
 
-  const renderProperties = (properties, props) =>
+  const renderProperties = (id, properties, props) =>
     Object.keys(properties)
       .filter(propName => !searchExp || searchExp.test(propName))
       .filter(
@@ -164,13 +164,14 @@ export default ({
           !properties[propName].startsWith('-component-'),
       )
       .map((propName, index) => (
-        <Fragment key={propName}>
+        <Fragment key={`${id}-${propName}`}>
           <Property
             ref={searchExp && !firstRef ? defaultRef : undefined}
             first={index === 0}
             design={design}
             theme={theme}
             linkOptions={linkOptions}
+            componentId={component.id}
             name={propName}
             property={properties[propName]}
             props={props}
@@ -244,7 +245,8 @@ export default ({
               {(!searchExp || searchExp.test('name')) && (
                 <TextInputField
                   name="name"
-                  value={component.name}
+                  componentId={component.id}
+                  value={component.name || ''}
                   onChange={value => {
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
@@ -256,8 +258,11 @@ export default ({
               {type.text && (!searchExp || searchExp.test('text')) && (
                 <TextAreaField
                   name="text"
+                  componentId={component.id}
                   value={
-                    component.text === undefined ? type.text : component.text
+                    component.text === undefined
+                      ? type.text
+                      : component.text || ''
                   }
                   onChange={value => {
                     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -286,6 +291,7 @@ export default ({
               {type.designProperties && (
                 <Box flex="grow">
                   {renderProperties(
+                    component.id,
                     type.designProperties,
                     component.designProps,
                   )}
@@ -329,6 +335,7 @@ export default ({
                               {label}
                             </Heading>
                             {renderProperties(
+                              component.id,
                               sectionProperties,
                               component.props,
                             )}
@@ -346,7 +353,11 @@ export default ({
                     >
                       Properties
                     </Heading>
-                    {renderProperties(type.properties, component.props)}
+                    {renderProperties(
+                      component.id,
+                      type.properties,
+                      component.props,
+                    )}
                     {parentType && parentType.container && (
                       <Box pad="medium">
                         <Paragraph size="small" color="text-xweak">
@@ -370,6 +381,7 @@ export default ({
                 {(!searchExp || searchExp.test('style')) && (
                   <TextAreaField
                     name="style"
+                    componentId={component.id}
                     value={
                       component.style
                         ? JSON.stringify(component.style, null, 2)
