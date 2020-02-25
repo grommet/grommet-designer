@@ -43,15 +43,42 @@ export const loadDesign = (id, setDesign, initial) => {
 const themeApiUrl =
   'https://us-central1-grommet-designer.cloudfunctions.net/themes';
 
+const npmTheme = {};
+
 export const loadTheme = (theme, setTheme) => {
   const themeUrl = themes[theme] || theme;
   if (typeof themeUrl === 'string' && themeUrl.slice(0, 4) === 'http') {
-    // extract id from URL
+    // this could be from the theme designer or from npmjs
     const id = themeUrl.split('id=')[1];
     if (id) {
+      // this is from the theme designer
       fetch(`${themeApiUrl}/${id}`)
         .then(response => response.json())
         .then(setTheme);
+    } else if (themeUrl.match('grommet-theme-')) {
+      // this is from npmjs
+      // e.g. https://unpkg.com/grommet-theme-hpe/dist/grommet-theme-hpe.min.js
+      const name = themeUrl.split('/')[3].split('.')[0]; // grommet-theme-hpe
+      const nameParts = name.split('-'); // [grommet, theme, hpe]
+      const varName = nameParts
+        .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
+        .join(''); // GrommetThemeHpe
+      const subName = nameParts[2]; // hpe
+      if (!document.getElementById(name)) {
+        // we haven't loaded this theme, add it in its own script tag
+        const script = document.createElement('script');
+        script.src = themeUrl;
+        script.id = name;
+        document.body.appendChild(script);
+        script.onload = () => {
+          npmTheme[name] = window[varName][subName];
+          setTheme(npmTheme[name]);
+        };
+      } else {
+        setTheme(npmTheme[name]);
+      }
+    } else {
+      setTheme(grommet);
     }
   } else if (typeof themeUrl === 'object') {
     setTheme(themeUrl);
