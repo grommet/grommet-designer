@@ -791,6 +791,7 @@ export const components = {
     },
     properties: {
       color: ['-color-'],
+      disabled: false,
       error: 'error',
       help: 'help',
       label: 'label',
@@ -801,6 +802,7 @@ export const components = {
     component: MaskedInput,
     name: 'MaskedInput',
     properties: {
+      disabled: false,
       mask: MaskedInputMask,
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
@@ -844,6 +846,7 @@ export const components = {
     component: TextArea,
     name: 'TextArea',
     properties: {
+      disabled: false,
       fill: false,
       placeholder: '',
       plain: false,
@@ -856,6 +859,7 @@ export const components = {
     component: TextInput,
     name: 'TextInput',
     properties: {
+      disabled: false,
       placeholder: '',
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
