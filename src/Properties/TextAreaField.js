@@ -3,8 +3,8 @@ import { TextArea } from 'grommet';
 import Field from '../components/Field';
 import useDebounce from './useDebounce';
 
-export default ({ componentId, onChange, name, value: valueProp }) => {
-  const [value, setValue] = useDebounce(componentId, valueProp, onChange);
+export default ({ onChange, name, value: valueProp }) => {
+  const [value, setValue] = useDebounce(valueProp, onChange);
   return (
     <Field label={name} htmlFor={name}>
       <TextArea

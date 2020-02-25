@@ -4,8 +4,8 @@ import Field from '../components/Field';
 import useDebounce from './useDebounce';
 
 const StringProperty = React.forwardRef(
-  ({ componentId, first, name, onChange, sub, value: valueProp }, ref) => {
-    const [value, setValue] = useDebounce(componentId, valueProp, onChange);
+  ({ first, name, onChange, sub, value: valueProp }, ref) => {
+    const [value, setValue] = useDebounce(valueProp, onChange);
     return (
       <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
         <MaskedInput

@@ -1,21 +1,36 @@
 import React from 'react';
 
-export default (componentId, valueProp, onChange) => {
+// Performs updates from Properties but accomodates updates from Canvas.
+export default (valueProp, onChange) => {
   const [value, setValue] = React.useState(valueProp);
-  const [previousId, setPreviousId] = React.useState(componentId);
+
+  // setting tracks when we're between set() and onChange().
+  // When the user is typing, we set it to true. When he stops typing and
+  // we call onChange, we clear it.
+  // When the user changes the value from the Canvas, we'll update our
+  // value if setting isn't true.
+  // This is so we don't throw out subsequent characters that user has typed
+  // since we called onChange() but haven't received it via valueProp yet.
+  const [setting, setSetting] = React.useState(false);
   React.useEffect(() => {
-    // if the component changes, just update our value
-    if (componentId !== previousId) {
-      setValue(valueProp);
-      setPreviousId(componentId);
-      return undefined;
-    }
-    if (value !== valueProp) {
+    if (!setting) setValue(valueProp);
+  }, [setting, valueProp]);
+
+  const set = React.useCallback(nextValue => {
+    setSetting(true);
+    setValue(nextValue);
+  }, []);
+
+  React.useEffect(() => {
+    if (value !== valueProp && setting) {
       // lazily update, so we don't slow down typing
-      const timer = setTimeout(() => onChange(value), 500);
+      const timer = setTimeout(() => {
+        onChange(value);
+        setSetting(false);
+      }, 500);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [componentId, onChange, previousId, value, valueProp]);
-  return [value, setValue];
+  }, [onChange, setting, value, valueProp]);
+  return [value, set];
 };
