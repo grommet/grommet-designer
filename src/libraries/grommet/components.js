@@ -571,7 +571,7 @@ export const components = {
         options: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       }),
       textAlign: TextAlign,
-      margin: Edge,
+      margin: HeadingMargin,
       color: ['-color-'],
     },
   },
