@@ -567,6 +567,7 @@ export const components = {
     name: 'Paragraph',
     text: 'Paragraph',
     properties: {
+      fill: false,
       size: SizeOptions({
         options: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
       }),
