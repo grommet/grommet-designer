@@ -251,6 +251,8 @@ export default ({
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
                     component.name = value;
+                    // don't let unnamed components stay hidden
+                    if (!value) delete component.hide;
                     setDesign(nextDesign);
                   }}
                 />
