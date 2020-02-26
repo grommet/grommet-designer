@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import styled from 'styled-components';
 import { Box, Grommet, Paragraph } from 'grommet';
 import Icon from './libraries/designer/Icon';
@@ -86,6 +87,7 @@ const Canvas = ({
   const [dragging, setDragging] = React.useState();
   const [dropTarget, setDropTarget] = React.useState();
   const [dropAt, setDropAt] = React.useState();
+  const grommetRef = React.useRef();
   const inputRef = React.useRef();
 
   // load data, if needed
@@ -273,6 +275,9 @@ const Canvas = ({
     } else {
       specialProps = {};
     }
+    if (component.type === 'grommet.Layer' && grommetRef.current) {
+      specialProps.target = findDOMNode(grommetRef.current);
+    }
     Object.keys(component.props).forEach(prop => {
       if (type.properties) {
         const property = type.properties[prop];
@@ -425,6 +430,7 @@ const Canvas = ({
   const screen = design.screens[selected.screen];
   return (
     <Grommet
+      ref={grommetRef}
       theme={theme}
       themeMode={design.themeMode}
       style={{ height: '100vh' }}
