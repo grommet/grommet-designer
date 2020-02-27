@@ -17,6 +17,12 @@ module.exports = override(
     new CopyWebpackPlugin([
       { from: './node_modules/grommet/grommet.min.js' },
       { from: './node_modules/grommet-icons/grommet-icons.min.js' },
+      { from: './node_modules/react/umd/react.production.min.js' },
+      { from: './node_modules/react-dom/umd/react-dom.production.min.js' },
+      { from: './node_modules/react-is/umd/react-is.production.min.js' },
+      {
+        from: './node_modules/styled-components/dist/styled-components.min.js',
+      },
     ]),
   ),
 );
