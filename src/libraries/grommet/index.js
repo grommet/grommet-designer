@@ -39,6 +39,7 @@ const structure = [
       'Form',
       'FormField',
       'RadioButtonGroup',
+      'RangeInput',
       'Select',
       'TextArea',
       'TextInput',

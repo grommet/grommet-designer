@@ -28,6 +28,7 @@ import {
   Meter,
   Paragraph,
   RadioButtonGroup,
+  RangeInput,
   Select,
   Stack,
   Text,
@@ -820,6 +821,22 @@ export const components = {
       disabled: false,
       options: SelectOptions,
       value: '',
+    },
+  },
+  RangeInput: {
+    component: RangeInput,
+    name: 'RangeInput',
+    defaultProps: {
+      max: 10,
+      min: 0,
+      step: 1,
+      value: 0,
+    },
+    properties: {
+      max: 10,
+      min: 0,
+      step: 1,
+      value: 0,
     },
   },
   Select: {
