@@ -918,6 +918,7 @@ export const components = {
       },
       gap: EdgeSizeOptions({
         options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+        direction: 'row',
       }),
       margin: Edge,
       overflow: false,

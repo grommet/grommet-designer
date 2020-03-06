@@ -11,10 +11,10 @@ export default ({ options, direction }) => {
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
         {(option, { checked, hover }) => (
           <EdgeSizeState
+            {...props.props}
             size={option.label}
             checked={checked}
             hover={hover}
-            {...props.props}
             direction={direction || props.props.direction}
           />
         )}
