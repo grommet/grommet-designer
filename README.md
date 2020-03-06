@@ -81,9 +81,11 @@ design as either the `src` for an Image or the `background.image` for a Box.
 
 ### Theming
 
-You can use either one of the official themes or a theme published
-via theme-designer.grommet.io. Just choose "published" as the theme and then
-provide the theme sharing URL.
+You can use any theme published via theme-designer.grommet.io, just enter
+the published URL in the context of editing the design details. If you want
+to change a theme you have published that you are using, edit it in the
+theme designer, re-publish it, and then refresh any designer.grommet.io
+page using it.
 
 ### Data
 
