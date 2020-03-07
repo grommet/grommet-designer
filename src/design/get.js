@@ -207,3 +207,9 @@ export const canParent = (design, libraries, component) => {
   }
   return result;
 };
+
+export const slugify = name =>
+  `/${name
+    .toLocaleLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')}`;

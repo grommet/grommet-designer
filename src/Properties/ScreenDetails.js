@@ -1,15 +1,9 @@
 import React from 'react';
 import { Box, Heading, Keyboard } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen, deleteScreen } from '../design';
+import { addScreen, deleteScreen, slugify } from '../design';
 import ActionButton from '../components/ActionButton';
 import TextInputField from './TextInputField';
-
-export const slugify = name =>
-  `/${name
-    .toLocaleLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '')}`;
 
 const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
   const delet = () => {

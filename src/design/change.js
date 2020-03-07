@@ -1,6 +1,6 @@
 import { getComponentType } from '../utils';
 import { bare } from './bare';
-import { canParent, getParent } from './get';
+import { canParent, getParent, slugify } from './get';
 import { upgradeDesign } from './upgrade';
 
 export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
@@ -105,7 +105,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
     name = nameAvailable(`${baseName} ${suffix}`);
   }
   nextDesign.screens[screenId].name = name;
-  nextDesign.screens[screenId].path = `/screen-${suffix}`;
+  nextDesign.screens[screenId].path = slugify(name);
   const index = nextDesign.screenOrder.indexOf(nextSelected.screen);
   nextDesign.screenOrder.splice(index + 1, 0, screenId);
 
