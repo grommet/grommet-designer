@@ -1,13 +1,17 @@
 import React from 'react';
-import { Box, Heading, Keyboard, TextInput } from 'grommet';
+import { Box, Heading, Keyboard } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen, deleteScreen } from '../design';
 import ActionButton from '../components/ActionButton';
-import Field from '../components/Field';
+import TextInputField from './TextInputField';
+
+export const slugify = name =>
+  `/${name
+    .toLocaleLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')}`;
 
 const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
-  let debounceTimer;
-
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextScreen = deleteScreen(nextDesign, selected.screen);
@@ -32,31 +36,6 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
         delet();
       }
     }
-  };
-
-  const PropertyField = ({ name }) => {
-    const [value, setValue] = React.useState(screen[name] || '');
-    return (
-      <Field label={name} htmlFor={name}>
-        <TextInput
-          id={name}
-          name={name}
-          plain
-          value={value}
-          onChange={event => {
-            const nextValue = event.target.value;
-            setValue(nextValue);
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-              const nextDesign = JSON.parse(JSON.stringify(design));
-              nextDesign.screens[selected.screen][name] = nextValue;
-              setDesign(nextDesign);
-            }, 500);
-          }}
-          style={{ textAlign: 'end' }}
-        />
-      </Field>
-    );
   };
 
   const screen = design.screens[selected.screen];
@@ -95,8 +74,27 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
         </Box>
         <Box flex overflow="auto">
           <Box flex={false}>
-            <PropertyField name="name" />
-            <PropertyField name="path" />
+            <TextInputField
+              name="name"
+              componentId={screen.id}
+              value={screen.name || ''}
+              onChange={value => {
+                const nextDesign = JSON.parse(JSON.stringify(design));
+                nextDesign.screens[selected.screen].name = value;
+                nextDesign.screens[selected.screen].path = slugify(value);
+                setDesign(nextDesign);
+              }}
+            />
+            <TextInputField
+              name="path"
+              componentId={screen.id}
+              value={screen.path || ''}
+              onChange={value => {
+                const nextDesign = JSON.parse(JSON.stringify(design));
+                nextDesign.screens[selected.screen].path = value;
+                setDesign(nextDesign);
+              }}
+            />
           </Box>
         </Box>
       </Box>
