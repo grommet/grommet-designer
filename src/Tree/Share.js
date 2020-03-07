@@ -81,6 +81,8 @@ const Publish = ({ design, setDesign }) => {
             ].join('');
             setUploadUrl(nextUploadUrl);
             setPublishing(false);
+            nextDesign.publishedUrl = nextUploadUrl;
+            setDesign(nextDesign);
 
             ReactGA.event({
               category: 'share',
@@ -95,8 +97,6 @@ const Publish = ({ design, setDesign }) => {
         setError(e.message);
         setPublishing(false);
       });
-
-    setDesign(nextDesign);
   };
 
   const onCopy = () => {
@@ -164,6 +164,18 @@ const Publish = ({ design, setDesign }) => {
             <Text textAlign="end">{message}&nbsp;</Text>
           </Box>
         </Fragment>
+      )}
+      {design.date && (
+        <Box>
+          <Text size="small" color="text-xweak">
+            Last published {new Date(design.date).toLocaleString()}
+          </Text>
+          {design.publishedUrl && (
+            <Text size="small" color="text-xweak">
+              {design.publishedUrl}
+            </Text>
+          )}
+        </Box>
       )}
     </Box>
   );
