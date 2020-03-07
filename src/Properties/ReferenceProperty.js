@@ -24,12 +24,15 @@ const ReferenceProperty = React.forwardRef(
     const options = Object.keys(design.components).filter(id =>
       isReferenceable(design.components[id]),
     );
-    const referenceComponentId = parseInt(value, 10);
-    const referenceSelected = {
-      ...selected,
-      screen: getScreenForComponent(design, referenceComponentId),
-      component: referenceComponentId,
-    };
+    let referenceSelected;
+    if (value) {
+      const referenceComponentId = parseInt(value, 10);
+      referenceSelected = value && {
+        ...selected,
+        screen: getScreenForComponent(design, referenceComponentId),
+        component: referenceComponentId,
+      };
+    }
     return (
       <ArrayProperty
         ref={ref}
