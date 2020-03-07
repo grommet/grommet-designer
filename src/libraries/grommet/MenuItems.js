@@ -3,9 +3,9 @@ import { Box, Button, FormField, Select, Text, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
 export default ({ linkOptions, value, onChange }) => {
-  const LinkLabel = ({ active, value }) => (
+  const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
-      <Text weight={active ? 'bold' : undefined}>
+      <Text weight={selected ? 'bold' : undefined}>
         {(value === 'undefined' && 'undefined') || (value && value.label) || ''}
       </Text>
     </Box>
@@ -35,11 +35,11 @@ export default ({ linkOptions, value, onChange }) => {
                   nextValue[i].link = option;
                   onChange(nextValue);
                 }}
-                valueLabel={<LinkLabel active value={item.link} />}
+                valueLabel={<LinkLabel selected value={item.link} />}
               >
                 {option => (
                   <LinkLabel
-                    active={option.component === value.component}
+                    selected={option.component === value.component}
                     value={option}
                   />
                 )}

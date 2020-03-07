@@ -96,14 +96,20 @@ export const getLinkOptions = (design, libraries, selected) => {
         component: c.id,
         type: c.type,
         label: getDisplayName(design, c.id),
+        key: c.id,
       })),
     ...Object.keys(design.screens)
       .map(k => design.screens[k])
       .map(s => ({
         screen: s.id,
         label: s.name || `Screen ${screen.id}`,
+        key: s.id,
       })),
-    { control: 'toggleThemeMode', label: '-toggle theme mode-' },
+    {
+      control: 'toggleThemeMode',
+      label: '-toggle theme mode-',
+      key: 'toggleThemeMode',
+    },
   ];
 };
 

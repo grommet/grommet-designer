@@ -4,12 +4,12 @@ import ArrayProperty from './ArrayProperty';
 
 const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
 
-const ColorLabel = theme => ({ active, value }) => (
+const ColorLabel = theme => ({ selected, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <ThemeContext.Extend value={theme}>
       <Box pad="small" background={value} />
     </ThemeContext.Extend>
-    <Text weight={active ? 'bold' : undefined}>{value}</Text>
+    <Text weight={selected ? 'bold' : undefined}>{value}</Text>
   </Box>
 );
 

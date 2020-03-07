@@ -4,9 +4,9 @@ import { Location } from 'grommet-icons';
 import { getDisplayName, getScreenForComponent } from '../design';
 import ArrayProperty from './ArrayProperty';
 
-const ReferenceLabel = design => ({ active, value }) => (
+const ReferenceLabel = design => ({ selected, value }) => (
   <Box pad="small">
-    <Text weight={active ? 'bold' : undefined}>
+    <Text weight={selected ? 'bold' : undefined}>
       {(value === 'undefined' && 'undefined') ||
         (value && getDisplayName(design, value)) ||
         ''}

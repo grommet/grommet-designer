@@ -370,7 +370,7 @@ const Tree = ({
 
   const renderScreen = (screenId, firstScreen) => {
     const screen = design.screens[screenId];
-    const active = selected.screen === screenId && !selected.component;
+    const isSelected = selected.screen === screenId && !selected.component;
     const collapserColor = 'border';
     return (
       <Box
@@ -407,7 +407,7 @@ const Tree = ({
               justify="between"
               gap="medium"
               pad={{ vertical: 'small', left: 'large', right: 'small' }}
-              background={active ? 'accent-1' : undefined}
+              background={isSelected ? 'accent-1' : undefined}
             >
               <Heading level={3} size="xsmall" margin="none">
                 {screen.name || `Screen ${screenId}`}

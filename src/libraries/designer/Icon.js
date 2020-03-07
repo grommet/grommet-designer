@@ -7,10 +7,10 @@ const exp = new RegExp(/^[A-Z]/);
 export const names = Object.keys(icons).filter(n => exp.test(n));
 export const aliases = metadata;
 
-export const SelectLabel = ({ active, value }) => (
+export const SelectLabel = ({ selected, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <Icon icon={value} />
-    <Text weight={active ? 'bold' : undefined}>{value}</Text>
+    <Text weight={selected ? 'bold' : undefined}>{value}</Text>
   </Box>
 );
 

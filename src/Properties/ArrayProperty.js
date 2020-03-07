@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Select, Text } from 'grommet';
 import Field from '../components/Field';
 
-const OptionLabel = ({ active, value }) => (
+const OptionLabel = ({ selected, value }) => (
   <Box pad="small">
-    <Text weight={active ? 'bold' : undefined}>
+    <Text weight={selected ? 'bold' : undefined}>
       {(typeof value !== 'string' ? JSON.stringify(value) : value) || ''}
     </Text>
   </Box>
@@ -12,7 +12,18 @@ const OptionLabel = ({ active, value }) => (
 
 const ArrayProperty = React.forwardRef(
   (
-    { children, first, Label, name, onChange, options, searchTest, sub, value },
+    {
+      children,
+      first,
+      Label,
+      name,
+      onChange,
+      options,
+      searchTest,
+      sub,
+      value,
+      valueKey,
+    },
     ref,
   ) => {
     const SelectLabel = React.useMemo(() => Label || OptionLabel, [Label]);
@@ -53,7 +64,8 @@ const ArrayProperty = React.forwardRef(
           name={name}
           options={selectOptions}
           value={typeof value === 'boolean' ? value.toString() : value || ''}
-          valueLabel={<SelectLabel value={value} active />}
+          valueLabel={<SelectLabel value={value} selected />}
+          valueKey={valueKey}
           onChange={({ option }) => {
             setSearchText(undefined);
             onChange(option === 'undefined' ? undefined : option);
@@ -64,7 +76,9 @@ const ArrayProperty = React.forwardRef(
               : undefined
           }
         >
-          {option => <SelectLabel value={option} active={option === value} />}
+          {(option, index, options, { selected }) => (
+            <SelectLabel value={option} selected={selected} />
+          )}
         </Select>
       </Field>
     );
