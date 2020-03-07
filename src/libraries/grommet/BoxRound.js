@@ -3,14 +3,17 @@ import { Box, FormField, Select, RadioButtonGroup } from 'grommet';
 
 const flavors = ['all corners the same', 'varied'];
 
-const sizes = [
-  'xsmall',
-  'small',
-  'medium',
-  'large',
-  'xlarge',
-  'full',
-  'undefined',
+const sizes = ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'];
+
+const corners = [
+  'top',
+  'left',
+  'bottom',
+  'right',
+  'top-left',
+  'top-right',
+  'bottom-left',
+  'bottom-right',
 ];
 
 export default ({ name, value, onChange }) => {
@@ -33,17 +36,7 @@ export default ({ name, value, onChange }) => {
           <Fragment>
             <FormField label="corner">
               <Select
-                options={[
-                  'top',
-                  'left',
-                  'bottom',
-                  'right',
-                  'top-left',
-                  'top-right',
-                  'bottom-left',
-                  'bottom-right',
-                  'undefined',
-                ]}
+                options={value.corner ? [...corners, 'undefined'] : corners}
                 value={value.corner || ''}
                 onChange={({ option }) =>
                   onChange({
@@ -55,7 +48,7 @@ export default ({ name, value, onChange }) => {
             </FormField>
             <FormField label="size">
               <Select
-                options={sizes}
+                options={value.size ? [...sizes, 'undefined'] : sizes}
                 value={value.size || ''}
                 onChange={({ option }) =>
                   onChange({
@@ -69,7 +62,7 @@ export default ({ name, value, onChange }) => {
         ) : (
           <FormField label={name}>
             <Select
-              options={[true, false, ...sizes, 'undefined']}
+              options={value ? [...sizes, 'undefined'] : sizes}
               value={value || ''}
               onChange={({ option }) =>
                 onChange(option === 'undefined' ? undefined : option)
