@@ -42,8 +42,10 @@ export const getScreenForComponent = (design, id) => {
     }
     return false;
   });
+  if (result) return result;
   const parent = getParent(design, id);
-  return result || getScreenForComponent(design, parent.id);
+  if (parent) return getScreenForComponent(design, parent.id);
+  return undefined;
 };
 
 export const getScreenByPath = (design, path) => {

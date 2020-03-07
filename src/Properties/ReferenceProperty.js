@@ -26,12 +26,13 @@ const ReferenceProperty = React.forwardRef(
     );
     let referenceSelected;
     if (value) {
-      const referenceComponentId = parseInt(value, 10);
-      referenceSelected = value && {
-        ...selected,
-        screen: getScreenForComponent(design, referenceComponentId),
-        component: referenceComponentId,
-      };
+      const component = parseInt(value, 10);
+      if (component) {
+        const screen = getScreenForComponent(design, component);
+        if (screen) {
+          referenceSelected = { ...selected, screen, component };
+        }
+      }
     }
     return (
       <ArrayProperty
@@ -47,7 +48,7 @@ const ReferenceProperty = React.forwardRef(
         }
         onChange={onChange}
       >
-        {value && (
+        {referenceSelected && (
           <Button
             icon={<Location />}
             hoverIndicator
