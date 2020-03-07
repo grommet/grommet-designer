@@ -347,7 +347,8 @@ const Canvas = ({
       } else {
         children = component.text;
       }
-      if (!children) children = <>&nbsp;</>;
+      // if (!children) children = <>&nbsp;</>; // breaks Markdown
+      if (!children) children = type.text;
     } else if (type.text) {
       children = type.text;
     } else if (specialProps && specialProps.children) {
