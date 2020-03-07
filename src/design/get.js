@@ -79,6 +79,15 @@ const getDescendants = (design, id) => {
   return result;
 };
 
+export const getReferences = (design, id) =>
+  Object.keys(design.components)
+    .map(cId => design.components[cId])
+    .filter(
+      c =>
+        c.type === 'designer.Reference' &&
+        parseInt(c.props.component, 10) === id,
+    );
+
 export const getLinkOptions = (design, libraries, selected) => {
   // options for what a Button or MenuItem should do:
   // open a layer, close the layer it is in, change screens,

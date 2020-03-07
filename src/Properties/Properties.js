@@ -3,14 +3,17 @@ import ReactGA from 'react-ga';
 import {
   Anchor,
   Box,
+  Button,
   CheckBox,
+  Drop,
   Heading,
   Keyboard,
   Markdown,
   Paragraph,
+  Text,
   TextInput,
 } from 'grommet';
-import { Duplicate, Help, Refresh, Trash } from 'grommet-icons';
+import { Duplicate, Help, Location, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
@@ -19,6 +22,8 @@ import {
   duplicateComponent,
   getLinkOptions,
   getParent,
+  getReferences,
+  getScreenForComponent,
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
@@ -37,6 +42,11 @@ export default ({
     () => getComponentType(libraries, component.type) || {},
     [component, libraries],
   );
+  const references = React.useMemo(() => getReferences(design, component.id), [
+    component,
+    design,
+  ]);
+  const [showReferences, setShowReferences] = React.useState();
   const [search, setSearch] = React.useState();
   const searchExp = React.useMemo(
     () => search && new RegExp(`^${search}`, 'i'),
@@ -49,6 +59,7 @@ export default ({
 
   const searchRef = React.useRef();
   const defaultRef = React.useRef();
+  const referencesRef = React.useRef();
 
   React.useEffect(() => setSearch(undefined), [component.id]);
 
@@ -218,7 +229,43 @@ export default ({
                 icon={<Duplicate />}
                 onClick={duplicate}
               />
-              <ActionButton title="delete" icon={<Trash />} onClick={delet} />
+              {references.length === 0 ? (
+                <ActionButton title="delete" icon={<Trash />} onClick={delet} />
+              ) : (
+                <ActionButton
+                  ref={referencesRef}
+                  title="references"
+                  icon={<Location />}
+                  onClick={() => setShowReferences(!showReferences)}
+                />
+              )}
+              {showReferences && (
+                <Drop
+                  target={referencesRef.current}
+                  align={{ top: 'bottom', right: 'right' }}
+                  onClickOutside={() => setShowReferences(false)}
+                  onEsc={() => setShowReferences(false)}
+                >
+                  <Box>
+                    {references.map(r => (
+                      <Button
+                        hoverIndicator
+                        onClick={() => {
+                          setSelected({
+                            ...selected,
+                            screen: getScreenForComponent(design, r.id),
+                            component: r.id,
+                          });
+                        }}
+                      >
+                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                          <Text>{r.id}</Text>
+                        </Box>
+                      </Button>
+                    ))}
+                  </Box>
+                </Drop>
+              )}
             </Box>
           )}
         </Box>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Drop, Text } from 'grommet';
 
-export default ({ title, ...rest }) => {
+export default React.forwardRef(({ title, ...rest }, forwardRef) => {
   const ref = React.useRef();
   const [hover, setHover] = React.useState();
 
@@ -14,7 +14,7 @@ export default ({ title, ...rest }) => {
   return (
     <>
       <Button
-        ref={ref}
+        ref={forwardRef || ref}
         hoverIndicator
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -22,7 +22,7 @@ export default ({ title, ...rest }) => {
         {...rest}
       />
       {hover && (
-        <Drop target={ref.current} align={{ top: 'bottom' }}>
+        <Drop target={(forwardRef || ref).current} align={{ top: 'bottom' }}>
           <Box margin="xsmall" pad="xsmall">
             <Text>{title}</Text>
           </Box>
@@ -30,4 +30,4 @@ export default ({ title, ...rest }) => {
       )}
     </>
   );
-};
+});
