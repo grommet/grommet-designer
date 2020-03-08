@@ -57,4 +57,5 @@ export const bare = {
   //   },
   // },
   theme: 'grommet',
+  imports: [],
 };

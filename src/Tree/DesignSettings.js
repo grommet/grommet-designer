@@ -33,72 +33,35 @@ export default ({ design, onClose, setDesign, theme }) => (
         />
       </Field>
 
-      <Field label="Based on" htmlFor="base">
-        <TextInput
-          id="base"
-          name="base"
-          plain
-          placeholder="https://designer.grommet.io?id="
-          value={design.base || ''}
-          onChange={event => {
-            const base = event.target.value;
-            const nextDesign = JSON.parse(JSON.stringify(design));
-            nextDesign.base = base;
-            setDesign(nextDesign);
-          }}
-          style={{ textAlign: 'end' }}
-        />
-      </Field>
-
       <Box direction="row" justify="between" align="center">
-        <Heading level={3}>Libraries</Heading>
+        <Heading level={3}>Imports</Heading>
         <ActionButton
-          title="add a library"
+          title="add an import"
           icon={<Add />}
           hoverIndicator
           onClick={() => {
             const nextDesign = JSON.parse(JSON.stringify(design));
-            if (!nextDesign.library) {
-              nextDesign.library = { '': '' };
-            } else {
-              nextDesign.library[''] = '';
-            }
+            if (!nextDesign.imports) nextDesign.imports = [];
+            nextDesign.imports.push({});
             setDesign(nextDesign);
           }}
         />
       </Box>
-      {design.library && (
+      {design.imports && (
         <Box flex={false}>
-          {Object.keys(design.library).map((key, index) => (
-            <Box key={key} direction="row" align="start" justify="between">
+          {design.imports.map((impor, index) => (
+            <Box key={index} direction="row" align="start" justify="between">
               <Box flex="grow">
-                <Field label="Name" htmlFor={`name-${index}`}>
-                  <TextInput
-                    id={`name-${index}`}
-                    name={`name-${index}`}
-                    plain
-                    value={key || ''}
-                    onChange={event => {
-                      if (event.target.value !== key) {
-                        const nextDesign = JSON.parse(JSON.stringify(design));
-                        nextDesign.library[event.target.value] =
-                          nextDesign.library[key];
-                        delete nextDesign.library[key];
-                        setDesign(nextDesign);
-                      }
-                    }}
-                    style={{ textAlign: 'end' }}
-                  />
-                </Field>
-                <Field label="URL" htmlFor={`url-${index}`}>
+                <Field htmlFor={`url-${index}`}>
                   <TextInput
                     id={`url-${index}`}
                     name={`url-${index}`}
                     plain
-                    value={design.library[key]}
+                    placeholder="url"
+                    value={impor.url}
                     onChange={event => {
                       const nextDesign = JSON.parse(JSON.stringify(design));
-                      nextDesign.library[key] = event.target.value;
+                      nextDesign.imports[index].url = event.target.value;
                       setDesign(nextDesign);
                     }}
                     style={{ textAlign: 'end' }}
@@ -106,15 +69,12 @@ export default ({ design, onClose, setDesign, theme }) => (
                 </Field>
               </Box>
               <ActionButton
-                title="delete library"
+                title="remove import"
                 icon={<Trash />}
                 hoverIndicator
                 onClick={() => {
                   const nextDesign = JSON.parse(JSON.stringify(design));
-                  delete nextDesign.library[key];
-                  if (Object.keys(nextDesign.library).length === 0) {
-                    delete nextDesign.library;
-                  }
+                  nextDesign.imports.splice(index, 1);
                   setDesign(nextDesign);
                 }}
               />

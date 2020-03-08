@@ -14,7 +14,7 @@ import {
 import ScreenDetails from './Properties/ScreenDetails';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
-import { loadDesign, loadLibraries, loadTheme } from './design/load';
+import { loadDesign, loadImports, loadTheme } from './design/load';
 
 const designerTheme = {
   ...grommet,
@@ -23,6 +23,11 @@ const designerTheme = {
     colors: { background: { dark: '#282828', light: '#f8f8f8' } },
   },
 };
+
+const defaultImports = [
+  { name: grommetLibrary.name, library: grommetLibrary },
+  { name: designerLibrary.name, library: designerLibrary },
+];
 
 const getParams = () => {
   const { location } = window;
@@ -40,12 +45,16 @@ const getParams = () => {
 const App = () => {
   const responsive = React.useContext(ResponsiveContext);
   // In the worst case, we need to load a published design, a published theme,
-  // a base design, and any libraries. We load theme as we go into the 'load'
+  // and any imports. We load theme as we go into the 'load'
   // state. When they're all ready, we update all of the necessary states.
   const [load, setLoad] = React.useState({});
   const [design, setDesign] = React.useState(setupDesign(loading));
   const [selected, setSelected] = React.useState(getInitialSelected(design));
-  const [base, setBase] = React.useState();
+  const [imports, setImports] = React.useState(defaultImports);
+  const libraries = React.useMemo(
+    () => imports.filter(i => i.library).map(i => i.library),
+    [imports],
+  );
   const [theme, setTheme] = React.useState(grommet);
   const [colorMode, setColorMode] = React.useState('dark');
   const [rtl, setRTL] = React.useState();
@@ -53,10 +62,6 @@ const App = () => {
   const [changes, setChanges] = React.useState([]);
   const [changeIndex, setChangeIndex] = React.useState();
   const [designs, setDesigns] = React.useState([]);
-  const [libraries, setLibraries] = React.useState([
-    grommetLibrary,
-    designerLibrary,
-  ]);
   const selectedComponent = React.useMemo(
     () =>
       selected.component ? design.components[selected.component] : undefined,
@@ -111,17 +116,11 @@ const App = () => {
           setLoad(prevLoad => ({ ...prevLoad, theme: nextTheme }));
         });
 
-        if (nextDesign.base) {
-          const id = nextDesign.base.split('id=')[1];
-          loadDesign(id, nextBase => {
-            setLoad(prevLoad => ({ ...prevLoad, base: nextBase }));
-          });
-        } else {
-          setLoad(prevLoad => ({ ...prevLoad, base: true }));
-        }
-
-        loadLibraries(nextDesign.library, nextLibraries => {
-          setLoad(prevLoad => ({ ...prevLoad, libraries: nextLibraries }));
+        let loadingImports = [...defaultImports, ...(nextDesign.imports || [])];
+        setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
+        loadImports(loadingImports, f => {
+          loadingImports = f(loadingImports);
+          setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
         });
       },
       true,
@@ -135,16 +134,15 @@ const App = () => {
       load.design &&
       load.selected &&
       load.theme &&
-      load.base &&
-      load.libraries
+      load.imports &&
+      !load.imports.some(i => i.url && !(i.design || i.library))
     ) {
       const params = getParams();
-      if (load.base && load.base !== true) setBase(load.base);
-      setLibraries(prevLibraries => [...load.libraries, ...prevLibraries]);
+      setImports(load.imports);
       setTheme(load.theme);
       setDesign(load.design);
       setSelected(load.selected);
-      setPreview(!!params.id);
+      setPreview(params.preview ? JSON.parse(params.preview) : !!params.id);
       setChanges([{ design: load.design, selected: load.selected }]);
       setChangeIndex(0);
       setLoad(undefined);
@@ -225,26 +223,15 @@ const App = () => {
     }
   }, [design, designs, load]);
 
-  // update libraries
+  // update imports
   React.useEffect(() => {
     if (!load) {
-      loadLibraries(design.library, nextLibraries =>
-        setLibraries(prevLibraries => [...nextLibraries, ...prevLibraries]),
-      );
+      loadImports(design.imports, f => {
+        const nextImports = f(imports);
+        setLoad(prevLoad => ({ ...prevLoad, imports: nextImports }));
+      });
     }
-  }, [design.library, load]);
-
-  // update base
-  React.useEffect(() => {
-    if (!load) {
-      if (design.base && !base) {
-        const id = design.base.split('id=')[1];
-        loadDesign(id, setBase);
-      } else if (base && !design.base) {
-        setBase(undefined);
-      }
-    }
-  }, [base, design.base, load]);
+  }, [design.imports, imports, load]);
 
   // update theme
   React.useEffect(() => {
@@ -348,8 +335,7 @@ const App = () => {
           {responsive !== 'small' && !preview && (
             <Tree
               design={design}
-              libraries={libraries}
-              base={base}
+              imports={imports}
               rtl={rtl}
               selected={selected}
               theme={theme}
@@ -366,7 +352,7 @@ const App = () => {
           <ErrorCatcher>
             <Canvas
               design={design}
-              libraries={libraries}
+              imports={imports}
               selected={selected}
               preview={preview}
               setDesign={setDesign}

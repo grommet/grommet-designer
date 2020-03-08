@@ -18,3 +18,11 @@ export const displayName = component =>
   component.props.icon ||
   component.type.split('.')[1] ||
   component.type;
+
+export const getReferenceDesign = (imports, referenceComponent) => {
+  if (referenceComponent.props.design)
+    return imports
+      .filter(i => i.url === referenceComponent.props.design.url)
+      .map(i => i.design)[0];
+  return undefined;
+};

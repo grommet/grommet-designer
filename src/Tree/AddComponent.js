@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 import {
+  Anchor,
   Box,
   Button,
   Heading,
   Keyboard,
   Layer,
-  Paragraph,
-  Select,
-  Text,
   TextInput,
 } from 'grommet';
 import { Close } from 'grommet-icons';
@@ -16,43 +14,29 @@ import {
   addComponent,
   addScreen,
   copyComponent,
-  getParent,
   insertComponent,
 } from '../design';
-import { displayName, getComponentType } from '../utils';
 import ActionButton from '../components/ActionButton';
-
-const allLocations = ['within', 'after', 'before', 'container of'];
+import AddLocation from './AddLocation';
+import AddMethod from './AddMethod';
 
 const AddComponent = ({
   base,
   design,
-  libraries,
+  imports,
   selected,
   setDesign,
   setSelected,
   onClose,
 }) => {
-  const selectedComponent = design.components[selected.component];
-  const selectedType = React.useMemo(
-    () =>
-      selectedComponent
-        ? getComponentType(libraries, selectedComponent.type)
-        : undefined,
-    [libraries, selectedComponent],
+  const libraries = React.useMemo(
+    () => imports.filter(i => i.library).map(i => i.library),
+    [imports],
   );
-  const locations = React.useMemo(() => {
-    const parent = getParent(design, selected.component);
-    if (!parent)
-      return allLocations.filter(l => l === 'within' || l === 'container of');
-    if (selectedType && selectedType.container) return allLocations;
-    return allLocations.filter(l => l !== 'within');
-  }, [design, selected.component, selectedType]);
   const [location, setLocation] = React.useState();
-  React.useEffect(() => setLocation(locations[0]), [locations]);
 
   const [search, setSearch] = React.useState('');
-  const [addMode, setAddMode] = React.useState('copy');
+  const [addMode, setAddMode] = React.useState();
 
   const inputRef = React.useRef();
 
@@ -71,18 +55,20 @@ const AddComponent = ({
     };
 
     const result = [];
-    if (base) {
-      result.push(buildTemplates(base));
-    }
     result.push(buildTemplates(design));
+
+    imports
+      .filter(i => i.design)
+      .forEach(i => result.push({ ...i, ...buildTemplates(i.design) }));
+
     return result;
-  }, [base, design]);
+  }, [design, imports]);
 
   React.useLayoutEffect(() => {
     setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
   });
 
-  const add = ({ typeName, template, templateDesign }) => {
+  const add = ({ typeName, template, templateDesign, url }) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
 
@@ -101,6 +87,9 @@ const AddComponent = ({
         addComponent(nextDesign, libraries, nextSelected, 'designer.Reference');
         nextDesign.components[nextSelected.component].props.component =
           template.id;
+        if (url) {
+          nextDesign.components[nextSelected.component].props.design = { url };
+        }
       }
     }
 
@@ -147,22 +136,16 @@ const AddComponent = ({
             add
           </Heading>
         </Box>
-        <Box flex={false} pad="small">
-          <Select
-            name="add-location"
-            options={locations}
-            disabled={locations.length === 1}
-            value={location}
-            onChange={event => setLocation(event.value)}
-            valueLabel={
-              <Box pad="small">
-                <Text>{`${location} ${
-                  selectedComponent ? displayName(selectedComponent) : ''
-                }`}</Text>
-              </Box>
-            }
-          />
-        </Box>
+        {selected.component && (
+          <Box flex={false} pad="small">
+            <AddLocation
+              design={design}
+              libraries={libraries}
+              selected={selected}
+              onChange={nextLocation => setLocation(nextLocation)}
+            />
+          </Box>
+        )}
         <Box flex={false} pad="small">
           <Keyboard
             onEnter={
@@ -247,14 +230,22 @@ const AddComponent = ({
                   !searchExp ||
                   Object.keys(templates).some(name => name.match(searchExp)),
               )
-              .map(({ name, design: tempDesign, templates: temps }) => (
+              .map(({ name, design: tempDesign, templates: temps, url }) => (
                 <Box key={name} flex={false} border="top">
                   <Box
                     pad={{ horizontal: 'small', vertical: 'xsmall' }}
                     margin={{ top: 'small' }}
                   >
                     <Heading level="3" size="small" margin="none">
-                      {name}
+                      {url ? (
+                        <Anchor
+                          target="_blank"
+                          href={`${url}&preview=false`}
+                          label={name}
+                        />
+                      ) : (
+                        name
+                      )}
                     </Heading>
                   </Box>
                   {Object.keys(temps)
@@ -268,6 +259,7 @@ const AddComponent = ({
                             containSelected: event.metaKey || event.ctrlKey,
                             templateDesign: tempDesign,
                             template: temps[name],
+                            url,
                           })
                         }
                       >
@@ -277,16 +269,11 @@ const AddComponent = ({
                       </Button>
                     ))}
                   <Box pad="small">
-                    <Select
-                      name="addMode"
-                      options={['copy', 'reference']}
+                    <AddMethod
+                      id={name}
                       value={addMode}
-                      onChange={({ option }) => setAddMode(option)}
+                      onChange={setAddMode}
                     />
-                    <Paragraph size="small" color="text-xweak">
-                      For named components in your design, you can add a copy of
-                      it or a Reference to it.
-                    </Paragraph>
                   </Box>
                 </Box>
               ))}

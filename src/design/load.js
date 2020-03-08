@@ -87,25 +87,38 @@ export const loadTheme = (theme, setTheme) => {
   }
 };
 
-let libraries = [];
-
-export const loadLibraries = (library, setLibraries) => {
-  if (library) {
-    Object.keys(library).forEach(name => {
-      const url = library[name];
-      if (name && url && !document.getElementById(name)) {
-        // add library
-        const script = document.createElement('script');
-        script.src = url;
-        script.id = name;
-        document.body.appendChild(script);
-        script.onload = () => {
-          libraries = [window[name].designer, ...libraries];
-          setLibraries(libraries);
-        };
+export const loadImports = (imports, setImports) => {
+  imports.forEach(impor => {
+    const url = impor.url;
+    if (url) {
+      if (url.includes('id=')) {
+        // looks like another design
+        if (!impor.design) {
+          const id = url.split('id=')[1];
+          loadDesign(id, importDesign => {
+            setImports(prevImports => {
+              const nextImports = [...prevImports];
+              const index = nextImports.findIndex(i => i.url === url);
+              nextImports[index] = { ...impor, design: importDesign };
+              return nextImports;
+            });
+          });
+        }
       } else {
-        setLibraries(libraries);
+        // assume it is a package of components
+        if (!impor.library) {
+          const script = document.createElement('script');
+          script.src = url;
+          document.body.appendChild(script);
+          script.onload = () => {
+            setImports(prevImports => {
+              const nextImports = [...prevImports];
+              // nextImports[index] = { ...impor, library: window[name].designer };
+              return nextImports;
+            });
+          };
+        }
       }
-    });
-  } else setLibraries(libraries);
+    }
+  });
 };

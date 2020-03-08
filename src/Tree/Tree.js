@@ -20,7 +20,7 @@ import {
   previousSiblingSelected,
   isDescendent,
 } from '../design';
-import { displayName } from '../utils';
+import { displayName, getReferenceDesign } from '../utils';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignSettings from './DesignSettings';
@@ -40,7 +40,7 @@ const Tree = ({
   base,
   colorMode,
   design,
-  libraries,
+  imports,
   rtl,
   selected,
   theme,
@@ -51,6 +51,10 @@ const Tree = ({
   onUndo,
   onRedo,
 }) => {
+  const libraries = React.useMemo(
+    () => imports.filter(i => i.library).map(i => i.library),
+    [imports],
+  );
   const selectedAncestors = React.useMemo(() => {
     const result = [];
     if (selected.component) {
@@ -274,9 +278,13 @@ const Tree = ({
   const renderComponent = (screen, id, firstChild) => {
     const component = design.components[id];
     if (!component) return null;
-    const reference =
-      component.type === 'designer.Reference' &&
-      design.components[component.props.component];
+    let reference;
+    if (component.type === 'designer.Reference') {
+      const referenceDesign = getReferenceDesign(imports, component);
+      reference = (referenceDesign || design).components[
+        component.props.component
+      ];
+    }
     const collapserColor = selectedAncestors.includes(id)
       ? 'accent-1'
       : 'border';
@@ -480,7 +488,7 @@ const Tree = ({
             {sharing && (
               <Sharing
                 design={design}
-                libraries={libraries}
+                imports={imports}
                 theme={theme}
                 colorMode={colorMode}
                 setDesign={setDesign}
@@ -512,7 +520,7 @@ const Tree = ({
           {adding && (
             <AddComponent
               design={design}
-              libraries={libraries}
+              imports={imports}
               base={base}
               selected={selected}
               setDesign={setDesign}

@@ -209,7 +209,7 @@ const SaveLocally = ({ design, onClose }) => (
   </Box>
 );
 
-const Developer = ({ design, libraries, theme }) => {
+const Developer = ({ design, imports, theme }) => {
   const [code, setCode] = React.useState();
 
   return (
@@ -228,7 +228,7 @@ const Developer = ({ design, libraries, theme }) => {
           label="Generate Code"
           hoverIndicator
           onClick={() => {
-            setCode(generateJSX(design, libraries, theme));
+            setCode(generateJSX(design, imports, theme));
             ReactGA.event({
               category: 'share',
               action: 'generate code',
@@ -255,7 +255,7 @@ const Developer = ({ design, libraries, theme }) => {
   );
 };
 
-const Share = ({ design, libraries, theme, onClose, setDesign }) => (
+const Share = ({ design, imports, theme, onClose, setDesign }) => (
   <Action label="share" full="horizontal" animation="fadeIn" onClose={onClose}>
     <Grid
       fill="horizontal"
@@ -264,7 +264,7 @@ const Share = ({ design, libraries, theme, onClose, setDesign }) => (
     >
       <Publish design={design} setDesign={setDesign} />
       <SaveLocally design={design} onClose={onClose} />
-      <Developer design={design} libraries={libraries} theme={theme} />
+      <Developer design={design} imports={imports} theme={theme} />
     </Grid>
   </Action>
 );

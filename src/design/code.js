@@ -1,4 +1,4 @@
-import { getComponentType } from '../utils';
+import { getComponentType, getReferenceDesign } from '../utils';
 
 const router = firstPath => `
 const RouterContext = React.createContext({})
@@ -47,7 +47,8 @@ const screenComponentName = ({ id, name }) =>
     ? `${name.charAt(0).toUpperCase()}${name.replace(/\s/g, '').slice(1)}`
     : `Screen${id}`;
 
-export const generateJSX = (design, libraries, themeArg) => {
+export const generateJSX = (design, importsArg, themeArg) => {
+  const libraries = importsArg.filter(i => i.library).map(i => i.library);
   const imports = { Grommet: true };
   const iconImports = {};
   const themeImports = {};
@@ -56,9 +57,9 @@ export const generateJSX = (design, libraries, themeArg) => {
   let theme = design.theme;
   let publishedTheme;
 
-  const componentToJSX = ({ screen, id, indent = '  ' }) => {
+  const componentToJSX = ({ screen, id, indent = '  ', referenceDesign }) => {
     let result;
-    const component = design.components[id];
+    const component = (referenceDesign || design).components[id];
     const type = getComponentType(libraries, component.type);
     if (component.type === 'designer.Icon' || component.type === 'Icon') {
       const { icon, ...rest } = component.props;
@@ -73,18 +74,24 @@ export const generateJSX = (design, libraries, themeArg) => {
       const childId = component.children && component.children[0];
       result = childId
         ? (
-            componentToJSX({ screen, id: childId, indent: `${indent}  ` }) +
-            '\n'
+            componentToJSX({
+              screen,
+              id: childId,
+              indent: `${indent}  `,
+              referenceDesign,
+            }) + '\n'
           ).repeat(component.props.count)
         : '';
     } else if (
       component.type === 'designer.Reference' ||
       component.type === 'Reference'
     ) {
+      const nextReferenceDesign = getReferenceDesign(importsArg, component);
       result = componentToJSX({
         screen,
         id: component.props.component,
         indent,
+        referenceDesign: nextReferenceDesign,
       });
     } else {
       if (component.type === 'grommet.Layer') {
@@ -96,7 +103,12 @@ export const generateJSX = (design, libraries, themeArg) => {
         (component.children &&
           component.children
             .map(cId =>
-              componentToJSX({ screen, id: cId, indent: `${indent}  ` }),
+              componentToJSX({
+                screen,
+                id: cId,
+                indent: `${indent}  `,
+                referenceDesign,
+              }),
             )
             .join('\n')) ||
         (component.text && `${indent}  ${component.text}`);
@@ -135,6 +147,7 @@ export const generateJSX = (design, libraries, themeArg) => {
               screen,
               id: value,
               indent: `${indent}  `,
+              referenceDesign,
             })}\n${indent})}\n${indent}`;
           }
           if (typeof value === 'string') {

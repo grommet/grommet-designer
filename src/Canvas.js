@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Box, Grommet, Paragraph } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
-import { getComponentType } from './utils';
+import { getComponentType, getReferenceDesign } from './utils';
 
 const InlineInput = styled.input`
   box-sizing: border-box;
@@ -74,7 +74,7 @@ const replace = (text, data, contextPath) =>
 
 const Canvas = ({
   design,
-  libraries,
+  imports,
   preview,
   selected,
   theme,
@@ -89,6 +89,11 @@ const Canvas = ({
   const [dropAt, setDropAt] = React.useState();
   const grommetRef = React.useRef();
   const inputRef = React.useRef();
+
+  const libraries = React.useMemo(
+    () => imports.filter(i => i.library).map(i => i.library),
+    [imports],
+  );
 
   // load data, if needed
   React.useEffect(() => {
@@ -184,7 +189,7 @@ const Canvas = ({
     }
   };
 
-  const renderRepeater = (component, type, dataContextPath) => {
+  const renderRepeater = (component, type, { dataContextPath }) => {
     const {
       children,
       designProps,
@@ -200,11 +205,10 @@ const Canvas = ({
         const dataValue = find(data, path);
         if (dataValue && Array.isArray(dataValue)) {
           contents = dataValue.map((_, index) =>
-            renderComponent(
-              children[0],
-              [...path, index],
-              `${component.id}-${index}`,
-            ),
+            renderComponent(children[0], {
+              dataContextPath: [...path, index],
+              key: `${component.id}-${index}`,
+            }),
           );
         }
       }
@@ -212,11 +216,10 @@ const Canvas = ({
         contents = [];
         for (let i = 0; i < count; i += 1) {
           contents.push(
-            renderComponent(
-              children[0],
+            renderComponent(children[0], {
               dataContextPath,
-              `${component.id}-${i}`,
-            ),
+              key: `${component.id}-${i}`,
+            }),
           );
         }
       }
@@ -226,18 +229,25 @@ const Canvas = ({
     return contents || null;
   };
 
-  const renderComponent = (id, dataContextPath, key) => {
-    let component = design.components[id];
+  const renderComponent = (
+    id,
+    { dataContextPath, key, referenceDesign: referenceDesignProp } = {},
+  ) => {
+    let component = (referenceDesignProp || design).components[id];
     let parent;
+    let referenceDesign = referenceDesignProp;
     if (
       component &&
       (component.type === 'designer.Reference' ||
         component.type === 'Reference')
     ) {
-      if (component && component.props.includeChildren === false) {
+      if (component.props.includeChildren === false) {
         parent = component;
       }
-      component = design.components[component.props.component];
+      referenceDesign = getReferenceDesign(imports, component);
+      component = (referenceDesign || design).components[
+        component.props.component
+      ];
     }
     if (!component || component.hide) return null;
 
@@ -250,7 +260,10 @@ const Canvas = ({
       component.type === 'designer.Repeater' ||
       component.type === 'Repeater'
     ) {
-      return renderRepeater(component, type, contextPath);
+      return renderRepeater(component, type, {
+        dataContextPath: contextPath,
+        referenceDesign,
+      });
     }
 
     // set up any properties that need special handling
@@ -294,10 +307,9 @@ const Canvas = ({
           typeof property === 'string' &&
           property.startsWith('-component-')
         ) {
-          specialProps[prop] = renderComponent(
-            component.props[prop],
+          specialProps[prop] = renderComponent(component.props[prop], {
             dataContextPath,
-          );
+          });
         }
       }
     });
@@ -319,7 +331,7 @@ const Canvas = ({
     if (parent.children && parent.children.length > 0) {
       if (parent.children.length > 0) {
         children = parent.children.map(childId =>
-          renderComponent(childId, dataContextPath),
+          renderComponent(childId, { dataContextPath, referenceDesign }),
         );
         if (children.length === 0) children = undefined;
       }
@@ -401,7 +413,7 @@ const Canvas = ({
         if (selected.component !== id) {
           setSelected({ ...selected, component: id });
           setInlineEdit(undefined);
-        } else if (type.text) {
+        } else if (type.text && !referenceDesign) {
           setInlineEdit(id);
         }
         if (specialProps.onClick) specialProps.onClick(event);

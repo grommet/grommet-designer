@@ -175,5 +175,18 @@ export const upgradeDesign = design => {
       );
     });
 
-  design.version = 3.3;
+  // convert libraries and base into imports
+  if (!design.imports) design.imports = [];
+  if (design.base) {
+    design.imports.push({ url: design.base });
+    delete design.base;
+  }
+  if (design.library) {
+    design.library.forEach(lib => {
+      design.imports.push({ name: lib.name, url: lib.url });
+    });
+    delete design.library;
+  }
+
+  design.version = 3.4;
 };
