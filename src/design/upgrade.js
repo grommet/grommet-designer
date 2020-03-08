@@ -182,9 +182,11 @@ export const upgradeDesign = design => {
     delete design.base;
   }
   if (design.library) {
-    design.library.forEach(lib => {
-      design.imports.push({ name: lib.name, url: lib.url });
-    });
+    Object.keys(design.library)
+      .filter(n => n)
+      .forEach(name => {
+        design.imports.push({ name, url: design.library[name] });
+      });
     delete design.library;
   }
 
