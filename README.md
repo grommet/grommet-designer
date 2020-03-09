@@ -50,7 +50,7 @@ The Share control near the upper left provides three methods of sharing.
 
 1. Publish your design. This will generate a unique URL you can send
    to someone. When they open that URL, they will see your work. They will not be
-   able to modify the published version. Also see "base" below.
+   able to modify the published version. Also see "imports" below.
 1. Download the design as a JSON file. You can save or send this
    however you like. You can upload one of these files using the Designs
    dialog, via the Import control.
@@ -98,14 +98,16 @@ you want inside '{}'. For example: `{data-source-name[0].property-name}`.
 You can also reference data in Repeater `dataPath`, so that Repeater will
 iterate over an array.
 
-### Base design
+### Imports
 
-Any published design can be used as a "base" for another design. Any
-components in the base design that have been explicitly given a name will
-be shown in the list of components that can be added. When added, these will
-be copied into the current design by value. In other words, any changes
-published to the base design will not be reflected in components already
-added in the design using it.
+Any published design can be used as a "import" from another design. Any
+components in the imported design that have been explicitly given a name will
+be shown in the list of components that can be added. When added, these can
+be copied into the current design by value. In this case, any changes
+published to the imported design will not be reflected in components already
+added in the design using it. Or, components can be added as a reference. In
+this case, any changes published to the imported design will be reflected
+in the importing design, when the browser is refreshed.
 
 ## Local development
 
