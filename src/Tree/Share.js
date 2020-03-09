@@ -15,7 +15,7 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import { apiUrl, /* bucketPostUrl, bucketKey, */ generateJSX } from '../design';
+import { generateJSX, publish } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -47,56 +47,27 @@ const Publish = ({ design, setDesign }) => {
   }, [design]);
 
   const onPublish = ({ value: { name, email, pin } }) => {
-    setPublishing(true);
     // remember email and pin in local storage so we can use later
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
-
-    // add some metadata to the design
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    nextDesign.email = email;
-    const date = new Date();
-    date.setMilliseconds(pin);
-    nextDesign.date = date.toISOString();
-
-    const body = JSON.stringify(nextDesign);
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Content-Length': body.length,
+    setPublishing(true);
+    publish({
+      design,
+      email,
+      pin,
+      onChange: nextDesign => {
+        setPublishing(false);
+        setUploadUrl(nextDesign.publishedUrl);
+        setDesign(nextDesign);
+        ReactGA.event({
+          category: 'share',
+          action: 'publish design',
+        });
       },
-      body,
-    })
-      .then(response => {
-        if (response.ok) {
-          setError(undefined);
-          return response.text().then(id => {
-            const nextUploadUrl = [
-              window.location.protocol,
-              '//',
-              window.location.host,
-              window.location.pathname,
-              `?id=${encodeURIComponent(id)}`,
-              window.location.hash,
-            ].join('');
-            setUploadUrl(nextUploadUrl);
-            setPublishing(false);
-            nextDesign.publishedUrl = nextUploadUrl;
-            setDesign(nextDesign);
-
-            ReactGA.event({
-              category: 'share',
-              action: 'publish design',
-            });
-          });
-        }
+      onError: error => {
         setPublishing(false);
-        return response.text().then(setError);
-      })
-      .catch(e => {
-        setError(e.message);
-        setPublishing(false);
-      });
+        setError(error);
+      },
+    });
   };
 
   const onCopy = () => {

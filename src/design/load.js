@@ -4,9 +4,7 @@ import themes from '../themes';
 import { setupDesign } from './reset';
 import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
-
-const apiUrl =
-  'https://us-central1-grommet-designer.cloudfunctions.net/designs';
+import { apiUrl, themeApiUrl } from './urls';
 
 export const loadDesign = (id, setDesign, initial) => {
   if (id === '_new') {
@@ -39,9 +37,6 @@ export const loadDesign = (id, setDesign, initial) => {
     }
   }
 };
-
-const themeApiUrl =
-  'https://us-central1-grommet-designer.cloudfunctions.net/themes';
 
 const npmTheme = {};
 

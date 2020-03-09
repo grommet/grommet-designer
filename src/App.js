@@ -10,6 +10,7 @@ import {
   getScreenByPath,
   setupDesign,
   loading,
+  publish,
 } from './design';
 import ScreenDetails from './Properties/ScreenDetails';
 import designerLibrary from './libraries/designer';
@@ -286,10 +287,23 @@ const App = () => {
         if (event.key === 'e' || event.key === 'E') {
           event.preventDefault();
           setPreview(!preview);
+        } else if (event.key === 'p' && event.shiftKey) {
+          const stored = localStorage.getItem('identity');
+          if (stored) {
+            const identity = JSON.parse(stored);
+            publish({
+              design,
+              ...identity,
+              onChange: setDesign,
+              onError: error => console.error(error),
+            });
+          } else {
+            console.warn('You need to have published to be able to re-publish');
+          }
         }
       }
     },
-    [preview],
+    [design, preview],
   );
 
   const onUndo = React.useCallback(() => {

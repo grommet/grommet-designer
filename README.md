@@ -24,6 +24,7 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 - **command-c** or **control-c**: copies the selected component
 - **command-v** or **control-v**: pastes the previously copied component
   into the selected component
+- **command-shift-p** or **control-shift-p**: re-publish
 
 ### Linking
 
