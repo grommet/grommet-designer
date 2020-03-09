@@ -42,7 +42,7 @@ const ArrayProperty = React.forwardRef(
           (searchTest && searchTest(o, searchExp)),
       );
     }
-    if (value) {
+    if (value !== undefined) {
       selectOptions = [...selectOptions, 'undefined'];
     }
 
