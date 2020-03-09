@@ -21,7 +21,6 @@ import AddLocation from './AddLocation';
 import AddMethod from './AddMethod';
 
 const AddComponent = ({
-  base,
   design,
   imports,
   selected,

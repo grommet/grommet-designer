@@ -112,7 +112,7 @@ export default ({ design, libraries, onChange, selected }) => {
       options={locations}
       disabled={locations.length === 1}
       value={location}
-      onChange={event => setLocation(event.value)}
+      onChange={event => setLocation(event.target.value)}
       direction="row"
     >
       {(option, { checked, hover }) => {
