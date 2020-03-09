@@ -93,8 +93,10 @@ export const loadImports = (imports, setImports) => {
           loadDesign(id, importDesign => {
             setImports(prevImports => {
               const nextImports = [...prevImports];
+              const nextImport = { ...impor, design: importDesign };
               const index = nextImports.findIndex(i => i.url === url);
-              nextImports[index] = { ...impor, design: importDesign };
+              if (index !== -1) nextImports[index] = nextImport;
+              else nextImports.push(nextImport);
               return nextImports;
             });
           });

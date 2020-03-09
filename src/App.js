@@ -224,15 +224,35 @@ const App = () => {
     }
   }, [design, designs, load]);
 
-  // update imports
+  // align imports with design.imports
   React.useEffect(() => {
     if (!load) {
-      loadImports(design.imports, f => {
-        const nextImports = f(imports);
-        setLoad(prevLoad => ({ ...prevLoad, imports: nextImports }));
+      // remove any imports we don't want anymore
+      const nextImports = imports.filter(
+        ({ url }) =>
+          !url || design.imports.findIndex(i => i.url === url) !== -1,
+      );
+      let changed = nextImports.length !== imports.length;
+      // add any imports we don't have yet
+      design.imports.forEach(({ url }) => {
+        if (nextImports.findIndex(i => i.url === url) === -1) {
+          nextImports.push({ url });
+          changed = true;
+        }
       });
+      if (changed) setImports(nextImports);
     }
   }, [design.imports, imports, load]);
+
+  // load any imports we don't have yet
+  React.useEffect(() => {
+    if (!load) {
+      loadImports(imports, f => {
+        const nextImports = f(imports);
+        setImports(nextImports);
+      });
+    }
+  }, [imports, load]);
 
   // update theme
   React.useEffect(() => {
