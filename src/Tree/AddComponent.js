@@ -79,7 +79,12 @@ const AddComponent = ({
       }
     } else if (template) {
       if (addMode === 'copy') {
-        const id = copyComponent(nextDesign, templateDesign, template.id);
+        const id = copyComponent({
+          nextDesign,
+          templateDesign,
+          id: template.id,
+          screen: nextSelected.screen,
+        });
         nextDesign.components[id].name = template.name;
         nextSelected.component = id;
       } else if (addMode === 'reference') {

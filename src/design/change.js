@@ -45,22 +45,42 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
   }
 };
 
-export const copyComponent = (nextDesign, design, id) => {
-  const component = design.components[id];
+export const copyComponent = ({
+  nextDesign,
+  templateDesign,
+  id,
+  idMap: idMapArg,
+  screen,
+}) => {
+  const component = templateDesign.components[id];
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;
   const nextComponent = JSON.parse(JSON.stringify(component));
   nextComponent.id = nextId;
   nextDesign.components[nextId] = nextComponent;
+  const idMap = idMapArg || {};
+  idMap[id] = nextId;
   if (component.children) {
     nextComponent.children = component.children.map(childId => {
-      const nextChildId = copyComponent(nextDesign, design, childId);
+      const nextChildId = copyComponent({
+        nextDesign,
+        templateDesign,
+        id: childId,
+        idMap,
+        screen,
+      });
       return nextChildId;
     });
   }
   if (component.propComponents) {
     nextComponent.propComponents = component.propComponents.map(childId => {
-      const nextChildId = copyComponent(nextDesign, design, childId);
+      const nextChildId = copyComponent({
+        nextDesign,
+        templateDesign,
+        id: childId,
+        idMap,
+        screen,
+      });
       // update corresponding property
       Object.keys(nextComponent.props).forEach(prop => {
         if (nextComponent.props[prop] === childId) {
@@ -68,6 +88,40 @@ export const copyComponent = (nextDesign, design, id) => {
         }
       });
       return nextChildId;
+    });
+  }
+  if (!idMapArg && nextDesign.name !== templateDesign.name) {
+    // We are at the root of what was copied and we've used an import.
+    // Fix up any links to point to the copied components.
+    Object.keys(idMap).forEach(templateId => {
+      const component = nextDesign.components[idMap[templateId]];
+      if (component.designProps && component.designProps.link) {
+        // Button
+        if (idMap[component.designProps.link.component]) {
+          // we have a map for this, update it
+          component.designProps.link.component =
+            idMap[component.designProps.link.component];
+          component.designProps.link.screen = screen;
+        } else {
+          // we don't have a map for this, remove the link
+          delete component.designProps.link;
+        }
+      }
+      if (component.props && component.props.items) {
+        // Menu
+        component.props.items.forEach(item => {
+          if (item.link) {
+            if (idMap[item.link.component]) {
+              // we have a map for this, update it
+              item.link.component = idMap[item.link.component];
+              item.link.screen = screen; // not sure what screen yet
+            } else {
+              // we don't have a map for this, clear the link
+              item.link = {};
+            }
+          }
+        });
+      }
     });
   }
   return nextId;
