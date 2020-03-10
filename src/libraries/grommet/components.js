@@ -31,6 +31,8 @@ import {
   RangeInput,
   Select,
   Stack,
+  Tab,
+  Tabs,
   Text,
   TextArea,
   TextInput,
@@ -606,6 +608,11 @@ export const components = {
       animate: true,
       multiple: false,
     },
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Accordion is currently empty. Add AccordionPanels to it.
+      </Paragraph>
+    ),
   },
   AccordionPanel: {
     component: AccordionPanel,
@@ -752,6 +759,35 @@ export const components = {
         },
       }));
       return result;
+    },
+  },
+  Tabs: {
+    component: Tabs,
+    name: 'Tabs',
+    container: true,
+    documentation: 'https://v2.grommet.io/tabs',
+    properties: {
+      activeIndex: 0,
+      flex: ['grow', 'shrink', true, false],
+      margin: Edge,
+    },
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Tabs is currently empty. Add Tab components to it.
+      </Paragraph>
+    ),
+  },
+  Tab: {
+    component: Tab,
+    name: 'Tab',
+    container: true,
+    documentation: 'https://v2.grommet.io/tabs',
+    defaultProps: {
+      title: 'tab',
+    },
+    properties: {
+      title: 'tab',
+      plain: false,
     },
   },
   CheckBox: {

@@ -137,13 +137,25 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
     // copy components from the copyScreen
     if (copyScreen.id) {
       // screen in nextDesign
-      screen.root = copyComponent(nextDesign, nextDesign, copyScreen.root);
+      screen.root = copyComponent({
+        nextDesign,
+        templateDesign: nextDesign,
+        id: copyScreen.root,
+      });
     } else {
       // starter
-      screen.root = copyComponent(nextDesign, copyScreen, copyScreen.root);
+      screen.root = copyComponent({
+        nextDesign,
+        templateDesign: copyScreen,
+        id: copyScreen.root,
+      });
     }
   } else {
-    screen.root = copyComponent(nextDesign, bare, bare.screens[1].root);
+    screen.root = copyComponent({
+      nextDesign,
+      templateDesign: bare,
+      id: bare.screens[1].root,
+    });
   }
 
   // set a good initial name
@@ -178,7 +190,7 @@ export const deleteScreen = (nextDesign, id) => {
 };
 
 export const duplicateComponent = (nextDesign, id, parentId) => {
-  const newId = copyComponent(nextDesign, nextDesign, id);
+  const newId = copyComponent({ nextDesign, templateDesign: nextDesign, id });
   const parent = parentId
     ? nextDesign.components[parentId]
     : getParent(nextDesign, id);

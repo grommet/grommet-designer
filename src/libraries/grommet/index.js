@@ -29,6 +29,8 @@ const structure = [
       'Button',
       'DropButton',
       'Menu',
+      'Tabs',
+      'Tab',
     ],
   },
   {
