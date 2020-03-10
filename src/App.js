@@ -210,6 +210,9 @@ const App = () => {
       // do this stuff lazily, so we don't bog down the UI
       const timer = setTimeout(() => {
         document.title = design.name;
+        const date = new Date();
+        date.setMilliseconds(0);
+        design.date = date.toISOString();
 
         localStorage.setItem(design.name, JSON.stringify(design));
         localStorage.setItem('activeDesign', design.name);
