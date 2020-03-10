@@ -6908,9 +6908,9 @@ minimist@0.0.8:
   integrity sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
 
 minimist@^1.1.1, minimist@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.1.tgz#f41818114b8d4be3c0a4febdf3c432b956680ece"
-  integrity sha512-MxgrjJPBtptee4aL2EExBK3tS4KUc1RtuRluaHZCmxKII8SBkvUP6z7XDmxEaUxdvpp++waKrqvSzuFXTRntVg==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.3.tgz#3db5c0765545ab8637be71f333a104a965a9ca3f"
+  integrity sha512-+bMdgqjMN/Z77a6NlY/I3U5LlRDbnmaAk6lDveAPKwSpcPM4tKAuYsvYF8xjhOPXhOYGe/73vVLVez5PW+jqhw==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
