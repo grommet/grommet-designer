@@ -10,7 +10,7 @@ const LinkLabel = design => ({ selected, value }) => {
   } else if (value.component) {
     label = getDisplayName(design, value.component);
   } else if (value.screen) {
-    label = design.screens[value.screen].name;
+    label = (design.screens[value.screen] || {}).name; // defensive
   } else if (value.label) {
     label = value.label;
   } else {

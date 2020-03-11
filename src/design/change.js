@@ -97,7 +97,13 @@ export const copyComponent = ({
       const component = nextDesign.components[idMap[templateId]];
       if (component.designProps && component.designProps.link) {
         // Button
-        if (idMap[component.designProps.link.component]) {
+        if (
+          component.designProps.link.screen &&
+          !component.designProps.libraries.component
+        ) {
+          // this is a screen link, delete it
+          delete component.designProps.link;
+        } else if (idMap[component.designProps.link.component]) {
           // we have a map for this, update it
           component.designProps.link.component =
             idMap[component.designProps.link.component];
@@ -111,7 +117,10 @@ export const copyComponent = ({
         // Menu
         component.props.items.forEach(item => {
           if (item.link) {
-            if (idMap[item.link.component]) {
+            if (item.link.screen && !item.link.component) {
+              // this is a screen link, clear it
+              item.link = {};
+            } else if (idMap[item.link.component]) {
               // we have a map for this, update it
               item.link.component = idMap[item.link.component];
               item.link.screen = screen; // not sure what screen yet
