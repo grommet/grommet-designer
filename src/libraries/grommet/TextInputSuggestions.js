@@ -11,7 +11,7 @@ export default ({ value, onChange }) => {
         value={value ? value.join('\n') : ''}
         onChange={event => {
           const nextValue = event.target.value;
-          onChange(nextValue.split('\n'));
+          onChange(nextValue ? nextValue.split('\n') : '');
         }}
       />
     </Box>
