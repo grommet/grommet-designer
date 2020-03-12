@@ -118,7 +118,7 @@ const AddComponent = ({
     });
   };
 
-  const searchExp = search ? new RegExp(`^${search}`, 'i') : undefined;
+  const searchExp = search ? new RegExp(search, 'i') : undefined;
 
   return (
     <Layer
