@@ -952,6 +952,7 @@ export const components = {
         color: ['-color-'],
         opacity: ['weak', 'medium', 'strong'],
       },
+      dash: false,
       gap: EdgeSizeOptions({
         options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
         direction: 'row',
