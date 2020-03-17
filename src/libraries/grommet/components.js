@@ -1102,6 +1102,7 @@ export const components = {
         'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
     },
     properties: {
+      fill: ['horizontal', 'vertical', true, false],
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
