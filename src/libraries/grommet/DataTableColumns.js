@@ -54,6 +54,18 @@ export default ({ value, onChange }) => {
                 }}
               />
             </FormField>
+            <FormField label="verticalAlign">
+              <Select
+                options={['top', 'middle', 'bottom', 'undefined']}
+                value={c.verticalAlign || ''}
+                onChange={({ option }) => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  nextValue[i].verticalAlign =
+                    option === 'undefined' ? undefined : option;
+                  onChange(nextValue);
+                }}
+              />
+            </FormField>
             {['primary', 'search', 'sortable'].map(subProp => (
               <FormField key={subProp}>
                 <Box pad="small">
