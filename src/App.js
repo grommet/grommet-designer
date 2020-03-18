@@ -294,15 +294,12 @@ const App = () => {
     window.dispatchEvent(new Event('resize'));
   }, [preview]);
 
-  // set body editing class when preview changes, so we can use some
-  // custom CSS for Layer. Yes, this is a bit of a hack :(
+  // clear any query parameters if the design changes
   React.useEffect(() => {
-    if (preview) {
-      document.body.classList.remove('editing');
-    } else {
-      document.body.classList.add('editing');
+    if (!load && window.location.search) {
+      window.history.pushState(undefined, undefined, window.location.pathname);
     }
-  }, [preview]);
+  }, [design, load]);
 
   const onKey = React.useCallback(
     event => {
