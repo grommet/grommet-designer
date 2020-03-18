@@ -10,6 +10,7 @@ import {
   CheckBox,
   Clock,
   DataTable,
+  Distribution,
   DropButton,
   Footer,
   Form,
@@ -1044,6 +1045,59 @@ export const components = {
           followLink({ ...props.onClickRow, dataContextPath: path });
         };
       }
+      return result;
+    },
+  },
+  Distribution: {
+    component: Distribution,
+    name: 'Distribution',
+    defaultProps: {
+      gap: 'xsmall',
+      values: [
+        { value: 10 },
+        { value: 20 },
+        { value: 25 },
+        { value: 40 },
+        { value: 35 },
+      ],
+    },
+    properties: {
+      basis: [
+        'xxsmall',
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+        'full',
+        '1/2',
+        '1/3',
+        '2/3',
+        '1/4',
+        '3/4',
+        'auto',
+      ],
+      fill: false,
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+        direction: 'row',
+      }),
+      margin: Edge,
+      values: MeterValues,
+    },
+    designProperties: {
+      dataPath: '',
+    },
+    override: ({ props }, { data }) => {
+      const result = {};
+      // need to use retrieved data for values property
+      if (data) result.values = data;
+      result.children = value => (
+        <Box fill background={value.color} pad="xsmall">
+          <Text>{value.value}</Text>
+        </Box>
+      );
       return result;
     },
   },

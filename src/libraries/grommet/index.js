@@ -50,7 +50,15 @@ const structure = [
   {
     name: 'Visualizations',
     Icon: BarChart,
-    components: ['Calendar', 'Chart', 'Clock', 'DataTable', 'List', 'Meter'],
+    components: [
+      'Calendar',
+      'Chart',
+      'Clock',
+      'DataTable',
+      'Distribution',
+      'List',
+      'Meter',
+    ],
   },
   {
     name: 'Media',
