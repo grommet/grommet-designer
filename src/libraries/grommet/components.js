@@ -52,6 +52,7 @@ import ChartValues from './ChartValues';
 import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
 import GridColumns from './GridColumns';
+import GridGap from './GridGap';
 import GridRows from './GridRows';
 import DataTableColumns from './DataTableColumns';
 import DataTableData from './DataTableData';
@@ -474,9 +475,7 @@ export const components = {
       areas: GridAreas,
       columns: GridColumns,
       fill: ['horizontal', 'vertical'],
-      gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      }),
+      gap: GridGap,
       justify: ['stretch', 'start', 'center', 'end'],
       justifyContent: ['stretch', 'start', 'center', 'end', 'between'],
       margin: Edge,
