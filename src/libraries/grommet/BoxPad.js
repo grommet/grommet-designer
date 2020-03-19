@@ -2,15 +2,10 @@ import React from 'react';
 import { Blank } from 'grommet-icons';
 import InlineOptions from './InlineOptions';
 import InlineOption from './InlineOption';
+import UndefinedOption, { undefinedOption } from './UndefinedOption';
+import VariedOption, { variedOption } from './VariedOption';
 
-const options = [
-  'xsmall',
-  'small',
-  'medium',
-  'large',
-  'xlarge',
-  { label: 'varied', value: {}, domValue: '{}' },
-];
+const options = ['xsmall', 'small', 'medium', 'large', 'xlarge', variedOption];
 
 const deltas = {
   xsmall: 1,
@@ -27,19 +22,7 @@ const stroke = {
 
 const PadState = ({ checked, hover, name, option }) => {
   let content;
-  if (option.label === 'undefined') {
-    content = [
-      <line key="1" x1={8} y1={8} x2={16} y2={16} />,
-      <line key="2" x1={8} y1={16} x2={16} y2={8} />,
-    ];
-  } else if (option.label === 'varied') {
-    content = [
-      <line key="1" x1={8} y1={2} x2={16} y2={2} />,
-      <line key="2" x1={22} y1={8} x2={22} y2={16} />,
-      <line key="3" x1={16} y1={22} x2={8} y2={22} />,
-      <line key="4" x1={2} y1={16} x2={2} y2={8} />,
-    ];
-  } else if (name === 'pad') {
+  if (name === 'pad') {
     const d = deltas[option.value];
     const d2 = 24 - d;
     content = (
@@ -89,24 +72,25 @@ const BoxPad = props => {
   const adjustedOptions = options.filter(
     o => name === 'pad' || typeof o === 'string',
   );
-  if (value) {
-    adjustedOptions.push({
-      label: 'undefined',
-      value: undefined,
-      domValue: '-',
-    });
-  }
+  if (value) adjustedOptions.push(undefinedOption);
   return (
     <InlineOptions name={name} options={adjustedOptions} {...props}>
-      {(option, { checked, hover }) => (
-        <PadState
-          name={name}
-          option={option}
-          checked={checked}
-          hover={hover}
-          {...props.props}
-        />
-      )}
+      {(option, { checked, hover }) => {
+        if (option.label === undefinedOption.label) {
+          return <UndefinedOption checked={checked} hover={hover} />;
+        } else if (option.label === variedOption.label) {
+          return <VariedOption checked={checked} hover={hover} />;
+        }
+        return (
+          <PadState
+            name={name}
+            option={option}
+            checked={checked}
+            hover={hover}
+            {...props.props}
+          />
+        );
+      }}
     </InlineOptions>
   );
 };

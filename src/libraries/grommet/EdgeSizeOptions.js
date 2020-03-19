@@ -1,11 +1,12 @@
 import React from 'react';
 import InlineOptions from './InlineOptions';
 import EdgeSizeState from './EdgeSizeState';
+import { undefinedOption } from './UndefinedOption';
 
 export default ({ options, direction }) => {
   const EdgeSizeOptions = props => {
     const adjustedOptions = props.value
-      ? options.concat({ label: 'undefined', value: undefined, domValue: '-' })
+      ? options.concat(undefinedOption)
       : options;
     return (
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
