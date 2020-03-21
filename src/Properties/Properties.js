@@ -9,14 +9,16 @@ import {
   Heading,
   Keyboard,
   Markdown,
+  Menu,
   Paragraph,
   Text,
   TextInput,
 } from 'grommet';
-import { Duplicate, Help, Location, Refresh, Trash } from 'grommet-icons';
+import { Duplicate, Location, Refresh, Trash } from 'grommet-icons';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
+import ComponentCode from './ComponentCode';
 import {
   deleteComponent,
   duplicateComponent,
@@ -32,6 +34,7 @@ import { getComponentType } from '../utils';
 export default ({
   component,
   design,
+  imports,
   libraries,
   selected,
   theme,
@@ -56,6 +59,7 @@ export default ({
     () => getLinkOptions(design, libraries, selected),
     [design, libraries, selected],
   );
+  const [showCode, setShowCode] = React.useState();
 
   const searchRef = React.useRef();
   const defaultRef = React.useRef();
@@ -200,26 +204,31 @@ export default ({
       <Box height="100vh" border="left">
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
-            <ActionButton
-              title="documentation"
+            <Menu
               fill
               hoverIndicator
-              target="_blank"
-              href={type.documentation}
-            >
-              <Box
-                fill
-                pad="small"
-                direction="row"
-                align="center"
-                justify="between"
-              >
+              justifyContent="between"
+              label={
                 <Heading level={2} size="18px" margin="none" truncate>
                   {type.name}
                 </Heading>
-                <Help size="small" />
-              </Box>
-            </ActionButton>
+              }
+              dropProps={{ align: { top: 'bottom' } }}
+              items={[
+                { label: 'code', onClick: () => setShowCode(true) },
+                { label: 'reset', onClick: reset },
+                { label: 'help', href: type.documentation, target: '_blank' },
+              ]}
+            />
+            {showCode && (
+              <ComponentCode
+                component={component}
+                design={design}
+                imports={imports}
+                theme={theme}
+                onDone={() => setShowCode(false)}
+              />
+            )}
           </Box>
           {!component.coupled && (
             <Box flex={false} direction="row" align="center">

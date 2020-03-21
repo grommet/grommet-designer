@@ -47,7 +47,7 @@ exports[`App empty 1`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Mar 20 Design
+                  Mar 21 Design
                 </h1>
               </div>
             </button>
@@ -263,34 +263,40 @@ exports[`App empty 1`] = `
         <div
           class="StyledBox-sc-13pk1d4-0 jdqjIE"
         >
-          <a
+          <button
+            aria-label="Open Menu"
             class="StyledButton-sc-323bzc-0 fQsUEE"
-            href="https://v2.grommet.io/box"
-            target="_blank"
-            title="documentation"
+            type="button"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dZrjrI"
+              class="StyledBox-sc-13pk1d4-0 gyvaAn"
             >
-              <h2
-                class="StyledHeading-sc-1rdh4aw-0 IMaVO"
+              <span
+                class="StyledText-sc-1sadyjn-0 hUokoe"
               >
-                Box
-              </h2>
+                <h2
+                  class="StyledHeading-sc-1rdh4aw-0 IMaVO"
+                >
+                  Box
+                </h2>
+              </span>
+              <div
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffjnxm"
+              />
               <svg
-                aria-label="Help"
-                class="StyledIcon-ofa7kd-0 yDmRf"
+                aria-label="FormDown"
+                class="StyledIcon-ofa7kd-0 hxHSmr"
                 viewBox="0 0 24 24"
               >
-                <path
-                  d="M12,23 C12.5522847,23 13,22.5522847 13,22 C13,21.4477153 12.5522847,21 12,21 C11.4477153,21 11,21.4477153 11,22 C11,22.5522847 11.4477153,23 12,23 Z M12,18 L12,15 C12,13 13,13 15,12 C17,11 18,9.15767339 18,7 C18,3.6862915 15.3137085,1 12,1 C8.6862915,1 6,3.6862915 6,7"
+                <polyline
                   fill="none"
+                  points="18 9 12 15 6 9"
                   stroke="#000"
                   stroke-width="2"
                 />
               </svg>
             </div>
-          </a>
+          </button>
         </div>
         <div
           class="StyledBox-sc-13pk1d4-0 kDGHLb"
@@ -2708,7 +2714,7 @@ exports[`App empty 2`] = `
                 <h1
                   class="StyledHeading-sc-1rdh4aw-0 guPwVC"
                 >
-                  Mar 20 Design
+                  Mar 21 Design
                 </h1>
               </div>
             </button>
@@ -2924,34 +2930,40 @@ exports[`App empty 2`] = `
         <div
           class="StyledBox-sc-13pk1d4-0 jdqjIE"
         >
-          <a
+          <button
+            aria-label="Open Menu"
             class="StyledButton-sc-323bzc-0 fQsUEE"
-            href="https://v2.grommet.io/box"
-            target="_blank"
-            title="documentation"
+            type="button"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dZrjrI"
+              class="StyledBox-sc-13pk1d4-0 gyvaAn"
             >
-              <h2
-                class="StyledHeading-sc-1rdh4aw-0 IMaVO"
+              <span
+                class="StyledText-sc-1sadyjn-0 hUokoe"
               >
-                Box
-              </h2>
+                <h2
+                  class="StyledHeading-sc-1rdh4aw-0 IMaVO"
+                >
+                  Box
+                </h2>
+              </span>
+              <div
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffjnxm"
+              />
               <svg
-                aria-label="Help"
-                class="StyledIcon-ofa7kd-0 yDmRf"
+                aria-label="FormDown"
+                class="StyledIcon-ofa7kd-0 hxHSmr"
                 viewBox="0 0 24 24"
               >
-                <path
-                  d="M12,23 C12.5522847,23 13,22.5522847 13,22 C13,21.4477153 12.5522847,21 12,21 C11.4477153,21 11,21.4477153 11,22 C11,22.5522847 11.4477153,23 12,23 Z M12,18 L12,15 C12,13 13,13 15,12 C17,11 18,9.15767339 18,7 C18,3.6862915 15.3137085,1 12,1 C8.6862915,1 6,3.6862915 6,7"
+                <polyline
                   fill="none"
+                  points="18 9 12 15 6 9"
                   stroke="#000"
                   stroke-width="2"
                 />
               </svg>
             </div>
-          </a>
+          </button>
         </div>
         <div
           class="StyledBox-sc-13pk1d4-0 kDGHLb"

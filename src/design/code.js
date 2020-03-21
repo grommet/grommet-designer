@@ -47,7 +47,12 @@ const screenComponentName = ({ id, name }) =>
     ? `${name.charAt(0).toUpperCase()}${name.replace(/\s/g, '').slice(1)}`
     : `Screen${id}`;
 
-export const generateJSX = (design, importsArg, themeArg) => {
+export const generateJSX = ({
+  component,
+  design,
+  imports: importsArg,
+  theme: themeArg,
+}) => {
   const libraries = importsArg.filter(i => i.library).map(i => i.library);
   const imports = { Grommet: true };
   const iconImports = {};
@@ -174,82 +179,86 @@ ${result}
     return result;
   };
 
-  if (design.theme) {
-    if (design.theme.startsWith('https:')) {
-      publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
-      theme = 'theme';
-    } else {
-      if (design.theme === 'grommet' || design.theme === 'dark') {
-        imports[design.theme] = true;
+  if (component) {
+    return componentToJSX({ id: component.id, indent: '' });
+  } else {
+    if (design.theme) {
+      if (design.theme.startsWith('https:')) {
+        publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
+        theme = 'theme';
       } else {
-        themeImports[design.theme] = true;
+        if (design.theme === 'grommet' || design.theme === 'dark') {
+          imports[design.theme] = true;
+        } else {
+          themeImports[design.theme] = true;
+        }
       }
     }
+
+    Object.keys(design.screens).forEach(sId => {
+      const screen = design.screens[sId];
+      screenNames[sId] = screenComponentName(screen);
+    });
+
+    const single = Object.keys(design.screens).length === 1;
+    const screens = Object.keys(design.screens)
+      .map(sKey => design.screens[sKey])
+      .map(screen => {
+        layers = {};
+        const root = componentToJSX({
+          screen,
+          id: screen.root,
+          indent: single ? '      ' : '    ',
+        });
+        return `${
+          single ? 'export default' : `const ${screenComponentName(screen)} =`
+        } () => {
+    ${!single ? 'const { push } = React.useContext(RouterContext)\n  ' : ''}${
+          Object.keys(layers).length > 0
+            ? 'const [layer, setLayer] = React.useState()'
+            : ''
+        }
+    return (${single ? `\n    <Grommet theme={${theme}}>` : ''}
+  ${root}
+  ${single ? '    </Grommet>\n' : ''}  )
+  }`;
+      })
+      .join('\n\n');
+
+    return `import React${!single ? ', { Children }' : ''} from 'react'
+  import { ${Object.keys(imports).join(', ')} } from 'grommet'
+  ${
+    Object.keys(iconImports).length > 0
+      ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
+      : ''
+  }${Object.keys(themeImports)
+      .map(theme => `import { ${theme} } from 'grommet-theme-${theme}'`)
+      .join('\n')}
+  ${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
+  ${publishedTheme || ''}
+  ${screens}
+  ${
+    !single
+      ? `
+  export default () => (
+    <Grommet full theme={${theme}}>
+      <Router>
+        <Routes>
+          ${Object.keys(design.screens)
+            .map(id => design.screens[id])
+            .map(
+              screen =>
+                `<Route path="${screen.path}" Component={${screenComponentName(
+                  screen,
+                )}} />`,
+            )
+            .join('\n        ')}
+        </Routes>
+      </Router>
+    </Grommet>
+  )
+  `
+      : ''
+  }`;
   }
-
-  Object.keys(design.screens).forEach(sId => {
-    const screen = design.screens[sId];
-    screenNames[sId] = screenComponentName(screen);
-  });
-
-  const single = Object.keys(design.screens).length === 1;
-  const screens = Object.keys(design.screens)
-    .map(sKey => design.screens[sKey])
-    .map(screen => {
-      layers = {};
-      const root = componentToJSX({
-        screen,
-        id: screen.root,
-        indent: single ? '      ' : '    ',
-      });
-      return `${
-        single ? 'export default' : `const ${screenComponentName(screen)} =`
-      } () => {
-  ${!single ? 'const { push } = React.useContext(RouterContext)\n  ' : ''}${
-        Object.keys(layers).length > 0
-          ? 'const [layer, setLayer] = React.useState()'
-          : ''
-      }
-  return (${single ? `\n    <Grommet theme={${theme}}>` : ''}
-${root}
-${single ? '    </Grommet>\n' : ''}  )
-}`;
-    })
-    .join('\n\n');
-
-  return `import React${!single ? ', { Children }' : ''} from 'react'
-import { ${Object.keys(imports).join(', ')} } from 'grommet'
-${
-  Object.keys(iconImports).length > 0
-    ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
-    : ''
-}${Object.keys(themeImports)
-    .map(theme => `import { ${theme} } from 'grommet-theme-${theme}'`)
-    .join('\n')}
-${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
-${publishedTheme || ''}
-${screens}
-${
-  !single
-    ? `
-export default () => (
-  <Grommet full theme={${theme}}>
-    <Router>
-      <Routes>
-        ${Object.keys(design.screens)
-          .map(id => design.screens[id])
-          .map(
-            screen =>
-              `<Route path="${screen.path}" Component={${screenComponentName(
-                screen,
-              )}} />`,
-          )
-          .join('\n        ')}
-      </Routes>
-    </Router>
-  </Grommet>
-)
-`
-    : ''
-}`;
 };

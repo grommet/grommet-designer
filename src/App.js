@@ -408,6 +408,7 @@ const App = () => {
               <Properties
                 design={design}
                 libraries={libraries}
+                imports={imports}
                 theme={theme}
                 selected={selected}
                 component={selectedComponent}

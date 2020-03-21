@@ -199,7 +199,7 @@ const Developer = ({ design, imports, theme }) => {
           label="Generate Code"
           hoverIndicator
           onClick={() => {
-            setCode(generateJSX(design, imports, theme));
+            setCode(generateJSX({ design, imports, theme }));
             ReactGA.event({
               category: 'share',
               action: 'generate code',
