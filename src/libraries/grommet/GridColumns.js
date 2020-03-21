@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormField,
+  MaskedInput,
   Paragraph,
   Select,
   RadioButtonGroup,
@@ -179,29 +180,52 @@ export default ({ value, onChange }) => {
                 'large',
                 'xlarge',
                 'xxlarge',
+                'flex',
               ]}
               value={(value && value.size) || value || ''}
               onChange={({ option }) => onChange(option)}
             />
           </FormField>
           <FormField label="count">
-            <Select
-              options={['fit', 'fill', 'undefined']}
-              value={(value && value.count) || ''}
-              onChange={({ option }) => {
-                let nextValue;
-                if (option === 'undefined') {
-                  nextValue = value.size || value;
-                } else {
-                  if (typeof value === 'string') {
-                    nextValue = { size: value, count: option };
+            {value && (value === 'flex' || value.size === 'flex') ? (
+              <MaskedInput
+                mask={[
+                  {
+                    regexp: /^\d*$/,
+                  },
+                ]}
+                value={value.count}
+                onChange={event => {
+                  const count =
+                    event.target.value === ''
+                      ? undefined
+                      : parseInt(event.target.value, 10);
+                  let nextValue =
+                    typeof value === 'string'
+                      ? { size: value, count }
+                      : { ...value, count };
+                  onChange(nextValue);
+                }}
+              />
+            ) : (
+              <Select
+                options={['fit', 'fill', 'undefined']}
+                value={(value && value.count) || ''}
+                onChange={({ option }) => {
+                  let nextValue;
+                  if (option === 'undefined') {
+                    nextValue = value.size || value;
                   } else {
-                    nextValue = { ...value, count: option };
+                    if (typeof value === 'string') {
+                      nextValue = { size: value, count: option };
+                    } else {
+                      nextValue = { ...value, count: option };
+                    }
                   }
-                }
-                onChange(nextValue);
-              }}
-            />
+                  onChange(nextValue);
+                }}
+              />
+            )}
           </FormField>
         </Box>
       )}
