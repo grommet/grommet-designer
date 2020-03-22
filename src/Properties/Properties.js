@@ -50,6 +50,7 @@ export default ({
     design,
   ]);
   const [showReferences, setShowReferences] = React.useState();
+  const [showAdvanced, setShowAdvanced] = React.useState(false);
   const [search, setSearch] = React.useState();
   const searchExp = React.useMemo(
     () => search && new RegExp(`^${search}`, 'i'),
@@ -177,6 +178,12 @@ export default ({
         propName =>
           typeof properties[propName] !== 'string' ||
           !properties[propName].startsWith('-component-'),
+      )
+      .filter(
+        propName =>
+          !type.advancedProperties ||
+          showAdvanced ||
+          type.advancedProperties.indexOf(propName) === -1,
       )
       .map((propName, index) => (
         <Fragment key={`${id}-${propName}`}>
@@ -435,7 +442,16 @@ export default ({
                   </Box>
                 )}
 
-                {(!searchExp || searchExp.test('style')) && (
+                <Box pad="medium">
+                  <CheckBox
+                    label="advanced"
+                    checked={showAdvanced}
+                    toggle
+                    onChange={() => setShowAdvanced(!showAdvanced)}
+                  />
+                </Box>
+
+                {(!searchExp || searchExp.test('style')) && showAdvanced && (
                   <TextAreaField
                     name="style"
                     componentId={component.id}

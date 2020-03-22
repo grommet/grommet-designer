@@ -188,6 +188,7 @@ export const components = {
       ],
       wrap: false,
     },
+    advancedProperties: ['alignSelf', 'height', 'width', 'wrap'],
     structure: [
       {
         label: 'Content layout',
@@ -341,6 +342,7 @@ export const components = {
       pad: BoxPad,
       rows: GridRows,
     },
+    advancedProperties: ['margin'],
   },
   Stack: {
     component: Stack,
@@ -369,6 +371,7 @@ export const components = {
       guidingChild: ['first', 'last'],
       margin: Edge,
     },
+    advancedProperties: ['margin'],
   },
   Layer: {
     component: Layer,
@@ -400,6 +403,7 @@ export const components = {
       position: ['center', 'top', 'bottom', 'left', 'right'],
       responsive: false,
     },
+    advancedProperties: ['animate', 'responsive'],
     override: (_, { setHide }) => {
       const result = {};
       result.onClickOutside = () => setHide(true);
@@ -502,6 +506,7 @@ export const components = {
     designProperties: {
       link: ['-link-'],
     },
+    advancedProperties: ['margin', 'color'],
     override: ({ designProps }, { dataContextPath, followLink }) => {
       return {
         onClick:
@@ -541,6 +546,7 @@ export const components = {
     designProperties: {
       link: ['-link-'],
     },
+    advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
     override: ({ designProps }, { dataContextPath, followLink }) => {
       return {
         onClick:
@@ -588,6 +594,7 @@ export const components = {
       primary: false,
       reverse: false,
     },
+    advancedProperties: ['color', 'disabled', 'gap', 'margin'],
   },
   Menu: {
     component: Menu,

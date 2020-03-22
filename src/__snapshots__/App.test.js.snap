@@ -1840,42 +1840,6 @@ exports[`App empty 1`] = `
                     </div>
                   </button>
                 </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="wrap"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      wrap
-                    </span>
-                  </label>
-                  <div
-                    class="StyledBox-sc-13pk1d4-0 dzUoz"
-                  >
-                    <label
-                      class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 qTBiO"
-                      for="wrap"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 jmffUi StyledCheckBox-sc-1dbk5ju-6 CBoMo"
-                      >
-                        <input
-                          class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 dXmyaG"
-                          id="wrap"
-                          name="wrap"
-                          type="checkbox"
-                        />
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 glNMIk StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 iEciRS"
-                        />
-                      </div>
-                    </label>
-                  </div>
-                </div>
               </div>
               <div
                 class="StyledBox-sc-13pk1d4-0 gkmXdO"
@@ -2042,112 +2006,6 @@ exports[`App empty 1`] = `
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="height"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      height
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="height"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="width"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      width
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="width"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
                     for="basis"
                   >
                     <span
@@ -2160,59 +2018,6 @@ exports[`App empty 1`] = `
                     aria-label="Open Drop"
                     class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
                     id="basis"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="alignSelf"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      alignSelf
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="alignSelf"
                     type="button"
                   >
                     <div
@@ -2622,24 +2427,30 @@ exports[`App empty 1`] = `
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 iptkul"
+              class="StyledBox-sc-13pk1d4-0 cMHWMf"
             >
               <label
-                class="StyledBox-sc-13pk1d4-0 cacHrb"
-                for="style"
+                class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 qTBiO"
               >
-                <span
-                  class="StyledText-sc-1sadyjn-0 hUokoe"
+                <div
+                  class="StyledBox-sc-13pk1d4-0 eeTGTD StyledCheckBox-sc-1dbk5ju-6 CBoMo"
                 >
-                  style
+                  <input
+                    class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 dXmyaG"
+                    type="checkbox"
+                  />
+                  <span
+                    class="StyledCheckBox__StyledCheckBoxToggle-sc-1dbk5ju-4 larwhx"
+                  >
+                    <span
+                      class="StyledCheckBox__StyledCheckBoxKnob-sc-1dbk5ju-5 bVGQgu"
+                    />
+                  </span>
+                </div>
+                <span>
+                  advanced
                 </span>
               </label>
-              <textarea
-                class="StyledTextArea-sc-17i3mwp-0 ioQuPU"
-                id="style"
-                name="style"
-                style="text-align: end;"
-              />
             </div>
           </div>
         </div>
@@ -4489,42 +4300,6 @@ exports[`App empty 2`] = `
                     </div>
                   </button>
                 </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="wrap"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      wrap
-                    </span>
-                  </label>
-                  <div
-                    class="StyledBox-sc-13pk1d4-0 dzUoz"
-                  >
-                    <label
-                      class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 qTBiO"
-                      for="wrap"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 jmffUi StyledCheckBox-sc-1dbk5ju-6 CBoMo"
-                      >
-                        <input
-                          class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 dXmyaG"
-                          id="wrap"
-                          name="wrap"
-                          type="checkbox"
-                        />
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 glNMIk StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 iEciRS"
-                        />
-                      </div>
-                    </label>
-                  </div>
-                </div>
               </div>
               <div
                 class="StyledBox-sc-13pk1d4-0 gkmXdO"
@@ -4691,112 +4466,6 @@ exports[`App empty 2`] = `
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="height"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      height
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="height"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="width"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      width
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="width"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
                     for="basis"
                   >
                     <span
@@ -4809,59 +4478,6 @@ exports[`App empty 2`] = `
                     aria-label="Open Drop"
                     class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
                     id="basis"
-                    type="button"
-                  >
-                    <div
-                      class="StyledBox-sc-13pk1d4-0 kDANyu"
-                    >
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 fBosDE"
-                      >
-                        <div
-                          class="StyledBox-sc-13pk1d4-0 eXTSqT"
-                        >
-                          <span
-                            class="StyledText-sc-1sadyjn-0 gmtNWw"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="StyledBox-sc-13pk1d4-0 bmLwcd"
-                        style="min-width: auto;"
-                      >
-                        <svg
-                          aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hxHSmr"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline
-                            fill="none"
-                            points="18 9 12 15 6 9"
-                            stroke="#000"
-                            stroke-width="2"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iptkul"
-                >
-                  <label
-                    class="StyledBox-sc-13pk1d4-0 cacHrb"
-                    for="alignSelf"
-                  >
-                    <span
-                      class="StyledText-sc-1sadyjn-0 hUokoe"
-                    >
-                      alignSelf
-                    </span>
-                  </label>
-                  <button
-                    aria-label="Open Drop"
-                    class="StyledButton-sc-323bzc-0 dnCEuz Select__StyledSelectDropButton-sc-17idtfo-1 eucjJD"
-                    id="alignSelf"
                     type="button"
                   >
                     <div
@@ -5271,24 +4887,30 @@ exports[`App empty 2`] = `
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 iptkul"
+              class="StyledBox-sc-13pk1d4-0 cMHWMf"
             >
               <label
-                class="StyledBox-sc-13pk1d4-0 cacHrb"
-                for="style"
+                class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 qTBiO"
               >
-                <span
-                  class="StyledText-sc-1sadyjn-0 hUokoe"
+                <div
+                  class="StyledBox-sc-13pk1d4-0 eeTGTD StyledCheckBox-sc-1dbk5ju-6 CBoMo"
                 >
-                  style
+                  <input
+                    class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 dXmyaG"
+                    type="checkbox"
+                  />
+                  <span
+                    class="StyledCheckBox__StyledCheckBoxToggle-sc-1dbk5ju-4 larwhx"
+                  >
+                    <span
+                      class="StyledCheckBox__StyledCheckBoxKnob-sc-1dbk5ju-5 bVGQgu"
+                    />
+                  </span>
+                </div>
+                <span>
+                  advanced
                 </span>
               </label>
-              <textarea
-                class="StyledTextArea-sc-17i3mwp-0 ioQuPU"
-                id="style"
-                name="style"
-                style="text-align: end;"
-              />
             </div>
           </div>
         </div>
