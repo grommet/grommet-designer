@@ -199,10 +199,24 @@ const App = () => {
       // backward/forward controls work
       const screen = design.screens[selected.screen];
       if (screen && screen.path !== pathname) {
-        window.history.pushState(undefined, undefined, screen.path);
+        window.history.pushState(
+          undefined,
+          undefined,
+          screen.path + window.location.search,
+        );
       }
     }
   }, [design, load, selected.screen]);
+
+  // setup derivedFromId
+  React.useEffect(() => {
+    if (!load && design.id && changes.length > 1) {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      nextDesign.derivedFromId = nextDesign.id;
+      delete nextDesign.id;
+      setDesign(nextDesign);
+    }
+  }, [changes, design, load]);
 
   // store design
   React.useEffect(() => {
@@ -296,10 +310,10 @@ const App = () => {
 
   // clear any query parameters if the design changes
   React.useEffect(() => {
-    if (!load && window.location.search) {
+    if (!load && window.location.search && changes.length > 1) {
       window.history.pushState(undefined, undefined, window.location.pathname);
     }
-  }, [design, load]);
+  }, [changes, design, load]);
 
   const onKey = React.useCallback(
     event => {

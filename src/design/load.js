@@ -17,6 +17,8 @@ export const loadDesign = (id, setDesign, initial) => {
       .then(response => response.json())
       .then(design => {
         upgradeDesign(design);
+        // remember in case we make a change so we can set derivedFromId
+        design.id = id;
         setDesign(design);
         if (initial)
           ReactGA.event({ category: 'switch', action: 'published design' });

@@ -32,6 +32,18 @@ export default ({ design, onClose, setDesign, theme }) => (
           style={{ textAlign: 'end' }}
         />
       </Field>
+      {design.derivedFromId && (
+        <Box align="end" margin={{ vertical: 'xsmall' }}>
+          <Text size="small">
+            derived from{' '}
+            <Anchor
+              size="small"
+              label={design.derivedFromId}
+              href={`//designer.grommet.io?${design.derivedFromId}`}
+            />
+          </Text>
+        </Box>
+      )}
 
       <Box direction="row" justify="between" align="center">
         <Heading level={3}>Imports</Heading>

@@ -16,7 +16,11 @@ export const Router = ({ children }) => {
 
   const push = nextPath => {
     if (nextPath !== path) {
-      window.history.pushState(undefined, undefined, nextPath);
+      window.history.pushState(
+        undefined,
+        undefined,
+        nextPath + window.location.search,
+      );
       setPath(nextPath);
       window.scrollTo(0, 0);
     }
