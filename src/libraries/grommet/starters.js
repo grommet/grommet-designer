@@ -1,0 +1,106 @@
+export const starters = {
+  screens: {
+    '1': { id: 1, name: 'App 2 column', path: '/app-2-column', root: 6 },
+  },
+  screenOrder: [1],
+  components: {
+    '6': {
+      type: 'grommet.Grid',
+      id: 6,
+      props: { columns: [['xxsmall', 'auto'], 'flex'], fill: 'vertical' },
+      children: [7, 8],
+    },
+    '7': {
+      type: 'grommet.Box',
+      id: 7,
+      props: {
+        align: 'start',
+        justify: 'between',
+        background: { color: 'brand' },
+      },
+      children: [14, 15],
+      name: 'Sidebar',
+      collapsed: true,
+    },
+    '8': {
+      type: 'grommet.Box',
+      id: 8,
+      props: { align: 'stretch', justify: 'start' },
+      children: [17, 18],
+    },
+    '10': {
+      type: 'grommet.Nav',
+      id: 10,
+      props: {
+        align: 'center',
+        flex: false,
+        direction: 'column',
+        gap: 'xxsmall',
+      },
+      children: [11, 13],
+    },
+    '11': {
+      type: 'grommet.Button',
+      id: 11,
+      props: { label: '', icon: 'Apps' },
+    },
+    '12': {
+      type: 'grommet.Button',
+      id: 12,
+      props: { label: '', icon: 'Ad' },
+    },
+    '13': {
+      type: 'grommet.Button',
+      id: 13,
+      props: { label: '', icon: 'Escalator' },
+    },
+    '14': {
+      type: 'grommet.Box',
+      id: 14,
+      props: { align: 'center', justify: 'center' },
+      children: [12, 10],
+    },
+    '15': {
+      type: 'grommet.Box',
+      id: 15,
+      props: { align: 'center', justify: 'center' },
+      children: [16],
+    },
+    '16': {
+      type: 'grommet.Button',
+      id: 16,
+      props: { label: '', icon: 'User' },
+    },
+    '17': {
+      type: 'grommet.Header',
+      id: 17,
+      props: {
+        align: 'center',
+        direction: 'row',
+        flex: false,
+        justify: 'between',
+        gap: 'medium',
+        pad: { left: 'medium', vertical: 'xsmall', right: 'xsmall' },
+      },
+      children: [19, 22],
+    },
+    '18': {
+      type: 'grommet.Main',
+      id: 18,
+      props: { fill: 'vertical', flex: 'grow', overflow: 'auto' },
+    },
+    '19': {
+      type: 'grommet.Heading',
+      id: 19,
+      props: { margin: 'none', size: 'small' },
+    },
+    '22': { type: 'grommet.Menu', id: 22, props: { label: 'Actions' } },
+  },
+  theme: 'grommet',
+  imports: [],
+  name: 'App Starters',
+  nextId: 23,
+  version: 3.4,
+  created: '2020-03-21T05:50:12.208Z',
+  date: '2020-03-21T15:49:31.000Z',
+};

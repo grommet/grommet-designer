@@ -27,6 +27,7 @@ import {
   MaskedInput,
   Menu,
   Meter,
+  Nav,
   Paragraph,
   RadioButtonGroup,
   RangeInput,
@@ -71,6 +72,59 @@ import WeightOptions from './WeightOptions';
 import DropAlign from './DropAlign';
 import Edge from './Edge';
 
+const reusedBoxProps = {
+  align: BoxAlign,
+  background: {
+    color: ['-color-'],
+    dark: false,
+    opacity: ['weak', 'medium', 'strong'],
+    position: ['center', 'top', 'bottom', 'left', 'right'],
+    image: BoxBackgroundImage,
+  },
+  border: {
+    color: ['-color-'],
+    size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+    side: ['all', 'horizontal', 'vertical', 'top', 'left', 'bottom', 'right'],
+    style: [
+      'solid',
+      'dashed',
+      'dotted',
+      'double',
+      'groove',
+      'ridge',
+      'inset',
+      'outset',
+      'hidden',
+    ],
+  },
+  direction: BoxDirection,
+  fill: ['horizontal', 'vertical', true, false],
+  flex: ['grow', 'shrink', true, false],
+  gap: EdgeSizeOptions({
+    options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+  }),
+  gridArea: BoxGridArea,
+  justify: BoxJustify,
+  margin: Edge,
+  overflow: ['auto', 'hidden', 'scroll', 'visible'],
+  pad: BoxPad,
+};
+
+const reusedBoxStructure = [
+  {
+    label: 'Content layout',
+    properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
+  },
+  {
+    label: 'Layout in container',
+    properties: ['flex', 'fill', 'margin', 'gridArea'],
+  },
+  {
+    label: 'Style',
+    properties: ['animation', 'background', 'border'],
+  },
+];
+
 export const components = {
   Box: {
     component: Box,
@@ -91,16 +145,9 @@ export const components = {
       justify: 'center',
     },
     properties: {
-      align: BoxAlign,
+      ...reusedBoxProps,
       alignSelf: ['stretch', 'start', 'center', 'end'],
       animation: BoxAnimation,
-      background: {
-        color: ['-color-'],
-        dark: false,
-        opacity: ['weak', 'medium', 'strong'],
-        position: ['center', 'top', 'bottom', 'left', 'right'],
-        image: BoxBackgroundImage,
-      },
       basis: [
         'xxsmall',
         'xsmall',
@@ -117,39 +164,7 @@ export const components = {
         '3/4',
         'auto',
       ],
-      border: {
-        color: ['-color-'],
-        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-        side: [
-          'all',
-          'horizontal',
-          'vertical',
-          'top',
-          'left',
-          'bottom',
-          'right',
-          'between',
-        ],
-        style: [
-          'solid',
-          'dashed',
-          'dotted',
-          'double',
-          'groove',
-          'ridge',
-          'inset',
-          'outset',
-          'hidden',
-        ],
-      },
-      direction: BoxDirection,
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      fill: ['horizontal', 'vertical', true, false],
-      flex: ['grow', 'shrink', true, false],
-      gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      }),
-      gridArea: BoxGridArea,
       height: [
         'xxsmall',
         'xsmall',
@@ -160,11 +175,7 @@ export const components = {
         'xxlarge',
       ],
       hoverIndicator: false,
-      justify: BoxJustify,
-      margin: Edge,
       onClick: ['-link-'],
-      overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: BoxPad,
       round: BoxRound,
       width: [
         'xxsmall',
@@ -241,65 +252,27 @@ export const components = {
       flex: 'grow',
       overflow: 'auto',
     },
-    properties: {
-      align: BoxAlign,
-      background: {
-        color: ['-color-'],
-        dark: false,
-        opacity: ['weak', 'medium', 'strong'],
-        position: ['center', 'top', 'bottom', 'left', 'right'],
-        image: BoxBackgroundImage,
-      },
-      border: {
-        color: ['-color-'],
-        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-        side: [
-          'all',
-          'horizontal',
-          'vertical',
-          'top',
-          'left',
-          'bottom',
-          'right',
-        ],
-        style: [
-          'solid',
-          'dashed',
-          'dotted',
-          'double',
-          'groove',
-          'ridge',
-          'inset',
-          'outset',
-          'hidden',
-        ],
-      },
-      direction: BoxDirection,
-      fill: ['horizontal', 'vertical', true, false],
-      flex: ['grow', 'shrink', true, false],
-      gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      }),
-      gridArea: BoxGridArea,
-      justify: BoxJustify,
-      margin: Edge,
-      overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: BoxPad,
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
+  },
+  Nav: {
+    component: Nav,
+    name: 'Nav',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Nav is currently empty. Add Buttons to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/nav',
+    defaultProps: {
+      align: 'center',
+      flex: false,
     },
-    structure: [
-      {
-        label: 'Content layout',
-        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
-      },
-      {
-        label: 'Layout in container',
-        properties: ['flex', 'fill', 'margin', 'gridArea'],
-      },
-      {
-        label: 'Style',
-        properties: ['animation', 'background', 'border'],
-      },
-    ],
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
   },
   Header: {
     component: Header,
@@ -320,65 +293,8 @@ export const components = {
       justify: 'between',
       gap: 'medium',
     },
-    properties: {
-      align: BoxAlign,
-      background: {
-        color: ['-color-'],
-        dark: false,
-        opacity: ['weak', 'medium', 'strong'],
-        position: ['center', 'top', 'bottom', 'left', 'right'],
-        image: BoxBackgroundImage,
-      },
-      border: {
-        color: ['-color-'],
-        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-        side: [
-          'all',
-          'horizontal',
-          'vertical',
-          'top',
-          'left',
-          'bottom',
-          'right',
-        ],
-        style: [
-          'solid',
-          'dashed',
-          'dotted',
-          'double',
-          'groove',
-          'ridge',
-          'inset',
-          'outset',
-          'hidden',
-        ],
-      },
-      direction: BoxDirection,
-      fill: ['horizontal', 'vertical', true, false],
-      flex: ['grow', 'shrink', true, false],
-      gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      }),
-      gridArea: BoxGridArea,
-      justify: BoxJustify,
-      margin: Edge,
-      overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: BoxPad,
-    },
-    structure: [
-      {
-        label: 'Content layout',
-        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
-      },
-      {
-        label: 'Layout in container',
-        properties: ['flex', 'fill', 'margin', 'gridArea'],
-      },
-      {
-        label: 'Style',
-        properties: ['animation', 'background', 'border'],
-      },
-    ],
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
   },
   Footer: {
     component: Footer,
@@ -399,65 +315,8 @@ export const components = {
       justify: 'between',
       gap: 'medium',
     },
-    properties: {
-      align: BoxAlign,
-      background: {
-        color: ['-color-'],
-        dark: false,
-        opacity: ['weak', 'medium', 'strong'],
-        position: ['center', 'top', 'bottom', 'left', 'right'],
-        image: BoxBackgroundImage,
-      },
-      border: {
-        color: ['-color-'],
-        size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-        side: [
-          'all',
-          'horizontal',
-          'vertical',
-          'top',
-          'left',
-          'bottom',
-          'right',
-        ],
-        style: [
-          'solid',
-          'dashed',
-          'dotted',
-          'double',
-          'groove',
-          'ridge',
-          'inset',
-          'outset',
-          'hidden',
-        ],
-      },
-      direction: BoxDirection,
-      fill: ['horizontal', 'vertical', true, false],
-      flex: ['grow', 'shrink', true, false],
-      gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      }),
-      gridArea: BoxGridArea,
-      justify: BoxJustify,
-      margin: Edge,
-      overflow: ['auto', 'hidden', 'scroll', 'visible'],
-      pad: BoxPad,
-    },
-    structure: [
-      {
-        label: 'Content layout',
-        properties: ['direction', 'justify', 'align', 'pad', 'gap', 'overflow'],
-      },
-      {
-        label: 'Layout in container',
-        properties: ['flex', 'fill', 'margin', 'gridArea'],
-      },
-      {
-        label: 'Style',
-        properties: ['animation', 'background', 'border'],
-      },
-    ],
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
   },
   Grid: {
     component: Grid,

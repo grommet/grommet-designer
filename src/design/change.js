@@ -188,6 +188,26 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
   nextSelected.component = screen.root;
 };
 
+export const copyScreen = (nextDesign, nextSelected, starter) => {
+  // create new screen
+  const screenId = nextDesign.nextId;
+  nextDesign.nextId += 1;
+  const screen = { id: screenId };
+  nextDesign.screens[screenId] = screen;
+  screen.root = copyComponent({
+    nextDesign,
+    templateDesign: starter.starters,
+    id: starter.starters.screens[starter.id].root,
+  });
+  nextDesign.screens[screenId].name = starter.name;
+  nextDesign.screens[screenId].path = slugify(starter.name);
+  const index = nextDesign.screenOrder.indexOf(nextSelected.screen);
+  nextDesign.screenOrder.splice(index + 1, 0, screenId);
+
+  nextSelected.screen = screenId;
+  nextSelected.component = screen.root;
+};
+
 export const deleteScreen = (nextDesign, id) => {
   delete nextDesign.screens[id];
   const index = nextDesign.screenOrder.indexOf(id);

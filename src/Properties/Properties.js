@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Duplicate, Location, Refresh, Trash } from 'grommet-icons';
+import { Duplicate, Location, Trash } from 'grommet-icons';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
@@ -232,7 +232,6 @@ export default ({
           </Box>
           {!component.coupled && (
             <Box flex={false} direction="row" align="center">
-              <ActionButton title="reset" icon={<Refresh />} onClick={reset} />
               <ActionButton
                 title="duplicate"
                 icon={<Duplicate />}
