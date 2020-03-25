@@ -6,11 +6,11 @@ import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
 import { apiUrl, themeApiUrl } from './urls';
 
-export const loadDesign = ({ fresh, id, initial, name, setDesign }) => {
+export const loadDesign = ({ fresh, id, initial, name, onLoad }) => {
   if (fresh) {
     const design = setupDesign(bare);
     upgradeDesign(design);
-    setDesign(design);
+    onLoad(design);
     ReactGA.event({ category: 'switch', action: 'force new design' });
   } else if (id) {
     fetch(`${apiUrl}/${id}`)
@@ -19,7 +19,7 @@ export const loadDesign = ({ fresh, id, initial, name, setDesign }) => {
         upgradeDesign(design);
         // remember in case we make a change so we can set derivedFromId
         design.id = id;
-        setDesign(design);
+        onLoad(design);
         if (initial)
           ReactGA.event({ category: 'switch', action: 'published design' });
       });
@@ -27,7 +27,7 @@ export const loadDesign = ({ fresh, id, initial, name, setDesign }) => {
     const stored = localStorage.getItem(name);
     const design = JSON.parse(stored);
     upgradeDesign(design);
-    setDesign(design);
+    onLoad(design);
     ReactGA.event({ category: 'switch', action: 'previous design' });
   } else {
     let stored = localStorage.getItem('activeDesign');
@@ -35,12 +35,12 @@ export const loadDesign = ({ fresh, id, initial, name, setDesign }) => {
     if (stored) {
       const design = JSON.parse(stored);
       upgradeDesign(design);
-      setDesign(design);
+      onLoad(design);
       ReactGA.event({ category: 'switch', action: 'previous design' });
     } else {
       const design = setupDesign(bare);
       upgradeDesign(design);
-      setDesign(design);
+      onLoad(design);
       ReactGA.event({ category: 'switch', action: 'new design' });
     }
   }
@@ -100,7 +100,7 @@ export const loadImports = (imports, setImports) => {
           const id = url.split('id=')[1];
           loadDesign({
             id,
-            setDesign: importDesign => {
+            onLoad: importDesign => {
               setImports(prevImports => {
                 const nextImports = [...prevImports];
                 const nextImport = { ...impor, design: importDesign };

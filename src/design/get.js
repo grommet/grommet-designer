@@ -187,33 +187,6 @@ export const previousSiblingSelected = (design, selected) => {
   return undefined;
 };
 
-// export const nextSelected = (design, selected, descend = true) => {
-//   const component = design.components[selected.component];
-//   // children
-//   if (descend && !component.collapsed && component.children
-//     && component.children.length > 0) {
-//     return { ...selected, component: component.children[0] };
-//   }
-//   // siblings
-//   const parent = getParent(design, selected.component);
-//   let childIndex = parent.children.indexOf(selected.component);
-//   if (childIndex < (parent.children.length - 1)) {
-//     return { ...selected, component: parent.children[childIndex + 1] };
-//   }
-//   // screen
-//   if (parent.id === design.screens[selected.screen].root) {
-//     const screenIndex = design.screenOrder.indexOf(selected.screen);
-//     if (screenIndex < (design.screenOrder.length - 1)) {
-//       const nextScreen = design.screens[design.screenOrder[childIndex + 1]];
-//       return { ...selected, screen: nextScreen.id, component: nextScreen.root };
-//     } else {
-//       return undefined;
-//     }
-//   }
-//   // aunts, uncles, etc.
-//   return nextSelected(design, { ...selected, component: parent.id }, false);
-// }
-
 export const canParent = (design, libraries, component) => {
   const type = getComponentType(libraries, component.type);
   let result = type.container;

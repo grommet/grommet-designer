@@ -88,7 +88,7 @@ const App = () => {
     const params = getParams();
     const options = {
       initial: true,
-      setDesign: nextDesign => {
+      onLoad: nextDesign => {
         let nextSelected;
         if (params.id) {
           const screen =
@@ -100,9 +100,10 @@ const App = () => {
           if (stored) nextSelected = JSON.parse(stored);
           else {
             const screen =
-              pathname && pathname !== '/_new'
-                ? getScreenByPath(nextDesign, pathname)
-                : nextDesign.screenOrder[0];
+              (pathname &&
+                pathname !== '/_new' &&
+                getScreenByPath(nextDesign, pathname)) ||
+              nextDesign.screenOrder[0];
             const component = nextDesign.screens[screen].root;
             nextSelected = { screen, component };
           }

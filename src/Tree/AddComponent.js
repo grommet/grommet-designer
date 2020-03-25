@@ -72,7 +72,7 @@ const AddComponent = ({
   }, [libraries]);
   const [addTypeName, setAddTypeName] = React.useState();
   const [addStarters, setAddStarters] = React.useState();
-  const [location, setLocation] = React.useState();
+  const [addLocation, setAddLocation] = React.useState();
 
   const [search, setSearch] = React.useState('');
   const [addMode, setAddMode] = React.useState();
@@ -158,7 +158,7 @@ const AddComponent = ({
         libraries,
         selected,
         id: nextSelected.component,
-        location,
+        location: addLocation,
       });
     }
 
@@ -376,7 +376,7 @@ const AddComponent = ({
               design={design}
               libraries={libraries}
               selected={selected}
-              onChange={nextLocation => setLocation(nextLocation)}
+              onChange={nextAddLocation => setAddLocation(nextAddLocation)}
             />
           </Box>
         )}

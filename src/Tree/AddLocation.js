@@ -102,17 +102,17 @@ export default ({ design, libraries, onChange, selected }) => {
     return allLocations.filter(l => l !== 'within');
   }, [design, selected.component, selectedType]);
 
-  const [location, setLocation] = React.useState();
-  React.useEffect(() => setLocation(locations[0]), [locations]);
-  React.useEffect(() => onChange(location), [location, onChange]);
+  const [addLocation, setAddLocation] = React.useState();
+  React.useEffect(() => setAddLocation(locations[0]), [locations]);
+  React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
 
   return (
     <RadioButtonGroup
       name="add-location"
       options={locations}
       disabled={locations.length === 1}
-      value={location}
-      onChange={event => setLocation(event.target.value)}
+      value={addLocation}
+      onChange={event => setAddLocation(event.target.value)}
       direction="row"
     >
       {(option, { checked, hover }) => {
