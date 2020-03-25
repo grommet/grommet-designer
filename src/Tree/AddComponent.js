@@ -10,7 +10,7 @@ import {
   Layer,
   TextInput,
 } from 'grommet';
-import { Close } from 'grommet-icons';
+import { Close, Next } from 'grommet-icons';
 import {
   addComponent,
   addScreen,
@@ -108,12 +108,6 @@ const AddComponent = ({
   });
 
   const add = ({ typeName, starter, template, templateDesign, url }) => {
-    if (typeName && starters[typeName] && !starter) {
-      setAddTypeName(typeName);
-      setAddStarters(starters[typeName]);
-      return;
-    }
-
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
 
@@ -181,6 +175,181 @@ const AddComponent = ({
 
   const searchExp = search ? new RegExp(search, 'i') : undefined;
 
+  const Library = ({ name: libraryName, components, structure }) =>
+    structure
+      .filter(
+        ({ components: names }) =>
+          !searchExp || names.some(name => name.match(searchExp)),
+      )
+      .map(({ name, Icon, components: names }) => (
+        <Box key={name} flex={false}>
+          <Box
+            direction="row"
+            gap="medium"
+            align="center"
+            justify="between"
+            pad={{ horizontal: 'small', vertical: 'xsmall' }}
+          >
+            <Heading level={4} size="small" margin="none">
+              {name}
+            </Heading>
+            {Icon && <Icon color="text-xweak" />}
+          </Box>
+          {names &&
+            names
+              .filter(name => !searchExp || name.match(searchExp))
+              .map(name => {
+                const typeName = `${libraryName}.${name}`;
+                let content = (
+                  <AddButton
+                    key={name}
+                    label={components[name].name}
+                    onClick={event =>
+                      add({
+                        typeName,
+                        containSelected: event.metaKey || event.ctrlKey,
+                      })
+                    }
+                  />
+                );
+                if (starters[typeName]) {
+                  content = (
+                    <Box key={name} direction="row" align="center">
+                      <Box flex="grow">{content}</Box>
+                      <Button
+                        icon={<Next />}
+                        hoverIndicator
+                        onClick={() => {
+                          setAddTypeName(typeName);
+                          setAddStarters(starters[typeName]);
+                        }}
+                      />
+                    </Box>
+                  );
+                }
+                return content;
+              })}
+        </Box>
+      ));
+
+  const Template = ({ name, design: tempDesign, templates: temps, url }) => (
+    <Box key={name} flex={false} border="top">
+      <Box
+        pad={{ horizontal: 'small', vertical: 'xsmall' }}
+        margin={{ top: 'small' }}
+      >
+        <Heading level="3" size="small" margin="none">
+          {url ? (
+            <Anchor
+              target="_blank"
+              href={`${url}&preview=false`}
+              label={name}
+            />
+          ) : (
+            name
+          )}
+        </Heading>
+      </Box>
+      {Object.keys(temps)
+        .filter(name => !searchExp || name.match(searchExp))
+        .map(name => (
+          <AddButton
+            key={name}
+            label={name}
+            onClick={event =>
+              add({
+                containSelected: event.metaKey || event.ctrlKey,
+                templateDesign: tempDesign,
+                template: temps[name],
+                url,
+              })
+            }
+          />
+        ))}
+      <Box pad="small">
+        <AddMethod id={name} value={addMode} onChange={setAddMode} />
+      </Box>
+    </Box>
+  );
+
+  const Components = () => (
+    <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
+      <Box flex={false} pad="small">
+        <Keyboard
+          onEnter={
+            searchExp
+              ? event => {
+                  // find first match
+                  let typeName;
+                  libraries.some(({ name, components }) => {
+                    const first = Object.keys(components).filter(n =>
+                      n.match(searchExp),
+                    )[0];
+                    if (first) typeName = `${name}.${first}`;
+                    return !!typeName;
+                  });
+                  if (typeName) {
+                    add({
+                      typeName,
+                      containSelected: event.metaKey || event.ctrlKey,
+                    });
+                  }
+                }
+              : undefined
+          }
+        >
+          <TextInput
+            ref={inputRef}
+            value={search}
+            onChange={event => setSearch(event.target.value)}
+          />
+        </Keyboard>
+      </Box>
+
+      {libraries.map(library => (
+        <Library {...library} />
+      ))}
+
+      {templates
+        .filter(
+          ({ templates }) =>
+            !searchExp ||
+            Object.keys(templates).some(name => name.match(searchExp)),
+        )
+        .map(template => (
+          <Template {...template} />
+        ))}
+    </Box>
+  );
+
+  const Starters = () => (
+    <Box flex={false}>
+      <Header pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+        <Heading level={4} size="small" margin="none">
+          {addTypeName}
+        </Heading>
+        <Button
+          icon={<Close />}
+          hoverIndicator
+          onClick={() => setAddStarters(undefined)}
+        />
+      </Header>
+      {addStarters.map(starter => (
+        <AddButton
+          key={starter.name}
+          label={starter.name}
+          onClick={event =>
+            add({
+              typeName: addTypeName,
+              containSelected: event.metaKey || event.ctrlKey,
+              starter,
+            })
+          }
+        />
+      ))}
+    </Box>
+  );
+
   return (
     <Layer
       position="top-left"
@@ -212,166 +381,7 @@ const AddComponent = ({
           </Box>
         )}
         <Box flex overflow="auto">
-          {addStarters ? (
-            <Box flex={false}>
-              <Header pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                <Heading level={4} size="small" margin="none">
-                  {addTypeName}
-                </Heading>
-                <Button
-                  icon={<Close />}
-                  hoverIndicator
-                  onClick={() => setAddStarters(undefined)}
-                />
-              </Header>
-              <AddButton
-                label="default"
-                onClick={event =>
-                  add({
-                    typeName: addTypeName,
-                    containSelected: event.metaKey || event.ctrlKey,
-                    starter: 'default',
-                  })
-                }
-              />
-              {addStarters.map(starter => (
-                <AddButton
-                  key={starter.name}
-                  label={starter.name}
-                  onClick={event =>
-                    add({
-                      typeName: addTypeName,
-                      containSelected: event.metaKey || event.ctrlKey,
-                      starter,
-                    })
-                  }
-                />
-              ))}
-            </Box>
-          ) : (
-            <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
-              <Box flex={false} pad="small">
-                <Keyboard
-                  onEnter={
-                    searchExp
-                      ? event => {
-                          // find first match
-                          let typeName;
-                          libraries.some(({ name, components }) => {
-                            const first = Object.keys(components).filter(n =>
-                              n.match(searchExp),
-                            )[0];
-                            if (first) typeName = `${name}.${first}`;
-                            return !!typeName;
-                          });
-                          if (typeName) {
-                            add({
-                              typeName,
-                              containSelected: event.metaKey || event.ctrlKey,
-                            });
-                          }
-                        }
-                      : undefined
-                  }
-                >
-                  <TextInput
-                    ref={inputRef}
-                    value={search}
-                    onChange={event => setSearch(event.target.value)}
-                  />
-                </Keyboard>
-              </Box>
-              {libraries.map(({ name: libraryName, components, structure }) =>
-                structure
-                  .filter(
-                    ({ components: names }) =>
-                      !searchExp || names.some(name => name.match(searchExp)),
-                  )
-                  .map(({ name, Icon, components: names }) => (
-                    <Box key={name} flex={false}>
-                      <Box
-                        direction="row"
-                        gap="medium"
-                        align="center"
-                        justify="between"
-                        pad={{ horizontal: 'small', vertical: 'xsmall' }}
-                      >
-                        <Heading level={4} size="small" margin="none">
-                          {name}
-                        </Heading>
-                        {Icon && <Icon color="text-xweak" />}
-                      </Box>
-                      {names &&
-                        names
-                          .filter(name => !searchExp || name.match(searchExp))
-                          .map(name => (
-                            <AddButton
-                              key={name}
-                              label={components[name].name}
-                              onClick={event =>
-                                add({
-                                  typeName: `${libraryName}.${name}`,
-                                  containSelected:
-                                    event.metaKey || event.ctrlKey,
-                                })
-                              }
-                            />
-                          ))}
-                    </Box>
-                  )),
-              )}
-
-              {templates
-                .filter(
-                  ({ templates }) =>
-                    !searchExp ||
-                    Object.keys(templates).some(name => name.match(searchExp)),
-                )
-                .map(({ name, design: tempDesign, templates: temps, url }) => (
-                  <Box key={name} flex={false} border="top">
-                    <Box
-                      pad={{ horizontal: 'small', vertical: 'xsmall' }}
-                      margin={{ top: 'small' }}
-                    >
-                      <Heading level="3" size="small" margin="none">
-                        {url ? (
-                          <Anchor
-                            target="_blank"
-                            href={`${url}&preview=false`}
-                            label={name}
-                          />
-                        ) : (
-                          name
-                        )}
-                      </Heading>
-                    </Box>
-                    {Object.keys(temps)
-                      .filter(name => !searchExp || name.match(searchExp))
-                      .map(name => (
-                        <AddButton
-                          key={name}
-                          label={name}
-                          onClick={event =>
-                            add({
-                              containSelected: event.metaKey || event.ctrlKey,
-                              templateDesign: tempDesign,
-                              template: temps[name],
-                              url,
-                            })
-                          }
-                        />
-                      ))}
-                    <Box pad="small">
-                      <AddMethod
-                        id={name}
-                        value={addMode}
-                        onChange={setAddMode}
-                      />
-                    </Box>
-                  </Box>
-                ))}
-            </Box>
-          )}
+          {addStarters ? <Starters /> : <Components />}
         </Box>
       </Box>
     </Layer>
