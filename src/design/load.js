@@ -6,8 +6,8 @@ import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
 import { apiUrl, themeApiUrl } from './urls';
 
-export const loadDesign = (id, setDesign, initial) => {
-  if (id === '_new') {
+export const loadDesign = ({ fresh, id, initial, name, setDesign }) => {
+  if (fresh) {
     const design = setupDesign(bare);
     upgradeDesign(design);
     setDesign(design);
@@ -23,6 +23,12 @@ export const loadDesign = (id, setDesign, initial) => {
         if (initial)
           ReactGA.event({ category: 'switch', action: 'published design' });
       });
+  } else if (name) {
+    const stored = localStorage.getItem(name);
+    const design = JSON.parse(stored);
+    upgradeDesign(design);
+    setDesign(design);
+    ReactGA.event({ category: 'switch', action: 'previous design' });
   } else {
     let stored = localStorage.getItem('activeDesign');
     if (stored) stored = localStorage.getItem(stored);
@@ -92,15 +98,18 @@ export const loadImports = (imports, setImports) => {
         // looks like another design
         if (!impor.design) {
           const id = url.split('id=')[1];
-          loadDesign(id, importDesign => {
-            setImports(prevImports => {
-              const nextImports = [...prevImports];
-              const nextImport = { ...impor, design: importDesign };
-              const index = nextImports.findIndex(i => i.url === url);
-              if (index !== -1) nextImports[index] = nextImport;
-              else nextImports.push(nextImport);
-              return nextImports;
-            });
+          loadDesign({
+            id,
+            setDesign: importDesign => {
+              setImports(prevImports => {
+                const nextImports = [...prevImports];
+                const nextImport = { ...impor, design: importDesign };
+                const index = nextImports.findIndex(i => i.url === url);
+                if (index !== -1) nextImports[index] = nextImport;
+                else nextImports.push(nextImport);
+                return nextImports;
+              });
+            },
           });
         }
       } else {

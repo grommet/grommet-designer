@@ -86,9 +86,9 @@ const App = () => {
       location: { pathname },
     } = window;
     const params = getParams();
-    loadDesign(
-      pathname === '/_new' ? '_new' : params.id,
-      nextDesign => {
+    const options = {
+      initial: true,
+      setDesign: nextDesign => {
         let nextSelected;
         if (params.id) {
           const screen =
@@ -124,8 +124,11 @@ const App = () => {
           setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
         });
       },
-      true,
-    );
+    };
+    if (pathname === '/_new') options.fresh = true;
+    else if (params.id) options.id = params.id;
+    else if (params.name) options.name = params.name;
+    loadDesign(options);
   }, []);
 
   // finish loading
@@ -229,7 +232,6 @@ const App = () => {
         design.date = date.toISOString();
 
         localStorage.setItem(design.name, JSON.stringify(design));
-        localStorage.setItem('activeDesign', design.name);
 
         if (!designs.includes(design.name)) {
           const nextDesigns = [design.name, ...designs];
@@ -308,10 +310,18 @@ const App = () => {
     window.dispatchEvent(new Event('resize'));
   }, [preview]);
 
-  // clear any query parameters if the design changes
+  // clear any id query parameter and set a name parameter if the design changes
   React.useEffect(() => {
-    if (!load && window.location.search && changes.length > 1) {
-      window.history.pushState(undefined, undefined, window.location.pathname);
+    if (!load) {
+      const params = getParams();
+      if (!params.name || params.name !== design.name) {
+        const search = `?name=${encodeURIComponent(design.name)}`;
+        window.history.replaceState(
+          undefined,
+          undefined,
+          window.location.pathname + search,
+        );
+      }
     }
   }, [changes, design, load]);
 
