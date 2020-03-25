@@ -174,7 +174,16 @@ const Canvas = ({
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
-      if (hideable) {
+      const cycle = target && getComponentType(libraries, target.type).cycle;
+      if (cycle) {
+        const nextDesign = JSON.parse(JSON.stringify(design));
+        const component = nextDesign.components[target.id];
+        component.props[cycle] = component.props[cycle] + 1;
+        if (component.props[cycle] > component.children.length) {
+          component.props[cycle] = 1;
+        }
+        setDesign(nextDesign);
+      } else if (hideable) {
         setHide(target.id, !target.hide);
         setSelected(to);
       } else if (target) {

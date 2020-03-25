@@ -5,7 +5,7 @@ const structure = [
   {
     name: 'Design',
     Icon: Blank,
-    components: ['Icon', 'Repeater', 'Reference', 'Screen'],
+    components: ['Alternative', 'Icon', 'Repeater', 'Reference', 'Screen'],
   },
 ];
 

@@ -90,7 +90,7 @@ export const getReferences = (design, id) =>
 
 export const getLinkOptions = (design, libraries, selected) => {
   // options for what a Button or MenuItem should do:
-  // open a layer, close the layer it is in, change screens,
+  // open a layer, close the layer it is in, change screens, cycle Alternative
   const screen = design.screens[selected.screen];
   const screenComponents = screen.root
     ? getDescendants(design, screen.root)
@@ -100,7 +100,7 @@ export const getLinkOptions = (design, libraries, selected) => {
       .map(k => design.components[k])
       .filter(c => {
         const type = getComponentType(libraries, c.type);
-        return type.hideable && c.name; // must have a name
+        return (type.hideable || type.cycle) && c.name; // must have a name
       })
       .map(c => ({
         screen: selected.screen,

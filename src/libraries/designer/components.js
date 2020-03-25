@@ -1,8 +1,30 @@
 import React from 'react';
 import { Paragraph } from 'grommet';
+import Alternative from './Alternative';
 import Icon from './Icon';
 
 export const components = {
+  Alternative: {
+    component: Alternative,
+    name: 'Alternative',
+    container: true,
+    cycle: 'active',
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Alternative is currently empty. Add some components to it so it can
+        alternate between them.
+      </Paragraph>
+    ),
+    help: `Alternative is a designer specific component for
+    use with this design tool. It provides a way to cycle through a variety
+    of design options.`,
+    defaultProps: {
+      active: 1,
+    },
+    properties: {
+      active: 1,
+    },
+  },
   Icon: {
     component: Icon,
     name: 'Icon',
