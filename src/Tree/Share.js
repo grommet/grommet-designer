@@ -94,23 +94,28 @@ const Publish = ({ design, setDesign }) => {
           label="Email"
           required
           validate={{ regexp: /\w+@\w+\.\w+/ }}
-        />
+        >
+          <TextInput name="email" />
+        </FormField>
         <FormField
           name="pin"
           label="PIN"
           required
           validate={{ regexp: /\d{3}/, message: 'three digits' }}
           error={error}
-          component={MaskedInput}
-          type="password"
-          mask={[
-            {
-              length: 3,
-              regexp: /^\d{1,3}$/,
-              placeholder: '###',
-            },
-          ]}
-        />
+        >
+          <MaskedInput
+            name="pin"
+            type="password"
+            mask={[
+              {
+                length: 3,
+                regexp: /^\d{1,3}$/,
+                placeholder: '###',
+              },
+            ]}
+          />
+        </FormField>
         <Box align="center" margin="medium">
           <Button type="submit" label="Publish" disabled={publishing} />
         </Box>
