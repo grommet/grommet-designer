@@ -10,10 +10,55 @@ test('initial', async t => {
   await t.expect(empty.exists).ok();
 });
 
-// test('open Designs', async t => {
-//   const control = Selector('button').withAttribute('title', 'add a component');
-//   const layerHeading = Selector('h2').withText('add');
-//   await t
-//     .click(control)
-//     .expect(layerHeading.exists).ok();
-// });
+test('open and close add', async t => {
+  const openControl = Selector('button').withAttribute(
+    'title',
+    'add a component',
+  );
+  const layerHeading = Selector('h2').withText('add');
+  const closeControl = Selector('button').withAttribute('title', 'close');
+
+  await t
+    .click(openControl)
+    .expect(layerHeading.exists)
+    .ok()
+    .click(closeControl)
+    .expect(layerHeading.exists)
+    .notOk();
+});
+
+test('add paragraph and undo', async t => {
+  const openControl = Selector('button').withAttribute(
+    'title',
+    'add a component',
+  );
+  const layerHeading = Selector('h2').withText('add');
+  const addParagraphControl = Selector('button').withText('Paragraph');
+  const nameInput = Selector('input').withAttribute('name', 'name');
+  const name = 'paragraph name';
+  const paragraphSelect = Selector('button').withText(name);
+  const textInput = Selector('textarea').withAttribute('name', 'text');
+  const text = 'paragraph text';
+  const paragraph = Selector('p').withText(text);
+  const undoControl = Selector('button').withAttribute(
+    'title',
+    'undo last change',
+  );
+
+  await t
+    .click(openControl)
+    .expect(layerHeading.exists)
+    .ok()
+    .click(addParagraphControl)
+    .expect(layerHeading.exists)
+    .notOk()
+    .typeText(nameInput, name)
+    .expect(paragraphSelect.exists)
+    .ok()
+    .typeText(textInput, text)
+    .expect(paragraph.exists)
+    .ok()
+    .click(undoControl)
+    .expect(paragraph.exists)
+    .notOk();
+});
