@@ -12,13 +12,16 @@ import {
 import {
   canParent,
   childSelected,
+  copyComponent,
   duplicateComponent,
   getParent,
   getScreenForComponent,
+  insertComponent,
   nextSiblingSelected,
   parentSelected,
   previousSiblingSelected,
   isDescendent,
+  serialize,
 } from '../design';
 import { displayName, getReferenceDesign } from '../utils';
 import ActionButton from '../components/ActionButton';
@@ -200,18 +203,38 @@ const Tree = ({
       }
       if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
         setCopied(selected);
+        navigator.clipboard.writeText(serialize(design, selected));
       } else if (event.key === 'c') {
         toggleCollapse(selected.component);
       }
       if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
-        const nextDesign = JSON.parse(JSON.stringify(design));
-        const newId = duplicateComponent(
-          nextDesign,
-          copied.component,
-          selected.component,
-        );
-        setDesign(nextDesign);
-        setSelected({ ...selected, component: newId });
+        if (copied) {
+          const nextDesign = JSON.parse(JSON.stringify(design));
+          const newId = duplicateComponent(
+            nextDesign,
+            copied.component,
+            selected.component,
+          );
+          setDesign(nextDesign);
+          setSelected({ ...selected, component: newId });
+        } else {
+          navigator.clipboard.readText().then(clipText => {
+            const {
+              design: copiedDesign,
+              selected: copiedSelected,
+            } = JSON.parse(clipText);
+            const nextDesign = JSON.parse(JSON.stringify(design));
+            const newId = copyComponent({
+              nextDesign,
+              templateDesign: copiedDesign,
+              id: copiedSelected.component,
+            });
+            insertComponent({ nextDesign, libraries, selected, id: newId });
+
+            setDesign(nextDesign);
+            setSelected({ ...selected, component: newId });
+          });
+        }
       }
     }
   };
