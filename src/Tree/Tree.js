@@ -39,6 +39,12 @@ const treeSubName = component =>
     ? undefined
     : component.type.split('.')[1] || component.type;
 
+const within = (node, container) => {
+  if (!node) return false;
+  if (node === container) return true;
+  return within(node.parentNode, container);
+};
+
 const Tree = ({
   base,
   colorMode,
@@ -79,6 +85,7 @@ const Tree = ({
   const [editing, setEditing] = React.useState();
   const [sharing, setSharing] = React.useState();
   const [copied, setCopied] = React.useState();
+  const treeRef = React.useRef();
   const selectedRef = React.useRef();
 
   // ensure selected component is visible in the tree
@@ -89,6 +96,9 @@ const Tree = ({
         const rect = selectedRef.current.getBoundingClientRect();
         if (rect.bottom < 0 || rect.top > window.innerHeight) {
           selectedRef.current.scrollIntoView();
+        }
+        if (within(document.activeElement, treeRef.current)) {
+          document.activeElement.blur();
         }
       }
     }, 20);
@@ -177,7 +187,10 @@ const Tree = ({
   };
 
   const onKey = event => {
-    if (document.activeElement === document.body) {
+    if (
+      document.activeElement === document.body ||
+      within(event.target, treeRef.current)
+    ) {
       if (event.key === 'a') {
         setAdding(true);
       }
@@ -468,7 +481,7 @@ const Tree = ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box height="100vh" border="right">
+      <Box ref={treeRef} height="100vh" border="right">
         <Box flex={false} border="bottom">
           <Box
             flex={false}
