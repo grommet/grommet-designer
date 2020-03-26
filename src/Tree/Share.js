@@ -46,13 +46,14 @@ const Publish = ({ design, setDesign }) => {
     }
   }, [design]);
 
-  const onPublish = ({ value: { name, email, pin } }) => {
+  const onPublish = ({ value: { email, password, pin } }) => {
     // remember email and pin in local storage so we can use later
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
     setPublishing(true);
     publish({
       design,
       email,
+      password,
       pin,
       onChange: nextDesign => {
         setPublishing(false);
@@ -99,7 +100,7 @@ const Publish = ({ design, setDesign }) => {
         </FormField>
         <FormField
           name="pin"
-          label="PIN"
+          label="PIN to change"
           required
           validate={{ regexp: /\d{3}/, message: 'three digits' }}
           error={error}
@@ -115,6 +116,9 @@ const Publish = ({ design, setDesign }) => {
               },
             ]}
           />
+        </FormField>
+        <FormField name="password" label="Password to see" help="optional">
+          <TextInput name="password" type="password" />
         </FormField>
         <Box align="center" margin="medium">
           <Button type="submit" label="Publish" disabled={publishing} />

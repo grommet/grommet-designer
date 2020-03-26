@@ -6,23 +6,40 @@ import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
 import { apiUrl, themeApiUrl } from './urls';
 
-export const loadDesign = ({ fresh, id, initial, name, onLoad }) => {
+export const loadDesign = ({
+  fresh,
+  id,
+  initial,
+  name,
+  password,
+  onLoad,
+  onAuth,
+}) => {
   if (fresh) {
     const design = setupDesign(bare);
     upgradeDesign(design);
     onLoad(design);
     ReactGA.event({ category: 'switch', action: 'force new design' });
   } else if (id) {
-    fetch(`${apiUrl}/${id}`)
-      .then(response => response.json())
-      .then(design => {
-        upgradeDesign(design);
-        // remember in case we make a change so we can set derivedFromId
-        design.id = id;
-        onLoad(design);
-        if (initial)
-          ReactGA.event({ category: 'switch', action: 'published design' });
-      });
+    const options = {};
+    if (password) {
+      options.headers = {
+        Authorization: `Basic ${btoa(password)}`,
+      };
+    }
+    fetch(`${apiUrl}/${id}`, options).then(response => {
+      if (response.status === 401) onAuth();
+      else if (response.ok) {
+        response.json().then(design => {
+          upgradeDesign(design);
+          // remember in case we make a change so we can set derivedFromId
+          design.id = id;
+          onLoad(design);
+          if (initial)
+            ReactGA.event({ category: 'switch', action: 'published design' });
+        });
+      }
+    });
   } else if (name) {
     const stored = localStorage.getItem(name);
     const design = JSON.parse(stored);

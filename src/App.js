@@ -1,6 +1,17 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { Grommet, Grid, Keyboard, ResponsiveContext, grommet } from 'grommet';
+import {
+  Box,
+  Button,
+  Form,
+  Grommet,
+  Grid,
+  Keyboard,
+  ResponsiveContext,
+  TextInput,
+  grommet,
+} from 'grommet';
+import { Next } from 'grommet-icons';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
 import Properties from './Properties/Properties';
@@ -49,6 +60,8 @@ const App = () => {
   // and any imports. We load theme as we go into the 'load'
   // state. When they're all ready, we update all of the necessary states.
   const [load, setLoad] = React.useState({});
+  const [auth, setAuth] = React.useState();
+  const [password, setPassword] = React.useState();
   const [design, setDesign] = React.useState(setupDesign(loading));
   const [selected, setSelected] = React.useState(getInitialSelected(design));
   const [imports, setImports] = React.useState(defaultImports);
@@ -88,6 +101,7 @@ const App = () => {
     const params = getParams();
     const options = {
       initial: true,
+      onAuth: () => setAuth(true),
       onLoad: nextDesign => {
         let nextSelected;
         if (params.id) {
@@ -129,8 +143,9 @@ const App = () => {
     if (pathname === '/_new') options.fresh = true;
     else if (params.id) options.id = params.id;
     else if (params.name) options.name = params.name;
+    if (password) options.password = password;
     loadDesign(options);
-  }, []);
+  }, [password]);
 
   // finish loading
   React.useEffect(() => {
@@ -313,7 +328,7 @@ const App = () => {
 
   // clear any id query parameter and set a name parameter if the design changes
   React.useEffect(() => {
-    if (!load) {
+    if (!load && changes.length > 1) {
       const params = getParams();
       if (!params.name || params.name !== design.name) {
         const search = `?name=${encodeURIComponent(design.name)}`;
@@ -408,17 +423,38 @@ const App = () => {
             />
           )}
 
-          <ErrorCatcher>
-            <Canvas
-              design={design}
-              imports={imports}
-              selected={selected}
-              preview={preview}
-              setDesign={setDesign}
-              setSelected={setSelected}
-              theme={theme}
-            />
-          </ErrorCatcher>
+          {auth ? (
+            <Box fill align="center" justify="center">
+              <Form
+                onSubmit={({ value: { password: nextPassword } }) => {
+                  setPassword(nextPassword);
+                  setAuth(false);
+                }}
+              >
+                <Box direction="row" gap="medium">
+                  <TextInput
+                    size="large"
+                    name="password"
+                    placeholder="password"
+                    type="password"
+                  />
+                  <Button type="submit" icon={<Next />} hoverIndicator />
+                </Box>
+              </Form>
+            </Box>
+          ) : (
+            <ErrorCatcher>
+              <Canvas
+                design={design}
+                imports={imports}
+                selected={selected}
+                preview={preview}
+                setDesign={setDesign}
+                setSelected={setSelected}
+                theme={theme}
+              />
+            </ErrorCatcher>
+          )}
 
           {responsive !== 'small' &&
             !preview &&

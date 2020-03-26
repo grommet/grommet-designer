@@ -1,12 +1,20 @@
 import { apiUrl } from './urls';
 
-export const publish = ({ design, email, pin, onChange, onError }) => {
+export const publish = ({
+  design,
+  email,
+  password,
+  pin,
+  onChange,
+  onError,
+}) => {
   // add some metadata to the site
   const nextDesign = JSON.parse(JSON.stringify(design));
   nextDesign.email = email;
   const date = new Date();
   date.setMilliseconds(pin);
   nextDesign.date = date.toISOString();
+  nextDesign.password = password;
 
   const body = JSON.stringify(nextDesign);
   fetch(apiUrl, {
