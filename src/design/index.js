@@ -4,6 +4,7 @@ export * from './change';
 export * from './code';
 export * from './get';
 export * from './loading';
+export * from './new';
 export * from './publish';
 export * from './reset';
 export * from './serial';

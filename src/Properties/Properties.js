@@ -26,6 +26,7 @@ import {
   getParent,
   getReferences,
   getScreenForComponent,
+  newFrom,
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
@@ -121,6 +122,14 @@ export default ({
       category: 'edit',
       action: 'reset component',
     });
+  };
+
+  const newDesignFrom = () => {
+    const [nextDesign, nextSelected] = newFrom(design, selected);
+    setDesign(nextDesign);
+    setSelected(nextSelected);
+
+    ReactGA.event({ category: 'switch', action: 'new design from' });
   };
 
   const duplicate = () => {
@@ -234,6 +243,7 @@ export default ({
               dropProps={{ align: { top: 'bottom' } }}
               items={[
                 { label: 'code', onClick: () => setShowCode(true) },
+                { label: 'new design from', onClick: newDesignFrom },
                 { label: 'reset', onClick: reset },
                 { label: 'help', href: type.documentation, target: '_blank' },
               ]}
