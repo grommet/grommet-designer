@@ -84,7 +84,16 @@ const reusedBoxProps = {
   border: {
     color: ['-color-'],
     size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-    side: ['all', 'horizontal', 'vertical', 'top', 'left', 'bottom', 'right'],
+    side: [
+      'all',
+      'horizontal',
+      'vertical',
+      'top',
+      'left',
+      'bottom',
+      'right',
+      'between',
+    ],
     style: [
       'solid',
       'dashed',
