@@ -50,13 +50,14 @@ import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
+import DataTableColumns from './DataTableColumns';
+import DataTableData from './DataTableData';
+import DataTablePrimaryKey from './DataTablePrimaryKey';
 import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
 import GridColumns from './GridColumns';
 import GridGap from './GridGap';
 import GridRows from './GridRows';
-import DataTableColumns from './DataTableColumns';
-import DataTableData from './DataTableData';
 import HeadingLevel from './HeadingLevel';
 import HeadingMargin from './HeadingMargin';
 import ImageSrc from './ImageSrc';
@@ -899,6 +900,7 @@ export const components = {
       groupBy: '',
       onClickRow: ['-link-'],
       pad: BoxPad,
+      primaryKey: DataTablePrimaryKey,
       replace: false,
       resizeable: false,
       size: ['small', 'medium', 'large', 'xlarge'],

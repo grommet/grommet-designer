@@ -5955,7 +5955,7 @@ grommet-styles@^0.2.0:
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.11.2"
-  resolved "https://github.com/grommet/grommet/tarball/stable#b5a924592f6788558f2126a20e802ff02a3781d9"
+  resolved "https://github.com/grommet/grommet/tarball/stable#2b8a9246ca850e0e53442434e4a76c16dcfec0c4"
   dependencies:
     css "^2.2.3"
     grommet-icons "^4.2.0"
