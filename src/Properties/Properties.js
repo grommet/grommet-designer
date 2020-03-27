@@ -50,7 +50,7 @@ export default ({
     design,
   ]);
   const [showReferences, setShowReferences] = React.useState();
-  const [showAdvanced, setShowAdvanced] = React.useState(false);
+  const [showAdvanced, setShowAdvanced] = React.useState();
   const [search, setSearch] = React.useState();
   const searchExp = React.useMemo(
     () => search && new RegExp(`^${search}`, 'i'),
@@ -71,6 +71,17 @@ export default ({
   React.useEffect(() => {
     if (search !== undefined) searchRef.current.focus();
   }, [search]);
+
+  // persist showAdvanced state when it changes
+  React.useEffect(() => {
+    if (showAdvanced !== undefined)
+      localStorage.setItem('advanced', JSON.stringify(showAdvanced));
+  }, [showAdvanced]);
+
+  React.useEffect(() => {
+    const stored = localStorage.getItem('advanced');
+    if (stored) setShowAdvanced(JSON.parse(stored));
+  }, []);
 
   const setProp = (propName, value) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
