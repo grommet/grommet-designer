@@ -112,7 +112,7 @@ export const templates = {
             vertical: 'large',
           },
           background: {
-            color: 'accent-1',
+            color: 'brand',
             opacity: 'strong',
           },
           round: 'medium',
@@ -158,7 +158,10 @@ export const templates = {
         id: 37,
         props: {
           fill: 'vertical',
-          columns: [['small', 'medium'], ['medium', 'flex']],
+          columns: [
+            ['small', 'medium'],
+            ['medium', 'flex'],
+          ],
         },
         children: [38, 47],
       },

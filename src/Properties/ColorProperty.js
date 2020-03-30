@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Text, ThemeContext } from 'grommet';
+import { deepMerge } from 'grommet/utils';
 import ArrayProperty from './ArrayProperty';
 
-const internalColors = ['focus', 'icon', 'placeholder', 'selected'];
+// input is due to a bug in grommet-theme-hpe v1.0.5
+const internalColors = ['focus', 'icon', 'placeholder', 'selected', 'input'];
 
 const ColorLabel = theme => ({ selected, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -17,7 +19,7 @@ const ColorProperty = React.forwardRef(
   ({ first, name, onChange, sub, theme, value }, ref) => {
     const baseTheme = React.useContext(ThemeContext);
     const options = React.useMemo(() => {
-      const merged = { ...baseTheme.global.colors, ...theme.global.colors };
+      const merged = deepMerge(baseTheme.global.colors, theme.global.colors);
       return Object.keys(merged)
         .filter(c => !internalColors.includes(c))
         .sort();

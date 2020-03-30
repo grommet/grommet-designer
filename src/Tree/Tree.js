@@ -258,7 +258,7 @@ const Tree = ({
         pad="xxsmall"
         background={
           dragging && dropTarget && dropTarget === id && dropWhere === where
-            ? 'accent-2'
+            ? 'focus'
             : undefined
         }
         onDragEnter={event => {
@@ -289,7 +289,7 @@ const Tree = ({
           dropScreenTarget &&
           dropScreenTarget === screenId &&
           dropWhere === where
-            ? 'accent-2'
+            ? 'focus'
             : undefined
         }
         onDragEnter={event => {
@@ -322,7 +322,7 @@ const Tree = ({
       ];
     }
     const collapserColor = selectedAncestors.includes(id)
-      ? 'accent-1'
+      ? 'selected-background'
       : 'border';
     return (
       <Box key={id}>
@@ -366,9 +366,9 @@ const Tree = ({
               pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
               background={
                 dropTarget && dropTarget === id && dropWhere === 'in'
-                  ? 'accent-2'
+                  ? 'focus'
                   : selected.component === id
-                  ? 'accent-1'
+                  ? 'selected-background'
                   : undefined
               }
             >
@@ -451,9 +451,14 @@ const Tree = ({
               justify="between"
               gap="medium"
               pad={{ vertical: 'small', left: 'large', right: 'small' }}
-              background={isSelected ? 'accent-1' : undefined}
+              background={isSelected ? 'selected-background' : undefined}
             >
-              <Heading level={3} size="xsmall" margin="none">
+              <Heading
+                level={3}
+                size="xsmall"
+                margin="none"
+                color="selected-text"
+              >
                 {screen.name || `Screen ${screenId}`}
               </Heading>
             </Box>

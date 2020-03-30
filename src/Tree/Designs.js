@@ -47,7 +47,7 @@ const nameToBackground = name => {
   for (let i = 0; i < name.length; i++) {
     num += name.charCodeAt(i);
   }
-  return `accent-${(num % 4) + 1}`;
+  return `graph-${(num % 4) + 1}`;
 };
 
 const Design = ({ name, loading, onClick }) => (

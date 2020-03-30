@@ -157,7 +157,7 @@ exports[`App empty 1`] = `
                     class="StyledBox-sc-13pk1d4-0 ckRNXr"
                   >
                     <h3
-                      class="StyledHeading-sc-1rdh4aw-0 cQliYa"
+                      class="StyledHeading-sc-1rdh4aw-0 gQA-DTd"
                     >
                       Screen
                     </h3>
@@ -204,7 +204,7 @@ exports[`App empty 1`] = `
                       type="button"
                     >
                       <div
-                        class="StyledBox-sc-13pk1d4-0 julBGC"
+                        class="StyledBox-sc-13pk1d4-0 SWzLE"
                       >
                         <span
                           class="StyledText-sc-1sadyjn-0 eGyAkH"
@@ -2617,7 +2617,7 @@ exports[`App empty 2`] = `
                     class="StyledBox-sc-13pk1d4-0 ckRNXr"
                   >
                     <h3
-                      class="StyledHeading-sc-1rdh4aw-0 cQliYa"
+                      class="StyledHeading-sc-1rdh4aw-0 gQA-DTd"
                     >
                       Screen
                     </h3>
@@ -2664,7 +2664,7 @@ exports[`App empty 2`] = `
                       type="button"
                     >
                       <div
-                        class="StyledBox-sc-13pk1d4-0 julBGC"
+                        class="StyledBox-sc-13pk1d4-0 SWzLE"
                       >
                         <span
                           class="StyledText-sc-1sadyjn-0 eGyAkH"
