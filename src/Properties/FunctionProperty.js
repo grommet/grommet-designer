@@ -26,6 +26,7 @@ const FunctionProperty = React.forwardRef(
             value={value}
             theme={theme}
             linkOptions={linkOptions}
+            dropTarget={ref && ref.current}
             {...rest}
           />
         </Field>

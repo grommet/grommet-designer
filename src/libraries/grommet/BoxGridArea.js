@@ -13,7 +13,7 @@ export default ({ value, onChange, design, selected }) => {
     `;
   } else {
     areas = parent.props.areas && parent.props.areas.map(a => a.name);
-    if (parent.type !== 'Grid') {
+    if (parent.type !== 'grommet.Grid') {
       message = `
         Well, gridArea only does anything when the parent component is a Grid.
         Currently, the parent of this component is a ${parent.type}

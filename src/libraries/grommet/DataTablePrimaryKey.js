@@ -1,28 +1,32 @@
 import React from 'react';
-import { Text } from 'grommet';
-import InlineOptions from './InlineOptions';
-import InlineOption from './InlineOption';
-import UndefinedOption, { undefinedOption } from './UndefinedOption';
+import { Box, Select, Text } from 'grommet';
 
-const options = [{ label: 'false', value: false, domValue: '--' }];
+const OptionLabel = ({ selected, value }) => (
+  <Box pad="small">
+    <Text weight={selected ? 'bold' : undefined}>
+      {(typeof value !== 'string' ? JSON.stringify(value) : value) || ''}
+    </Text>
+  </Box>
+);
 
-const PrimaryKey = props => {
-  const { value } = props;
-  const adjustedOptions = [...options];
-  if (value === false) adjustedOptions.push(undefinedOption);
+const PrimaryKey = ({ dropTarget, onChange, value }) => {
   return (
-    <InlineOptions name={props.name} options={adjustedOptions} {...props}>
-      {(option, { checked, hover }) => {
-        if (option.label === undefinedOption.label) {
-          return <UndefinedOption checked={checked} hover={hover} />;
-        }
-        return (
-          <InlineOption checked={checked} hover={hover} label="false">
-            <Text color="text-xweak"> ! </Text>
-          </InlineOption>
-        );
+    <Select
+      plain
+      dropTarget={dropTarget}
+      id="primary"
+      name="primary"
+      options={['false', 'undefined']}
+      value={typeof value === 'boolean' ? value.toString() : value || ''}
+      valueLabel={<OptionLabel value={value} selected />}
+      onChange={({ option }) => {
+        onChange(option === 'undefined' ? undefined : option);
       }}
-    </InlineOptions>
+    >
+      {(option, index, options, { selected }) => (
+        <OptionLabel value={option} selected={selected} />
+      )}
+    </Select>
   );
 };
 

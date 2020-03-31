@@ -66,7 +66,24 @@ export default ({ value, onChange }) => {
                 }}
               />
             </FormField>
-            {['primary', 'search', 'sortable'].map(subProp => (
+            <FormField>
+              <Box pad="small">
+                <CheckBox
+                  label="primary"
+                  checked={c.primary || false}
+                  onChange={event => {
+                    const nextValue = JSON.parse(JSON.stringify(value));
+                    // only one primary
+                    nextValue.forEach(c => {
+                      c.primary = false;
+                    });
+                    nextValue[i].primary = event.target.checked;
+                    onChange(nextValue);
+                  }}
+                />
+              </Box>
+            </FormField>
+            {['search', 'sortable'].map(subProp => (
               <FormField key={subProp}>
                 <Box pad="small">
                   <CheckBox
