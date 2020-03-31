@@ -53,10 +53,9 @@ export default ({
   const [showReferences, setShowReferences] = React.useState();
   const [showAdvanced, setShowAdvanced] = React.useState();
   const [search, setSearch] = React.useState();
-  const searchExp = React.useMemo(
-    () => search && new RegExp(`^${search}`, 'i'),
-    [search],
-  );
+  const searchExp = React.useMemo(() => search && new RegExp(search, 'i'), [
+    search,
+  ]);
   const linkOptions = React.useMemo(
     () => getLinkOptions(design, libraries, selected),
     [design, libraries, selected],
@@ -392,9 +391,7 @@ export default ({
                       .filter(
                         ({ properties }) =>
                           !searchExp ||
-                          Object.keys(properties).some(propName =>
-                            searchExp.test(propName),
-                          ),
+                          properties.some(propName => searchExp.test(propName)),
                       )
                       .map(({ label, properties: propertyNames }) => {
                         const sectionProperties = {};
