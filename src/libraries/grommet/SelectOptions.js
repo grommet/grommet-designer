@@ -21,7 +21,7 @@ export default ({ design, selected, value, onChange }) => {
             icon={<Trash />}
             onClick={() => {
               const nextValue = JSON.parse(JSON.stringify(value));
-              nextValue.slice(i, 1);
+              nextValue.splice(i, 1);
               onChange(nextValue);
             }}
           />
