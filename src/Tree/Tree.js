@@ -216,7 +216,9 @@ const Tree = ({
       }
       if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
         setCopied(selected);
-        navigator.clipboard.writeText(serialize(design, selected));
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(serialize(design, selected));
+        }
       } else if (event.key === 'c') {
         toggleCollapse(selected.component);
       }
@@ -231,22 +233,24 @@ const Tree = ({
           setDesign(nextDesign);
           setSelected({ ...selected, component: newId });
         } else {
-          navigator.clipboard.readText().then(clipText => {
-            const {
-              design: copiedDesign,
-              selected: copiedSelected,
-            } = JSON.parse(clipText);
-            const nextDesign = JSON.parse(JSON.stringify(design));
-            const newId = copyComponent({
-              nextDesign,
-              templateDesign: copiedDesign,
-              id: copiedSelected.component,
-            });
-            insertComponent({ nextDesign, libraries, selected, id: newId });
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(clipText => {
+              const {
+                design: copiedDesign,
+                selected: copiedSelected,
+              } = JSON.parse(clipText);
+              const nextDesign = JSON.parse(JSON.stringify(design));
+              const newId = copyComponent({
+                nextDesign,
+                templateDesign: copiedDesign,
+                id: copiedSelected.component,
+              });
+              insertComponent({ nextDesign, libraries, selected, id: newId });
 
-            setDesign(nextDesign);
-            setSelected({ ...selected, component: newId });
-          });
+              setDesign(nextDesign);
+              setSelected({ ...selected, component: newId });
+            });
+          }
         }
       }
     }
