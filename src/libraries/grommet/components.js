@@ -679,6 +679,23 @@ export const components = {
       reverse: false,
       toggle: false,
     },
+    designProperties: {
+      link: ['-link-'],
+    },
+    override: ({ designProps, props }, { dataContextPath, toggleLink }) => {
+      return {
+        onChange:
+          designProps && designProps.link
+            ? event => {
+                event.stopPropagation();
+                toggleLink(
+                  { ...designProps.link, dataContextPath },
+                  event.target.checked,
+                );
+              }
+            : undefined,
+      };
+    },
   },
   Form: {
     component: Form,

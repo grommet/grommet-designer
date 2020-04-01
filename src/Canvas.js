@@ -198,6 +198,21 @@ const Canvas = ({
     }
   };
 
+  const toggleLink = (to, onOff) => {
+    if (to.control === 'toggleThemeMode') {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
+      setDesign(nextDesign);
+    } else if (to.component) {
+      const target = design.components[to.component];
+      const hideable =
+        target && getComponentType(libraries, target.type).hideable;
+      if (hideable) {
+        setHide(target.id, !onOff);
+      }
+    }
+  };
+
   const renderRepeater = (component, type, { dataContextPath }) => {
     const {
       children,
@@ -290,6 +305,7 @@ const Canvas = ({
       specialProps = type.override(component, {
         dataContextPath: dataPath,
         followLink,
+        toggleLink,
         replaceData: text => replace(text, data, contextPath),
         setHide: value => setHide(id, value),
         data: dataValue || undefined,
