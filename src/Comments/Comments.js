@@ -199,7 +199,11 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                         {adding ? (
                           <Text>updating ...</Text>
                         ) : (
-                          <Button type="submit" label="update comment" />
+                          <Button
+                            type="submit"
+                            primary
+                            label="update comment"
+                          />
                         )}
                       </Box>
                     </Box>
