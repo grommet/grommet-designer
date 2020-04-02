@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactGA from 'react-ga';
 import {
+  Anchor,
   Box,
   Button,
   Form,
@@ -146,15 +147,21 @@ const Publish = ({ design, setDesign }) => {
         </Fragment>
       )}
       {design.date && (
-        <Box>
+        <Box direction="row" gap="meduim" justify="between">
           <Text size="small" color="text-xweak">
             Last published {new Date(design.date).toLocaleString()}
           </Text>
-          {design.publishedUrl && (
-            <Text size="small" color="text-xweak">
-              {design.publishedUrl}
-            </Text>
-          )}
+          <Box align="end">
+            {design.publishedUrl && (
+              <Anchor href={design.publishedUrl} label="preview" />
+            )}
+            {design.publishedUrl && design.id && (
+              <Anchor
+                href={`${design.publishedUrl}&comments=true`}
+                label="comments"
+              />
+            )}
+          </Box>
         </Box>
       )}
     </Box>
