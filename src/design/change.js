@@ -99,7 +99,7 @@ export const copyComponent = ({
         // Button
         if (
           component.designProps.link.screen &&
-          !component.designProps.libraries.component
+          !component.designProps.link.component
         ) {
           // this is a screen link, delete it
           delete component.designProps.link;
