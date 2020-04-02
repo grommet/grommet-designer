@@ -372,7 +372,10 @@ const AddComponent = ({
               design={design}
               libraries={libraries}
               selected={selected}
-              onChange={nextAddLocation => setAddLocation(nextAddLocation)}
+              onChange={nextAddLocation => {
+                setAddLocation(nextAddLocation);
+                inputRef.current.focus();
+              }}
             />
           </Box>
         )}
