@@ -90,7 +90,11 @@ const Publish = ({ design, setDesign }) => {
         They will be able to create their own design based on it.
       `}
       />
-      <Form value={publication} onSubmit={onPublish}>
+      <Form
+        value={publication}
+        onChange={({ value }) => setPublication(value)}
+        onSubmit={onPublish}
+      >
         <FormField
           name="email"
           label="Email"
