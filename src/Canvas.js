@@ -75,7 +75,7 @@ const replace = (text, data, contextPath) =>
 const Canvas = ({
   design,
   imports,
-  preview,
+  mode,
   selected,
   theme,
   setDesign,
@@ -347,7 +347,7 @@ const Canvas = ({
       style = { outline: '1px dashed blue' };
     } else if (inlineEdit === id) {
       style = { outline: '2px dashed red' };
-    } else if (!preview && selected.component === id) {
+    } else if (mode === 'edit' && selected.component === id) {
       style = { outline: '1px dashed red' };
     }
 
@@ -397,7 +397,7 @@ const Canvas = ({
 
     // We don't drag when editing so that the user can use text selection.
     const dragProps = {};
-    if (!preview && !inlineEdit) {
+    if (mode === 'edit' && !inlineEdit) {
       dragProps.draggable = true;
       dragProps.onDragStart = event => {
         event.stopPropagation();
@@ -432,7 +432,7 @@ const Canvas = ({
     }
 
     const selectProps = {};
-    if (!preview) {
+    if (mode === 'edit') {
       selectProps.onClick = event => {
         event.stopPropagation();
         if (selected.component !== id) {

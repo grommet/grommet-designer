@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import {
   Add,
+  Chat,
   Folder,
   FormDown,
   FormNext,
@@ -55,6 +56,7 @@ const Tree = ({
   theme,
   setColorMode,
   setDesign,
+  setMode,
   setRTL,
   setSelected,
   onUndo,
@@ -525,6 +527,15 @@ const Tree = ({
                 </Box>
               </Button>
             </Box>
+            {design.publishedUrl && (
+              <ActionButton
+                title={`add comments ${
+                  /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                };`}
+                icon={<Chat />}
+                onClick={() => setMode('comments')}
+              />
+            )}
             <ActionButton
               title="share design"
               icon={<Share />}

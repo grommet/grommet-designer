@@ -37,6 +37,7 @@ export const publish = ({
             window.location.hash,
           ].join('');
           nextDesign.publishedUrl = nextUploadUrl;
+          nextDesign.id = id;
           onChange(nextDesign);
         });
       }

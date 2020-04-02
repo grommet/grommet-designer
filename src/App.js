@@ -16,6 +16,7 @@ import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
+import Comments from './Comments/Comments';
 import {
   getInitialSelected,
   getScreenByPath,
@@ -72,7 +73,7 @@ const App = () => {
   const [theme, setTheme] = React.useState(grommet);
   const [colorMode, setColorMode] = React.useState('dark');
   const [rtl, setRTL] = React.useState();
-  const [preview, setPreview] = React.useState(true);
+  const [mode, setMode] = React.useState();
   const [changes, setChanges] = React.useState([]);
   const [changeIndex, setChangeIndex] = React.useState();
   const [designs, setDesigns] = React.useState([]);
@@ -162,7 +163,20 @@ const App = () => {
       setTheme(load.theme);
       setDesign(load.design);
       setSelected(load.selected);
-      setPreview(params.preview ? JSON.parse(params.preview) : !!params.id);
+      let nextMode;
+      if (params.preview && JSON.parse(params.preview)) nextMode = 'preview';
+      else if (params.comments && JSON.parse(params.comments))
+        nextMode = 'comments';
+      else if (params.mode) nextMode = params.mode;
+      else if (!!params.id) nextMode = 'preview';
+      else {
+        let stored = localStorage.getItem('preview');
+        if (stored && JSON.parse(stored)) nextMode = 'preview';
+        stored = localStorage.getItem('designerMode');
+        if (stored) nextMode = JSON.parse(stored);
+        if (!nextMode) nextMode = 'edit';
+      }
+      setMode(nextMode);
       setChanges([{ design: load.design, selected: load.selected }]);
       setChangeIndex(0);
       setLoad(undefined);
@@ -186,10 +200,12 @@ const App = () => {
     }
   }, []);
 
-  React.useEffect(() => {
-    const stored = localStorage.getItem('preview');
-    if (stored) setPreview(JSON.parse(stored));
-  }, []);
+  // React.useEffect(() => {
+  //   let stored = localStorage.getItem('preview');
+  //   if (stored && JSON.parse(stored)) setMode('preview');
+  //   stored = localStorage.getItem('designerMode');
+  //   if (stored) setMode(JSON.parse(stored));
+  // }, []);
 
   // browser navigation
 
@@ -226,16 +242,6 @@ const App = () => {
       }
     }
   }, [design, load, selected.screen]);
-
-  // setup derivedFromId
-  React.useEffect(() => {
-    if (!load && design.id && changes.length > 1) {
-      const nextDesign = JSON.parse(JSON.stringify(design));
-      nextDesign.derivedFromId = nextDesign.id;
-      delete nextDesign.id;
-      setDesign(nextDesign);
-    }
-  }, [changes, design, load]);
 
   // store design
   React.useEffect(() => {
@@ -299,6 +305,14 @@ const App = () => {
     localStorage.setItem('selected', JSON.stringify(selected));
   }, [selected]);
 
+  const changeDesign = nextDesign => {
+    if (nextDesign.fetched) {
+      nextDesign.derivedFromId = nextDesign.id;
+      delete nextDesign.fetched;
+    }
+    setDesign(nextDesign);
+  };
+
   // add to changes, if needed
   React.useEffect(() => {
     if (!load) {
@@ -319,12 +333,14 @@ const App = () => {
     }
   }, [changes, changeIndex, design, load, selected]);
 
-  // persist preview state when it changes
+  // persist mode when it changes
   React.useEffect(() => {
-    localStorage.setItem('preview', JSON.stringify(preview));
-    // trigger resize so rendered elements can respond accordingly
-    window.dispatchEvent(new Event('resize'));
-  }, [preview]);
+    if (mode) {
+      localStorage.setItem('designerMode', JSON.stringify(mode));
+      // trigger resize so rendered elements can respond accordingly
+      window.dispatchEvent(new Event('resize'));
+    }
+  }, [mode]);
 
   // clear any id query parameter and set a name parameter if the design changes
   React.useEffect(() => {
@@ -344,9 +360,12 @@ const App = () => {
   const onKey = React.useCallback(
     event => {
       if (event.metaKey || event.ctrlKey) {
-        if (event.key === 'e' || event.key === 'E') {
+        if (event.key === 'e' || event.key === 'E' || event.key === '.') {
           event.preventDefault();
-          setPreview(!preview);
+          setMode(mode === 'preview' ? 'edit' : 'preview');
+        } else if (event.key === ';') {
+          event.preventDefault();
+          setMode(mode === 'preview' ? 'comments' : 'preview');
         } else if (event.key === 'p' && event.shiftKey) {
           const stored = localStorage.getItem('identity');
           if (stored) {
@@ -363,7 +382,7 @@ const App = () => {
         }
       }
     },
-    [design, preview],
+    [design, mode],
   );
 
   const onUndo = React.useCallback(() => {
@@ -386,6 +405,21 @@ const App = () => {
     setChangeIndex(nextChangeIndex);
   }, [changes, changeIndex]);
 
+  let columns;
+  if (responsive === 'small' || mode === 'preview') columns = 'flex';
+  else if (mode === 'comments') {
+    columns = [
+      ['1/2', 'flex'],
+      ['small', 'medium'],
+    ];
+  } else if (mode === 'edit') {
+    columns = [
+      ['small', 'medium'],
+      ['1/2', 'flex'],
+      ['small', 'medium'],
+    ];
+  }
+
   return (
     <Grommet
       full
@@ -394,19 +428,8 @@ const App = () => {
       dir={rtl ? 'rtl' : undefined}
     >
       <Keyboard target="document" onKeyDown={onKey}>
-        <Grid
-          fill
-          columns={
-            responsive === 'small' || preview
-              ? 'flex'
-              : [
-                  ['small', 'medium'],
-                  ['1/2', 'flex'],
-                  ['small', 'medium'],
-                ]
-          }
-        >
-          {responsive !== 'small' && !preview && (
+        <Grid fill columns={columns}>
+          {responsive !== 'small' && mode === 'edit' && (
             <Tree
               design={design}
               imports={imports}
@@ -415,7 +438,8 @@ const App = () => {
               theme={theme}
               colorMode={colorMode}
               setColorMode={setColorMode}
-              setDesign={setDesign}
+              setDesign={changeDesign}
+              setMode={setMode}
               setRTL={setRTL}
               setSelected={setSelected}
               onRedo={changeIndex > 0 && onRedo}
@@ -448,8 +472,8 @@ const App = () => {
                 design={design}
                 imports={imports}
                 selected={selected}
-                preview={preview}
-                setDesign={setDesign}
+                mode={mode}
+                setDesign={changeDesign}
                 setSelected={setSelected}
                 theme={theme}
               />
@@ -457,12 +481,19 @@ const App = () => {
           )}
 
           {responsive !== 'small' &&
-            !preview &&
-            (!selectedComponent ? (
+            mode !== 'preview' &&
+            (mode === 'comments' ? (
+              <Comments
+                design={design}
+                selected={selected}
+                setMode={setMode}
+                setSelected={setSelected}
+              />
+            ) : !selectedComponent ? (
               <ScreenDetails
                 design={design}
                 selected={selected}
-                setDesign={setDesign}
+                setDesign={changeDesign}
                 setSelected={setSelected}
               />
             ) : (
@@ -473,7 +504,7 @@ const App = () => {
                 theme={theme}
                 selected={selected}
                 component={selectedComponent}
-                setDesign={setDesign}
+                setDesign={changeDesign}
                 setSelected={setSelected}
               />
             ))}

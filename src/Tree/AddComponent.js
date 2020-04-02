@@ -240,11 +240,7 @@ const AddComponent = ({
       >
         <Heading level="3" size="small" margin="none">
           {url ? (
-            <Anchor
-              target="_blank"
-              href={`${url}&preview=false`}
-              label={name}
-            />
+            <Anchor target="_blank" href={`${url}&mode=edit`} label={name} />
           ) : (
             name
           )}

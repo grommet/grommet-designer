@@ -32,14 +32,16 @@ exports.designs = (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
 
   if (req.method === 'OPTIONS') {
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.set('Access-Control-Max-Age', '3600');
     res.status(204).send('');
     return;
   }
+
   if (req.method === 'GET') {
-    const id = decodeURIComponent(req.url.split('/')[1]);
+    const parts = req.url.split('/');
+    const id = decodeURIComponent(parts[1]);
     const authorization = req.get('Authorization');
     let password;
     if (authorization) {
@@ -47,6 +49,8 @@ exports.designs = (req, res) => {
       const buffer = Buffer.from(encoded, 'base64');
       password = buffer.toString();
     }
+
+    // get the design in question, no matter the sub-paths
     const file = bucket.file(`${id}.json`);
     return file
       .download()
@@ -61,62 +65,127 @@ exports.designs = (req, res) => {
             .status(401)
             .send();
         }
+
+        design.id = id;
         const date = new Date(design.date);
         date.setMilliseconds(0);
         design.date = date.toISOString();
+
+        // check for comments
+        return bucket
+          .getFiles({
+            autoPaginate: false,
+            delimiter: '/',
+            prefix: `${id}/comments/`,
+          })
+          .then(data =>
+            Promise.all(
+              data[0].map(file =>
+                file.download().then(data => JSON.parse(data[0])),
+              ),
+            ),
+          )
+          .then(comments => {
+            design.comments = comments;
+            return design;
+          })
+          .catch(e => design); // no comments
+      })
+      .then(design => {
         res
           .status(200)
           .type('json')
-          .send(JSON.stringify(design));
+          .send(
+            JSON.stringify(parts[2] === 'comments' ? design.comments : design),
+          );
       })
       .catch(e => res.status(400).send(e.message));
   }
+
   if (req.method === 'POST') {
-    const design = req.body;
-    const id = encodeURIComponent(
-      `${design.name}-${design.email.replace('@', '-')}`.replace(
-        /\.|\s+/g,
-        '-',
-      ),
-    );
-    const file = bucket.file(`${id}.json`);
+    const parts = req.url.split('/');
+    const designId = decodeURIComponent(parts[1]);
 
-    return file
-      .download()
-      .then(data => {
-        const existingDesign = JSON.parse(data[0]);
+    if (designId && parts[2] === 'comments') {
+      // comment
+      const comment = req.body;
+      const createdAt = new Date().toISOString();
+      const id = `${designId}/comments/${encodeURIComponent(createdAt)}`;
+      comment.createdAt = createdAt;
+      comment.id = id;
+      const file = bucket.file(`${id}.json`);
+      return file
+        .save(JSON.stringify(comment), { resumable: false })
+        .then(() =>
+          res
+            .status(201)
+            .type('json')
+            .send(JSON.stringify({ id, createdAt })),
+        )
+        .catch(e => res.status(500).send(e.message));
+    } else if (parts.length === 2) {
+      // new design
+      const design = req.body;
+      const id = encodeURIComponent(
+        `${design.name}-${design.email.replace('@', '-')}`.replace(
+          /\.|\s+/g,
+          '-',
+        ),
+      );
+      const file = bucket.file(`${id}.json`);
 
-        const existingPin = new Date(existingDesign.date).getMilliseconds();
-        const pin = new Date(design.date).getMilliseconds();
-        if (pin !== existingPin) {
-          res.status(403).send('Unauthorized');
-          return;
-        }
+      return file
+        .download()
+        .then(data => {
+          const existingDesign = JSON.parse(data[0]);
 
-        hashPassword(design);
-        file
-          .save(JSON.stringify(design), { resumable: false })
-          .then(() =>
-            res
-              .status(200)
-              .type('text')
-              .send(id),
-          )
-          .catch(e => res.status(500).send(e.message));
-      })
-      .catch(() => {
-        // doesn't exist yet, add it
-        hashPassword(design);
-        file
-          .save(JSON.stringify(design), { resumable: false })
-          .then(() =>
-            res
-              .status(201)
-              .type('text')
-              .send(id),
-          )
-          .catch(e => res.status(500).send(e.message));
-      });
+          const existingPin = new Date(existingDesign.date).getMilliseconds();
+          const pin = new Date(design.date).getMilliseconds();
+          if (pin !== existingPin) {
+            res.status(403).send('Unauthorized');
+            return;
+          }
+
+          hashPassword(design);
+          file
+            .save(JSON.stringify(design), { resumable: false })
+            .then(() =>
+              res
+                .status(200)
+                .type('text')
+                .send(id),
+            )
+            .catch(e => res.status(500).send(e.message));
+        })
+        .catch(() => {
+          // doesn't exist yet, add it
+          hashPassword(design);
+          file
+            .save(JSON.stringify(design), { resumable: false })
+            .then(() =>
+              res
+                .status(201)
+                .type('text')
+                .send(id),
+            )
+            .catch(e => res.status(500).send(e.message));
+        });
+    }
   }
+
+  if (req.method === 'PUT') {
+    const file = bucket.file(`${req.url}.json`);
+    const comment = req.body;
+    comment.updatedAt = new Date().toISOString();
+    return file
+      .save(JSON.stringify(comment), { resumable: false })
+      .then(() => res.status(200).send());
+  }
+
+  if (req.method === 'DELETE') {
+    const file = bucket.file(`${req.url}.json`);
+    return file.delete().then(() => res.status(200).send());
+  }
+
   res.status(405).send();
 };

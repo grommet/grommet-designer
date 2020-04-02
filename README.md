@@ -8,7 +8,8 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 ### Command shortcuts
 
-- **command-e** or **control-E**: toggles preview vs. edit modes
+- **command-e** or **control-E** or **command-.**: toggles preview vs. edit mode
+- **command-;** or **control-;**: toggles preview vs. comment mode
 - **ArrowUp** and **ArrowDown**: traverses the selection across siblings
 - **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
 - **c**: toggles collapsing the currently selected component
@@ -57,6 +58,15 @@ The Share control near the upper left provides three methods of sharing.
    dialog, via the Import control.
 1. Generate the appropriate code for your design such that you
    or a developer could run it as an actual site.
+
+### Comments
+
+After a design is published, comments can be added to it. If someone is
+able to access the design, they will be able to comment on it. Comments
+are fully shared, anyone can update or delete individual comments. So, play
+nice. Comments support Markdown syntax. There is no protection against
+multiple users changing a comment at the same time. The last one to change
+will win in this scenario.
 
 ### Design Components
 

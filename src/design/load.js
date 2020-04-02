@@ -34,6 +34,7 @@ export const loadDesign = ({
           upgradeDesign(design);
           // remember in case we make a change so we can set derivedFromId
           design.id = id;
+          design.fetched = true;
           onLoad(design);
           if (initial)
             ReactGA.event({ category: 'switch', action: 'published design' });
