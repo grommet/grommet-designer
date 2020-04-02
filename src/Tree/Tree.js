@@ -527,7 +527,7 @@ const Tree = ({
                 </Box>
               </Button>
             </Box>
-            {design.publishedUrl && (
+            {design.id && (
               <ActionButton
                 title={`add comments ${
                   /Mac/i.test(navigator.platform) ? '⌘' : '^'
