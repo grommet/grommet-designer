@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactGA from 'react-ga';
 import {
-  Anchor,
   Box,
   Button,
   Form,
@@ -32,10 +31,10 @@ const Summary = ({ Icon, label, guidance }) => (
 const Publish = ({ design, setDesign }) => {
   const [publication, setPublication] = React.useState();
   const [publishing, setPublishing] = React.useState();
-  const [uploadUrl, setUploadUrl] = React.useState();
   const [message, setMessage] = React.useState();
   const [error, setError] = React.useState();
-  const inputRef = React.useRef();
+  const previewRef = React.useRef();
+  const commentRef = React.useRef();
 
   React.useEffect(() => {
     const stored = localStorage.getItem('identity');
@@ -58,7 +57,6 @@ const Publish = ({ design, setDesign }) => {
       pin,
       onChange: nextDesign => {
         setPublishing(false);
-        setUploadUrl(nextDesign.publishedUrl);
         setDesign(nextDesign);
         ReactGA.event({
           category: 'share',
@@ -70,12 +68,6 @@ const Publish = ({ design, setDesign }) => {
         setError(error);
       },
     });
-  };
-
-  const onCopy = () => {
-    inputRef.current.select();
-    document.execCommand('copy');
-    setMessage('copied to clipboard!');
   };
 
   return (
@@ -134,38 +126,63 @@ const Publish = ({ design, setDesign }) => {
           <Text size="large">...</Text>
         </Box>
       )}
-      {uploadUrl && (
-        <Fragment>
-          <Box direction="row">
-            <TextInput ref={inputRef} value={uploadUrl} />
-            <Button
-              icon={<Copy />}
-              title="Copy URL"
-              hoverIndicator
-              onClick={onCopy}
-            />
-          </Box>
-          <Box>
-            <Text textAlign="end">{message}&nbsp;</Text>
-          </Box>
-        </Fragment>
-      )}
       {design.date && (
-        <Box direction="row" gap="meduim" justify="between">
+        <Box margin="small" align="center">
           <Text size="small" color="text-xweak">
             Last published {new Date(design.date).toLocaleString()}
           </Text>
-          <Box align="end">
-            {design.publishedUrl && (
-              <Anchor href={design.publishedUrl} label="preview" />
-            )}
-            {design.publishedUrl && design.id && (
-              <Anchor
-                href={`${design.publishedUrl}&comments=true`}
-                label="comments"
-              />
-            )}
-          </Box>
+        </Box>
+      )}
+      <Grid columns={['auto', 'flex', 'auto']} gap="small" align="center">
+        {design.publishedUrl && [
+          <Text key="l" margin={{ start: 'small' }}>
+            preview
+          </Text>,
+          <TextInput
+            key="i"
+            ref={previewRef}
+            size="small"
+            value={design.publishedUrl}
+          />,
+          <Button
+            key="b"
+            icon={<Copy />}
+            title="Copy URL"
+            hoverIndicator
+            onClick={() => {
+              previewRef.current.select();
+              document.execCommand('copy');
+              setMessage('copied to clipboard!');
+            }}
+          />,
+        ]}
+        {design.publishedUrl &&
+          design.id && [
+            <Text key="l" margin={{ start: 'small' }}>
+              comment
+            </Text>,
+            <TextInput
+              key="i"
+              ref={commentRef}
+              size="small"
+              value={`${design.publishedUrl}&comments=true`}
+            />,
+            <Button
+              key="b"
+              icon={<Copy />}
+              title="Copy URL"
+              hoverIndicator
+              onClick={() => {
+                commentRef.current.select();
+                document.execCommand('copy');
+                setMessage('copied to clipboard!');
+              }}
+            />,
+          ]}
+      </Grid>
+      {message && (
+        <Box margin="small" align="center">
+          <Text>{message}</Text>
         </Box>
       )}
     </Box>
