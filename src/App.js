@@ -139,6 +139,22 @@ const App = () => {
           loadingImports = f(loadingImports);
           setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
         });
+
+        let nextMode;
+        if (params.preview && JSON.parse(params.preview)) nextMode = 'preview';
+        else if (params.comments && JSON.parse(params.comments))
+          nextMode = 'comments';
+        else if (params.mode) nextMode = params.mode;
+        else if (!!params.id) nextMode = 'preview';
+        else if (pathname === '/_new') nextMode = 'edit';
+        else {
+          let stored = localStorage.getItem('preview');
+          if (stored && JSON.parse(stored)) nextMode = 'preview';
+          stored = localStorage.getItem('designerMode');
+          if (stored) nextMode = JSON.parse(stored);
+          if (!nextMode) nextMode = 'edit';
+        }
+        setLoad(prevLoad => ({ ...prevLoad, mode: nextMode }));
       },
     };
     if (pathname === '/_new') options.fresh = true;
@@ -158,25 +174,11 @@ const App = () => {
       load.imports &&
       !load.imports.some(i => i.url && !(i.design || i.library))
     ) {
-      const params = getParams();
       setImports(load.imports);
       setTheme(load.theme);
       setDesign(load.design);
       setSelected(load.selected);
-      let nextMode;
-      if (params.preview && JSON.parse(params.preview)) nextMode = 'preview';
-      else if (params.comments && JSON.parse(params.comments))
-        nextMode = 'comments';
-      else if (params.mode) nextMode = params.mode;
-      else if (!!params.id) nextMode = 'preview';
-      else {
-        let stored = localStorage.getItem('preview');
-        if (stored && JSON.parse(stored)) nextMode = 'preview';
-        stored = localStorage.getItem('designerMode');
-        if (stored) nextMode = JSON.parse(stored);
-        if (!nextMode) nextMode = 'edit';
-      }
-      setMode(nextMode);
+      setMode(load.mode);
       setChanges([{ design: load.design, selected: load.selected }]);
       setChangeIndex(0);
       setLoad(undefined);
@@ -199,13 +201,6 @@ const App = () => {
       );
     }
   }, []);
-
-  // React.useEffect(() => {
-  //   let stored = localStorage.getItem('preview');
-  //   if (stored && JSON.parse(stored)) setMode('preview');
-  //   stored = localStorage.getItem('designerMode');
-  //   if (stored) setMode(JSON.parse(stored));
-  // }, []);
 
   // browser navigation
 
