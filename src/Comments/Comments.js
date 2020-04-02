@@ -48,59 +48,68 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
     }
   }, [design.id]);
 
-  const addComment = comment => {
-    setAdding(true);
-    const nextComments = [...comments];
-    comment.selected = selected;
-    nextComments.push(comment);
-    setComments(nextComments);
-    setAddValue({ text: '' });
+  const addComment = React.useCallback(
+    comment => {
+      setAdding(true);
+      const nextComments = [...comments];
+      comment.selected = selected;
+      nextComments.push(comment);
+      setComments(nextComments);
+      setAddValue({ text: '' });
 
-    const body = JSON.stringify(comment);
-    fetch(`${apiUrl}/${design.id}/comments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Content-Length': body.length,
-      },
-      body,
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(({ id, createdAt }) => {
-          comment.id = id;
-          comment.createdAt = createdAt;
-          setAdding(false);
-        });
-      }
-    });
-  };
+      const body = JSON.stringify(comment);
+      fetch(`${apiUrl}/${design.id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Length': body.length,
+        },
+        body,
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(({ id, createdAt }) => {
+            comment.id = id;
+            comment.createdAt = createdAt;
+            setAdding(false);
+          });
+        }
+      });
+    },
+    [comments, design.id, selected],
+  );
 
-  const updateComment = comment => {
-    const nextComments = [...comments];
-    const index = nextComments.findIndex(c => c.id === comment.id);
-    nextComments[index] = comment;
-    comment.selected = selected;
-    setComments(nextComments);
-    setEditValue(undefined);
-    setEditing(false);
+  const updateComment = React.useCallback(
+    comment => {
+      const nextComments = [...comments];
+      const index = nextComments.findIndex(c => c.id === comment.id);
+      nextComments[index] = comment;
+      comment.selected = selected;
+      setComments(nextComments);
+      setEditValue(undefined);
+      setEditing(false);
 
-    const body = JSON.stringify(comment);
-    fetch(`${apiUrl}/${comment.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Content-Length': body.length,
-      },
-      body,
-    });
-  };
+      const body = JSON.stringify(comment);
+      fetch(`${apiUrl}/${comment.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Length': body.length,
+        },
+        body,
+      });
+    },
+    [comments, selected],
+  );
 
-  const deleteComment = id => {
-    const nextComments = comments.filter(c => c.id !== id);
-    setComments(nextComments);
-    setDeleting(undefined);
-    fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
-  };
+  const deleteComment = React.useCallback(
+    id => {
+      const nextComments = comments.filter(c => c.id !== id);
+      setComments(nextComments);
+      setDeleting(undefined);
+      fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+    },
+    [comments],
+  );
 
   return (
     <Box height="100vh" border="left">
@@ -138,8 +147,10 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                 }
                 focusIndicator={false}
                 onClick={() => {
-                  setActive(c.id);
-                  setSelected(c.selected);
+                  if (active !== c.id) {
+                    setActive(c.id);
+                    setSelected(c.selected);
+                  }
                 }}
               >
                 <Box direction="row" align="center" justify="between">
