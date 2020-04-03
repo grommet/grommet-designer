@@ -33,7 +33,7 @@ export default ({ design, onClose, setDesign, theme }) => (
         />
       </Field>
       {design.derivedFromId && (
-        <Box align="end" margin={{ vertical: 'xsmall' }}>
+        <Box align="end" margin={{ vertical: 'xsmall', horizontal: 'medium' }}>
           <Text size="small">
             derived from{' '}
             <Anchor
@@ -106,7 +106,7 @@ export default ({ design, onClose, setDesign, theme }) => (
         </Anchor>
       </Box>
 
-      <Field label="Theme" htmlFor="theme" align="start" help="published URL">
+      <Field label="url" htmlFor="theme" align="start">
         <TextInput
           id="theme"
           name="theme"
@@ -140,12 +140,13 @@ export default ({ design, onClose, setDesign, theme }) => (
       </Field>
 
       {theme && typeof theme.global.colors.background === 'object' && (
-        <Field label="Theme mode" htmlFor="themeMode">
+        <Field label="mode" htmlFor="themeMode">
           <RadioButtonGroup
             id="themeMode"
             name="themeMode"
             direction="row"
             gap="medium"
+            margin={{ right: 'small' }}
             options={['dark', 'light']}
             value={design.themeMode}
             onChange={event => {
