@@ -38,7 +38,7 @@ const designerTheme = {
   // so designer layers are on top of Canvas layers
   layer: {
     ...grommet.layer,
-    zIndex: 100,
+    zIndex: 15,
   },
 };
 
