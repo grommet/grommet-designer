@@ -231,10 +231,17 @@ export const duplicateComponent = (nextDesign, id, parentId) => {
 };
 
 export const deleteComponent = (nextDesign, id) => {
+  let nextSelectedComponent;
   // remove from the parent
   const parent = getParent(nextDesign, id);
-  if (parent && parent.children)
+  if (parent && parent.children) {
+    const index = parent.children.indexOf(id);
+    if (index > 0) nextSelectedComponent = parent.children[index - 1];
+    else if (index < parent.children.length - 2) {
+      nextSelectedComponent = parent.children[index + 1];
+    } else nextSelectedComponent = parent.id;
     parent.children = parent.children.filter(i => i !== id);
+  }
   // remove propComponents
   const component = nextDesign.components[id];
   if (component.propComponents) {
@@ -252,7 +259,7 @@ export const deleteComponent = (nextDesign, id) => {
 
   // delete component
   delete nextDesign.components[id];
-  return parent ? parent.id : undefined;
+  return nextSelectedComponent;
 };
 
 export const insertComponent = ({
