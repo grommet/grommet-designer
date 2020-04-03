@@ -28,6 +28,8 @@ const friendlyDate = iso => {
   return date.toLocaleString('default', { hour: 'numeric', minute: '2-digit' });
 };
 
+const breakLines = text => text.replace(/(\S)\n/g, (_, c) => `${c}  \n`);
+
 const Comments = ({ design, selected, setMode, setSelected }) => {
   const [comments, setComments] = React.useState(design.comments);
   const [active, setActive] = React.useState();
@@ -36,6 +38,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   const [deleting, setDeleting] = React.useState();
   const [editing, setEditing] = React.useState();
   const [editValue, setEditValue] = React.useState({ text: '' });
+  const addAreaRef = React.useRef();
 
   React.useEffect(() => {
     if (design.id) {
@@ -47,6 +50,16 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
       });
     }
   }, [design.id]);
+
+  // focus on add TextArea to start with
+  React.useEffect(() => addAreaRef.current.focus(), []);
+
+  // scroll to bottom when comments change but add TextArea has focus
+  React.useEffect(() => {
+    if (document.activeElement === addAreaRef.current) {
+      addAreaRef.current.scrollIntoView();
+    }
+  }, [comments]);
 
   const addComment = React.useCallback(
     comment => {
@@ -221,7 +234,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                   </Form>
                 ) : (
                   <Box pad="small">
-                    <Markdown>{c.text}</Markdown>
+                    <Markdown>{breakLines(c.text)}</Markdown>
                   </Box>
                 )}
               </Box>
@@ -241,7 +254,11 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
               background={active ? undefined : 'background-front'}
             >
               <FormField name="text" required>
-                <TextArea name="text" onFocus={() => setActive(undefined)} />
+                <TextArea
+                  ref={addAreaRef}
+                  name="text"
+                  onFocus={() => setActive(undefined)}
+                />
               </FormField>
               <Box alignSelf="center" pad="small">
                 {adding ? (

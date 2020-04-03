@@ -360,7 +360,7 @@ const App = () => {
           setMode(mode === 'preview' ? 'edit' : 'preview');
         } else if (event.key === ';') {
           event.preventDefault();
-          setMode(mode === 'preview' ? 'comments' : 'preview');
+          setMode(mode !== 'comments' ? 'comments' : 'preview');
         } else if (event.key === 'p' && event.shiftKey) {
           const stored = localStorage.getItem('identity');
           if (stored) {
