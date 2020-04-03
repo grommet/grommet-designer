@@ -35,6 +35,11 @@ const designerTheme = {
     ...grommet.global,
     colors: { background: { dark: '#282828', light: '#f8f8f8' } },
   },
+  // so designer layers are on top of Canvas layers
+  layer: {
+    ...grommet.layer,
+    zIndex: 100,
+  },
 };
 
 const defaultImports = [
