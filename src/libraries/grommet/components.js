@@ -509,6 +509,7 @@ export const components = {
     properties: {
       label: 'anchor',
       color: ['-color-'],
+      disabled: false,
       href: '',
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
