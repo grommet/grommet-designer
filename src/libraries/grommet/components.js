@@ -729,6 +729,7 @@ export const components = {
       help: 'help',
       label: 'label',
       name: 'string',
+      required: false,
     },
   },
   MaskedInput: {
