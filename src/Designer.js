@@ -196,7 +196,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
       if (event.metaKey || event.ctrlKey) {
         if (event.key === 'e' || event.key === 'E' || event.key === '.') {
           event.preventDefault();
-          setMode(mode === 'preview' ? 'edit' : 'preview');
+          setMode(mode !== 'edit' ? 'edit' : 'preview');
         } else if (event.key === ';') {
           event.preventDefault();
           setMode(mode !== 'comments' ? 'comments' : 'preview');
