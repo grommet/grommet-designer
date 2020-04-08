@@ -203,6 +203,7 @@ const Start = ({
                   const url = `/?name=${encodeURIComponent(name)}`;
                   return (
                     <Button
+                      key={name}
                       plain
                       href={`${url}&mode=edit`}
                       onClick={event => {
@@ -240,7 +241,7 @@ const Start = ({
           <Heading level={2}>inspiration</Heading>
           <Box direction="row" overflow="auto" gap="medium">
             {inspirations.map(({ title, url }) => (
-              <Button plain href={`${url}&mode=edit`}>
+              <Button key={title} plain href={`${url}&mode=edit`}>
                 <Thumbnail title={title} url={url} />
               </Button>
             ))}
