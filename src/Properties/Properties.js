@@ -232,11 +232,10 @@ export default ({
           <Box flex direction="row">
             <Menu
               hoverIndicator
-              justifyContent="between"
               label={
-                <Heading level={2} size="18px" margin="none" truncate>
+                <Text weight="bold" truncate>
                   {type.name}
-                </Heading>
+                </Text>
               }
               dropProps={{ align: { top: 'bottom', left: 'left' } }}
               items={[

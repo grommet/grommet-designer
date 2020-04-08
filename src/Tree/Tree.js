@@ -491,35 +491,48 @@ const Tree = ({
     <Keyboard target="document" onKeyDown={onKey}>
       <Box ref={treeRef} height="100vh" border="right">
         <Box flex={false} border="bottom">
-          <Header border="bottom">
-            <Menu
-              hoverIndicator
-              justifyContent="between"
-              label={
-                <Heading level={2} size="18px" margin="none" truncate>
-                  {design.name}
-                </Heading>
-              }
-              dropProps={{ align: { top: 'bottom' } }}
-              items={[
-                { label: 'configure', onClick: () => setEditing(true) },
-                { label: 'share', onClick: () => setSharing(true) },
-                {
-                  label: `preview ${
-                    /Mac/i.test(navigator.platform) ? '⌘' : '^'
-                  }.`,
-                  onClick: () => setMode('preview'),
-                },
-                {
-                  label: `comments ${
-                    /Mac/i.test(navigator.platform) ? '⌘' : '^'
-                  };`,
-                  onClick: () => setMode('comments'),
-                },
-                { label: 'close', onClick: () => setDesign(undefined) },
-                { label: 'delete', onClick: () => setDeleting(true) },
-              ]}
-            />
+          <Header border="bottom" gap="none">
+            <Box flex>
+              <Menu
+                hoverIndicator
+                dropProps={{ align: { top: 'bottom' } }}
+                items={[
+                  { label: 'configure', onClick: () => setEditing(true) },
+                  { label: 'share', onClick: () => setSharing(true) },
+                  {
+                    label: `preview ${
+                      /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                    }.`,
+                    onClick: () => setMode('preview'),
+                  },
+                  {
+                    label: `comments ${
+                      /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                    };`,
+                    onClick: () => setMode('comments'),
+                  },
+                  { label: 'close', onClick: () => setDesign(undefined) },
+                  { label: 'delete', onClick: () => setDeleting(true) },
+                ]}
+              >
+                <Box
+                  flex="shrink"
+                  direction="row"
+                  align="center"
+                  pad="small"
+                  gap="small"
+                >
+                  <Text
+                    weight="bold"
+                    truncate
+                    size={design.name.length > 20 ? 'small' : undefined}
+                  >
+                    {design.name}
+                  </Text>
+                  <FormDown color="control" />
+                </Box>
+              </Menu>
+            </Box>
             <Box flex={false} direction="row" align="center">
               <ActionButton
                 title="undo last change"
