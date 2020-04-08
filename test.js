@@ -8,6 +8,8 @@ const createControl = Selector('button').withAttribute(
   'title',
   'create a new design',
 );
+const designNameInput = Selector('input').withAttribute('value', 'new design');
+const closeControl = Selector('button').withAttribute('title', 'close');
 const empty = Selector('p').withText(
   'This Box is currently empty. Add components to it, so it can do its layout thing.',
 );
@@ -19,12 +21,14 @@ test('initial', async t => {
 
 test('create design', async t => {
   const layerHeading = Selector('h2').withText('add');
-  const closeControl = Selector('button').withAttribute('title', 'close');
 
   await t
     .expect(tagline.exists)
     .ok()
     .click(createControl)
+    .expect(designNameInput.exists)
+    .ok()
+    .click(closeControl)
     .expect(empty.exists)
     .ok()
     .click(addControl)
@@ -53,6 +57,9 @@ test('add paragraph and undo', async t => {
     .expect(tagline.exists)
     .ok()
     .click(createControl)
+    .expect(designNameInput.exists)
+    .ok()
+    .click(closeControl)
     .expect(empty.exists)
     .ok()
     .click(addControl)

@@ -80,7 +80,7 @@ const Tree = ({
   const [draggingScreen, setDraggingScreen] = React.useState();
   const [dropScreenTarget, setDropScreenTarget] = React.useState();
   const [adding, setAdding] = React.useState();
-  const [editing, setEditing] = React.useState();
+  const [editing, setEditing] = React.useState(design.name === 'new design');
   const [sharing, setSharing] = React.useState();
   const [copied, setCopied] = React.useState();
   const [deleting, setDeleting] = React.useState();
