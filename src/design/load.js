@@ -18,6 +18,7 @@ export const loadDesign = ({
   if (fresh) {
     const design = setupDesign(bare);
     upgradeDesign(design);
+    design.local = true;
     onLoad(design);
     ReactGA.event({ category: 'switch', action: 'force new design' });
   } else if (id) {
@@ -45,22 +46,23 @@ export const loadDesign = ({
     const stored = localStorage.getItem(name);
     const design = JSON.parse(stored);
     upgradeDesign(design);
+    design.local = true;
     onLoad(design);
     ReactGA.event({ category: 'switch', action: 'previous design' });
-  } else {
-    let stored = localStorage.getItem('activeDesign');
-    if (stored) stored = localStorage.getItem(stored);
-    if (stored) {
-      const design = JSON.parse(stored);
-      upgradeDesign(design);
-      onLoad(design);
-      ReactGA.event({ category: 'switch', action: 'previous design' });
-    } else {
-      const design = setupDesign(bare);
-      upgradeDesign(design);
-      onLoad(design);
-      ReactGA.event({ category: 'switch', action: 'new design' });
-    }
+    // } else {
+    //   let stored = localStorage.getItem('activeDesign');
+    //   if (stored) stored = localStorage.getItem(stored);
+    //   if (stored) {
+    //     const design = JSON.parse(stored);
+    //     upgradeDesign(design);
+    //     onLoad(design);
+    //     ReactGA.event({ category: 'switch', action: 'previous design' });
+    //   } else {
+    //     const design = setupDesign(bare);
+    //     upgradeDesign(design);
+    //     onLoad(design);
+    //     ReactGA.event({ category: 'switch', action: 'new design' });
+    //   }
   }
 };
 

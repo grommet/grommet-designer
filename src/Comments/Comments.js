@@ -143,7 +143,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
               /Mac/i.test(navigator.platform) ? '⌘' : '^'
             };`}
             icon={<Close />}
-            onClick={() => setMode('preview')}
+            onClick={() => setMode(design.local ? 'edit' : 'preview')}
           />
         </Box>
       </Box>

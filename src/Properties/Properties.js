@@ -231,7 +231,6 @@ export default ({
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
             <Menu
-              fill
               hoverIndicator
               justifyContent="between"
               label={
@@ -239,12 +238,16 @@ export default ({
                   {type.name}
                 </Heading>
               }
-              dropProps={{ align: { top: 'bottom' } }}
+              dropProps={{ align: { top: 'bottom', left: 'left' } }}
               items={[
                 { label: 'code', onClick: () => setShowCode(true) },
-                { label: 'new design from', onClick: newDesignFrom },
+                { label: 'new design from this', onClick: newDesignFrom },
                 { label: 'reset', onClick: reset },
-                { label: 'help', href: type.documentation, target: '_blank' },
+                {
+                  label: `help on ${type.name}`,
+                  href: type.documentation,
+                  target: '_blank',
+                },
               ]}
             />
             {showCode && (

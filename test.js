@@ -3,23 +3,31 @@ import { Selector } from 'testcafe';
 
 fixture('basic').page('http://localhost:3000');
 
+const tagline = Selector('p').withText('design with grommet components');
+const createControl = Selector('button').withAttribute(
+  'title',
+  'create a new design',
+);
+const empty = Selector('p').withText(
+  'This Box is currently empty. Add components to it, so it can do its layout thing.',
+);
+const addControl = Selector('button').withAttribute('title', 'add a component');
+
 test('initial', async t => {
-  const empty = Selector('p').withText(
-    'This Box is currently empty. Add components to it, so it can do its layout thing.',
-  );
-  await t.expect(empty.exists).ok();
+  await t.expect(tagline.exists).ok();
 });
 
-test('open and close add', async t => {
-  const openControl = Selector('button').withAttribute(
-    'title',
-    'add a component',
-  );
+test('create design', async t => {
   const layerHeading = Selector('h2').withText('add');
   const closeControl = Selector('button').withAttribute('title', 'close');
 
   await t
-    .click(openControl)
+    .expect(tagline.exists)
+    .ok()
+    .click(createControl)
+    .expect(empty.exists)
+    .ok()
+    .click(addControl)
     .expect(layerHeading.exists)
     .ok()
     .click(closeControl)
@@ -28,10 +36,6 @@ test('open and close add', async t => {
 });
 
 test('add paragraph and undo', async t => {
-  const openControl = Selector('button').withAttribute(
-    'title',
-    'add a component',
-  );
   const layerHeading = Selector('h2').withText('add');
   const addParagraphControl = Selector('button').withText('Paragraph');
   const nameInput = Selector('input').withAttribute('name', 'name');
@@ -46,7 +50,12 @@ test('add paragraph and undo', async t => {
   );
 
   await t
-    .click(openControl)
+    .expect(tagline.exists)
+    .ok()
+    .click(createControl)
+    .expect(empty.exists)
+    .ok()
+    .click(addControl)
     .expect(layerHeading.exists)
     .ok()
     .click(addParagraphControl)

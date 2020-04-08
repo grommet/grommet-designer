@@ -1,6 +1,7 @@
 import { getComponentType } from '../utils';
 
-export const getInitialSelected = design => ({ screen: design.screenOrder[0] });
+export const getInitialSelected = design =>
+  design ? { screen: design.screenOrder[0] } : undefined;
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];

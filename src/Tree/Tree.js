@@ -1,15 +1,16 @@
 import React from 'react';
-import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
 import {
-  Add,
-  Chat,
-  Folder,
-  FormDown,
-  FormNext,
-  Redo,
-  Share,
-  Undo,
-} from 'grommet-icons';
+  Box,
+  Button,
+  Header,
+  Heading,
+  Keyboard,
+  Layer,
+  Menu,
+  Stack,
+  Text,
+} from 'grommet';
+import { Add, FormDown, FormNext, Redo, Undo } from 'grommet-icons';
 import {
   canParent,
   childSelected,
@@ -28,7 +29,6 @@ import { displayName, getReferenceDesign } from '../utils';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignSettings from './DesignSettings';
-import Designs from './Designs';
 import Sharing from './Share';
 
 const treeSubName = component =>
@@ -51,13 +51,10 @@ const Tree = ({
   colorMode,
   design,
   imports,
-  rtl,
   selected,
   theme,
-  setColorMode,
   setDesign,
   setMode,
-  setRTL,
   setSelected,
   onUndo,
   onRedo,
@@ -83,10 +80,10 @@ const Tree = ({
   const [draggingScreen, setDraggingScreen] = React.useState();
   const [dropScreenTarget, setDropScreenTarget] = React.useState();
   const [adding, setAdding] = React.useState();
-  const [choosing, setChoosing] = React.useState();
   const [editing, setEditing] = React.useState();
   const [sharing, setSharing] = React.useState();
   const [copied, setCopied] = React.useState();
+  const [deleting, setDeleting] = React.useState();
   const treeRef = React.useRef();
   const selectedRef = React.useRef();
 
@@ -494,66 +491,36 @@ const Tree = ({
     <Keyboard target="document" onKeyDown={onKey}>
       <Box ref={treeRef} height="100vh" border="right">
         <Box flex={false} border="bottom">
-          <Box
-            flex={false}
-            direction="row"
-            align="start"
-            justify="between"
-            border="bottom"
-          >
-            <ActionButton
-              title="choose another design"
-              icon={<Folder />}
-              onClick={() => setChoosing(true)}
+          <Header border="bottom">
+            <Menu
+              hoverIndicator
+              justifyContent="between"
+              label={
+                <Heading level={2} size="18px" margin="none" truncate>
+                  {design.name}
+                </Heading>
+              }
+              dropProps={{ align: { top: 'bottom' } }}
+              items={[
+                { label: 'configure', onClick: () => setEditing(true) },
+                { label: 'share', onClick: () => setSharing(true) },
+                {
+                  label: `preview ${
+                    /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                  }.`,
+                  onClick: () => setMode('preview'),
+                },
+                {
+                  label: `comments ${
+                    /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                  };`,
+                  onClick: () => setMode('comments'),
+                },
+                { label: 'close', onClick: () => setDesign(undefined) },
+                { label: 'delete', onClick: () => setDeleting(true) },
+              ]}
             />
-            {choosing && (
-              <Designs
-                design={design}
-                colorMode={colorMode}
-                rtl={rtl}
-                setColorMode={setColorMode}
-                setDesign={setDesign}
-                setRTL={setRTL}
-                setSelected={setSelected}
-                onClose={() => setChoosing(false)}
-              />
-            )}
-            <Box flex alignSelf="stretch">
-              <Button fill hoverIndicator onClick={() => setEditing(true)}>
-                <Box fill pad="small">
-                  <Heading size="18px" margin="none" truncate>
-                    {design.name}
-                  </Heading>
-                </Box>
-              </Button>
-            </Box>
-            {design.id && (
-              <ActionButton
-                title={`add comments ${
-                  /Mac/i.test(navigator.platform) ? '⌘' : '^'
-                };`}
-                icon={<Chat />}
-                onClick={() => setMode('comments')}
-              />
-            )}
-            <ActionButton
-              title="share design"
-              icon={<Share />}
-              onClick={() => setSharing(true)}
-            />
-            {sharing && (
-              <Sharing
-                design={design}
-                imports={imports}
-                theme={theme}
-                colorMode={colorMode}
-                setDesign={setDesign}
-                onClose={() => setSharing(false)}
-              />
-            )}
-          </Box>
-          <Box flex={false} direction="row" justify="between" align="center">
-            <Box direction="row">
+            <Box flex={false} direction="row" align="center">
               <ActionButton
                 title="undo last change"
                 icon={<Undo />}
@@ -566,13 +533,43 @@ const Tree = ({
                 disabled={!onRedo}
                 onClick={onRedo || undefined}
               />
+              <ActionButton
+                title="add a component"
+                icon={<Add />}
+                onClick={() => setAdding(true)}
+              />
             </Box>
-            <ActionButton
-              title="add a component"
-              icon={<Add />}
-              onClick={() => setAdding(true)}
+          </Header>
+          {deleting && (
+            <Layer
+              position="center"
+              margin="medium"
+              animation="fadeIn"
+              onEsc={() => setDeleting(false)}
+              onClickOutside={() => setDeleting(false)}
+            >
+              <Box flex elevation="medium" pad="large">
+                <Button
+                  label="Confirm delete"
+                  onClick={() => {
+                    localStorage.removeItem(`${design.name}--state`);
+                    localStorage.removeItem(design.name);
+                    setDesign(undefined);
+                  }}
+                />
+              </Box>
+            </Layer>
+          )}
+          {sharing && (
+            <Sharing
+              design={design}
+              imports={imports}
+              theme={theme}
+              colorMode={colorMode}
+              setDesign={setDesign}
+              onClose={() => setSharing(false)}
             />
-          </Box>
+          )}
           {adding && (
             <AddComponent
               design={design}

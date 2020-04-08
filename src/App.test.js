@@ -9,7 +9,7 @@ describe('App', () => {
     const { getByTitle, container } = render(<App />);
     expect(container.firstChild).toMatchSnapshot();
 
-    fireEvent.click(getByTitle('choose another design'));
+    fireEvent.click(getByTitle('create a new design'));
     expect(container.firstChild).toMatchSnapshot();
   });
 });

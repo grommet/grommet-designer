@@ -15,6 +15,7 @@ export const publish = ({
   date.setMilliseconds(pin);
   nextDesign.date = date.toISOString();
   nextDesign.password = password;
+  delete nextDesign.local;
 
   const body = JSON.stringify(nextDesign);
   fetch(apiUrl, {
@@ -38,6 +39,7 @@ export const publish = ({
           ].join('');
           nextDesign.publishedUrl = nextUploadUrl;
           nextDesign.id = id;
+          nextDesign.local = true;
           onChange(nextDesign);
         });
       }

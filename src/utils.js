@@ -26,3 +26,16 @@ export const getReferenceDesign = (imports, referenceComponent) => {
       .map(i => i.design)[0];
   return undefined;
 };
+
+export const getParams = () => {
+  const { location } = window;
+  const params = {};
+  location.search
+    .slice(1)
+    .split('&')
+    .forEach(p => {
+      const [k, v] = p.split('=');
+      params[k] = decodeURIComponent(v);
+    });
+  return params;
+};
