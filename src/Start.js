@@ -135,7 +135,13 @@ const Start = ({
           title="create a new design"
           primary
           label="Create"
-          onClick={createDesign}
+          href="/_new"
+          onClick={event => {
+            if (!event.ctrlKey && !event.metaKey) {
+              event.preventDefault();
+              createDesign();
+            }
+          }}
         />
         <Box flex />
         <Box
@@ -207,8 +213,10 @@ const Start = ({
                       plain
                       href={`${url}&mode=edit`}
                       onClick={event => {
-                        event.preventDefault();
-                        chooseDesign(name);
+                        if (!event.ctrlKey && !event.metaKey) {
+                          event.preventDefault();
+                          chooseDesign(name);
+                        }
                       }}
                     >
                       <Thumbnail title={name} url={url} />

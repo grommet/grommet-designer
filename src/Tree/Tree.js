@@ -501,18 +501,18 @@ const Tree = ({
                   { label: 'share', onClick: () => setSharing(true) },
                   {
                     label: `preview ${
-                      /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                      /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
                     }.`,
                     onClick: () => setMode('preview'),
                   },
                   {
                     label: `comments ${
-                      /Mac/i.test(navigator.platform) ? '⌘' : '^'
+                      /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
                     };`,
                     onClick: () => setMode('comments'),
                   },
                   { label: 'close', onClick: () => setDesign(undefined) },
-                  { label: 'delete', onClick: () => setDeleting(true) },
+                  { label: 'delete ...', onClick: () => setDeleting(true) },
                 ]}
               >
                 <Box
