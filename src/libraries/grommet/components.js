@@ -548,7 +548,7 @@ export const components = {
       hoverIndicator: false,
       href: '',
       margin: Edge,
-      plain: false,
+      plain: [true, false],
       primary: false,
       reverse: false,
       size: ['small', 'medium', 'large'],
