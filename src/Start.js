@@ -18,6 +18,8 @@ import { Search } from 'grommet-icons';
 const tutorials = [
   {
     title: 'introduction',
+    thumb:
+      'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
     url:
       'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
   },
@@ -88,7 +90,9 @@ const Thumbnail = ({ title, url }) => {
           </ThumbnailContainer>
         )}
       </Box>
-      <Text>{title}</Text>
+      <Text weight="bold" size="large">
+        {title}
+      </Text>
     </Box>
   );
 };
@@ -239,7 +243,7 @@ const Start = ({
           <Header alignSelf="stretch">
             <Heading level={2}>tutorials</Heading>
           </Header>
-          {tutorials.map(({ title, url }) => (
+          {tutorials.map(({ thumb, title, url }) => (
             <Button key={title} plain href={url} target="_blank">
               <Box gap="xsmall">
                 <Box
@@ -249,9 +253,11 @@ const Start = ({
                   background="background-front"
                   overflow="hidden"
                 >
-                  <Image src={url} fit="contain" />
+                  <Image src={thumb} fit="contain" />
                 </Box>
-                <Text>{title}</Text>
+                <Text weight="bold" size="large">
+                  {title}
+                </Text>
               </Box>
             </Button>
           ))}
