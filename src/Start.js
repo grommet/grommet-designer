@@ -182,7 +182,7 @@ const Start = ({
         {designs && designs.length > 0 && (
           <Box>
             <Header>
-              <Heading level={2}>recent</Heading>
+              <Heading level={2}>my designs</Heading>
               {designs.length > 5 && (
                 <Box
                   basis="small"
@@ -237,7 +237,7 @@ const Start = ({
 
         <Box alignSelf="start">
           <Header alignSelf="stretch">
-            <Heading level={2}>instruction</Heading>
+            <Heading level={2}>tutorials</Heading>
           </Header>
           {tutorials.map(({ title, url }) => (
             <Button key={title} plain href={url} target="_blank">
