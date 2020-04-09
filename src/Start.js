@@ -6,14 +6,22 @@ import {
   CheckBox,
   Header,
   Heading,
+  Image,
   Markdown,
   Paragraph,
   RadioButtonGroup,
-  Stack,
   Text,
   TextInput,
 } from 'grommet';
 import { Search } from 'grommet-icons';
+
+const tutorials = [
+  {
+    title: 'introduction',
+    url:
+      'http://localhost:8080/eric-soderberg-hpe-com/designer%20introduction%202.mp4',
+  },
+];
 
 const inspirations = [
   {
@@ -231,18 +239,22 @@ const Start = ({
           <Header alignSelf="stretch">
             <Heading level={2}>instruction</Heading>
           </Header>
-          <Stack anchor="center">
-            <Box
-              width="medium"
-              height="small"
-              background="background-front"
-              round="xsmall"
-              border={{ side: 'top', size: 'xlarge' }}
-            />
-            <Paragraph size="large" textAlign="center">
-              screencast tutorials coming soon!
-            </Paragraph>
-          </Stack>
+          {tutorials.map(({ title, url }) => (
+            <Button key={title} plain href={url} target="_blank">
+              <Box gap="xsmall">
+                <Box
+                  width="medium"
+                  height="small"
+                  round="xsmall"
+                  background="background-front"
+                  overflow="hidden"
+                >
+                  <Image src={url} fit="contain" />
+                </Box>
+                <Text>{title}</Text>
+              </Box>
+            </Button>
+          ))}
         </Box>
 
         <Box>
