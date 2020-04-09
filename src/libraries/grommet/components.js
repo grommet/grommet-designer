@@ -810,8 +810,10 @@ export const components = {
     name: 'TextInput',
     properties: {
       disabled: false,
+      icon: ['-Icon-'],
       placeholder: '',
       plain: false,
+      reverse: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       suggestions: TextInputSuggestions,
       type: ['text', 'password'],
