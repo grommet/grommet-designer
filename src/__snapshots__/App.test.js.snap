@@ -141,7 +141,7 @@ exports[`App empty 1`] = `
         </header>
         <a
           class="StyledButton-sc-323bzc-0 dnCEuz"
-          href="http://localhost:8080/eric-soderberg-hpe-com/designer%20introduction%202.mp4"
+          href="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
           target="_blank"
         >
           <div
@@ -152,7 +152,7 @@ exports[`App empty 1`] = `
             >
               <img
                 class="StyledImage-ey4zx9-0 cHpGKY"
-                src="http://localhost:8080/eric-soderberg-hpe-com/designer%20introduction%202.mp4"
+                src="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
               />
             </div>
             <div

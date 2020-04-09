@@ -19,7 +19,7 @@ const tutorials = [
   {
     title: 'introduction',
     url:
-      'http://localhost:8080/eric-soderberg-hpe-com/designer%20introduction%202.mp4',
+      'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
   },
 ];
 
