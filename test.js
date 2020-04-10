@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 fixture('basic').page('http://localhost:3000');
 
 const tagline = Selector('p').withText('design with grommet components');
-const createControl = Selector('button').withAttribute(
+const createControl = Selector('a').withAttribute(
   'title',
   'create a new design',
 );

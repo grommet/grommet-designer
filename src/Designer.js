@@ -137,6 +137,10 @@ const Designer = ({ colorMode, design, setDesign }) => {
     }
   }, [design, selected.screen]);
 
+  React.useEffect(() => {
+    document.title = design.name;
+  }, [design.name]);
+
   // store design
   React.useEffect(() => {
     if (design && design.local) {

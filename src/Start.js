@@ -111,6 +111,7 @@ const Start = ({
   const searchRef = React.useRef();
 
   React.useEffect(() => {
+    document.title = 'Grommet Designer';
     const stored = localStorage.getItem('designs');
     if (stored) {
       setDesigns(JSON.parse(stored).filter(name => localStorage.getItem(name)));
