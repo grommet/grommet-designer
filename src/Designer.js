@@ -11,6 +11,7 @@ import {
 } from 'grommet';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
+import Loading from './Loading';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 import Comments from './Comments/Comments';
@@ -251,6 +252,8 @@ const Designer = ({ colorMode, design, setDesign }) => {
       ['small', 'medium'],
     ];
   }
+
+  if (!theme) return <Loading />;
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
