@@ -140,7 +140,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
           </Heading>
           <ActionButton
             title={`close comments ${
-              /Mac/i.test(navigator.platform) ? '⌘' : '^'
+              /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
             };`}
             icon={<Close />}
             onClick={() => setMode(design.local ? 'edit' : 'preview')}
@@ -212,7 +212,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                 {c.id && editing === c.id ? (
                   <Form
                     value={editValue}
-                    onChange={({ value }) => setEditValue(value)}
+                    onChange={setEditValue}
                     onSubmit={({ value }) => updateComment(value)}
                   >
                     <Box margin={{ bottom: 'medium' }}>
@@ -246,7 +246,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
           )}
           <Form
             value={addValue}
-            onChange={({ value }) => setAddValue(value)}
+            onChange={setAddValue}
             onSubmit={({ value }) => addComment(value)}
           >
             <Box
