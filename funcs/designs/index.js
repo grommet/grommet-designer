@@ -1,5 +1,8 @@
 const { Storage } = require('@google-cloud/storage');
 const crypto = require('crypto');
+// const sgMail = require('@sendgrid/mail');
+
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const storage = new Storage();
 const bucket = storage.bucket('grommet-designs');
@@ -114,15 +117,32 @@ exports.designs = (req, res) => {
       comment.createdAt = createdAt;
       comment.id = id;
       const file = bucket.file(`${id}.json`);
-      return file
-        .save(JSON.stringify(comment), { resumable: false })
-        .then(() =>
-          res
-            .status(201)
-            .type('json')
-            .send(JSON.stringify({ id, createdAt })),
-        )
-        .catch(e => res.status(500).send(e.message));
+      return (
+        file
+          .save(JSON.stringify(comment), { resumable: false })
+          .then(() =>
+            res
+              .status(201)
+              .type('json')
+              .send(JSON.stringify({ id, createdAt })),
+          )
+          // .then(() => {
+          //   const file = bucket.file(`${designId}.json`);
+          //   return file
+          //     .download()
+          //     .then(data => {
+          //       const design = JSON.parse(data[0]);
+          //       const msg = {
+          //         to: design.email,
+          //         from: design.email,
+          //         subject: `New comment on ${design.name}`,
+          //         text: comment.text,
+          //       };
+          //       sgMail.send(msg);
+          //     });
+          // })
+          .catch(e => res.status(500).send(e.message))
+      );
     } else if (parts.length === 2) {
       // new design
       const design = req.body;
