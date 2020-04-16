@@ -18,6 +18,7 @@ export const structure = [
       'Nav',
       'Header',
       'Footer',
+      'Sidebar',
       'Stack',
       'Layer',
     ],

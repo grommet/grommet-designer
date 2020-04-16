@@ -170,9 +170,15 @@ export const upgradeDesign = design => {
     .map(id => design.components[id])
     .filter(component => component.propComponents)
     .forEach(component => {
-      component.propComponents.forEach(
-        id => (design.components[id].coupled = true),
+      component.propComponents = component.propComponents.filter(
+        id => design.components[id],
       );
+      component.propComponents.forEach(id => {
+        if (design.components[id]) {
+          design.components[id].coupled = true;
+        } else {
+        }
+      });
     });
 
   // convert libraries and base into imports

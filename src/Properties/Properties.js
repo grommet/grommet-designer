@@ -144,24 +144,27 @@ export default ({
   };
 
   const delet = () => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const parentId = deleteComponent(nextDesign, selected.component);
-    setSelected({ ...selected, component: parentId });
-    setDesign(nextDesign);
+    if (!design.components[selected.component].coupled) {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      const parentId = deleteComponent(nextDesign, selected.component);
+      setSelected({ ...selected, component: parentId });
+      setDesign(nextDesign);
 
-    ReactGA.event({
-      category: 'edit',
-      action: 'delete component',
-    });
+      ReactGA.event({
+        category: 'edit',
+        action: 'delete component',
+      });
+    }
   };
 
   const onKey = event => {
     if (document.activeElement === document.body) {
       if (
-        (event.key === 'Backspace' && event.metaKey) || // osx
+        // osx
+        (event.key === 'Backspace' && event.metaKey) ||
+        // windows
         ((event.key === 'Backspace' || event.key === 'Delete') && event.ctrlKey)
       ) {
-        // windows
         event.preventDefault();
         delet();
       }

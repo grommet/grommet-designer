@@ -24,15 +24,16 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
         typeof type.properties[prop] === 'string' &&
         type.properties[prop].startsWith('-component-')
       ) {
-        const [, propTypeName] = type.properties[prop].split(' ');
+        const [, propTypeName, props] = type.properties[prop].split(' ');
         const propType = getComponentType(libraries, propTypeName);
         const propId = nextDesign.nextId;
         nextDesign.nextId += 1;
+        const initialProps = props ? JSON.parse(props) : {};
         const propComponent = {
           type: propTypeName,
           name: prop,
           id: propId,
-          props: { ...propType.defaultProps, name: prop },
+          props: { ...propType.defaultProps, ...initialProps, name: prop },
           coupled: true,
         };
         nextDesign.components[propComponent.id] = propComponent;

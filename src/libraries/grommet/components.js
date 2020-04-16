@@ -32,6 +32,7 @@ import {
   RadioButtonGroup,
   RangeInput,
   Select,
+  Sidebar,
   Stack,
   Tab,
   Tabs,
@@ -327,6 +328,32 @@ export const components = {
       gap: 'medium',
     },
     properties: reusedBoxProps,
+    structure: reusedBoxStructure,
+  },
+  Sidebar: {
+    component: Sidebar,
+    name: 'Sidebar',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Sidebar is currently empty. Add a Nav component to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/sidebar',
+    defaultProps: {
+      align: 'stretch',
+      direction: 'column',
+      flex: false,
+      gap: 'large',
+      pad: 'small',
+    },
+    properties: {
+      ...reusedBoxProps,
+      header: '-component- grommet.Box {"align":"stretch","justify":"stretch"}',
+      footer: '-component- grommet.Box {"align":"stretch","justify":"stretch"}',
+    },
     structure: reusedBoxStructure,
   },
   Grid: {

@@ -391,7 +391,7 @@ const Canvas = ({
     } else if (specialProps && specialProps.children) {
       children = specialProps.children;
       delete specialProps.children;
-    } else if (type.placeholder) {
+    } else if (type.placeholder && !component.coupled) {
       children = <Placeholder>{type.placeholder(component.props)}</Placeholder>;
     }
 
