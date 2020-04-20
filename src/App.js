@@ -1,6 +1,14 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { Box, Button, Form, Grommet, TextInput, grommet } from 'grommet';
+import {
+  Box,
+  Button,
+  Form,
+  Grommet,
+  Paragraph,
+  TextInput,
+  grommet,
+} from 'grommet';
 import { Next } from 'grommet-icons';
 import Designer from './Designer';
 import Loading from './Loading';
@@ -31,6 +39,7 @@ const App = () => {
   const [start, setStart] = React.useState();
   const [auth, setAuth] = React.useState();
   const [password, setPassword] = React.useState();
+  const [subsequent, setSubsequent] = React.useState();
   const readOnly = React.useMemo(() => {
     const params = getParams();
     return params.mode === 'thumb';
@@ -59,60 +68,17 @@ const App = () => {
     const options = {
       initial: true,
       onAuth: () => setAuth(true),
-      onLoad: setDesign,
-      // onLoad: nextDesign => {
-      //   let nextSelected;
-      //   if (params.id) {
-      //     const screen =
-      //       (pathname && getScreenByPath(nextDesign, pathname)) ||
-      //       nextDesign.screenOrder[0];
-      //     nextSelected = { screen };
-      //   } else {
-      //     const stored = localStorage.getItem('selected');
-      //     if (stored) nextSelected = JSON.parse(stored);
-      //     else {
-      //       const screen =
-      //         (pathname &&
-      //           pathname !== '/_new' &&
-      //           getScreenByPath(nextDesign, pathname)) ||
-      //         nextDesign.screenOrder[0];
-      //       const component = nextDesign.screens[screen].root;
-      //       nextSelected = { screen, component };
-      //     }
-      //   }
-      //   setLoad(prevLoad => ({
-      //     ...prevLoad,
-      //     design: nextDesign,
-      //     selected: nextSelected,
-      //   }));
-
-      //   loadTheme(nextDesign.theme, nextTheme => {
-      //     setLoad(prevLoad => ({ ...prevLoad, theme: nextTheme }));
-      //   });
-
-      //   let loadingImports = [...defaultImports, ...(nextDesign.imports || [])];
-      //   setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
-      //   loadImports(loadingImports, f => {
-      //     loadingImports = f(loadingImports);
-      //     setLoad(prevLoad => ({ ...prevLoad, imports: loadingImports }));
-      //   });
-
-      //   let nextMode;
-      //   if (params.preview && JSON.parse(params.preview)) nextMode = 'preview';
-      //   else if (params.comments && JSON.parse(params.comments))
-      //     nextMode = 'comments';
-      //   else if (params.mode) nextMode = params.mode;
-      //   else if (!!params.id) nextMode = 'preview';
-      //   else if (pathname === '/_new') nextMode = 'edit';
-      //   else {
-      //     let stored = localStorage.getItem('preview');
-      //     if (stored && JSON.parse(stored)) nextMode = 'preview';
-      //     stored = localStorage.getItem('designerMode');
-      //     if (stored) nextMode = JSON.parse(stored);
-      //     if (!nextMode) nextMode = 'edit';
-      //   }
-      //   setLoad(prevLoad => ({ ...prevLoad, mode: nextMode }));
-      // },
+      onLoad: nextDesign => {
+        if (nextDesign.subsequentPublish) {
+          setSubsequent({
+            local: nextDesign,
+            published: nextDesign.subsequentPublish,
+          });
+          delete nextDesign.subsequentPublish;
+        } else {
+          setDesign(nextDesign);
+        }
+      },
     };
     if (pathname === '/_new') options.fresh = true;
     else if (params.id) options.id = params.id;
@@ -180,6 +146,52 @@ const App = () => {
         </Form>
       </Box>
     );
+  } else if (subsequent) {
+    const { local, published } = subsequent;
+    const publishDate = new Date(published.date);
+    const localDate = new Date(local.date);
+    console.log('!!!', local, published, localDate, publishDate);
+    let options;
+    if (publishDate.getUTCFullYear() !== localDate.getUTCFullYear()) {
+      options = { year: 'numeric' };
+    } else if (publishDate.getUTCMonth() !== localDate.getUTCMonth()) {
+      options = { month: 'long' };
+    } else if (publishDate.getUTCDate() !== localDate.getUTCDate()) {
+      options = { month: 'short', day: 'numeric' };
+    } else {
+      options = { hour: 'numeric', minute: '2-digit' };
+    }
+
+    content = (
+      <Box fill align="center" justify="center" pad="large">
+        <Paragraph size="large" textAlign="center">
+          A newer published version of this design has been detected. Which one
+          would you like to use?
+        </Paragraph>
+        <Box direction="row" align="center" gap="medium">
+          <Button
+            label={`use published ${publishDate.toLocaleString(
+              undefined,
+              options,
+            )}`}
+            onClick={() => {
+              setSubsequent(undefined);
+              setDesign(published);
+            }}
+          />
+          <Button
+            label={`use current local ${localDate.toLocaleString(
+              undefined,
+              options,
+            )}`}
+            onClick={() => {
+              setSubsequent(undefined);
+              setDesign(local);
+            }}
+          />
+        </Box>
+      </Box>
+    );
   } else if (design) {
     content = (
       <Designer
@@ -200,8 +212,16 @@ const App = () => {
           loadDesign({
             name,
             onLoad: nextDesign => {
-              setDesign(nextDesign);
-              setNameParam(nextDesign.name);
+              if (nextDesign.subsequentPublish) {
+                setSubsequent({
+                  local: nextDesign,
+                  published: nextDesign.subsequentPublish,
+                });
+                delete nextDesign.subsequentPublish;
+              } else {
+                setDesign(nextDesign);
+                setNameParam(nextDesign.name);
+              }
             },
           });
         }}

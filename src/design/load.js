@@ -47,22 +47,27 @@ export const loadDesign = ({
     const design = JSON.parse(stored);
     upgradeDesign(design);
     design.local = true;
-    onLoad(design);
+    if (design.publishedUrl) {
+      // check if this design has been subsequently published
+      fetch(`${apiUrl}/${design.id}`).then(response => {
+        if (response.ok) {
+          response.json().then(publishedDesign => {
+            upgradeDesign(publishedDesign);
+            if (publishedDesign.date > design.date) {
+              design.subsequentPublish = publishedDesign;
+            } else {
+              delete design.subsequentPublish;
+            }
+            onLoad(design);
+          });
+        } else {
+          onLoad(design);
+        }
+      });
+    } else {
+      onLoad(design);
+    }
     ReactGA.event({ category: 'switch', action: 'previous design' });
-    // } else {
-    //   let stored = localStorage.getItem('activeDesign');
-    //   if (stored) stored = localStorage.getItem(stored);
-    //   if (stored) {
-    //     const design = JSON.parse(stored);
-    //     upgradeDesign(design);
-    //     onLoad(design);
-    //     ReactGA.event({ category: 'switch', action: 'previous design' });
-    //   } else {
-    //     const design = setupDesign(bare);
-    //     upgradeDesign(design);
-    //     onLoad(design);
-    //     ReactGA.event({ category: 'switch', action: 'new design' });
-    //   }
   }
 };
 
