@@ -690,6 +690,7 @@ export const components = {
       title: 'tab',
     },
     properties: {
+      disabled: false,
       icon: ['-Icon-'],
       title: 'tab',
       plain: false,
