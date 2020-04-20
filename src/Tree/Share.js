@@ -37,17 +37,27 @@ const Publish = ({ design, setDesign }) => {
   const commentRef = React.useRef();
 
   React.useEffect(() => {
-    const stored = localStorage.getItem('identity');
+    let stored = localStorage.getItem(`${design.name}--identity`);
     if (stored) {
       const identity = JSON.parse(stored);
       setPublication({ ...identity, name: design.name });
     } else {
-      setPublication({ name: design.name });
+      stored = localStorage.getItem('identity');
+      if (stored) {
+        const identity = JSON.parse(stored);
+        setPublication({ ...identity, name: design.name });
+      } else {
+        setPublication({ name: design.name });
+      }
     }
   }, [design]);
 
   const onPublish = ({ value: { email, password, pin } }) => {
     // remember email and pin in local storage so we can use later
+    localStorage.setItem(
+      `${design.name}--identity`,
+      JSON.stringify({ email, pin }),
+    );
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
     setPublishing(true);
     publish({

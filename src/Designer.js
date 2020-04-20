@@ -206,7 +206,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
           event.preventDefault();
           setMode(mode !== 'comments' ? 'comments' : 'preview');
         } else if (event.key === 'p' && event.shiftKey) {
-          const stored = localStorage.getItem('identity');
+          const stored = localStorage.getItem(`${design.name}--identity`);
           if (stored) {
             const identity = JSON.parse(stored);
             publish({
