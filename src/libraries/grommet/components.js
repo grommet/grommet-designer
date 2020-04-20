@@ -690,8 +690,10 @@ export const components = {
       title: 'tab',
     },
     properties: {
+      icon: ['-Icon-'],
       title: 'tab',
       plain: false,
+      reverse: false,
     },
   },
   CheckBox: {
