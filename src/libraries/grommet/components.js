@@ -818,6 +818,12 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
     },
+    override: ({ props }) => {
+      const result = {};
+      // no-op for now
+      if (props.searchPlaceholder) result.onSearch = text => {};
+      return result;
+    },
   },
   TextArea: {
     component: TextArea,
