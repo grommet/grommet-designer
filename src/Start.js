@@ -29,7 +29,7 @@ const inspirations = [
   {
     title: 'HPE design system',
     url:
-      'https://designer.grommet.io/?id=HPE-design-system-taylor-seamans-hpe-com',
+      'https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com',
   },
   {
     title: 'Card',
