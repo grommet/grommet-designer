@@ -106,7 +106,8 @@ const Tree = ({
 
   // ensure selected component is expanded in the tree
   React.useEffect(() => {
-    if (selected.component) {
+    // only change local designs, otherwise we might have to prompt for change
+    if (design.local && selected.component) {
       let parent = getParent(design, selected.component);
       while (parent && !parent.collapsed) {
         parent = getParent(design, parent.id);

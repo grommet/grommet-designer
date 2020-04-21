@@ -150,7 +150,6 @@ const App = () => {
     const { local, published } = subsequent;
     const publishDate = new Date(published.date);
     const localDate = new Date(local.date);
-    console.log('!!!', local, published, localDate, publishDate);
     let options;
     if (publishDate.getUTCFullYear() !== localDate.getUTCFullYear()) {
       options = { year: 'numeric' };
