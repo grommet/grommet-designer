@@ -241,7 +241,7 @@ export const components = {
           props && props.onClick
             ? event => {
                 event.stopPropagation();
-                followLink({ ...props.onClick, dataContextPath });
+                followLink(props.onClick, { dataContextPath });
               }
             : undefined,
       };
@@ -551,7 +551,7 @@ export const components = {
           designProps && designProps.link
             ? event => {
                 event.stopPropagation();
-                followLink({ ...designProps.link, dataContextPath });
+                followLink(designProps.link, { dataContextPath });
               }
             : undefined,
       };
@@ -591,7 +591,7 @@ export const components = {
           designProps && designProps.link
             ? event => {
                 event.stopPropagation();
-                followLink({ ...designProps.link, dataContextPath });
+                followLink(designProps.link, { dataContextPath });
               }
             : undefined,
       };
@@ -713,16 +713,15 @@ export const components = {
     designProperties: {
       link: ['-link-'],
     },
-    override: ({ designProps, props }, { dataContextPath, toggleLink }) => {
+    override: ({ designProps }, { dataContextPath, toggleLink }) => {
       return {
         onChange:
           designProps && designProps.link
             ? event => {
                 event.stopPropagation();
-                toggleLink(
-                  { ...designProps.link, dataContextPath },
-                  event.target.checked,
-                );
+                toggleLink(designProps.link, event.target.checked, {
+                  dataContextPath,
+                });
               }
             : undefined,
       };
@@ -975,7 +974,7 @@ export const components = {
           event.stopPropagation();
           const { index } = event;
           const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink({ ...props.onClickRow, dataContextPath: path });
+          followLink(props.onClickRow, { dataContextPath: path });
         };
       }
       return result;
@@ -1062,7 +1061,7 @@ export const components = {
           event.stopPropagation();
           const { index } = event;
           const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink({ ...props.onClickItem, dataContextPath: path });
+          followLink(props.onClickItem, { dataContextPath: path });
         };
       }
       return result;

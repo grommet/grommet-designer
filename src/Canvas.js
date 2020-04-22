@@ -165,50 +165,69 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const followLink = to => {
-    if (to.control === 'toggleThemeMode') {
-      const nextDesign = JSON.parse(JSON.stringify(design));
+  const followLink = (to, { dataContextPath, nextRef }) => {
+    if (Array.isArray(to)) {
+      // when to is an Array, lazily create nextDesign and re-use
+      const ref = {};
+      to.forEach(t => followLink(t, { dataContextPath, nextRef: ref }));
+      if (ref.design) setDesign(ref.design);
+    } else if (to.control === 'toggleThemeMode') {
+      const nextDesign =
+        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
       nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
     } else if (to.component) {
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
       const cycle = target && getComponentType(libraries, target.type).cycle;
       if (cycle) {
-        const nextDesign = JSON.parse(JSON.stringify(design));
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
         const component = nextDesign.components[target.id];
         component.props[cycle] = component.props[cycle] + 1;
         if (component.props[cycle] > component.children.length) {
           component.props[cycle] = 1;
         }
-        setDesign(nextDesign);
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
       } else if (hideable) {
-        setHide(target.id, !target.hide);
-        setSelected(to);
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        nextDesign.components[target.id].hide = !target.hide;
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+        if (target.hide) setSelected({ ...to, dataContextPath });
       } else if (target) {
         // might not have anymore
-        setSelected(to);
+        setSelected({ ...to, dataContextPath });
       }
     } else {
       if (design.screens[to.screen]) {
         // might not have anymore
-        setSelected(to);
+        setSelected({ ...to, dataContextPath });
       }
     }
   };
 
-  const toggleLink = (to, onOff) => {
-    if (to.control === 'toggleThemeMode') {
-      const nextDesign = JSON.parse(JSON.stringify(design));
+  const toggleLink = (to, onOff, { nextRef }) => {
+    if (Array.isArray(to)) {
+      // when to is an Array, lazily create nextDesign and re-use
+      const ref = {};
+      to.forEach(t => followLink(t, { nextRef: ref }));
+      if (ref.design) setDesign(ref.design);
+    } else if (to.control === 'toggleThemeMode') {
+      const nextDesign =
+        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
       nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
     } else if (to.component) {
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
       if (hideable) {
-        setHide(target.id, !onOff);
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        nextDesign.components[target.id].hide = !onOff;
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
       }
     }
   };
