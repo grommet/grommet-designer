@@ -63,6 +63,9 @@ const Designer = ({ colorMode, design, setDesign }) => {
       if (params.mode) {
         setMode(params.mode);
         initializeSelected();
+      } else if (!design.local) {
+        setMode('preview');
+        initializeSelected();
       } else {
         const stored = localStorage.getItem(`${design.name}--state`);
         if (stored) {
