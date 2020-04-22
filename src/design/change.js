@@ -3,6 +3,29 @@ import { bare } from './bare';
 import { canParent, getParent, slugify } from './get';
 import { upgradeDesign } from './upgrade';
 
+export const addPropertyComponent = (
+  nextDesign,
+  libraries,
+  id,
+  { propTypeName, name, props },
+) => {
+  const propType = getComponentType(libraries, propTypeName);
+  const propId = nextDesign.nextId;
+  nextDesign.nextId += 1;
+  const propComponent = {
+    type: propTypeName,
+    name,
+    id: propId,
+    props: { ...propType.defaultProps, ...props, name },
+    coupled: true,
+  };
+  nextDesign.components[propComponent.id] = propComponent;
+  const component = nextDesign.components[id];
+  if (!component.propComponents) component.propComponents = [];
+  component.propComponents.push(propId);
+  return propId;
+};
+
 export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
   const type = getComponentType(libraries, typeName);
   const id = nextDesign.nextId;
@@ -25,21 +48,11 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
         type.properties[prop].startsWith('-component-')
       ) {
         const [, propTypeName, props] = type.properties[prop].split(' ');
-        const propType = getComponentType(libraries, propTypeName);
-        const propId = nextDesign.nextId;
-        nextDesign.nextId += 1;
-        const initialProps = props ? JSON.parse(props) : {};
-        const propComponent = {
-          type: propTypeName,
+        const propId = addPropertyComponent(nextDesign, libraries, id, {
+          propTypeName,
           name: prop,
-          id: propId,
-          props: { ...propType.defaultProps, ...initialProps, name: prop },
-          coupled: true,
-        };
-        nextDesign.components[propComponent.id] = propComponent;
-        const component = nextDesign.components[id];
-        if (!component.propComponents) component.propComponents = [];
-        component.propComponents.push(propId);
+          props: props ? JSON.parse(props) : {},
+        });
         component.props[prop] = propId;
       }
     });
@@ -85,7 +98,7 @@ export const copyComponent = ({
       // update corresponding property
       Object.keys(nextComponent.props).forEach(prop => {
         if (nextComponent.props[prop] === childId) {
-          nextComponent.props[prop] = nextChildId;
+          nextComponent.props[prop] = nextChildId; // TODO: !!! DataTable columns
         }
       });
       return nextChildId;

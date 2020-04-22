@@ -281,7 +281,7 @@ const Canvas = ({
 
   const renderComponent = (
     id,
-    { dataContextPath, key, referenceDesign: referenceDesignProp } = {},
+    { dataContextPath, datum, key, referenceDesign: referenceDesignProp } = {},
   ) => {
     let component = (referenceDesignProp || design).components[id];
     let parent;
@@ -332,9 +332,10 @@ const Canvas = ({
         dataContextPath: dataPath,
         followLink,
         toggleLink,
-        replaceData: text => replace(text, data, contextPath),
+        replaceData: text => replace(text, datum || data, contextPath),
         setHide: value => setHide(id, value),
         data: dataValue || undefined,
+        renderComponent,
       });
     } else {
       specialProps = {};
@@ -382,7 +383,7 @@ const Canvas = ({
     if (parent.children && parent.children.length > 0) {
       if (parent.children.length > 0) {
         children = parent.children.map(childId =>
-          renderComponent(childId, { dataContextPath, referenceDesign }),
+          renderComponent(childId, { dataContextPath, datum, referenceDesign }),
         );
         if (children.length === 0) children = undefined;
       }
@@ -404,9 +405,9 @@ const Canvas = ({
         />
       );
     } else if (component.text !== undefined) {
-      if (data) {
+      if (datum || data) {
         // resolve any data references
-        children = replace(component.text, data, contextPath);
+        children = replace(component.text, datum || data, contextPath);
       } else {
         children = component.text;
       }

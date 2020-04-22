@@ -965,7 +965,10 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: ({ props }, { data, dataContextPath, followLink }) => {
+    override: (
+      { props },
+      { data, dataContextPath, followLink, renderComponent },
+    ) => {
       const result = {};
       // need to use retrieved data for data property
       if (data) result.data = data;
@@ -977,6 +980,13 @@ export const components = {
           followLink(props.onClickRow, { dataContextPath: path });
         };
       }
+      // adjust render columns
+      result.columns = props.columns.map(c => ({
+        ...c,
+        render: c.render
+          ? datum => renderComponent(c.render, { datum })
+          : undefined,
+      }));
       return result;
     },
   },

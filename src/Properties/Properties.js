@@ -20,6 +20,7 @@ import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
 import {
+  addPropertyComponent,
   deleteComponent,
   duplicateComponent,
   getLinkOptions,
@@ -84,7 +85,7 @@ export default ({
     if (stored) setShowAdvanced(JSON.parse(stored));
   }, []);
 
-  const setProp = (propName, value) => {
+  const setProp = (propName, value, sideEffects) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     let props;
@@ -101,6 +102,12 @@ export default ({
     }
     if (value !== undefined) props[propName] = value;
     else delete props[propName];
+    if (sideEffects)
+      sideEffects(nextDesign, selected.component, {
+        addPropertyComponent: args =>
+          addPropertyComponent(nextDesign, libraries, selected.component, args),
+        deletePropertyComponent: id => deleteComponent(nextDesign, id),
+      });
     setDesign(nextDesign);
   };
 
@@ -224,7 +231,9 @@ export default ({
             selected={selected}
             setSelected={setSelected}
             value={props ? props[propName] : undefined}
-            onChange={value => setProp(propName, value)}
+            onChange={(value, sideEffects) =>
+              setProp(propName, value, sideEffects)
+            }
           />
           {(firstRef = true)}
         </Fragment>
