@@ -129,6 +129,13 @@ const Canvas = ({
     }
   }, [design.data, data, dataSources]);
 
+  // clear inline edit when selection changes
+  React.useEffect(() => {
+    if (inlineEdit && inlineEdit !== selected.component) {
+      setInlineEdit(undefined);
+    }
+  }, [inlineEdit, selected.component]);
+
   // set Input height based on contents
   React.useEffect(() => {
     if (inputRef.current) {
