@@ -27,6 +27,7 @@ import {
   getReferences,
   getScreenForComponent,
   newFrom,
+  upgradeDesign,
 } from '../design';
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
@@ -147,6 +148,7 @@ export default ({
     if (!design.components[selected.component].coupled) {
       const nextDesign = JSON.parse(JSON.stringify(design));
       const parentId = deleteComponent(nextDesign, selected.component);
+      upgradeDesign(nextDesign); // clean up links
       setSelected({ ...selected, component: parentId });
       setDesign(nextDesign);
 

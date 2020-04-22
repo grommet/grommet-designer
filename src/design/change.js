@@ -98,7 +98,13 @@ export const copyComponent = ({
       const component = nextDesign.components[idMap[templateId]];
       if (component.designProps && component.designProps.link) {
         // Button
-        if (
+        if (Array.isArray(component.designProps.link)) {
+          component.designProps.link = component.designProps.link
+            // remove any outside of what we copied
+            .filter(l => l.screen && l.component && idMap[l.component])
+            // update any we have maps to
+            .map(l => ({ screen, component: idMap[l.component] }));
+        } else if (
           component.designProps.link.screen &&
           !component.designProps.link.component
         ) {
