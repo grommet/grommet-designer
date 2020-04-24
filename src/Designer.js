@@ -313,9 +313,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
             design={design}
             nextDesign={confirmReplace}
             onDone={nextDesign => {
-              if (nextDesign) {
-                setDesign(nextDesign);
-              }
+              if (nextDesign) setDesign(nextDesign);
               setConfirmReplace(undefined);
             }}
           />
