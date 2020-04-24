@@ -705,6 +705,7 @@ export const components = {
     },
     properties: {
       checked: false,
+      defaultChecked: false,
       disabled: false,
       label: 'enabled?',
       reverse: false,
@@ -831,6 +832,7 @@ export const components = {
     component: TextArea,
     name: 'TextArea',
     properties: {
+      defaultValue: '',
       disabled: false,
       fill: false,
       placeholder: '',
@@ -844,6 +846,7 @@ export const components = {
     component: TextInput,
     name: 'TextInput',
     properties: {
+      defaultValue: '',
       disabled: false,
       icon: ['-Icon-'],
       placeholder: '',
