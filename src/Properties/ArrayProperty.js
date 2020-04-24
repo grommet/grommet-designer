@@ -71,7 +71,7 @@ const ArrayProperty = React.forwardRef(
           onChange={({ option, value: nextValue }) => {
             setSearchText(undefined);
             if (multiple) {
-              onChange(nextValue);
+              onChange(option === 'undefined' ? undefined : nextValue);
             } else {
               onChange(option === 'undefined' ? undefined : option);
             }
