@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Keyboard,
-  Layer,
-  Paragraph,
-  ResponsiveContext,
-  Text,
-} from 'grommet';
+import { Grid, Keyboard, ResponsiveContext } from 'grommet';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
 import Loading from './Loading';
+import ConfirmReplace from './ConfirmReplace';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 import Comments from './Comments/Comments';
@@ -317,37 +309,16 @@ const Designer = ({ colorMode, design, setDesign }) => {
             />
           ) : null)}
         {confirmReplace && (
-          <Layer
-            position="top"
-            margin="medium"
-            modal
-            onEsc={() => setConfirmReplace(false)}
-            onClickOutside={() => setConfirmReplace(false)}
-          >
-            <Box pad="large">
-              <Paragraph>
-                You already have a design named{' '}
-                <Text weight="bold">{design.name}</Text>. If you make a change,
-                you will replace your local copy. If you do not want to replace
-                your copy, you should rename this design.
-              </Paragraph>
-              <Box direction="row" align="center" gap="medium">
-                <Button
-                  label={`Replace my ${design.name}`}
-                  onClick={() => {
-                    confirmReplace.derivedFromId = design.id;
-                    confirmReplace.local = true;
-                    setDesign(confirmReplace);
-                    setConfirmReplace(undefined);
-                  }}
-                />
-                <Button
-                  label="Discard change"
-                  onClick={() => setConfirmReplace(undefined)}
-                />
-              </Box>
-            </Box>
-          </Layer>
+          <ConfirmReplace
+            design={design}
+            nextDesign={confirmReplace}
+            onDone={nextDesign => {
+              if (nextDesign) {
+                setDesign(nextDesign);
+              }
+              setConfirmReplace(undefined);
+            }}
+          />
         )}
       </Grid>
     </Keyboard>
