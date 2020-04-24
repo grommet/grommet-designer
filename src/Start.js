@@ -114,7 +114,12 @@ const Start = ({
     document.title = 'Grommet Designer';
     const stored = localStorage.getItem('designs');
     if (stored) {
-      setDesigns(JSON.parse(stored).filter(name => localStorage.getItem(name)));
+      // prune out non-existing designs
+      const nextDesigns = JSON.parse(stored).filter(name =>
+        localStorage.getItem(name),
+      );
+      setDesigns(nextDesigns);
+      localStorage.setItem('designs', JSON.stringify(nextDesigns));
     }
   }, []);
 
