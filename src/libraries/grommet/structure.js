@@ -67,6 +67,7 @@ export const structure = [
       'Distribution',
       'List',
       'Meter',
+      'WorldMap',
     ],
   },
   {

@@ -40,6 +40,7 @@ import {
   TextArea,
   TextInput,
   Video,
+  WorldMap,
 } from 'grommet';
 import BoxAlign from './BoxAlign';
 import BoxAnimation from './BoxAnimation';
@@ -1128,6 +1129,17 @@ export const components = {
         return { children: <source src={source} /> };
       }
       return null;
+    },
+  },
+  WorldMap: {
+    component: WorldMap,
+    name: 'WorldMap',
+    properties: {
+      color: ['-color-'],
+      fill: ['horizontal', 'vertical', true, false],
+      gridArea: BoxGridArea,
+      hoverColor: ['-color-'],
+      margin: Edge,
     },
   },
 };
