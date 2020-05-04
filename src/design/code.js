@@ -122,6 +122,7 @@ export const generateJSX = ({
       let nav;
       if (component.designProps && component.designProps.link) {
         const link = component.designProps.link;
+        // TODO: need to handle links that are Arrays
         if (link.component) {
           if (design.components[link.component]) {
             nav = `setLayer(layer ? undefined : ${link.component})`;

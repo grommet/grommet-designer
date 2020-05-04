@@ -129,6 +129,13 @@ const Canvas = ({
     }
   }, [design.data, data, dataSources]);
 
+  // clear inline edit when selection changes
+  React.useEffect(() => {
+    if (inlineEdit && inlineEdit !== selected.component) {
+      setInlineEdit(undefined);
+    }
+  }, [inlineEdit, selected.component]);
+
   // set Input height based on contents
   React.useEffect(() => {
     if (inputRef.current) {
@@ -165,50 +172,69 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const followLink = to => {
-    if (to.control === 'toggleThemeMode') {
-      const nextDesign = JSON.parse(JSON.stringify(design));
+  const followLink = (to, { dataContextPath, nextRef }) => {
+    if (Array.isArray(to)) {
+      // when to is an Array, lazily create nextDesign and re-use
+      const ref = {};
+      to.forEach(t => followLink(t, { dataContextPath, nextRef: ref }));
+      if (ref.design) setDesign(ref.design);
+    } else if (to.control === 'toggleThemeMode') {
+      const nextDesign =
+        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
       nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
     } else if (to.component) {
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
       const cycle = target && getComponentType(libraries, target.type).cycle;
       if (cycle) {
-        const nextDesign = JSON.parse(JSON.stringify(design));
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
         const component = nextDesign.components[target.id];
         component.props[cycle] = component.props[cycle] + 1;
         if (component.props[cycle] > component.children.length) {
           component.props[cycle] = 1;
         }
-        setDesign(nextDesign);
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
       } else if (hideable) {
-        setHide(target.id, !target.hide);
-        setSelected(to);
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        nextDesign.components[target.id].hide = !target.hide;
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+        if (target.hide) setSelected({ ...to, dataContextPath });
       } else if (target) {
         // might not have anymore
-        setSelected(to);
+        setSelected({ ...to, dataContextPath });
       }
     } else {
       if (design.screens[to.screen]) {
         // might not have anymore
-        setSelected(to);
+        setSelected({ ...to, dataContextPath });
       }
     }
   };
 
-  const toggleLink = (to, onOff) => {
-    if (to.control === 'toggleThemeMode') {
-      const nextDesign = JSON.parse(JSON.stringify(design));
+  const toggleLink = (to, onOff, { nextRef }) => {
+    if (Array.isArray(to)) {
+      // when to is an Array, lazily create nextDesign and re-use
+      const ref = {};
+      to.forEach(t => followLink(t, { nextRef: ref }));
+      if (ref.design) setDesign(ref.design);
+    } else if (to.control === 'toggleThemeMode') {
+      const nextDesign =
+        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
       nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
     } else if (to.component) {
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
       if (hideable) {
-        setHide(target.id, !onOff);
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        nextDesign.components[target.id].hide = !onOff;
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
       }
     }
   };
@@ -255,7 +281,7 @@ const Canvas = ({
 
   const renderComponent = (
     id,
-    { dataContextPath, key, referenceDesign: referenceDesignProp } = {},
+    { dataContextPath, datum, key, referenceDesign: referenceDesignProp } = {},
   ) => {
     let component = (referenceDesignProp || design).components[id];
     let parent;
@@ -306,9 +332,10 @@ const Canvas = ({
         dataContextPath: dataPath,
         followLink,
         toggleLink,
-        replaceData: text => replace(text, data, contextPath),
+        replaceData: text => replace(text, datum || data, contextPath),
         setHide: value => setHide(id, value),
         data: dataValue || undefined,
+        renderComponent,
       });
     } else {
       specialProps = {};
@@ -356,7 +383,7 @@ const Canvas = ({
     if (parent.children && parent.children.length > 0) {
       if (parent.children.length > 0) {
         children = parent.children.map(childId =>
-          renderComponent(childId, { dataContextPath, referenceDesign }),
+          renderComponent(childId, { dataContextPath, datum, referenceDesign }),
         );
         if (children.length === 0) children = undefined;
       }
@@ -378,9 +405,9 @@ const Canvas = ({
         />
       );
     } else if (component.text !== undefined) {
-      if (data) {
+      if (datum || data) {
         // resolve any data references
-        children = replace(component.text, data, contextPath);
+        children = replace(component.text, datum || data, contextPath);
       } else {
         children = component.text;
       }

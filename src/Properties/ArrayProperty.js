@@ -16,6 +16,7 @@ const ArrayProperty = React.forwardRef(
       children,
       first,
       Label,
+      multiple,
       name,
       onChange,
       options,
@@ -63,12 +64,17 @@ const ArrayProperty = React.forwardRef(
           id={name}
           name={name}
           options={selectOptions}
+          multiple={multiple}
           value={typeof value === 'boolean' ? value.toString() : value || ''}
           valueLabel={<SelectLabel value={value} selected />}
           valueKey={valueKey}
-          onChange={({ option }) => {
+          onChange={({ option, value: nextValue }) => {
             setSearchText(undefined);
-            onChange(option === 'undefined' ? undefined : option);
+            if (multiple) {
+              onChange(option === 'undefined' ? undefined : nextValue);
+            } else {
+              onChange(option === 'undefined' ? undefined : option);
+            }
           }}
           onSearch={
             options.length > 20 || searchExp

@@ -47,7 +47,7 @@ export const loadDesign = ({
     const design = JSON.parse(stored);
     upgradeDesign(design);
     design.local = true;
-    if (design.publishedUrl) {
+    if (design.id && design.publishedUrl) {
       // check if this design has been subsequently published
       fetch(`${apiUrl}/${design.id}`).then(response => {
         if (response.ok) {

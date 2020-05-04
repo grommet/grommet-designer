@@ -5,7 +5,7 @@ import { getDisplayName } from '../design';
 
 const LinkLabel = design => ({ selected, value }) => {
   let label;
-  if (!value) {
+  if (!value || value.length === 0) {
     label = '';
   } else if (value.component) {
     label = getDisplayName(design, value.component);
@@ -13,6 +13,8 @@ const LinkLabel = design => ({ selected, value }) => {
     label = (design.screens[value.screen] || {}).name; // defensive
   } else if (value.label) {
     label = value.label;
+  } else if (Array.isArray(value)) {
+    label = value.map(v => v.label).join(', ');
   } else {
     label = value;
   }
@@ -33,7 +35,9 @@ const LinkProperty = React.forwardRef(
         first={first}
         Label={LinkLabel(design)}
         options={linkOptions}
+        multiple
         value={value}
+        labelKey="label"
         valueKey="key"
         onChange={onChange}
       />

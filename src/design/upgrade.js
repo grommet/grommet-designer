@@ -196,5 +196,28 @@ export const upgradeDesign = design => {
     delete design.library;
   }
 
+  // remove any designProps.link that isn't there anymore
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .forEach(component => {
+      if (component.designProps && component.designProps.link) {
+        if (Array.isArray(component.designProps.link)) {
+          component.designProps.link = component.designProps.link.filter(
+            l =>
+              design.screens[l.screen] &&
+              (!l.component || design.components[l.component]),
+          );
+        } else {
+          const l = component.designProps.link;
+          if (
+            !design.screens[l.screen] ||
+            (l.component && !design.components[l.component])
+          ) {
+            delete component.designProps.link;
+          }
+        }
+      }
+    });
+
   design.version = 3.4;
 };

@@ -42,6 +42,39 @@ export default ({ value, onChange }) => {
                 }}
               />
             </FormField>
+            <FormField>
+              <Box pad="small">
+                <CheckBox
+                  label="render"
+                  checked={c.render || false}
+                  onChange={event => {
+                    const nextValue = JSON.parse(JSON.stringify(value));
+                    const priorRender = nextValue[i].render;
+                    nextValue[i].render = event.target.checked;
+                    onChange(
+                      nextValue,
+                      (
+                        nextDesign,
+                        id,
+                        { addPropertyComponent, deletePropertyComponent },
+                      ) => {
+                        if (!priorRender) {
+                          const propId = addPropertyComponent({
+                            propTypeName: 'grommet.Box',
+                            name: c.property,
+                          });
+                          nextDesign.components[id].props.columns.filter(
+                            col => col.property === c.property,
+                          )[0].render = propId;
+                        } else {
+                          deletePropertyComponent(priorRender);
+                        }
+                      },
+                    );
+                  }}
+                />
+              </Box>
+            </FormField>
             <FormField label="align">
               <Select
                 options={['start', 'center', 'end', 'undefined']}
