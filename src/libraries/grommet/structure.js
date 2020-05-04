@@ -49,6 +49,7 @@ export const structure = [
       'CheckBox',
       'Form',
       'FormField',
+      'MaskedInput',
       'RadioButtonGroup',
       'RangeInput',
       'Select',
