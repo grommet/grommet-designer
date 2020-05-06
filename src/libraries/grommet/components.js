@@ -773,6 +773,21 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
     },
+    override: ({ props }) => {
+      const result = {};
+      if (props.mask) {
+        // convert regexp from string to RegExp
+        result.mask = props.mask.map(m => {
+          let regexp;
+          if (m.regexp) {
+            const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
+            if (match) regexp = new RegExp(match[1] || match[2]);
+          }
+          return { ...m, regexp };
+        });
+      }
+      return result;
+    },
   },
   RadioButtonGroup: {
     component: RadioButtonGroup,

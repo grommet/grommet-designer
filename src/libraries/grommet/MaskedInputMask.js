@@ -114,16 +114,12 @@ export default ({ value, onChange }) => {
                 </FormField>
                 <FormField label="regexp">
                   <TextInput
-                    value={element.regexp ? element.regexp.toString() : ''}
+                    value={element.regexp || ''}
                     onChange={event => {
-                      let exp = event.target.value;
-                      const match = exp.match(/^\/(.*)\/$/);
-                      if (match) exp = match[1];
                       const nextValue = JSON.parse(
                         JSON.stringify(value || [{}]),
                       );
-                      nextValue[index].regexp =
-                        exp.length > 0 ? new RegExp(exp) : undefined;
+                      nextValue[index].regexp = event.target.value;
                       onChange(nextValue);
                     }}
                   />
