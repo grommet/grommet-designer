@@ -779,7 +779,7 @@ export const components = {
         // convert regexp from string to RegExp
         result.mask = props.mask.map(m => {
           let regexp;
-          if (m.regexp) {
+          if (m.regexp && m.regexp.match) {
             const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
             if (match) regexp = new RegExp(match[1] || match[2]);
           }
