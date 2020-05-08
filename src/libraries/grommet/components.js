@@ -796,7 +796,11 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      direction: BoxDirection,
       disabled: false,
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
       options: SelectOptions,
       value: '',
     },

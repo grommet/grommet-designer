@@ -1406,12 +1406,11 @@
     loader-utils "^1.2.3"
 
 "@testing-library/dom@^7.2.2":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.4.0.tgz#0c2ac09f209c1141324eb5117ff1e9e04978bbce"
-  integrity sha512-47Zy7msjFXpQAHuqNNEeBm1wHn5vJGQKzMN9RA5O3KkPYGXMgBtCg16z7ihhFg5AarJIZxGX17CjTzNzDsfKUw==
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.5.1.tgz#c3537e2b970576072ea4083e603463843c8a8d2b"
+  integrity sha512-c9iQWyFtdsqaVScIlOdgdG3HXWkYvGzin02nJ4LUnzNXKyxqeqq9KPIAAjnmfrSApbRc8mK1l6esiCeEredfRw==
   dependencies:
     "@babel/runtime" "^7.9.6"
-    "@types/testing-library__dom" "^7.0.2"
     aria-query "^4.0.2"
     dom-accessibility-api "^0.4.3"
     pretty-format "^26.0.1"
@@ -1572,7 +1571,7 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
-"@types/testing-library__dom@*", "@types/testing-library__dom@^7.0.2":
+"@types/testing-library__dom@*":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@types/testing-library__dom/-/testing-library__dom-7.0.2.tgz#2906f8a0dce58b0746c6ab606f786bd06fe6940e"
   integrity sha512-8yu1gSwUEAwzg2OlPNbGq+ixhmSviGurBu1+ivxRKq1eRcwdjkmlwtPvr9VhuxTq2fNHBWN2po6Iem3Xt5A6rg==
@@ -3493,9 +3492,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001039, caniuse-lite@^1.0.30001043:
-  version "1.0.30001053"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001053.tgz#b7ae027567ce2665b965b0437e4512b296ccd20d"
-  integrity sha512-HtV4wwIZl6GA4Oznse8aR274XUOYGZnQLcf/P8vHgmlfqSNelwD+id8CyHOceqLqt9yfKmo7DUZTh1EuS9pukg==
+  version "1.0.30001054"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001054.tgz#7e82fc42d927980b0ce1426c4813df12381e1a75"
+  integrity sha512-jiKlTI6Ur8Kjfj8z0muGrV6FscpRvefcQVPSuMuXnvRCfExU7zlVLNjmOz1TnurWgUrAY7MMmjyy+uTgIl1XHw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -6028,7 +6027,7 @@ grommet-styles@^0.2.0:
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.13.0"
-  resolved "https://github.com/grommet/grommet/tarball/stable#3a3c980f8839d20d507ccb29883e510c11020e3b"
+  resolved "https://github.com/grommet/grommet/tarball/stable#c9985fcf8b5ca5c832cbf2cd859a4570c6245a0b"
   dependencies:
     css "^2.2.3"
     grommet-icons "^4.2.0"
