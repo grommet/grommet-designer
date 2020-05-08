@@ -579,6 +579,7 @@ export const components = {
       plain: [true, false],
       primary: false,
       reverse: false,
+      secondary: false,
       size: ['small', 'medium', 'large'],
       type: ['button', 'reset', 'submit'],
     },
