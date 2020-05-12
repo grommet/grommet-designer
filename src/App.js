@@ -37,6 +37,7 @@ const setNameParam = name => {
 
 const App = () => {
   const [start, setStart] = React.useState();
+  const [error, setError] = React.useState();
   const [auth, setAuth] = React.useState();
   const [password, setPassword] = React.useState();
   const [subsequent, setSubsequent] = React.useState();
@@ -79,6 +80,7 @@ const App = () => {
           setDesign(nextDesign);
         }
       },
+      onError: message => setError(message),
     };
     if (pathname === '/_new') options.fresh = true;
     else if (params.id) options.id = params.id;
@@ -125,7 +127,15 @@ const App = () => {
   }, [design, readOnly]);
 
   let content;
-  if (auth) {
+  if (error) {
+    content = (
+      <Box fill align="center" justify="center">
+        <Paragraph size="xlarge" textAlign="center">
+          {error}
+        </Paragraph>
+      </Box>
+    );
+  } else if (auth) {
     content = (
       <Box fill align="center" justify="center">
         <Form

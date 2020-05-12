@@ -14,6 +14,7 @@ export const loadDesign = ({
   password,
   onLoad,
   onAuth,
+  onError,
 }) => {
   if (fresh) {
     const design = setupDesign(bare);
@@ -40,10 +41,20 @@ export const loadDesign = ({
           if (initial)
             ReactGA.event({ category: 'switch', action: 'published design' });
         });
+      } else {
+        onError(`Unable to fetch design with id "${id}".`);
       }
     });
   } else if (name) {
     const stored = localStorage.getItem(name);
+    if (!stored) {
+      onError(
+        `You don't appear to have a design called "${name}". Perhaps
+         someone shared their local design URL and not a published
+         one?`,
+      );
+      return;
+    }
     const design = JSON.parse(stored);
     upgradeDesign(design);
     design.local = true;
