@@ -616,7 +616,7 @@ export const components = {
       color: ['-color-'],
       disabled: false,
       dropAlign: DropAlign,
-      dropContent: '-component- grommet.Box',
+      dropContent: '-component- grommet.Box {"pad":"medium"}',
       dropProps: {
         elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
         plain: false,
