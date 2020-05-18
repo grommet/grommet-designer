@@ -672,9 +672,13 @@ export const components = {
     name: 'Tabs',
     container: true,
     documentation: 'https://v2.grommet.io/tabs',
+    defaultProps: {
+      justify: 'center',
+    },
     properties: {
       activeIndex: 0,
       flex: ['grow', 'shrink', true, false],
+      justify: ['start', 'center', 'end'],
       margin: Edge,
     },
     placeholder: () => (
