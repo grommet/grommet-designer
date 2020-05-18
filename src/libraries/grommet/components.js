@@ -361,6 +361,7 @@ export const components = {
     component: Grid,
     name: 'Grid',
     container: true,
+    hideable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Grid is currently empty. Define columns and add components to it.
@@ -809,6 +810,7 @@ export const components = {
       options: SelectOptions,
       value: '',
     },
+    advancedProperties: ['gap'],
     override: ({ props }) => {
       const result = {};
       if (!props.value) result.value = undefined;

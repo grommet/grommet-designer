@@ -187,7 +187,10 @@ const Designer = ({ colorMode, design, setDesign }) => {
     if (selected.screen && !design.screens[selected.screen]) {
       setSelected(getInitialSelected(design));
     } else if (selected.component && !design.components[selected.component]) {
-      setSelected({ ...selected, component: undefined });
+      setSelected({
+        ...selected,
+        component: design.screens[selected.screen].root,
+      });
     }
   }, [design, selected]);
 
