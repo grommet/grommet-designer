@@ -850,6 +850,7 @@ export const components = {
       const result = {};
       // no-op for now
       if (props.searchPlaceholder) result.onSearch = text => {};
+      if (!props.value) result.value = undefined;
       return result;
     },
   },
