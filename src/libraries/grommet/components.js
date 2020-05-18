@@ -809,6 +809,11 @@ export const components = {
       options: SelectOptions,
       value: '',
     },
+    override: ({ props }) => {
+      const result = {};
+      if (!props.value) result.value = undefined;
+      return result;
+    },
   },
   RangeInput: {
     component: RangeInput,
@@ -848,7 +853,6 @@ export const components = {
     },
     override: ({ props }) => {
       const result = {};
-      // no-op for now
       if (props.searchPlaceholder) result.onSearch = text => {};
       if (!props.value) result.value = undefined;
       return result;
