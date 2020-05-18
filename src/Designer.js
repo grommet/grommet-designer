@@ -182,6 +182,15 @@ const Designer = ({ colorMode, design, setDesign }) => {
     return () => clearTimeout(timer);
   }, [changes, changeIndex, design]);
 
+  // if selected doesn't exist anymore, reset it
+  React.useEffect(() => {
+    if (selected.screen && !design.screens[selected.screen]) {
+      setSelected(getInitialSelected(design));
+    } else if (selected.component && !design.components[selected.component]) {
+      setSelected({ ...selected, component: undefined });
+    }
+  }, [design, selected]);
+
   const changeDesign = design => {
     if (design && !design.local && localStorage.getItem(design.name)) {
       setConfirmReplace(design);
