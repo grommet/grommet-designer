@@ -104,7 +104,8 @@ const AddComponent = ({
   }, [design, imports]);
 
   React.useLayoutEffect(() => {
-    setTimeout(() => inputRef.current && inputRef.current.focus(), 1);
+    // 10ms was empirically determined for Chrome
+    setTimeout(() => inputRef.current && inputRef.current.focus(), 10);
   });
 
   const add = ({ typeName, starter, template, templateDesign, url }) => {
@@ -372,10 +373,7 @@ const AddComponent = ({
               design={design}
               libraries={libraries}
               selected={selected}
-              onChange={nextAddLocation => {
-                setAddLocation(nextAddLocation);
-                inputRef.current.focus();
-              }}
+              onChange={nextAddLocation => setAddLocation(nextAddLocation)}
             />
           </Box>
         )}
