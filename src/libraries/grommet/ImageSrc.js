@@ -13,7 +13,9 @@ const stripPrefix = value => {
 export default ({ value, onChange }) => {
   return (
     <Box>
-      <Paragraph margin="none">URL or &lt;svg&gt; markup.</Paragraph>
+      <Paragraph margin="none" fill>
+        URL or &lt;svg&gt; markup. If using SVG, you must convert '#' to '%23'.
+      </Paragraph>
       <TextArea
         rows={4}
         cols={80}
