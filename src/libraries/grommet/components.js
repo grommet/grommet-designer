@@ -8,6 +8,7 @@ import {
   Calendar,
   Chart,
   CheckBox,
+  CheckBoxGroup,
   Clock,
   DataTable,
   Distribution,
@@ -733,6 +734,30 @@ export const components = {
               }
             : undefined,
       };
+    },
+  },
+  CheckBoxGroup: {
+    component: CheckBoxGroup,
+    name: 'CheckBoxGroup',
+    defaultProps: {
+      options: ['option 1', 'option 2'],
+    },
+    properties: {
+      direction: BoxDirection,
+      disabled: false,
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      }),
+      name: '',
+      options: SelectOptions,
+      value: '',
+    },
+    advancedProperties: ['gap'],
+    override: ({ id, props }) => {
+      const result = {};
+      if (!props.id) result.id = props.name || id;
+      if (!props.value) result.value = undefined;
+      return result;
     },
   },
   Form: {

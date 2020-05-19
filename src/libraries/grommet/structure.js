@@ -47,6 +47,7 @@ export const structure = [
     Icon: CheckboxSelected,
     components: [
       'CheckBox',
+      'CheckBoxGroup',
       'Form',
       'FormField',
       'MaskedInput',
