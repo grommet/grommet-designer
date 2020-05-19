@@ -104,8 +104,8 @@ const AddComponent = ({
   }, [design, imports]);
 
   React.useLayoutEffect(() => {
-    // 10ms was empirically determined for Chrome
-    setTimeout(() => inputRef.current && inputRef.current.focus(), 10);
+    // 40ms was empirically determined for Chrome on Windows, improve sometime
+    setTimeout(() => inputRef.current && inputRef.current.focus(), 40);
   });
 
   const add = ({ typeName, starter, template, templateDesign, url }) => {
