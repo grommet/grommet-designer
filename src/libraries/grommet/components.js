@@ -775,6 +775,7 @@ export const components = {
     properties: {
       disabled: false,
       mask: MaskedInputMask,
+      name: '',
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
@@ -807,12 +808,14 @@ export const components = {
       gap: EdgeSizeOptions({
         options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       }),
+      name: '',
       options: SelectOptions,
       value: '',
     },
     advancedProperties: ['gap'],
-    override: ({ props }) => {
+    override: ({ id, props }) => {
       const result = {};
+      if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
       return result;
     },
@@ -846,6 +849,7 @@ export const components = {
       dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       icon: ['-Icon-'],
       multiple: false,
+      name: '',
       options: SelectOptions,
       placeholder: '',
       plain: false,
@@ -867,6 +871,7 @@ export const components = {
       defaultValue: '',
       disabled: false,
       fill: false,
+      name: '',
       placeholder: '',
       plain: false,
       resize: ['vertical', 'horizontal', true, false],
@@ -881,6 +886,7 @@ export const components = {
       defaultValue: '',
       disabled: false,
       icon: ['-Icon-'],
+      name: '',
       placeholder: '',
       plain: false,
       reverse: false,
