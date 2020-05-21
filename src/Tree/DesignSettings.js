@@ -15,6 +15,21 @@ import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import themes from '../themes';
 
+const themeSuggestions = themes.map(
+  ({ label, name, designerUrl, packageName, jsUrl }) => {
+    const value = jsUrl || designerUrl || packageName;
+    return {
+      label: (
+        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }} gap="xsmall">
+          <Text weight="bold">{label || name}</Text>
+          <Text>{value}</Text>
+        </Box>
+      ),
+      value,
+    };
+  },
+);
+
 export default ({ design, onClose, setDesign, theme }) => {
   return (
     <Action label="design" onClose={onClose}>
@@ -116,22 +131,11 @@ export default ({ design, onClose, setDesign, theme }) => {
             name="theme"
             plain
             value={design.theme || ''}
-            suggestions={Object.keys(themes).map(k => ({
-              label: (
-                <Box
-                  pad={{ horizontal: 'small', vertical: 'xsmall' }}
-                  gap="xsmall"
-                >
-                  <Text weight="bold">{k}</Text>
-                  <Text>{themes[k]}</Text>
-                </Box>
-              ),
-              value: themes[k],
-            }))}
+            suggestions={themeSuggestions}
             onChange={event => {
-              const theme = event.target.value;
+              const themeValue = event.target.value;
               const nextDesign = JSON.parse(JSON.stringify(design));
-              nextDesign.theme = theme;
+              nextDesign.theme = themeValue;
               setDesign(nextDesign);
             }}
             onSelect={({ suggestion }) => {

@@ -1,4 +1,15 @@
 import { getComponentType, getReferenceDesign } from '../utils';
+import { themeForValue } from '../themes';
+
+export const dependencies = design => {
+  const result = ['styled-components'];
+  result.push('https://github.com/grommet/grommet/tarball/stable');
+  result.push('https://github.com/grommet/grommet-icons/tarball/stable');
+  const theme = themeForValue(design.theme);
+  if (theme && (theme.packageUrl || theme.packageName))
+    result.push(theme.packageUrl || theme.packageName);
+  return result;
+};
 
 const router = firstPath => `
 const RouterContext = React.createContext({})
@@ -56,10 +67,9 @@ export const generateJSX = ({
   const libraries = importsArg.filter(i => i.library).map(i => i.library);
   const imports = { Grommet: true };
   const iconImports = {};
-  const themeImports = {};
+  const theme = themeForValue(design.theme);
   const screenNames = {};
   let layers = {};
-  let theme = design.theme;
   let publishedTheme;
 
   const componentToJSX = ({ screen, id, indent = '  ', referenceDesign }) => {
@@ -183,17 +193,10 @@ ${result}
   if (component) {
     return componentToJSX({ id: component.id, indent: '' });
   } else {
-    if (design.theme) {
-      if (design.theme.startsWith('https:')) {
-        publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
-        theme = 'theme';
-      } else {
-        if (design.theme === 'grommet' || design.theme === 'dark') {
-          imports[design.theme] = true;
-        } else {
-          themeImports[design.theme] = true;
-        }
-      }
+    if (!theme || theme.designerUrl) {
+      // embed any theme from the designer, since code can't depend on it
+      // directly
+      publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
     }
 
     Object.keys(design.screens).forEach(sId => {
@@ -219,47 +222,48 @@ ${result}
             ? 'const [layer, setLayer] = React.useState()'
             : ''
         }
-    return (${single ? `\n    <Grommet theme={${theme}}>` : ''}
-  ${root}
-  ${single ? '    </Grommet>\n' : ''}  )
-  }`;
+  return (${single ? `\n    <Grommet full theme={theme}>` : ''}
+${root}
+${single ? '    </Grommet>\n' : ''}  )
+}`;
       })
       .join('\n\n');
 
     return `import React${!single ? ', { Children }' : ''} from 'react'
-  import { ${Object.keys(imports).join(', ')} } from 'grommet'
-  ${
-    Object.keys(iconImports).length > 0
-      ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
-      : ''
-  }${Object.keys(themeImports)
-      .map(theme => `import { ${theme} } from 'grommet-theme-${theme}'`)
-      .join('\n')}
-  ${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
-  ${publishedTheme || ''}
-  ${screens}
-  ${
-    !single
-      ? `
-  export default () => (
-    <Grommet full theme={${theme}}>
-      <Router>
-        <Routes>
-          ${Object.keys(design.screens)
-            .map(id => design.screens[id])
-            .map(
-              screen =>
-                `<Route path="${screen.path}" Component={${screenComponentName(
-                  screen,
-                )}} />`,
-            )
-            .join('\n        ')}
-        </Routes>
-      </Router>
-    </Grommet>
-  )
-  `
-      : ''
-  }`;
+import { ${Object.keys(imports).join(', ')} } from 'grommet'
+${
+  Object.keys(iconImports).length > 0
+    ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
+    : ''
+}
+${theme &&
+  !theme.designerUrl &&
+  `import { ${theme.name} as theme } from '${theme.packageName}'`}
+${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
+${publishedTheme || ''}
+${screens}
+${
+  !single
+    ? `
+export default () => (
+  <Grommet full theme={theme}>
+    <Router>
+      <Routes>
+        ${Object.keys(design.screens)
+          .map(id => design.screens[id])
+          .map(
+            screen =>
+              `<Route path="${screen.path}" Component={${screenComponentName(
+                screen,
+              )}} />`,
+          )
+          .join('\n        ')}
+      </Routes>
+    </Router>
+  </Grommet>
+)
+`
+    : ''
+}`;
   }
 };

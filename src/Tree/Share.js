@@ -15,7 +15,7 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import { generateJSX, publish } from '../design';
+import { dependencies, generateJSX, publish } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -259,9 +259,9 @@ const Developer = ({ design, imports, theme }) => {
           <Markdown>
             {`
 * install nodejs, npm, yarn, and create-react-app (if needed)
-* \`# create-react-app my-app\`
+* \`# npx create-react-app my-app\`
 * \`# cd my-app\`
-* \`# yarn add grommet grommet-icons styled-components\`
+* \`# yarn add ${dependencies(design).join(' ')}\`
 * replace the contents of \`src/App.js\` with the text below
 * \`# yarn start\`
             `}

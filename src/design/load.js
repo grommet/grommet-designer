@@ -1,6 +1,6 @@
 import { grommet } from 'grommet';
 import ReactGA from 'react-ga';
-import themes from '../themes';
+import { themeForValue } from '../themes';
 import { setupDesign } from './reset';
 import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
@@ -93,43 +93,37 @@ export const loadDesign = ({
 
 const npmTheme = {};
 
-export const loadTheme = (theme, setTheme) => {
-  const themeUrl = themes[theme] || theme;
-  if (typeof themeUrl === 'string' && themeUrl.slice(0, 4) === 'http') {
-    // this could be from the theme designer or from npmjs
-    const id = themeUrl.split('id=')[1];
-    if (id) {
-      // this is from the theme designer
-      fetch(`${themeApiUrl}/${id}`)
-        .then(response => response.json())
-        .then(setTheme);
-    } else if (themeUrl.match('grommet-theme-')) {
-      // this is from npmjs
-      // e.g. https://unpkg.com/grommet-theme-hpe/dist/grommet-theme-hpe.min.js
-      const name = themeUrl.split('/')[3].split('.')[0]; // grommet-theme-hpe
-      const nameParts = name.split('-'); // [grommet, theme, hpe]
-      const varName = nameParts
-        .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
-        .join(''); // GrommetThemeHpe
-      const subName = nameParts[2]; // hpe
-      if (!document.getElementById(name)) {
-        // we haven't loaded this theme, add it in its own script tag
-        const script = document.createElement('script');
-        script.src = themeUrl;
-        script.id = name;
-        document.body.appendChild(script);
-        script.onload = () => {
-          npmTheme[name] = window[varName][subName];
-          setTheme(npmTheme[name]);
-        };
-      } else {
-        setTheme(npmTheme[name]);
-      }
+export const loadTheme = (themeValue, setTheme) => {
+  const theme = themeForValue(themeValue);
+  const designerUrl =
+    (theme && theme.designerUrl) ||
+    (themeValue.match('theme-designer.grommet.io') && themeValue);
+  if (designerUrl) {
+    const id = designerUrl.split('id=')[1];
+    fetch(`${themeApiUrl}/${id}`)
+      .then(response => response.json())
+      .then(setTheme);
+  } else if (theme && theme.jsUrl) {
+    // this is from npmjs or github pages
+    // e.g. https://unpkg.com/grommet-theme-hpe/dist/grommet-theme-hpe.min.js
+    const { packageName, name } = theme;
+    const nameParts = packageName.split('-'); // [grommet, theme, hpe]
+    const varName = nameParts
+      .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
+      .join(''); // GrommetThemeHpe
+    if (!document.getElementById(packageName)) {
+      // we haven't loaded this theme, add it in its own script tag
+      const script = document.createElement('script');
+      script.src = theme.jsUrl;
+      script.id = packageName;
+      document.body.appendChild(script);
+      script.onload = () => {
+        npmTheme[packageName] = window[varName][name];
+        setTheme(npmTheme[packageName]);
+      };
     } else {
-      setTheme(grommet);
+      setTheme(npmTheme[packageName]);
     }
-  } else if (typeof themeUrl === 'object') {
-    setTheme(themeUrl);
   } else {
     setTheme(grommet);
   }
