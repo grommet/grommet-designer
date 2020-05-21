@@ -10,6 +10,7 @@ export const loadDesign = ({
   fresh,
   id,
   initial,
+  json,
   name,
   password,
   onLoad,
@@ -45,17 +46,22 @@ export const loadDesign = ({
         onError(`Unable to fetch design with id "${id}".`);
       }
     });
-  } else if (name) {
-    const stored = localStorage.getItem(name);
-    if (!stored) {
-      onError(
-        `You don't appear to have a design called "${name}". Perhaps
-         someone shared their local design URL and not a published
-         one?`,
-      );
-      return;
+  } else if (name || json) {
+    let design;
+    if (name) {
+      const stored = localStorage.getItem(name);
+      if (!stored) {
+        onError(
+          `You don't appear to have a design called "${name}". Perhaps
+          someone shared their local design URL and not a published
+          one?`,
+        );
+        return;
+      }
+      design = JSON.parse(stored);
+    } else {
+      design = json;
     }
-    const design = JSON.parse(stored);
     upgradeDesign(design);
     design.local = true;
     if (design.id && design.publishedUrl) {
@@ -78,7 +84,10 @@ export const loadDesign = ({
     } else {
       onLoad(design);
     }
-    ReactGA.event({ category: 'switch', action: 'previous design' });
+    ReactGA.event({
+      category: 'switch',
+      action: name ? 'previous design' : 'import design',
+    });
   }
 };
 

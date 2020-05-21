@@ -246,6 +246,23 @@ const App = () => {
             },
           });
         }}
+        importDesign={jsonDesign => {
+          loadDesign({
+            json: jsonDesign,
+            onLoad: nextDesign => {
+              if (nextDesign.subsequentPublish) {
+                setSubsequent({
+                  local: nextDesign,
+                  published: nextDesign.subsequentPublish,
+                });
+                delete nextDesign.subsequentPublish;
+              } else {
+                setDesign(nextDesign);
+                setNameParam(nextDesign.name);
+              }
+            },
+          });
+        }}
         rtl={rtl}
         setColorMode={setColorMode}
         setRtl={setRtl}

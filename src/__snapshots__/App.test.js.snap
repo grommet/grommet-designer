@@ -31,7 +31,37 @@ exports[`App empty 1`] = `
         class="StyledBox-sc-13pk1d4-0 jwQkzn"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 bVOlzr"
+        class="StyledBox-sc-13pk1d4-0 cOfaUF"
+      >
+        <div
+          class="StyledStack-ajspsk-0 liEjfH"
+        >
+          <div
+            class="StyledStack__StyledStackLayer-ajspsk-1 gzpmgV"
+          >
+            <input
+              accept=".json"
+              style="display: block; width: 100%; height: 100%;"
+              type="file"
+            />
+          </div>
+          <div
+            class="StyledStack__StyledStackLayer-ajspsk-1 ifGbDg"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 eypBJc"
+            >
+              <span
+                class="StyledText-sc-1sadyjn-0 kTzped"
+              >
+                Import - drop design file here
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledBox-sc-13pk1d4-0 xFYsu"
       >
         <div
           class="StyledBox-sc-13pk1d4-0 bIdaiR"

@@ -10,6 +10,7 @@ import {
   Markdown,
   Paragraph,
   RadioButtonGroup,
+  Stack,
   Text,
   TextInput,
 } from 'grommet';
@@ -101,6 +102,7 @@ const Start = ({
   chooseDesign,
   colorMode,
   createDesign,
+  importDesign,
   rtl,
   setColorMode,
   setRtl,
@@ -109,6 +111,8 @@ const Start = ({
   const [readme, setReadme] = React.useState();
   const [search, setSearch] = React.useState();
   const searchRef = React.useRef();
+  const [dropping, setDropping] = React.useState();
+  const [error, setError] = React.useState();
 
   React.useEffect(() => {
     document.title = 'Grommet Designer';
@@ -162,12 +166,50 @@ const Start = ({
           }}
         />
         <Box flex />
+        <Box alignSelf="stretch" border round overflow="hidden">
+          <Stack guidingChild="last" interactiveChild="first">
+            <input
+              style={{ display: 'block', width: '100%', height: '100%' }}
+              type="file"
+              accept=".json"
+              onDragEnter={() => setDropping(true)}
+              onDragLeave={() => setDropping(false)}
+              onChange={event => {
+                setError(undefined);
+                const reader = new FileReader();
+                reader.onload = () => {
+                  try {
+                    const nextDesign = JSON.parse(reader.result);
+                    importDesign(nextDesign);
+                  } catch (e) {
+                    setError(e.message);
+                  }
+                };
+                reader.readAsText(event.target.files[0]);
+              }}
+            />
+            <Box
+              fill
+              background={dropping ? 'control' : 'background'}
+              pad="small"
+              align="center"
+              justify="center"
+            >
+              <Text color="text-weak">Import - drop design file here</Text>
+              {error && (
+                <Box background="status-critical" pad="medium round">
+                  <Text>{error}</Text>
+                </Box>
+              )}
+            </Box>
+          </Stack>
+        </Box>
         <Box
           flex={false}
           direction="row"
           justify="center"
           gap="medium"
-          margin={{ top: 'xlarge' }}
+          margin={{ top: 'large' }}
         >
           <RadioButtonGroup
             id="themeMode"
