@@ -62,6 +62,7 @@ export const structure = [
     name: 'Visualizations',
     Icon: BarChart,
     components: [
+      'Avatar',
       'Calendar',
       'Chart',
       'Clock',

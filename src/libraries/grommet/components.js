@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionPanel,
   Anchor,
+  Avatar,
   Box,
   Button,
   Calendar,
@@ -920,6 +921,37 @@ export const components = {
       type: ['text', 'password'],
       value: '',
     },
+  },
+  Avatar: {
+    component: Avatar,
+    name: 'Avatar',
+    container: true,
+    help: `Typically an Avatar has either a background, a src,
+    or an Icon child.`,
+    placeholder: ({ background, src }) =>
+      !src &&
+      !background && (
+        <Text size="large" textAlign="center" color="placeholder">
+          ?
+        </Text>
+      ),
+    documentation: 'https://v2.grommet.io/avatar',
+    defaultProps: {
+      align: 'center',
+      flex: false,
+      justify: 'center',
+      overflow: 'hidden',
+      round: 'full',
+    },
+    properties: {
+      size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      src: ImageSrc,
+      background: reusedBoxProps.background,
+      border: reusedBoxProps.border,
+      gridArea: reusedBoxProps.gridArea,
+      margin: reusedBoxProps.margin,
+    },
+    advancedProperties: ['border', 'gridArea', 'margin'],
   },
   Calendar: {
     component: Calendar,
