@@ -172,7 +172,7 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const followLink = (to, { dataContextPath, nextRef }) => {
+  const followLink = (to, { dataContextPath, nextRef } = {}) => {
     if (Array.isArray(to)) {
       // when to is an Array, lazily create nextDesign and re-use
       const ref = {};
