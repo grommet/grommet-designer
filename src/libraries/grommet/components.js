@@ -11,6 +11,7 @@ import {
   CheckBox,
   CheckBoxGroup,
   Clock,
+  DataChart,
   DataTable,
   Distribution,
   DropButton,
@@ -54,8 +55,8 @@ import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
+import DataChartChart from './DataChartChart';
 import DataTableColumns from './DataTableColumns';
-import DataTableData from './DataTableData';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
 import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
@@ -65,6 +66,7 @@ import GridRows from './GridRows';
 import HeadingLevel from './HeadingLevel';
 import HeadingMargin from './HeadingMargin';
 import ImageSrc from './ImageSrc';
+import JsonData from './JsonData';
 import MaskedInputMask from './MaskedInputMask';
 import MenuItems from './MenuItems';
 import MeterValues from './MeterValues';
@@ -1035,6 +1037,85 @@ export const components = {
       type: ['analog', 'digital'],
     },
   },
+  DataChart: {
+    component: DataChart,
+    name: 'DataChart',
+    defaultProps: {
+      chart: [{ key: 'amount' }],
+      data: [
+        { date: '2020-01-15', amount: 22 },
+        { date: '2020-02-15', amount: 11 },
+        { date: '2020-03-15', amount: 33 },
+        { date: '2020-04-15', amount: 77 },
+        { date: '2020-05-15', amount: 88 },
+      ],
+      gap: 'xsmall',
+      xAxis: { labels: 2 },
+      yAxis: { guide: true, labels: 2 },
+    },
+    properties: {
+      chart: DataChartChart,
+      color: {
+        color: ['-color-'],
+        opacity: ['weak', 'medium', 'strong'],
+      },
+      data: JsonData,
+      gap: EdgeSizeOptions({
+        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+        direction: 'row',
+      }),
+      margin: Edge,
+      size: {
+        height: [
+          'xxsmall',
+          'xsmall',
+          'small',
+          'medium',
+          'large',
+          'xlarge',
+          'fill',
+        ],
+        width: [
+          'xxsmall',
+          'xsmall',
+          'small',
+          'medium',
+          'large',
+          'xlarge',
+          'fill',
+        ],
+      },
+      thickness: ['hair', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      xAxis: {
+        guide: false,
+        labels: 2,
+        key: '',
+        // render: ['month', 'year'],
+      },
+      yAxis: {
+        guide: true,
+        labels: 2,
+      },
+    },
+    designProperties: {
+      dataPath: '',
+    },
+    override: ({ props }, { data }) => {
+      const result = {};
+      // need to use retrieved data for data property
+      if (data) result.data = data;
+      // if (props.xAxis && props.xAxis.render) {
+      //   if (props.xAxis.key) {
+      //     result.yAxis.render = (i) => {
+      //       new Date(props.data[i][props.key]).toLocaleDateString('en-US', {
+      //         month: 'narrow',
+      //       })
+      //     }
+      //   }
+      // }
+      return result;
+    },
+  },
   DataTable: {
     component: DataTable,
     name: 'DataTable',
@@ -1050,7 +1131,7 @@ export const components = {
     },
     properties: {
       columns: DataTableColumns,
-      data: DataTableData,
+      data: JsonData,
       groupBy: '',
       onClickRow: ['-link-'],
       pad: BoxPad,
@@ -1151,7 +1232,7 @@ export const components = {
       ],
     },
     properties: {
-      data: DataTableData,
+      data: JsonData,
       onClickItem: ['-link-'],
       pad: BoxPad,
       primaryKey: '',

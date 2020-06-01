@@ -66,6 +66,7 @@ export const structure = [
       'Calendar',
       'Chart',
       'Clock',
+      'DataChart',
       'DataTable',
       'Distribution',
       'List',
