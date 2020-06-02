@@ -292,11 +292,11 @@ const Canvas = ({
     { dataContextPath, datum, key, referenceDesign: referenceDesignProp } = {},
   ) => {
     let component = (referenceDesignProp || design).components[id];
-    const responsiveProps =
+    let responsiveProps =
       component.responsive &&
       component.responsive[responsiveSize] &&
       component.responsive[responsiveSize].props;
-    const mergedProps = responsiveProps
+    let mergedProps = responsiveProps
       ? { ...component.props, ...responsiveProps }
       : component.props;
 
@@ -312,6 +312,13 @@ const Canvas = ({
       }
       referenceDesign = getReferenceDesign(imports, component);
       component = (referenceDesign || design).components[mergedProps.component];
+      responsiveProps =
+        component.responsive &&
+        component.responsive[responsiveSize] &&
+        component.responsive[responsiveSize].props;
+      mergedProps = responsiveProps
+        ? { ...component.props, ...responsiveProps }
+        : component.props;
     }
     if (!component || component.hide) return null;
 
