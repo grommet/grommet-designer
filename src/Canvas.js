@@ -312,13 +312,15 @@ const Canvas = ({
       }
       referenceDesign = getReferenceDesign(imports, component);
       component = (referenceDesign || design).components[mergedProps.component];
-      responsiveProps =
-        component.responsive &&
-        component.responsive[responsiveSize] &&
-        component.responsive[responsiveSize].props;
-      mergedProps = responsiveProps
-        ? { ...component.props, ...responsiveProps }
-        : component.props;
+      if (component) {
+        responsiveProps =
+          component.responsive &&
+          component.responsive[responsiveSize] &&
+          component.responsive[responsiveSize].props;
+        mergedProps = responsiveProps
+          ? { ...component.props, ...responsiveProps }
+          : component.props;
+      }
     }
     if (!component || component.hide) return null;
 
