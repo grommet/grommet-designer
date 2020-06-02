@@ -36,7 +36,7 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
   if (!screen) return null;
   return (
     <Keyboard target="document" onKeyDown={onKeyDown}>
-      <Box height="100vh" border="left">
+      <Box border="left">
         <Box
           flex={false}
           direction="row"

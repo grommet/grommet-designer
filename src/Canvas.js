@@ -520,7 +520,7 @@ const Canvas = ({
       ref={grommetRef}
       theme={theme}
       themeMode={design.themeMode}
-      style={{ height: '100vh' }}
+      style={{ height: '100%' }}
     >
       {screen && screen.root && renderComponent(screen.root)}
       {screen && !screen.root && (

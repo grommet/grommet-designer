@@ -274,10 +274,10 @@ const App = () => {
 
   return (
     <Grommet
-      full
       theme={designerTheme}
       themeMode={colorMode}
       dir={rtl ? 'rtl' : undefined}
+      style={{ height: '100%' }}
     >
       {content}
     </Grommet>

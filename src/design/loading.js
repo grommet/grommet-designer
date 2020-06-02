@@ -13,7 +13,7 @@ export const loading = {
       type: 'Grommet',
       props: {
         style: {
-          height: '100vh',
+          height: '100%',
         },
       },
       children: [3],

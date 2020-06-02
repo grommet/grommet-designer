@@ -490,7 +490,7 @@ const Tree = ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box ref={treeRef} height="100vh" border="right">
+      <Box ref={treeRef} fill="vertical" overflow="auto" border="right">
         <Box flex={false} border="bottom">
           <Header border="bottom" gap="none">
             <Box flex>

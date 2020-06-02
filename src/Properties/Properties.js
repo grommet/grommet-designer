@@ -256,7 +256,7 @@ export default ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box height="100vh" border="left">
+      <Box border="left">
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
             <Menu

@@ -2,7 +2,8 @@
 
 exports[`App empty 1`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 fwnjmm"
+  class="StyledGrommet-sc-19lkkz7-0 hukInu"
+  style="height: 100%;"
 >
   <div
     class="StyledBox-sc-13pk1d4-0 djQjXT"
@@ -262,13 +263,14 @@ exports[`App empty 1`] = `
 
 exports[`App empty 2`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 fwnjmm"
+  class="StyledGrommet-sc-19lkkz7-0 hukInu"
+  style="height: 100%;"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 bKMVmx"
+    class="StyledGrid-sc-1wofa1l-0 fKQCtW"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 iARZmz"
+      class="StyledBox-sc-13pk1d4-0 hRkfHm"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 dtwQir"
@@ -471,7 +473,7 @@ exports[`App empty 2`] = `
     </div>
     <div
       class="StyledGrommet-sc-19lkkz7-0 dlDmwu"
-      style="height: 100vh;"
+      style="height: 100%;"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 exGNON"
@@ -490,7 +492,7 @@ exports[`App empty 2`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 bVRaEb"
+      class="StyledBox-sc-13pk1d4-0 duXuZS"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 gHyeln"
