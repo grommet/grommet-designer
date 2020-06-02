@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Anchor,
@@ -52,44 +52,45 @@ export default ({
   setDesign,
   setSelected,
 }) => {
-  const type = React.useMemo(
+  const type = useMemo(
     () => getComponentType(libraries, component.type) || {},
     [component, libraries],
   );
-  const references = React.useMemo(() => getReferences(design, component.id), [
+  const references = useMemo(() => getReferences(design, component.id), [
     component,
     design,
   ]);
-  const [showReferences, setShowReferences] = React.useState();
-  const [showAdvanced, setShowAdvanced] = React.useState();
-  const [responsiveSize, setResponsiveSize] = React.useState('medium');
-  const [search, setSearch] = React.useState();
-  const searchExp = React.useMemo(() => search && new RegExp(search, 'i'), [
-    search,
-  ]);
-  const linkOptions = React.useMemo(
+  const [showReferences, setShowReferences] = useState();
+  const [showAdvanced, setShowAdvanced] = useState();
+  const [responsiveSize, setResponsiveSize] = useState('medium');
+  const [search, setSearch] = useState();
+  const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
+  const linkOptions = useMemo(
     () => getLinkOptions(design, libraries, selected),
     [design, libraries, selected],
   );
-  const [showCode, setShowCode] = React.useState();
+  const [showCode, setShowCode] = useState();
+  const [style, setStyle] = useState(
+    component.style ? JSON.stringify(component.style, null, 2) : '',
+  );
 
-  const searchRef = React.useRef();
-  const defaultRef = React.useRef();
-  const referencesRef = React.useRef();
+  const searchRef = useRef();
+  const defaultRef = useRef();
+  const referencesRef = useRef();
 
-  React.useEffect(() => setSearch(undefined), [component.id]);
+  useEffect(() => setSearch(undefined), [component.id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (search !== undefined) searchRef.current.focus();
   }, [search]);
 
   // persist showAdvanced state when it changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (showAdvanced !== undefined)
       localStorage.setItem('advanced', JSON.stringify(showAdvanced));
   }, [showAdvanced]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const stored = localStorage.getItem('advanced');
     if (stored) setShowAdvanced(JSON.parse(stored));
   }, []);
@@ -600,13 +601,11 @@ export default ({
                   <TextAreaField
                     name="style"
                     componentId={component.id}
-                    value={
-                      component.style
-                        ? JSON.stringify(component.style, null, 2)
-                        : ''
-                    }
+                    value={style}
                     onChange={value => {
+                      setStyle(value);
                       try {
+                        // only save it when it's valid
                         const json = JSON.parse(value);
                         setProp('style', json);
                       } catch (e) {
