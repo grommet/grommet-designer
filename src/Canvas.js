@@ -1,7 +1,14 @@
-import React from 'react';
+import React, {
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { findDOMNode } from 'react-dom';
 import styled from 'styled-components';
-import { Box, Grommet, Paragraph } from 'grommet';
+import { Box, Grommet, Paragraph, ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
 import { getComponentType, getReferenceDesign } from './utils';
@@ -81,22 +88,23 @@ const Canvas = ({
   setDesign,
   setSelected,
 }) => {
-  const [dataSources, setDataSources] = React.useState();
-  const [data, setData] = React.useState();
-  const [inlineEdit, setInlineEdit] = React.useState();
-  const [dragging, setDragging] = React.useState();
-  const [dropTarget, setDropTarget] = React.useState();
-  const [dropAt, setDropAt] = React.useState();
-  const grommetRef = React.useRef();
-  const inputRef = React.useRef();
+  const responsiveSize = useContext(ResponsiveContext);
+  const [dataSources, setDataSources] = useState();
+  const [data, setData] = useState();
+  const [inlineEdit, setInlineEdit] = useState();
+  const [dragging, setDragging] = useState();
+  const [dropTarget, setDropTarget] = useState();
+  const [dropAt, setDropAt] = useState();
+  const grommetRef = useRef();
+  const inputRef = useRef();
 
-  const libraries = React.useMemo(
+  const libraries = useMemo(
     () => imports.filter(i => i.library).map(i => i.library),
     [imports],
   );
 
   // load data, if needed
-  React.useEffect(() => {
+  useEffect(() => {
     if (design.data) {
       const nextDataSources = dataSources
         ? JSON.parse(JSON.stringify(dataSources))
@@ -130,14 +138,14 @@ const Canvas = ({
   }, [design.data, data, dataSources]);
 
   // clear inline edit when selection changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (inlineEdit && inlineEdit !== selected.component) {
       setInlineEdit(undefined);
     }
   }, [inlineEdit, selected.component]);
 
   // set Input height based on contents
-  React.useEffect(() => {
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
       inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
@@ -284,6 +292,14 @@ const Canvas = ({
     { dataContextPath, datum, key, referenceDesign: referenceDesignProp } = {},
   ) => {
     let component = (referenceDesignProp || design).components[id];
+    const responsiveProps =
+      component.responsive &&
+      component.responsive[responsiveSize] &&
+      component.responsive[responsiveSize].props;
+    const mergedProps = responsiveProps
+      ? { ...component.props, ...responsiveProps }
+      : component.props;
+
     let parent;
     let referenceDesign = referenceDesignProp;
     if (
@@ -291,13 +307,11 @@ const Canvas = ({
       (component.type === 'designer.Reference' ||
         component.type === 'Reference')
     ) {
-      if (component.props.includeChildren === false) {
+      if (mergedProps.includeChildren === false) {
         parent = component;
       }
       referenceDesign = getReferenceDesign(imports, component);
-      component = (referenceDesign || design).components[
-        component.props.component
-      ];
+      component = (referenceDesign || design).components[mergedProps.component];
     }
     if (!component || component.hide) return null;
 
@@ -343,7 +357,8 @@ const Canvas = ({
     if (component.type === 'grommet.Layer' && grommetRef.current) {
       specialProps.target = findDOMNode(grommetRef.current);
     }
-    Object.keys(component.props).forEach(prop => {
+
+    Object.keys(mergedProps).forEach(prop => {
       if (type.properties) {
         const property = type.properties[prop];
         // use designer Icon for icons
@@ -353,13 +368,13 @@ const Canvas = ({
           component.type !== 'Icon' &&
           property.includes('-Icon-')
         ) {
-          specialProps[prop] = <Icon icon={component.props[prop]} />;
+          specialProps[prop] = <Icon icon={mergedProps[prop]} />;
         }
         if (
           typeof property === 'string' &&
           property.startsWith('-component-')
         ) {
-          specialProps[prop] = renderComponent(component.props[prop], {
+          specialProps[prop] = renderComponent(mergedProps[prop], {
             dataContextPath,
           });
         }
@@ -419,7 +434,7 @@ const Canvas = ({
       children = specialProps.children;
       delete specialProps.children;
     } else if (type.placeholder && !component.coupled) {
-      children = <Placeholder>{type.placeholder(component.props)}</Placeholder>;
+      children = <Placeholder>{type.placeholder(mergedProps)}</Placeholder>;
     }
 
     // We don't drag when editing so that the user can use text selection.
@@ -478,13 +493,13 @@ const Canvas = ({
       return null;
     }
 
-    return React.createElement(
+    return createElement(
       type.component,
       {
         key: key || id,
         ...dragProps,
         style,
-        ...component.props,
+        ...mergedProps,
         ...specialProps,
         ...selectProps,
       },

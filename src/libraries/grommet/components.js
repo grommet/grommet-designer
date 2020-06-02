@@ -366,6 +366,7 @@ export const components = {
     name: 'Grid',
     container: true,
     hideable: true,
+    respondable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Grid is currently empty. Define columns and add components to it.
@@ -385,7 +386,13 @@ export const components = {
       pad: BoxPad,
       rows: GridRows,
     },
-    advancedProperties: ['margin'],
+    advancedProperties: [
+      'align',
+      'alignContent',
+      'justify',
+      'justifyContent',
+      'margin',
+    ],
   },
   Stack: {
     component: Stack,

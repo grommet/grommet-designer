@@ -6,15 +6,17 @@ import {
   Button,
   CheckBox,
   Drop,
+  Header,
   Heading,
   Keyboard,
   Markdown,
   Menu,
   Paragraph,
+  RadioButtonGroup,
   Text,
   TextInput,
 } from 'grommet';
-import { Duplicate, Location, Trash } from 'grommet-icons';
+import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
@@ -33,6 +35,12 @@ import {
 import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getComponentType } from '../utils';
+
+const responsiveSizePad = {
+  small: 'xsmall',
+  medium: 'small',
+  large: 'medium',
+};
 
 export default ({
   component,
@@ -54,6 +62,7 @@ export default ({
   ]);
   const [showReferences, setShowReferences] = React.useState();
   const [showAdvanced, setShowAdvanced] = React.useState();
+  const [responsiveSize, setResponsiveSize] = React.useState('medium');
   const [search, setSearch] = React.useState();
   const searchExp = React.useMemo(() => search && new RegExp(search, 'i'), [
     search,
@@ -87,7 +96,10 @@ export default ({
 
   const setProp = (propName, value, sideEffects) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
+    let component = nextDesign.components[selected.component];
+    if (component.responsive && component.responsive[responsiveSize]) {
+      component = component.responsive[responsiveSize];
+    }
     let props;
     if (type.properties[propName] !== undefined) props = component.props;
     else if (
@@ -122,6 +134,7 @@ export default ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.props = {};
+    delete component.responsive;
     if (!component.text) component.text = undefined;
     setDesign(nextDesign);
 
@@ -228,6 +241,7 @@ export default ({
             name={propName}
             property={properties[propName]}
             props={props}
+            responsiveSize={responsiveSize}
             selected={selected}
             setSelected={setSelected}
             value={props ? props[propName] : undefined}
@@ -393,7 +407,11 @@ export default ({
                   {renderProperties(
                     component.id,
                     type.designProperties,
-                    component.designProps,
+                    (
+                      (component.responsive &&
+                        component.responsive[responsiveSize]) ||
+                      component
+                    ).designProps,
                   )}
                 </Box>
               )}
@@ -435,7 +453,11 @@ export default ({
                             {renderProperties(
                               component.id,
                               sectionProperties,
-                              component.props,
+                              (
+                                (component.responsive &&
+                                  component.responsive[responsiveSize]) ||
+                                component
+                              ).props,
                             )}
                             {(firstRef = true)}
                           </Box>
@@ -444,17 +466,106 @@ export default ({
                   </Box>
                 ) : (
                   <Box flex="grow">
-                    <Heading
-                      level={3}
-                      size="small"
-                      margin={{ horizontal: 'medium', vertical: 'medium' }}
-                    >
-                      Properties
-                    </Heading>
+                    <Header>
+                      <Heading
+                        level={3}
+                        size="small"
+                        margin={{ horizontal: 'medium', vertical: 'medium' }}
+                      >
+                        Properties
+                      </Heading>
+                      {type.respondable && !component.responsive && (
+                        <Button
+                          title="ResponsiveContext variations"
+                          icon={<Multiple />}
+                          hoverIndicator
+                          onClick={() => {
+                            const nextDesign = JSON.parse(
+                              JSON.stringify(design),
+                            );
+                            const component =
+                              nextDesign.components[selected.component];
+                            component.responsive = {
+                              small: { props: {} },
+                              large: { props: {} },
+                            };
+                            setDesign(nextDesign);
+                            setResponsiveSize('medium');
+                          }}
+                        />
+                      )}
+                    </Header>
+                    {component.responsive && (
+                      <Box
+                        border="top"
+                        pad={{ start: 'medium', vertical: 'small' }}
+                        gap="small"
+                      >
+                        <Box margin={{ end: 'medium' }}>
+                          <Heading level={4} size="small" margin="none">
+                            ResponsiveContext
+                          </Heading>
+                          <Paragraph margin="none" size="small">
+                            Properties set for medium size are used unless
+                            over-ridden by a property for small or large size.
+                          </Paragraph>
+                        </Box>
+                        <Box direction="row" align="center" justify="between">
+                          <RadioButtonGroup
+                            direction="row"
+                            options={['small', 'medium', 'large']}
+                            value={responsiveSize}
+                            onChange={({
+                              target: { value: nextResponsiveSize },
+                            }) => setResponsiveSize(nextResponsiveSize)}
+                          >
+                            {(option, { checked }) => (
+                              <Box
+                                border={{
+                                  side: 'all',
+                                  size: 'small',
+                                  color: checked ? 'selected-text' : 'border',
+                                }}
+                                pad={{
+                                  vertical: 'xsmall',
+                                  horizontal: responsiveSizePad[option],
+                                }}
+                                round="xxsmall"
+                              >
+                                <Text
+                                  size="small"
+                                  color={checked ? 'selected-text' : 'border'}
+                                  weight={checked ? 'bold' : undefined}
+                                >
+                                  {option[0].toUpperCase()}
+                                </Text>
+                              </Box>
+                            )}
+                          </RadioButtonGroup>
+                          <Button
+                            icon={<Trash />}
+                            hoverIndicator
+                            onClick={() => {
+                              const nextDesign = JSON.parse(
+                                JSON.stringify(design),
+                              );
+                              const component =
+                                nextDesign.components[selected.component];
+                              delete component.responsive;
+                              setDesign(nextDesign);
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                    )}
                     {renderProperties(
                       component.id,
                       type.properties,
-                      component.props,
+                      (
+                        (component.responsive &&
+                          component.responsive[responsiveSize]) ||
+                        component
+                      ).props,
                     )}
                     {parentType && parentType.container && (
                       <Box pad="medium">

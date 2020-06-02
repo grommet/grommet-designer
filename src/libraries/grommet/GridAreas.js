@@ -32,9 +32,14 @@ const CoordinateInput = ({ value, index, name, max, onChange }) => (
   />
 );
 
-export default ({ design, selected, value, onChange }) => {
+export default ({ design, responsiveSize, selected, value, onChange }) => {
   const component = design.components[selected.component];
-  const { columns, rows } = component.props;
+  let { columns, rows } = component.props;
+  if (component.responsive && component.responsive[responsiveSize]) {
+    const responsiveProps = component.responsive[responsiveSize].props;
+    if (responsiveProps.columns) ({ columns } = responsiveProps);
+    if (responsiveProps.rows) ({ rows } = responsiveProps);
+  }
   const missing = !Array.isArray(rows) || !Array.isArray(columns);
   const max = !missing && [columns.length - 1, rows.length - 1];
   return (
