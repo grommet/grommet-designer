@@ -55,3 +55,6 @@ export const themeForValue = value =>
       theme.jsUrl === value ||
       theme.designerUrl === value,
   );
+
+export const themeForUrl = url =>
+  themes.find(theme => url.search(`/${theme.packageName}/`) !== -1);

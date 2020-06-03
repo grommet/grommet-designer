@@ -1,6 +1,6 @@
 import { grommet } from 'grommet';
 import ReactGA from 'react-ga';
-import { themeForValue } from '../themes';
+import { themeForUrl, themeForValue } from '../themes';
 import { setupDesign } from './reset';
 import { upgradeDesign } from './upgrade';
 import { bare } from './bare';
@@ -93,6 +93,26 @@ export const loadDesign = ({
 
 const npmTheme = {};
 
+const loadThemePackage = ({ url, name, packageName, setTheme }) => {
+  const nameParts = packageName.split('-'); // [grommet, theme, hpe]
+  const varName = nameParts
+    .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
+    .join(''); // GrommetThemeHpe
+  if (!document.getElementById(packageName)) {
+    // we haven't loaded this theme, add it in its own script tag
+    const script = document.createElement('script');
+    script.src = url;
+    script.id = packageName;
+    document.body.appendChild(script);
+    script.onload = () => {
+      npmTheme[packageName] = window[varName][name];
+      setTheme(npmTheme[packageName]);
+    };
+  } else {
+    setTheme(npmTheme[packageName]);
+  }
+};
+
 export const loadTheme = (themeValue, setTheme) => {
   const theme = themeForValue(themeValue);
   const designerUrl =
@@ -107,22 +127,15 @@ export const loadTheme = (themeValue, setTheme) => {
     // this is from npmjs or github pages
     // e.g. https://unpkg.com/grommet-theme-hpe/dist/grommet-theme-hpe.min.js
     const { packageName, name } = theme;
-    const nameParts = packageName.split('-'); // [grommet, theme, hpe]
-    const varName = nameParts
-      .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
-      .join(''); // GrommetThemeHpe
-    if (!document.getElementById(packageName)) {
-      // we haven't loaded this theme, add it in its own script tag
-      const script = document.createElement('script');
-      script.src = theme.jsUrl;
-      script.id = packageName;
-      document.body.appendChild(script);
-      script.onload = () => {
-        npmTheme[packageName] = window[varName][name];
-        setTheme(npmTheme[packageName]);
-      };
+    loadThemePackage({ name, packageName, url: theme.jsUrl, setTheme });
+  } else if (typeof themeValue === 'string') {
+    // see if we can guess the packageName and name
+    const urlTheme = themeForUrl(themeValue);
+    if (urlTheme) {
+      const { packageName, name } = urlTheme;
+      loadThemePackage({ name, packageName, url: themeValue, setTheme });
     } else {
-      setTheme(npmTheme[packageName]);
+      setTheme(grommet);
     }
   } else {
     setTheme(grommet);
