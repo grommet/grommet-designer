@@ -1097,11 +1097,12 @@ export const components = {
         guide: false,
         labels: 2,
         key: '',
-        // render: ['month', 'year'],
       },
       yAxis: {
         guide: true,
         labels: 2,
+        prefix: '',
+        suffix: '',
       },
     },
     designProperties: {
