@@ -73,7 +73,7 @@ exports[`App empty 1`] = `
             for="themeMode-dark"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 ccBKMo StyledRadioButton-g1f6ld-4 eLBYmH"
+              class="StyledBox-sc-13pk1d4-0 haldyp StyledRadioButton-g1f6ld-4 eLBYmH"
             >
               <input
                 checked=""
@@ -111,7 +111,7 @@ exports[`App empty 1`] = `
             for="themeMode-light"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 ccBKMo StyledRadioButton-g1f6ld-4 eLBYmH"
+              class="StyledBox-sc-13pk1d4-0 haldyp StyledRadioButton-g1f6ld-4 eLBYmH"
             >
               <input
                 class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 hBCEfd"
