@@ -158,13 +158,15 @@ export default ({ value, onChange }) => {
                 ''
               }
               onChange={({ option }) => {
-                let nextValue = JSON.parse(JSON.stringify(value));
+                let nextValue = value
+                  ? JSON.parse(JSON.stringify(value))
+                  : undefined;
                 if (option === 'min/max') {
                   nextValue = {
                     size: [typeof nextValue === 'string' ? nextValue : ''],
                   };
                 } else {
-                  if (nextValue.size) {
+                  if (nextValue && nextValue.size) {
                     nextValue.size = option;
                   } else {
                     nextValue = option;
