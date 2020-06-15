@@ -116,9 +116,16 @@ const Tree = ({
         const nextDesign = JSON.parse(JSON.stringify(design));
         nextDesign.components[parent.id].collapsed = false;
         setDesign(nextDesign);
+      } else {
+        // if ancestors aren't collapsed, perhaps the screen is?
+        if (design.screens[selected.screen].collapsed) {
+          const nextDesign = JSON.parse(JSON.stringify(design));
+          nextDesign.screens[selected.screen].collapsed = false;
+          setDesign(nextDesign);
+        }
       }
     }
-  }, [design, selected.component, setDesign]);
+  }, [design, selected, setDesign]);
 
   const moveChild = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
