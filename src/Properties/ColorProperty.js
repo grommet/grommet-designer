@@ -21,7 +21,7 @@ const ColorProperty = React.forwardRef(
     const options = React.useMemo(() => {
       const merged = deepMerge(baseTheme.global.colors, theme.global.colors);
       return Object.keys(merged)
-        .filter(c => !internalColors.includes(c))
+        .filter(c => merged[c] && !internalColors.includes(c))
         .sort();
     }, [baseTheme.global.colors, theme.global.colors]);
 
