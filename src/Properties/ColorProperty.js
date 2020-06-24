@@ -4,7 +4,15 @@ import { deepMerge } from 'grommet/utils';
 import ArrayProperty from './ArrayProperty';
 
 // input is due to a bug in grommet-theme-hpe v1.0.5
-const internalColors = ['focus', 'icon', 'placeholder', 'selected', 'input'];
+const internalColors = [
+  'focus',
+  'icon',
+  'placeholder',
+  'selected',
+  'selected-background',
+  'selected-text',
+  'input',
+];
 
 const ColorLabel = theme => ({ selected, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
