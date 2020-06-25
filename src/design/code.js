@@ -102,12 +102,14 @@ export const generateJSX = ({
       component.type === 'Reference'
     ) {
       const nextReferenceDesign = getReferenceDesign(importsArg, component);
-      result = componentToJSX({
-        screen,
-        id: component.props.component,
-        indent,
-        referenceDesign: nextReferenceDesign,
-      });
+      result = nextReferenceDesign
+        ? componentToJSX({
+            screen,
+            id: component.props.component,
+            indent,
+            referenceDesign: nextReferenceDesign,
+          })
+        : '';
     } else {
       if (component.type === 'grommet.Layer') {
         layers[id] = true;
