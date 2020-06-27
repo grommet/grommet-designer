@@ -3,7 +3,6 @@
 exports[`App empty 1`] = `
 <div
   class="StyledGrommet-sc-19lkkz7-0 hukInu"
-  style="height: 100%;"
 >
   <div
     class="StyledBox-sc-13pk1d4-0 djQjXT"
@@ -264,10 +263,10 @@ exports[`App empty 1`] = `
 exports[`App empty 2`] = `
 <div
   class="StyledGrommet-sc-19lkkz7-0 hukInu"
-  style="height: 100%;"
 >
   <div
     class="StyledGrid-sc-1wofa1l-0 fKQCtW"
+    style="height: 100vh;"
   >
     <div
       class="StyledBox-sc-13pk1d4-0 hRkfHm"
