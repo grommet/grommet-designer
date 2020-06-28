@@ -238,9 +238,10 @@ ${
     ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
     : ''
 }
-${theme &&
+${(theme &&
   !theme.designerUrl &&
-  `import { ${theme.name} as theme } from '${theme.packageName}'`}
+  `import { ${theme.name} as theme } from '${theme.packageName}'`) ||
+  ''}
 ${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
 ${publishedTheme || ''}
 ${screens}
