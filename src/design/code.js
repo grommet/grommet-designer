@@ -151,8 +151,7 @@ export const generateJSX = ({
           return !(
             (typeof value === 'object' && Object.keys(value).length === 0) ||
             value === '' ||
-            value === undefined ||
-            value === false
+            value === undefined
           );
         })
         .map(name => {
@@ -176,7 +175,7 @@ export const generateJSX = ({
             }
             return ` ${name}="${value}"`;
           }
-          if (typeof value === 'boolean') {
+          if (typeof value === 'boolean' && value) {
             return ` ${name}`;
           }
           return ` ${name}={${JSON.stringify(value)}}`;
