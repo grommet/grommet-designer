@@ -175,6 +175,9 @@ export const generateJSX = ({
             }
             return ` ${name}="${value}"`;
           }
+          if (typeof value === 'boolean' && value) {
+            return ` ${name}`;
+          }
           return ` ${name}={${JSON.stringify(value)}}`;
         })
         .join('')}${nav ? ` onClick={() => ${nav}}` : ''}${
