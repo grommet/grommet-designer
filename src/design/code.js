@@ -134,15 +134,16 @@ export const generateJSX = ({
       let nav;
       if (component.designProps && component.designProps.link) {
         const link = component.designProps.link;
-        // TODO: need to handle links that are Arrays
-        if (link.component) {
-          if (design.components[link.component]) {
-            nav = `setLayer(layer ? undefined : ${link.component})`;
+        (Array.isArray(link) ? link : [link]).forEach(aLink => {
+          if (aLink.component) {
+            if (design.components[aLink.component]) {
+              nav = `setLayer(layer ? undefined : ${aLink.component})`;
+            }
+          } else {
+            const screen = design.screens[aLink.screen];
+            if (screen) nav = `push("${screen.path}")`;
           }
-        } else {
-          const screen = design.screens[link.screen];
-          if (screen) nav = `push("${screen.path}")`;
-        }
+        });
       }
 
       result = `${indent}<${type.name}${Object.keys(component.props)
@@ -174,6 +175,9 @@ export const generateJSX = ({
               return ` ${name}={<${value} />}`;
             }
             return ` ${name}="${value}"`;
+          }
+          if (typeof value === 'boolean' && value) {
+            return ` ${name}`;
           }
           return ` ${name}={${JSON.stringify(value)}}`;
         })
@@ -238,9 +242,10 @@ ${
     ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
     : ''
 }
-${theme &&
+${(theme &&
   !theme.designerUrl &&
-  `import { ${theme.name} as theme } from '${theme.packageName}'`}
+  `import { ${theme.name} as theme } from '${theme.packageName}'`) ||
+  ''}
 ${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
 ${publishedTheme || ''}
 ${screens}
