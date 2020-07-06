@@ -264,7 +264,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Grid fill columns={columns} rows="full" style={{ height: '100vh' }}>
+      <Grid fill columns={columns} rows="full">
         {responsive !== 'small' && mode === 'edit' && (
           <Tree
             design={design}
