@@ -149,7 +149,7 @@ const Start = ({
   }, [search]);
 
   return (
-    <Box direction="row-responsive" gap="medium" border="between">
+    <Box fill direction="row-responsive" gap="medium" border="between">
       <Box align="start" pad="large" height="100vh">
         <Heading margin={{ top: 'none' }}>grommet designer</Heading>
         <Paragraph size="xlarge">design with grommet components</Paragraph>
@@ -230,9 +230,15 @@ const Start = ({
         </Box>
       </Box>
 
-      <Box flex pad={{ vertical: 'medium', horizontal: 'large' }} gap="large">
+      <Box
+        flex
+        fill
+        overflow="auto"
+        pad={{ vertical: 'medium', horizontal: 'large' }}
+        gap="large"
+      >
         {designs && designs.length > 0 && (
-          <Box>
+          <Box flex={false}>
             <Header>
               <Heading level={2}>my designs</Heading>
               {designs.length > 5 && (
@@ -287,7 +293,7 @@ const Start = ({
           </Box>
         )}
 
-        <Box alignSelf="start">
+        <Box flex={false} alignSelf="start">
           <Header alignSelf="stretch">
             <Heading level={2}>tutorials</Heading>
           </Header>
@@ -311,7 +317,7 @@ const Start = ({
           ))}
         </Box>
 
-        <Box>
+        <Box flex={false}>
           <Heading level={2}>inspiration</Heading>
           <Box direction="row" overflow="auto" gap="medium">
             {inspirations.map(({ title, url }) => (
@@ -323,7 +329,7 @@ const Start = ({
         </Box>
 
         {readme && (
-          <Box>
+          <Box flex={false}>
             <Markdown>{readme}</Markdown>
           </Box>
         )}
