@@ -292,6 +292,10 @@ const Canvas = ({
     { dataContextPath, datum, key, referenceDesign: referenceDesignProp } = {},
   ) => {
     let component = (referenceDesignProp || design).components[id];
+    if (!component) {
+      console.warn(`Missing component ${id}`);
+      return null;
+    }
     let responsiveProps =
       component.responsive &&
       component.responsive[responsiveSize] &&
@@ -325,7 +329,10 @@ const Canvas = ({
     if (!component || component.hide) return null;
 
     const type = getComponentType(libraries, component.type);
-    if (!type) return null;
+    if (!type) {
+      console.warn(`Missing component type ${component.type}`);
+      return null;
+    }
 
     const contextPath = dataContextPath || selected.dataContextPath;
 
