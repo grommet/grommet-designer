@@ -6,6 +6,7 @@ import {
   Form,
   Grommet,
   Paragraph,
+  Text,
   TextInput,
   grommet,
 } from 'grommet';
@@ -68,7 +69,8 @@ const App = () => {
     const params = getParams();
     const options = {
       initial: true,
-      onAuth: () => setAuth(true),
+      onAuth: () =>
+        setAuth(password ? "Hmm, that password didn't work." : true),
       onLoad: nextDesign => {
         if (nextDesign.subsequentPublish) {
           setSubsequent({
@@ -150,8 +152,12 @@ const App = () => {
               name="password"
               placeholder="password"
               type="password"
+              onChange={() => setAuth(true)}
             />
             <Button type="submit" icon={<Next />} hoverIndicator />
+          </Box>
+          <Box pad="small">
+            <Text>{typeof auth === 'string' ? auth : ''}&nbsp;</Text>
           </Box>
         </Form>
       </Box>

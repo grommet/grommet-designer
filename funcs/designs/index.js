@@ -92,15 +92,17 @@ exports.designs = (req, res) => {
             design.comments = comments;
             return design;
           })
-          .catch(e => design); // no comments
-      })
-      .then(design => {
-        res
-          .status(200)
-          .type('json')
-          .send(
-            JSON.stringify(parts[2] === 'comments' ? design.comments : design),
-          );
+          .catch(e => design) // no comments
+          .then(design => {
+            res
+              .status(200)
+              .type('json')
+              .send(
+                JSON.stringify(
+                  parts[2] === 'comments' ? design.comments : design,
+                ),
+              );
+          });
       })
       .catch(e => res.status(400).send(e.message));
   }
@@ -148,7 +150,7 @@ exports.designs = (req, res) => {
       const design = req.body;
       const id = encodeURIComponent(
         `${design.name}-${design.email.replace('@', '-')}`.replace(
-          /\.|\s+/g,
+          /\.|\s+|\//g,
           '-',
         ),
       );
