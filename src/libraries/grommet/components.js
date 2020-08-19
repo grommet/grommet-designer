@@ -56,6 +56,7 @@ import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
 import DataChartChart from './DataChartChart';
+import DataChartSeries from './DataChartSeries';
 import DataTableColumns from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
 import EdgeSizeOptions from './EdgeSizeOptions';
@@ -1048,7 +1049,8 @@ export const components = {
     component: DataChart,
     name: 'DataChart',
     defaultProps: {
-      chart: [{ key: 'amount' }],
+      axis: { x: { granularity: 'coarse' }, y: { granularity: 'coarse' } },
+      chart: [{ property: 'amount' }],
       data: [
         { date: '2020-01-15', amount: 22 },
         { date: '2020-02-15', amount: 11 },
@@ -1057,21 +1059,38 @@ export const components = {
         { date: '2020-05-15', amount: 88 },
       ],
       gap: 'xsmall',
-      xAxis: { labels: 2 },
-      yAxis: { guide: true, labels: 2 },
+      guide: { x: true, y: true },
+      series: ['date', 'amount'],
     },
     properties: {
-      chart: DataChartChart,
-      color: {
-        color: ['-color-'],
-        opacity: ['weak', 'medium', 'strong'],
+      axis: {
+        x: {
+          property: '',
+          granularity: ['coarse', 'medium', 'fine'],
+        },
+        y: {
+          property: '',
+          granularity: ['coarse', 'medium', 'fine'],
+        },
       },
+      chart: DataChartChart,
       data: JsonData,
+      detail: false,
       gap: EdgeSizeOptions({
         options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
         direction: 'row',
       }),
+      guide: {
+        x: {
+          granularity: ['coarse', 'medium', 'fine'],
+        },
+        y: {
+          granularity: ['coarse', 'medium', 'fine'],
+        },
+      },
+      legend: false,
       margin: Edge,
+      series: DataChartSeries,
       size: {
         height: [
           'xxsmall',
@@ -1091,18 +1110,6 @@ export const components = {
           'xlarge',
           'fill',
         ],
-      },
-      thickness: ['hair', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      xAxis: {
-        guide: false,
-        labels: 2,
-        key: '',
-      },
-      yAxis: {
-        guide: true,
-        labels: 2,
-        prefix: '',
-        suffix: '',
       },
     },
     designProperties: {

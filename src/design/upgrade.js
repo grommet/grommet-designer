@@ -219,5 +219,59 @@ export const upgradeDesign = design => {
       }
     });
 
-  design.version = 3.4;
+  // 3.5
+  // upgrade DataChart props to align with grommet changes
+  Object.keys(design.components)
+    .map(id => design.components[id])
+    .filter(
+      component =>
+        component.type === 'grommet.DataChart' && !component.props.series,
+    )
+    .forEach(component => {
+      component.props.series = [];
+      // convert chart
+      component.props.chart
+        .filter(c => c.key)
+        .forEach(chart => {
+          chart.property = chart.key;
+          delete chart.key;
+          if (component.props.series.indexOf(chart.property) === -1)
+            component.props.series.push(chart.property);
+          if (typeof chart.color === 'object') {
+            if (chart.color.opacity) chart.opacity = chart.color.opacity;
+            chart.color = chart.color.color;
+          }
+        });
+      // convert xAxis and yAxis to axis and guide
+      const xAxis = component.props.xAxis;
+      if (xAxis) {
+        if (xAxis.key) {
+          if (!component.props.axis) component.props.axis = {};
+          component.props.axis.x = { property: xAxis.key };
+        }
+        // TODO: xAxis.labels -> granularity
+        if (xAxis.guide) {
+          if (!component.props.guide) component.props.guide = {};
+          component.props.guide.x = { granularity: 'coarse' };
+        }
+      }
+      delete component.props.xAxis;
+      const yAxis = component.props.yAxis;
+      if (yAxis) {
+        if (yAxis.key) {
+          if (!component.props.axis) component.props.axis = {};
+          component.props.axis.y = { property: xAxis.key };
+        }
+        // TODO: yAxis.labels -> granularity
+        if (yAxis.guide) {
+          if (!component.props.guide) component.props.guide = {};
+          component.props.guide.y = { granularity: 'coarse' };
+        }
+      }
+      delete component.props.yAxis;
+      // remove thickness
+      delete component.props.thickness;
+    });
+
+  design.version = 3.5;
 };

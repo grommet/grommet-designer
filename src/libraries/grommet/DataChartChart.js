@@ -18,12 +18,12 @@ export default ({ value, onChange, theme }) => {
         .map((item, i) => (
           <Box basis="xsmall" flex="grow" key={i}>
             <Box flex="grow">
-              <FormField label="key">
+              <FormField label="property">
                 <TextInput
-                  value={item.key || ''}
+                  value={item.property || ''}
                   onChange={event => {
                     const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].key = event.target.value;
+                    nextValue[i].property = event.target.value;
                     onChange(nextValue);
                   }}
                 />
@@ -40,36 +40,26 @@ export default ({ value, onChange, theme }) => {
                   }}
                 />
               </FormField>
-              <FormField label="color.color">
+              <FormField label="color">
                 <Select
                   options={colorOptions}
-                  value={(item.color && item.color.color) || ''}
+                  value={item.color || ''}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') {
-                      delete nextValue[i].color.color;
-                    } else
-                      nextValue[i].color = {
-                        ...(nextValue[i].color || {}),
-                        color: option,
-                      };
+                    if (option === 'undefined') delete nextValue[i].color;
+                    else nextValue[i].color = option;
                     onChange(nextValue);
                   }}
                 />
               </FormField>
-              <FormField label="color.opacity">
+              <FormField label="opacity">
                 <Select
                   options={['weak', 'medium', 'strong', 'undefined']}
-                  value={(item.color && item.color.opacity) || ''}
+                  value={item.opacity || ''}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') {
-                      delete nextValue[i].color.opacity;
-                    } else
-                      nextValue[i].color = {
-                        ...(nextValue[i].color || {}),
-                        opacity: option,
-                      };
+                    if (option === 'undefined') delete nextValue[i].opacity;
+                    else nextValue[i].opacity = option;
                     onChange(nextValue);
                   }}
                 />
