@@ -13,6 +13,7 @@ import {
   Clock,
   DataChart,
   DataTable,
+  DateInput,
   Distribution,
   DropButton,
   Footer,
@@ -769,6 +770,21 @@ export const components = {
       if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
       return result;
+    },
+  },
+  DateInput: {
+    component: DateInput,
+    name: 'DateInput',
+    defaultProps: {
+      format: 'mm/dd/yyyy',
+    },
+    properties: {
+      defaultValue: '',
+      disabled: false,
+      name: '',
+      inline: false,
+      format: '',
+      value: '',
     },
   },
   Form: {

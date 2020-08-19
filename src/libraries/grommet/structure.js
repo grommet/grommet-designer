@@ -48,6 +48,7 @@ export const structure = [
     components: [
       'CheckBox',
       'CheckBoxGroup',
+      'DateInput',
       'Form',
       'FormField',
       'MaskedInput',
