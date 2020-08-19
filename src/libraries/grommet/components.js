@@ -1075,7 +1075,7 @@ export const components = {
         { date: '2020-05-15', amount: 88 },
       ],
       gap: 'xsmall',
-      guide: { x: true, y: true },
+      guide: { x: { granularity: 'coarse' }, y: { granularity: 'coarse' } },
       series: ['date', 'amount'],
     },
     properties: {
