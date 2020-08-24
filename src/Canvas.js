@@ -73,10 +73,12 @@ const find = (data, path) => {
 const replace = (text, data, contextPath) =>
   (text || '').replace(/\{[^}]*\}/g, match => {
     const dataPath = parsePath(match.slice(1, match.length - 1));
-    return (
-      find(data, contextPath ? [...contextPath, ...dataPath] : dataPath) ||
-      match
+    const replaced = find(
+      data,
+      contextPath ? [...contextPath, ...dataPath] : dataPath,
     );
+    if (replaced !== undefined) return replaced;
+    return match;
   });
 
 const Canvas = ({
@@ -443,7 +445,7 @@ const Canvas = ({
         children = component.text;
       }
       // if (!children) children = <>&nbsp;</>; // breaks Markdown
-      if (!children) children = type.text;
+      if (children === undefined) children = type.text;
     } else if (type.text) {
       children = type.text;
     } else if (specialProps && specialProps.children) {

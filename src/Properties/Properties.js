@@ -374,15 +374,11 @@ export default ({
                 <TextAreaField
                   name="text"
                   componentId={component.id}
-                  value={
-                    component.text === undefined
-                      ? type.text
-                      : component.text || ''
-                  }
+                  value={component.text || ''}
                   onChange={value => {
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
-                    component.text = value;
+                    component.text = value === '' ? undefined : value;
                     setDesign(nextDesign);
                   }}
                 />
