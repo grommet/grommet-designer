@@ -143,7 +143,7 @@ export default ({ value, onChange }) => {
                 }}
               />
             </FormField>
-            {c.aggregate && (
+            {c.aggregate ? (
               <FormField>
                 <Box pad="small">
                   <CheckBox
@@ -159,7 +159,32 @@ export default ({ value, onChange }) => {
                   />
                 </Box>
               </FormField>
+            ) : (
+              <FormField label="footer">
+                <TextInput
+                  value={c.footer || ''}
+                  onChange={event => {
+                    const nextValue = JSON.parse(JSON.stringify(value));
+                    nextValue[i].footer = event.target.value;
+                    setColumns(nextValue);
+                    debounceOnChange(nextValue);
+                  }}
+                />
+              </FormField>
             )}
+            <FormField>
+              <Box pad="small">
+                <CheckBox
+                  label="pin"
+                  checked={!!c.pin || false}
+                  onChange={event => {
+                    const nextValue = JSON.parse(JSON.stringify(value));
+                    nextValue[i].pin = event.target.checked ? true : undefined;
+                    onChange(nextValue);
+                  }}
+                />
+              </Box>
+            </FormField>
           </Box>
           <Box direction="row" align="center" justify="between">
             <Button

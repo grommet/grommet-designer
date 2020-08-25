@@ -1163,9 +1163,11 @@ export const components = {
     properties: {
       columns: DataTableColumns,
       data: JsonData,
+      fill: [true, 'horizontal', 'vertical', false],
       groupBy: '',
       onClickRow: ['-link-'],
       pad: BoxPad,
+      pin: [true, 'header', 'footer', false],
       primaryKey: DataTablePrimaryKey,
       replace: false,
       resizeable: false,
