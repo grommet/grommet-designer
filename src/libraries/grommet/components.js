@@ -1161,6 +1161,16 @@ export const components = {
       ],
     },
     properties: {
+      background: {
+        header: {
+          color: ['-color-'],
+          opacity: ['weak', 'medium', 'strong'],
+        },
+        footer: {
+          color: ['-color-'],
+          opacity: ['weak', 'medium', 'strong'],
+        },
+      },
       columns: DataTableColumns,
       data: JsonData,
       fill: [true, 'horizontal', 'vertical', false],
