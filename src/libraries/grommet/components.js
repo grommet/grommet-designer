@@ -513,6 +513,17 @@ export const components = {
     component: Markdown,
     name: 'Markdown',
     text: 'Markdown',
+    properties: {
+      components: {
+        p: {
+          props: {
+            fill: false,
+            size: ['small', 'medium', 'large'],
+            textAlign: ['start', 'center', 'end'],
+          },
+        },
+      },
+    },
   },
   Accordion: {
     component: Accordion,
