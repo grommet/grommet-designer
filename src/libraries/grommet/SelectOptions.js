@@ -3,7 +3,6 @@ import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
 export default ({ design, selected, value, onChange }) => {
-  console.log('!!!', value);
   return (
     <Box gap="medium">
       {(value || []).map((item, i) => (
