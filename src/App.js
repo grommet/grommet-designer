@@ -30,10 +30,13 @@ const designerTheme = {
   },
 };
 
-const setNameParam = name => {
-  const search = `?name=${encodeURIComponent(name)}`;
-  const url = window.location.pathname + search;
-  window.history.replaceState(undefined, undefined, url);
+const setUrl = (design, method = 'push') => {
+  const url = design
+    ? `${window.location.pathname}?name=${encodeURIComponent(design.name)}`
+    : '/';
+  if (method === 'replace')
+    window.history.replaceState(undefined, undefined, url);
+  else window.history.pushState(undefined, undefined, url);
 };
 
 const App = () => {
@@ -42,13 +45,10 @@ const App = () => {
   const [auth, setAuth] = React.useState();
   const [password, setPassword] = React.useState();
   const [subsequent, setSubsequent] = React.useState();
-  const readOnly = React.useMemo(() => {
-    const params = getParams();
-    return params.mode === 'thumb';
-  }, []);
   const [design, setDesign] = React.useState();
   const [colorMode, setColorMode] = React.useState('dark');
   const [rtl, setRtl] = React.useState();
+  const [needSave, setNeedSave] = React.useState(0);
 
   // initialize analytics
   React.useEffect(() => {
@@ -84,7 +84,7 @@ const App = () => {
       },
       onError: message => setError(message),
     };
-    if (pathname === '/_new') options.fresh = true;
+    if (pathname === '/_new' || params.new) options.fresh = true;
     else if (params.id) options.id = params.id;
     else if (params.name) options.name = params.name;
     else {
@@ -108,25 +108,24 @@ const App = () => {
   }, []);
 
   React.useEffect(() => {
-    if (design && design.local && !readOnly) {
-      const timer = setTimeout(() => {
-        if (design.local) {
-          const params = getParams();
-          if (params.name !== design.name) setNameParam(design.name);
-          const stored = localStorage.getItem('designs');
-          const designs = stored ? JSON.parse(stored) : [];
-          const index = designs.indexOf(design.name);
-          if (index !== 0) {
-            const nextDesigns = [...designs];
-            if (index !== -1) nextDesigns.splice(index, 1);
-            nextDesigns.unshift(design.name);
-            localStorage.setItem('designs', JSON.stringify(nextDesigns));
-          }
+    const timer = setTimeout(() => {
+      if (needSave) {
+        const params = getParams();
+        if (params.name !== design.name) setUrl(design, 'replace');
+        const stored = localStorage.getItem('designs');
+        const designs = stored ? JSON.parse(stored) : [];
+        const index = designs.indexOf(design.name);
+        if (index !== 0) {
+          const nextDesigns = [...designs];
+          if (index !== -1) nextDesigns.splice(index, 1);
+          nextDesigns.unshift(design.name);
+          localStorage.setItem('designs', JSON.stringify(nextDesigns));
         }
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [design, readOnly]);
+        setNeedSave(0);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [design, needSave]);
 
   let content;
   if (error) {
@@ -211,12 +210,14 @@ const App = () => {
     content = (
       <Designer
         design={design}
-        setDesign={design => {
-          if (!design) {
-            setStart(true);
-            window.history.replaceState(undefined, undefined, '/');
-          }
+        chooseDesign={design => {
+          if (!design) setStart(true);
           setDesign(design);
+          setUrl(design);
+        }}
+        updateDesign={design => {
+          setDesign(design);
+          setNeedSave(needSave + 1);
         }}
       />
     );
@@ -235,7 +236,7 @@ const App = () => {
                 delete nextDesign.subsequentPublish;
               } else {
                 setDesign(nextDesign);
-                setNameParam(nextDesign.name);
+                setUrl(nextDesign);
               }
             },
           });
@@ -245,10 +246,8 @@ const App = () => {
           loadDesign({
             fresh: true,
             onLoad: nextDesign => {
-              // pick an unused initial name
-              nextDesign.name = 'new design';
               setDesign(nextDesign);
-              window.history.replaceState(undefined, undefined, '/_new');
+              window.history.pushState(undefined, undefined, '/?new');
             },
           });
         }}
@@ -264,7 +263,7 @@ const App = () => {
                 delete nextDesign.subsequentPublish;
               } else {
                 setDesign(nextDesign);
-                setNameParam(nextDesign.name);
+                setUrl(nextDesign);
               }
             },
           });

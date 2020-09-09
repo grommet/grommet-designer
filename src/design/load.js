@@ -21,6 +21,7 @@ export const loadDesign = ({
     const design = setupDesign(bare);
     upgradeDesign(design);
     design.local = true;
+    design.name = 'new design';
     onLoad(design);
     ReactGA.event({ category: 'switch', action: 'force new design' });
   } else if (id) {

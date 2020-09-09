@@ -48,14 +48,15 @@ const within = (node, container) => {
 
 const Tree = ({
   base,
+  chooseDesign,
   colorMode,
   design,
   imports,
   selected,
   theme,
-  setDesign,
   setMode,
   setSelected,
+  updateDesign,
   onUndo,
   onRedo,
 }) => {
@@ -80,7 +81,7 @@ const Tree = ({
   const [draggingScreen, setDraggingScreen] = React.useState();
   const [dropScreenTarget, setDropScreenTarget] = React.useState();
   const [adding, setAdding] = React.useState();
-  const [editing, setEditing] = React.useState(design.name === 'new design');
+  const [editing, setEditing] = React.useState();
   const [sharing, setSharing] = React.useState();
   const [copied, setCopied] = React.useState();
   const [deleting, setDeleting] = React.useState();
@@ -115,17 +116,17 @@ const Tree = ({
       if (parent) {
         const nextDesign = JSON.parse(JSON.stringify(design));
         nextDesign.components[parent.id].collapsed = false;
-        setDesign(nextDesign);
+        updateDesign(nextDesign);
       } else {
         // if ancestors aren't collapsed, perhaps the screen is?
         if (design.screens[selected.screen].collapsed) {
           const nextDesign = JSON.parse(JSON.stringify(design));
           nextDesign.screens[selected.screen].collapsed = false;
-          setDesign(nextDesign);
+          updateDesign(nextDesign);
         }
       }
     }
-  }, [design, selected, setDesign]);
+  }, [design, selected, updateDesign]);
 
   const moveChild = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -156,7 +157,7 @@ const Tree = ({
     const nextScreen = getScreenForComponent(nextDesign, dragging);
     setDragging(undefined);
     setDropTarget(undefined);
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
     setSelected({ screen: nextScreen, component: dragging });
   };
 
@@ -172,14 +173,14 @@ const Tree = ({
     );
     setDraggingScreen(undefined);
     setDropScreenTarget(undefined);
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
   };
 
   const toggleScreenCollapse = id => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const screen = nextDesign.screens[id];
     screen.collapsed = !screen.collapsed;
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
     const nextSelected = { ...selected };
     delete nextSelected.component;
     setSelected(nextSelected);
@@ -189,7 +190,7 @@ const Tree = ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[id];
     component.collapsed = !component.collapsed;
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
     setSelected({ ...selected, component: id });
   };
 
@@ -237,7 +238,7 @@ const Tree = ({
             copied.component,
             selected.component,
           );
-          setDesign(nextDesign);
+          updateDesign(nextDesign);
           setSelected({ ...selected, component: newId });
         } else {
           if (navigator.clipboard && navigator.clipboard.readText) {
@@ -254,7 +255,7 @@ const Tree = ({
               });
               insertComponent({ nextDesign, libraries, selected, id: newId });
 
-              setDesign(nextDesign);
+              updateDesign(nextDesign);
               setSelected({ ...selected, component: newId });
             });
           }
@@ -519,7 +520,7 @@ const Tree = ({
                     };`,
                     onClick: () => setMode('comments'),
                   },
-                  { label: 'close', onClick: () => setDesign(undefined) },
+                  { label: 'close', onClick: () => chooseDesign(undefined) },
                   { label: 'delete ...', onClick: () => setDeleting(true) },
                 ]}
               >
@@ -575,7 +576,7 @@ const Tree = ({
                   onClick={() => {
                     localStorage.removeItem(`${design.name}--state`);
                     localStorage.removeItem(design.name);
-                    setDesign(undefined);
+                    chooseDesign(undefined);
                   }}
                 />
               </Box>
@@ -587,7 +588,7 @@ const Tree = ({
               imports={imports}
               theme={theme}
               colorMode={colorMode}
-              setDesign={setDesign}
+              setDesign={updateDesign}
               onClose={() => setSharing(false)}
             />
           )}
@@ -597,7 +598,7 @@ const Tree = ({
               imports={imports}
               base={base}
               selected={selected}
-              setDesign={setDesign}
+              setDesign={updateDesign}
               setSelected={setSelected}
               onClose={() => setAdding(false)}
             />
@@ -606,7 +607,7 @@ const Tree = ({
             <DesignSettings
               design={design}
               theme={theme}
-              setDesign={setDesign}
+              setDesign={updateDesign}
               onClose={() => setEditing(false)}
             />
           )}

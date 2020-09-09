@@ -19,7 +19,7 @@ const defaultImports = [
   { name: designerLibrary.name, library: designerLibrary },
 ];
 
-const Designer = ({ colorMode, design, setDesign }) => {
+const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   const responsive = React.useContext(ResponsiveContext);
   const [selected, setSelected] = React.useState({});
   const [imports, setImports] = React.useState(defaultImports);
@@ -195,11 +195,13 @@ const Designer = ({ colorMode, design, setDesign }) => {
   }, [design, selected]);
 
   const changeDesign = design => {
+    // We are trying to change a published design when we have a local
+    // copy with the same name. Need the user to confirm.
     if (design && !design.local && localStorage.getItem(design.name)) {
       setConfirmReplace(design);
     } else {
       if (design) design.local = true;
-      setDesign(design);
+      updateDesign(design);
     }
   };
 
@@ -219,7 +221,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
             publish({
               design,
               ...identity,
-              onChange: setDesign,
+              onChange: updateDesign,
               onError: error => console.error(error),
             });
           } else {
@@ -228,22 +230,22 @@ const Designer = ({ colorMode, design, setDesign }) => {
         }
       }
     },
-    [design, mode, setDesign],
+    [design, mode, updateDesign],
   );
 
   const onUndo = React.useCallback(() => {
     const nextChangeIndex = Math.min(changeIndex + 1, changes.length - 1);
     const nextDesign = changes[nextChangeIndex];
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
     setChangeIndex(nextChangeIndex);
-  }, [changes, changeIndex, setDesign]);
+  }, [changes, changeIndex, updateDesign]);
 
   const onRedo = React.useCallback(() => {
     const nextChangeIndex = Math.max(changeIndex - 1, 0);
     const nextDesign = changes[nextChangeIndex];
-    setDesign(nextDesign);
+    updateDesign(nextDesign);
     setChangeIndex(nextChangeIndex);
-  }, [changes, changeIndex, setDesign]);
+  }, [changes, changeIndex, updateDesign]);
 
   let columns;
   if (responsive === 'small' || mode === 'preview') columns = 'flex';
@@ -272,9 +274,10 @@ const Designer = ({ colorMode, design, setDesign }) => {
             selected={selected}
             theme={theme}
             colorMode={colorMode}
-            setDesign={changeDesign}
+            chooseDesign={chooseDesign}
             setMode={setMode}
             setSelected={setSelected}
+            updateDesign={changeDesign}
             onRedo={changeIndex > 0 && onRedo}
             onUndo={changeIndex < changes.length - 1 && onUndo}
           />
@@ -286,7 +289,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
             imports={imports}
             selected={selected}
             mode={mode}
-            setDesign={changeDesign}
+            updateDesign={changeDesign}
             setSelected={setSelected}
             theme={theme}
           />
@@ -325,7 +328,7 @@ const Designer = ({ colorMode, design, setDesign }) => {
             design={design}
             nextDesign={confirmReplace}
             onDone={nextDesign => {
-              if (nextDesign) setDesign(nextDesign);
+              if (nextDesign) updateDesign(nextDesign);
               setConfirmReplace(undefined);
             }}
           />

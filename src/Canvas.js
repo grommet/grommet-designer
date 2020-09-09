@@ -503,7 +503,14 @@ const Canvas = ({
         }
         if (specialProps.onClick) specialProps.onClick(event);
       };
-      selectProps.focusIndicator = false;
+      // This causes problems when FormField checks for
+      // focusIndicator === undefined for its children.
+      if (
+        mergedProps.focusIndicator === undefined &&
+        (getParent(design, id) || {}).type !== 'grommet.FormField'
+      ) {
+        selectProps.focusIndicator = false;
+      }
     }
 
     if (!type.component) {
