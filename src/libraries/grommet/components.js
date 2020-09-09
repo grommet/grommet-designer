@@ -769,7 +769,15 @@ export const components = {
       direction: BoxDirection,
       disabled: false,
       gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+        options: [
+          'none',
+          'xxsmall',
+          'xsmall',
+          'small',
+          'medium',
+          'large',
+          'xlarge',
+        ],
       }),
       name: '',
       options: SelectOptions,
@@ -869,7 +877,15 @@ export const components = {
       direction: BoxDirection,
       disabled: false,
       gap: EdgeSizeOptions({
-        options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+        options: [
+          'none',
+          'xxsmall',
+          'xsmall',
+          'small',
+          'medium',
+          'large',
+          'xlarge',
+        ],
       }),
       name: '',
       options: SelectOptions,

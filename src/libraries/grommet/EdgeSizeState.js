@@ -4,7 +4,8 @@ import InlineOption from './InlineOption';
 
 const edgeCoords = ({ direction = 'column', size }) => {
   let b;
-  if (size === 'xxsmall') b = [10, 14];
+  if (size === 'none') b = [12, 12];
+  else if (size === 'xxsmall') b = [10, 14];
   else if (size === 'xsmall') b = [9, 15];
   else if (size === 'small') b = [8, 16];
   else if (size === 'medium') b = [7, 17];

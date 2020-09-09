@@ -2,43 +2,43 @@
 
 exports[`App empty 1`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 hukInu"
+  class="StyledGrommet-sc-19lkkz7-0 kYboWV"
   style="height: 100%;"
 >
   <div
-    class="StyledBox-sc-13pk1d4-0 wqCVw"
+    class="StyledBox-sc-13pk1d4-0 kSXLWL"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 kefwRz"
+      class="StyledBox-sc-13pk1d4-0 eMpUKs"
     >
       <h1
-        class="StyledHeading-sc-1rdh4aw-0 hbIQiB"
+        class="StyledHeading-sc-1rdh4aw-0 dlExXi"
       >
         grommet designer
       </h1>
       <p
-        class="StyledParagraph-tbetod-0 bMJYFx"
+        class="StyledParagraph-tbetod-0 pYjWe"
       >
         design with grommet components
       </p>
       <a
-        class="StyledButton-sc-323bzc-0 iaJSya"
+        class="StyledButton-sc-323bzc-0 pHpEp"
         href="/_new"
         title="create a new design"
       >
         Create
       </a>
       <div
-        class="StyledBox-sc-13pk1d4-0 jwQkzn"
+        class="StyledBox-sc-13pk1d4-0 bXEBrY"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 cOfaUF"
+        class="StyledBox-sc-13pk1d4-0 EHobS"
       >
         <div
-          class="StyledStack-ajspsk-0 liEjfH"
+          class="StyledStack-ajspsk-0 exHXcQ"
         >
           <div
-            class="StyledStack__StyledStackLayer-ajspsk-1 gzpmgV"
+            class="StyledStack__StyledStackLayer-ajspsk-1 lgopjm"
           >
             <input
               accept=".json"
@@ -47,13 +47,13 @@ exports[`App empty 1`] = `
             />
           </div>
           <div
-            class="StyledStack__StyledStackLayer-ajspsk-1 ifGbDg"
+            class="StyledStack__StyledStackLayer-ajspsk-1 kZVLDz"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 eypBJc"
+              class="StyledBox-sc-13pk1d4-0 gaPArf"
             >
               <span
-                class="StyledText-sc-1sadyjn-0 kTzped"
+                class="StyledText-sc-1sadyjn-0 gFNqVi"
               >
                 Import - drop design file here
               </span>
@@ -62,32 +62,32 @@ exports[`App empty 1`] = `
         </div>
       </div>
       <div
-        class="StyledBox-sc-13pk1d4-0 xFYsu"
+        class="StyledBox-sc-13pk1d4-0 cfvZMd"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 bIdaiR"
+          class="StyledBox-sc-13pk1d4-0 iSmarO"
           id="themeMode"
         >
           <label
-            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 bFclck"
+            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 fdhZPr"
             for="themeMode-dark"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 haldyp StyledRadioButton-g1f6ld-5 dUxqYi"
+              class="StyledBox-sc-13pk1d4-0 iXCcFC StyledRadioButton-g1f6ld-5 gFvNRB"
             >
               <input
                 checked=""
-                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 hBCEfd"
+                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 fcnQDm"
                 id="themeMode-dark"
                 name="themeMode"
                 type="radio"
                 value="dark"
               />
               <div
-                class="StyledBox-sc-13pk1d4-0 fPePeX StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 GRgRM"
+                class="StyledBox-sc-13pk1d4-0 fTduGg StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 csMKZz"
               >
                 <svg
-                  class="StyledRadioButton__StyledRadioButtonIcon-g1f6ld-3 gItfod"
+                  class="StyledRadioButton__StyledRadioButtonIcon-g1f6ld-3 dMaXBq"
                   preserveAspectRatio="xMidYMid meet"
                   viewBox="0 0 24 24"
                 >
@@ -100,54 +100,54 @@ exports[`App empty 1`] = `
               </div>
             </div>
             <span
-              class="StyledRadioButton__StyledRadioButtonLabel-g1f6ld-2 gMQgqV"
+              class="StyledRadioButton__StyledRadioButtonLabel-g1f6ld-2"
             >
               dark
             </span>
           </label>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 cxqgXz"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
           />
           <label
-            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 bFclck"
+            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 fdhZPr"
             for="themeMode-light"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 haldyp StyledRadioButton-g1f6ld-5 dUxqYi"
+              class="StyledBox-sc-13pk1d4-0 iXCcFC StyledRadioButton-g1f6ld-5 gFvNRB"
             >
               <input
-                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 hBCEfd"
+                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 fcnQDm"
                 id="themeMode-light"
                 name="themeMode"
                 type="radio"
                 value="light"
               />
               <div
-                class="StyledBox-sc-13pk1d4-0 hfCYar StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 GRgRM"
+                class="StyledBox-sc-13pk1d4-0 ixzPvs StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 csMKZz"
               />
             </div>
             <span
-              class="StyledRadioButton__StyledRadioButtonLabel-g1f6ld-2 gMQgqV"
+              class="StyledRadioButton__StyledRadioButtonLabel-g1f6ld-2"
             >
               light
             </span>
           </label>
         </div>
         <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 cxqgXz"
+          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
         />
         <label
-          class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 qTBiO"
+          class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 bNddOF"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 fuEVwc StyledCheckBox-sc-1dbk5ju-6 CBoMo"
+            class="StyledBox-sc-13pk1d4-0 hxGMLz StyledCheckBox-sc-1dbk5ju-6 iilsmH"
           >
             <input
-              class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 dXmyaG"
+              class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 eFVdah"
               type="checkbox"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 ikQYrf StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 iEciRS"
+              class="StyledBox-sc-13pk1d4-0 exVBlc StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 coocwN"
             />
           </div>
           <span>
@@ -157,44 +157,44 @@ exports[`App empty 1`] = `
       </div>
     </div>
     <div
-      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 fuwziC"
+      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iuvxmB"
     />
     <div
-      class="StyledBox-sc-13pk1d4-0 fUVYjS"
+      class="StyledBox-sc-13pk1d4-0 afzAF"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dAiQgr"
+        class="StyledBox-sc-13pk1d4-0 bgDWNs"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 cfyNvW"
+          class="StyledBox-sc-13pk1d4-0 ktnBXV"
         >
           <h2
-            class="StyledHeading-sc-1rdh4aw-0 jMKEAN"
+            class="StyledHeading-sc-1rdh4aw-0 heSbru"
           >
             tutorials
           </h2>
         </header>
         <a
-          class="StyledButton-sc-323bzc-0 jFJBys"
+          class="StyledButton-sc-323bzc-0 kUDdtj"
           href="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
           target="_blank"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 bFwQzJ"
+            class="StyledBox-sc-13pk1d4-0 gAsOLC"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 nairh"
+              class="StyledBox-sc-13pk1d4-0 dakYuC"
             >
               <img
-                class="StyledImage-ey4zx9-0 cHpGKY"
+                class="StyledImage-ey4zx9-0 dfToQT"
                 src="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png"
               />
             </div>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gKqBBs"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
             />
             <span
-              class="StyledText-sc-1sadyjn-0 kxRdiZ"
+              class="StyledText-sc-1sadyjn-0 gTnUNO"
             >
               introduction
             </span>
@@ -202,57 +202,57 @@ exports[`App empty 1`] = `
         </a>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kDebtf"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 qCliw"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 gzfjUM"
+        class="StyledBox-sc-13pk1d4-0 hrGwMH"
       >
         <h2
-          class="StyledHeading-sc-1rdh4aw-0 jMKEAN"
+          class="StyledHeading-sc-1rdh4aw-0 heSbru"
         >
           inspiration
         </h2>
         <div
-          class="StyledBox-sc-13pk1d4-0 fJSHyj"
+          class="StyledBox-sc-13pk1d4-0 gbJIRs"
         >
           <a
-            class="StyledButton-sc-323bzc-0 jFJBys"
+            class="StyledButton-sc-323bzc-0 kUDdtj"
             href="https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com&mode=edit"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 bFwQzJ"
+              class="StyledBox-sc-13pk1d4-0 gAsOLC"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 nairh"
+                class="StyledBox-sc-13pk1d4-0 dakYuC"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gKqBBs"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 kxRdiZ"
+                class="StyledText-sc-1sadyjn-0 gTnUNO"
               >
                 HPE design system
               </span>
             </div>
           </a>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 cxqgXz"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
           />
           <a
-            class="StyledButton-sc-323bzc-0 jFJBys"
+            class="StyledButton-sc-323bzc-0 kUDdtj"
             href="https://designer.grommet.io/?id=Card-eric-soderberg-hpe-com&mode=edit"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 bFwQzJ"
+              class="StyledBox-sc-13pk1d4-0 gAsOLC"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 nairh"
+                class="StyledBox-sc-13pk1d4-0 dakYuC"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gKqBBs"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 kxRdiZ"
+                class="StyledText-sc-1sadyjn-0 gTnUNO"
               >
                 Card
               </span>
@@ -267,43 +267,43 @@ exports[`App empty 1`] = `
 
 exports[`App empty 2`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 hukInu"
+  class="StyledGrommet-sc-19lkkz7-0 kYboWV"
   style="height: 100%;"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 fKQCtW"
+    class="StyledGrid-sc-1wofa1l-0 cdqoKR"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 hRkfHm"
+      class="StyledBox-sc-13pk1d4-0 diEokF"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dtwQir"
+        class="StyledBox-sc-13pk1d4-0 cclhNk"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 gHyeln"
+          class="StyledBox-sc-13pk1d4-0 jmHkZc"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 jwQkzn"
+            class="StyledBox-sc-13pk1d4-0 bXEBrY"
           >
             <button
               aria-label="Open Menu"
-              class="StyledButton-sc-323bzc-0 hMRUyI"
+              class="StyledButton-sc-323bzc-0 bjIYXH"
               type="button"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 gMqsgw"
+                class="StyledBox-sc-13pk1d4-0 gzPhSz"
               >
                 <span
-                  class="StyledText-sc-1sadyjn-0 gWIGcR"
+                  class="StyledText-sc-1sadyjn-0 iAwRee"
                 >
                   new design
                 </span>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffjnxm"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 bZqeeV"
                 />
                 <svg
                   aria-label="FormDown"
-                  class="StyledIcon-ofa7kd-0 juPKBf"
+                  class="StyledIcon-ofa7kd-0 blvBMo"
                   viewBox="0 0 24 24"
                 >
                   <polyline
@@ -317,17 +317,17 @@ exports[`App empty 2`] = `
             </button>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 bBymtc"
+            class="StyledBox-sc-13pk1d4-0 hXDOLL"
           >
             <button
-              class="StyledButton-sc-323bzc-0 jqoewU"
+              class="StyledButton-sc-323bzc-0 cojSTT"
               disabled=""
               title="undo last change"
               type="button"
             >
               <svg
                 aria-label="Undo"
-                class="StyledIcon-ofa7kd-0 bwZhlv"
+                class="StyledIcon-ofa7kd-0 gAiAzc"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -336,14 +336,14 @@ exports[`App empty 2`] = `
               </svg>
             </button>
             <button
-              class="StyledButton-sc-323bzc-0 jqoewU"
+              class="StyledButton-sc-323bzc-0 cojSTT"
               disabled=""
               title="redo last change"
               type="button"
             >
               <svg
                 aria-label="Redo"
-                class="StyledIcon-ofa7kd-0 bwZhlv"
+                class="StyledIcon-ofa7kd-0 gAiAzc"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -352,13 +352,13 @@ exports[`App empty 2`] = `
               </svg>
             </button>
             <button
-              class="StyledButton-sc-323bzc-0 WEFIC"
+              class="StyledButton-sc-323bzc-0 jdPOWd"
               title="add a component"
               type="button"
             >
               <svg
                 aria-label="Add"
-                class="StyledIcon-ofa7kd-0 bwZhlv"
+                class="StyledIcon-ofa7kd-0 gAiAzc"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -373,33 +373,33 @@ exports[`App empty 2`] = `
         </header>
       </div>
       <div
-        class="StyledBox-sc-13pk1d4-0 jNmCFN"
+        class="StyledBox-sc-13pk1d4-0 idlpba"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 gzfjUM"
+          class="StyledBox-sc-13pk1d4-0 hrGwMH"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 gzfjUM"
+            class="StyledBox-sc-13pk1d4-0 hrGwMH"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 kzQMbE"
+              class="StyledBox-sc-13pk1d4-0 bzptCL"
             />
             <div
-              class="StyledStack-ajspsk-0 liEjfH"
+              class="StyledStack-ajspsk-0 exHXcQ"
             >
               <div
-                class="StyledStack__StyledStackLayer-ajspsk-1 eFfYoG"
+                class="StyledStack__StyledStackLayer-ajspsk-1 egnOtZ"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 bjcCRH"
+                  class="StyledButton-sc-323bzc-0 fJIbAs"
                   draggable="true"
                   type="button"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 iuCECX"
+                    class="StyledBox-sc-13pk1d4-0 doOJqM"
                   >
                     <h3
-                      class="StyledHeading-sc-1rdh4aw-0 gQA-DTd"
+                      class="StyledHeading-sc-1rdh4aw-0 hHaZyW"
                     >
                       Screen
                     </h3>
@@ -407,15 +407,15 @@ exports[`App empty 2`] = `
                 </button>
               </div>
               <div
-                class="StyledStack__StyledStackLayer-ajspsk-1 AJRUK"
+                class="StyledStack__StyledStackLayer-ajspsk-1 cUagjN"
               >
                 <button
-                  class="StyledButton-sc-323bzc-0 fKcmhi"
+                  class="StyledButton-sc-323bzc-0 dYCPbF"
                   type="button"
                 >
                   <svg
                     aria-label="FormDown"
-                    class="StyledIcon-ofa7kd-0 kPaBKb"
+                    class="StyledIcon-ofa7kd-0 ipcVEU"
                     viewBox="0 0 24 24"
                   >
                     <polyline
@@ -429,66 +429,66 @@ exports[`App empty 2`] = `
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 gzfjUM"
+              class="StyledBox-sc-13pk1d4-0 hrGwMH"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 bFwQzJ"
+                class="StyledBox-sc-13pk1d4-0 gAsOLC"
               >
                 <div
-                  class="StyledStack-ajspsk-0 liEjfH"
+                  class="StyledStack-ajspsk-0 exHXcQ"
                 >
                   <div
-                    class="StyledStack__StyledStackLayer-ajspsk-1 eFfYoG"
+                    class="StyledStack__StyledStackLayer-ajspsk-1 egnOtZ"
                   >
                     <button
-                      class="StyledButton-sc-323bzc-0 bjcCRH"
+                      class="StyledButton-sc-323bzc-0 fJIbAs"
                       draggable="true"
                       type="button"
                     >
                       <div
-                        class="StyledBox-sc-13pk1d4-0 gFziDY"
+                        class="StyledBox-sc-13pk1d4-0 kQFAqH"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 eGyAkH"
+                          class="StyledText-sc-1sadyjn-0 kiCFCE"
                         >
                           Box
                         </span>
                         <div
-                          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 cxqgXz"
+                          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
                         />
                         <span
-                          class="StyledText-sc-1sadyjn-0 hObItf"
+                          class="StyledText-sc-1sadyjn-0 bhoQcU"
                         />
                       </div>
                     </button>
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 kzQMbE"
+                  class="StyledBox-sc-13pk1d4-0 bzptCL"
                 />
               </div>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 kzQMbE"
+              class="StyledBox-sc-13pk1d4-0 bzptCL"
             />
           </div>
         </div>
       </div>
     </div>
     <div
-      class="StyledGrommet-sc-19lkkz7-0 dlDmwu"
+      class="StyledGrommet-sc-19lkkz7-0 cBoAiB"
       style="height: 100%;"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 exGNON"
+        class="StyledBox-sc-13pk1d4-0 fwlBWq"
         draggable="true"
         tabindex="0"
       >
         <div
-          class="sc-AxirZ eUMBiI"
+          class="sc-gtssRu cyuwDL"
         >
           <p
-            class="StyledParagraph-tbetod-0 kvXHGB"
+            class="StyledParagraph-tbetod-0 hXkKRa"
           >
             This Box is currently empty. Add components to it, so it can do its layout thing.
           </p>
@@ -496,31 +496,31 @@ exports[`App empty 2`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 duXuZS"
+      class="StyledBox-sc-13pk1d4-0 gGobhd"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 gHyeln"
+        class="StyledBox-sc-13pk1d4-0 jmHkZc"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 eEnzqa"
+          class="StyledBox-sc-13pk1d4-0 kingDJ"
         >
           <h2
-            class="StyledHeading-sc-1rdh4aw-0 IMaVO"
+            class="StyledHeading-sc-1rdh4aw-0 keEJit"
           >
             Screen
           </h2>
         </div>
         <div
-          class="StyledBox-sc-13pk1d4-0 bBymtc"
+          class="StyledBox-sc-13pk1d4-0 hXDOLL"
         >
           <button
-            class="StyledButton-sc-323bzc-0 WEFIC"
+            class="StyledButton-sc-323bzc-0 jdPOWd"
             title="duplicate"
             type="button"
           >
             <svg
               aria-label="Duplicate"
-              class="StyledIcon-ofa7kd-0 bwZhlv"
+              class="StyledIcon-ofa7kd-0 gAiAzc"
               viewBox="0 0 24 24"
             >
               <path
@@ -534,30 +534,30 @@ exports[`App empty 2`] = `
         </div>
       </div>
       <div
-        class="StyledBox-sc-13pk1d4-0 jNmCFN"
+        class="StyledBox-sc-13pk1d4-0 idlpba"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 gzfjUM"
+          class="StyledBox-sc-13pk1d4-0 hrGwMH"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 cGyRWa"
+            class="StyledBox-sc-13pk1d4-0 dMrjzJ"
           >
             <label
-              class="StyledBox-sc-13pk1d4-0 kFVKJJ"
+              class="StyledBox-sc-13pk1d4-0 gilRmi"
               for="name"
             >
               <span
-                class="StyledText-sc-1sadyjn-0 hUokoe"
+                class="StyledText-sc-1sadyjn-0 PRJF"
               >
                 name
               </span>
             </label>
             <div
-              class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 ksQrmr"
+              class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 flNVco"
             >
               <input
                 autocomplete="off"
-                class="StyledTextInput-sc-1x30a0s-0 hTkwhZ"
+                class="StyledTextInput-sc-1x30a0s-0 ffIfTu"
                 id="name"
                 name="name"
                 style="text-align: end;"
@@ -566,24 +566,24 @@ exports[`App empty 2`] = `
             </div>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 cGyRWa"
+            class="StyledBox-sc-13pk1d4-0 dMrjzJ"
           >
             <label
-              class="StyledBox-sc-13pk1d4-0 kFVKJJ"
+              class="StyledBox-sc-13pk1d4-0 gilRmi"
               for="path"
             >
               <span
-                class="StyledText-sc-1sadyjn-0 hUokoe"
+                class="StyledText-sc-1sadyjn-0 PRJF"
               >
                 path
               </span>
             </label>
             <div
-              class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 ksQrmr"
+              class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 flNVco"
             >
               <input
                 autocomplete="off"
-                class="StyledTextInput-sc-1x30a0s-0 hTkwhZ"
+                class="StyledTextInput-sc-1x30a0s-0 ffIfTu"
                 id="path"
                 name="path"
                 style="text-align: end;"
