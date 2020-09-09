@@ -3,6 +3,7 @@ import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
 export default ({ design, selected, value, onChange }) => {
+  console.log('!!!', value);
   return (
     <Box gap="medium">
       {(value || []).map((item, i) => (
@@ -32,7 +33,11 @@ export default ({ design, selected, value, onChange }) => {
         hoverIndicator
         onClick={() => {
           const nextValue = JSON.parse(JSON.stringify(value || []));
-          nextValue.push('');
+          // start with a reasonable value, we do this so components like
+          // CheckBoxGroup don't have duplicate key issues
+          let suffix = 1;
+          while (nextValue.includes(`option ${suffix}`)) suffix += 1;
+          nextValue.push(`option ${suffix}`);
           onChange(nextValue);
         }}
       />
