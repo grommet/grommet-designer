@@ -27,8 +27,22 @@ const themes = [
     packageName: 'grommet-theme-hpe',
     packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
     jsUrl:
-      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe.min.js',
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-2.min.js',
   },
+  {
+    name: 'hpe-1',
+    packageName: 'grommet-theme-hpe',
+    packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/v1.0.5',
+    jsUrl:
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-1.min.js',
+  },
+  {
+    label: 'hpe-0',
+    packageName: 'grommet-theme-hpe',
+    designerUrl:
+      'https://theme-designer.grommet.io/?id=HPE-0-eric-soderberg-hpe-com',
+  },
+  // deprecated, upgrade designs to use v2
   {
     label: 'hpe-next',
     name: 'hpe',
@@ -37,12 +51,6 @@ const themes = [
       'https://github.com/grommet/grommet-theme-hpe/tarball/NEXT-stable',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-next.min.js',
-  },
-  {
-    label: 'hpe-0',
-    packageName: 'grommet-theme-hpe',
-    designerUrl:
-      'https://theme-designer.grommet.io/?id=HPE-0-eric-soderberg-hpe-com',
   },
 ];
 
