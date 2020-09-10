@@ -7,6 +7,13 @@ const exp = new RegExp(/^[A-Z]/);
 export const names = Object.keys(icons).filter(n => exp.test(n));
 export const aliases = metadata;
 
+// map size to align with font sizes better, empirically determined,
+// maybe work into grommet someday?
+const sizes = {
+  small: '20px',
+  large: '32px',
+};
+
 export const SelectLabel = ({ selected, value }) => (
   <Box pad="small" direction="row" gap="small" align="center">
     <Icon icon={value} />
@@ -14,9 +21,9 @@ export const SelectLabel = ({ selected, value }) => (
   </Box>
 );
 
-const Icon = ({ icon, ...rest }) => {
+const Icon = ({ icon, size, ...rest }) => {
   const Icon = icons[icon] || icons.Blank;
-  return <Icon {...rest} />;
+  return <Icon {...rest} size={size ? sizes[size] || size : undefined} />;
 };
 
 export default Icon;

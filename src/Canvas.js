@@ -386,7 +386,10 @@ const Canvas = ({
           component.type !== 'Icon' &&
           property.includes('-Icon-')
         ) {
-          specialProps[prop] = <Icon icon={mergedProps[prop]} />;
+          // pass along size so we can adjust the icon size as well
+          specialProps[prop] = (
+            <Icon icon={mergedProps[prop]} size={component.props.size} />
+          );
         }
         if (
           typeof property === 'string' &&
