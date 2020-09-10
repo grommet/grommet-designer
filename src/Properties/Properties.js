@@ -24,6 +24,7 @@ import ComponentCode from './ComponentCode';
 import {
   addPropertyComponent,
   deleteComponent,
+  disconnectReference,
   duplicateComponent,
   getLinkOptions,
   getParent,
@@ -153,6 +154,24 @@ export default ({
     ReactGA.event({ category: 'switch', action: 'new design from' });
   };
 
+  const disconnect = () => {
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const newId = disconnectReference({
+      nextDesign,
+      id: selected.component,
+      imports,
+    });
+    if (newId) {
+      setDesign(nextDesign);
+      setSelected({ ...selected, component: newId });
+
+      ReactGA.event({
+        category: 'edit',
+        action: 'disconnect reference',
+      });
+    }
+  };
+
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const newId = duplicateComponent(nextDesign, selected.component);
@@ -254,6 +273,20 @@ export default ({
         </Fragment>
       ));
 
+  const menuItems = [
+    { label: 'code', onClick: () => setShowCode(true) },
+    { label: 'new design from this', onClick: newDesignFrom },
+    component.type === 'designer.Reference'
+      ? { label: 'disconnect Reference', onClick: disconnect }
+      : undefined,
+    { label: 'reset', onClick: reset },
+    {
+      label: `help on ${type.name}`,
+      href: type.documentation,
+      target: '_blank',
+    },
+  ].filter(i => i);
+
   return (
     <Keyboard target="document" onKeyDown={onKey}>
       <Box border="left">
@@ -267,16 +300,7 @@ export default ({
                 </Text>
               }
               dropProps={{ align: { top: 'bottom', left: 'left' } }}
-              items={[
-                { label: 'code', onClick: () => setShowCode(true) },
-                { label: 'new design from this', onClick: newDesignFrom },
-                { label: 'reset', onClick: reset },
-                {
-                  label: `help on ${type.name}`,
-                  href: type.documentation,
-                  target: '_blank',
-                },
-              ]}
+              items={menuItems}
             />
             {showCode && (
               <ComponentCode

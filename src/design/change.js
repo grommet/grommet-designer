@@ -1,4 +1,4 @@
-import { getComponentType } from '../utils';
+import { getComponentType, getReferenceDesign } from '../utils';
 import { bare } from './bare';
 import { canParent, getParent, slugify } from './get';
 import { upgradeDesign } from './upgrade';
@@ -323,4 +323,29 @@ export const insertComponent = ({
     const screen = nextDesign.screens[selected.screen];
     screen.root = id;
   }
+};
+
+export const disconnectReference = ({ id, imports, nextDesign }) => {
+  const component = nextDesign.components[id];
+  const parent = getParent(nextDesign, component.id);
+
+  // get component being referenced
+  const referenceDesign = getReferenceDesign(imports, component);
+  const referenceComponent = (referenceDesign || nextDesign).components[
+    component.props.component
+  ];
+  if (referenceComponent) {
+    const newId = copyComponent({
+      nextDesign,
+      templateDesign: referenceDesign || nextDesign,
+      id: referenceComponent.id,
+    });
+    // copiedComponent has been inserted into the nextDesign already.
+    // Place it to where this component is.
+    const index = parent.children.indexOf(id);
+    parent.children.splice(index + 1, 0, newId);
+    deleteComponent(nextDesign, id);
+    return newId;
+  }
+  return undefined;
 };
