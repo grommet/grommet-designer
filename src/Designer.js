@@ -289,7 +289,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
             imports={imports}
             selected={selected}
             mode={mode}
-            updateDesign={changeDesign}
+            setDesign={changeDesign}
             setSelected={setSelected}
             theme={theme}
           />
