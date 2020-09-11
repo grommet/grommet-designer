@@ -21,6 +21,7 @@ import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
+import CopyPropertiesFrom from './CopyPropertiesFrom';
 import {
   addPropertyComponent,
   deleteComponent,
@@ -71,6 +72,7 @@ export default ({
     [design, libraries, selected],
   );
   const [showCode, setShowCode] = useState();
+  const [copyFrom, setCopyFrom] = useState();
   const [style, setStyle] = useState(
     component.style ? JSON.stringify(component.style, null, 2) : '',
   );
@@ -274,8 +276,12 @@ export default ({
       ));
 
   const menuItems = [
-    { label: 'code', onClick: () => setShowCode(true) },
-    { label: 'new design from this', onClick: newDesignFrom },
+    { label: 'show code ...', onClick: () => setShowCode(true) },
+    { label: 'copy properties from ...', onClick: () => setCopyFrom(true) },
+    {
+      label: `create new design using this ${type.name}`,
+      onClick: newDesignFrom,
+    },
     component.type === 'designer.Reference'
       ? { label: 'disconnect Reference', onClick: disconnect }
       : undefined,
@@ -309,6 +315,14 @@ export default ({
                 imports={imports}
                 theme={theme}
                 onDone={() => setShowCode(false)}
+              />
+            )}
+            {copyFrom && (
+              <CopyPropertiesFrom
+                component={component}
+                design={design}
+                setDesign={setDesign}
+                onDone={() => setCopyFrom(false)}
               />
             )}
           </Box>
