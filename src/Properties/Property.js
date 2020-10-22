@@ -7,6 +7,7 @@ import IconProperty from './IconProperty';
 import LinkProperty from './LinkProperty';
 import NumberProperty from './NumberProperty';
 import ObjectProperty from './ObjectProperty';
+import OptionsProperty from './OptionsProperty';
 import ReferenceProperty from './ReferenceProperty';
 import StringProperty from './StringProperty';
 
@@ -30,10 +31,35 @@ const Property = React.forwardRef(
       if (property.includes('-reference-')) {
         return <ReferenceProperty ref={ref} value={value} {...rest} />;
       }
+      if (
+        property.some((p) => typeof p === 'string' && p.includes('-property-'))
+      ) {
+        const [, from] = property[0].split(' ');
+        return (
+          <OptionsProperty
+            ref={ref}
+            multiple
+            value={value}
+            options={rest.props[from]}
+            {...rest}
+          />
+        );
+      }
       return (
         <ArrayProperty ref={ref} options={property} value={value} {...rest} />
       );
     } else if (typeof property === 'string') {
+      if (property.includes('-property-')) {
+        const [, from] = property.split(' ');
+        return (
+          <OptionsProperty
+            ref={ref}
+            value={value}
+            options={rest.props[from]}
+            {...rest}
+          />
+        );
+      }
       return <StringProperty ref={ref} value={value} {...rest} />;
     } else if (typeof property === 'number') {
       return <NumberProperty ref={ref} value={value} {...rest} />;

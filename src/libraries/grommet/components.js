@@ -246,7 +246,7 @@ export const components = {
       return {
         onClick:
           props && props.onClick
-            ? event => {
+            ? (event) => {
                 event.stopPropagation();
                 followLink(props.onClick, { dataContextPath });
               }
@@ -575,7 +575,7 @@ export const components = {
       return {
         onClick:
           designProps && designProps.link
-            ? event => {
+            ? (event) => {
                 event.stopPropagation();
                 followLink(designProps.link, { dataContextPath });
               }
@@ -616,7 +616,7 @@ export const components = {
       return {
         onClick:
           designProps && designProps.link
-            ? event => {
+            ? (event) => {
                 event.stopPropagation();
                 followLink(designProps.link, { dataContextPath });
               }
@@ -682,9 +682,9 @@ export const components = {
     },
     override: ({ props }, { followLink }) => {
       const result = {};
-      result.items = (props.items || []).map(item => ({
+      result.items = (props.items || []).map((item) => ({
         ...item,
-        onClick: event => {
+        onClick: (event) => {
           event.stopPropagation();
           followLink(item.link);
         },
@@ -749,7 +749,7 @@ export const components = {
       return {
         onChange:
           designProps && designProps.link
-            ? event => {
+            ? (event) => {
                 event.stopPropagation();
                 toggleLink(designProps.link, event.target.checked, {
                   dataContextPath,
@@ -781,7 +781,7 @@ export const components = {
       }),
       name: '',
       options: SelectOptions,
-      value: '',
+      value: ['-property- options'],
     },
     advancedProperties: ['gap'],
     override: ({ id, props }) => {
@@ -855,7 +855,7 @@ export const components = {
       const result = {};
       if (props.mask) {
         // convert regexp from string to RegExp
-        result.mask = props.mask.map(m => {
+        result.mask = props.mask.map((m) => {
           let regexp;
           if (m.regexp && m.regexp.match) {
             const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
@@ -889,7 +889,7 @@ export const components = {
       }),
       name: '',
       options: SelectOptions,
-      value: '',
+      value: '-property- options',
     },
     advancedProperties: ['gap'],
     override: ({ id, props }) => {
@@ -938,7 +938,7 @@ export const components = {
     },
     override: ({ props }) => {
       const result = {};
-      if (props.searchPlaceholder) result.onSearch = text => {};
+      if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
       return result;
     },
@@ -1222,7 +1222,7 @@ export const components = {
       // need to use retrieved data for data property
       if (data) result.data = data;
       if (props.onClickRow) {
-        result.onClickRow = event => {
+        result.onClickRow = (event) => {
           event.stopPropagation();
           const { index } = event;
           const path = dataContextPath ? [...dataContextPath, index] : [index];
@@ -1230,10 +1230,10 @@ export const components = {
         };
       }
       // adjust render columns
-      result.columns = props.columns.map(c => ({
+      result.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
-          ? datum => renderComponent(c.render, { datum })
+          ? (datum) => renderComponent(c.render, { datum })
           : undefined,
       }));
       return result;
@@ -1284,7 +1284,7 @@ export const components = {
       const result = {};
       // need to use retrieved data for values property
       if (data) result.values = data;
-      result.children = value => (
+      result.children = (value) => (
         <Box fill background={value.color} pad="xsmall">
           <Text>{value.value}</Text>
         </Box>
@@ -1316,7 +1316,7 @@ export const components = {
       // need to use retrieved data for data property
       if (data) result.data = data;
       if (props.onClickItem) {
-        result.onClickItem = event => {
+        result.onClickItem = (event) => {
           event.stopPropagation();
           const { index } = event;
           const path = dataContextPath ? [...dataContextPath, index] : [index];
