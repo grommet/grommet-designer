@@ -17,7 +17,7 @@ exports[`App empty 1`] = `
         grommet designer
       </h1>
       <p
-        class="StyledParagraph-tbetod-0 pYjWe"
+        class="StyledParagraph-tbetod-0 imCSsR"
       >
         design with grommet components
       </p>
@@ -53,7 +53,7 @@ exports[`App empty 1`] = `
               class="StyledBox-sc-13pk1d4-0 gaPArf"
             >
               <span
-                class="StyledText-sc-1sadyjn-0 gFNqVi"
+                class="StyledText-sc-1sadyjn-0 gmqmPk"
               >
                 Import - drop design file here
               </span>
@@ -106,7 +106,7 @@ exports[`App empty 1`] = `
             </span>
           </label>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 hRwOln"
           />
           <label
             class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 fdhZPr"
@@ -134,7 +134,7 @@ exports[`App empty 1`] = `
           </label>
         </div>
         <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
+          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 hRwOln"
         />
         <label
           class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 bNddOF"
@@ -157,7 +157,7 @@ exports[`App empty 1`] = `
       </div>
     </div>
     <div
-      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iuvxmB"
+      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iZqyPx"
     />
     <div
       class="StyledBox-sc-13pk1d4-0 afzAF"
@@ -191,10 +191,10 @@ exports[`App empty 1`] = `
               />
             </div>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 jVmRoH"
             />
             <span
-              class="StyledText-sc-1sadyjn-0 gTnUNO"
+              class="StyledText-sc-1sadyjn-0 hJKvjA"
             >
               introduction
             </span>
@@ -202,7 +202,7 @@ exports[`App empty 1`] = `
         </a>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 qCliw"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 hleNBA"
       />
       <div
         class="StyledBox-sc-13pk1d4-0 hrGwMH"
@@ -226,17 +226,17 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 dakYuC"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 jVmRoH"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 gTnUNO"
+                class="StyledText-sc-1sadyjn-0 hJKvjA"
               >
                 HPE design system
               </span>
             </div>
           </a>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 hRwOln"
           />
           <a
             class="StyledButton-sc-323bzc-0 kUDdtj"
@@ -249,10 +249,10 @@ exports[`App empty 1`] = `
                 class="StyledBox-sc-13pk1d4-0 dakYuC"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 FdsUX"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 jVmRoH"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 gTnUNO"
+                class="StyledText-sc-1sadyjn-0 hJKvjA"
               >
                 Card
               </span>
@@ -271,16 +271,16 @@ exports[`App empty 2`] = `
   style="height: 100%;"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 cdqoKR"
+    class="StyledGrid-sc-1wofa1l-0 gbSPxE"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 diEokF"
+      class="StyledBox-sc-13pk1d4-0 fzemOh"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 cclhNk"
+        class="StyledBox-sc-13pk1d4-0 ipmikE"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 jmHkZc"
+          class="StyledBox-sc-13pk1d4-0 kLKYNY"
         >
           <div
             class="StyledBox-sc-13pk1d4-0 bXEBrY"
@@ -294,12 +294,12 @@ exports[`App empty 2`] = `
                 class="StyledBox-sc-13pk1d4-0 gzPhSz"
               >
                 <span
-                  class="StyledText-sc-1sadyjn-0 iAwRee"
+                  class="StyledText-sc-1sadyjn-0 iiuRcw"
                 >
                   new design
                 </span>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 bZqeeV"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iGRskX"
                 />
                 <svg
                   aria-label="FormDown"
@@ -449,15 +449,15 @@ exports[`App empty 2`] = `
                         class="StyledBox-sc-13pk1d4-0 ieXAnA"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 kiCFCE"
+                          class="StyledText-sc-1sadyjn-0 cFSaza"
                         >
                           Box
                         </span>
                         <div
-                          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eHjkEI"
+                          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 hRwOln"
                         />
                         <span
-                          class="StyledText-sc-1sadyjn-0 bhoQcU"
+                          class="StyledText-sc-1sadyjn-0 gLLFRW"
                         />
                       </div>
                     </button>
@@ -489,7 +489,7 @@ exports[`App empty 2`] = `
           class="sc-gtssRu cyuwDL"
         >
           <p
-            class="StyledParagraph-tbetod-0 hXkKRa"
+            class="StyledParagraph-tbetod-0 jCMQgJ"
           >
             This Box is currently empty. Add components to it, so it can do its layout thing.
           </p>
@@ -497,10 +497,10 @@ exports[`App empty 2`] = `
       </div>
     </div>
     <div
-      class="StyledBox-sc-13pk1d4-0 gGobhd"
+      class="StyledBox-sc-13pk1d4-0 bymliV"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 hojtzo"
+        class="StyledBox-sc-13pk1d4-0 IRnSs"
       >
         <div
           class="StyledBox-sc-13pk1d4-0 BALhU"
@@ -514,20 +514,20 @@ exports[`App empty 2`] = `
               class="StyledBox-sc-13pk1d4-0 bioQGq"
             >
               <span
-                class="StyledText-sc-1sadyjn-0 PRJF"
+                class="StyledText-sc-1sadyjn-0 keEqcz"
               >
                 <span
-                  class="StyledText-sc-1sadyjn-0 iAwRee"
+                  class="StyledText-sc-1sadyjn-0 iiuRcw"
                 >
                   Box
                 </span>
               </span>
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 bZqeeV"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iGRskX"
               />
               <svg
                 aria-label="FormDown"
-                class="StyledIcon-ofa7kd-0 hPRDVA"
+                class="StyledIcon-ofa7kd-0 blvBMo"
                 viewBox="0 0 24 24"
               >
                 <polyline
@@ -591,14 +591,14 @@ exports[`App empty 2`] = `
             class="StyledBox-sc-13pk1d4-0 gAsOLC"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+              class="StyledBox-sc-13pk1d4-0 iyCTYp"
             >
               <label
                 class="StyledBox-sc-13pk1d4-0 gilRmi"
                 for="name"
               >
                 <span
-                  class="StyledText-sc-1sadyjn-0 PRJF"
+                  class="StyledText-sc-1sadyjn-0 keEqcz"
                 >
                   name
                 </span>
@@ -632,14 +632,14 @@ exports[`App empty 2`] = `
                   Content layout
                 </h4>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 clMqlr"
+                  class="StyledBox-sc-13pk1d4-0 kSqUDj"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="direction"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       direction
                     </span>
@@ -837,14 +837,14 @@ exports[`App empty 2`] = `
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="justify"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       justify
                     </span>
@@ -1104,14 +1104,14 @@ exports[`App empty 2`] = `
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="align"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       align
                     </span>
@@ -1434,14 +1434,14 @@ exports[`App empty 2`] = `
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="pad"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       pad
                     </span>
@@ -1688,14 +1688,14 @@ exports[`App empty 2`] = `
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="gap"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       gap
                     </span>
@@ -1971,14 +1971,14 @@ exports[`App empty 2`] = `
                   </div>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="overflow"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       overflow
                     </span>
@@ -1999,7 +1999,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           >
                             auto
                           </span>
@@ -2011,7 +2011,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2035,14 +2035,14 @@ exports[`App empty 2`] = `
                   Layout in container
                 </h4>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 clMqlr"
+                  class="StyledBox-sc-13pk1d4-0 kSqUDj"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="flex"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       flex
                     </span>
@@ -2063,7 +2063,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           >
                             grow
                           </span>
@@ -2075,7 +2075,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2090,14 +2090,14 @@ exports[`App empty 2`] = `
                   </button>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="fill"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       fill
                     </span>
@@ -2118,7 +2118,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           >
                             vertical
                           </span>
@@ -2130,7 +2130,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2152,13 +2152,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                      class="StyledBox-sc-13pk1d4-0 iyCTYp"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           margin
                         </span>
@@ -2187,14 +2187,14 @@ exports[`App empty 2`] = `
                   </button>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="basis"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       basis
                     </span>
@@ -2215,7 +2215,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           />
                         </div>
                       </div>
@@ -2225,7 +2225,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2247,13 +2247,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                      class="StyledBox-sc-13pk1d4-0 iyCTYp"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           gridArea
                         </span>
@@ -2298,13 +2298,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 clMqlr"
+                      class="StyledBox-sc-13pk1d4-0 kSqUDj"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           animation
                         </span>
@@ -2340,13 +2340,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                      class="StyledBox-sc-13pk1d4-0 iyCTYp"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           background
                         </span>
@@ -2382,13 +2382,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                      class="StyledBox-sc-13pk1d4-0 iyCTYp"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           border
                         </span>
@@ -2417,14 +2417,14 @@ exports[`App empty 2`] = `
                   </button>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="elevation"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       elevation
                     </span>
@@ -2445,7 +2445,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           />
                         </div>
                       </div>
@@ -2455,7 +2455,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2477,13 +2477,13 @@ exports[`App empty 2`] = `
                     type="button"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                      class="StyledBox-sc-13pk1d4-0 iyCTYp"
                     >
                       <label
                         class="StyledBox-sc-13pk1d4-0 gilRmi"
                       >
                         <span
-                          class="StyledText-sc-1sadyjn-0 PRJF"
+                          class="StyledText-sc-1sadyjn-0 keEqcz"
                         >
                           round
                         </span>
@@ -2521,14 +2521,14 @@ exports[`App empty 2`] = `
                   Interaction
                 </h4>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 clMqlr"
+                  class="StyledBox-sc-13pk1d4-0 kSqUDj"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="onClick"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       onClick
                     </span>
@@ -2549,7 +2549,7 @@ exports[`App empty 2`] = `
                           class="StyledBox-sc-13pk1d4-0 iIIbdL"
                         >
                           <span
-                            class="StyledText-sc-1sadyjn-0 eHRdKX"
+                            class="StyledText-sc-1sadyjn-0 fiywiB"
                           />
                         </div>
                       </div>
@@ -2559,7 +2559,7 @@ exports[`App empty 2`] = `
                       >
                         <svg
                           aria-label="FormDown"
-                          class="StyledIcon-ofa7kd-0 hPRDVA"
+                          class="StyledIcon-ofa7kd-0 blvBMo"
                           viewBox="0 0 24 24"
                         >
                           <polyline
@@ -2574,14 +2574,14 @@ exports[`App empty 2`] = `
                   </button>
                 </div>
                 <div
-                  class="StyledBox-sc-13pk1d4-0 dMrjzJ"
+                  class="StyledBox-sc-13pk1d4-0 iyCTYp"
                 >
                   <label
                     class="StyledBox-sc-13pk1d4-0 gilRmi"
                     for="hoverIndicator"
                   >
                     <span
-                      class="StyledText-sc-1sadyjn-0 PRJF"
+                      class="StyledText-sc-1sadyjn-0 keEqcz"
                     >
                       hoverIndicator
                     </span>
