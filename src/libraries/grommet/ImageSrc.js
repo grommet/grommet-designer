@@ -3,14 +3,14 @@ import { Box, Paragraph, TextArea } from 'grommet';
 
 const svgPrefix = 'data:image/svg+xml;utf8,';
 
-const stripPrefix = value => {
+const stripPrefix = (value) => {
   if (value && value.slice(0, svgPrefix.length) === svgPrefix) {
     return value.slice(svgPrefix.length);
   }
   return value || '';
 };
 
-export default ({ value, onChange }) => {
+const ImageSrc = ({ value, onChange }) => {
   return (
     <Box>
       <Paragraph margin="none" fill>
@@ -20,7 +20,7 @@ export default ({ value, onChange }) => {
         rows={4}
         cols={80}
         value={stripPrefix(value)}
-        onChange={event => {
+        onChange={(event) => {
           const nextValue = event.target.value;
           if (nextValue[0] === '<') {
             onChange(`${svgPrefix}${nextValue}`);
@@ -32,3 +32,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default ImageSrc;

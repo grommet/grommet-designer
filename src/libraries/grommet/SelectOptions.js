@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-export default ({ design, selected, value, onChange }) => {
+const SelectOptions = ({ design, selected, value, onChange }) => {
   return (
     <Box gap="medium">
       {(value || []).map((item, i) => (
@@ -10,7 +10,7 @@ export default ({ design, selected, value, onChange }) => {
           <FormField>
             <TextInput
               value={item || ''}
-              onChange={event => {
+              onChange={(event) => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue[i] = event.target.value;
                 onChange(nextValue);
@@ -43,3 +43,5 @@ export default ({ design, selected, value, onChange }) => {
     </Box>
   );
 };
+
+export default SelectOptions;

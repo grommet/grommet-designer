@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { Add, Next, Previous, Trash } from 'grommet-icons';
 
-const debounce = (func, delay) => {
-  let timeout;
-  return nextValue => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(nextValue), delay);
-  };
-};
-
-export default ({ value, onChange }) => {
-  const [columns, setColumns] = React.useState(value);
+const DataTableColumns = ({ value, onChange }) => {
+  const [columns, setColumns] = useState(value);
   React.useEffect(() => setColumns(value), [value]);
-  const debounceOnChange = React.useCallback(debounce(onChange, 500), []);
+  const debounceOnChange = useCallback(() => {
+    let timeout;
+    return (nextValue) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => onChange(nextValue), 500);
+    };
+  }, [onChange]);
 
   return (
     <Box direction="row" gap="medium">
@@ -23,7 +21,7 @@ export default ({ value, onChange }) => {
             <FormField label="property">
               <TextInput
                 value={c.property || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(columns));
                   nextValue[i].property = event.target.value;
                   setColumns(nextValue);
@@ -34,7 +32,7 @@ export default ({ value, onChange }) => {
             <FormField label="header">
               <TextInput
                 value={c.header || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].header = event.target.value;
                   setColumns(nextValue);
@@ -47,7 +45,7 @@ export default ({ value, onChange }) => {
                 <CheckBox
                   label="render"
                   checked={c.render || false}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     const priorRender = nextValue[i].render;
                     nextValue[i].render = event.target.checked;
@@ -64,7 +62,7 @@ export default ({ value, onChange }) => {
                             name: c.property,
                           });
                           nextDesign.components[id].props.columns.filter(
-                            col => col.property === c.property,
+                            (col) => col.property === c.property,
                           )[0].render = propId;
                         } else {
                           deletePropertyComponent(priorRender);
@@ -104,10 +102,10 @@ export default ({ value, onChange }) => {
                 <CheckBox
                   label="primary"
                   checked={c.primary || false}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     // only one primary
-                    nextValue.forEach(c => {
+                    nextValue.forEach((c) => {
                       c.primary = false;
                     });
                     nextValue[i].primary = event.target.checked;
@@ -116,13 +114,13 @@ export default ({ value, onChange }) => {
                 />
               </Box>
             </FormField>
-            {['search', 'sortable'].map(subProp => (
+            {['search', 'sortable'].map((subProp) => (
               <FormField key={subProp}>
                 <Box pad="small">
                   <CheckBox
                     label={subProp}
                     checked={c[subProp] || false}
-                    onChange={event => {
+                    onChange={(event) => {
                       const nextValue = JSON.parse(JSON.stringify(value));
                       nextValue[i][subProp] = event.target.checked;
                       onChange(nextValue);
@@ -149,7 +147,7 @@ export default ({ value, onChange }) => {
                   <CheckBox
                     label="footer aggregate"
                     checked={!!c.footer || false}
-                    onChange={event => {
+                    onChange={(event) => {
                       const nextValue = JSON.parse(JSON.stringify(value));
                       nextValue[i].footer = event.target.checked
                         ? { aggregate: true }
@@ -163,7 +161,7 @@ export default ({ value, onChange }) => {
               <FormField label="footer">
                 <TextInput
                   value={c.footer || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].footer = event.target.value;
                     setColumns(nextValue);
@@ -177,7 +175,7 @@ export default ({ value, onChange }) => {
                 <CheckBox
                   label="pin"
                   checked={!!c.pin || false}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].pin = event.target.checked ? true : undefined;
                     onChange(nextValue);
@@ -193,7 +191,7 @@ export default ({ value, onChange }) => {
               onClick={() => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue.splice(i, 1);
-                onChange(nextValue.filter(c => c));
+                onChange(nextValue.filter((c) => c));
               }}
             />
             <Box direction="row">
@@ -237,3 +235,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default DataTableColumns;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Box, Drop, RadioButtonGroup, Text } from 'grommet';
 import { Blank } from 'grommet-icons';
 import { getParent } from '../design';
@@ -81,7 +81,7 @@ const locationVisuals = {
   ],
 };
 
-export default ({ design, libraries, onChange, selected }) => {
+const AddLocation = ({ design, libraries, onChange, selected }) => {
   const selectedComponent = design.components[selected.component];
   const selectedType = React.useMemo(
     () =>
@@ -97,14 +97,42 @@ export default ({ design, libraries, onChange, selected }) => {
   const locations = React.useMemo(() => {
     const parent = getParent(design, selected.component);
     if (!parent)
-      return allLocations.filter(l => l === 'within' || l === 'container of');
+      return allLocations.filter((l) => l === 'within' || l === 'container of');
     if (selectedType && selectedType.container) return allLocations;
-    return allLocations.filter(l => l !== 'within');
+    return allLocations.filter((l) => l !== 'within');
   }, [design, selected.component, selectedType]);
 
   const [addLocation, setAddLocation] = React.useState();
   React.useEffect(() => setAddLocation(locations[0]), [locations]);
   React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
+
+  const Option = ({ option, checked, hover }) => {
+    const ref = useRef();
+    return (
+      <Box
+        ref={ref}
+        pad="xsmall"
+        background={hover && !checked ? { color: 'active' } : undefined}
+      >
+        <Blank color={checked ? 'selected-text' : 'border'}>
+          <g>{locationVisuals[option]}</g>
+        </Blank>
+        {hover && (
+          <Drop target={ref.current} align={{ top: 'bottom' }}>
+            <Box
+              margin="xsmall"
+              animation={{ type: 'fadeIn', duration: 100 }}
+              pad="xsmall"
+            >
+              <Text>
+                {option} {selectedName}
+              </Text>
+            </Box>
+          </Drop>
+        )}
+      </Box>
+    );
+  };
 
   return (
     <RadioButtonGroup
@@ -112,36 +140,14 @@ export default ({ design, libraries, onChange, selected }) => {
       options={locations}
       disabled={locations.length === 1}
       value={addLocation}
-      onChange={event => setAddLocation(event.target.value)}
+      onChange={(event) => setAddLocation(event.target.value)}
       direction="row"
     >
-      {(option, { checked, hover }) => {
-        const ref = React.useRef();
-        return (
-          <Box
-            ref={ref}
-            pad="xsmall"
-            background={hover && !checked ? { color: 'active' } : undefined}
-          >
-            <Blank color={checked ? 'selected-text' : 'border'}>
-              <g>{locationVisuals[option]}</g>
-            </Blank>
-            {hover && (
-              <Drop target={ref.current} align={{ top: 'bottom' }}>
-                <Box
-                  margin="xsmall"
-                  animation={{ type: 'fadeIn', duration: 100 }}
-                  pad="xsmall"
-                >
-                  <Text>
-                    {option} {selectedName}
-                  </Text>
-                </Box>
-              </Drop>
-            )}
-          </Box>
-        );
-      }}
+      {(option, { checked, hover }) => (
+        <Option option={option} checked={checked} hover={hover} />
+      )}
     </RadioButtonGroup>
   );
 };
+
+export default AddLocation;

@@ -3,7 +3,7 @@ import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 import { ThemeContext } from 'styled-components';
 
-export default ({ value, onChange, theme }) => {
+const DataChartChart = ({ value, onChange, theme }) => {
   const baseTheme = React.useContext(ThemeContext);
   const colorOptions = React.useMemo(() => {
     const merged = { ...baseTheme.global.colors, ...theme.global.colors };
@@ -14,14 +14,14 @@ export default ({ value, onChange, theme }) => {
   return (
     <Box direction="row" gap="medium">
       {(value || [])
-        .filter(item => item)
+        .filter((item) => item)
         .map((item, i) => (
           <Box basis="xsmall" flex="grow" key={i}>
             <Box flex="grow">
               <FormField label="property">
                 <TextInput
                   value={item.property || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].property = event.target.value;
                     onChange(nextValue);
@@ -88,7 +88,7 @@ export default ({ value, onChange, theme }) => {
                 <CheckBox
                   label="dash"
                   checked={item.dash}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].dash = event.target.checked;
                     onChange(nextValue);
@@ -99,7 +99,7 @@ export default ({ value, onChange, theme }) => {
                 <CheckBox
                   label="round"
                   checked={item.round}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].round = event.target.checked;
                     onChange(nextValue);
@@ -113,7 +113,7 @@ export default ({ value, onChange, theme }) => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue.splice(i, 1);
                 // prune empty values
-                onChange(nextValue.filter(i => i));
+                onChange(nextValue.filter((i) => i));
               }}
             />
           </Box>
@@ -130,3 +130,5 @@ export default ({ value, onChange, theme }) => {
     </Box>
   );
 };
+
+export default DataChartChart;

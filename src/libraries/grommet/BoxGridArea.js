@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, FormField, Paragraph, Select } from 'grommet';
 import { getParent } from '../../design'; // TODO: fix
 
-export default ({ value, onChange, design, selected }) => {
+const BoxGridArea = ({ value, onChange, design, selected }) => {
   let message;
   const parent = getParent(design, selected.component);
   let areas;
@@ -12,7 +12,7 @@ export default ({ value, onChange, design, selected }) => {
       Currently, this Box has no parent.
     `;
   } else {
-    areas = parent.props.areas && parent.props.areas.map(a => a.name);
+    areas = parent.props.areas && parent.props.areas.map((a) => a.name);
     if (parent.type !== 'grommet.Grid') {
       message = `
         Well, gridArea only does anything when the parent component is a Grid.
@@ -45,3 +45,5 @@ export default ({ value, onChange, design, selected }) => {
     </Box>
   );
 };
+
+export default BoxGridArea;

@@ -23,7 +23,7 @@ const sizeOptions = [
 const fractionalOptions = ['1/2', '1/3', '2/3', '1/4', '3/4', 'full'];
 const contentOptions = ['flex', 'auto'];
 
-export default ({ value, onChange }) => {
+const GridColumns = ({ value, onChange }) => {
   return (
     <Box>
       <Paragraph>
@@ -35,7 +35,7 @@ export default ({ value, onChange }) => {
           name="flavor"
           options={flavors}
           value={Array.isArray(value) ? flavors[1] : flavors[0]}
-          onChange={event => {
+          onChange={(event) => {
             const choice = event.target.value;
             let nextValue;
             if (choice === flavors[1]) {
@@ -219,7 +219,7 @@ export default ({ value, onChange }) => {
                   },
                 ]}
                 value={value.count}
-                onChange={event => {
+                onChange={(event) => {
                   const count =
                     event.target.value === ''
                       ? undefined
@@ -259,3 +259,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default GridColumns;

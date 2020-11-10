@@ -37,20 +37,20 @@ const AddComponent = ({
   onClose,
 }) => {
   const libraries = React.useMemo(
-    () => imports.filter(i => i.library).map(i => i.library),
+    () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
   const starters = React.useMemo(() => {
     const result = {};
     libraries
-      .filter(l => l.starters)
+      .filter((l) => l.starters)
       .forEach(({ starters }) => {
         // find all screen and components that have names
         const type = 'designer.Screen';
         Object.keys(starters.screens)
-          .map(id => starters.screens[id])
-          .filter(s => s.name)
-          .forEach(screen => {
+          .map((id) => starters.screens[id])
+          .filter((s) => s.name)
+          .forEach((screen) => {
             if (!result[type]) result[type] = [];
             result[type] = [
               ...result[type],
@@ -58,9 +58,9 @@ const AddComponent = ({
             ];
           });
         Object.keys(starters.components)
-          .map(id => starters.components[id])
-          .filter(c => c.name)
-          .forEach(component => {
+          .map((id) => starters.components[id])
+          .filter((c) => c.name)
+          .forEach((component) => {
             if (!result[component.type]) result[component.type] = [];
             result[component.type] = [
               ...result[component.type],
@@ -80,12 +80,12 @@ const AddComponent = ({
   const inputRef = React.useRef();
 
   const templates = React.useMemo(() => {
-    const buildTemplates = design => {
+    const buildTemplates = (design) => {
       const templates = {};
       Object.keys(design.components)
-        .map(id => design.components[id])
-        .filter(component => component.name)
-        .forEach(component => {
+        .map((id) => design.components[id])
+        .filter((component) => component.name)
+        .forEach((component) => {
           if (!templates[component.name]) {
             templates[component.name] = component;
           }
@@ -97,8 +97,8 @@ const AddComponent = ({
     result.push(buildTemplates(design));
 
     imports
-      .filter(i => i.design)
-      .forEach(i => result.push({ ...i, ...buildTemplates(i.design) }));
+      .filter((i) => i.design)
+      .forEach((i) => result.push({ ...i, ...buildTemplates(i.design) }));
 
     return result;
   }, [design, imports]);
@@ -180,10 +180,10 @@ const AddComponent = ({
     structure
       .filter(
         ({ components: names }) =>
-          !searchExp || names.some(name => name.match(searchExp)),
+          !searchExp || names.some((name) => name.match(searchExp)),
       )
       .map(({ name, Icon, components: names }) => (
-        <Box key={name} flex={false}>
+        <Box flex={false}>
           <Box
             direction="row"
             gap="medium"
@@ -198,14 +198,14 @@ const AddComponent = ({
           </Box>
           {names &&
             names
-              .filter(name => !searchExp || name.match(searchExp))
-              .map(name => {
+              .filter((name) => !searchExp || name.match(searchExp))
+              .map((name) => {
                 const typeName = `${libraryName}.${name}`;
                 let content = (
                   <AddButton
                     key={name}
                     label={components[name].name}
-                    onClick={event =>
+                    onClick={(event) =>
                       add({
                         typeName,
                         containSelected: event.metaKey || event.ctrlKey,
@@ -234,7 +234,7 @@ const AddComponent = ({
       ));
 
   const Template = ({ name, design: tempDesign, templates: temps, url }) => (
-    <Box key={name} flex={false} border="top">
+    <Box flex={false} border="top">
       <Box
         pad={{ horizontal: 'small', vertical: 'xsmall' }}
         margin={{ top: 'small' }}
@@ -248,12 +248,12 @@ const AddComponent = ({
         </Heading>
       </Box>
       {Object.keys(temps)
-        .filter(name => !searchExp || name.match(searchExp))
-        .map(name => (
+        .filter((name) => !searchExp || name.match(searchExp))
+        .map((name) => (
           <AddButton
             key={name}
             label={name}
-            onClick={event =>
+            onClick={(event) =>
               add({
                 containSelected: event.metaKey || event.ctrlKey,
                 templateDesign: tempDesign,
@@ -275,11 +275,11 @@ const AddComponent = ({
         <Keyboard
           onEnter={
             searchExp
-              ? event => {
+              ? (event) => {
                   // find first match
                   let typeName;
                   libraries.some(({ name, components }) => {
-                    const first = Object.keys(components).filter(n =>
+                    const first = Object.keys(components).filter((n) =>
                       n.match(searchExp),
                     )[0];
                     if (first) typeName = `${name}.${first}`;
@@ -298,23 +298,23 @@ const AddComponent = ({
           <TextInput
             ref={inputRef}
             value={search}
-            onChange={event => setSearch(event.target.value)}
+            onChange={(event) => setSearch(event.target.value)}
           />
         </Keyboard>
       </Box>
 
-      {libraries.map(library => (
-        <Library {...library} />
+      {libraries.map((library) => (
+        <Library key={library.name} {...library} />
       ))}
 
       {templates
         .filter(
           ({ templates }) =>
             !searchExp ||
-            Object.keys(templates).some(name => name.match(searchExp)),
+            Object.keys(templates).some((name) => name.match(searchExp)),
         )
-        .map(template => (
-          <Template {...template} />
+        .map((template) => (
+          <Template key={template.name} {...template} />
         ))}
     </Box>
   );
@@ -331,11 +331,11 @@ const AddComponent = ({
           onClick={() => setAddStarters(undefined)}
         />
       </Header>
-      {addStarters.map(starter => (
+      {addStarters.map((starter) => (
         <AddButton
           key={starter.name}
           label={starter.name}
-          onClick={event =>
+          onClick={(event) =>
             add({
               typeName: addTypeName,
               containSelected: event.metaKey || event.ctrlKey,
@@ -373,7 +373,7 @@ const AddComponent = ({
               design={design}
               libraries={libraries}
               selected={selected}
-              onChange={nextAddLocation => setAddLocation(nextAddLocation)}
+              onChange={(nextAddLocation) => setAddLocation(nextAddLocation)}
             />
           </Box>
         )}

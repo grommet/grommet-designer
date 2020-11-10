@@ -3,8 +3,8 @@ import InlineOptions from './InlineOptions';
 import WeightState from './WeightState';
 import { undefinedOption } from './UndefinedOption';
 
-export default ({ options }) => {
-  const WeightOptions = props => {
+const WeightOption = ({ options }) => {
+  const WeightOptions = (props) => {
     const adjustedOptions = props.value
       ? options.concat(undefinedOption)
       : options;
@@ -28,3 +28,5 @@ export default ({ options }) => {
 
   return WeightOptions;
 };
+
+export default WeightOption;

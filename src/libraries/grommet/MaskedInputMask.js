@@ -10,7 +10,7 @@ import {
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-export default ({ value, onChange }) => {
+const MaskedInputMask = ({ value, onChange }) => {
   return (
     <Box direction="row" gap="medium" overflow="auto">
       {(value || [{}]).map((element, index) => (
@@ -19,7 +19,7 @@ export default ({ value, onChange }) => {
             <FormField label="fixed">
               <TextInput
                 value={element.fixed || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value || [{}]));
                   nextValue[index].fixed = event.target.value;
                   onChange(nextValue);
@@ -44,7 +44,7 @@ export default ({ value, onChange }) => {
                             ? ''
                             : (element.length || [])[0]
                         }
-                        onChange={event => {
+                        onChange={(event) => {
                           const min = event.target.value;
                           const nextValue = JSON.parse(
                             JSON.stringify(value || [{}]),
@@ -72,7 +72,7 @@ export default ({ value, onChange }) => {
                             ? ''
                             : (element.length || [])[1]
                         }
-                        onChange={event => {
+                        onChange={(event) => {
                           const max = event.target.value;
                           const nextValue = JSON.parse(
                             JSON.stringify(value || [{}]),
@@ -91,7 +91,7 @@ export default ({ value, onChange }) => {
                 <FormField label="options" help="one per line">
                   <TextArea
                     value={element.options ? element.options.join('\n') : ''}
-                    onChange={event => {
+                    onChange={(event) => {
                       const nextValue = JSON.parse(
                         JSON.stringify(value || [{}]),
                       );
@@ -103,7 +103,7 @@ export default ({ value, onChange }) => {
                 <FormField label="placeholder">
                   <TextInput
                     value={element.placeholder || ''}
-                    onChange={event => {
+                    onChange={(event) => {
                       const nextValue = JSON.parse(
                         JSON.stringify(value || [{}]),
                       );
@@ -115,7 +115,7 @@ export default ({ value, onChange }) => {
                 <FormField label="regexp">
                   <TextInput
                     value={element.regexp || ''}
-                    onChange={event => {
+                    onChange={(event) => {
                       const nextValue = JSON.parse(
                         JSON.stringify(value || [{}]),
                       );
@@ -152,3 +152,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default MaskedInputMask;

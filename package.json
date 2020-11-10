@@ -9,6 +9,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "lint": "eslint './src/**/*.js'",
     "test": "react-app-rewired test",
     "test:nowatch": "react-app-rewired test --watchAll=false",
     "e2e": "testcafe firefox test.js --debug-on-fail",
@@ -46,7 +47,7 @@
     "react-app-rewired": "^2.1.5",
     "react-dom": "^17.0.1",
     "react-is": "17.0.1",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.0",
     "styled-components": "^5.0.0",
     "testcafe": "^1.8.3"
   }

@@ -3,7 +3,7 @@ import { Box, FormField, Select, RadioButtonGroup } from 'grommet';
 
 const flavors = ['all sides the same', 'varied'];
 
-export default ({ name, value, onChange }) => {
+const HeadingMargin = ({ name, value, onChange }) => {
   return (
     <Box>
       <Box pad="small">
@@ -11,7 +11,7 @@ export default ({ name, value, onChange }) => {
           name="flavor"
           options={flavors}
           value={typeof value === 'object' ? flavors[1] : flavors[0]}
-          onChange={event => {
+          onChange={(event) => {
             const choice = event.target.value;
             const nextValue = choice === flavors[1] ? {} : undefined;
             onChange(nextValue);
@@ -21,7 +21,7 @@ export default ({ name, value, onChange }) => {
       {typeof value === 'object' ? (
         <Box>
           {['horizontal', 'vertical', 'top', 'bottom', 'left', 'right'].map(
-            side => (
+            (side) => (
               <FormField key={side} label={side}>
                 <Select
                   options={[
@@ -72,3 +72,5 @@ export default ({ name, value, onChange }) => {
     </Box>
   );
 };
+
+export default HeadingMargin;

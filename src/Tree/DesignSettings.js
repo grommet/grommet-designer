@@ -30,7 +30,7 @@ const themeSuggestions = themes.map(
   },
 );
 
-export default ({ design, onClose, setDesign, theme }) => {
+const DesignSettings = ({ design, onClose, setDesign, theme }) => {
   return (
     <Action label="design" onClose={onClose}>
       <Box flex={false} gap="medium">
@@ -40,7 +40,7 @@ export default ({ design, onClose, setDesign, theme }) => {
             name="name"
             plain
             value={design.name || ''}
-            onChange={event => {
+            onChange={(event) => {
               const nextDesign = JSON.parse(JSON.stringify(design));
               nextDesign.name = event.target.value;
               setDesign(nextDesign);
@@ -98,7 +98,7 @@ export default ({ design, onClose, setDesign, theme }) => {
                         plain
                         placeholder="url"
                         value={impor.url}
-                        onChange={event => {
+                        onChange={(event) => {
                           const nextDesign = JSON.parse(JSON.stringify(design));
                           nextDesign.imports[index].url = event.target.value;
                           setDesign(nextDesign);
@@ -144,7 +144,7 @@ export default ({ design, onClose, setDesign, theme }) => {
               plain
               value={design.theme || ''}
               suggestions={themeSuggestions}
-              onChange={event => {
+              onChange={(event) => {
                 const themeValue = event.target.value;
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.theme = themeValue;
@@ -169,7 +169,7 @@ export default ({ design, onClose, setDesign, theme }) => {
                 margin={{ right: 'small' }}
                 options={['dark', 'light']}
                 value={design.themeMode}
-                onChange={event => {
+                onChange={(event) => {
                   const nextDesign = JSON.parse(JSON.stringify(design));
                   nextDesign.themeMode = event.target.value;
                   setDesign(nextDesign);
@@ -219,7 +219,7 @@ export default ({ design, onClose, setDesign, theme }) => {
                         name={`name-${index}`}
                         plain
                         value={key || ''}
-                        onChange={event => {
+                        onChange={(event) => {
                           if (event.target.value !== key) {
                             const nextDesign = JSON.parse(
                               JSON.stringify(design),
@@ -241,7 +241,7 @@ export default ({ design, onClose, setDesign, theme }) => {
                         cols={30}
                         rows={4}
                         value={design.data[key]}
-                        onChange={event => {
+                        onChange={(event) => {
                           const nextDesign = JSON.parse(JSON.stringify(design));
                           nextDesign.data[key] = event.target.value;
                           setDesign(nextDesign);
@@ -272,3 +272,5 @@ export default ({ design, onClose, setDesign, theme }) => {
     </Action>
   );
 };
+
+export default DesignSettings;

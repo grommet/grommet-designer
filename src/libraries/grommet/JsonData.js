@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, TextArea } from 'grommet';
 
-export default ({ value, onChange }) => {
+const JsonData = ({ value, onChange }) => {
   const [text, setText] = React.useState(JSON.stringify(value, null, 2));
   const [error, setError] = React.useState(false);
   return (
@@ -9,7 +9,7 @@ export default ({ value, onChange }) => {
       <TextArea
         rows={20}
         value={text}
-        onChange={event => {
+        onChange={(event) => {
           const value = event.target.value;
           setText(value);
           if (value) {
@@ -29,3 +29,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default JsonData;

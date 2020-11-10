@@ -44,7 +44,7 @@ const responsiveSizePad = {
   large: 'medium',
 };
 
-export default ({
+const Properties = ({
   component,
   design,
   imports,
@@ -120,14 +120,14 @@ export default ({
     else delete props[propName];
     if (sideEffects)
       sideEffects(nextDesign, selected.component, {
-        addPropertyComponent: args =>
+        addPropertyComponent: (args) =>
           addPropertyComponent(nextDesign, libraries, selected.component, args),
-        deletePropertyComponent: id => deleteComponent(nextDesign, id),
+        deletePropertyComponent: (id) => deleteComponent(nextDesign, id),
       });
     setDesign(nextDesign);
   };
 
-  const setHide = hide => {
+  const setHide = (hide) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.hide = hide;
@@ -201,7 +201,7 @@ export default ({
     }
   };
 
-  const onKey = event => {
+  const onKey = (event) => {
     if (document.activeElement === document.body) {
       if (
         // osx
@@ -239,14 +239,14 @@ export default ({
 
   const renderProperties = (id, properties, props) =>
     Object.keys(properties)
-      .filter(propName => !searchExp || searchExp.test(propName))
+      .filter((propName) => !searchExp || searchExp.test(propName))
       .filter(
-        propName =>
+        (propName) =>
           typeof properties[propName] !== 'string' ||
           !properties[propName].startsWith('-component-'),
       )
       .filter(
-        propName =>
+        (propName) =>
           !type.advancedProperties ||
           showAdvanced ||
           type.advancedProperties.indexOf(propName) === -1,
@@ -291,7 +291,7 @@ export default ({
       href: type.documentation,
       target: '_blank',
     },
-  ].filter(i => i);
+  ].filter((i) => i);
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
@@ -351,7 +351,7 @@ export default ({
                   onEsc={() => setShowReferences(false)}
                 >
                   <Box>
-                    {references.map(r => (
+                    {references.map((r) => (
                       <Button
                         hoverIndicator
                         onClick={() => {
@@ -380,7 +380,7 @@ export default ({
               ref={searchRef}
               placeholder="search properties ..."
               value={search}
-              onChange={event => setSearch(event.target.value)}
+              onChange={(event) => setSearch(event.target.value)}
             />
           </Box>
         )}
@@ -398,7 +398,7 @@ export default ({
                   name="name"
                   componentId={component.id}
                   value={component.name || ''}
-                  onChange={value => {
+                  onChange={(value) => {
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
                     component.name = value;
@@ -413,7 +413,7 @@ export default ({
                   name="text"
                   componentId={component.id}
                   value={component.text || ''}
-                  onChange={value => {
+                  onChange={(value) => {
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
                     component.text = value === '' ? undefined : value;
@@ -460,12 +460,14 @@ export default ({
                       .filter(
                         ({ properties }) =>
                           !searchExp ||
-                          properties.some(propName => searchExp.test(propName)),
+                          properties.some((propName) =>
+                            searchExp.test(propName),
+                          ),
                       )
                       .map(({ label, properties: propertyNames }) => {
                         const sectionProperties = {};
                         propertyNames.forEach(
-                          name =>
+                          (name) =>
                             (sectionProperties[name] = type.properties[name]),
                         );
                         return (
@@ -636,7 +638,7 @@ export default ({
                     name="style"
                     componentId={component.id}
                     value={style}
-                    onChange={value => {
+                    onChange={(value) => {
                       setStyle(value);
                       try {
                         // only save it when it's valid
@@ -656,3 +658,5 @@ export default ({
     </Keyboard>
   );
 };
+
+export default Properties;

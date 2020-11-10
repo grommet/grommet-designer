@@ -2,18 +2,18 @@ import React from 'react';
 import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-export default ({ value, onChange, theme }) => {
+const DataChartSeries = ({ value, onChange, theme }) => {
   return (
     <Box direction="row" gap="medium">
       {(value || [])
-        .filter(item => item)
+        .filter((item) => item)
         .map((item, i) => (
           <Box basis="xsmall" flex="grow" key={i}>
             <Box flex="grow">
               <FormField label="property">
                 <TextInput
                   value={item.property || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].property = event.target.value;
                     onChange(nextValue);
@@ -23,7 +23,7 @@ export default ({ value, onChange, theme }) => {
               <FormField label="label">
                 <TextInput
                   value={item.label || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].label = event.target.value;
                     onChange(nextValue);
@@ -33,7 +33,7 @@ export default ({ value, onChange, theme }) => {
               <FormField label="prefix">
                 <TextInput
                   value={item.prefix || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].prefix = event.target.value;
                     onChange(nextValue);
@@ -43,7 +43,7 @@ export default ({ value, onChange, theme }) => {
               <FormField label="suffix">
                 <TextInput
                   value={item.suffix || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].suffix = event.target.value;
                     onChange(nextValue);
@@ -57,7 +57,7 @@ export default ({ value, onChange, theme }) => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue.splice(i, 1);
                 // prune empty values
-                onChange(nextValue.filter(i => i));
+                onChange(nextValue.filter((i) => i));
               }}
             />
           </Box>
@@ -74,3 +74,5 @@ export default ({ value, onChange, theme }) => {
     </Box>
   );
 };
+
+export default DataChartSeries;

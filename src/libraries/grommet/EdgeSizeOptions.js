@@ -3,8 +3,8 @@ import InlineOptions from './InlineOptions';
 import EdgeSizeState from './EdgeSizeState';
 import { undefinedOption } from './UndefinedOption';
 
-export default ({ options, direction }) => {
-  const EdgeSizeOptions = props => {
+const EdgeSizeOptions = ({ options, direction }) => {
+  const EdgeSizeOptions = (props) => {
     const adjustedOptions = props.value
       ? options.concat(undefinedOption)
       : options;
@@ -27,3 +27,5 @@ export default ({ options, direction }) => {
 
   return EdgeSizeOptions;
 };
+
+export default EdgeSizeOptions;

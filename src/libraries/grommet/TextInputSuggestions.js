@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Paragraph, TextArea } from 'grommet';
 
-export default ({ value, onChange }) => {
+const TextInputSuggestions = ({ value, onChange }) => {
   return (
     <Box>
       <Paragraph margin="none">One per line</Paragraph>
@@ -9,7 +9,7 @@ export default ({ value, onChange }) => {
         rows={4}
         cols={20}
         value={value ? value.join('\n') : ''}
-        onChange={event => {
+        onChange={(event) => {
           const nextValue = event.target.value;
           onChange(nextValue ? nextValue.split('\n') : '');
         }}
@@ -17,3 +17,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default TextInputSuggestions;

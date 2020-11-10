@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, FormField, Select } from 'grommet';
 
-export default ({ name, value, onChange }) => {
+const DropAlign = ({ name, value, onChange }) => {
   return (
     <Box>
-      {['top', 'bottom'].map(side => (
+      {['top', 'bottom'].map((side) => (
         <FormField key={side} label={side}>
           <Select
             options={['top', 'bottom', 'undefined']}
@@ -21,7 +21,7 @@ export default ({ name, value, onChange }) => {
           />
         </FormField>
       ))}
-      {['left', 'right'].map(side => (
+      {['left', 'right'].map((side) => (
         <FormField key={side} label={side}>
           <Select
             options={['left', 'right', 'undefined']}
@@ -41,3 +41,5 @@ export default ({ name, value, onChange }) => {
     </Box>
   );
 };
+
+export default DropAlign;

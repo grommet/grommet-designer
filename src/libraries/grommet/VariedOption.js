@@ -9,7 +9,7 @@ const stroke = {
 
 export const variedOption = { label: 'varied', value: {}, domValue: '{}' };
 
-export default ({ checked, hover }) => (
+const VariedOption = ({ checked, hover }) => (
   <InlineOption checked={checked} hover={hover} label={variedOption.label}>
     <Blank color={checked ? 'selected-text' : 'border'}>
       <g {...stroke}>
@@ -21,3 +21,5 @@ export default ({ checked, hover }) => (
     </Blank>
   </InlineOption>
 );
+
+export default VariedOption;

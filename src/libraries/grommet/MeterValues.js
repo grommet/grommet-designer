@@ -20,7 +20,7 @@ const ColorLabel = ({ color, theme }) => (
   </Box>
 );
 
-export default ({ value, theme, onChange }) => {
+const MeterValues = ({ value, theme, onChange }) => {
   const baseTheme = React.useContext(ThemeContext);
   const [searchText, setSearchText] = React.useState('');
   const searchExp = searchText && new RegExp(searchText, 'i');
@@ -41,7 +41,7 @@ export default ({ value, theme, onChange }) => {
                 name="color"
                 options={
                   searchExp
-                    ? [...colors.filter(c => searchExp.test(c)), 'undefined']
+                    ? [...colors.filter((c) => searchExp.test(c)), 'undefined']
                     : [...colors, 'undefined']
                 }
                 value={item.color || ''}
@@ -55,18 +55,18 @@ export default ({ value, theme, onChange }) => {
                 }}
                 onSearch={
                   colors.length > 20
-                    ? nextSearchText => setSearchText(nextSearchText)
+                    ? (nextSearchText) => setSearchText(nextSearchText)
                     : undefined
                 }
               >
-                {option => <ColorLabel color={option} theme={theme} />}
+                {(option) => <ColorLabel color={option} theme={theme} />}
               </Select>
             </FormField>
             <FormField label="highlight">
               <Box pad="small">
                 <CheckBox
                   checked={item.highlight || false}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].highlight = event.target.checked;
                     onChange(nextValue);
@@ -77,7 +77,7 @@ export default ({ value, theme, onChange }) => {
             <FormField label="label">
               <TextInput
                 value={item.label || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].label = event.target.value;
                   onChange(nextValue);
@@ -87,7 +87,7 @@ export default ({ value, theme, onChange }) => {
             <FormField label="value">
               <TextInput
                 value={item.value || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].value = parseInt(event.target.value, 10);
                   onChange(nextValue);
@@ -117,3 +117,5 @@ export default ({ value, theme, onChange }) => {
     </Box>
   );
 };
+
+export default MeterValues;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, FormField, Select, Text, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-export default ({ linkOptions, value, onChange }) => {
+const MenuItems = ({ linkOptions, value, onChange }) => {
   const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
       <Text weight={selected ? 'bold' : undefined}>
@@ -19,7 +19,7 @@ export default ({ linkOptions, value, onChange }) => {
             <FormField label="label">
               <TextInput
                 value={item.label || ''}
-                onChange={event => {
+                onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i].label = event.target.value;
                   onChange(nextValue);
@@ -37,7 +37,7 @@ export default ({ linkOptions, value, onChange }) => {
                 }}
                 valueLabel={<LinkLabel selected value={item.link} />}
               >
-                {option => (
+                {(option) => (
                   <LinkLabel
                     selected={option.component === value.component}
                     value={option}
@@ -68,3 +68,5 @@ export default ({ linkOptions, value, onChange }) => {
     </Box>
   );
 };
+
+export default MenuItems;

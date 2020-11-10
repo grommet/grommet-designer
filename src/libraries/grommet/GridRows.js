@@ -4,7 +4,7 @@ import { Add, Trash } from 'grommet-icons';
 
 const flavors = ['all the same size', 'different sizes'];
 
-export default ({ value, onChange }) => {
+const GridRows = ({ value, onChange }) => {
   return (
     <Box>
       <Box pad="small">
@@ -12,7 +12,7 @@ export default ({ value, onChange }) => {
           name="flavor"
           options={flavors}
           value={Array.isArray(value) ? flavors[1] : flavors[0]}
-          onChange={event => {
+          onChange={(event) => {
             const choice = event.target.value;
             let nextValue;
             if (choice === flavors[1]) {
@@ -181,3 +181,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default GridRows;

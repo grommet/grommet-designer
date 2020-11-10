@@ -21,18 +21,18 @@ const CoordinateInput = ({ value, index, name, max, onChange }) => (
       { fixed: ',' },
       { regexp: new RegExp(`^[0-${max[1]}]$`), length: 1, placeholder: 'row' },
     ]}
-    value={value[index][name].map(v => (v === undefined ? '' : v)).join(',')}
-    onChange={event => {
+    value={value[index][name].map((v) => (v === undefined ? '' : v)).join(',')}
+    onChange={(event) => {
       const nextValue = JSON.parse(JSON.stringify(value));
       nextValue[index][name] = event.target.value
         .split(',')
-        .map(v => (v === '' ? undefined : parseInt(v, 10)));
+        .map((v) => (v === '' ? undefined : parseInt(v, 10)));
       onChange(nextValue);
     }}
   />
 );
 
-export default ({ design, responsiveSize, selected, value, onChange }) => {
+const GridAreas = ({ design, responsiveSize, selected, value, onChange }) => {
   const component = design.components[selected.component];
   let { columns, rows } = component.props;
   if (component.responsive && component.responsive[responsiveSize]) {
@@ -61,7 +61,7 @@ export default ({ design, responsiveSize, selected, value, onChange }) => {
                     <FormField label="name">
                       <TextInput
                         value={area.name}
-                        onChange={event => {
+                        onChange={(event) => {
                           const nextValue = JSON.parse(JSON.stringify(value));
                           nextValue[index].name = event.target.value;
                           onChange(nextValue);
@@ -114,3 +114,5 @@ export default ({ design, responsiveSize, selected, value, onChange }) => {
     </Box>
   );
 };
+
+export default GridAreas;

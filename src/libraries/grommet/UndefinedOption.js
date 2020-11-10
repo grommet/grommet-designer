@@ -13,7 +13,7 @@ export const undefinedOption = {
   domValue: '-',
 };
 
-export default ({ checked, hover }) => (
+const UndefinedOption = ({ checked, hover }) => (
   <InlineOption checked={checked} hover={hover} label={undefinedOption.label}>
     <Blank color={checked ? 'selected-text' : 'border'}>
       <g {...stroke}>
@@ -23,3 +23,5 @@ export default ({ checked, hover }) => (
     </Blank>
   </InlineOption>
 );
+
+export default UndefinedOption;

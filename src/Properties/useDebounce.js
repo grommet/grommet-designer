@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Performs updates from Properties but accomodates updates from Canvas.
-export default (valueProp, onChange) => {
+const useDebounce = (valueProp, onChange) => {
   const [value, setValue] = React.useState(valueProp);
 
   // setting tracks when we're between set() and onChange().
@@ -16,7 +16,7 @@ export default (valueProp, onChange) => {
     if (!setting) setValue(valueProp);
   }, [setting, valueProp]);
 
-  const set = React.useCallback(nextValue => {
+  const set = React.useCallback((nextValue) => {
     setSetting(true);
     setValue(nextValue);
   }, []);
@@ -34,3 +34,5 @@ export default (valueProp, onChange) => {
   }, [onChange, setting, value, valueProp]);
   return [value, set];
 };
+
+export default useDebounce;

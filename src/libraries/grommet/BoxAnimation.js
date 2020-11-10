@@ -31,7 +31,7 @@ const set = (value, index, property, propertyValue) => {
   return nextValue;
 };
 
-export default ({ value, onChange }) => (
+const BoxAnimation = ({ value, onChange }) => (
   <Box direction="row" gap="medium">
     {(
       (value && Array.isArray(value) && value) ||
@@ -64,7 +64,7 @@ export default ({ value, onChange }) => (
           <FormField label="delay">
             <TextInput
               value={c.delay || ''}
-              onChange={event => {
+              onChange={(event) => {
                 const nextValue = set(
                   value,
                   i,
@@ -78,7 +78,7 @@ export default ({ value, onChange }) => (
           <FormField label="duration">
             <TextInput
               value={c.duration || ''}
-              onChange={event => {
+              onChange={(event) => {
                 const nextValue = set(
                   value,
                   i,
@@ -145,3 +145,5 @@ export default ({ value, onChange }) => (
     />
   </Box>
 );
+
+export default BoxAnimation;

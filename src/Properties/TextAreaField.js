@@ -3,7 +3,7 @@ import { TextArea } from 'grommet';
 import Field from '../components/Field';
 import useDebounce from './useDebounce';
 
-export default ({ onChange, name, value: valueProp }) => {
+const TextAreaField = ({ onChange, name, value: valueProp }) => {
   const [value, setValue] = useDebounce(valueProp, onChange);
   return (
     <Field label={name} htmlFor={name}>
@@ -12,9 +12,11 @@ export default ({ onChange, name, value: valueProp }) => {
         name={name}
         plain
         value={value}
-        onChange={event => setValue(event.target.value)}
+        onChange={(event) => setValue(event.target.value)}
         style={{ textAlign: 'end' }}
       />
     </Field>
   );
 };
+
+export default TextAreaField;

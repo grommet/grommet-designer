@@ -1,14 +1,14 @@
 import React from 'react';
 import { Box, TextArea } from 'grommet';
 
-export default ({ value, onChange }) => {
+const TextAreaValue = ({ value, onChange }) => {
   return (
     <Box>
       <TextArea
         rows={20}
         cols={80}
         value={value}
-        onChange={event => {
+        onChange={(event) => {
           const nextValue = event.target.value;
           onChange(nextValue);
         }}
@@ -16,3 +16,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default TextAreaValue;

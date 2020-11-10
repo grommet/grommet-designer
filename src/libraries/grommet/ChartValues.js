@@ -2,18 +2,18 @@ import React from 'react';
 import { Box, Button, FormField, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 
-export default ({ value, onChange }) => {
+const ChartValues = ({ value, onChange }) => {
   return (
     <Box direction="row" gap="medium">
       {(value || [])
-        .filter(item => item)
+        .filter((item) => item)
         .map((item, i) => (
           <Box basis="xsmall" flex="grow" key={i}>
             <Box flex="grow">
               <FormField label="label">
                 <TextInput
                   value={item.label || ''}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].label = event.target.value;
                     onChange(nextValue);
@@ -23,7 +23,7 @@ export default ({ value, onChange }) => {
               <FormField label="value">
                 <TextInput
                   value={item.value[1]}
-                  onChange={event => {
+                  onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     nextValue[i].value = [i, parseInt(event.target.value, 10)];
                     onChange(nextValue);
@@ -37,7 +37,7 @@ export default ({ value, onChange }) => {
                 const nextValue = JSON.parse(JSON.stringify(value));
                 nextValue.splice(i, 1);
                 // prune empty values
-                onChange(nextValue.filter(i => i));
+                onChange(nextValue.filter((i) => i));
               }}
             />
           </Box>
@@ -54,3 +54,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default ChartValues;

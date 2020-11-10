@@ -9,8 +9,10 @@ const structure = [
   },
 ];
 
-export default {
+const index = {
   name: 'designer',
   components,
   structure,
 };
+
+export default index;

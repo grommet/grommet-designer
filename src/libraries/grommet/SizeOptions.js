@@ -3,8 +3,8 @@ import InlineOptions from './InlineOptions';
 import SizeState from './SizeState';
 import { undefinedOption } from './UndefinedOption';
 
-export default ({ options }) => {
-  const SizeOptions = props => {
+const SizeOptions = ({ options }) => {
+  const SizeOptions = (props) => {
     const adjustedOptions = props.value
       ? options.concat(undefinedOption)
       : options;
@@ -28,3 +28,5 @@ export default ({ options }) => {
 
   return SizeOptions;
 };
+
+export default SizeOptions;

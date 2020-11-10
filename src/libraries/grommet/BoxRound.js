@@ -16,7 +16,7 @@ const corners = [
   'bottom-right',
 ];
 
-export default ({ name, value, onChange }) => {
+const BoxRound = ({ name, value, onChange }) => {
   return (
     <Box>
       <Box margin={{ vertical: 'medium' }}>
@@ -24,7 +24,7 @@ export default ({ name, value, onChange }) => {
           name="flavor"
           options={flavors}
           value={typeof value === 'object' ? flavors[1] : flavors[0]}
-          onChange={event => {
+          onChange={(event) => {
             const choice = event.target.value;
             const nextValue = choice === flavors[1] ? {} : undefined;
             onChange(nextValue);
@@ -74,3 +74,5 @@ export default ({ name, value, onChange }) => {
     </Box>
   );
 };
+
+export default BoxRound;

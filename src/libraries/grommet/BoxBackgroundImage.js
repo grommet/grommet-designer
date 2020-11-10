@@ -5,7 +5,7 @@ const dataUrlPrefix = "url('";
 const dataUrlSuffix = "')";
 const svgPrefix = 'data:image/svg+xml;utf8,';
 
-const stripToText = value => {
+const stripToText = (value) => {
   if (value && value.slice(0, dataUrlPrefix.length) === dataUrlPrefix) {
     const deDataUrl = value
       .slice(dataUrlPrefix.length)
@@ -19,7 +19,7 @@ const stripToText = value => {
   return value || '';
 };
 
-export default ({ value, onChange }) => {
+const BoxBackgroundImage = ({ value, onChange }) => {
   return (
     <Box>
       <Paragraph margin="none">URL or &lt;svg&gt; markup.</Paragraph>
@@ -27,7 +27,7 @@ export default ({ value, onChange }) => {
         rows={4}
         cols={80}
         value={stripToText(value)}
-        onChange={event => {
+        onChange={(event) => {
           const nextValue = event.target.value;
           if (nextValue[0] === '<') {
             onChange(
@@ -41,3 +41,5 @@ export default ({ value, onChange }) => {
     </Box>
   );
 };
+
+export default BoxBackgroundImage;
