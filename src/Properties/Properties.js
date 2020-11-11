@@ -27,6 +27,7 @@ import {
   deleteComponent,
   disconnectReference,
   duplicateComponent,
+  getAlternativeOptions,
   getLinkOptions,
   getParent,
   getReferences,
@@ -69,6 +70,10 @@ const Properties = ({
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
   const linkOptions = useMemo(
     () => getLinkOptions(design, libraries, selected),
+    [design, libraries, selected],
+  );
+  const alternativeOptions = useMemo(
+    () => getAlternativeOptions(design, libraries, selected),
     [design, libraries, selected],
   );
   const [showCode, setShowCode] = useState();
@@ -259,6 +264,7 @@ const Properties = ({
             design={design}
             theme={theme}
             linkOptions={linkOptions}
+            alternativeOptions={alternativeOptions}
             componentId={component.id}
             name={propName}
             property={properties[propName]}

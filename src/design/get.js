@@ -1,21 +1,21 @@
 import { getComponentType } from '../utils';
 
-export const getInitialSelected = design =>
+export const getInitialSelected = (design) =>
   design ? { screen: design.screenOrder[0] } : undefined;
 
 export const getDisplayName = (design, id) => {
   const component = design.components[id];
   if (!component) return '';
   const screen = Object.keys(design.screens)
-    .map(sId => design.screens[sId])
-    .filter(s => s.root === id)[0];
+    .map((sId) => design.screens[sId])
+    .filter((s) => s.root === id)[0];
   if (screen) return screen.name || `Screen ${screen.id}`;
   return component.name || `${component.type} ${component.id}`;
 };
 
 export const getParent = (design, id) => {
   let result;
-  Object.keys(design.components).some(id2 => {
+  Object.keys(design.components).some((id2) => {
     const component = design.components[id2];
     // does this component have id as a child?
     const children = component.children;
@@ -35,7 +35,7 @@ export const getParent = (design, id) => {
 
 export const getScreenForComponent = (design, id) => {
   let result;
-  Object.keys(design.screens).some(sId => {
+  Object.keys(design.screens).some((sId) => {
     const screen = design.screens[sId];
     if (screen.root === id) {
       result = screen.id;
@@ -51,7 +51,7 @@ export const getScreenForComponent = (design, id) => {
 
 export const getScreenByPath = (design, path) => {
   let result;
-  Object.keys(design.screens).some(sId => {
+  Object.keys(design.screens).some((sId) => {
     const screen = design.screens[sId];
     if (screen.path === path) {
       result = screen.id;
@@ -73,7 +73,7 @@ const getDescendants = (design, id) => {
   let result = [];
   const component = design.components[id];
   if (component.children) {
-    component.children.forEach(childId => {
+    component.children.forEach((childId) => {
       result = [...result, childId, ...getDescendants(design, childId)];
     });
   }
@@ -82,9 +82,9 @@ const getDescendants = (design, id) => {
 
 export const getReferences = (design, id) =>
   Object.keys(design.components)
-    .map(cId => design.components[cId])
+    .map((cId) => design.components[cId])
     .filter(
-      c =>
+      (c) =>
         c.type === 'designer.Reference' &&
         parseInt(c.props.component, 10) === id,
     );
@@ -98,12 +98,13 @@ export const getLinkOptions = (design, libraries, selected) => {
     : [];
   return [
     ...screenComponents
-      .map(k => design.components[k])
-      .filter(c => {
+      .map((k) => design.components[k])
+      .filter((c) => {
         const type = getComponentType(libraries, c.type);
-        return (type.hideable || type.cycle) && c.name; // must have a name
+        // must have a name
+        return (type.hideable || type.selectable) && c.name;
       })
-      .map(c => ({
+      .map((c) => ({
         screen: selected.screen,
         component: c.id,
         type: c.type,
@@ -111,8 +112,8 @@ export const getLinkOptions = (design, libraries, selected) => {
         key: c.id,
       })),
     ...Object.keys(design.screens)
-      .map(k => design.screens[k])
-      .map(s => ({
+      .map((k) => design.screens[k])
+      .map((s) => ({
         screen: s.id,
         label: s.name || `Screen ${screen.id}`,
         key: s.id,
@@ -122,6 +123,29 @@ export const getLinkOptions = (design, libraries, selected) => {
       label: '-toggle theme mode-',
       key: 'toggleThemeMode',
     },
+  ];
+};
+
+export const getAlternativeOptions = (design, libraries, selected) => {
+  // options for what a Select should do:
+  const screen = design.screens[selected.screen];
+  const screenComponents = screen.root
+    ? getDescendants(design, screen.root)
+    : [];
+  return [
+    ...screenComponents
+      .map((k) => design.components[k])
+      .filter((c) => {
+        const type = getComponentType(libraries, c.type);
+        return type.selectable && c.name; // must have a name
+      })
+      .map((c) => ({
+        screen: selected.screen,
+        component: c.id,
+        type: c.type,
+        label: getDisplayName(design, c.id),
+        key: c.id,
+      })),
   ];
 };
 
@@ -199,7 +223,7 @@ export const canParent = (design, libraries, component) => {
   return result;
 };
 
-export const slugify = name =>
+export const slugify = (name) =>
   `/${name
     .toLocaleLowerCase()
     .replace(/ /g, '-')

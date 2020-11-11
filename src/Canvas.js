@@ -41,10 +41,10 @@ const Placeholder = styled.div`
 
 const arrayExp = /(.+)\[(\d+)\]/;
 // converts something like 'data[0].details' to: ['data', 0, 'details']
-const parsePath = text =>
+const parsePath = (text) =>
   text
     .split('.')
-    .map(part => {
+    .map((part) => {
       const match = part.match(arrayExp);
       if (match) {
         return [match[1], parseInt(match[2], 10)];
@@ -71,7 +71,7 @@ const find = (data, path) => {
 };
 
 const replace = (text, data, contextPath) =>
-  (text || '').replace(/\{[^}]*\}/g, match => {
+  (text || '').replace(/\{[^}]*\}/g, (match) => {
     const dataPath = parsePath(match.slice(1, match.length - 1));
     const replaced = find(
       data,
@@ -101,7 +101,7 @@ const Canvas = ({
   const inputRef = useRef();
 
   const libraries = useMemo(
-    () => imports.filter(i => i.library).map(i => i.library),
+    () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
 
@@ -112,14 +112,14 @@ const Canvas = ({
         ? JSON.parse(JSON.stringify(dataSources))
         : {};
       let changed = false;
-      Object.keys(design.data).forEach(key => {
+      Object.keys(design.data).forEach((key) => {
         if (nextDataSources[key] !== design.data[key]) {
           nextDataSources[key] = design.data[key];
           changed = true;
           if (design.data[key].slice(0, 4) === 'http') {
             fetch(design.data[key])
-              .then(response => response.json())
-              .then(response => {
+              .then((response) => response.json())
+              .then((response) => {
                 const nextData = JSON.parse(JSON.stringify(data || {}));
                 nextData[key] = response;
                 setData(nextData);
@@ -186,7 +186,7 @@ const Canvas = ({
     if (Array.isArray(to)) {
       // when to is an Array, lazily create nextDesign and re-use
       const ref = {};
-      to.forEach(t => followLink(t, { dataContextPath, nextRef: ref }));
+      to.forEach((t) => followLink(t, { dataContextPath, nextRef: ref }));
       if (ref.design) setDesign(ref.design);
     } else if (to.control === 'toggleThemeMode') {
       const nextDesign =
@@ -197,14 +197,15 @@ const Canvas = ({
       const target = design.components[to.component];
       const hideable =
         target && getComponentType(libraries, target.type).hideable;
-      const cycle = target && getComponentType(libraries, target.type).cycle;
-      if (cycle) {
+      const selectable =
+        target && getComponentType(libraries, target.type).selectable;
+      if (selectable) {
         const nextDesign =
           (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
         const component = nextDesign.components[target.id];
-        component.props[cycle] = component.props[cycle] + 1;
-        if (component.props[cycle] > component.children.length) {
-          component.props[cycle] = 1;
+        component.props.active = component.props.active + 1;
+        if (component.props.active > component.children.length) {
+          component.props.active = 1;
         }
         nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
       } else if (hideable) {
@@ -229,7 +230,7 @@ const Canvas = ({
     if (Array.isArray(to)) {
       // when to is an Array, lazily create nextDesign and re-use
       const ref = {};
-      to.forEach(t => followLink(t, { nextRef: ref }));
+      to.forEach((t) => followLink(t, { nextRef: ref }));
       if (ref.design) setDesign(ref.design);
     } else if (to.control === 'toggleThemeMode') {
       const nextDesign =
@@ -245,6 +246,48 @@ const Canvas = ({
           (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
         nextDesign.components[target.id].hide = !onOff;
         nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+      }
+    }
+  };
+
+  const selectAlternative = (
+    to,
+    selected,
+    { dataContextPath, nextRef } = {},
+  ) => {
+    if (Array.isArray(to)) {
+      // when to is an Array, lazily create nextDesign and re-use
+      const ref = {};
+      to.forEach((t) =>
+        selectAlternative(t, selected, { dataContextPath, nextRef: ref }),
+      );
+      if (ref.design) setDesign(ref.design);
+    } else if (to.component) {
+      const target = design.components[to.component];
+      const selectable =
+        target && getComponentType(libraries, target.type).selectable;
+      if (selectable) {
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        const component = nextDesign.components[target.id];
+        // find out which children indexes to show based on what is selected
+        let nextActive = [];
+        component.children.forEach((childId, index) => {
+          const childName = nextDesign.components[childId].name;
+          if (
+            selected === childName ||
+            (Array.isArray(selected) && selected.includes(childName))
+          ) {
+            nextActive.push(index + 1);
+          }
+        });
+        if (nextActive.length === 0) nextActive = undefined;
+        else if (nextActive.length === 1) nextActive = nextActive[0];
+        component.props.active = nextActive;
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+      } else if (target) {
+        // might not have anymore
+        setSelected({ ...to, dataContextPath });
       }
     }
   };
@@ -362,10 +405,12 @@ const Canvas = ({
       }
       specialProps = type.override(component, {
         dataContextPath: dataPath,
+        design: referenceDesignProp || design,
         followLink,
         toggleLink,
-        replaceData: text => replace(text, datum || data, contextPath),
-        setHide: value => setHide(id, value),
+        selectAlternative,
+        replaceData: (text) => replace(text, datum || data, contextPath),
+        setHide: (value) => setHide(id, value),
         data: dataValue || undefined,
         renderComponent,
       });
@@ -376,7 +421,7 @@ const Canvas = ({
       specialProps.target = findDOMNode(grommetRef.current);
     }
 
-    Object.keys(mergedProps).forEach(prop => {
+    Object.keys(mergedProps).forEach((prop) => {
       if (type.properties) {
         const property = type.properties[prop];
         // use designer Icon for icons
@@ -418,7 +463,7 @@ const Canvas = ({
     let children;
     if (parent.children && parent.children.length > 0) {
       if (parent.children.length > 0) {
-        children = parent.children.map(childId =>
+        children = parent.children.map((childId) =>
           renderComponent(childId, { dataContextPath, datum, referenceDesign }),
         );
         if (children.length === 0) children = undefined;
@@ -431,7 +476,7 @@ const Canvas = ({
           placeholder={type.text}
           value={component.text || ''}
           size={component.text ? component.text.length : 4}
-          onChange={event => {
+          onChange={(event) => {
             const text = event.target.value;
             const nextDesign = JSON.parse(JSON.stringify(design));
             const component = nextDesign.components[selected.component];
@@ -462,17 +507,17 @@ const Canvas = ({
     const dragProps = {};
     if (mode === 'edit' && !inlineEdit) {
       dragProps.draggable = true;
-      dragProps.onDragStart = event => {
+      dragProps.onDragStart = (event) => {
         event.stopPropagation();
         event.dataTransfer.setData('text/plain', ''); // for Firefox
         setDragging(id);
       };
-      dragProps.onDragEnd = event => {
+      dragProps.onDragEnd = (event) => {
         event.stopPropagation();
         setDragging(undefined);
         setDropTarget(undefined);
       };
-      dragProps.onDragEnter = event => {
+      dragProps.onDragEnter = (event) => {
         if (droppable) event.stopPropagation();
         if (dragging && dragging !== id) {
           if (droppable) {
@@ -482,13 +527,13 @@ const Canvas = ({
           }
         }
       };
-      dragProps.onDragOver = event => {
+      dragProps.onDragOver = (event) => {
         if (droppable) event.stopPropagation();
         if (dragging && dragging !== id && droppable) {
           event.preventDefault();
         }
       };
-      dragProps.onDrop = event => {
+      dragProps.onDrop = (event) => {
         if (droppable) event.stopPropagation();
         moveChild();
       };
@@ -496,7 +541,7 @@ const Canvas = ({
 
     const selectProps = {};
     if (mode === 'edit') {
-      selectProps.onClick = event => {
+      selectProps.onClick = (event) => {
         event.stopPropagation();
         if (selected.component !== id) {
           setSelected({ ...selected, component: id });

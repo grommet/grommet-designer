@@ -1,4 +1,5 @@
 import React from 'react';
+import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
 import ColorProperty from './ColorProperty';
@@ -27,6 +28,9 @@ const Property = React.forwardRef(
       }
       if (property.includes('-link-')) {
         return <LinkProperty ref={ref} value={value} {...rest} />;
+      }
+      if (property.includes('-alternative-')) {
+        return <AlternativeProperty ref={ref} value={value} {...rest} />;
       }
       if (property.includes('-reference-')) {
         return <ReferenceProperty ref={ref} value={value} {...rest} />;

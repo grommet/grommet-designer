@@ -8,7 +8,7 @@ export const components = {
     component: Alternative,
     name: 'Alternative',
     container: true,
-    cycle: 'active',
+    selectable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Alternative is currently empty. Add some components to it so it can
@@ -16,7 +16,7 @@ export const components = {
       </Paragraph>
     ),
     help: `Alternative is a designer specific component for
-    use with this design tool. It provides a way to cycle through a variety
+    use with this design tool. It provides a way to alternate through a variety
     of design options.`,
     defaultProps: {
       active: 1,

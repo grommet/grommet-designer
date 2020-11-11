@@ -784,10 +784,38 @@ export const components = {
       value: ['-property- options'],
     },
     advancedProperties: ['gap'],
-    override: ({ id, props }) => {
+    designProperties: {
+      alternative: ['-alternative-'],
+    },
+    override: (
+      { id, props, designProps },
+      { dataContextPath, design, selectAlternative },
+    ) => {
       const result = {};
       if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
+      if (
+        designProps &&
+        designProps.alternative &&
+        designProps.alternative.length
+      ) {
+        result.onChange = ({ value }) =>
+          selectAlternative(designProps.alternative, value, {
+            dataContextPath,
+          });
+        // set options from first alternative component children names
+        const target = design.components[designProps.alternative[0].component];
+        const childNames = target.children.map(
+          (cId) => design.components[cId].name,
+        );
+        result.options = childNames.filter((name) => name); // must have a name
+        const active = target.props.active;
+        result.value = childNames.filter(
+          (n, index) =>
+            active === index + 1 ||
+            (Array.isArray(active) && active.includes(index + 1)),
+        );
+      }
       return result;
     },
   },
@@ -892,10 +920,33 @@ export const components = {
       value: '-property- options',
     },
     advancedProperties: ['gap'],
-    override: ({ id, props }) => {
+    designProperties: {
+      alternative: ['-alternative-'],
+    },
+    override: (
+      { id, props, designProps },
+      { dataContextPath, design, selectAlternative },
+    ) => {
       const result = {};
       if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
+      if (
+        designProps &&
+        designProps.alternative &&
+        designProps.alternative.length
+      ) {
+        result.onChange = ({ target: { value } }) =>
+          selectAlternative(designProps.alternative, value, {
+            dataContextPath,
+          });
+        // set options from first alternative component children names
+        const target = design.components[designProps.alternative[0].component];
+        const childNames = target.children.map(
+          (cId) => design.components[cId].name,
+        );
+        result.options = childNames.filter((name) => name); // must have a name
+        result.value = childNames[target.props.active - 1];
+      }
       return result;
     },
   },
@@ -936,10 +987,33 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
     },
-    override: ({ props }) => {
+    designProperties: {
+      alternative: ['-alternative-'],
+    },
+    override: (
+      { props, designProps },
+      { dataContextPath, design, selectAlternative },
+    ) => {
       const result = {};
       if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
+      if (
+        designProps &&
+        designProps.alternative &&
+        designProps.alternative.length
+      ) {
+        result.onChange = ({ value }) =>
+          selectAlternative(designProps.alternative, value, {
+            dataContextPath,
+          });
+        // set options from first alternative component children names
+        const target = design.components[designProps.alternative[0].component];
+        const childNames = target.children.map(
+          (cId) => design.components[cId].name,
+        );
+        result.options = childNames.filter((name) => name); // must have a name
+        result.value = childNames[target.props.active - 1];
+      }
       return result;
     },
   },
