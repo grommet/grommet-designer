@@ -808,7 +808,10 @@ export const components = {
         const childNames = target.children.map(
           (cId) => design.components[cId].name,
         );
-        result.options = childNames.filter((name) => name); // must have a name
+        // target children must have a name to be an option
+        result.options = [
+          ...new Set([...childNames.filter((name) => name), ...props.options]),
+        ];
         const active = target.props.active;
         result.value = childNames.filter(
           (n, index) =>
@@ -944,7 +947,10 @@ export const components = {
         const childNames = target.children.map(
           (cId) => design.components[cId].name,
         );
-        result.options = childNames.filter((name) => name); // must have a name
+        // target children must have a name to be an option
+        result.options = [
+          ...new Set([...childNames.filter((name) => name), ...props.options]),
+        ];
         result.value = childNames[target.props.active - 1];
       }
       return result;
@@ -1011,7 +1017,10 @@ export const components = {
         const childNames = target.children.map(
           (cId) => design.components[cId].name,
         );
-        result.options = childNames.filter((name) => name); // must have a name
+        // target children must have a name to be an option
+        result.options = [
+          ...new Set([...childNames.filter((name) => name), ...props.options]),
+        ];
         result.value = childNames[target.props.active - 1];
       }
       return result;
