@@ -250,46 +250,25 @@ const Canvas = ({
     }
   };
 
-  const selectAlternative = (
-    to,
-    selected,
-    { dataContextPath, nextRef } = {},
-  ) => {
-    if (Array.isArray(to)) {
-      // when to is an Array, lazily create nextDesign and re-use
-      const ref = {};
-      to.forEach((t) =>
-        selectAlternative(t, selected, { dataContextPath, nextRef: ref }),
-      );
-      if (ref.design) setDesign(ref.design);
-    } else if (to.component) {
-      const target = design.components[to.component];
-      const selectable =
-        target && getComponentType(libraries, target.type).selectable;
-      if (selectable) {
-        const nextDesign =
-          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        const component = nextDesign.components[target.id];
-        // find out which children indexes to show based on what is selected
-        let nextActive = [];
-        component.children.forEach((childId, index) => {
-          const childName = nextDesign.components[childId].name;
-          if (
-            selected === childName ||
-            (Array.isArray(selected) && selected.includes(childName))
-          ) {
-            nextActive.push(index + 1);
-          }
-        });
-        if (nextActive.length === 0) nextActive = undefined;
-        else if (nextActive.length === 1) nextActive = nextActive[0];
-        component.props.active = nextActive;
-        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-      } else if (target) {
-        // might not have anymore
-        setSelected({ ...to, dataContextPath });
-      }
-    }
+  const followLinkOption = (options, selected) => {
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    // figure out which link to use, if any
+    Object.keys(options)
+      .filter((n) => options[n])
+      .forEach((name) => {
+        const target = design.components[options[name].component];
+        const hideable =
+          target && getComponentType(libraries, target.type).hideable;
+        if (hideable) {
+          nextDesign.components[target.id].hide =
+            (name === '-any-' && (!selected || !selected.length)) ||
+            (name !== '-any-' &&
+              (Array.isArray(selected)
+                ? !selected.includes(name)
+                : selected !== name));
+        }
+      });
+    setDesign(nextDesign);
   };
 
   const renderRepeater = (component, type, { dataContextPath }) => {
@@ -407,8 +386,8 @@ const Canvas = ({
         dataContextPath: dataPath,
         design: referenceDesignProp || design,
         followLink,
+        followLinkOption,
         toggleLink,
-        selectAlternative,
         replaceData: (text) => replace(text, datum || data, contextPath),
         setHide: (value) => setHide(id, value),
         data: dataValue || undefined,

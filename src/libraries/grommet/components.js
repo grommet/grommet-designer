@@ -785,39 +785,18 @@ export const components = {
     },
     advancedProperties: ['gap'],
     designProperties: {
-      alternative: ['-alternative-'],
+      link: ['-link-options-'],
     },
     override: (
       { id, props, designProps },
-      { dataContextPath, design, selectAlternative },
+      { dataContextPath, followLinkOption },
     ) => {
       const result = {};
       if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
-      if (
-        designProps &&
-        designProps.alternative &&
-        designProps.alternative.length
-      ) {
+      if (designProps && designProps.link) {
         result.onChange = ({ value }) =>
-          selectAlternative(designProps.alternative, value, {
-            dataContextPath,
-          });
-        // set options from first alternative component children names
-        const target = design.components[designProps.alternative[0].component];
-        const childNames = target.children.map(
-          (cId) => design.components[cId].name,
-        );
-        // target children must have a name to be an option
-        result.options = [
-          ...new Set([...childNames.filter((name) => name), ...props.options]),
-        ];
-        const active = target.props.active;
-        result.value = childNames.filter(
-          (n, index) =>
-            active === index + 1 ||
-            (Array.isArray(active) && active.includes(index + 1)),
-        );
+          followLinkOption(designProps.link, value, { dataContextPath });
       }
       return result;
     },
@@ -924,34 +903,18 @@ export const components = {
     },
     advancedProperties: ['gap'],
     designProperties: {
-      alternative: ['-alternative-'],
+      link: ['-link-options-'],
     },
     override: (
       { id, props, designProps },
-      { dataContextPath, design, selectAlternative },
+      { dataContextPath, followLinkOption },
     ) => {
       const result = {};
       if (!props.id) result.id = props.name || id;
       if (!props.value) result.value = undefined;
-      if (
-        designProps &&
-        designProps.alternative &&
-        designProps.alternative.length
-      ) {
+      if (designProps && designProps.link) {
         result.onChange = ({ target: { value } }) =>
-          selectAlternative(designProps.alternative, value, {
-            dataContextPath,
-          });
-        // set options from first alternative component children names
-        const target = design.components[designProps.alternative[0].component];
-        const childNames = target.children.map(
-          (cId) => design.components[cId].name,
-        );
-        // target children must have a name to be an option
-        result.options = [
-          ...new Set([...childNames.filter((name) => name), ...props.options]),
-        ];
-        result.value = childNames[target.props.active - 1];
+          followLinkOption(designProps.link, value, { dataContextPath });
       }
       return result;
     },
@@ -994,34 +957,18 @@ export const components = {
       value: '',
     },
     designProperties: {
-      alternative: ['-alternative-'],
+      link: ['-link-options-'],
     },
     override: (
       { props, designProps },
-      { dataContextPath, design, selectAlternative },
+      { dataContextPath, followLinkOption },
     ) => {
       const result = {};
       if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
-      if (
-        designProps &&
-        designProps.alternative &&
-        designProps.alternative.length
-      ) {
+      if (designProps && designProps.link) {
         result.onChange = ({ value }) =>
-          selectAlternative(designProps.alternative, value, {
-            dataContextPath,
-          });
-        // set options from first alternative component children names
-        const target = design.components[designProps.alternative[0].component];
-        const childNames = target.children.map(
-          (cId) => design.components[cId].name,
-        );
-        // target children must have a name to be an option
-        result.options = [
-          ...new Set([...childNames.filter((name) => name), ...props.options]),
-        ];
-        result.value = childNames[target.props.active - 1];
+          followLinkOption(designProps.link, value, { dataContextPath });
       }
       return result;
     },

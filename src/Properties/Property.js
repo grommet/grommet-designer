@@ -6,6 +6,7 @@ import ColorProperty from './ColorProperty';
 import FunctionProperty from './FunctionProperty';
 import IconProperty from './IconProperty';
 import LinkProperty from './LinkProperty';
+import LinkOptionsProperty from './LinkOptionsProperty';
 import NumberProperty from './NumberProperty';
 import ObjectProperty from './ObjectProperty';
 import OptionsProperty from './OptionsProperty';
@@ -25,6 +26,16 @@ const Property = React.forwardRef(
       }
       if (property.includes('-Icon-')) {
         return <IconProperty ref={ref} value={value} {...rest} />;
+      }
+      if (property.includes('-link-options-')) {
+        return (
+          <FunctionProperty
+            ref={ref}
+            value={value}
+            property={LinkOptionsProperty}
+            {...rest}
+          />
+        );
       }
       if (property.includes('-link-')) {
         return <LinkProperty ref={ref} value={value} {...rest} />;

@@ -1,15 +1,15 @@
 // Upgrade to latest design structure
-export const upgradeDesign = design => {
+export const upgradeDesign = (design) => {
   // add screenOrder if it isn't there
   if (!design.screenOrder) {
-    design.screenOrder = Object.keys(design.screens).map(id =>
+    design.screenOrder = Object.keys(design.screens).map((id) =>
       parseInt(id, 10),
     );
   }
   // move components out of screens (v2.0)
   if (!design.components) {
     design.components = {};
-    Object.keys(design.screens).forEach(id => {
+    Object.keys(design.screens).forEach((id) => {
       const screen = design.screens[id];
       screen.root = Object.keys(screen.components)[0];
       Object.assign(design.components, screen.components);
@@ -18,11 +18,11 @@ export const upgradeDesign = design => {
   }
   // remove any children where the component doesn't exist anymore
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .forEach((component) => {
       if (component.children) {
         component.children = component.children.filter(
-          childId => design.components[childId],
+          (childId) => design.components[childId],
         );
       }
     });
@@ -30,40 +30,40 @@ export const upgradeDesign = design => {
   // remove any component that isn't a screen root, another component's child,
   // or another component's propComponent
   const found = {};
-  const descend = id => {
+  const descend = (id) => {
     const component = design.components[id];
     if (component) {
       found[id] = true;
       if (component.children) {
-        component.children.forEach(childId => descend(childId));
+        component.children.forEach((childId) => descend(childId));
       }
       if (component.propComponents) {
-        component.propComponents.forEach(compId => descend(compId));
+        component.propComponents.forEach((compId) => descend(compId));
       }
     }
   };
 
   // ensure screen roots are numbers
   Object.keys(design.screens)
-    .map(sId => design.screens[sId])
-    .filter(screen => screen.root)
-    .forEach(screen => (screen.root = parseInt(screen.root, 10)));
+    .map((sId) => design.screens[sId])
+    .filter((screen) => screen.root)
+    .forEach((screen) => (screen.root = parseInt(screen.root, 10)));
 
   // record which components we have references to from screen roots
   Object.keys(design.screens)
-    .map(sId => design.screens[sId])
-    .forEach(screen => descend(screen.root));
+    .map((sId) => design.screens[sId])
+    .forEach((screen) => descend(screen.root));
   // delete anything unreferenced
-  Object.keys(design.components).forEach(id => {
+  Object.keys(design.components).forEach((id) => {
     if (!found[id]) delete design.components[id];
   });
 
   // ensure all linkTo properties have both screen and component
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.linkTo)
-    .map(component => component.linkTo)
-    .forEach(linkTo => {
+    .map((id) => design.components[id])
+    .filter((component) => component.linkTo)
+    .map((component) => component.linkTo)
+    .forEach((linkTo) => {
       if (!linkTo.component) {
         linkTo.component = design.screens[linkTo.screen].root;
       }
@@ -78,13 +78,13 @@ export const upgradeDesign = design => {
   // before, DropButton had dropContentId property
   // after, DropButton has propComponents
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.props.dropContentId)
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .filter((component) => component.props.dropContentId)
+    .forEach((component) => {
       component.propComponents = [component.props.dropContentId];
       component.props.dropContent = component.props.dropContentId;
       component.children = component.children.filter(
-        id => id !== component.props.dropContentId,
+        (id) => id !== component.props.dropContentId,
       );
       delete component.props.dropContentId;
     });
@@ -92,19 +92,19 @@ export const upgradeDesign = design => {
   // 3.1
   // upgrade Button links to use design props
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.linkTo)
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .filter((component) => component.linkTo)
+    .forEach((component) => {
       if (!component.designProps) component.designProps = {};
       component.designProps.link = component.linkTo;
       delete component.linkTo;
     });
   // upgrade Menu items links to use design props
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.props.items && component.props.items[0])
-    .forEach(component => {
-      component.props.items.forEach(item => {
+    .map((id) => design.components[id])
+    .filter((component) => component.props.items && component.props.items[0])
+    .forEach((component) => {
+      component.props.items.forEach((item) => {
         if (item.linkTo) {
           item.link = item.linkTo;
           delete item.linkTo;
@@ -113,15 +113,15 @@ export const upgradeDesign = design => {
     });
   // remove styling property
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.props.styling)
-    .forEach(component => delete component.props.styling);
+    .map((id) => design.components[id])
+    .filter((component) => component.props.styling)
+    .forEach((component) => delete component.props.styling);
 
   // 3.2
   // remove component from screen links
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .forEach((component) => {
       const link = component.designProps && component.designProps.link;
       if (
         link &&
@@ -134,8 +134,8 @@ export const upgradeDesign = design => {
     });
   // remove screen root Grommet components
   Object.keys(design.screens)
-    .map(id => design.screens[id])
-    .forEach(screen => {
+    .map((id) => design.screens[id])
+    .forEach((screen) => {
       if (screen.root) {
         const root = design.components[screen.root];
         if (root && root.type === 'Grommet') {
@@ -158,22 +158,22 @@ export const upgradeDesign = design => {
     });
   // move dataPath to designProperties
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.props.dataPath)
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .filter((component) => component.props.dataPath)
+    .forEach((component) => {
       if (!component.designProps) component.designProps = {};
       component.designProps.dataPath = component.props.dataPath;
       delete component.props.dataPath;
     });
   // mark any dropContent components coupled
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .filter(component => component.propComponents)
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .filter((component) => component.propComponents)
+    .forEach((component) => {
       component.propComponents = component.propComponents.filter(
-        id => design.components[id],
+        (id) => design.components[id],
       );
-      component.propComponents.forEach(id => {
+      component.propComponents.forEach((id) => {
         if (design.components[id]) {
           design.components[id].coupled = true;
         } else {
@@ -189,8 +189,8 @@ export const upgradeDesign = design => {
   }
   if (design.library) {
     Object.keys(design.library)
-      .filter(n => n)
-      .forEach(name => {
+      .filter((n) => n)
+      .forEach((name) => {
         design.imports.push({ name, url: design.library[name] });
       });
     delete design.library;
@@ -198,20 +198,32 @@ export const upgradeDesign = design => {
 
   // remove any designProps.link that isn't there anymore
   Object.keys(design.components)
-    .map(id => design.components[id])
-    .forEach(component => {
+    .map((id) => design.components[id])
+    .forEach((component) => {
       if (component.designProps && component.designProps.link) {
-        if (Array.isArray(component.designProps.link)) {
-          component.designProps.link = component.designProps.link.filter(
-            l =>
+        const link = component.designProps.link;
+        if (Array.isArray(link)) {
+          // Button
+          component.designProps.link = link.filter(
+            (l) =>
               design.screens[l.screen] &&
               (!l.component || design.components[l.component]),
           );
+        } else if (typeof link === 'object') {
+          // Select
+          Object.keys(link).forEach((name) => {
+            const l = link[name];
+            if (
+              !design.screens[l.screen] ||
+              (l.component && !design.components[l.component])
+            ) {
+              delete component.designProps.link[name];
+            }
+          });
         } else {
-          const l = component.designProps.link;
           if (
-            !design.screens[l.screen] ||
-            (l.component && !design.components[l.component])
+            !design.screens[link.screen] ||
+            (link.component && !design.components[link.component])
           ) {
             delete component.designProps.link;
           }
@@ -222,17 +234,17 @@ export const upgradeDesign = design => {
   // 3.5
   // upgrade DataChart props to align with grommet changes
   Object.keys(design.components)
-    .map(id => design.components[id])
+    .map((id) => design.components[id])
     .filter(
-      component =>
+      (component) =>
         component.type === 'grommet.DataChart' && !component.props.series,
     )
-    .forEach(component => {
+    .forEach((component) => {
       component.props.series = [];
       // convert chart
       component.props.chart
-        .filter(c => c.key)
-        .forEach(chart => {
+        .filter((c) => c.key)
+        .forEach((chart) => {
           chart.property = chart.key;
           delete chart.key;
           if (component.props.series.indexOf(chart.property) === -1)
