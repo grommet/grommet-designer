@@ -260,12 +260,17 @@ const Canvas = ({
         const hideable =
           target && getComponentType(libraries, target.type).hideable;
         if (hideable) {
-          nextDesign.components[target.id].hide =
-            (name === '-any-' && (!selected || !selected.length)) ||
-            (name !== '-any-' &&
-              (Array.isArray(selected)
-                ? !selected.includes(name)
-                : selected !== name));
+          let hide;
+          if (name === '-any-') hide = !selected || !selected.length;
+          else if (name === '-none-')
+            hide = Array.isArray(selected)
+              ? !!selected.length && selected[0] !== name
+              : !!selected && selected !== name;
+          else
+            hide = Array.isArray(selected)
+              ? !selected.includes(name)
+              : selected !== name;
+          nextDesign.components[target.id].hide = hide;
         }
       });
     setDesign(nextDesign);

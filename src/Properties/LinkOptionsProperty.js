@@ -1,6 +1,11 @@
 import React from 'react';
 import { Box, Grid, Select, Text } from 'grommet';
 
+const specialNames = {
+  '-any-': '<any option>',
+  '-none-': '<no option>',
+};
+
 const LinkOptionsProperty = ({
   componentId,
   design,
@@ -16,7 +21,10 @@ const LinkOptionsProperty = ({
     </Box>
   );
 
-  const names = ['-any-', ...design.components[componentId].props.options];
+  const names = [
+    ...Object.keys(specialNames),
+    ...design.components[componentId].props.options,
+  ];
 
   return (
     <Grid
@@ -27,7 +35,7 @@ const LinkOptionsProperty = ({
     >
       {names.map((name) => [
         <Text key="name" textAlign="end">
-          {name === '-any-' ? '<any option>' : name}
+          {specialNames[name] || name}
         </Text>,
         <Select
           key="value"
