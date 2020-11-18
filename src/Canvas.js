@@ -288,15 +288,17 @@ const Canvas = ({
     [design, libraries, setDesign],
   );
 
-  // Initialize all components who have asked for it
+  // Initialize components who have asked for it, one at a time in case
+  // they affect others
   useEffect(() => {
     if (Object.keys(initialize).length) {
-      setInitialize({}); // ensure we don't initialize twice
-      Object.keys(initialize).forEach((id) => {
-        const component = initialize[id];
-        const type = getComponentType(libraries, component.type);
-        type.initialize(component, { followLinkOption });
-      });
+      const id = Object.keys(initialize)[0];
+      const component = initialize[id];
+      const type = getComponentType(libraries, component.type);
+      type.initialize(component, { followLinkOption });
+      const nextInitialize = { ...initialize };
+      delete nextInitialize[id];
+      setInitialize(nextInitialize);
     }
   }, [followLinkOption, initialize, libraries]);
 
