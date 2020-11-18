@@ -942,6 +942,7 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      clear: false,
       closeOnChange: true,
       disabled: false,
       dropAlign: DropAlign,
