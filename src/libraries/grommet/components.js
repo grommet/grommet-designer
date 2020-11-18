@@ -960,18 +960,20 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    override: (
-      { props, designProps },
-      { dataContextPath, followLinkOption },
-    ) => {
+    override: ({ props, designProps }, { followLinkOption }) => {
       const result = {};
       if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
       if (designProps && designProps.link) {
         result.onChange = ({ value }) =>
-          followLinkOption(designProps.link, value, { dataContextPath });
+          followLinkOption(designProps.link, value);
       }
       return result;
+    },
+    initialize: ({ props, designProps }, { followLinkOption }) => {
+      if (designProps && designProps.link) {
+        followLinkOption(designProps.link, props.value);
+      }
     },
   },
   TextArea: {

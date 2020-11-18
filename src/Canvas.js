@@ -1,5 +1,6 @@
 import React, {
   createElement,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -99,6 +100,8 @@ const Canvas = ({
   const [dropAt, setDropAt] = useState();
   const grommetRef = useRef();
   const inputRef = useRef();
+  const rendered = useRef({});
+  const [initialize, setInitialize] = useState({});
 
   const libraries = useMemo(
     () => imports.filter((i) => i.library).map((i) => i.library),
@@ -182,99 +185,120 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const followLink = (to, { dataContextPath, nextRef } = {}) => {
-    if (Array.isArray(to)) {
-      // when to is an Array, lazily create nextDesign and re-use
-      const ref = {};
-      to.forEach((t) => followLink(t, { dataContextPath, nextRef: ref }));
-      if (ref.design) setDesign(ref.design);
-    } else if (to.control === 'toggleThemeMode') {
-      const nextDesign =
-        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-      nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-    } else if (to.component) {
-      const target = design.components[to.component];
-      const hideable =
-        target && getComponentType(libraries, target.type).hideable;
-      const selectable =
-        target && getComponentType(libraries, target.type).selectable;
-      if (selectable) {
+  const followLink = useCallback(
+    (to, { dataContextPath, nextRef } = {}) => {
+      if (Array.isArray(to)) {
+        // when to is an Array, lazily create nextDesign and re-use
+        const ref = {};
+        to.forEach((t) => followLink(t, { dataContextPath, nextRef: ref }));
+        if (ref.design) setDesign(ref.design);
+      } else if (to.control === 'toggleThemeMode') {
         const nextDesign =
           (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        const component = nextDesign.components[target.id];
-        component.props.active = component.props.active + 1;
-        if (component.props.active > component.children.length) {
-          component.props.active = 1;
+        nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
+        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+      } else if (to.component) {
+        const target = design.components[to.component];
+        const hideable =
+          target && getComponentType(libraries, target.type).hideable;
+        const selectable =
+          target && getComponentType(libraries, target.type).selectable;
+        if (selectable) {
+          const nextDesign =
+            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+          const component = nextDesign.components[target.id];
+          component.props.active = component.props.active + 1;
+          if (component.props.active > component.children.length) {
+            component.props.active = 1;
+          }
+          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+        } else if (hideable) {
+          const nextDesign =
+            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+          nextDesign.components[target.id].hide = !target.hide;
+          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+          if (target.hide) setSelected({ ...to, dataContextPath });
+        } else if (target) {
+          // might not have anymore
+          setSelected({ ...to, dataContextPath });
         }
-        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-      } else if (hideable) {
+      } else {
+        if (design.screens[to.screen]) {
+          // might not have anymore
+          setSelected({ ...to, dataContextPath });
+        }
+      }
+    },
+    [design, libraries, setDesign, setSelected],
+  );
+
+  const toggleLink = useCallback(
+    (to, onOff, { nextRef }) => {
+      if (Array.isArray(to)) {
+        // when to is an Array, lazily create nextDesign and re-use
+        const ref = {};
+        to.forEach((t) => followLink(t, { nextRef: ref }));
+        if (ref.design) setDesign(ref.design);
+      } else if (to.control === 'toggleThemeMode') {
         const nextDesign =
           (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        nextDesign.components[target.id].hide = !target.hide;
+        nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
         nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-        if (target.hide) setSelected({ ...to, dataContextPath });
-      } else if (target) {
-        // might not have anymore
-        setSelected({ ...to, dataContextPath });
-      }
-    } else {
-      if (design.screens[to.screen]) {
-        // might not have anymore
-        setSelected({ ...to, dataContextPath });
-      }
-    }
-  };
-
-  const toggleLink = (to, onOff, { nextRef }) => {
-    if (Array.isArray(to)) {
-      // when to is an Array, lazily create nextDesign and re-use
-      const ref = {};
-      to.forEach((t) => followLink(t, { nextRef: ref }));
-      if (ref.design) setDesign(ref.design);
-    } else if (to.control === 'toggleThemeMode') {
-      const nextDesign =
-        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-      nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-    } else if (to.component) {
-      const target = design.components[to.component];
-      const hideable =
-        target && getComponentType(libraries, target.type).hideable;
-      if (hideable) {
-        const nextDesign =
-          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        nextDesign.components[target.id].hide = !onOff;
-        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-      }
-    }
-  };
-
-  const followLinkOption = (options, selected) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    // figure out which link to use, if any
-    Object.keys(options)
-      .filter((n) => options[n])
-      .forEach((name) => {
-        const target = design.components[options[name].component];
+      } else if (to.component) {
+        const target = design.components[to.component];
         const hideable =
           target && getComponentType(libraries, target.type).hideable;
         if (hideable) {
-          let hide;
-          if (name === '-any-') hide = !selected || !selected.length;
-          else if (name === '-none-')
-            hide = Array.isArray(selected)
-              ? !!selected.length && selected[0] !== name
-              : !!selected && selected !== name;
-          else
-            hide = Array.isArray(selected)
-              ? !selected.includes(name)
-              : selected !== name;
-          nextDesign.components[target.id].hide = hide;
+          const nextDesign =
+            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+          nextDesign.components[target.id].hide = !onOff;
+          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
         }
+      }
+    },
+    [design, followLink, libraries, setDesign],
+  );
+
+  const followLinkOption = useCallback(
+    (options, selected) => {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      // figure out which link to use, if any
+      Object.keys(options)
+        .filter((n) => options[n])
+        .forEach((name) => {
+          const target = design.components[options[name].component];
+          const hideable =
+            target && getComponentType(libraries, target.type).hideable;
+          if (hideable) {
+            let hide;
+            if (name === '-any-') hide = !selected || !selected.length;
+            else if (name === '-none-')
+              hide = Array.isArray(selected)
+                ? !!selected.length && selected[0] !== name
+                : !!selected && selected !== name;
+            else
+              hide = Array.isArray(selected)
+                ? !selected.includes(name)
+                : selected !== name;
+            nextDesign.components[target.id].hide = hide;
+          }
+        });
+      setDesign(nextDesign);
+    },
+    [design, libraries, setDesign],
+  );
+
+  // Initialize all components who have asked for it
+  useEffect(() => {
+    if (Object.keys(initialize).length) {
+      setInitialize({}); // ensure we don't initialize twice
+      Object.keys(initialize).forEach((id) => {
+        const component = initialize[id];
+        const type = getComponentType(libraries, component.type);
+        type.initialize(component, { followLinkOption });
       });
-    setDesign(nextDesign);
-  };
+    }
+  }, [followLinkOption, initialize, libraries]);
 
   const renderRepeater = (component, type, { dataContextPath }) => {
     const {
@@ -315,6 +339,8 @@ const Canvas = ({
     }
     return contents || null;
   };
+
+  const nextRendered = {};
 
   const renderComponent = (
     id,
@@ -550,6 +576,9 @@ const Canvas = ({
       return null;
     }
 
+    // track which components want to initialize themselves
+    if (type.initialize) nextRendered[id] = component;
+
     return createElement(
       type.component,
       {
@@ -565,6 +594,29 @@ const Canvas = ({
   };
 
   const screen = design.screens[selected.screen];
+  const content =
+    screen && screen.root ? (
+      renderComponent(screen.root)
+    ) : (
+      <Box align="center">
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Screen is currently empty. Add a layout component to it to to
+          start building it out.
+        </Paragraph>
+      </Box>
+    );
+
+  // Remember which components want to be told that they should initialize
+  let nextInitialize;
+  Object.keys(nextRendered).forEach((id) => {
+    if (!initialize[id] && !rendered.current[id]) {
+      if (!nextInitialize) nextInitialize = { ...initialize };
+      nextInitialize[id] = nextRendered[id];
+    }
+  });
+  if (nextInitialize) setInitialize(nextInitialize);
+  rendered.current = nextRendered;
+
   return (
     <Grommet
       ref={grommetRef}
@@ -572,15 +624,7 @@ const Canvas = ({
       themeMode={design.themeMode}
       style={{ height: '100%' }}
     >
-      {screen && screen.root && renderComponent(screen.root)}
-      {screen && !screen.root && (
-        <Box align="center">
-          <Paragraph size="large" textAlign="center" color="placeholder">
-            This Screen is currently empty. Add a layout component to it to to
-            start building it out.
-          </Paragraph>
-        </Box>
-      )}
+      {content}
     </Grommet>
   );
 };
