@@ -30,7 +30,7 @@ const DataChartChart = ({ value, onChange, theme }) => {
               </FormField>
               <FormField label="type">
                 <Select
-                  options={['bar', 'area', 'line', 'undefined']}
+                  options={['bar', 'area', 'line', 'point', 'undefined']}
                   value={item.type}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
@@ -40,6 +40,27 @@ const DataChartChart = ({ value, onChange, theme }) => {
                   }}
                 />
               </FormField>
+              {item.type === 'point' && (
+                <FormField label="point">
+                  <Select
+                    options={[
+                      'circle',
+                      'diamond',
+                      'square',
+                      'star',
+                      'triangle',
+                      'triangleDown',
+                    ]}
+                    value={item.point}
+                    onChange={({ option }) => {
+                      const nextValue = JSON.parse(JSON.stringify(value));
+                      if (option === 'undefined') delete nextValue[i].point;
+                      else nextValue[i].point = option;
+                      onChange(nextValue);
+                    }}
+                  />
+                </FormField>
+              )}
               <FormField label="color">
                 <Select
                   options={colorOptions}
