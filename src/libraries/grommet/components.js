@@ -7,6 +7,10 @@ import {
   Box,
   Button,
   Calendar,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Chart,
   CheckBox,
   CheckBoxGroup,
@@ -395,6 +399,85 @@ export const components = {
       'justifyContent',
       'margin',
     ],
+  },
+  Card: {
+    component: Card,
+    name: 'Card',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This Card is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/card',
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
+  },
+  CardHeader: {
+    component: CardHeader,
+    name: 'CardHeader',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This CardHeader is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/card',
+    defaultProps: {
+      align: 'center',
+      direction: 'row',
+      flex: false,
+      justify: 'between',
+      gap: 'medium',
+      pad: 'small',
+    },
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
+  },
+  CardBody: {
+    component: CardBody,
+    name: 'CardBody',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This CardBody is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/card',
+    defaultProps: {
+      pad: 'small',
+    },
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
+  },
+  CardFooter: {
+    component: CardFooter,
+    name: 'CardFooter',
+    container: true,
+    placeholder: ({ background, pad }) =>
+      !pad &&
+      !background && (
+        <Paragraph size="large" textAlign="center" color="placeholder">
+          This CardFooter is currently empty. Add components to it.
+        </Paragraph>
+      ),
+    documentation: 'https://v2.grommet.io/card',
+    defaultProps: {
+      align: 'center',
+      direction: 'row',
+      flex: false,
+      justify: 'between',
+      gap: 'medium',
+      pad: 'small',
+    },
+    properties: reusedBoxProps,
+    structure: reusedBoxStructure,
   },
   Stack: {
     component: Stack,
