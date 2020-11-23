@@ -18,24 +18,50 @@ const DataChartChart = ({ value, onChange, theme }) => {
         .map((item, i) => (
           <Box basis="xsmall" flex="grow" key={i}>
             <Box flex="grow">
-              <FormField label="property">
+              <FormField
+                label="property"
+                help={
+                  item.type === 'bars' ? 'space separated for multiple' : ''
+                }
+              >
                 <TextInput
-                  value={item.property || ''}
+                  value={
+                    item.type === 'bars'
+                      ? item.property.join(' ')
+                      : item.property || ''
+                  }
                   onChange={(event) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].property = event.target.value;
+                    nextValue[i].property =
+                      item.type === 'bars'
+                        ? event.target.value.split(' ')
+                        : event.target.value;
                     onChange(nextValue);
                   }}
                 />
               </FormField>
               <FormField label="type">
                 <Select
-                  options={['bar', 'area', 'line', 'point', 'undefined']}
+                  options={[
+                    'bar',
+                    'bars',
+                    'area',
+                    'line',
+                    'point',
+                    'undefined',
+                  ]}
                   value={item.type}
                   onChange={({ option }) => {
                     const nextValue = JSON.parse(JSON.stringify(value));
                     if (option === 'undefined') delete nextValue[i].type;
                     else nextValue[i].type = option;
+                    if (option === 'bars') {
+                      if (typeof item.property === 'string') {
+                        nextValue[i].property = [item.property];
+                      }
+                    } else if (Array.isArray(item.property)) {
+                      nextValue[i].property = item.property[0] || '';
+                    }
                     onChange(nextValue);
                   }}
                 />
