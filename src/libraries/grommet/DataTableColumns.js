@@ -1,17 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { Add, Next, Previous, Trash } from 'grommet-icons';
 
 const DataTableColumns = ({ value, onChange }) => {
   const [columns, setColumns] = useState(value);
   React.useEffect(() => setColumns(value), [value]);
-  const debounceOnChange = useCallback(() => {
-    let timeout;
-    return (nextValue) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => onChange(nextValue), 500);
-    };
-  }, [onChange]);
+  const timeout = useRef();
+  const debounceOnChange = useCallback(
+    (nextValue) => {
+      clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => onChange(nextValue), 500);
+    },
+    [onChange],
+  );
 
   return (
     <Box direction="row" gap="medium">
