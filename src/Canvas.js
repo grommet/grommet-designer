@@ -622,6 +622,7 @@ const Canvas = ({
   return (
     <Grommet
       ref={grommetRef}
+      id="designer-canvas"
       theme={theme}
       themeMode={design.themeMode}
       style={{ height: '100%' }}

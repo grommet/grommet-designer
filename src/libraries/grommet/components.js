@@ -541,7 +541,12 @@ export const components = {
     advancedProperties: ['animate', 'responsive'],
     override: (_, { setHide }) => {
       const result = {};
-      result.onClickOutside = () => setHide(true);
+      // only hide if clicking within the Canvas
+      result.onClickOutside = (event) => {
+        let node = event.target;
+        while (node && node.id !== 'designer-canvas') node = node.parentNode;
+        if (node) setHide(true);
+      };
       result.onEsc = () => setHide(true);
       return result;
     },
