@@ -41,6 +41,17 @@ const DataTableColumns = ({ value, onChange }) => {
                 }}
               />
             </FormField>
+            <FormField label="units">
+              <TextInput
+                value={c.units || ''}
+                onChange={(event) => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  nextValue[i].units = event.target.value;
+                  setColumns(nextValue);
+                  debounceOnChange(nextValue);
+                }}
+              />
+            </FormField>
             <FormField>
               <Box pad="small">
                 <CheckBox
