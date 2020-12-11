@@ -3,6 +3,7 @@ import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
 import ColorProperty from './ColorProperty';
+import ComponentProperty from './ComponentProperty';
 import FunctionProperty from './FunctionProperty';
 import IconProperty from './IconProperty';
 import LinkProperty from './LinkProperty';
@@ -74,6 +75,9 @@ const Property = React.forwardRef(
             {...rest}
           />
         );
+      }
+      if (property.includes('-component-')) {
+        return <ComponentProperty ref={ref} value={value} {...rest} />;
       }
       return <StringProperty ref={ref} value={value} {...rest} />;
     } else if (typeof property === 'number') {

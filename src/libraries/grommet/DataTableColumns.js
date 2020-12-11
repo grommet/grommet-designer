@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { Add, Next, Previous, Trash } from 'grommet-icons';
 
-const DataTableColumns = ({ value, onChange }) => {
+const DataTableColumns = ({ ComponentInput, value, onChange, ...rest }) => {
   const [columns, setColumns] = useState(value);
   React.useEffect(() => setColumns(value), [value]);
   const timeout = useRef();
@@ -52,38 +52,18 @@ const DataTableColumns = ({ value, onChange }) => {
                 }}
               />
             </FormField>
-            <FormField>
-              <Box pad="small">
-                <CheckBox
-                  label="render"
-                  checked={c.render || false}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    const priorRender = nextValue[i].render;
-                    nextValue[i].render = event.target.checked;
-                    onChange(
-                      nextValue,
-                      (
-                        nextDesign,
-                        id,
-                        { addPropertyComponent, deletePropertyComponent },
-                      ) => {
-                        if (!priorRender) {
-                          const propId = addPropertyComponent({
-                            propTypeName: 'grommet.Box',
-                            name: c.property,
-                          });
-                          nextDesign.components[id].props.columns.filter(
-                            (col) => col.property === c.property,
-                          )[0].render = propId;
-                        } else {
-                          deletePropertyComponent(priorRender);
-                        }
-                      },
-                    );
-                  }}
-                />
-              </Box>
+            <FormField label="render">
+              <ComponentInput
+                {...rest}
+                name={`columns[${i}].render`}
+                value={c.render}
+                onChange={(id, nextDesign) => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  if (id) nextValue[i].render = id;
+                  else delete nextValue[i].render;
+                  onChange(nextValue, nextDesign);
+                }}
+              />
             </FormField>
             <FormField label="align">
               <Select

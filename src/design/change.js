@@ -37,26 +37,37 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
   };
   nextDesign.components[component.id] = component;
   nextSelected.component = id;
+  if (nextSelected.property && !nextSelected.property.component) {
+    nextSelected.property.component = id;
+    nextSelected.property.onChange(id, nextDesign);
+    const source = nextDesign.components[nextSelected.property.source];
+    if (!source.propComponents) source.propComponents = [];
+    source.propComponents.push(id);
+  }
 
   if (type.properties) {
     // Special case any -component- properties by adding separate components
     // for them. Canvas will take care of rendering them.
-    // Tree will show them so the user can select them.
-    Object.keys(type.properties).forEach(prop => {
-      if (
-        typeof type.properties[prop] === 'string' &&
-        type.properties[prop].startsWith('-component-')
-      ) {
+    Object.keys(type.properties)
+      .filter(
+        (prop) =>
+          typeof type.properties[prop] === 'string' &&
+          type.properties[prop].startsWith('-component-'),
+      )
+      .forEach((prop) => {
+        // e.g. '-component- grommet.Box {"pad":"medium"}'
         const [, propTypeName, props] = type.properties[prop].split(' ');
-        const propId = addPropertyComponent(nextDesign, libraries, id, {
-          propTypeName,
-          name: prop,
-          props: props ? JSON.parse(props) : {},
-        });
-        component.props[prop] = propId;
-      }
-    });
+        if (propTypeName) {
+          const propId = addPropertyComponent(nextDesign, libraries, id, {
+            propTypeName,
+            name: prop,
+            props: props ? JSON.parse(props) : {},
+          });
+          component.props[prop] = propId;
+        }
+      });
   }
+  return id;
 };
 
 export const copyComponent = ({
@@ -75,7 +86,7 @@ export const copyComponent = ({
   const idMap = idMapArg || {};
   idMap[id] = nextId;
   if (component.children) {
-    nextComponent.children = component.children.map(childId => {
+    nextComponent.children = component.children.map((childId) => {
       const nextChildId = copyComponent({
         nextDesign,
         templateDesign,
@@ -87,7 +98,7 @@ export const copyComponent = ({
     });
   }
   if (component.propComponents) {
-    nextComponent.propComponents = component.propComponents.map(childId => {
+    nextComponent.propComponents = component.propComponents.map((childId) => {
       const nextChildId = copyComponent({
         nextDesign,
         templateDesign,
@@ -96,7 +107,7 @@ export const copyComponent = ({
         screen,
       });
       // update corresponding property
-      Object.keys(nextComponent.props).forEach(prop => {
+      Object.keys(nextComponent.props).forEach((prop) => {
         if (nextComponent.props[prop] === childId) {
           nextComponent.props[prop] = nextChildId; // TODO: !!! DataTable columns
         }
@@ -107,16 +118,16 @@ export const copyComponent = ({
   if (!idMapArg && nextDesign.name !== templateDesign.name) {
     // We are at the root of what was copied and we've used an import.
     // Fix up any links to point to the copied components.
-    Object.keys(idMap).forEach(templateId => {
+    Object.keys(idMap).forEach((templateId) => {
       const component = nextDesign.components[idMap[templateId]];
       if (component.designProps && component.designProps.link) {
         // Button
         if (Array.isArray(component.designProps.link)) {
           component.designProps.link = component.designProps.link
             // remove any outside of what we copied
-            .filter(l => l.screen && l.component && idMap[l.component])
+            .filter((l) => l.screen && l.component && idMap[l.component])
             // update any we have maps to
-            .map(l => ({ screen, component: idMap[l.component] }));
+            .map((l) => ({ screen, component: idMap[l.component] }));
         } else if (
           component.designProps.link.screen &&
           !component.designProps.link.component
@@ -135,7 +146,7 @@ export const copyComponent = ({
       }
       if (component.props && component.props.items) {
         // Menu
-        component.props.items.forEach(item => {
+        component.props.items.forEach((item) => {
           if (item.link) {
             if (item.link.screen && !item.link.component) {
               // this is a screen link, clear it
@@ -189,10 +200,10 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
 
   // set a good initial name
   const baseName = copyScreen ? copyScreen.name : 'Screen';
-  const nameAvailable = name =>
+  const nameAvailable = (name) =>
     !Object.keys(nextDesign.screens)
-      .map(sId => nextDesign.screens[sId])
-      .some(screen => screen.name === name) && name;
+      .map((sId) => nextDesign.screens[sId])
+      .some((screen) => screen.name === name) && name;
   let name = nameAvailable(baseName);
   let suffix = 1;
   while (!name) {
@@ -250,7 +261,7 @@ export const duplicateComponent = (nextDesign, id, parentId) => {
   return newId;
 };
 
-export const deleteComponent = (nextDesign, id) => {
+export const deleteComponent = (nextDesign, id, nextSelected) => {
   let nextSelectedComponent;
   // remove from the parent
   const parent = getParent(nextDesign, id);
@@ -260,17 +271,29 @@ export const deleteComponent = (nextDesign, id) => {
     else if (index < parent.children.length - 2) {
       nextSelectedComponent = parent.children[index + 1];
     } else nextSelectedComponent = parent.id;
-    parent.children = parent.children.filter(i => i !== id);
+    parent.children = parent.children.filter((i) => i !== id);
   }
+
   // remove propComponents
   const component = nextDesign.components[id];
   if (component.propComponents) {
-    component.propComponents.forEach(i => deleteComponent(nextDesign, i));
+    component.propComponents.forEach((i) => deleteComponent(nextDesign, i));
   }
+  if (
+    nextSelected &&
+    nextSelected.property &&
+    nextSelected.property.component === id
+  ) {
+    nextSelected.property.onChange(undefined, nextDesign);
+    const source = nextDesign.components[nextSelected.property.source];
+    if (source.propComponents)
+      source.propComponents = source.propComponents.filter((pId) => pId !== id);
+  }
+
   // remove Screen root, if any
   Object.keys(nextDesign.screens)
-    .map(sId => nextDesign.screens[sId])
-    .forEach(screen => {
+    .map((sId) => nextDesign.screens[sId])
+    .forEach((screen) => {
       if (screen.root === id) delete screen.root;
     });
 
@@ -279,7 +302,7 @@ export const deleteComponent = (nextDesign, id) => {
 
   // delete component
   delete nextDesign.components[id];
-  return nextSelectedComponent;
+  if (nextSelected) nextSelected.component = nextSelectedComponent;
 };
 
 export const insertComponent = ({
@@ -319,7 +342,7 @@ export const insertComponent = ({
       if (!parent.children) parent.children = [];
       parent.children.push(id);
     }
-  } else {
+  } else if (!selected.property) {
     const screen = nextDesign.screens[selected.screen];
     screen.root = id;
   }

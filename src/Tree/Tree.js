@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Header,
-  Heading,
-  Keyboard,
-  Layer,
-  Menu,
-  Stack,
-  Text,
-} from 'grommet';
-import { Add, FormDown, FormNext, Redo, Undo } from 'grommet-icons';
+import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
+import { FormDown, FormNext, Previous } from 'grommet-icons';
 import {
   canParent,
   childSelected,
@@ -26,12 +16,9 @@ import {
   serialize,
 } from '../design';
 import { displayName, getReferenceDesign } from '../utils';
-import ActionButton from '../components/ActionButton';
-import AddComponent from './AddComponent';
-import DesignSettings from './DesignSettings';
-import Sharing from './Share';
+import Header from './Header';
 
-const treeSubName = component =>
+const treeSubName = (component) =>
   !component.name &&
   !component.text &&
   !component.props.name &&
@@ -47,21 +34,15 @@ const within = (node, container) => {
 };
 
 const Tree = ({
-  base,
-  chooseDesign,
-  colorMode,
   design,
   imports,
   selected,
-  theme,
-  setMode,
   setSelected,
   updateDesign,
-  onUndo,
-  onRedo,
+  ...rest
 }) => {
   const libraries = React.useMemo(
-    () => imports.filter(i => i.library).map(i => i.library),
+    () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
   const selectedAncestors = React.useMemo(() => {
@@ -80,11 +61,7 @@ const Tree = ({
   const [dropWhere, setDropWhere] = React.useState();
   const [draggingScreen, setDraggingScreen] = React.useState();
   const [dropScreenTarget, setDropScreenTarget] = React.useState();
-  const [adding, setAdding] = React.useState();
-  const [editing, setEditing] = React.useState();
-  const [sharing, setSharing] = React.useState();
   const [copied, setCopied] = React.useState();
-  const [deleting, setDeleting] = React.useState();
   const treeRef = React.useRef();
   const selectedRef = React.useRef();
 
@@ -176,7 +153,7 @@ const Tree = ({
     updateDesign(nextDesign);
   };
 
-  const toggleScreenCollapse = id => {
+  const toggleScreenCollapse = (id) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const screen = nextDesign.screens[id];
     screen.collapsed = !screen.collapsed;
@@ -186,7 +163,7 @@ const Tree = ({
     setSelected(nextSelected);
   };
 
-  const toggleCollapse = id => {
+  const toggleCollapse = (id) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[id];
     component.collapsed = !component.collapsed;
@@ -194,14 +171,11 @@ const Tree = ({
     setSelected({ ...selected, component: id });
   };
 
-  const onKey = event => {
+  const onKey = (event) => {
     if (
       document.activeElement === document.body ||
       within(event.target, treeRef.current)
     ) {
-      if (event.key === 'a') {
-        setAdding(true);
-      }
       if (event.key === 'ArrowDown') {
         setSelected(nextSiblingSelected(design, selected) || selected);
       }
@@ -213,14 +187,6 @@ const Tree = ({
       }
       if (event.key === 'ArrowRight') {
         setSelected(childSelected(design, selected) || selected);
-      }
-      if (onUndo && event.key === 'z' && !event.shiftKey) {
-        event.preventDefault();
-        onUndo();
-      }
-      if (onRedo && event.key === 'z' && event.shiftKey) {
-        event.preventDefault();
-        onRedo();
       }
       if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
         setCopied(selected);
@@ -242,7 +208,7 @@ const Tree = ({
           setSelected({ ...selected, component: newId });
         } else {
           if (navigator.clipboard && navigator.clipboard.readText) {
-            navigator.clipboard.readText().then(clipText => {
+            navigator.clipboard.readText().then((clipText) => {
               const {
                 design: copiedDesign,
                 selected: copiedSelected,
@@ -273,7 +239,7 @@ const Tree = ({
             ? 'focus'
             : undefined
         }
-        onDragEnter={event => {
+        onDragEnter={(event) => {
           if (dragging && dragging !== id) {
             event.preventDefault();
             setDropTarget(id);
@@ -282,7 +248,7 @@ const Tree = ({
             setDropTarget(undefined);
           }
         }}
-        onDragOver={event => {
+        onDragOver={(event) => {
           if (dragging && dragging !== id) {
             event.preventDefault();
           }
@@ -304,7 +270,7 @@ const Tree = ({
             ? 'focus'
             : undefined
         }
-        onDragEnter={event => {
+        onDragEnter={(event) => {
           if (draggingScreen && draggingScreen !== screenId) {
             event.preventDefault();
             setDropScreenTarget(screenId);
@@ -313,7 +279,7 @@ const Tree = ({
             setDropScreenTarget(undefined);
           }
         }}
-        onDragOver={event => {
+        onDragOver={(event) => {
           if (draggingScreen && draggingScreen !== screenId) {
             event.preventDefault();
           }
@@ -343,9 +309,9 @@ const Tree = ({
           <Button
             fill
             hoverIndicator
-            onClick={() => setSelected({ screen, component: id })}
+            onClick={() => setSelected({ ...selected, screen, component: id })}
             draggable={!component.coupled}
-            onDragStart={event => {
+            onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
               setDragging(id);
             }}
@@ -363,7 +329,7 @@ const Tree = ({
                 setDropWhere('in');
               }
             }}
-            onDragOver={event => {
+            onDragOver={(event) => {
               if (dragging && dragging !== id) {
                 event.preventDefault();
               }
@@ -392,7 +358,7 @@ const Tree = ({
               </Text>
             </Box>
           </Button>
-          {(component.children || component.propComponents) && (
+          {component.children && (
             <Button
               icon={
                 component.collapsed ? (
@@ -412,13 +378,13 @@ const Tree = ({
             )}
           </Box>
         )}
-        {!component.collapsed && component.propComponents && (
+        {/* {!component.collapsed && component.propComponents && (
           <Box pad={{ left: 'small' }}>
             {component.propComponents.map((propId, index) =>
               renderComponent(screen, propId, index === 0),
             )}
           </Box>
-        )}
+        )} */}
         {renderDropArea(id, 'after')}
       </Box>
     );
@@ -441,7 +407,7 @@ const Tree = ({
             hoverIndicator
             onClick={() => setSelected({ screen: screenId })}
             draggable
-            onDragStart={event => {
+            onDragStart={(event) => {
               event.dataTransfer.setData('text/plain', ''); // for Firefox
               setDraggingScreen(screenId);
             }}
@@ -449,7 +415,7 @@ const Tree = ({
               setDraggingScreen(undefined);
               setDropScreenTarget(undefined);
             }}
-            onDragOver={event => {
+            onDragOver={(event) => {
               if (draggingScreen && draggingScreen !== screenId) {
                 event.preventDefault();
               }
@@ -499,128 +465,48 @@ const Tree = ({
   return (
     <Keyboard target="document" onKeyDown={onKey}>
       <Box ref={treeRef} fill="vertical" overflow="auto" border="right">
-        <Box flex={false} border="bottom">
-          <Header border="bottom" gap="none">
-            <Box flex>
-              <Menu
-                hoverIndicator
-                dropProps={{ align: { top: 'bottom' } }}
-                items={[
-                  { label: 'configure', onClick: () => setEditing(true) },
-                  { label: 'share', onClick: () => setSharing(true) },
-                  {
-                    label: `preview ${
-                      /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
-                    }.`,
-                    onClick: () => setMode('preview'),
-                  },
-                  {
-                    label: `comments ${
-                      /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
-                    };`,
-                    onClick: () => setMode('comments'),
-                  },
-                  { label: 'close', onClick: () => chooseDesign(undefined) },
-                  { label: 'delete ...', onClick: () => setDeleting(true) },
-                ]}
-              >
-                <Box
-                  flex="shrink"
-                  direction="row"
-                  align="center"
-                  pad="small"
-                  gap="small"
-                >
-                  <Text
-                    weight="bold"
-                    truncate
-                    size={design.name.length > 20 ? 'small' : undefined}
-                  >
-                    {design.name}
-                  </Text>
-                  <FormDown color="control" />
-                </Box>
-              </Menu>
-            </Box>
-            <Box flex={false} direction="row" align="center">
-              <ActionButton
-                title="undo last change"
-                icon={<Undo />}
-                disabled={!onUndo}
-                onClick={onUndo || undefined}
-              />
-              <ActionButton
-                title="redo last change"
-                icon={<Redo />}
-                disabled={!onRedo}
-                onClick={onRedo || undefined}
-              />
-              <ActionButton
-                title="add a component"
-                icon={<Add />}
-                onClick={() => setAdding(true)}
-              />
-            </Box>
-          </Header>
-          {deleting && (
-            <Layer
-              position="center"
-              margin="medium"
-              animation="fadeIn"
-              onEsc={() => setDeleting(false)}
-              onClickOutside={() => setDeleting(false)}
-            >
-              <Box flex elevation="medium" pad="large">
-                <Button
-                  label="Confirm delete"
-                  onClick={() => {
-                    localStorage.removeItem(`${design.name}--state`);
-                    localStorage.removeItem(design.name);
-                    chooseDesign(undefined);
-                  }}
-                />
-              </Box>
-            </Layer>
-          )}
-          {sharing && (
-            <Sharing
-              design={design}
-              imports={imports}
-              theme={theme}
-              colorMode={colorMode}
-              setDesign={updateDesign}
-              onClose={() => setSharing(false)}
-            />
-          )}
-          {adding && (
-            <AddComponent
-              design={design}
-              imports={imports}
-              base={base}
-              selected={selected}
-              setDesign={updateDesign}
-              setSelected={setSelected}
-              onClose={() => setAdding(false)}
-            />
-          )}
-          {editing && (
-            <DesignSettings
-              design={design}
-              theme={theme}
-              setDesign={updateDesign}
-              onClose={() => setEditing(false)}
-            />
-          )}
-        </Box>
+        <Header
+          design={design}
+          imports={imports}
+          selected={selected}
+          setSelected={setSelected}
+          updateDesign={updateDesign}
+          {...rest}
+        />
 
         <Box flex overflow="auto">
           <Box flex={false}>
-            {design.screenOrder.map((sId, index) =>
-              renderScreen(
-                parseInt(sId, 10),
-                index === 0,
-                design.screenOrder.length === 1,
-              ),
+            {selected.property ? (
+              <>
+                <Button
+                  hoverIndicator
+                  onClick={() => {
+                    const {
+                      property: { source },
+                      ...nextSelected
+                    } = selected;
+                    nextSelected.component = source;
+                    setSelected(nextSelected);
+                  }}
+                >
+                  <Box direction="row" pad="small" gap="small" border="bottom">
+                    <Previous />
+                    <Text>
+                      back to{' '}
+                      {displayName(design.components[selected.property.source])}
+                    </Text>
+                  </Box>
+                </Button>
+                {renderComponent(selected.screen, selected.property.component)}
+              </>
+            ) : (
+              design.screenOrder.map((sId, index) =>
+                renderScreen(
+                  parseInt(sId, 10),
+                  index === 0,
+                  design.screenOrder.length === 1,
+                ),
+              )
             )}
           </Box>
         </Box>

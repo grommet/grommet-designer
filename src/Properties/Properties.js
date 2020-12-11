@@ -23,7 +23,6 @@ import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
 import CopyPropertiesFrom from './CopyPropertiesFrom';
 import {
-  addPropertyComponent,
   deleteComponent,
   disconnectReference,
   duplicateComponent,
@@ -103,8 +102,8 @@ const Properties = ({
     if (stored) setShowAdvanced(JSON.parse(stored));
   }, []);
 
-  const setProp = (propName, value, sideEffects) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
+  const setProp = (propName, value, nextDesignArg) => {
+    const nextDesign = nextDesignArg || JSON.parse(JSON.stringify(design));
     let component = nextDesign.components[selected.component];
     if (component.responsive && component.responsive[responsiveSize]) {
       component = component.responsive[responsiveSize];
@@ -123,13 +122,7 @@ const Properties = ({
     }
     if (value !== undefined) props[propName] = value;
     else delete props[propName];
-    if (sideEffects)
-      sideEffects(nextDesign, selected.component, {
-        addPropertyComponent: (args) =>
-          addPropertyComponent(nextDesign, libraries, selected.component, args),
-        deletePropertyComponent: (id) => deleteComponent(nextDesign, id),
-      });
-    setDesign(nextDesign);
+    if (!nextDesignArg) setDesign(nextDesign);
   };
 
   const setHide = (hide) => {
@@ -194,9 +187,14 @@ const Properties = ({
   const delet = () => {
     if (!design.components[selected.component].coupled) {
       const nextDesign = JSON.parse(JSON.stringify(design));
-      const parentId = deleteComponent(nextDesign, selected.component);
+      const nextSelected = { ...selected };
+      nextSelected.component = deleteComponent(
+        nextDesign,
+        selected.component,
+        nextSelected,
+      );
       upgradeDesign(nextDesign); // clean up links
-      setSelected({ ...selected, component: parentId });
+      setSelected(nextSelected);
       setDesign(nextDesign);
 
       ReactGA.event({
@@ -247,11 +245,6 @@ const Properties = ({
       .filter((propName) => !searchExp || searchExp.test(propName))
       .filter(
         (propName) =>
-          typeof properties[propName] !== 'string' ||
-          !properties[propName].startsWith('-component-'),
-      )
-      .filter(
-        (propName) =>
           !type.advancedProperties ||
           showAdvanced ||
           type.advancedProperties.indexOf(propName) === -1,
@@ -273,8 +266,8 @@ const Properties = ({
             selected={selected}
             setSelected={setSelected}
             value={props ? props[propName] : undefined}
-            onChange={(value, sideEffects) =>
-              setProp(propName, value, sideEffects)
+            onChange={(value, nextDesign) =>
+              setProp(propName, value, nextDesign)
             }
           />
           {(firstRef = true)}

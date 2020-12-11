@@ -596,10 +596,27 @@ const Canvas = ({
   };
 
   const screen = design.screens[selected.screen];
-  const content =
-    screen && screen.root ? (
-      renderComponent(screen.root)
-    ) : (
+  let content;
+  if (selected.property)
+    if (selected.property.component)
+      // showing just a property component, no screen
+      content = (
+        <Box align="center" justify="center">
+          {renderComponent(selected.property.component)}
+        </Box>
+      );
+    else
+      content = (
+        <Box align="center">
+          <Paragraph size="large" textAlign="center" color="placeholder">
+            {selected.property.name} is currently empty. Add a component to it
+            to to start building it out.
+          </Paragraph>
+        </Box>
+      );
+  else if (screen && screen.root) content = renderComponent(screen.root);
+  else
+    content = (
       <Box align="center">
         <Paragraph size="large" textAlign="center" color="placeholder">
           This Screen is currently empty. Add a layout component to it to to
