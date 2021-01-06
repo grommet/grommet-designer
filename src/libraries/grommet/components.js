@@ -1032,6 +1032,7 @@ export const components = {
     properties: {
       clear: false,
       closeOnChange: true,
+      defaultValue: '',
       disabled: false,
       dropAlign: DropAlign,
       dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
