@@ -188,11 +188,7 @@ const Properties = ({
     if (!design.components[selected.component].coupled) {
       const nextDesign = JSON.parse(JSON.stringify(design));
       const nextSelected = { ...selected };
-      nextSelected.component = deleteComponent(
-        nextDesign,
-        selected.component,
-        nextSelected,
-      );
+      deleteComponent(nextDesign, selected.component, nextSelected);
       upgradeDesign(nextDesign); // clean up links
       setSelected(nextSelected);
       setDesign(nextDesign);
