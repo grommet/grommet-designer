@@ -534,19 +534,22 @@ export const components = {
       full: ['horizontal', 'vertical'],
       margin: ['none', 'xsmall', 'small', 'medium', 'large'],
       modal: false,
+      onClickOutside: ['hide'],
       plain: false,
       position: ['center', 'top', 'bottom', 'left', 'right'],
       responsive: false,
     },
     advancedProperties: ['animate', 'responsive'],
-    override: (_, { setHide }) => {
+    override: ({ props }, { setHide }) => {
       const result = {};
-      // only hide if clicking within the Canvas
-      result.onClickOutside = (event) => {
-        let node = event.target;
-        while (node && node.id !== 'designer-canvas') node = node.parentNode;
-        if (node) setHide(true);
-      };
+      if (props.onClickOutside === 'hide') {
+        // only hide if clicking within the Canvas
+        result.onClickOutside = (event) => {
+          let node = event.target;
+          while (node && node.id !== 'designer-canvas') node = node.parentNode;
+          if (node) setHide(true);
+        };
+      }
       result.onEsc = () => setHide(true);
       return result;
     },
