@@ -534,7 +534,7 @@ export const components = {
       full: ['horizontal', 'vertical'],
       margin: ['none', 'xsmall', 'small', 'medium', 'large'],
       modal: false,
-      onClickOutside: ['hide'],
+      onClickOutside: ['hide', 'ignore'],
       plain: false,
       position: ['center', 'top', 'bottom', 'left', 'right'],
       responsive: false,
@@ -542,10 +542,17 @@ export const components = {
     advancedProperties: ['animate', 'responsive'],
     override: ({ props }, { setHide }) => {
       const result = {};
-      if (props.onClickOutside === 'hide') {
-        // only hide if clicking within the Canvas
+      if (props.modal !== false && props.onClickOutside !== 'ignore') {
         result.onClickOutside = (event) => {
           let node = event.target;
+          // only hide if clicking the modal overlay, which is outside root
+          while (node && node.id !== 'root') node = node.parentNode;
+          if (!node) setHide(true);
+        };
+      } else if (props.modal === false && props.onClickOutside === 'hide') {
+        result.onClickOutside = (event) => {
+          let node = event.target;
+          // only hide if clicking within the Canvas
           while (node && node.id !== 'designer-canvas') node = node.parentNode;
           if (node) setHide(true);
         };
