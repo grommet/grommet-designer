@@ -1359,6 +1359,9 @@ export const components = {
   Distribution: {
     component: Distribution,
     name: 'Distribution',
+    help: `The 'values' property needs to be ordered largest to
+    smallest.
+    `,
     defaultProps: {
       gap: 'xsmall',
       values: [
