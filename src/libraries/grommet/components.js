@@ -64,6 +64,7 @@ import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
 import DataTableColumns from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
+import Dimension from './Dimension';
 import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
 import GridColumns from './GridColumns';
@@ -187,27 +188,11 @@ export const components = {
         'auto',
       ],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      height: [
-        'xxsmall',
-        'xsmall',
-        'small',
-        'medium',
-        'large',
-        'xlarge',
-        'xxlarge',
-      ],
+      height: Dimension,
       hoverIndicator: false,
       onClick: ['-link-'],
       round: BoxRound,
-      width: [
-        'xxsmall',
-        'xsmall',
-        'small',
-        'medium',
-        'large',
-        'xlarge',
-        'xxlarge',
-      ],
+      width: Dimension,
       wrap: false,
     },
     advancedProperties: ['alignSelf', 'height', 'width', 'wrap'],
