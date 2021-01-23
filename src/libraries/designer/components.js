@@ -2,6 +2,7 @@ import React from 'react';
 import { Paragraph } from 'grommet';
 import Alternative from './Alternative';
 import Icon from './Icon';
+import IFrame from './IFrame';
 
 export const components = {
   Alternative: {
@@ -32,6 +33,14 @@ export const components = {
       color: ['-color-'],
       icon: ['-Icon-'],
       size: ['small', 'medium', 'large'],
+    },
+  },
+  IFrame: {
+    component: IFrame,
+    name: 'IFrame',
+    properties: {
+      title: '',
+      src: '',
     },
   },
   Repeater: {
