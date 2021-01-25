@@ -3,7 +3,7 @@ import { MaskedInput } from 'grommet';
 import Field from '../components/Field';
 import useDebounce from './useDebounce';
 
-const StringProperty = React.forwardRef(
+const NumberProperty = React.forwardRef(
   ({ first, name, onChange, sub, value: valueProp }, ref) => {
     const [value, setValue] = useDebounce(valueProp, onChange);
     return (
@@ -18,8 +18,8 @@ const StringProperty = React.forwardRef(
               regexp: /^\d*$/,
             },
           ]}
-          value={value || ''}
-          onChange={event => {
+          value={value !== undefined ? value : ''}
+          onChange={(event) => {
             const nextValue =
               event.target.value === ''
                 ? undefined
@@ -33,4 +33,4 @@ const StringProperty = React.forwardRef(
   },
 );
 
-export default StringProperty;
+export default NumberProperty;
