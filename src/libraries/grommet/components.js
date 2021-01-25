@@ -582,9 +582,19 @@ export const components = {
     name: 'Text',
     text: 'Text',
     properties: {
-      size: SizeOptions({
-        options: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge'],
-      }),
+      size: [
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+        '2xl',
+        '3xl',
+        '4xl',
+        '5xl',
+        '6xl',
+      ],
       textAlign: TextAlign,
       truncate: false,
       weight: WeightOptions({ options: ['normal', 'bold'] }),
