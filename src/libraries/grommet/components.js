@@ -1375,11 +1375,11 @@ export const components = {
     defaultProps: {
       gap: 'xsmall',
       values: [
-        { value: 10 },
-        { value: 20 },
+        { value: 45 },
+        { value: 32 },
         { value: 25 },
-        { value: 40 },
-        { value: 35 },
+        { value: 17 },
+        { value: 8 },
       ],
     },
     properties: {
@@ -1414,11 +1414,14 @@ export const components = {
       const result = {};
       // need to use retrieved data for values property
       if (data) result.values = data;
-      result.children = (value) => (
-        <Box fill background={value.color} pad="xsmall">
-          <Text>{value.value}</Text>
-        </Box>
-      );
+      result.children = (value) => {
+        const index = props.values.indexOf(value);
+        return (
+          <Box fill background={value.color || `graph-${index}`} pad="xsmall">
+            <Text>{value.value}</Text>
+          </Box>
+        );
+      };
       return result;
     },
   },
