@@ -32,7 +32,7 @@ export const components = {
     properties: {
       color: ['-color-'],
       icon: ['-Icon-'],
-      size: ['small', 'medium', 'large'],
+      size: ['small', 'medium', 'large', 'xlarge'],
     },
   },
   IFrame: {
