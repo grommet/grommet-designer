@@ -11,6 +11,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Carousel,
   Chart,
   CheckBox,
   CheckBoxGroup,
@@ -1470,6 +1471,25 @@ export const components = {
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       type: ['bar', 'circle'],
       values: MeterValues,
+    },
+  },
+  Carousel: {
+    component: Carousel,
+    name: 'Carousel',
+    container: true,
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Carousel is currently empty. Add components to it, so it can do its
+        thing.
+      </Paragraph>
+    ),
+    documentation: 'https://v2.grommet.io/carousel',
+    properties: {
+      controls: [true, false, 'arrows', 'selectors'],
+      fill: [true, false],
+      initialChild: 0,
+      margin: Edge,
+      play: 0,
     },
   },
   Image: {

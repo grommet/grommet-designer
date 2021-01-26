@@ -82,6 +82,6 @@ export const structure = [
   {
     name: 'Media',
     Icon: Image,
-    components: ['Image', 'Video'],
+    components: ['Carousel', 'Image', 'Video'],
   },
 ];
