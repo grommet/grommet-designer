@@ -110,7 +110,6 @@ const Start = ({
   const [designs, setDesigns] = React.useState([]);
   const [readme, setReadme] = React.useState();
   const [search, setSearch] = React.useState();
-  const searchRef = React.useRef();
   const [dropping, setDropping] = React.useState();
   const [error, setError] = React.useState();
 
@@ -119,7 +118,7 @@ const Start = ({
     const stored = localStorage.getItem('designs');
     if (stored) {
       // prune out non-existing designs
-      const nextDesigns = JSON.parse(stored).filter(name =>
+      const nextDesigns = JSON.parse(stored).filter((name) =>
         localStorage.getItem(name),
       );
       setDesigns(nextDesigns);
@@ -130,23 +129,14 @@ const Start = ({
   React.useEffect(() => {
     fetch(
       'https://raw.githubusercontent.com/grommet/grommet-designer/master/README.md',
-    ).then(response => {
+    ).then((response) => {
       if (response.ok) {
-        response.text().then(text =>
-          setReadme(
-            text
-              .split('\n')
-              .splice(8)
-              .join('\n'),
-          ),
-        );
+        response
+          .text()
+          .then((text) => setReadme(text.split('\n').splice(8).join('\n')));
       }
     });
   }, []);
-
-  React.useLayoutEffect(() => {
-    if (search !== undefined && searchRef.current) searchRef.current.focus();
-  }, [search]);
 
   return (
     <Box fill direction="row-responsive" gap="medium" border="between">
@@ -158,7 +148,7 @@ const Start = ({
           primary
           label="Create"
           href="/_new"
-          onClick={event => {
+          onClick={(event) => {
             if (!event.ctrlKey && !event.metaKey) {
               event.preventDefault();
               createDesign();
@@ -174,7 +164,7 @@ const Start = ({
               accept=".json"
               onDragEnter={() => setDropping(true)}
               onDragLeave={() => setDropping(false)}
-              onChange={event => {
+              onChange={(event) => {
                 setError(undefined);
                 const reader = new FileReader();
                 reader.onload = () => {
@@ -218,7 +208,7 @@ const Start = ({
             gap="medium"
             options={['dark', 'light']}
             value={colorMode || ''}
-            onChange={event => {
+            onChange={(event) => {
               setColorMode(event.target.value);
             }}
           />
@@ -249,18 +239,11 @@ const Start = ({
                   align="center"
                   justify="end"
                 >
-                  {search !== undefined && (
-                    <TextInput
-                      ref={searchRef}
-                      value={search}
-                      onChange={event => setSearch(event.target.value)}
-                    />
-                  )}
-                  <Button
+                  <TextInput
                     icon={<Search />}
-                    onClick={() =>
-                      setSearch(search !== undefined ? undefined : '')
-                    }
+                    reverse
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
                   />
                 </Box>
               )}
@@ -268,7 +251,7 @@ const Start = ({
             <Box direction="row" overflow="auto" gap="medium" border="right">
               {designs
                 .filter(
-                  name =>
+                  (name) =>
                     !search || name.search(new RegExp(search, 'i')) !== -1,
                 )
                 .map((name, index) => {
@@ -278,7 +261,7 @@ const Start = ({
                       key={name}
                       plain
                       href={`${url}&mode=edit`}
-                      onClick={event => {
+                      onClick={(event) => {
                         if (!event.ctrlKey && !event.metaKey) {
                           event.preventDefault();
                           chooseDesign(name);
