@@ -260,6 +260,7 @@ const Properties = ({
             props={props}
             responsiveSize={responsiveSize}
             selected={selected}
+            setDesign={setDesign}
             setSelected={setSelected}
             value={props ? props[propName] : undefined}
             onChange={(value, nextDesign) =>

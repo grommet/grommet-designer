@@ -279,11 +279,13 @@ export const deleteComponent = (nextDesign, id, nextSelected) => {
   if (component.propComponents) {
     component.propComponents.forEach((i) => deleteComponent(nextDesign, i));
   }
+
   if (
     nextSelected &&
     nextSelected.property &&
     nextSelected.property.component === id
   ) {
+    // handle removing a property component when editing it
     nextSelected.property.onChange(undefined, nextDesign);
     const source = nextDesign.components[nextSelected.property.source];
     if (source.propComponents)
