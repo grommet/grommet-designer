@@ -1376,11 +1376,11 @@ export const components = {
     defaultProps: {
       gap: 'xsmall',
       values: [
-        { value: 45 },
-        { value: 32 },
-        { value: 25 },
-        { value: 17 },
-        { value: 8 },
+        { label: 'first', value: 45 },
+        { label: 'second', value: 32 },
+        { label: 'third', value: 25 },
+        { label: 'fourth', value: 17 },
+        { label: 'fifth', value: 8 },
       ],
     },
     properties: {
@@ -1410,16 +1410,28 @@ export const components = {
     },
     designProperties: {
       dataPath: '',
+      render: '-component-',
     },
-    override: ({ props }, { data }) => {
+    override: ({ designProps, props }, { data, renderComponent }) => {
       const result = {};
       // need to use retrieved data for values property
       if (data) result.values = data;
       result.children = (value) => {
-        const index = props.values.indexOf(value);
+        const index = (result.values || props.values || []).indexOf(value);
+        if (designProps.render)
+          return renderComponent(designProps.render, { datum: value });
         return (
-          <Box fill background={value.color || `graph-${index}`} pad="xsmall">
-            <Text>{value.value}</Text>
+          <Box
+            fill
+            background={value.color || `graph-${index}`}
+            pad="xsmall"
+            direction="row"
+            gap="small"
+          >
+            <Text truncate>{value.label}</Text>
+            <Text truncate weight="bold">
+              {value.value}
+            </Text>
           </Box>
         );
       };

@@ -34,6 +34,34 @@ const MeterValues = ({ value, theme, onChange }) => {
       {(value || []).map((item, i) => (
         <Box flex="grow" key={i}>
           <Box flex="grow">
+            <FormField label="label">
+              <TextInput
+                value={item.label || ''}
+                onChange={(event) => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  nextValue[i].label = event.target.value;
+                  onChange(nextValue);
+                }}
+              />
+            </FormField>
+            <FormField label="value">
+              <TextInput
+                value={item.value !== undefined ? item.value : ''}
+                onChange={(event) => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  nextValue[i].value =
+                    // allow for data references
+                    event.target.value === '{'
+                      ? event.target.value
+                      : parseInt(event.target.value, 10);
+                  // eslint-disable-next-line no-self-compare
+                  if (nextValue[i].value !== nextValue[i].value)
+                    // NaN check
+                    nextValue[i].value = undefined;
+                  onChange(nextValue);
+                }}
+              />
+            </FormField>
             <FormField label="color">
               <Select
                 plain
@@ -73,26 +101,6 @@ const MeterValues = ({ value, theme, onChange }) => {
                   }}
                 />
               </Box>
-            </FormField>
-            <FormField label="label">
-              <TextInput
-                value={item.label || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].label = event.target.value;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="value">
-              <TextInput
-                value={item.value || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].value = parseInt(event.target.value, 10);
-                  onChange(nextValue);
-                }}
-              />
             </FormField>
           </Box>
           <Button
