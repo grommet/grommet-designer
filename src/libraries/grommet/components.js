@@ -1477,13 +1477,21 @@ export const components = {
     name: 'Meter',
     properties: {
       background: ['-color-'],
+      color: ['-color-'],
       max: 100,
       round: false,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       type: ['bar', 'circle'],
+      value: 0,
       values: MeterValues,
     },
+    override: ({ props }, { replaceData }) => ({
+      value:
+        typeof props.value === 'string'
+          ? replaceData(props.value)
+          : props.value,
+    }),
   },
   Carousel: {
     component: Carousel,

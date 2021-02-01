@@ -108,7 +108,7 @@ const MeterValues = ({ value, theme, onChange }) => {
             onClick={() => {
               const nextValue = JSON.parse(JSON.stringify(value));
               nextValue.splice(i, 1);
-              onChange(nextValue);
+              onChange(nextValue.length === 0 ? undefined : nextValue);
             }}
           />
         </Box>

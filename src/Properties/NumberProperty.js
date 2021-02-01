@@ -15,15 +15,20 @@ const NumberProperty = React.forwardRef(
           plain
           mask={[
             {
-              regexp: /^\d*$/,
+              regexp: /^\d*$|^\{|^\{.+/,
             },
           ]}
           value={value !== undefined ? value : ''}
           onChange={(event) => {
-            const nextValue =
-              event.target.value === ''
-                ? undefined
-                : parseInt(event.target.value, 10);
+            let nextValue;
+            // data reference
+            if (event.target.value[0] === '{') nextValue = event.target.value;
+            else {
+              nextValue = parseInt(event.target.value, 10);
+              // NaN check
+              // eslint-disable-next-line no-self-compare
+              if (nextValue !== nextValue) nextValue = undefined;
+            }
             setValue(nextValue);
           }}
           style={{ textAlign: 'end' }}
