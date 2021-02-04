@@ -1417,7 +1417,7 @@ export const components = {
       if (data) result.values = data;
       result.children = (value) => {
         const index = (result.values || props.values || []).indexOf(value);
-        if (designProps.render)
+        if (designProps && designProps.render)
           return renderComponent(designProps.render, { datum: value });
         return (
           <Box
