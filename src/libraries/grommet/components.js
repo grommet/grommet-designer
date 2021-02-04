@@ -830,7 +830,6 @@ export const components = {
     },
     properties: {
       checked: false,
-      defaultChecked: false,
       disabled: false,
       label: 'enabled?',
       reverse: false,
