@@ -852,6 +852,14 @@ export const components = {
             : undefined,
       };
     },
+    initialize: ({ props, designProps }, { setLink }) => {
+      if (designProps && designProps.link) {
+        setLink(
+          designProps.link,
+          props.value !== undefined ? props.checked : props.defaultChecked,
+        );
+      }
+    },
   },
   CheckBoxGroup: {
     component: CheckBoxGroup,

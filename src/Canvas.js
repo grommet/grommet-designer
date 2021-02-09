@@ -232,6 +232,40 @@ const Canvas = ({
     [design, libraries, setDesign, setSelected],
   );
 
+  const setLink = useCallback(
+    (to, on, { nextRef } = {}) => {
+      if (Array.isArray(to)) {
+        // when to is an Array, lazily create nextDesign and re-use
+        const ref = {};
+        to.forEach((t) => setLink(t, on, { nextRef: ref }));
+        if (ref.design)
+          nextRef ? (nextRef.design = ref.design) : setDesign(ref.design);
+      } else if (to.control === 'toggleThemeMode') {
+        const nextThemeMode = design.themeMode === 'dark' ? 'dark' : 'light';
+        const nextDesign =
+          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+        if (nextThemeMode !== nextDesign.themeMode) {
+          nextDesign.themeMode = nextThemeMode;
+          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+        }
+      } else if (to.component) {
+        const target = design.components[to.component];
+        const hideable =
+          target && getComponentType(libraries, target.type).hideable;
+        if (hideable) {
+          const nextDesign =
+            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+          const nextHide = !on;
+          if (nextDesign.components[target.id].hide !== nextHide) {
+            nextDesign.components[target.id].hide = nextHide;
+            nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+          }
+        }
+      }
+    },
+    [design, libraries, setDesign],
+  );
+
   const toggleLink = useCallback(
     (to, onOff, { nextRef }) => {
       if (Array.isArray(to)) {
@@ -295,12 +329,12 @@ const Canvas = ({
       const id = Object.keys(initialize)[0];
       const component = initialize[id];
       const type = getComponentType(libraries, component.type);
-      type.initialize(component, { followLinkOption });
+      type.initialize(component, { followLinkOption, setLink });
       const nextInitialize = { ...initialize };
       delete nextInitialize[id];
       setInitialize(nextInitialize);
     }
-  }, [followLinkOption, initialize, libraries]);
+  }, [followLinkOption, initialize, libraries, setLink]);
 
   const renderRepeater = (component, type, { dataContextPath }) => {
     const {
