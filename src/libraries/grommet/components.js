@@ -1020,6 +1020,11 @@ export const components = {
       }
       return result;
     },
+    initialize: ({ props, designProps }, { followLinkOption }) => {
+      if (designProps && designProps.link) {
+        followLinkOption(designProps.link, props.value);
+      }
+    },
   },
   RangeInput: {
     component: RangeInput,
