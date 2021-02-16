@@ -398,8 +398,29 @@ export const components = {
         </Paragraph>
       ),
     documentation: 'https://v2.grommet.io/card',
-    properties: reusedBoxProps,
-    structure: reusedBoxStructure,
+    properties: {
+      ...reusedBoxProps,
+      hoverIndicator: false,
+      onClick: ['-link-'],
+    },
+    structure: [
+      ...reusedBoxStructure,
+      {
+        label: 'Interaction',
+        properties: ['onClick', 'hoverIndicator'],
+      },
+    ],
+    override: ({ props }, { dataContextPath, followLink }) => {
+      return {
+        onClick:
+          props && props.onClick
+            ? (event) => {
+                event.stopPropagation();
+                followLink(props.onClick, { dataContextPath });
+              }
+            : undefined,
+      };
+    },
   },
   CardHeader: {
     component: CardHeader,
