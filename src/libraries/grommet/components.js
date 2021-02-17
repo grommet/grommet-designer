@@ -1475,6 +1475,7 @@ export const components = {
   List: {
     component: List,
     name: 'List',
+    container: true,
     defaultProps: {
       data: [
         { name: 'Eric', count: 5 },
@@ -1491,7 +1492,10 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: ({ props }, { data, dataContextPath, followLink }) => {
+    override: (
+      { children, props },
+      { data, dataContextPath, followLink, renderComponent },
+    ) => {
       const result = {};
       // need to use retrieved data for data property
       if (data) result.data = data;
@@ -1502,6 +1506,10 @@ export const components = {
           const path = dataContextPath ? [...dataContextPath, index] : [index];
           followLink(props.onClickItem, { dataContextPath: path });
         };
+      }
+      if (children) {
+        result.children = (value) =>
+          renderComponent(children[0], { datum: value });
       }
       return result;
     },

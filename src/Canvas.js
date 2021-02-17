@@ -507,7 +507,10 @@ const Canvas = ({
 
     if (!parent) parent = component;
     let children;
-    if (parent.children && parent.children.length > 0) {
+    if (specialProps && specialProps.children) {
+      children = specialProps.children;
+      delete specialProps.children;
+    } else if (parent.children && parent.children.length > 0) {
       if (parent.children.length > 0) {
         children = parent.children.map((childId) =>
           renderComponent(childId, { dataContextPath, datum, referenceDesign }),
@@ -542,9 +545,6 @@ const Canvas = ({
       if (children === undefined) children = type.text;
     } else if (type.text) {
       children = type.text;
-    } else if (specialProps && specialProps.children) {
-      children = specialProps.children;
-      delete specialProps.children;
     } else if (type.placeholder && !component.coupled) {
       children = <Placeholder>{type.placeholder(mergedProps)}</Placeholder>;
     }
