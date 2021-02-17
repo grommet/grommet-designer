@@ -192,11 +192,12 @@ export const components = {
       height: Dimension,
       hoverIndicator: false,
       onClick: ['-link-'],
+      responsive: true,
       round: BoxRound,
       width: Dimension,
       wrap: false,
     },
-    advancedProperties: ['alignSelf', 'height', 'width', 'wrap'],
+    advancedProperties: ['alignSelf', 'height', 'responsive', 'width', 'wrap'],
     structure: [
       {
         label: 'Content layout',
@@ -207,6 +208,7 @@ export const components = {
           'pad',
           'gap',
           'overflow',
+          'responsive',
           'wrap',
         ],
       },
