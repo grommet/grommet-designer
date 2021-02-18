@@ -54,7 +54,7 @@ const DataChartSeries = ({ value, onChange, theme }) => {
             <Button
               icon={<Trash />}
               onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
+                let nextValue = JSON.parse(JSON.stringify(value));
                 nextValue.splice(i, 1);
                 // prune empty values
                 nextValue = nextValue.filter((i) => i);
