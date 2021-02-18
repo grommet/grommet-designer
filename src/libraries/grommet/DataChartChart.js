@@ -157,10 +157,12 @@ const DataChartChart = ({ value, onChange, theme }) => {
             <Button
               icon={<Trash />}
               onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
+                let nextValue = JSON.parse(JSON.stringify(value || []));
                 nextValue.splice(i, 1);
                 // prune empty values
-                onChange(nextValue.filter((i) => i));
+                nextValue = nextValue.filter((i) => i);
+                if (!nextValue.length) nextValue = undefined;
+                onChange(nextValue);
               }}
             />
           </Box>
