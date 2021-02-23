@@ -21,6 +21,7 @@ import {
   DateInput,
   Distribution,
   DropButton,
+  FileInput,
   Footer,
   Form,
   FormField,
@@ -37,11 +38,13 @@ import {
   Menu,
   Meter,
   Nav,
+  Pagination,
   Paragraph,
   RadioButtonGroup,
   RangeInput,
   Select,
   Sidebar,
+  Spinner,
   Stack,
   Tab,
   Tabs,
@@ -941,6 +944,17 @@ export const components = {
       value: '',
     },
   },
+  FileInput: {
+    component: FileInput,
+    name: 'FileInput',
+    properties: {
+      disabled: false,
+      id: '',
+      multiple: false,
+      name: '',
+      renderFile: '-component- grommet.Box {"pad":"small"}',
+    },
+  },
   Form: {
     component: Form,
     container: true,
@@ -1536,6 +1550,26 @@ export const components = {
           ? replaceData(props.value)
           : props.value,
     }),
+  },
+  Pagination: {
+    component: Pagination,
+    name: 'Pagination',
+    defaultProps: {
+      numberItems: 27,
+    },
+    properties: {
+      numberEdgePages: 1,
+      numberItems: 27,
+      numberMiddlePages: 3,
+      size: ['small', 'medium', 'large'],
+    },
+  },
+  Spinner: {
+    component: Spinner,
+    name: 'Spinner',
+    properties: {
+      size: ['small', 'medium', 'large'],
+    },
   },
   Carousel: {
     component: Carousel,
