@@ -12,7 +12,7 @@
     "lint": "eslint './src/**/*.js'",
     "test": "react-app-rewired test",
     "test:nowatch": "react-app-rewired test --watchAll=false",
-    "e2e": "testcafe firefox test.js --debug-on-fail",
+    "e2e": "testcafe firefox cafe-test.js --debug-on-fail",
     "prettier": "pretty-quick --staged"
   },
   "pre-commit": [
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^11.1.0",
-    "copy-webpack-plugin": "^6.2.1",
+    "copy-webpack-plugin": "^7.0.0",
     "customize-cra": "^1.0.0",
     "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "grommet-icons": "https://github.com/grommet/grommet-icons/tarball/stable",
@@ -47,7 +47,7 @@
     "react-app-rewired": "^2.1.5",
     "react-dom": "^17.0.1",
     "react-is": "17.0.1",
-    "react-scripts": "4.0.2",
+    "react-scripts": "4.0.3",
     "styled-components": "^5.0.0",
     "testcafe": "^1.8.3"
   }

@@ -15,11 +15,11 @@ const empty = Selector('p').withText(
 );
 const addControl = Selector('button').withAttribute('title', 'add a component');
 
-test('initial', async t => {
+test('initial', async (t) => {
   await t.expect(tagline.exists).ok();
 });
 
-test('create design', async t => {
+test('create design', async (t) => {
   const layerHeading = Selector('h2').withText('add');
 
   await t
@@ -40,7 +40,7 @@ test('create design', async t => {
     .notOk();
 });
 
-test('add paragraph and undo', async t => {
+test('add paragraph and undo', async (t) => {
   const layerHeading = Selector('h2').withText('add');
   const addParagraphControl = Selector('button').withText('Paragraph');
   const nameInput = Selector('input').withAttribute('name', 'name');
