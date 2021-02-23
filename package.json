@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^11.1.0",
-    "copy-webpack-plugin": "^7.0.0",
+    "copy-webpack-plugin": "^6.3.2",
     "customize-cra": "^1.0.0",
     "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "grommet-icons": "https://github.com/grommet/grommet-icons/tarball/stable",
