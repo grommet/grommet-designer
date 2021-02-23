@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 import ArrayProperty from './ArrayProperty';
 import { getDisplayName } from '../design';
 
-const LinkLabel = design => ({ selected, value }) => {
+const LinkLabel = (design) => ({ selected, value }) => {
   let label;
   if (!value || value.length === 0) {
     label = '';
@@ -14,9 +14,12 @@ const LinkLabel = design => ({ selected, value }) => {
   } else if (value.label) {
     label = value.label;
   } else if (Array.isArray(value)) {
-    label = value.map(v => v.label).join(', ');
-  } else {
+    label = value.map((v) => v.label).join(', ');
+  } else if (typeof value === 'string') {
+    // defensive
     label = value;
+  } else {
+    label = JSON.stringify(value);
   }
   return (
     <Box pad="small">

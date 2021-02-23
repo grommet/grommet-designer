@@ -31,10 +31,10 @@ export const loadDesign = ({
         Authorization: `Basic ${btoa(password)}`,
       };
     }
-    fetch(`${apiUrl}/${id}`, options).then(response => {
+    fetch(`${apiUrl}/${id}`, options).then((response) => {
       if (response.status === 401) onAuth();
       else if (response.ok) {
-        response.json().then(design => {
+        response.json().then((design) => {
           upgradeDesign(design);
           // remember in case we make a change so we can set derivedFromId
           design.id = id;
@@ -67,9 +67,9 @@ export const loadDesign = ({
     design.local = true;
     if (design.id && design.publishedUrl) {
       // check if this design has been subsequently published
-      fetch(`${apiUrl}/${design.id}`).then(response => {
+      fetch(`${apiUrl}/${design.id}`).then((response) => {
         if (response.ok) {
-          response.json().then(publishedDesign => {
+          response.json().then((publishedDesign) => {
             upgradeDesign(publishedDesign);
             if (publishedDesign.date > design.date) {
               design.subsequentPublish = publishedDesign;
@@ -97,7 +97,7 @@ const npmTheme = {};
 const loadThemePackage = ({ url, name, packageName, setTheme }) => {
   const nameParts = packageName.split('-'); // [grommet, theme, hpe]
   const varName = nameParts
-    .map(p => `${p[0].toUpperCase()}${p.slice(1)}`)
+    .map((p) => `${p[0].toUpperCase()}${p.slice(1)}`)
     .join(''); // GrommetThemeHpe
   if (!document.getElementById(packageName)) {
     // we haven't loaded this theme, add it in its own script tag
@@ -106,8 +106,13 @@ const loadThemePackage = ({ url, name, packageName, setTheme }) => {
     script.id = packageName;
     document.body.appendChild(script);
     script.onload = () => {
-      npmTheme[packageName] = window[varName][name];
-      setTheme(npmTheme[packageName]);
+      try {
+        npmTheme[packageName] = window[varName][name];
+        setTheme(npmTheme[packageName]);
+      } catch {
+        // well, didn't work, just use grommet
+        setTheme(grommet);
+      }
     };
   } else {
     setTheme(npmTheme[packageName]);
@@ -122,7 +127,7 @@ export const loadTheme = (themeValue, setTheme) => {
   if (designerUrl) {
     const id = designerUrl.split('id=')[1];
     fetch(`${themeApiUrl}/${id}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(setTheme);
   } else if (theme && theme.jsUrl) {
     // this is from npmjs or github pages
@@ -144,7 +149,7 @@ export const loadTheme = (themeValue, setTheme) => {
 };
 
 export const loadImports = (imports, setImports) => {
-  imports.forEach(impor => {
+  imports.forEach((impor) => {
     const url = impor.url;
     if (url) {
       if (url.includes('id=')) {
@@ -153,11 +158,11 @@ export const loadImports = (imports, setImports) => {
           const id = url.split('id=')[1];
           loadDesign({
             id,
-            onLoad: importDesign => {
-              setImports(prevImports => {
+            onLoad: (importDesign) => {
+              setImports((prevImports) => {
                 const nextImports = [...prevImports];
                 const nextImport = { ...impor, design: importDesign };
-                const index = nextImports.findIndex(i => i.url === url);
+                const index = nextImports.findIndex((i) => i.url === url);
                 if (index !== -1) nextImports[index] = nextImport;
                 else nextImports.push(nextImport);
                 return nextImports;
@@ -172,7 +177,7 @@ export const loadImports = (imports, setImports) => {
           script.src = url;
           document.body.appendChild(script);
           script.onload = () => {
-            setImports(prevImports => {
+            setImports((prevImports) => {
               const nextImports = [...prevImports];
               // nextImports[index] = { ...impor, library: window[name].designer };
               return nextImports;
