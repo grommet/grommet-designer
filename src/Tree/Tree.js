@@ -135,7 +135,7 @@ const Tree = ({
     setDragging(undefined);
     setDropTarget(undefined);
     updateDesign(nextDesign);
-    setSelected({ screen: nextScreen, component: dragging });
+    setSelected({ ...selected, screen: nextScreen, component: dragging });
   };
 
   const moveScreen = () => {
