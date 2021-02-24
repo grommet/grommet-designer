@@ -64,7 +64,7 @@ export const upgradeDesign = (design) => {
     .filter((component) => component.linkTo)
     .map((component) => component.linkTo)
     .forEach((linkTo) => {
-      if (!linkTo.component) {
+      if (!linkTo.component && linkTo.screen) {
         linkTo.component = design.screens[linkTo.screen].root;
       }
     });
@@ -206,24 +206,27 @@ export const upgradeDesign = (design) => {
           // Button
           component.designProps.link = link.filter(
             (l) =>
-              design.screens[l.screen] &&
-              (!l.component || design.components[l.component]),
+              l.control ||
+              (design.screens[l.screen] &&
+                (!l.component || design.components[l.component])),
           );
         } else if (typeof link === 'object') {
           // Select
           Object.keys(link).forEach((name) => {
             const l = link[name];
             if (
-              !design.screens[l.screen] ||
-              (l.component && !design.components[l.component])
+              !l.control &&
+              (!design.screens[l.screen] ||
+                (l.component && !design.components[l.component]))
             ) {
               delete component.designProps.link[name];
             }
           });
         } else {
           if (
-            !design.screens[link.screen] ||
-            (link.component && !design.components[link.component])
+            !link.control &&
+            (!design.screens[link.screen] ||
+              (link.component && !design.components[link.component]))
           ) {
             delete component.designProps.link;
           }
