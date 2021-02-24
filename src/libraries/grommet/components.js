@@ -1082,6 +1082,7 @@ export const components = {
   Select: {
     component: Select,
     name: 'Select',
+    container: true,
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1093,6 +1094,7 @@ export const components = {
       dropAlign: DropAlign,
       dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       icon: ['-Icon-'],
+      labelKey: '',
       multiple: false,
       name: '',
       options: SelectOptions,
@@ -1101,17 +1103,33 @@ export const components = {
       searchPlaceholder: '',
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
+      valueKey: '',
     },
     designProperties: {
+      data: JsonData,
       link: ['-link-options-'],
     },
-    override: ({ props, designProps }, { followLinkOption }) => {
+    override: (
+      { children, props, designProps },
+      { followLinkOption, renderComponent },
+    ) => {
       const result = {};
       if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
       if (designProps && designProps.link) {
         result.onChange = ({ value }) =>
           followLinkOption(designProps.link, value);
+      }
+      if (
+        props.options.length === 0 &&
+        designProps.data &&
+        Array.isArray(designProps.data)
+      ) {
+        result.options = designProps.data;
+      }
+      if (children) {
+        result.children = (option) =>
+          renderComponent(children[0], { datum: option });
       }
       return result;
     },
