@@ -57,7 +57,7 @@ const DataChartChart = ({ value, onChange, theme }) => {
                     else nextValue[i].type = option;
                     if (option === 'bars') {
                       if (typeof item.property === 'string') {
-                        nextValue[i].property = [item.property];
+                        nextValue[i].property = item.property.split(' ');
                       }
                     } else if (Array.isArray(item.property)) {
                       nextValue[i].property = item.property[0] || '';
