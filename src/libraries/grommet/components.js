@@ -59,6 +59,7 @@ import BoxAnimation from './BoxAnimation';
 import BoxBackgroundImage from './BoxBackgroundImage';
 import BoxDirection from './BoxDirection';
 import BoxGridArea from './BoxGridArea';
+import BoxHoverIndicator from './BoxHoverIndicator';
 import BoxJustify from './BoxJustify';
 import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
@@ -193,7 +194,7 @@ export const components = {
       ],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       height: Dimension,
-      hoverIndicator: false,
+      hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
       responsive: true,
       round: BoxRound,
@@ -405,7 +406,7 @@ export const components = {
     documentation: 'https://v2.grommet.io/card',
     properties: {
       ...reusedBoxProps,
-      hoverIndicator: false,
+      hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
     },
     structure: [
@@ -718,7 +719,7 @@ export const components = {
       disabled: false,
       fill: ['horizontal', 'vertical'],
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      hoverIndicator: false,
+      hoverIndicator: BoxHoverIndicator,
       href: '',
       margin: Edge,
       plain: [true, false],
@@ -769,7 +770,7 @@ export const components = {
       },
       fill: ['horizontal', 'vertical'],
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-      hoverIndicator: false,
+      hoverIndicator: BoxHoverIndicator,
       href: '',
       icon: ['-Icon-'],
       label: 'Click Me',
