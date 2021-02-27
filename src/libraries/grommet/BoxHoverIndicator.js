@@ -1,8 +1,6 @@
 import React from 'react';
-import { Blank } from 'grommet-icons';
 import BoxBackgroundImage from './BoxBackgroundImage';
 import InlineOptions from './InlineOptions';
-import InlineOption from './InlineOption';
 import TrueOption, { trueOption } from './TrueOption';
 import UndefinedOption, { undefinedOption } from './UndefinedOption';
 import VariedOption, { variedOption } from './VariedOption';
@@ -20,8 +18,10 @@ const BoxHoverIndicator = (props) => {
           return <UndefinedOption checked={checked} hover={hover} />;
         } else if (option.label === variedOption.label) {
           return <VariedOption checked={checked} hover={hover} />;
+        } else if (option.label === trueOption.label) {
+          return <TrueOption checked={checked} hover={hover} />;
         }
-        return <TrueOption checked={checked} hover={hover} />;
+        return null;
       }}
     </InlineOptions>
   );
