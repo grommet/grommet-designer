@@ -5,7 +5,7 @@ import TrueOption, { trueOption } from './TrueOption';
 import UndefinedOption, { undefinedOption } from './UndefinedOption';
 import VariedOption, { variedOption } from './VariedOption';
 
-const options = [true, variedOption];
+const options = [trueOption, variedOption];
 
 const BoxHoverIndicator = (props) => {
   const { name, value } = props;
