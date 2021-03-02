@@ -779,6 +779,7 @@ export const components = {
       plain: false,
       primary: false,
       reverse: false,
+      secondary: false,
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
   },
