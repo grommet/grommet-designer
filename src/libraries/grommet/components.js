@@ -1124,6 +1124,7 @@ export const components = {
       }
       if (
         props.options.length === 0 &&
+        designProps &&
         designProps.data &&
         Array.isArray(designProps.data)
       ) {
