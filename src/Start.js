@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   CheckBox,
+  FileInput,
   Header,
   Heading,
   Image,
@@ -156,44 +157,25 @@ const Start = ({
           }}
         />
         <Box flex />
-        <Box alignSelf="stretch" border round overflow="hidden">
-          <Stack guidingChild="last" interactiveChild="first">
-            <input
-              style={{ display: 'block', width: '100%', height: '100%' }}
-              type="file"
-              accept=".json"
-              onDragEnter={() => setDropping(true)}
-              onDragLeave={() => setDropping(false)}
-              onChange={(event) => {
-                setError(undefined);
-                const reader = new FileReader();
-                reader.onload = () => {
-                  try {
-                    const nextDesign = JSON.parse(reader.result);
-                    importDesign(nextDesign);
-                  } catch (e) {
-                    setError(e.message);
-                  }
-                };
-                reader.readAsText(event.target.files[0]);
-              }}
-            />
-            <Box
-              fill
-              background={dropping ? 'control' : 'background'}
-              pad="small"
-              align="center"
-              justify="center"
-            >
-              <Text color="text-weak">Import - drop design file here</Text>
-              {error && (
-                <Box background="status-critical" pad="medium round">
-                  <Text>{error}</Text>
-                </Box>
-              )}
-            </Box>
-          </Stack>
-        </Box>
+        <FileInput
+          accept=".json"
+          messages={{
+            dropPrompt: 'Import - drop design file here',
+          }}
+          onChange={(event) => {
+            setError(undefined);
+            const reader = new FileReader();
+            reader.onload = () => {
+              try {
+                const nextDesign = JSON.parse(reader.result);
+                importDesign(nextDesign);
+              } catch (e) {
+                setError(e.message);
+              }
+            };
+            reader.readAsText(event.target.files[0]);
+          }}
+        />
         <Box
           flex={false}
           direction="row"

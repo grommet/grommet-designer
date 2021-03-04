@@ -32,34 +32,25 @@ exports[`App empty 1`] = `
         class="StyledBox-sc-13pk1d4-0 kluzTJ"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 eQmduH"
+        class="StyledBox-sc-13pk1d4-0 kEeBHU FileInput__ContentsBox-sc-1jzq7im-0 kqONKo"
+        tabindex="0"
       >
-        <div
-          class="StyledStack-ajspsk-0 fDjhAR"
+        <span
+          class="StyledText-sc-1sadyjn-0 fnemch FileInput__Message-sc-1jzq7im-2 iXfBLQ"
         >
-          <div
-            class="StyledStack__StyledStackLayer-ajspsk-1 gBThXn"
+          Import - drop design file here
+           
+          <a
+            class="StyledAnchor-sc-1rp7lwl-0 eaoGTv"
           >
-            <input
-              accept=".json"
-              style="display: block; width: 100%; height: 100%;"
-              type="file"
-            />
-          </div>
-          <div
-            class="StyledStack__StyledStackLayer-ajspsk-1 jhazmS"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 duUjDK"
-            >
-              <span
-                class="StyledText-sc-1sadyjn-0 bsIBAh"
-              >
-                Import - drop design file here
-              </span>
-            </div>
-          </div>
-        </div>
+            browse
+          </a>
+        </span>
+        <input
+          accept=".json"
+          class="StyledFileInput-rl7ywv-0 bvpdjq"
+          type="file"
+        />
       </div>
       <div
         class="StyledBox-sc-13pk1d4-0 bLMgto"
