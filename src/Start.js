@@ -11,7 +11,6 @@ import {
   Markdown,
   Paragraph,
   RadioButtonGroup,
-  Stack,
   Text,
   TextInput,
 } from 'grommet';
@@ -111,7 +110,6 @@ const Start = ({
   const [designs, setDesigns] = React.useState([]);
   const [readme, setReadme] = React.useState();
   const [search, setSearch] = React.useState();
-  const [dropping, setDropping] = React.useState();
   const [error, setError] = React.useState();
 
   React.useEffect(() => {
@@ -157,6 +155,14 @@ const Start = ({
           }}
         />
         <Box flex />
+        {error && (
+          <Box
+            background={{ color: 'status-error', opacity: 'weak' }}
+            pad="small"
+          >
+            <Text>{error}</Text>
+          </Box>
+        )}
         <FileInput
           accept=".json"
           messages={{
