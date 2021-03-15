@@ -1208,11 +1208,38 @@ export const components = {
   Calendar: {
     component: Calendar,
     name: 'Calendar',
+    help: `The 'date' and 'reference' properties needs to be in ISO8601 format.
+    `,
+    container: true,
+    defaultProps: {
+      locale: 'en-US',
+      showAdjacentDays: true,
+    },
     properties: {
       animate: false,
+      date: '',
       daysOfWeek: false,
+      fill: false,
+      firstDayOfWeek: [0, 1],
+      header: '-component-',
+      locale: '',
+      margin: Edge,
       range: false,
+      reference: '',
+      showAdjacentDays: false,
       size: ['small', 'medium', 'large'],
+    },
+    override: ({ children, props }, { renderComponent }) => {
+      const result = {};
+      if (props.header) {
+        result.header = (datum) => {
+          return renderComponent(props.header, { datum });
+        };
+      }
+      if (children) {
+        result.children = (datum) => renderComponent(children[0], { datum });
+      }
+      return result;
     },
   },
   Chart: {

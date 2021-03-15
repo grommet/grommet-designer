@@ -74,11 +74,18 @@ const find = (data, path) => {
 const replace = (text, data, contextPath) =>
   (text || '').replace(/\{[^}]*\}/g, (match) => {
     const dataPath = parsePath(match.slice(1, match.length - 1));
-    const replaced = find(
-      data,
-      contextPath ? [...contextPath, ...dataPath] : dataPath,
-    );
-    if (replaced !== undefined) return replaced;
+    const path = contextPath ? [...contextPath, ...dataPath] : dataPath;
+    const replaced = find(data, path);
+    if (replaced !== undefined) {
+      if (typeof replaced === 'function') {
+        // need to get the context to call this function from
+        const funcPath = [...path];
+        funcPath.pop();
+        const funcContext = find(data, funcPath);
+        return replaced.call(funcContext);
+      }
+      return replaced;
+    }
     return match;
   });
 
@@ -484,7 +491,8 @@ const Canvas = ({
         }
         if (
           typeof property === 'string' &&
-          property.startsWith('-component-')
+          property.startsWith('-component-') &&
+          !specialProps[prop]
         ) {
           specialProps[prop] = renderComponent(mergedProps[prop], {
             dataContextPath,
