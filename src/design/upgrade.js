@@ -288,5 +288,25 @@ export const upgradeDesign = (design) => {
       delete component.props.thickness;
     });
 
+  // remove any link options that don't have options anymore
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter(
+      (component) =>
+        component.props.options &&
+        component.designProps &&
+        component.designProps.link,
+    )
+    .forEach((component) => {
+      Object.keys(component.designProps.link).forEach((name) => {
+        if (
+          name !== '-any-' &&
+          name !== '-none-' &&
+          !component.props.options.find((o) => o === name)
+        )
+          delete component.designProps.link[name];
+      });
+    });
+
   design.version = 3.5;
 };
