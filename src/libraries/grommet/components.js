@@ -569,7 +569,7 @@ export const components = {
           while (node && node.id !== 'designer-canvas') node = node.parentNode;
           if (node) setHide(true);
         };
-      }
+      } else result.onClickOutside = undefined;
       result.onEsc = () => setHide(true);
       return result;
     },
