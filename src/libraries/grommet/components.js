@@ -1138,7 +1138,7 @@ export const components = {
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
-        followLinkOption(designProps.link, props.value);
+        followLinkOption(designProps.link, props.value || props.defaultValue);
       }
     },
   },
