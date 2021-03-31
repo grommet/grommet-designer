@@ -249,28 +249,35 @@ const Canvas = ({
         .forEach((name) => {
           // function shared by array and non-array cases
           const updateLink = (link) => {
-            const target = design.components[link.component];
-            const hideable =
-              target && getComponentType(libraries, target.type).hideable;
-            if (hideable) {
-              let hide;
-              // -link-checked- cases
-              if (name === '-checked-') hide = !selected;
-              else if (name === '-unchecked-') hide = selected;
-              // undefined ok
-              else if (name === '-both-') hide = !selected;
-              // -link-option- cases
-              else if (name === '-any-') hide = !selected || !selected.length;
-              else if (name === '-none-')
-                hide = Array.isArray(selected)
-                  ? !!selected.length && selected[0] !== name
-                  : !!selected && selected !== name;
-              else
-                hide = Array.isArray(selected)
-                  ? !selected.includes(name)
-                  : selected !== name;
-              if (hide !== undefined)
-                nextDesign.components[target.id].hide = hide;
+            if (link.control) {
+              if (link.control === 'toggleThemeMode') {
+                nextDesign.themeMode =
+                  design.themeMode === 'dark' ? 'light' : 'dark';
+              }
+            } else {
+              const target = design.components[link.component];
+              const hideable =
+                target && getComponentType(libraries, target.type).hideable;
+              if (hideable) {
+                let hide;
+                // -link-checked- cases
+                if (name === '-checked-') hide = !selected;
+                else if (name === '-unchecked-') hide = selected;
+                // undefined ok
+                else if (name === '-both-') hide = !selected;
+                // -link-option- cases
+                else if (name === '-any-') hide = !selected || !selected.length;
+                else if (name === '-none-')
+                  hide = Array.isArray(selected)
+                    ? !!selected.length && selected[0] !== name
+                    : !!selected && selected !== name;
+                else
+                  hide = Array.isArray(selected)
+                    ? !selected.includes(name)
+                    : selected !== name;
+                if (hide !== undefined)
+                  nextDesign.components[target.id].hide = hide;
+              }
             }
           };
 

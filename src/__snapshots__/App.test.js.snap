@@ -2,83 +2,83 @@
 
 exports[`App empty 1`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 cQzNLA"
+  class="StyledGrommet-sc-19lkkz7-0 leQrzO"
   style="height: 100%;"
 >
   <div
-    class="StyledBox-sc-13pk1d4-0 dNsBiK"
+    class="StyledBox-sc-13pk1d4-0 jWUcU"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 fdCxaZ"
+      class="StyledBox-sc-13pk1d4-0 fttHVf"
     >
       <h1
-        class="StyledHeading-sc-1rdh4aw-0 krnTZH"
+        class="StyledHeading-sc-1rdh4aw-0 gnHqfl"
       >
         grommet designer
       </h1>
       <p
-        class="StyledParagraph-tbetod-0 ldWzVw"
+        class="StyledParagraph-tbetod-0 btmLde"
       >
         design with grommet components
       </p>
       <a
-        class="StyledButton-sc-323bzc-0 bcjuTs"
+        class="StyledButton-sc-323bzc-0 llOcRy"
         href="/_new"
         title="create a new design"
       >
         Create
       </a>
       <div
-        class="StyledBox-sc-13pk1d4-0 kluzTJ"
+        class="StyledBox-sc-13pk1d4-0 iEkqnX"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 kEeBHU FileInput__ContentsBox-sc-1jzq7im-0 kqONKo"
+        class="StyledBox-sc-13pk1d4-0 DFMPC FileInput__ContentsBox-sc-1jzq7im-0 gWwjPO"
         tabindex="0"
       >
         <span
-          class="StyledText-sc-1sadyjn-0 fnemch FileInput__Message-sc-1jzq7im-2 iXfBLQ"
+          class="StyledText-sc-1sadyjn-0 bgKNuT FileInput__Message-sc-1jzq7im-2 ePVpZq"
         >
           Import - drop design file here
            
           <a
-            class="StyledAnchor-sc-1rp7lwl-0 eaoGTv"
+            class="StyledAnchor-sc-1rp7lwl-0 hGwcxV"
           >
             browse
           </a>
         </span>
         <input
           accept=".json"
-          class="StyledFileInput-rl7ywv-0 bvpdjq"
+          class="StyledFileInput-rl7ywv-0 gYmbdQ"
           type="file"
         />
       </div>
       <div
-        class="StyledBox-sc-13pk1d4-0 bLMgto"
+        class="StyledBox-sc-13pk1d4-0 fnRnyy"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 bEnuwL"
+          class="StyledBox-sc-13pk1d4-0 iYasFZ"
           id="themeMode"
         >
           <label
-            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 jtWEwC"
+            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 qLgNQ"
             for="themeMode-dark"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 bHWzdD StyledRadioButton-g1f6ld-5 imYubY"
+              class="StyledBox-sc-13pk1d4-0 hDQlrN StyledRadioButton-g1f6ld-5 GyPly"
             >
               <input
                 checked=""
-                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 hIKMbD"
+                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 kGVKvV"
                 id="themeMode-dark"
                 name="themeMode"
                 type="radio"
                 value="dark"
               />
               <div
-                class="StyledBox-sc-13pk1d4-0 cHnnKN StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 kGVpuu"
+                class="StyledBox-sc-13pk1d4-0 jneWXr StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 ddKqQo"
               >
                 <svg
-                  class="StyledRadioButton__StyledRadioButtonIcon-g1f6ld-3 iVIoen"
+                  class="StyledRadioButton__StyledRadioButtonIcon-g1f6ld-3 dLiZYN"
                   preserveAspectRatio="xMidYMid meet"
                   viewBox="0 0 24 24"
                 >
@@ -97,24 +97,24 @@ exports[`App empty 1`] = `
             </span>
           </label>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffHQai"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eXRcsI"
           />
           <label
-            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 jtWEwC"
+            class="StyledRadioButton__StyledRadioButtonContainer-g1f6ld-0 qLgNQ"
             for="themeMode-light"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 bHWzdD StyledRadioButton-g1f6ld-5 imYubY"
+              class="StyledBox-sc-13pk1d4-0 hDQlrN StyledRadioButton-g1f6ld-5 GyPly"
             >
               <input
-                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 hIKMbD"
+                class="StyledRadioButton__StyledRadioButtonInput-g1f6ld-1 kGVKvV"
                 id="themeMode-light"
                 name="themeMode"
                 type="radio"
                 value="light"
               />
               <div
-                class="StyledBox-sc-13pk1d4-0 irrVUF StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 kGVpuu"
+                class="StyledBox-sc-13pk1d4-0 cBpNcn StyledRadioButton__StyledRadioButtonBox-g1f6ld-4 ddKqQo"
               />
             </div>
             <span
@@ -125,20 +125,20 @@ exports[`App empty 1`] = `
           </label>
         </div>
         <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffHQai"
+          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eXRcsI"
         />
         <label
-          class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 jIqVbk"
+          class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 dhFVeS"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 jbIyUK StyledCheckBox-sc-1dbk5ju-6 hOFfoi"
+            class="StyledBox-sc-13pk1d4-0 itMSJI StyledCheckBox-sc-1dbk5ju-6 fJLUFg"
           >
             <input
-              class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 iWBkeg"
+              class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 gPhsCK"
               type="checkbox"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 ivWWqp StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 kRWCTA"
+              class="StyledBox-sc-13pk1d4-0 cbPRST StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 eNpbdq"
             />
           </div>
           <span>
@@ -148,44 +148,44 @@ exports[`App empty 1`] = `
       </div>
     </div>
     <div
-      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 dVCWgs"
+      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kA-DAfK"
     />
     <div
-      class="StyledBox-sc-13pk1d4-0 kZnuKM"
+      class="StyledBox-sc-13pk1d4-0 cVlpRi"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 gJOldZ"
+        class="StyledBox-sc-13pk1d4-0 bfmpQf"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 beMEAk"
+          class="StyledBox-sc-13pk1d4-0 llaxeW"
         >
           <h2
-            class="StyledHeading-sc-1rdh4aw-0 iqLQKP"
+            class="StyledHeading-sc-1rdh4aw-0 jaqNgZ"
           >
             tutorials
           </h2>
         </header>
         <a
-          class="StyledButton-sc-323bzc-0 ebqXLG"
+          class="StyledButton-sc-323bzc-0 heIqNk"
           href="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
           target="_blank"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 dYebPD"
+            class="StyledBox-sc-13pk1d4-0 hvUCKZ"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dbmVVX"
+              class="StyledBox-sc-13pk1d4-0 QQwQh"
             >
               <img
-                class="StyledImage-ey4zx9-0 iBeQsm"
+                class="StyledImage-ey4zx9-0 fqVCxQ"
                 src="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png"
               />
             </div>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ZUJgG"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 dcgaqk"
             />
             <span
-              class="StyledText-sc-1sadyjn-0 cFsRYN"
+              class="StyledText-sc-1sadyjn-0 dNphxH"
             >
               introduction
             </span>
@@ -193,57 +193,57 @@ exports[`App empty 1`] = `
         </a>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 dLcqZl"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 fqwiwT"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 dIHSGy"
+        class="StyledBox-sc-13pk1d4-0 iuBOfw"
       >
         <h2
-          class="StyledHeading-sc-1rdh4aw-0 iqLQKP"
+          class="StyledHeading-sc-1rdh4aw-0 jaqNgZ"
         >
           inspiration
         </h2>
         <div
-          class="StyledBox-sc-13pk1d4-0 lilVsx"
+          class="StyledBox-sc-13pk1d4-0 czCfQv"
         >
           <a
-            class="StyledButton-sc-323bzc-0 ebqXLG"
+            class="StyledButton-sc-323bzc-0 heIqNk"
             href="https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com&mode=edit"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dYebPD"
+              class="StyledBox-sc-13pk1d4-0 hvUCKZ"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 dbmVVX"
+                class="StyledBox-sc-13pk1d4-0 QQwQh"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ZUJgG"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 dcgaqk"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 cFsRYN"
+                class="StyledText-sc-1sadyjn-0 dNphxH"
               >
                 HPE design system
               </span>
             </div>
           </a>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ffHQai"
+            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eXRcsI"
           />
           <a
-            class="StyledButton-sc-323bzc-0 ebqXLG"
+            class="StyledButton-sc-323bzc-0 heIqNk"
             href="https://designer.grommet.io/?id=Card-eric-soderberg-hpe-com&mode=edit"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 dYebPD"
+              class="StyledBox-sc-13pk1d4-0 hvUCKZ"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 dbmVVX"
+                class="StyledBox-sc-13pk1d4-0 QQwQh"
               />
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 ZUJgG"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 dcgaqk"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 cFsRYN"
+                class="StyledText-sc-1sadyjn-0 dNphxH"
               >
                 Card
               </span>
@@ -258,28 +258,28 @@ exports[`App empty 1`] = `
 
 exports[`App empty 2`] = `
 <div
-  class="StyledGrommet-sc-19lkkz7-0 cQzNLA"
+  class="StyledGrommet-sc-19lkkz7-0 leQrzO"
   style="height: 100%;"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 jxyntZ"
+    class="StyledGrid-sc-1wofa1l-0 clSDhH"
   >
     <div
-      class="StyledGrommet-sc-19lkkz7-0 jirFMY"
+      class="StyledGrommet-sc-19lkkz7-0 jtrFMW"
       id="designer-canvas"
       style="height: 100%;"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 hBeepv"
+        class="StyledBox-sc-13pk1d4-0 hZReLF"
         draggable="true"
         style="outline: 1px dashed red;"
         tabindex="0"
       >
         <div
-          class="sc-gsTCUz jmxRwO"
+          class="sc-gsDJrp bhOEVA"
         >
           <p
-            class="StyledParagraph-tbetod-0 knSyNU"
+            class="StyledParagraph-tbetod-0 gmijiO"
           >
             This Box is currently empty. Add components to it, so it can do its layout thing.
           </p>

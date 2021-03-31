@@ -2,6 +2,20 @@ import React, { useMemo, useState } from 'react';
 import { Grid, Select, Text } from 'grommet';
 import LinkLabel from './LinkLabel';
 
+const optionValue = (options) => (option) => {
+  let result;
+  options.some((o) => {
+    if (o === option) result = o;
+    else if (option.control && o.control === option.control) result = o;
+    else if (o.screen === option.screen && o.component === option.component)
+      result = o;
+    else if (!o.component && !option.component && o.screen === option.screen)
+      result = o;
+    return result;
+  });
+  return result;
+};
+
 const LinkPropertySelect = ({ design, linkOptions, onChange, value }) => {
   const [searchText, setSearchText] = useState('');
   const searchExp = useMemo(
@@ -30,6 +44,7 @@ const LinkPropertySelect = ({ design, linkOptions, onChange, value }) => {
           : undefined
       }
       valueLabel={<LinkLabel design={design} selected value={value} />}
+      valueKey={optionValue(linkOptions)}
     >
       {(option, index, options, { selected }) => (
         <LinkLabel design={design} selected={selected} value={option} />
