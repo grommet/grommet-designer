@@ -200,27 +200,23 @@ export const upgradeDesign = (design) => {
   Object.keys(design.components)
     .map((id) => design.components[id])
     .forEach((component) => {
+      const validLink = (l) =>
+        l.control ||
+        (design.screens[l.screen] &&
+          (!l.component || design.components[l.component]));
       if (component.designProps && component.designProps.link) {
         const link = component.designProps.link;
         if (Array.isArray(link)) {
           // Button
-          component.designProps.link = link.filter(
-            (l) =>
-              l.control ||
-              (design.screens[l.screen] &&
-                (!l.component || design.components[l.component])),
-          );
+          component.designProps.link = link.filter(validLink);
         } else if (typeof link === 'object') {
-          // Select
+          // Select, CheckBox, CheckBoxGroup
           Object.keys(link).forEach((name) => {
-            const l = link[name];
-            if (
-              !l.control &&
-              (!design.screens[l.screen] ||
-                (l.component && !design.components[l.component]))
-            ) {
+            if (Array.isArray(link[name])) {
+              link[name] = link[name].filter(validLink);
+              if (!link[name].length) delete component.designProps.link[name];
+            } else if (!validLink(link[name]))
               delete component.designProps.link[name];
-            }
           });
         } else {
           if (
@@ -288,6 +284,7 @@ export const upgradeDesign = (design) => {
       delete component.props.thickness;
     });
 
+  // 3.6
   // remove any link options that don't have options anymore
   Object.keys(design.components)
     .map((id) => design.components[id])
@@ -308,5 +305,19 @@ export const upgradeDesign = (design) => {
       });
     });
 
-  design.version = 3.5;
+  // convert CheckBox design links from array to use -both-
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter(
+      (component) =>
+        component.type === 'grommet.CheckBox' &&
+        component.designProps &&
+        component.designProps.link &&
+        Array.isArray(component.designProps.link),
+    )
+    .forEach((component) => {
+      component.designProps.link = { '-both-': component.designProps.link };
+    });
+
+  design.version = 3.6;
 };

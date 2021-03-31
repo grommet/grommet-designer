@@ -7,6 +7,7 @@ import ComponentProperty from './ComponentProperty';
 import FunctionProperty from './FunctionProperty';
 import IconProperty from './IconProperty';
 import LinkProperty from './LinkProperty';
+import LinkPropertyOptions from './LinkPropertyOptions';
 import LinkOptionsProperty from './LinkOptionsProperty';
 import NumberProperty from './NumberProperty';
 import ObjectProperty from './ObjectProperty';
@@ -34,6 +35,21 @@ const Property = React.forwardRef(
             ref={ref}
             value={value}
             property={LinkOptionsProperty}
+            {...rest}
+          />
+        );
+      }
+      if (property.includes('-link-checked-')) {
+        return (
+          <FunctionProperty
+            ref={ref}
+            value={value}
+            options={[
+              { label: 'checked', value: '-checked-' },
+              { label: 'unchecked', value: '-unchecked-' },
+              { label: 'both', value: '-both-' },
+            ]}
+            property={LinkPropertyOptions}
             {...rest}
           />
         );

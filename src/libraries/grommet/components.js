@@ -865,24 +865,23 @@ export const components = {
       toggle: false,
     },
     designProperties: {
-      link: ['-link-'],
+      link: ['-link-checked-'],
     },
-    override: ({ designProps }, { dataContextPath, toggleLink }) => {
+    override: ({ designProps }, { dataContextPath, followLinkOption }) => {
       return {
         onChange:
           designProps && designProps.link
             ? (event) => {
-                event.stopPropagation();
-                toggleLink(designProps.link, event.target.checked, {
+                followLinkOption(designProps.link, event.target.checked, {
                   dataContextPath,
                 });
               }
             : undefined,
       };
     },
-    initialize: ({ props, designProps }, { setLink }) => {
+    initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
-        setLink(
+        followLinkOption(
           designProps.link,
           props.value !== undefined ? props.checked : props.defaultChecked,
         );
@@ -929,6 +928,11 @@ export const components = {
           followLinkOption(designProps.link, value, { dataContextPath });
       }
       return result;
+    },
+    initialize: ({ props, designProps }, { followLinkOption }) => {
+      if (designProps && designProps.link) {
+        followLinkOption(designProps.link, props.value);
+      }
     },
   },
   DateInput: {

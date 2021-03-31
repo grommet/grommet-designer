@@ -239,92 +239,45 @@ const Canvas = ({
     [design, libraries, setDesign, setSelected],
   );
 
-  const setLink = useCallback(
-    (to, on, { nextRef } = {}) => {
-      if (Array.isArray(to)) {
-        // when to is an Array, lazily create nextDesign and re-use
-        const ref = {};
-        to.forEach((t) => setLink(t, on, { nextRef: ref }));
-        if (ref.design)
-          nextRef ? (nextRef.design = ref.design) : setDesign(ref.design);
-      } else if (to.control === 'toggleThemeMode') {
-        const nextThemeMode = design.themeMode === 'dark' ? 'dark' : 'light';
-        const nextDesign =
-          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        if (nextThemeMode !== nextDesign.themeMode) {
-          nextDesign.themeMode = nextThemeMode;
-          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-        }
-      } else if (to.component) {
-        const target = design.components[to.component];
-        const hideable =
-          target && getComponentType(libraries, target.type).hideable;
-        if (hideable) {
-          const nextDesign =
-            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-          const nextHide = !on;
-          if (nextDesign.components[target.id].hide !== nextHide) {
-            nextDesign.components[target.id].hide = nextHide;
-            nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-          }
-        }
-      }
-    },
-    [design, libraries, setDesign],
-  );
-
-  const toggleLink = useCallback(
-    (to, onOff, { nextRef }) => {
-      if (Array.isArray(to)) {
-        // when to is an Array, lazily create nextDesign and re-use
-        const ref = {};
-        to.forEach((t) => followLink(t, { nextRef: ref }));
-        if (ref.design) setDesign(ref.design);
-      } else if (to.control === 'toggleThemeMode') {
-        const nextDesign =
-          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-        nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-      } else if (to.component) {
-        const target = design.components[to.component];
-        const hideable =
-          target && getComponentType(libraries, target.type).hideable;
-        if (hideable) {
-          const nextDesign =
-            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
-          nextDesign.components[target.id].hide = !onOff;
-          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
-        }
-      }
-    },
-    [design, followLink, libraries, setDesign],
-  );
-
   const followLinkOption = useCallback(
-    (options, selected) => {
-      const nextDesign = JSON.parse(JSON.stringify(design));
+    (options, selected, { nextRef } = {}) => {
+      const nextDesign =
+        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
       // figure out which link to use, if any
       Object.keys(options)
         .filter((n) => options[n])
         .forEach((name) => {
-          const target = design.components[options[name].component];
-          const hideable =
-            target && getComponentType(libraries, target.type).hideable;
-          if (hideable) {
-            let hide;
-            if (name === '-any-') hide = !selected || !selected.length;
-            else if (name === '-none-')
-              hide = Array.isArray(selected)
-                ? !!selected.length && selected[0] !== name
-                : !!selected && selected !== name;
-            else
-              hide = Array.isArray(selected)
-                ? !selected.includes(name)
-                : selected !== name;
-            nextDesign.components[target.id].hide = hide;
-          }
+          // function shared by array and non-array cases
+          const updateLink = (link) => {
+            const target = design.components[link.component];
+            const hideable =
+              target && getComponentType(libraries, target.type).hideable;
+            if (hideable) {
+              let hide;
+              // -link-checked- cases
+              if (name === '-checked-') hide = !selected;
+              else if (name === '-unchecked-') hide = selected;
+              // undefined ok
+              else if (name === '-both-') hide = !selected;
+              // -link-option- cases
+              else if (name === '-any-') hide = !selected || !selected.length;
+              else if (name === '-none-')
+                hide = Array.isArray(selected)
+                  ? !!selected.length && selected[0] !== name
+                  : !!selected && selected !== name;
+              else
+                hide = Array.isArray(selected)
+                  ? !selected.includes(name)
+                  : selected !== name;
+              if (hide !== undefined)
+                nextDesign.components[target.id].hide = hide;
+            }
+          };
+
+          if (Array.isArray(options[name])) options[name].forEach(updateLink);
+          else updateLink(options[name]);
         });
-      setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
     },
     [design, libraries, setDesign],
   );
@@ -336,12 +289,12 @@ const Canvas = ({
       const id = Object.keys(initialize)[0];
       const component = initialize[id];
       const type = getComponentType(libraries, component.type);
-      type.initialize(component, { followLinkOption, setLink });
+      type.initialize(component, { followLinkOption });
       const nextInitialize = { ...initialize };
       delete nextInitialize[id];
       setInitialize(nextInitialize);
     }
-  }, [followLinkOption, initialize, libraries, setLink]);
+  }, [followLinkOption, initialize, libraries]);
 
   const renderRepeater = (component, type, { dataContextPath }) => {
     const {
@@ -461,7 +414,6 @@ const Canvas = ({
         design: referenceDesignProp || design,
         followLink,
         followLinkOption,
-        toggleLink,
         replaceData: (text) => replace(text, datum || data, contextPath),
         setHide: (value) => setHide(id, value),
         data: dataValue || undefined,
