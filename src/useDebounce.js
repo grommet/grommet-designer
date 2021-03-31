@@ -4,7 +4,7 @@ import React from 'react';
 const useDebounce = (valueProp, onChange) => {
   const [value, setValue] = React.useState(valueProp);
 
-  // setting tracks when we're between set() and onChange().
+  // setting tracks when we're between setValue() and onChange().
   // When the user is typing, we set it to true. When he stops typing and
   // we call onChange, we clear it.
   // When the user changes the value from the Canvas, we'll update our
@@ -27,7 +27,7 @@ const useDebounce = (valueProp, onChange) => {
       const timer = setTimeout(() => {
         onChange(value);
         setSetting(false);
-      }, 500);
+      }, 500); // 500, just empirical
       return () => clearTimeout(timer);
     }
     return undefined;

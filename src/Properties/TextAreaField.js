@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextArea } from 'grommet';
 import Field from '../components/Field';
-import useDebounce from './useDebounce';
+import useDebounce from '../useDebounce';
 
 const TextAreaField = ({ onChange, name, value: valueProp }) => {
   const [value, setValue] = useDebounce(valueProp, onChange);

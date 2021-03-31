@@ -13,6 +13,7 @@ import { Box, Grommet, Paragraph, ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import { getParent } from './design';
 import { getComponentType, getReferenceDesign } from './utils';
+import useDebounce from './useDebounce';
 
 const InlineInput = styled.input`
   box-sizing: border-box;
@@ -101,7 +102,15 @@ const Canvas = ({
   const responsiveSize = useContext(ResponsiveContext);
   const [dataSources, setDataSources] = useState();
   const [data, setData] = useState();
+  // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
+  // inlineEditText is used to debounce inline edit changes
+  const [inlineEditText, setInlineEditText] = useDebounce(undefined, (text) => {
+    const nextDesign = JSON.parse(JSON.stringify(design));
+    const component = nextDesign.components[selected.component];
+    component.text = text;
+    setDesign(nextDesign);
+  });
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
   const [dropAt, setDropAt] = useState();
@@ -490,15 +499,9 @@ const Canvas = ({
           ref={type.name === 'Paragraph' ? inputRef : undefined}
           as={type.name === 'Paragraph' ? 'textarea' : undefined}
           placeholder={type.text}
-          value={component.text || ''}
-          size={component.text ? component.text.length : 4}
-          onChange={(event) => {
-            const text = event.target.value;
-            const nextDesign = JSON.parse(JSON.stringify(design));
-            const component = nextDesign.components[selected.component];
-            component.text = text;
-            setDesign(nextDesign);
-          }}
+          value={inlineEditText}
+          size={inlineEditText ? inlineEditText.length : 4}
+          onChange={(event) => setInlineEditText(event.target.value)}
         />
       );
     } else if (component.text !== undefined) {
@@ -561,6 +564,7 @@ const Canvas = ({
           setInlineEdit(undefined);
         } else if (type.text && !referenceDesign) {
           setInlineEdit(id);
+          setInlineEditText(component.text || '');
         }
         if (specialProps.onClick) specialProps.onClick(event);
       };

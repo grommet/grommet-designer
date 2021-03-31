@@ -1,7 +1,7 @@
 import React from 'react';
 import { MaskedInput } from 'grommet';
 import Field from '../components/Field';
-import useDebounce from './useDebounce';
+import useDebounce from '../useDebounce';
 
 const NumberProperty = React.forwardRef(
   ({ first, name, onChange, sub, value: valueProp }, ref) => {

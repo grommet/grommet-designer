@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput } from 'grommet';
 import Field from '../components/Field';
-import useDebounce from './useDebounce';
+import useDebounce from '../useDebounce';
 
 const StringProperty = React.forwardRef(
   ({ first, name, onChange, sub, value: valueProp }, ref) => {
@@ -14,7 +14,7 @@ const StringProperty = React.forwardRef(
           name={name}
           plain
           value={value || ''}
-          onChange={event => setValue(event.target.value)}
+          onChange={(event) => setValue(event.target.value)}
           style={{ textAlign: 'end' }}
         />
       </Field>
