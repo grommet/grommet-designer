@@ -1,3 +1,5 @@
+import { getDisplayName } from './get';
+
 // Upgrade to latest design structure
 export const upgradeDesign = (design) => {
   // add screenOrder if it isn't there
@@ -317,6 +319,29 @@ export const upgradeDesign = (design) => {
     )
     .forEach((component) => {
       component.designProps.link = { '-both-': component.designProps.link };
+    });
+
+  // update any link labels
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter((component) => component.designProps && component.designProps.link)
+    .forEach((component) => {
+      const alignLabel = (link) => {
+        if (link.component) {
+          link.label = getDisplayName(design, link.component);
+        } else if (link.screen) {
+          link.label = (design.screens[link.screen] || {}).name;
+        }
+      };
+
+      if (Array.isArray(component.designProps.link))
+        component.designProps.link.forEach(alignLabel);
+      else if (typeof component.designProps.link === 'object')
+        Object.values(component.designProps.link).forEach((link) => {
+          if (Array.isArray(link)) link.forEach(alignLabel);
+          else alignLabel(link);
+        });
+      else alignLabel(component.designProps.link);
     });
 
   design.version = 3.6;
