@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Heading, Keyboard } from 'grommet';
+import ReactGA from 'react-ga';
+import { Box, Keyboard, Menu, Text } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
-import { addScreen, deleteScreen, slugify } from '../design';
+import { addScreen, deleteScreen, newFrom, slugify } from '../design';
 import ActionButton from '../components/ActionButton';
 import TextInputField from './TextInputField';
 
@@ -22,7 +23,15 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
     setSelected(nextSelected);
   };
 
-  const onKeyDown = event => {
+  const newDesignFrom = () => {
+    const [nextDesign, nextSelected] = newFrom(design, selected);
+    setDesign(nextDesign);
+    setSelected(nextSelected);
+
+    ReactGA.event({ category: 'switch', action: 'new design from' });
+  };
+
+  const onKeyDown = (event) => {
     if (event.metaKey) {
       if (event.keyCode === 8) {
         // delete
@@ -31,6 +40,13 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
       }
     }
   };
+
+  const menuItems = [
+    {
+      label: `create new design using this Screen`,
+      onClick: newDesignFrom,
+    },
+  ].filter((i) => i);
 
   const screen = design.screens[selected.screen];
   if (!screen) return null;
@@ -44,11 +60,16 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
           justify="between"
           border="bottom"
         >
-          <Box flex pad="small">
-            <Heading level={2} size="18px" margin="none" truncate>
-              Screen
-            </Heading>
-          </Box>
+          <Menu
+            hoverIndicator
+            label={
+              <Text weight="bold" truncate>
+                Screen
+              </Text>
+            }
+            dropProps={{ align: { top: 'bottom', left: 'left' } }}
+            items={menuItems}
+          />
           <Box flex={false} direction="row" align="center">
             <ActionButton
               title="duplicate"
@@ -72,7 +93,7 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
               name="name"
               componentId={screen.id}
               value={screen.name || ''}
-              onChange={value => {
+              onChange={(value) => {
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.screens[selected.screen].name = value;
                 nextDesign.screens[selected.screen].path = slugify(value);
@@ -83,7 +104,7 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
               name="path"
               componentId={screen.id}
               value={screen.path || ''}
-              onChange={value => {
+              onChange={(value) => {
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.screens[selected.screen].path = value;
                 setDesign(nextDesign);

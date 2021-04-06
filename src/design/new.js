@@ -14,7 +14,7 @@ export const newFrom = (design, selected) => {
   const id = copyComponent({
     nextDesign,
     templateDesign: design,
-    id: selected.component,
+    id: selected.component || design.screens[selected.screen].root,
     screen: selected.screen,
   });
   nextDesign.name = nextDesign.components[id].name || nextDesign.name;
