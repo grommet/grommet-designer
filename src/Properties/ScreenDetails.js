@@ -6,7 +6,13 @@ import { addScreen, deleteScreen, newFrom, slugify } from '../design';
 import ActionButton from '../components/ActionButton';
 import TextInputField from './TextInputField';
 
-const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
+const ScreenDetails = ({
+  design,
+  imports,
+  selected,
+  setDesign,
+  setSelected,
+}) => {
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextScreen = deleteScreen(nextDesign, selected.screen);
@@ -24,7 +30,12 @@ const ScreenDetails = ({ design, selected, setDesign, setSelected }) => {
   };
 
   const newDesignFrom = () => {
-    const [nextDesign, nextSelected] = newFrom(design, selected);
+    const [nextDesign, nextSelected] = newFrom({
+      design,
+      externalReferences: false,
+      imports,
+      selected,
+    });
     setDesign(nextDesign);
     setSelected(nextSelected);
 

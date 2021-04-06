@@ -8,16 +8,22 @@ const empty = {
   components: {},
 };
 
-export const newFrom = (design, selected) => {
+export const newFrom = ({ design, externalReferences, imports, selected }) => {
   const nextDesign = setupDesign(empty);
   upgradeDesign(nextDesign);
+  const screen = design.screens[selected.screen];
   const id = copyComponent({
+    externalReferences,
     nextDesign,
     templateDesign: design,
-    id: selected.component || design.screens[selected.screen].root,
+    id: selected.component || screen.root,
+    imports,
     screen: selected.screen,
   });
-  nextDesign.name = nextDesign.components[id].name || nextDesign.name;
+  nextDesign.name =
+    nextDesign.components[id].name || screen.name || nextDesign.name;
+  nextDesign.screens[1].name = screen.name;
   nextDesign.screens[1].root = id;
+  nextDesign.theme = design.theme;
   return [nextDesign, { component: id, screen: 1 }];
 };

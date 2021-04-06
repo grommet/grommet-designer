@@ -75,9 +75,27 @@ export const copyComponent = ({
   templateDesign,
   id,
   idMap: idMapArg,
+  imports,
   screen,
+  externalReferences = true,
 }) => {
   const component = templateDesign.components[id];
+
+  if (!externalReferences && component.type === 'designer.Reference') {
+    const referenceComponent =
+      templateDesign.components[component.props.component];
+    if (referenceComponent) {
+      const newId = copyComponent({
+        nextDesign,
+        templateDesign,
+        id: referenceComponent.id,
+        externalReferences,
+      });
+      return newId;
+    }
+    return undefined;
+  }
+
   const nextId = nextDesign.nextId;
   nextDesign.nextId += 1;
   const nextComponent = JSON.parse(JSON.stringify(component));
@@ -85,6 +103,7 @@ export const copyComponent = ({
   nextDesign.components[nextId] = nextComponent;
   const idMap = idMapArg || {};
   idMap[id] = nextId;
+
   if (component.children) {
     nextComponent.children = component.children.map((childId) => {
       const nextChildId = copyComponent({
@@ -93,10 +112,12 @@ export const copyComponent = ({
         id: childId,
         idMap,
         screen,
+        externalReferences,
       });
       return nextChildId;
     });
   }
+
   if (component.propComponents) {
     nextComponent.propComponents = component.propComponents.map((childId) => {
       const nextChildId = copyComponent({
@@ -105,6 +126,7 @@ export const copyComponent = ({
         id: childId,
         idMap,
         screen,
+        externalReferences,
       });
       // update corresponding property
       Object.keys(nextComponent.props).forEach((prop) => {
@@ -115,6 +137,7 @@ export const copyComponent = ({
       return nextChildId;
     });
   }
+
   if (!idMapArg && nextDesign.name !== templateDesign.name) {
     // We are at the root of what was copied and we've used an import.
     // Fix up any links to point to the copied components.

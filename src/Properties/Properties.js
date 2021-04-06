@@ -147,7 +147,7 @@ const Properties = ({
   };
 
   const newDesignFrom = () => {
-    const [nextDesign, nextSelected] = newFrom(design, selected);
+    const [nextDesign, nextSelected] = newFrom({ design, imports, selected });
     setDesign(nextDesign);
     setSelected(nextSelected);
 
