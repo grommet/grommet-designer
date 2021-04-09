@@ -7,7 +7,7 @@ const ComponentDropArea = ({ id, where }) => {
     dragging,
     dropTarget,
     dropWhere,
-    moveChild,
+    moveComponent,
     setDropTarget,
     setDropWhere,
   } = useContext(DragDropContext);
@@ -34,7 +34,7 @@ const ComponentDropArea = ({ id, where }) => {
           event.preventDefault();
         }
       }}
-      onDrop={moveChild}
+      onDrop={moveComponent}
     />
   );
 };

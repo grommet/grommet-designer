@@ -99,7 +99,7 @@ const Tree = ({
     }
   }, [design, selected, updateDesign]);
 
-  const moveChild = useCallback(() => {
+  const moveComponent = useCallback(() => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
     const priorParent = getParent(nextDesign, dragging);
@@ -194,7 +194,7 @@ const Tree = ({
       dropScreenTarget,
       dropTarget,
       dropWhere,
-      moveChild,
+      moveComponent,
       moveScreen,
       setDragging,
       setDraggingScreen,
@@ -208,7 +208,7 @@ const Tree = ({
       dropScreenTarget,
       dropTarget,
       dropWhere,
-      moveChild,
+      moveComponent,
       moveScreen,
       setDropScreenTarget,
       setDropTarget,

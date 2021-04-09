@@ -32,7 +32,7 @@ const Component = ({ screen, id, firstChild }) => {
     dragging,
     dropTarget,
     dropWhere,
-    moveChild,
+    moveComponent,
     setDragging,
     setDropTarget,
     setDropWhere,
@@ -91,7 +91,7 @@ const Component = ({ screen, id, firstChild }) => {
               event.preventDefault();
             }
           }}
-          onDrop={moveChild}
+          onDrop={moveComponent}
         >
           <Box
             ref={selected.component === id ? selectedRef : undefined}

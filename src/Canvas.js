@@ -179,7 +179,7 @@ const Canvas = ({
     setDesign(nextDesign);
   };
 
-  const moveChild = () => {
+  const moveComponent = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
 
     const parent = getParent(nextDesign, dragging);
@@ -551,7 +551,7 @@ const Canvas = ({
       };
       dragProps.onDrop = (event) => {
         if (droppable) event.stopPropagation();
-        moveChild();
+        moveComponent();
       };
     }
 
