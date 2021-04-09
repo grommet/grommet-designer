@@ -6,10 +6,20 @@ const optionValue = (options) => (option) => {
   let result;
   options.some((o) => {
     if (o === option) result = o;
-    else if (option.control && o.control === option.control) result = o;
-    else if (o.screen === option.screen && o.component === option.component)
+    else if (o.control && o.control === option.control) result = o;
+    else if (
+      o.screen &&
+      o.component &&
+      o.screen === option.screen &&
+      o.component === option.component
+    )
       result = o;
-    else if (!o.component && !option.component && o.screen === option.screen)
+    else if (
+      !o.component &&
+      !option.component &&
+      o.screen &&
+      o.screen === option.screen
+    )
       result = o;
     return result;
   });
