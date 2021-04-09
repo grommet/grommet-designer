@@ -1,8 +1,7 @@
-import React from 'react';
-import { Box, Button, Heading, Keyboard, Stack, Text } from 'grommet';
-import { FormDown, FormNext, Previous } from 'grommet-icons';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Box, Button, Keyboard, Text } from 'grommet';
+import { Previous } from 'grommet-icons';
 import {
-  canParent,
   childSelected,
   copyComponent,
   duplicateComponent,
@@ -15,17 +14,12 @@ import {
   isDescendent,
   serialize,
 } from '../design';
-import { displayName, getReferenceDesign } from '../utils';
+import { displayName } from '../utils';
+import Component from './Component';
+import DesignContext from './DesignContext';
+import DragDropContext from './DragDropContext';
 import Header from './Header';
-
-const treeSubName = (component) =>
-  !component.name &&
-  !component.text &&
-  !component.props.name &&
-  !component.props.label &&
-  !component.props.icon
-    ? undefined
-    : component.type.split('.')[1] || component.type;
+import Screen from './Screen';
 
 const within = (node, container) => {
   if (!node) return false;
@@ -41,11 +35,11 @@ const Tree = ({
   updateDesign,
   ...rest
 }) => {
-  const libraries = React.useMemo(
+  const libraries = useMemo(
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
-  const selectedAncestors = React.useMemo(() => {
+  const selectedAncestors = useMemo(() => {
     const result = [];
     if (selected.component) {
       let parent = getParent(design, selected.component);
@@ -56,14 +50,14 @@ const Tree = ({
     }
     return result;
   }, [design, selected]);
-  const [dragging, setDragging] = React.useState();
-  const [dropTarget, setDropTarget] = React.useState();
-  const [dropWhere, setDropWhere] = React.useState();
-  const [draggingScreen, setDraggingScreen] = React.useState();
-  const [dropScreenTarget, setDropScreenTarget] = React.useState();
-  const [copied, setCopied] = React.useState();
-  const treeRef = React.useRef();
-  const selectedRef = React.useRef();
+  const [dragging, setDragging] = useState();
+  const [dropTarget, setDropTarget] = useState();
+  const [dropWhere, setDropWhere] = useState();
+  const [draggingScreen, setDraggingScreen] = useState();
+  const [dropScreenTarget, setDropScreenTarget] = useState();
+  const [copied, setCopied] = useState();
+  const treeRef = useRef();
+  const selectedRef = useRef();
 
   // ensure selected component is visible in the tree
   React.useEffect(() => {
@@ -105,7 +99,7 @@ const Tree = ({
     }
   }, [design, selected, updateDesign]);
 
-  const moveChild = () => {
+  const moveChild = useCallback(() => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     // remove from old parent
     const priorParent = getParent(nextDesign, dragging);
@@ -136,9 +130,17 @@ const Tree = ({
     setDropTarget(undefined);
     updateDesign(nextDesign);
     setSelected({ ...selected, screen: nextScreen, component: dragging });
-  };
+  }, [
+    design,
+    dragging,
+    dropTarget,
+    dropWhere,
+    selected,
+    setSelected,
+    updateDesign,
+  ]);
 
-  const moveScreen = () => {
+  const moveScreen = useCallback(() => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const moveIndex = nextDesign.screenOrder.indexOf(draggingScreen);
     nextDesign.screenOrder.splice(moveIndex, 1);
@@ -151,17 +153,68 @@ const Tree = ({
     setDraggingScreen(undefined);
     setDropScreenTarget(undefined);
     updateDesign(nextDesign);
-  };
+  }, [design, draggingScreen, dropScreenTarget, dropWhere, updateDesign]);
 
-  const toggleScreenCollapse = (id) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const screen = nextDesign.screens[id];
-    screen.collapsed = !screen.collapsed;
-    updateDesign(nextDesign);
-    const nextSelected = { ...selected };
-    delete nextSelected.component;
-    setSelected(nextSelected);
-  };
+  // const toggleScreenCollapse = (id) => {
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   const screen = nextDesign.screens[id];
+  //   screen.collapsed = !screen.collapsed;
+  //   updateDesign(nextDesign);
+  //   const nextSelected = { ...selected };
+  //   delete nextSelected.component;
+  //   setSelected(nextSelected);
+  // };
+
+  const designContext = useMemo(
+    () => ({
+      design,
+      imports,
+      libraries,
+      selected,
+      selectedAncestors,
+      selectedRef,
+      setSelected,
+      updateDesign,
+    }),
+    [
+      design,
+      imports,
+      libraries,
+      selected,
+      selectedAncestors,
+      setSelected,
+      updateDesign,
+    ],
+  );
+
+  const dragDropContext = useMemo(
+    () => ({
+      dragging,
+      draggingScreen,
+      dropScreenTarget,
+      dropTarget,
+      dropWhere,
+      moveChild,
+      moveScreen,
+      setDragging,
+      setDraggingScreen,
+      setDropScreenTarget,
+      setDropTarget,
+      setDropWhere,
+    }),
+    [
+      dragging,
+      draggingScreen,
+      dropScreenTarget,
+      dropTarget,
+      dropWhere,
+      moveChild,
+      moveScreen,
+      setDropScreenTarget,
+      setDropTarget,
+      setDropWhere,
+    ],
+  );
 
   const toggleCollapse = (id) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -230,287 +283,62 @@ const Tree = ({
     }
   };
 
-  const renderDropArea = (id, where) => {
-    return (
-      <Box
-        pad="xxsmall"
-        background={
-          dragging && dropTarget && dropTarget === id && dropWhere === where
-            ? 'focus'
-            : undefined
-        }
-        onDragEnter={(event) => {
-          if (dragging && dragging !== id) {
-            event.preventDefault();
-            setDropTarget(id);
-            setDropWhere(where);
-          } else {
-            setDropTarget(undefined);
-          }
-        }}
-        onDragOver={(event) => {
-          if (dragging && dragging !== id) {
-            event.preventDefault();
-          }
-        }}
-        onDrop={moveChild}
-      />
-    );
-  };
-
-  const renderScreenDropArea = (screenId, where) => {
-    return (
-      <Box
-        pad="xxsmall"
-        background={
-          draggingScreen &&
-          dropScreenTarget &&
-          dropScreenTarget === screenId &&
-          dropWhere === where
-            ? 'focus'
-            : undefined
-        }
-        onDragEnter={(event) => {
-          if (draggingScreen && draggingScreen !== screenId) {
-            event.preventDefault();
-            setDropScreenTarget(screenId);
-            setDropWhere(where);
-          } else {
-            setDropScreenTarget(undefined);
-          }
-        }}
-        onDragOver={(event) => {
-          if (draggingScreen && draggingScreen !== screenId) {
-            event.preventDefault();
-          }
-        }}
-        onDrop={moveScreen}
-      />
-    );
-  };
-
-  const renderComponent = (screen, id, firstChild) => {
-    const component = design.components[id];
-    if (!component) return null;
-    let reference;
-    if (component.type === 'designer.Reference') {
-      const referenceDesign = getReferenceDesign(imports, component);
-      reference = (referenceDesign || design).components[
-        component.props.component
-      ];
-    }
-    const collapserColor = selectedAncestors.includes(id)
-      ? 'selected-background'
-      : 'border';
-    return (
-      <Box key={id}>
-        {firstChild && renderDropArea(id, 'before')}
-        <Stack anchor="left">
-          <Button
-            fill
-            hoverIndicator
-            onClick={() => setSelected({ ...selected, screen, component: id })}
-            draggable={!component.coupled}
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', ''); // for Firefox
-              setDragging(id);
-            }}
-            onDragEnd={() => {
-              setDragging(undefined);
-              setDropTarget(undefined);
-            }}
-            onDragEnter={() => {
-              if (
-                dragging &&
-                dragging !== id &&
-                canParent(design, libraries, component)
-              ) {
-                setDropTarget(id);
-                setDropWhere('in');
-              }
-            }}
-            onDragOver={(event) => {
-              if (dragging && dragging !== id) {
-                event.preventDefault();
-              }
-            }}
-            onDrop={moveChild}
-          >
-            <Box
-              ref={selected.component === id ? selectedRef : undefined}
-              direction="row"
-              align="center"
-              gap="medium"
-              pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
-              background={
-                dropTarget && dropTarget === id && dropWhere === 'in'
-                  ? 'focus'
-                  : selected.component === id
-                  ? 'selected-background'
-                  : undefined
-              }
-            >
-              <Text size="medium" truncate>
-                {displayName(reference || component)}
-              </Text>
-              <Text size="small" truncate>
-                {reference ? 'Reference' : treeSubName(component)}
-              </Text>
-            </Box>
-          </Button>
-          {component.children && (
-            <Button
-              icon={
-                component.collapsed ? (
-                  <FormNext color={collapserColor} />
-                ) : (
-                  <FormDown color={collapserColor} />
-                )
-              }
-              onClick={() => toggleCollapse(id)}
-            />
-          )}
-        </Stack>
-        {!component.collapsed && component.children && (
-          <Box pad={{ left: 'small' }}>
-            {component.children.map((childId, index) =>
-              renderComponent(screen, childId, index === 0),
-            )}
-          </Box>
-        )}
-        {/* {!component.collapsed && component.propComponents && (
-          <Box pad={{ left: 'small' }}>
-            {component.propComponents.map((propId, index) =>
-              renderComponent(screen, propId, index === 0),
-            )}
-          </Box>
-        )} */}
-        {renderDropArea(id, 'after')}
-      </Box>
-    );
-  };
-
-  const renderScreen = (screenId, firstScreen) => {
-    const screen = design.screens[screenId];
-    const isSelected = selected.screen === screenId && !selected.component;
-    const collapserColor = 'border';
-    return (
-      <Box
-        key={screen.id}
-        flex={false}
-        border={firstScreen ? undefined : 'top'}
-      >
-        {firstScreen && renderScreenDropArea(screenId, 'before')}
-        <Stack anchor="left">
-          <Button
-            fill
-            hoverIndicator
-            onClick={() => setSelected({ screen: screenId })}
-            draggable
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', ''); // for Firefox
-              setDraggingScreen(screenId);
-            }}
-            onDragEnd={() => {
-              setDraggingScreen(undefined);
-              setDropScreenTarget(undefined);
-            }}
-            onDragOver={(event) => {
-              if (draggingScreen && draggingScreen !== screenId) {
-                event.preventDefault();
-              }
-            }}
-            onDrop={moveScreen}
-          >
-            <Box
-              ref={selected.component === screen.root ? selectedRef : undefined}
-              direction="row"
-              align="center"
-              justify="between"
-              gap="medium"
-              pad={{ vertical: 'small', left: 'large', right: 'small' }}
-              background={isSelected ? 'selected-background' : undefined}
-            >
-              <Heading
-                level={3}
-                size="xsmall"
-                margin="none"
-                color="selected-text"
-              >
-                {screen.name || `Screen ${screenId}`}
-              </Heading>
-            </Box>
-          </Button>
-          {screen.root && (
-            <Button
-              icon={
-                screen.collapsed ? (
-                  <FormNext color={collapserColor} />
-                ) : (
-                  <FormDown color={collapserColor} />
-                )
-              }
-              onClick={() => toggleScreenCollapse(screenId)}
-            />
-          )}
-        </Stack>
-        {!screen.collapsed && screen.root && (
-          <Box flex={false}>{renderComponent(screen.id, screen.root)}</Box>
-        )}
-        {renderScreenDropArea(screenId, 'after')}
-      </Box>
-    );
-  };
-
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box ref={treeRef} fill="vertical" overflow="auto" border="right">
-        <Header
-          design={design}
-          imports={imports}
-          selected={selected}
-          setSelected={setSelected}
-          updateDesign={updateDesign}
-          {...rest}
-        />
+      <DesignContext.Provider value={designContext}>
+        <DragDropContext.Provider value={dragDropContext}>
+          <Box ref={treeRef} fill="vertical" overflow="auto" border="right">
+            <Header {...rest} />
 
-        <Box flex overflow="auto">
-          <Box flex={false}>
-            {selected.property ? (
-              <>
-                <Button
-                  hoverIndicator
-                  onClick={() => {
-                    const {
-                      property: { source },
-                      ...nextSelected
-                    } = selected;
-                    nextSelected.component = source;
-                    setSelected(nextSelected);
-                  }}
-                >
-                  <Box direction="row" pad="small" gap="small" border="bottom">
-                    <Previous />
-                    <Text>
-                      back to{' '}
-                      {displayName(design.components[selected.property.source])}
-                    </Text>
-                  </Box>
-                </Button>
-                {renderComponent(selected.screen, selected.property.component)}
-              </>
-            ) : (
-              design.screenOrder.map((sId, index) =>
-                renderScreen(
-                  parseInt(sId, 10),
-                  index === 0,
-                  design.screenOrder.length === 1,
-                ),
-              )
-            )}
+            <Box flex overflow="auto">
+              <Box flex={false}>
+                {selected.property ? (
+                  <>
+                    <Button
+                      hoverIndicator
+                      onClick={() => {
+                        const {
+                          property: { source },
+                          ...nextSelected
+                        } = selected;
+                        nextSelected.component = source;
+                        setSelected(nextSelected);
+                      }}
+                    >
+                      <Box
+                        direction="row"
+                        pad="small"
+                        gap="small"
+                        border="bottom"
+                      >
+                        <Previous />
+                        <Text>
+                          back to{' '}
+                          {displayName(
+                            design.components[selected.property.source],
+                          )}
+                        </Text>
+                      </Box>
+                    </Button>
+                    <Component
+                      screen={selected.screen}
+                      id={selected.property.component}
+                    />
+                  </>
+                ) : (
+                  design.screenOrder.map((sId, index) => (
+                    <Screen
+                      key={sId}
+                      screenId={parseInt(sId, 10)}
+                      firstScreen={index === 0}
+                    />
+                  ))
+                )}
+              </Box>
+            </Box>
           </Box>
-        </Box>
-      </Box>
+        </DragDropContext.Provider>
+      </DesignContext.Provider>
     </Keyboard>
   );
 };

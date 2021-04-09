@@ -1,8 +1,17 @@
-import React from 'react';
-import { Box, Button, Header, Keyboard, Layer, Menu, Text } from 'grommet';
+import React, { useContext, useRef, useState } from 'react';
+import {
+  Box,
+  Button,
+  Header as GrommetHeader,
+  Keyboard,
+  Layer,
+  Menu,
+  Text,
+} from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
 import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
+import DesignContext from './DesignContext';
 import DesignSettings from './DesignSettings';
 import Sharing from './Share';
 
@@ -12,25 +21,23 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Tree = ({
+const Header = ({
   base,
   chooseDesign,
   colorMode,
-  design,
-  imports,
-  selected,
   theme,
   setMode,
-  setSelected,
-  updateDesign,
   onUndo,
   onRedo,
 }) => {
-  const [adding, setAdding] = React.useState();
-  const [editing, setEditing] = React.useState();
-  const [sharing, setSharing] = React.useState();
-  const [deleting, setDeleting] = React.useState();
-  const ref = React.useRef();
+  const { design, imports, selected, setSelected, updateDesign } = useContext(
+    DesignContext,
+  );
+  const [adding, setAdding] = useState();
+  const [editing, setEditing] = useState();
+  const [sharing, setSharing] = useState();
+  const [deleting, setDeleting] = useState();
+  const ref = useRef();
 
   const onKey = (event) => {
     if (
@@ -54,7 +61,7 @@ const Tree = ({
   return (
     <Keyboard target="document" onKeyDown={onKey}>
       <Box ref={ref} flex={false} border="bottom">
-        <Header border="bottom" gap="none">
+        <GrommetHeader border="bottom" gap="none">
           <Box flex>
             <Menu
               hoverIndicator
@@ -115,7 +122,7 @@ const Tree = ({
               onClick={() => setAdding(true)}
             />
           </Box>
-        </Header>
+        </GrommetHeader>
         {deleting && (
           <Layer
             position="center"
@@ -170,4 +177,4 @@ const Tree = ({
   );
 };
 
-export default Tree;
+export default Header;
