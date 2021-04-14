@@ -114,7 +114,7 @@ const Start = ({
 
   React.useEffect(() => {
     document.title = 'Grommet Designer';
-    const stored = localStorage.getItem('designs');
+    let stored = localStorage.getItem('designs');
     if (stored) {
       // prune out non-existing designs
       const nextDesigns = JSON.parse(stored).filter((name) =>
@@ -122,6 +122,29 @@ const Start = ({
       );
       setDesigns(nextDesigns);
       localStorage.setItem('designs', JSON.stringify(nextDesigns));
+
+      // prune out orphaned designs
+      for (let i = 0; i < localStorage.length; i++) {
+        const name = localStorage.key(i);
+        if (!nextDesigns.includes(name)) {
+          stored = localStorage.getItem(name);
+          try {
+            const design = JSON.parse(stored);
+            if (
+              design.screens &&
+              design.components &&
+              design.version &&
+              design.name
+            ) {
+              // looks like a design, but it isn't in 'designs', remove it
+              console.log('Removed orphan design?:', name);
+              // localStorage.removeItem(name);
+            }
+          } catch {
+            // no-op
+          }
+        }
+      }
     }
   }, []);
 
