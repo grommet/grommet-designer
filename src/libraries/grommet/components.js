@@ -128,9 +128,7 @@ const reusedBoxProps = {
   direction: BoxDirection,
   fill: ['horizontal', 'vertical', true, false],
   flex: ['grow', 'shrink', true, false],
-  gap: EdgeSizeOptions({
-    options: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
-  }),
+  gap: ['none', 'xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
   gridArea: BoxGridArea,
   justify: BoxJustify,
   margin: Edge,
