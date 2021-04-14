@@ -1433,12 +1433,14 @@ export const components = {
       fill: [true, 'horizontal', 'vertical', false],
       groupBy: '',
       onClickRow: ['-link-'],
+      onSelect: false,
       pad: BoxPad,
       paginate: false,
       pin: [true, 'header', 'footer', false],
       primaryKey: DataTablePrimaryKey,
       replace: false,
       resizeable: false,
+      select: '',
       size: ['small', 'medium', 'large', 'xlarge'],
       sortable: false,
     },
@@ -1460,6 +1462,9 @@ export const components = {
           followLink(props.onClickRow, { dataContextPath: path });
         };
       }
+      if (props.onSelect) result.onSelect = (text) => {};
+      if (props.select)
+        result.select = props.select.split(',').map((s) => s.trim());
       // adjust render columns
       result.columns = props.columns.map((c) => ({
         ...c,
