@@ -137,8 +137,8 @@ const Start = ({
               design.name
             ) {
               // looks like a design, but it isn't in 'designs', remove it
-              console.log('Removed orphan design?:', name);
-              // localStorage.removeItem(name);
+              console.log('Removed orphan design:', name);
+              localStorage.removeItem(name);
             }
           } catch {
             // no-op
