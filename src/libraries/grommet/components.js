@@ -690,8 +690,12 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['margin', 'color'],
-    override: ({ designProps }, { dataContextPath, followLink }) => {
+    override: (
+      { designProps, props },
+      { dataContextPath, followLink, replaceData },
+    ) => {
       return {
+        label: replaceData(props.label),
         onClick:
           designProps && designProps.link
             ? (event) => {
