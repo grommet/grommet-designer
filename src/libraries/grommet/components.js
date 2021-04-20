@@ -1179,6 +1179,12 @@ export const components = {
       type: ['text', 'password'],
       value: '',
     },
+    override: ({ props }, { replaceData }) => ({
+      defaultValue:
+        typeof props.defaultValue === 'string'
+          ? replaceData(props.defaultValue)
+          : props.defaultValue,
+    }),
   },
   Avatar: {
     component: Avatar,
