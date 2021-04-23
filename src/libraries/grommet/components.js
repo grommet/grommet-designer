@@ -1031,6 +1031,7 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      defaultValue: '',
       direction: BoxDirection,
       disabled: false,
       gap: EdgeSizeOptions({
