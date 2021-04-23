@@ -100,7 +100,6 @@ const Canvas = ({
   setSelected,
 }) => {
   const responsiveSize = useContext(ResponsiveContext);
-  const [dataSources, setDataSources] = useState();
   const [data, setData] = useState();
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
@@ -127,36 +126,31 @@ const Canvas = ({
   // load data, if needed
   useEffect(() => {
     if (design.data) {
-      const nextDataSources = dataSources
-        ? JSON.parse(JSON.stringify(dataSources))
-        : {};
-      let changed = false;
       Object.keys(design.data).forEach((key) => {
-        if (nextDataSources[key] !== design.data[key]) {
-          nextDataSources[key] = design.data[key];
-          changed = true;
-          if (design.data[key].slice(0, 4) === 'http') {
-            fetch(design.data[key])
-              .then((response) => response.json())
-              .then((response) => {
-                const nextData = JSON.parse(JSON.stringify(data || {}));
+        if (design.data[key].slice(0, 4) === 'http') {
+          fetch(design.data[key])
+            .then((response) => response.json())
+            .then((response) => {
+              setData((prevData) => {
+                const nextData = JSON.parse(JSON.stringify(prevData || {}));
                 nextData[key] = response;
-                setData(nextData);
+                return nextData;
               });
-          } else if (design.data[key]) {
+            });
+        } else if (design.data[key]) {
+          setData((prevData) => {
+            const nextData = JSON.parse(JSON.stringify(prevData || {}));
             try {
-              const nextData = JSON.parse(JSON.stringify(data || {}));
               nextData[key] = JSON.parse(design.data[key]);
-              setData(nextData);
             } catch (e) {
               console.warn(e.message);
             }
-          }
+            return nextData;
+          });
         }
       });
-      if (changed) setDataSources(nextDataSources);
     }
-  }, [design.data, data, dataSources]);
+  }, [design.data]);
 
   // clear inline edit when selection changes
   useEffect(() => {
