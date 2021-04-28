@@ -74,7 +74,7 @@ export const copyComponent = ({
   nextDesign,
   templateDesign,
   id,
-  idMap: idMapArg,
+  idMap: idMapArg, // only set when descending into children
   imports,
   screen,
   externalReferences = true,
@@ -101,6 +101,8 @@ export const copyComponent = ({
   const nextComponent = JSON.parse(JSON.stringify(component));
   nextComponent.id = nextId;
   nextDesign.components[nextId] = nextComponent;
+  // idMap maps the source id to the copied to id. This allows us to
+  // fix up links to be within what was copied.
   const idMap = idMapArg || {};
   idMap[id] = nextId;
 
@@ -138,54 +140,97 @@ export const copyComponent = ({
     });
   }
 
-  if (!idMapArg && nextDesign.name !== templateDesign.name) {
-    // We are at the root of what was copied and we've used an import.
-    // Fix up any links to point to the copied components.
-    Object.keys(idMap).forEach((templateId) => {
-      const component = nextDesign.components[idMap[templateId]];
-      if (component.designProps && component.designProps.link) {
-        // Button
-        if (Array.isArray(component.designProps.link)) {
-          component.designProps.link = component.designProps.link
-            // remove any outside of what we copied
-            .filter((l) => l.screen && l.component && idMap[l.component])
-            // update any we have maps to
-            .map((l) => ({ screen, component: idMap[l.component] }));
-        } else if (
-          component.designProps.link.screen &&
-          !component.designProps.link.component
-        ) {
-          // this is a screen link, delete it
-          delete component.designProps.link;
-        } else if (idMap[component.designProps.link.component]) {
-          // we have a map for this, update it
-          component.designProps.link.component =
-            idMap[component.designProps.link.component];
-          component.designProps.link.screen = screen;
-        } else {
-          // we don't have a map for this, remove the link
-          delete component.designProps.link;
+  if (!idMapArg) {
+    // we are at the root of what we've copied, see about adjusting links
+    if (nextDesign.name !== templateDesign.name) {
+      // We've used an import.
+      Object.keys(idMap).forEach((templateId) => {
+        const component = nextDesign.components[idMap[templateId]];
+        if (component.designProps && component.designProps.link) {
+          // Button
+          if (Array.isArray(component.designProps.link)) {
+            component.designProps.link = component.designProps.link
+              // remove any outside of what we copied
+              .filter((l) => l.screen && l.component && idMap[l.component])
+              // update any we have maps to
+              .map((l) => ({ screen, component: idMap[l.component] }));
+          } else if (
+            component.designProps.link.screen &&
+            !component.designProps.link.component
+          ) {
+            // this is a screen link, delete it
+            delete component.designProps.link;
+          } else if (idMap[component.designProps.link.component]) {
+            // we have a map for this, update it
+            component.designProps.link.component =
+              idMap[component.designProps.link.component];
+            component.designProps.link.screen = screen;
+          } else {
+            // we don't have a map for this, remove the link
+            delete component.designProps.link;
+          }
         }
-      }
-      if (component.props && component.props.items) {
-        // Menu
-        component.props.items.forEach((item) => {
-          if (item.link) {
-            if (item.link.screen && !item.link.component) {
-              // this is a screen link, clear it
-              item.link = {};
-            } else if (idMap[item.link.component]) {
-              // we have a map for this, update it
-              item.link.component = idMap[item.link.component];
-              item.link.screen = screen; // not sure what screen yet
-            } else {
-              // we don't have a map for this, clear the link
-              item.link = {};
+        if (component.props && component.props.items) {
+          // Menu
+          component.props.items.forEach((item) => {
+            if (item.link) {
+              if (item.link.screen && !item.link.component) {
+                // this is a screen link, clear it
+                item.link = {};
+              } else if (idMap[item.link.component]) {
+                // we have a map for this, update it
+                item.link.component = idMap[item.link.component];
+                item.link.screen = screen; // not sure what screen yet
+              } else {
+                // we don't have a map for this, clear the link
+                item.link = {};
+              }
+            }
+          });
+        }
+      });
+    } else {
+      // Fix up any links to point to the copied components.
+      Object.keys(idMap).forEach((sourceId) => {
+        const component = nextDesign.components[idMap[sourceId]];
+        if (component.designProps && component.designProps.link) {
+          const link = component.designProps.link;
+          // Button
+          if (Array.isArray(link)) {
+            component.designProps.link = link
+              // update if we have copied it
+              .map((l) => {
+                const targetId = idMap[l.component];
+                if (targetId)
+                  return {
+                    ...l,
+                    screen: screen || l.screen,
+                    component: targetId,
+                  };
+                return l;
+              });
+          } else if (link.component) {
+            const targetId = idMap[link.component];
+            if (targetId) {
+              component.designProps.link.screen = screen || link.screen;
+              component.designProps.link.component = targetId;
             }
           }
-        });
-      }
-    });
+        }
+        if (component.props && component.props.items) {
+          // Menu
+          component.props.items.forEach((item) => {
+            if (item.link) {
+              if (item.link.component && idMap[item.link.component]) {
+                // we have a map for this, update it
+                item.link.component = idMap[item.link.component];
+                item.link.screen = screen || item.link.screen;
+              }
+            }
+          });
+        }
+      });
+    }
   }
   return nextId;
 };
