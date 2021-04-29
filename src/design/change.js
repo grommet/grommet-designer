@@ -195,26 +195,34 @@ export const copyComponent = ({
         const component = nextDesign.components[idMap[sourceId]];
         if (component.designProps && component.designProps.link) {
           const link = component.designProps.link;
+
+          const relinkOne = (l) => {
+            const targetId = idMap[l.component];
+            if (targetId)
+              return {
+                ...l,
+                screen: screen || l.screen,
+                component: targetId,
+              };
+            return l;
+          };
+
+          const relinkArray = (a) => a.map(relinkOne);
+
+          const relinkObject = (o) =>
+            Object.keys(o).forEach((name) => {
+              o[name] = Array.isArray(o[name])
+                ? relinkArray(o[name])
+                : relinkOne(o[name]);
+            });
+
           // Button
           if (Array.isArray(link)) {
-            component.designProps.link = link
-              // update if we have copied it
-              .map((l) => {
-                const targetId = idMap[l.component];
-                if (targetId)
-                  return {
-                    ...l,
-                    screen: screen || l.screen,
-                    component: targetId,
-                  };
-                return l;
-              });
+            component.designProps.link = relinkArray(link);
+          } else if (typeof link === 'object') {
+            relinkObject(link);
           } else if (link.component) {
-            const targetId = idMap[link.component];
-            if (targetId) {
-              component.designProps.link.screen = screen || link.screen;
-              component.designProps.link.component = targetId;
-            }
+            component.designProps.link = relinkOne(link);
           }
         }
         if (component.props && component.props.items) {
