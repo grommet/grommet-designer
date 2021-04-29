@@ -257,6 +257,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
         nextDesign,
         templateDesign: nextDesign,
         id: copyScreen.root,
+        screen: screenId, // so links can be re-linked
       });
     } else {
       // starter
@@ -264,6 +265,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
         nextDesign,
         templateDesign: copyScreen,
         id: copyScreen.root,
+        screen: screenId, // so links can be re-linked
       });
     }
   } else {
@@ -271,6 +273,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
       nextDesign,
       templateDesign: bare,
       id: bare.screens[1].root,
+      screen: screenId, // so links can be re-linked
     });
   }
 
@@ -305,6 +308,7 @@ export const copyScreen = (nextDesign, nextSelected, starter) => {
     nextDesign,
     templateDesign: starter.starters,
     id: starter.starters.screens[starter.id].root,
+    screen: screenId, // so links can be re-linked
   });
   nextDesign.screens[screenId].name = starter.name;
   nextDesign.screens[screenId].path = slugify(starter.name);
