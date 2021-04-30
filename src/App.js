@@ -28,6 +28,11 @@ const designerTheme = {
     ...grommet.layer,
     zIndex: 15,
   },
+  tip: {
+    content: {
+      background: 'background',
+    },
+  },
 };
 
 const setUrl = (design, method = 'push') => {
@@ -71,7 +76,7 @@ const App = () => {
       initial: true,
       onAuth: () =>
         setAuth(password ? "Hmm, that password didn't work." : true),
-      onLoad: nextDesign => {
+      onLoad: (nextDesign) => {
         if (nextDesign.subsequentPublish) {
           setSubsequent({
             local: nextDesign,
@@ -82,7 +87,7 @@ const App = () => {
           setDesign(nextDesign);
         }
       },
-      onError: message => setError(message),
+      onError: (message) => setError(message),
     };
     if (pathname === '/_new' || params.new) options.fresh = true;
     else if (params.id) options.id = params.id;
@@ -210,12 +215,12 @@ const App = () => {
     content = (
       <Designer
         design={design}
-        chooseDesign={design => {
+        chooseDesign={(design) => {
           if (!design) setStart(true);
           setDesign(design);
           setUrl(design);
         }}
-        updateDesign={design => {
+        updateDesign={(design) => {
           setDesign(design);
           setNeedSave(needSave + 1);
         }}
@@ -224,10 +229,10 @@ const App = () => {
   } else if (start) {
     content = (
       <Start
-        chooseDesign={name => {
+        chooseDesign={(name) => {
           loadDesign({
             name,
-            onLoad: nextDesign => {
+            onLoad: (nextDesign) => {
               if (nextDesign.subsequentPublish) {
                 setSubsequent({
                   local: nextDesign,
@@ -245,16 +250,16 @@ const App = () => {
         createDesign={() => {
           loadDesign({
             fresh: true,
-            onLoad: nextDesign => {
+            onLoad: (nextDesign) => {
               setDesign(nextDesign);
               window.history.pushState(undefined, undefined, '/?new');
             },
           });
         }}
-        importDesign={jsonDesign => {
+        importDesign={(jsonDesign) => {
           loadDesign({
             json: jsonDesign,
-            onLoad: nextDesign => {
+            onLoad: (nextDesign) => {
               if (nextDesign.subsequentPublish) {
                 setSubsequent({
                   local: nextDesign,

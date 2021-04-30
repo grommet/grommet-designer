@@ -69,8 +69,11 @@ const FunctionProperty = React.forwardRef(
               <Heading margin={{ left: 'small', vertical: 'none' }} level={3}>
                 {name}
               </Heading>
-              <ActionButton
-                title="close"
+              <Button
+                tip={{
+                  content: 'close',
+                  dropProps: { align: { right: 'left' } },
+                }}
                 icon={<Close />}
                 onClick={() => setExpand(false)}
               />
