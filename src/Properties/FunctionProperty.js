@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Button, Heading, Layer, Text } from 'grommet';
 import { Close, FormDown } from 'grommet-icons';
 import Field from '../components/Field';
-import ActionButton from '../components/ActionButton';
 import ComponentInput from './ComponentInput';
 
 const jsonValue = (value) =>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import {
   Box,
   Button,
@@ -14,7 +15,7 @@ import {
 import { Add, Blank, Down, FormNext, Previous, Trash, Up } from 'grommet-icons';
 import useDebounce from './useDebounce';
 
-const Reorder = () => (
+const ReorderIcon = () => (
   <Blank>
     <g strokeWidth={2} strokeLinecap="square">
       <path d="M 12,8 L 12,16" />
@@ -23,6 +24,13 @@ const Reorder = () => (
     </g>
   </Blank>
 );
+
+const DraggableBox = styled(Box)`
+  cursor: pointer;
+  &:hover {
+    background: #eee;
+  }
+`;
 
 const optionValue = (options) => (option) => {
   let result;
@@ -107,47 +115,86 @@ const BackHeader = ({ onDone, title }) => (
   </Header>
 );
 
-const ReorderItems = ({ value, onChange, onDone }) => (
-  <Box pad={{ bottom: 'small' }}>
-    <BackHeader title="Re-order" onDone={onDone} />
-    <List data={value} pad={{ left: 'small' }}>
-      {(item, i) => (
-        <Box key={i} flex="grow" direction="row" align="center" gap="medium">
-          <Text color="text-weak">{i + 1}.</Text>
-          <Box flex="grow">
-            <Text>{item.label}</Text>
-          </Box>
-          <Box direction="row">
-            <Button
-              icon={<Up />}
-              hoverIndicator
-              disabled={i === 0}
-              onClick={() => {
+const ReorderItems = ({ value, onChange, onDone }) => {
+  const [dragging, setDragging] = useState();
+  return (
+    <Box pad={{ bottom: 'small' }}>
+      <BackHeader title="Re-order" onDone={onDone} />
+      <List data={value} pad="none">
+        {(item, i) => (
+          <DraggableBox
+            key={i}
+            flex="grow"
+            direction="row"
+            align="center"
+            pad={{ left: 'small' }}
+            gap="medium"
+            draggable
+            background={dragging === i ? 'active' : undefined}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', ''); // for Firefox
+              event.dataTransfer.effectAllowed = 'move';
+              setDragging(i);
+            }}
+            onDragEnd={() => setDragging(undefined)}
+            onDragOver={(event) => {
+              if (dragging !== undefined && dragging !== i) {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'move';
+              }
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              if (dragging !== i) {
                 const nextValue = JSON.parse(JSON.stringify(value));
-                const tmp = nextValue[i];
-                nextValue[i] = nextValue[i - 1];
-                nextValue[i - 1] = tmp;
+                const tmp = nextValue[dragging];
+                if (dragging < i)
+                  for (let index = dragging; index < i; index += 1)
+                    nextValue[index] = nextValue[index + 1];
+                else
+                  for (let index = dragging; index > i; index -= 1)
+                    nextValue[index] = nextValue[index - 1];
+                nextValue[i] = tmp;
                 onChange(nextValue);
-              }}
-            />
-            <Button
-              icon={<Down />}
-              hoverIndicator
-              disabled={i === value.length - 1}
-              onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
-                const tmp = nextValue[i];
-                nextValue[i] = nextValue[i + 1];
-                nextValue[i + 1] = tmp;
-                onChange(nextValue);
-              }}
-            />
-          </Box>
-        </Box>
-      )}
-    </List>
-  </Box>
-);
+              }
+            }}
+          >
+            <Text color="text-weak">{i + 1}.</Text>
+            <Box flex="grow">
+              <Text>{item.label}</Text>
+            </Box>
+            <Box direction="row">
+              <Button
+                icon={<Up />}
+                hoverIndicator
+                disabled={i === 0}
+                onClick={() => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  const tmp = nextValue[i];
+                  nextValue[i] = nextValue[i - 1];
+                  nextValue[i - 1] = tmp;
+                  onChange(nextValue);
+                }}
+              />
+              <Button
+                icon={<Down />}
+                hoverIndicator
+                disabled={i === value.length - 1}
+                onClick={() => {
+                  const nextValue = JSON.parse(JSON.stringify(value));
+                  const tmp = nextValue[i];
+                  nextValue[i] = nextValue[i + 1];
+                  nextValue[i + 1] = tmp;
+                  onChange(nextValue);
+                }}
+              />
+            </Box>
+          </DraggableBox>
+        )}
+      </List>
+    </Box>
+  );
+};
 
 const MenuItems = ({ linkOptions, value = [], onChange }) => {
   const [active, setActive] = useState();
@@ -187,7 +234,7 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
     );
 
   return (
-    <Box gap="medium">
+    <Box gap="small" pad={{ top: 'small' }}>
       <List
         data={value}
         pad="small"
@@ -223,7 +270,7 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
           }}
         />
         <Button
-          icon={<Reorder />}
+          icon={<ReorderIcon />}
           tip={{
             content: 'Re-order items',
             dropProps: { align: { right: 'left' } },
