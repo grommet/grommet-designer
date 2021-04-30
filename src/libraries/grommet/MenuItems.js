@@ -110,39 +110,39 @@ const BackHeader = ({ onDone, title }) => (
 const ReorderItems = ({ value, onChange, onDone }) => (
   <Box pad={{ bottom: 'small' }}>
     <BackHeader title="Re-order" onDone={onDone} />
-    <List data={value} pad="none">
+    <List data={value} pad={{ left: 'small' }}>
       {(item, i) => (
-        <Box key={i} direction="row" align="center" flex="grow">
-          <Text margin={{ right: 'medium' }} color="text-weak">
-            {i + 1}.
-          </Text>
+        <Box key={i} flex="grow" direction="row" align="center" gap="medium">
+          <Text color="text-weak">{i + 1}.</Text>
           <Box flex="grow">
             <Text>{item.label}</Text>
           </Box>
-          <Button
-            icon={<Up />}
-            hoverIndicator
-            disabled={i === 0}
-            onClick={() => {
-              const nextValue = JSON.parse(JSON.stringify(value));
-              const tmp = nextValue[i];
-              nextValue[i] = nextValue[i - 1];
-              nextValue[i - 1] = tmp;
-              onChange(nextValue);
-            }}
-          />
-          <Button
-            icon={<Down />}
-            hoverIndicator
-            disabled={i === value.length - 1}
-            onClick={() => {
-              const nextValue = JSON.parse(JSON.stringify(value));
-              const tmp = nextValue[i];
-              nextValue[i] = nextValue[i + 1];
-              nextValue[i + 1] = tmp;
-              onChange(nextValue);
-            }}
-          />
+          <Box direction="row">
+            <Button
+              icon={<Up />}
+              hoverIndicator
+              disabled={i === 0}
+              onClick={() => {
+                const nextValue = JSON.parse(JSON.stringify(value));
+                const tmp = nextValue[i];
+                nextValue[i] = nextValue[i - 1];
+                nextValue[i - 1] = tmp;
+                onChange(nextValue);
+              }}
+            />
+            <Button
+              icon={<Down />}
+              hoverIndicator
+              disabled={i === value.length - 1}
+              onClick={() => {
+                const nextValue = JSON.parse(JSON.stringify(value));
+                const tmp = nextValue[i];
+                nextValue[i] = nextValue[i + 1];
+                nextValue[i + 1] = tmp;
+                onChange(nextValue);
+              }}
+            />
+          </Box>
         </Box>
       )}
     </List>
