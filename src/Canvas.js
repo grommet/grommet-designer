@@ -261,7 +261,22 @@ const Canvas = ({
               const target = design.components[link.component];
               const hideable =
                 target && getComponentType(libraries, target.type).hideable;
-              if (hideable) {
+              const selectable =
+                target && getComponentType(libraries, target.type).selectable;
+              if (selectable) {
+                const component = nextDesign.components[target.id];
+                // -link-checked- cases
+                if (name === '-unchecked-' && !selected)
+                  component.props.active = 1;
+                else if (name === '-checked-' && selected)
+                  component.props.active = 2;
+                else if (name === '-both-')
+                  component.props.active = component.props.active + 1;
+                if (component.props.active > component.children.length) {
+                  component.props.active = 1;
+                }
+                nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+              } else if (hideable) {
                 let hide;
                 // -link-checked- cases
                 if (name === '-checked-') hide = !selected;
