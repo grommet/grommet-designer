@@ -717,6 +717,7 @@ export const components = {
       label: 'Click Me',
       icon: ['-Icon-'],
       active: false,
+      badge: 0,
       color: ['-color-'],
       disabled: false,
       fill: ['horizontal', 'vertical'],
@@ -735,8 +736,9 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
-    override: ({ designProps }, { dataContextPath, followLink }) => {
+    override: ({ designProps, props }, { dataContextPath, followLink }) => {
       return {
+        badge: props.badge === 0 ? true : props.badge,
         onClick:
           designProps && designProps.link
             ? (event) => {
@@ -1662,8 +1664,7 @@ export const components = {
     component: Image,
     name: 'Image',
     defaultProps: {
-      src:
-        'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
+      src: 'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
     },
     properties: {
       fill: ['horizontal', 'vertical', true, false],
