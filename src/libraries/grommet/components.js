@@ -763,6 +763,7 @@ export const components = {
       open: true,
     },
     properties: {
+      badge: 0,
       color: ['-color-'],
       disabled: false,
       dropAlign: DropAlign,
@@ -786,6 +787,12 @@ export const components = {
       secondary: false,
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
+    override: ({ props }) => {
+      const result = {};
+      if (props.badge !== undefined)
+        result.badge = props.badge === 0 ? true : props.badge;
+      return result;
+    },
   },
   Menu: {
     component: Menu,
