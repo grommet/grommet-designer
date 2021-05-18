@@ -516,6 +516,7 @@ const Properties = ({
                       {type.respondable && !component.responsive && (
                         <Button
                           title="ResponsiveContext variations"
+                          tip="responsive context variations"
                           icon={<Multiple />}
                           hoverIndicator
                           onClick={() => {
