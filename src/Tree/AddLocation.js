@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Box, Drop, RadioButtonGroup, Text } from 'grommet';
+import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Blank } from 'grommet-icons';
 import { getParent } from '../design';
 import { displayName, getComponentType } from '../utils';
@@ -90,9 +90,10 @@ const AddLocation = ({ design, libraries, onChange, selected }) => {
         : undefined,
     [libraries, selectedComponent],
   );
-  const selectedName = React.useMemo(() => displayName(selectedComponent), [
-    selectedComponent,
-  ]);
+  const selectedName = React.useMemo(
+    () => displayName(selectedComponent),
+    [selectedComponent],
+  );
 
   const locations = React.useMemo(() => {
     const parent = getParent(design, selected.component);
@@ -107,30 +108,17 @@ const AddLocation = ({ design, libraries, onChange, selected }) => {
   React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
 
   const Option = ({ option, checked, hover }) => {
-    const ref = useRef();
     return (
-      <Box
-        ref={ref}
-        pad="xsmall"
-        background={hover && !checked ? { color: 'active' } : undefined}
-      >
-        <Blank color={checked ? 'selected-text' : 'border'}>
-          <g>{locationVisuals[option]}</g>
-        </Blank>
-        {hover && (
-          <Drop target={ref.current} align={{ top: 'bottom' }}>
-            <Box
-              margin="xsmall"
-              animation={{ type: 'fadeIn', duration: 100 }}
-              pad="xsmall"
-            >
-              <Text>
-                {option} {selectedName}
-              </Text>
-            </Box>
-          </Drop>
-        )}
-      </Box>
+      <Tip content={`${option} ${selectedName}`}>
+        <Box
+          pad="xsmall"
+          background={hover && !checked ? { color: 'active' } : undefined}
+        >
+          <Blank color={checked ? 'selected-text' : 'border'}>
+            <g>{locationVisuals[option]}</g>
+          </Blank>
+        </Box>
+      </Tip>
     );
   };
 
