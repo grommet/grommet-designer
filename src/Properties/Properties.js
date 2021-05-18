@@ -34,7 +34,6 @@ import {
   newFrom,
   upgradeDesign,
 } from '../design';
-import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import { getComponentType } from '../utils';
 
@@ -58,10 +57,10 @@ const Properties = ({
     () => getComponentType(libraries, component.type) || {},
     [component, libraries],
   );
-  const references = useMemo(() => getReferences(design, component.id), [
-    component,
-    design,
-  ]);
+  const references = useMemo(
+    () => getReferences(design, component.id),
+    [component, design],
+  );
   const [showReferences, setShowReferences] = useState();
   const [showAdvanced, setShowAdvanced] = useState();
   const [responsiveSize, setResponsiveSize] = useState('medium');
@@ -324,17 +323,24 @@ const Properties = ({
           </Box>
           {!component.coupled && (
             <Box flex={false} direction="row" align="center">
-              <ActionButton
+              <Button
                 title="duplicate"
+                tip="duplicate"
                 icon={<Duplicate />}
                 onClick={duplicate}
               />
               {references.length === 0 ? (
-                <ActionButton title="delete" icon={<Trash />} onClick={delet} />
+                <Button
+                  title="delete"
+                  tip="delete"
+                  icon={<Trash />}
+                  onClick={delet}
+                />
               ) : (
-                <ActionButton
+                <Button
                   ref={referencesRef}
                   title="references"
+                  tip="references"
                   icon={<Location />}
                   onClick={() => setShowReferences(!showReferences)}
                 />

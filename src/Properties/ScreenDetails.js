@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { Box, Keyboard, Menu, Text } from 'grommet';
+import { Box, Button, Keyboard, Menu, Text } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import { addScreen, deleteScreen, newFrom, slugify } from '../design';
-import ActionButton from '../components/ActionButton';
 import TextInputField from './TextInputField';
 
 const ScreenDetails = ({
@@ -82,15 +81,17 @@ const ScreenDetails = ({
             items={menuItems}
           />
           <Box flex={false} direction="row" align="center">
-            <ActionButton
+            <Button
               title="duplicate"
+              tip="duplicate"
               icon={<Duplicate />}
               hoverIndicator
               onClick={duplicate}
             />
             {design.screenOrder.length > 1 && (
-              <ActionButton
+              <Button
                 title="delete"
+                tip="delete"
                 icon={<Trash />}
                 hoverIndicator
                 onClick={delet}

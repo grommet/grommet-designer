@@ -10,10 +10,9 @@ import {
   TextArea,
 } from 'grommet';
 import { Blank, Close, Edit, Trash } from 'grommet-icons';
-import ActionButton from '../components/ActionButton';
 import { apiUrl } from '../design';
 
-const friendlyDate = iso => {
+const friendlyDate = (iso) => {
   const date = new Date(iso);
   const now = new Date();
   if (date.getFullYear() !== now.getFullYear()) {
@@ -28,7 +27,7 @@ const friendlyDate = iso => {
   return date.toLocaleString('default', { hour: 'numeric', minute: '2-digit' });
 };
 
-const breakLines = text => text.replace(/(\S)\n/g, (_, c) => `${c}  \n`);
+const breakLines = (text) => text.replace(/(\S)\n/g, (_, c) => `${c}  \n`);
 
 const Comments = ({ design, selected, setMode, setSelected }) => {
   const [comments, setComments] = React.useState(design.comments);
@@ -43,9 +42,9 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   React.useEffect(() => {
     if (design.id) {
       // TODO: password
-      fetch(`${apiUrl}/${design.id}/comments`).then(response => {
+      fetch(`${apiUrl}/${design.id}/comments`).then((response) => {
         if (response.ok) {
-          response.json().then(nextComments => setComments(nextComments));
+          response.json().then((nextComments) => setComments(nextComments));
         }
       });
     }
@@ -62,7 +61,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   }, [comments]);
 
   const addComment = React.useCallback(
-    comment => {
+    (comment) => {
       setAdding(true);
       const nextComments = [...comments];
       comment.selected = selected;
@@ -78,7 +77,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
           'Content-Length': body.length,
         },
         body,
-      }).then(response => {
+      }).then((response) => {
         if (response.ok) {
           response.json().then(({ id, createdAt }) => {
             comment.id = id;
@@ -92,9 +91,9 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   );
 
   const updateComment = React.useCallback(
-    comment => {
+    (comment) => {
       const nextComments = [...comments];
-      const index = nextComments.findIndex(c => c.id === comment.id);
+      const index = nextComments.findIndex((c) => c.id === comment.id);
       nextComments[index] = comment;
       comment.selected = selected;
       setComments(nextComments);
@@ -115,14 +114,18 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   );
 
   const deleteComment = React.useCallback(
-    id => {
-      const nextComments = comments.filter(c => c.id !== id);
+    (id) => {
+      const nextComments = comments.filter((c) => c.id !== id);
       setComments(nextComments);
       setDeleting(undefined);
       fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
     },
     [comments],
   );
+
+  const title = `close comments ${
+    /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
+  };`;
 
   return (
     <Box height="100vh" border="left">
@@ -138,10 +141,9 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
           <Heading size="18px" margin="none" truncate>
             Comments
           </Heading>
-          <ActionButton
-            title={`close comments ${
-              /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
-            };`}
+          <Button
+            title={title}
+            tip={title}
             icon={<Close />}
             onClick={() => setMode(design.local ? 'edit' : 'preview')}
           />
@@ -151,7 +153,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
       <Box flex overflow="auto">
         <Box flex={false}>
           {comments ? (
-            comments.map(c => (
+            comments.map((c) => (
               <Box
                 key={c.createdAt}
                 border="bottom"
@@ -175,8 +177,9 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                   {c.id && active === c.id ? (
                     <Box direction="row">
                       {c.id && (
-                        <ActionButton
+                        <Button
                           title="edit comment"
+                          tip="edit comment"
                           icon={<Edit color="text-xweak" />}
                           hoverIndicator
                           onClick={() => {
@@ -189,15 +192,17 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
                         />
                       )}
                       {c.id && deleting === c.id && (
-                        <ActionButton
+                        <Button
                           title="confirm delete"
+                          tip="confirm delete"
                           icon={<Trash color="status-critical" />}
                           hoverIndicator
                           onClick={() => deleteComment(c.id)}
                         />
                       )}
-                      <ActionButton
+                      <Button
                         title="delete comment"
+                        tip="delete comment"
                         icon={<Trash color="text-xweak" />}
                         hoverIndicator
                         onClick={() =>

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Anchor,
   Box,
+  Button,
   Heading,
   Paragraph,
   RadioButtonGroup,
@@ -11,7 +12,6 @@ import {
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 import Action from '../components/Action';
-import ActionButton from '../components/ActionButton';
 import Field from '../components/Field';
 import themes from '../themes';
 
@@ -69,8 +69,9 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
             <Heading level={3} size="small">
               Imports
             </Heading>
-            <ActionButton
+            <Button
               title="add an import"
+              tip="add an import"
               icon={<Add />}
               hoverIndicator
               onClick={() => {
@@ -107,8 +108,9 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                       />
                     </Field>
                   </Box>
-                  <ActionButton
+                  <Button
                     title="remove import"
+                    tip="remove import"
                     icon={<Trash />}
                     hoverIndicator
                     onClick={() => {
@@ -184,8 +186,9 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
             <Heading level={3} size="small">
               Data
             </Heading>
-            <ActionButton
+            <Button
               title="add a data source"
+              tip="add a data source"
               icon={<Add />}
               hoverIndicator
               onClick={() => {
@@ -250,8 +253,9 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                       />
                     </Field>
                   </Box>
-                  <ActionButton
+                  <Button
                     title="delete data source"
+                    tip="delete data source"
                     icon={<Trash />}
                     hoverIndicator
                     onClick={() => {

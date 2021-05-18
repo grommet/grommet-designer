@@ -18,7 +18,6 @@ import {
   copyScreen,
   insertComponent,
 } from '../design';
-import ActionButton from '../components/ActionButton';
 import AddLocation from './AddLocation';
 import AddMethod from './AddMethod';
 
@@ -358,7 +357,12 @@ const AddComponent = ({
     >
       <Box flex elevation="medium">
         <Box flex={false} direction="row" justify="between" align="center">
-          <ActionButton title="close" icon={<Close />} onClick={onClose} />
+          <Button
+            title="close"
+            tip="close"
+            icon={<Close />}
+            onClick={onClose}
+          />
           <Heading
             level={2}
             size="small"

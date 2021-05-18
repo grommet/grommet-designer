@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Heading, Layer } from 'grommet';
+import { Box, Button, Heading, Layer } from 'grommet';
 import { Close } from 'grommet-icons';
-import ActionButton from '../components/ActionButton';
 
 const Action = ({ children, label, onClose, ...rest }) => (
   <Layer
@@ -14,8 +13,9 @@ const Action = ({ children, label, onClose, ...rest }) => (
   >
     <Box flex elevation="medium">
       <Box flex={false} direction="row" align="center" justify="between">
-        <ActionButton
+        <Button
           title="close"
+          tip="close"
           icon={<Close />}
           hoverIndicator
           onClick={onClose}

@@ -9,7 +9,6 @@ import {
   Text,
 } from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
-import ActionButton from '../components/ActionButton';
 import AddComponent from './AddComponent';
 import DesignContext from './DesignContext';
 import DesignSettings from './DesignSettings';
@@ -30,9 +29,8 @@ const Header = ({
   onUndo,
   onRedo,
 }) => {
-  const { design, imports, selected, setSelected, updateDesign } = useContext(
-    DesignContext,
-  );
+  const { design, imports, selected, setSelected, updateDesign } =
+    useContext(DesignContext);
   const [adding, setAdding] = useState();
   const [editing, setEditing] = useState();
   const [sharing, setSharing] = useState();
@@ -104,20 +102,23 @@ const Header = ({
             </Menu>
           </Box>
           <Box flex={false} direction="row" align="center">
-            <ActionButton
+            <Button
               title="undo last change"
+              tip="undo last change"
               icon={<Undo />}
               disabled={!onUndo}
               onClick={onUndo || undefined}
             />
-            <ActionButton
+            <Button
               title="redo last change"
+              tip="redo last change"
               icon={<Redo />}
               disabled={!onRedo}
               onClick={onRedo || undefined}
             />
-            <ActionButton
+            <Button
               title="add a component"
+              tip="add a component"
               icon={<Add />}
               onClick={() => setAdding(true)}
             />
