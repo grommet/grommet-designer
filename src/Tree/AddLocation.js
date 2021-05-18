@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Blank } from 'grommet-icons';
 import { getParent } from '../design';
