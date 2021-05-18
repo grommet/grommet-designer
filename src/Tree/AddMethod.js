@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Box, Drop, RadioButtonGroup, Text } from 'grommet';
+import React from 'react';
+import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Copy, Link } from 'grommet-icons';
 
 const methods = ['copy', 'reference'];
@@ -15,27 +15,16 @@ const AddMethod = ({ id, value, onChange }) => {
   }, [value, onChange]);
 
   const Option = ({ option, checked, hover }) => {
-    const ref = useRef();
     const Icon = methodIcons[option];
     return (
-      <Box
-        ref={ref}
-        pad="xsmall"
-        background={hover && !checked ? { color: 'active' } : undefined}
-      >
-        <Icon color={checked ? 'selected-text' : 'border'} />
-        {hover && (
-          <Drop target={ref.current} align={{ top: 'bottom' }}>
-            <Box
-              margin="xsmall"
-              animation={{ type: 'fadeIn', duration: 100 }}
-              pad="xsmall"
-            >
-              <Text>{option}</Text>
-            </Box>
-          </Drop>
-        )}
-      </Box>
+      <Tip content={option}>
+        <Box
+          pad="xsmall"
+          background={hover && !checked ? { color: 'active' } : undefined}
+        >
+          <Icon color={checked ? 'selected-text' : 'border'} />
+        </Box>
+      </Tip>
     );
   };
 
