@@ -268,7 +268,7 @@ exports[`App empty 2`] = `
     <div
       class="StyledGrommet-sc-19lkkz7-0 cKCWGA"
       id="designer-canvas"
-      style="height: 100%;"
+      style="height: 100%; max-width: 100vw;"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 boogZL"

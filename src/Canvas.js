@@ -656,7 +656,7 @@ const Canvas = ({
       id="designer-canvas"
       theme={theme}
       themeMode={design.themeMode}
-      style={{ height: '100%' }}
+      style={{ height: '100%', maxWidth: '100vw' }}
     >
       {content}
     </Grommet>
