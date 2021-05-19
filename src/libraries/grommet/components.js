@@ -157,6 +157,7 @@ export const components = {
     name: 'Box',
     container: true,
     hideable: true,
+    respondable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -376,11 +377,13 @@ export const components = {
       columns: GridColumns,
       fill: ['horizontal', 'vertical'],
       gap: GridGap,
+      // height: Dimension,
       justify: ['stretch', 'start', 'center', 'end'],
       justifyContent: ['stretch', 'start', 'center', 'end', 'between'],
       margin: Edge,
       pad: BoxPad,
       rows: GridRows,
+      // width: Dimension,
     },
     advancedProperties: [
       'align',
@@ -730,6 +733,7 @@ export const components = {
       reverse: false,
       secondary: false,
       size: ['small', 'medium', 'large'],
+      tip: '',
       type: ['button', 'reset', 'submit'],
     },
     designProperties: {
@@ -785,6 +789,7 @@ export const components = {
       primary: false,
       reverse: false,
       secondary: false,
+      tip: '',
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
     override: ({ props }) => {
@@ -812,6 +817,7 @@ export const components = {
       label: 'Actions',
       open: false,
       size: ['small', 'medium', 'large', 'xlarge'],
+      tip: '',
     },
     override: ({ props }, { followLink }) => {
       const result = {};

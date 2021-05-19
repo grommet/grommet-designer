@@ -454,6 +454,128 @@ const Properties = ({
               )}
             </Box>
 
+            <Box flex={false} border={type.structure ? 'bottom' : undefined}>
+              <Header>
+                <Heading
+                  level={3}
+                  size="small"
+                  margin={{ horizontal: 'medium', vertical: 'medium' }}
+                >
+                  Properties
+                </Heading>
+                {type.respondable && !component.responsive && (
+                  <Button
+                    title="ResponsiveContext variations"
+                    tip="responsive context variations"
+                    icon={<Multiple />}
+                    hoverIndicator
+                    onClick={() => {
+                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      const component =
+                        nextDesign.components[selected.component];
+                      component.responsive = {
+                        small: { props: {} },
+                        large: { props: {} },
+                        hide: [],
+                      };
+                      setDesign(nextDesign);
+                      setResponsiveSize('medium');
+                    }}
+                  />
+                )}
+              </Header>
+              {component.responsive && (
+                <>
+                  <Box
+                    border="top"
+                    pad={{ start: 'medium', vertical: 'small' }}
+                    gap="small"
+                  >
+                    <Box margin={{ end: 'medium' }}>
+                      <Heading level={4} size="small" margin="none">
+                        ResponsiveContext
+                      </Heading>
+                      <Paragraph margin="none" size="small">
+                        Properties set for medium size are used unless
+                        over-ridden by a property for small or large size.
+                      </Paragraph>
+                    </Box>
+                    <Box direction="row" align="center" justify="between">
+                      <RadioButtonGroup
+                        name=""
+                        direction="row"
+                        options={['small', 'medium', 'large']}
+                        value={responsiveSize}
+                        onChange={({ target: { value: nextResponsiveSize } }) =>
+                          setResponsiveSize(nextResponsiveSize)
+                        }
+                      >
+                        {(option, { checked }) => (
+                          <Box
+                            border={{
+                              side: 'all',
+                              size: 'small',
+                              color: checked ? 'selected-text' : 'border',
+                            }}
+                            pad={{
+                              vertical: 'xsmall',
+                              horizontal: responsiveSizePad[option],
+                            }}
+                            round="xxsmall"
+                          >
+                            <Text
+                              size="small"
+                              color={checked ? 'selected-text' : 'border'}
+                              weight={checked ? 'bold' : undefined}
+                            >
+                              {option[0].toUpperCase()}
+                            </Text>
+                          </Box>
+                        )}
+                      </RadioButtonGroup>
+                      <Button
+                        icon={<Trash />}
+                        hoverIndicator
+                        onClick={() => {
+                          const nextDesign = JSON.parse(JSON.stringify(design));
+                          const component =
+                            nextDesign.components[selected.component];
+                          delete component.responsive;
+                          setDesign(nextDesign);
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Field
+                    label={`hide when ${responsiveSize}`}
+                    htmlFor="responsiveHide"
+                    first
+                  >
+                    <CheckBox
+                      id="responsiveHide"
+                      name="responsiveHide"
+                      checked={component.responsive.hide.includes(
+                        responsiveSize,
+                      )}
+                      onChange={({ target: { checked } }) => {
+                        const nextDesign = JSON.parse(JSON.stringify(design));
+                        const component =
+                          nextDesign.components[selected.component];
+                        if (checked)
+                          component.responsive.hide.push(responsiveSize);
+                        else
+                          component.responsive.hide =
+                            component.responsive.hide.filter(
+                              (s) => s !== responsiveSize,
+                            );
+                        setDesign(nextDesign);
+                      }}
+                    />
+                  </Field>
+                </>
+              )}
+            </Box>
+
             {type.properties && (
               <Box flex="grow">
                 {type.structure ? (
@@ -505,99 +627,6 @@ const Properties = ({
                   </Box>
                 ) : (
                   <Box flex="grow">
-                    <Header>
-                      <Heading
-                        level={3}
-                        size="small"
-                        margin={{ horizontal: 'medium', vertical: 'medium' }}
-                      >
-                        Properties
-                      </Heading>
-                      {type.respondable && !component.responsive && (
-                        <Button
-                          title="ResponsiveContext variations"
-                          tip="responsive context variations"
-                          icon={<Multiple />}
-                          hoverIndicator
-                          onClick={() => {
-                            const nextDesign = JSON.parse(
-                              JSON.stringify(design),
-                            );
-                            const component =
-                              nextDesign.components[selected.component];
-                            component.responsive = {
-                              small: { props: {} },
-                              large: { props: {} },
-                            };
-                            setDesign(nextDesign);
-                            setResponsiveSize('medium');
-                          }}
-                        />
-                      )}
-                    </Header>
-                    {component.responsive && (
-                      <Box
-                        border="top"
-                        pad={{ start: 'medium', vertical: 'small' }}
-                        gap="small"
-                      >
-                        <Box margin={{ end: 'medium' }}>
-                          <Heading level={4} size="small" margin="none">
-                            ResponsiveContext
-                          </Heading>
-                          <Paragraph margin="none" size="small">
-                            Properties set for medium size are used unless
-                            over-ridden by a property for small or large size.
-                          </Paragraph>
-                        </Box>
-                        <Box direction="row" align="center" justify="between">
-                          <RadioButtonGroup
-                            direction="row"
-                            options={['small', 'medium', 'large']}
-                            value={responsiveSize}
-                            onChange={({
-                              target: { value: nextResponsiveSize },
-                            }) => setResponsiveSize(nextResponsiveSize)}
-                          >
-                            {(option, { checked }) => (
-                              <Box
-                                border={{
-                                  side: 'all',
-                                  size: 'small',
-                                  color: checked ? 'selected-text' : 'border',
-                                }}
-                                pad={{
-                                  vertical: 'xsmall',
-                                  horizontal: responsiveSizePad[option],
-                                }}
-                                round="xxsmall"
-                              >
-                                <Text
-                                  size="small"
-                                  color={checked ? 'selected-text' : 'border'}
-                                  weight={checked ? 'bold' : undefined}
-                                >
-                                  {option[0].toUpperCase()}
-                                </Text>
-                              </Box>
-                            )}
-                          </RadioButtonGroup>
-                          <Button
-                            icon={<Trash />}
-                            hoverIndicator
-                            onClick={() => {
-                              const nextDesign = JSON.parse(
-                                JSON.stringify(design),
-                              );
-                              const component =
-                                nextDesign.components[selected.component];
-                              delete component.responsive;
-                              setDesign(nextDesign);
-                            }}
-                          />
-                        </Box>
-                      </Box>
-                    )}
                     {renderProperties(
                       component.id,
                       type.properties,

@@ -372,6 +372,15 @@ const Canvas = ({
       console.warn(`Missing component ${id}`);
       return null;
     }
+
+    // don't render if hiding at this size
+    if (
+      component.responsive &&
+      component.responsive.hide &&
+      component.responsive.hide.includes(responsiveSize)
+    )
+      return null;
+
     let responsiveProps =
       component.responsive &&
       component.responsive[responsiveSize] &&
