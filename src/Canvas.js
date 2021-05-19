@@ -402,6 +402,14 @@ const Canvas = ({
       referenceDesign = getReferenceDesign(imports, component);
       component = (referenceDesign || design).components[mergedProps.component];
       if (component) {
+        // don't render if hiding at this size
+        if (
+          component.responsive &&
+          component.responsive.hide &&
+          component.responsive.hide.includes(responsiveSize)
+        )
+          return null;
+
         responsiveProps =
           component.responsive &&
           component.responsive[responsiveSize] &&
