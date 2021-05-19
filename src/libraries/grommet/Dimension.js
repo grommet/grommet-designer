@@ -9,6 +9,7 @@ const options = [
   'large',
   'xlarge',
   'xxlarge',
+  '100%',
   'min/max',
   'undefined',
 ];
@@ -19,7 +20,7 @@ const Dimension = ({ name, value, onChange }) => {
       <Box>
         {typeof value === 'object' ? (
           <Fragment>
-            {['min', 'max'].map((threshold) => (
+            {['min', 'max', 'width'].map((threshold) => (
               <FormField key={threshold} label={threshold}>
                 <Select
                   options={options.filter((o) => o !== 'min/max')}
@@ -28,7 +29,7 @@ const Dimension = ({ name, value, onChange }) => {
                     let nextValue = JSON.parse(JSON.stringify(value));
                     if (option === 'undefined') {
                       delete nextValue[threshold];
-                      if (!nextValue.min && !nextValue.max)
+                      if (!nextValue.min && !nextValue.max && !nextValue.width)
                         nextValue = undefined;
                     } else {
                       nextValue[threshold] = option;
