@@ -147,7 +147,12 @@ const GridColumns = ({ value, onChange }) => {
         <Box>
           <FormField label="size">
             <Select
-              options={[...sizeOptions, ...contentOptions, 'min/max']}
+              options={[
+                ...sizeOptions,
+                ...fractionalOptions,
+                ...contentOptions,
+                'min/max',
+              ]}
               value={
                 (value &&
                   value.size &&
