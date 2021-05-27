@@ -1031,7 +1031,11 @@ export const components = {
           let regexp;
           if (m.regexp && m.regexp.match) {
             const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
-            if (match) regexp = new RegExp(match[1] || match[2]);
+            try {
+              if (match) regexp = new RegExp(match[1] || match[2]);
+            } catch {
+              console.log('Invalid regular expression', m.regexp);
+            }
           }
           return { ...m, regexp };
         });

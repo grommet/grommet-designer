@@ -34,57 +34,71 @@ const MaskedInputMask = ({ value, onChange }) => {
                       direction="row"
                       align="center"
                       pad={{ horizontal: 'small' }}
+                      gap="small"
                     >
                       <Text>min</Text>
-                      <MaskedInput
-                        plain
-                        mask={[{ regexp: /^[0-9]+$/ }]}
-                        value={
-                          (element.length || [])[0] === undefined
-                            ? ''
-                            : (element.length || [])[0]
-                        }
-                        onChange={(event) => {
-                          const min = event.target.value;
-                          const nextValue = JSON.parse(
-                            JSON.stringify(value || [{}]),
-                          );
-                          if (!nextValue[index].length)
-                            nextValue[index].length = [];
-                          nextValue[index].length[0] =
-                            min.length > 0 ? parseInt(min, 10) : undefined;
-                          onChange(nextValue);
-                        }}
-                        style={{ width: '96px' }}
-                      />
+                      <Box flex>
+                        <MaskedInput
+                          plain
+                          mask={[{ regexp: /^[0-9]+$/ }]}
+                          value={
+                            (element.length || [])[0] === undefined
+                              ? ''
+                              : (element.length || [])[0]
+                          }
+                          onChange={(event) => {
+                            const min = event.target.value;
+                            const nextValue = JSON.parse(
+                              JSON.stringify(value || [{}]),
+                            );
+                            if (!nextValue[index].length)
+                              nextValue[index].length = [];
+                            nextValue[index].length[0] =
+                              (min.length > 0 && parseInt(min, 10)) ||
+                              undefined;
+                            if (
+                              !nextValue[index].length.filter((m) => m).length
+                            )
+                              delete nextValue[index].length;
+                            onChange(nextValue);
+                          }}
+                        />
+                      </Box>
                     </Box>
                     <Box
                       direction="row"
                       align="center"
                       pad={{ horizontal: 'small' }}
+                      gap="small"
                     >
                       <Text>max</Text>
-                      <MaskedInput
-                        plain
-                        mask={[{ regexp: /^[0-9]+$/ }]}
-                        value={
-                          (element.length || [])[1] === undefined
-                            ? ''
-                            : (element.length || [])[1]
-                        }
-                        onChange={(event) => {
-                          const max = event.target.value;
-                          const nextValue = JSON.parse(
-                            JSON.stringify(value || [{}]),
-                          );
-                          if (!nextValue[index].length)
-                            nextValue[index].length = [];
-                          nextValue[index].length[1] =
-                            max.length > 0 ? parseInt(max, 10) : undefined;
-                          onChange(nextValue);
-                        }}
-                        style={{ width: '96px' }}
-                      />
+                      <Box flex>
+                        <MaskedInput
+                          plain
+                          mask={[{ regexp: /^[0-9]+$/ }]}
+                          value={
+                            (element.length || [])[1] === undefined
+                              ? ''
+                              : (element.length || [])[1]
+                          }
+                          onChange={(event) => {
+                            const max = event.target.value;
+                            const nextValue = JSON.parse(
+                              JSON.stringify(value || [{}]),
+                            );
+                            if (!nextValue[index].length)
+                              nextValue[index].length = [];
+                            nextValue[index].length[1] =
+                              (max.length > 0 && parseInt(max, 10)) ||
+                              undefined;
+                            if (
+                              !nextValue[index].length.filter((m) => m).length
+                            )
+                              delete nextValue[index].length;
+                            onChange(nextValue);
+                          }}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                 </FormField>
