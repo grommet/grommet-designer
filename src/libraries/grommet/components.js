@@ -1021,6 +1021,7 @@ export const components = {
       name: '',
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
+      textAlign: ['start', 'center', 'end'],
       value: '',
     },
     override: ({ props }) => {
@@ -1196,6 +1197,7 @@ export const components = {
       reverse: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       suggestions: TextInputSuggestions,
+      textAlign: ['start', 'center', 'end'],
       type: ['text', 'password'],
       value: '',
     },
