@@ -82,23 +82,6 @@ const BackButton = ({ onDone }) => (
   />
 );
 
-const ReorderItems = ({ value, onChange, onDone }) => {
-  return (
-    <Box pad={{ bottom: 'small' }} gap="small">
-      <List data={value} pad="none" onOrder={onChange}>
-        {(item) => (
-          <Box>
-            <Text>{item.label}</Text>
-          </Box>
-        )}
-      </List>
-      <Footer>
-        <BackButton onDone={onDone} />
-      </Footer>
-    </Box>
-  );
-};
-
 const MenuItems = ({ linkOptions, value = [], onChange }) => {
   const [active, setActive] = useState();
   const [reorder, setReorder] = useState();
@@ -139,11 +122,18 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
 
   if (reorder)
     return (
-      <ReorderItems
-        value={value}
-        onChange={onChange}
-        onDone={() => setReorder(false)}
-      />
+      <Box pad={{ bottom: 'small' }} gap="small">
+        <List data={value} pad="none" onOrder={onChange}>
+          {(item) => (
+            <Box>
+              <Text>{item.label}</Text>
+            </Box>
+          )}
+        </List>
+        <Footer>
+          <BackButton onDone={() => setReorder(false)} />
+        </Footer>
+      </Box>
     );
 
   return (
