@@ -1,229 +1,267 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
-import { Add, Next, Previous, Trash } from 'grommet-icons';
+import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  CheckBox,
+  Footer,
+  FormField,
+  Header,
+  List,
+  Select,
+  Text,
+  TextInput,
+} from 'grommet';
+import { Add, FormNext, Previous, Trash } from 'grommet-icons';
+import useDebounce from './useDebounce';
+import ReorderIcon from './ReorderIcon';
 
-const DataTableColumns = ({ ComponentInput, value, onChange, ...rest }) => {
-  const [columns, setColumns] = useState(value);
-  React.useEffect(() => setColumns(value), [value]);
-  const timeout = useRef();
-  const debounceOnChange = useCallback(
-    (nextValue) => {
-      clearTimeout(timeout.current);
-      timeout.current = setTimeout(() => onChange(nextValue), 500);
-    },
-    [onChange],
-  );
+const Column = ({ ComponentInput, value, onChange, ...rest }) => {
+  const [column, setColumn] = useDebounce(value, onChange);
+
+  const setField = (name, fieldValue) => {
+    const nextColumn = JSON.parse(JSON.stringify(column));
+    if (fieldValue) nextColumn[name] = fieldValue;
+    else delete nextColumn[name];
+    setColumn(nextColumn);
+  };
 
   return (
-    <Box direction="row" gap="medium">
-      {(columns || []).map((c, i) => (
-        <Box flex="grow" key={i}>
-          <Box flex="grow">
-            <FormField label="property">
-              <TextInput
-                value={c.property || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(columns));
-                  nextValue[i].property = event.target.value;
-                  setColumns(nextValue);
-                  debounceOnChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="header">
-              <TextInput
-                value={c.header || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].header = event.target.value;
-                  setColumns(nextValue);
-                  debounceOnChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="units">
-              <TextInput
-                value={c.units || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].units = event.target.value;
-                  setColumns(nextValue);
-                  debounceOnChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="render">
-              <ComponentInput
-                {...rest}
-                name={`columns[${i}].render`}
-                value={c.render}
-                onChange={(id, nextDesign) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  if (id) nextValue[i].render = id;
-                  else delete nextValue[i].render;
-                  onChange(nextValue, nextDesign);
-                }}
-              />
-            </FormField>
-            <FormField label="align">
-              <Select
-                options={['start', 'center', 'end', 'undefined']}
-                value={c.align || ''}
-                onChange={({ option }) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].align =
-                    option === 'undefined' ? undefined : option;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="verticalAlign">
-              <Select
-                options={['top', 'middle', 'bottom', 'undefined']}
-                value={c.verticalAlign || ''}
-                onChange={({ option }) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].verticalAlign =
-                    option === 'undefined' ? undefined : option;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField>
-              <Box pad="small">
-                <CheckBox
-                  label="primary"
-                  checked={c.primary || false}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    // only one primary
-                    nextValue.forEach((c) => {
-                      c.primary = false;
-                    });
-                    nextValue[i].primary = event.target.checked;
-                    onChange(nextValue);
-                  }}
-                />
-              </Box>
-            </FormField>
-            {['search', 'sortable'].map((subProp) => (
-              <FormField key={subProp}>
-                <Box pad="small">
-                  <CheckBox
-                    label={subProp}
-                    checked={c[subProp] || false}
-                    onChange={(event) => {
-                      const nextValue = JSON.parse(JSON.stringify(value));
-                      nextValue[i][subProp] = event.target.checked;
-                      onChange(nextValue);
-                    }}
-                  />
-                </Box>
-              </FormField>
-            ))}
-            <FormField label="aggregate">
-              <Select
-                options={['avg', 'max', 'min', 'sum', 'undefined']}
-                value={c.aggregate || ''}
-                onChange={({ option }) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].aggregate =
-                    option === 'undefined' ? undefined : option;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            {c.aggregate ? (
-              <FormField>
-                <Box pad="small">
-                  <CheckBox
-                    label="footer aggregate"
-                    checked={!!c.footer || false}
-                    onChange={(event) => {
-                      const nextValue = JSON.parse(JSON.stringify(value));
-                      nextValue[i].footer = event.target.checked
-                        ? { aggregate: true }
-                        : undefined;
-                      onChange(nextValue);
-                    }}
-                  />
-                </Box>
-              </FormField>
-            ) : (
-              <FormField label="footer">
-                <TextInput
-                  value={c.footer || ''}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].footer = event.target.value;
-                    setColumns(nextValue);
-                    debounceOnChange(nextValue);
-                  }}
-                />
-              </FormField>
-            )}
-            <FormField>
-              <Box pad="small">
-                <CheckBox
-                  label="pin"
-                  checked={!!c.pin || false}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].pin = event.target.checked ? true : undefined;
-                    onChange(nextValue);
-                  }}
-                />
-              </Box>
-            </FormField>
-          </Box>
-          <Box direction="row" align="center" justify="between">
-            <Button
-              icon={<Trash />}
-              hoverIndicator
-              onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
-                nextValue.splice(i, 1);
-                onChange(nextValue.filter((c) => c));
-              }}
-            />
-            <Box direction="row">
-              <Button
-                icon={<Previous />}
-                hoverIndicator
-                disabled={i === 0}
-                onClick={() => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  const tmpColumn = nextValue[i];
-                  nextValue[i] = nextValue[i - 1];
-                  nextValue[i - 1] = tmpColumn;
-                  onChange(nextValue);
-                }}
-              />
-              <Button
-                icon={<Next />}
-                hoverIndicator
-                disabled={i === value.length - 1}
-                onClick={() => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  const tmpColumn = nextValue[i];
-                  nextValue[i] = nextValue[i + 1];
-                  nextValue[i + 1] = tmpColumn;
-                  onChange(nextValue);
-                }}
-              />
-            </Box>
-          </Box>
+    <Box flex={false}>
+      <FormField label="property">
+        <TextInput
+          name="property"
+          value={column.property || ''}
+          onChange={(event) => setField('property', event.target.value)}
+        />
+      </FormField>
+      <FormField label="header">
+        <TextInput
+          name="header"
+          value={column.header || ''}
+          onChange={(event) => setField('header', event.target.value)}
+        />
+      </FormField>
+      <FormField label="units">
+        <TextInput
+          name="units"
+          value={column.units || ''}
+          onChange={(event) => setField('units', event.target.value)}
+        />
+      </FormField>
+      <FormField label="render">
+        <ComponentInput
+          {...rest}
+          name="render"
+          value={column.render}
+          onChange={(id, nextDesign) => {
+            const nextColumn = JSON.parse(JSON.stringify(column));
+            if (id) nextColumn.render = id;
+            else delete nextColumn.render;
+            onChange(nextColumn, nextDesign);
+          }}
+        />
+      </FormField>
+      <FormField label="align">
+        <Select
+          options={['start', 'center', 'end', 'undefined']}
+          value={column.align || ''}
+          onChange={({ option }) =>
+            setField('align', option === 'undefined' ? undefined : option)
+          }
+        />
+      </FormField>
+      <FormField label="verticalAlign">
+        <Select
+          options={['top', 'middle', 'bottom', 'undefined']}
+          value={column.verticalAlign || ''}
+          onChange={({ option }) =>
+            setField(
+              'verticalAlign',
+              option === 'undefined' ? undefined : option,
+            )
+          }
+        />
+      </FormField>
+      <FormField>
+        <Box pad="small">
+          <CheckBox
+            label="primary"
+            checked={column.primary || false}
+            onChange={(event) => setField('primary', event.target.checked)}
+          />
         </Box>
+      </FormField>
+      {['search', 'sortable'].map((subProp) => (
+        <FormField key={subProp}>
+          <Box pad="small">
+            <CheckBox
+              label={subProp}
+              checked={column[subProp] || false}
+              onChange={(event) => (event) =>
+                setField(subProp, event.target.checked)}
+            />
+          </Box>
+        </FormField>
       ))}
-      <Button
-        icon={<Add />}
-        hoverIndicator
-        onClick={() => {
-          const nextValue = JSON.parse(JSON.stringify(value));
-          nextValue.push({});
-          onChange(nextValue);
-        }}
-      />
+      <FormField label="aggregate">
+        <Select
+          options={['avg', 'max', 'min', 'sum', 'undefined']}
+          value={column.aggregate || ''}
+          onChange={({ option }) =>
+            setField('aggregate', option === 'undefined' ? undefined : option)
+          }
+        />
+      </FormField>
+      {column.aggregate ? (
+        <FormField>
+          <Box pad="small">
+            <CheckBox
+              label="footer aggregate"
+              checked={!!column.footer || false}
+              onChange={(event) =>
+                setField(
+                  'footer',
+                  event.target.checked ? { aggregate: true } : undefined,
+                )
+              }
+            />
+          </Box>
+        </FormField>
+      ) : (
+        <FormField label="footer">
+          <TextInput
+            value={column.footer || ''}
+            onChange={(event) => setField('footer', event.target.value)}
+          />
+        </FormField>
+      )}
+      <FormField>
+        <Box pad="small">
+          <CheckBox
+            label="pin"
+            checked={!!column.pin || false}
+            onChange={(event) =>
+              setField('pin', event.target.checked ? true : undefined)
+            }
+          />
+        </Box>
+      </FormField>
+    </Box>
+  );
+};
+
+const BackButton = ({ onDone }) => (
+  <Button
+    icon={<Previous />}
+    hoverIndicator
+    tip={{
+      content: 'Back to columns',
+      dropProps: { align: { left: 'right' } },
+    }}
+    onClick={onDone}
+  />
+);
+
+const DataTableColumns = ({ value = [], onChange, ...rest }) => {
+  const [active, setActive] = useState();
+  const [reorder, setReorder] = useState();
+
+  if (active !== undefined) {
+    const column = value[active];
+    return (
+      <Box>
+        <Header>
+          <BackButton onDone={() => setActive(undefined)} />
+          <Button
+            icon={<Trash />}
+            hoverIndicator
+            tip={{
+              content: 'Delete column',
+              dropProps: { align: { right: 'left' } },
+            }}
+            onClick={() => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.splice(active, 1);
+              onChange(nextValue.length ? nextValue : undefined);
+              setActive(undefined);
+            }}
+          />
+        </Header>
+        <Column
+          value={column}
+          onChange={(nextColumn, nextDesign) => {
+            const nextValue = JSON.parse(JSON.stringify(value));
+            nextValue[active] = nextColumn;
+            onChange(nextValue, nextDesign);
+          }}
+          {...rest}
+        />
+      </Box>
+    );
+  }
+
+  if (reorder)
+    return (
+      <Box pad={{ bottom: 'small' }} gap="small">
+        <List data={value} pad="none" onOrder={onChange}>
+          {(column) => (
+            <Box>
+              <Text>{column.header || column.property}</Text>
+            </Box>
+          )}
+        </List>
+        <Footer>
+          <BackButton onDone={() => setReorder(false)} />
+        </Footer>
+      </Box>
+    );
+
+  return (
+    <Box gap="small" pad={{ top: 'small' }}>
+      <List
+        data={value}
+        pad="small"
+        onClickItem={({ index }) => setActive(index)}
+      >
+        {(column, i) => (
+          <Box
+            key={i}
+            flex="grow"
+            direction="row"
+            align="center"
+            justify="between"
+            gap="medium"
+          >
+            <Text>{column.header || column.property}</Text>
+            <FormNext />
+          </Box>
+        )}
+      </List>
+      <Footer>
+        <Button
+          icon={<Add />}
+          tip={{
+            content: 'Add column',
+            dropProps: { align: { left: 'right' } },
+          }}
+          hoverIndicator
+          onClick={() => {
+            const nextValue = JSON.parse(JSON.stringify(value || []));
+            nextValue.push({});
+            onChange(nextValue);
+            setActive(nextValue.length - 1);
+          }}
+        />
+        <Button
+          icon={<ReorderIcon />}
+          tip={{
+            content: 'Re-order columns',
+            dropProps: { align: { right: 'left' } },
+          }}
+          hoverIndicator
+          onClick={() => setReorder(true)}
+        />
+      </Footer>
     </Box>
   );
 };
