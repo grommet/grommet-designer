@@ -356,7 +356,13 @@ export const components = {
       header: '-component- grommet.Box {"align":"stretch","justify":"stretch"}',
       footer: '-component- grommet.Box {"align":"stretch","justify":"stretch"}',
     },
-    structure: reusedBoxStructure,
+    structure: [
+      {
+        label: 'Content',
+        properties: ['header', 'footer'],
+      },
+      ...reusedBoxStructure,
+    ],
   },
   Grid: {
     component: Grid,
