@@ -1,36 +1,25 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import {
   Box,
   Button,
   Footer,
   FormField,
-  Header,
-  Heading,
   List,
   Select,
   Text,
   TextInput,
 } from 'grommet';
-import { Add, Blank, Down, FormNext, Previous, Trash, Up } from 'grommet-icons';
+import { Add, Blank, FormNext, Previous, Trash } from 'grommet-icons';
 import useDebounce from './useDebounce';
 
 const ReorderIcon = () => (
   <Blank>
     <g strokeWidth={2} strokeLinecap="square">
-      <path d="M 12,8 L 12,16" />
-      <path d="M 4,6 L 12,2 L 20,6" fill="none" stroke={2} />
-      <path d="M 4,18 L 12,22 L 20,18" fill="none" stroke={2} />
+      <path d="M 3,6 L 7,2 L 11,6 M 7,2 L 7,22" fill="none" stroke={2} />
+      <path d="M 13,18 L 17,22 L 21,18 M 17,22 L 17,2" fill="none" stroke={2} />
     </g>
   </Blank>
 );
-
-const DraggableBox = styled(Box)`
-  cursor: pointer;
-  &:hover {
-    background: #eee;
-  }
-`;
 
 const optionValue = (options) => (option) => {
   let result;
@@ -43,7 +32,7 @@ const optionValue = (options) => (option) => {
   return result;
 };
 
-const MenuItem = ({ linkOptions, value, onChange, onDelete }) => {
+const MenuItem = ({ linkOptions, value, onChange }) => {
   const [item, setItem] = useDebounce(value, onChange);
 
   const LinkLabel = ({ selected, value }) => (
@@ -85,113 +74,35 @@ const MenuItem = ({ linkOptions, value, onChange, onDelete }) => {
           </Select>
         </FormField>
       </Box>
-      <Button
-        icon={<Trash />}
-        hoverIndicator
-        tip={{
-          content: 'Delete item',
-          dropProps: { align: { right: 'left' } },
-        }}
-        onClick={onDelete}
-      />
     </Box>
   );
 };
 
-const BackHeader = ({ onDone, title }) => (
-  <Header>
-    <Button
-      icon={<Previous />}
-      hoverIndicator
-      tip={{
-        content: 'Back to items',
-        dropProps: { align: { left: 'right' } },
-      }}
-      onClick={onDone}
-    />
-    <Heading level={2} size="small">
-      {title}
-    </Heading>
-  </Header>
+const BackButton = ({ onDone }) => (
+  <Button
+    icon={<Previous />}
+    hoverIndicator
+    tip={{
+      content: 'Back to items',
+      dropProps: { align: { left: 'right' } },
+    }}
+    onClick={onDone}
+  />
 );
 
 const ReorderItems = ({ value, onChange, onDone }) => {
-  const [dragging, setDragging] = useState();
   return (
-    <Box pad={{ bottom: 'small' }}>
-      <BackHeader title="Re-order" onDone={onDone} />
-      <List data={value} pad="none">
-        {(item, i) => (
-          <DraggableBox
-            key={i}
-            flex="grow"
-            direction="row"
-            align="center"
-            pad={{ left: 'small' }}
-            gap="medium"
-            draggable
-            background={dragging === i ? 'active' : undefined}
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', ''); // for Firefox
-              event.dataTransfer.effectAllowed = 'move';
-              setDragging(i);
-            }}
-            onDragEnd={() => setDragging(undefined)}
-            onDragOver={(event) => {
-              if (dragging !== undefined && dragging !== i) {
-                event.preventDefault();
-                event.dataTransfer.dropEffect = 'move';
-              }
-            }}
-            onDrop={(event) => {
-              event.preventDefault();
-              if (dragging !== i) {
-                const nextValue = JSON.parse(JSON.stringify(value));
-                const tmp = nextValue[dragging];
-                if (dragging < i)
-                  for (let index = dragging; index < i; index += 1)
-                    nextValue[index] = nextValue[index + 1];
-                else
-                  for (let index = dragging; index > i; index -= 1)
-                    nextValue[index] = nextValue[index - 1];
-                nextValue[i] = tmp;
-                onChange(nextValue);
-              }
-            }}
-          >
-            <Text color="text-weak">{i + 1}.</Text>
-            <Box flex="grow">
-              <Text>{item.label}</Text>
-            </Box>
-            <Box direction="row">
-              <Button
-                icon={<Up />}
-                hoverIndicator
-                disabled={i === 0}
-                onClick={() => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  const tmp = nextValue[i];
-                  nextValue[i] = nextValue[i - 1];
-                  nextValue[i - 1] = tmp;
-                  onChange(nextValue);
-                }}
-              />
-              <Button
-                icon={<Down />}
-                hoverIndicator
-                disabled={i === value.length - 1}
-                onClick={() => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  const tmp = nextValue[i];
-                  nextValue[i] = nextValue[i + 1];
-                  nextValue[i + 1] = tmp;
-                  onChange(nextValue);
-                }}
-              />
-            </Box>
-          </DraggableBox>
+    <Box pad={{ bottom: 'small' }} gap="small">
+      <List data={value} pad="none" onOrder={onChange}>
+        {(item) => (
+          <Box>
+            <Text>{item.label}</Text>
+          </Box>
         )}
       </List>
+      <Footer>
+        <BackButton onDone={onDone} />
+      </Footer>
     </Box>
   );
 };
@@ -204,7 +115,6 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
     const item = value[active];
     return (
       <Box>
-        <BackHeader title="Edit item" onDone={() => setActive(undefined)} />
         <MenuItem
           linkOptions={linkOptions}
           value={item}
@@ -213,13 +123,24 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
             nextValue[active] = nextItem;
             onChange(nextValue);
           }}
-          onDelete={() => {
-            const nextValue = JSON.parse(JSON.stringify(value));
-            nextValue.splice(active, 1);
-            onChange(nextValue.length ? nextValue : undefined);
-            setActive(undefined);
-          }}
         />
+        <Footer>
+          <BackButton onDone={() => setActive(undefined)} />
+          <Button
+            icon={<Trash />}
+            hoverIndicator
+            tip={{
+              content: 'Delete item',
+              dropProps: { align: { right: 'left' } },
+            }}
+            onClick={() => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.splice(active, 1);
+              onChange(nextValue.length ? nextValue : undefined);
+              setActive(undefined);
+            }}
+          />
+        </Footer>
       </Box>
     );
   }
