@@ -1,16 +1,36 @@
-import React from 'react';
-import { Box, Button, FormField, List, Text, TextInput } from 'grommet';
-import { Add, Down, Trash, Up } from 'grommet-icons';
+import React, { useState } from 'react';
+import { Box, Button, Footer, FormField, List, Text, TextInput } from 'grommet';
+import { Add, Trash } from 'grommet-icons';
+import BackButton from './BackButton';
+import ReorderIcon from './ReorderIcon';
 
 const SelectOptions = ({ value = [], onChange }) => {
+  const [reorder, setReorder] = useState();
+
+  if (reorder)
+    return (
+      <Box pad={{ bottom: 'small' }} gap="small">
+        <List data={value} pad="none" onOrder={onChange}>
+          {(option) => (
+            <Box>
+              <Text>{option}</Text>
+            </Box>
+          )}
+        </List>
+        <Footer>
+          <BackButton
+            title="back to options"
+            onClick={() => setReorder(false)}
+          />
+        </Footer>
+      </Box>
+    );
+
   return (
     <Box gap="medium">
       <List data={value} border={false} pad="none">
         {(item, i) => (
           <Box key={i} direction="row" align="center" justify="end" flex="grow">
-            <Text margin={{ right: 'medium' }} color="text-weak">
-              {i + 1}.
-            </Text>
             <FormField>
               <TextInput
                 value={item || ''}
@@ -21,30 +41,6 @@ const SelectOptions = ({ value = [], onChange }) => {
                 }}
               />
             </FormField>
-            <Button
-              icon={<Up />}
-              hoverIndicator
-              disabled={i === 0}
-              onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
-                const tmp = nextValue[i];
-                nextValue[i] = nextValue[i - 1];
-                nextValue[i - 1] = tmp;
-                onChange(nextValue);
-              }}
-            />
-            <Button
-              icon={<Down />}
-              hoverIndicator
-              disabled={i === value.length - 1}
-              onClick={() => {
-                const nextValue = JSON.parse(JSON.stringify(value));
-                const tmp = nextValue[i];
-                nextValue[i] = nextValue[i + 1];
-                nextValue[i + 1] = tmp;
-                onChange(nextValue);
-              }}
-            />
             <Button
               icon={<Trash />}
               hoverIndicator
@@ -57,19 +53,34 @@ const SelectOptions = ({ value = [], onChange }) => {
           </Box>
         )}
       </List>
-      <Button
-        icon={<Add />}
-        hoverIndicator
-        onClick={() => {
-          const nextValue = JSON.parse(JSON.stringify(value));
-          // start with a reasonable value, we do this so components like
-          // CheckBoxGroup don't have duplicate key issues
-          let suffix = 1;
-          while (nextValue.includes(`option ${suffix}`)) suffix += 1;
-          nextValue.push(`option ${suffix}`);
-          onChange(nextValue);
-        }}
-      />
+      <Footer>
+        <Button
+          icon={<Add />}
+          tip={{
+            content: 'Add option',
+            dropProps: { align: { left: 'right' } },
+          }}
+          hoverIndicator
+          onClick={() => {
+            const nextValue = JSON.parse(JSON.stringify(value));
+            // start with a reasonable value, we do this so components like
+            // CheckBoxGroup don't have duplicate key issues
+            let suffix = 1;
+            while (nextValue.includes(`option ${suffix}`)) suffix += 1;
+            nextValue.push(`option ${suffix}`);
+            onChange(nextValue);
+          }}
+        />
+        <Button
+          icon={<ReorderIcon />}
+          tip={{
+            content: 'Re-order items',
+            dropProps: { align: { right: 'left' } },
+          }}
+          hoverIndicator
+          onClick={() => setReorder(true)}
+        />
+      </Footer>
     </Box>
   );
 };

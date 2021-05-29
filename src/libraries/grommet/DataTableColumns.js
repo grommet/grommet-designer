@@ -13,6 +13,7 @@ import {
 } from 'grommet';
 import { Add, FormNext, Previous, Trash } from 'grommet-icons';
 import useDebounce from './useDebounce';
+import BackButton from './BackButton';
 import ReorderIcon from './ReorderIcon';
 
 const Column = ({ ComponentInput, value, onChange, ...rest }) => {
@@ -150,18 +151,6 @@ const Column = ({ ComponentInput, value, onChange, ...rest }) => {
   );
 };
 
-const BackButton = ({ onDone }) => (
-  <Button
-    icon={<Previous />}
-    hoverIndicator
-    tip={{
-      content: 'Back to columns',
-      dropProps: { align: { left: 'right' } },
-    }}
-    onClick={onDone}
-  />
-);
-
 const DataTableColumns = ({ value = [], onChange, ...rest }) => {
   const [active, setActive] = useState();
   const [reorder, setReorder] = useState();
@@ -171,7 +160,10 @@ const DataTableColumns = ({ value = [], onChange, ...rest }) => {
     return (
       <Box>
         <Header>
-          <BackButton onDone={() => setActive(undefined)} />
+          <BackButton
+            title="back to columns"
+            onClick={() => setActive(undefined)}
+          />
           <Button
             icon={<Trash />}
             hoverIndicator
@@ -211,7 +203,10 @@ const DataTableColumns = ({ value = [], onChange, ...rest }) => {
           )}
         </List>
         <Footer>
-          <BackButton onDone={() => setReorder(false)} />
+          <BackButton
+            title="back to columns"
+            onClick={() => setReorder(false)}
+          />
         </Footer>
       </Box>
     );

@@ -9,8 +9,9 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Add, FormNext, Previous, Trash } from 'grommet-icons';
+import { Add, FormNext, Trash } from 'grommet-icons';
 import useDebounce from './useDebounce';
+import BackButton from './BackButton';
 import ReorderIcon from './ReorderIcon';
 
 const optionValue = (options) => (option) => {
@@ -70,18 +71,6 @@ const MenuItem = ({ linkOptions, value, onChange }) => {
   );
 };
 
-const BackButton = ({ onDone }) => (
-  <Button
-    icon={<Previous />}
-    hoverIndicator
-    tip={{
-      content: 'Back to items',
-      dropProps: { align: { left: 'right' } },
-    }}
-    onClick={onDone}
-  />
-);
-
 const MenuItems = ({ linkOptions, value = [], onChange }) => {
   const [active, setActive] = useState();
   const [reorder, setReorder] = useState();
@@ -100,7 +89,10 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
           }}
         />
         <Footer>
-          <BackButton onDone={() => setActive(undefined)} />
+          <BackButton
+            title="back to items"
+            onClick={() => setActive(undefined)}
+          />
           <Button
             icon={<Trash />}
             hoverIndicator
@@ -131,7 +123,7 @@ const MenuItems = ({ linkOptions, value = [], onChange }) => {
           )}
         </List>
         <Footer>
-          <BackButton onDone={() => setReorder(false)} />
+          <BackButton title="back to items" onClick={() => setReorder(false)} />
         </Footer>
       </Box>
     );
