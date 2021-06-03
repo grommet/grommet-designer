@@ -1,18 +1,7 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Footer,
-  FormField,
-  List,
-  Select,
-  Text,
-  TextInput,
-} from 'grommet';
-import { Add, FormNext, Trash } from 'grommet-icons';
+import React from 'react';
+import { Box, FormField, Select, Text, TextInput } from 'grommet';
 import useDebounce from './useDebounce';
-import BackButton from './BackButton';
-import ReorderIcon from './ReorderIcon';
+import ArrayOfObjects from './ArrayOfObjects';
 
 const optionValue = (options) => (option) => {
   let result;
@@ -71,111 +60,8 @@ const MenuItem = ({ linkOptions, value, onChange }) => {
   );
 };
 
-const MenuItems = ({ linkOptions, value = [], onChange }) => {
-  const [active, setActive] = useState();
-  const [reorder, setReorder] = useState();
-
-  if (active !== undefined) {
-    const item = value[active];
-    return (
-      <Box>
-        <MenuItem
-          linkOptions={linkOptions}
-          value={item}
-          onChange={(nextItem) => {
-            const nextValue = JSON.parse(JSON.stringify(value));
-            nextValue[active] = nextItem;
-            onChange(nextValue);
-          }}
-        />
-        <Footer>
-          <BackButton
-            title="back to items"
-            onClick={() => setActive(undefined)}
-          />
-          <Button
-            icon={<Trash />}
-            hoverIndicator
-            tip={{
-              content: 'Delete item',
-              dropProps: { align: { right: 'left' } },
-            }}
-            onClick={() => {
-              const nextValue = JSON.parse(JSON.stringify(value));
-              nextValue.splice(active, 1);
-              onChange(nextValue.length ? nextValue : undefined);
-              setActive(undefined);
-            }}
-          />
-        </Footer>
-      </Box>
-    );
-  }
-
-  if (reorder)
-    return (
-      <Box pad={{ bottom: 'small' }} gap="small">
-        <List data={value} pad="none" onOrder={onChange}>
-          {(item) => (
-            <Box>
-              <Text>{item.label}</Text>
-            </Box>
-          )}
-        </List>
-        <Footer>
-          <BackButton title="back to items" onClick={() => setReorder(false)} />
-        </Footer>
-      </Box>
-    );
-
-  return (
-    <Box gap="small" pad={{ top: 'small' }}>
-      <List
-        data={value}
-        pad="small"
-        onClickItem={({ index }) => setActive(index)}
-      >
-        {(item, i) => (
-          <Box
-            key={i}
-            flex="grow"
-            direction="row"
-            align="center"
-            justify="between"
-            gap="medium"
-          >
-            <Text>{item.label}</Text>
-            <FormNext />
-          </Box>
-        )}
-      </List>
-      <Footer>
-        <Button
-          icon={<Add />}
-          tip={{
-            content: 'Add item',
-            dropProps: { align: { left: 'right' } },
-          }}
-          hoverIndicator
-          onClick={() => {
-            const nextValue = JSON.parse(JSON.stringify(value || []));
-            nextValue.push({});
-            onChange(nextValue);
-            setActive(nextValue.length - 1);
-          }}
-        />
-        <Button
-          icon={<ReorderIcon />}
-          tip={{
-            content: 'Re-order items',
-            dropProps: { align: { right: 'left' } },
-          }}
-          hoverIndicator
-          onClick={() => setReorder(true)}
-        />
-      </Footer>
-    </Box>
-  );
-};
+const MenuItems = (props) => (
+  <ArrayOfObjects name="items" labelKey="label" Edit={MenuItem} {...props} />
+);
 
 export default MenuItems;

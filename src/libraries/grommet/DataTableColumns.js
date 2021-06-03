@@ -1,20 +1,7 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  CheckBox,
-  Footer,
-  FormField,
-  Header,
-  List,
-  Select,
-  Text,
-  TextInput,
-} from 'grommet';
-import { Add, FormNext, Trash } from 'grommet-icons';
+import React from 'react';
+import { Box, CheckBox, FormField, Select, TextInput } from 'grommet';
 import useDebounce from './useDebounce';
-import BackButton from './BackButton';
-import ReorderIcon from './ReorderIcon';
+import ArrayOfObjects from './ArrayOfObjects';
 
 const Column = ({ ComponentInput, value, onChange, ...rest }) => {
   const [column, setColumn] = useDebounce(value, onChange);
@@ -151,114 +138,8 @@ const Column = ({ ComponentInput, value, onChange, ...rest }) => {
   );
 };
 
-const DataTableColumns = ({ value = [], onChange, ...rest }) => {
-  const [active, setActive] = useState();
-  const [reorder, setReorder] = useState();
-
-  if (active !== undefined) {
-    const column = value[active];
-    return (
-      <Box>
-        <Header>
-          <BackButton
-            title="back to columns"
-            onClick={() => setActive(undefined)}
-          />
-          <Button
-            icon={<Trash />}
-            hoverIndicator
-            tip={{
-              content: 'Delete column',
-              dropProps: { align: { right: 'left' } },
-            }}
-            onClick={() => {
-              const nextValue = JSON.parse(JSON.stringify(value));
-              nextValue.splice(active, 1);
-              onChange(nextValue.length ? nextValue : undefined);
-              setActive(undefined);
-            }}
-          />
-        </Header>
-        <Column
-          value={column}
-          onChange={(nextColumn, nextDesign) => {
-            const nextValue = JSON.parse(JSON.stringify(value));
-            nextValue[active] = nextColumn;
-            onChange(nextValue, nextDesign);
-          }}
-          {...rest}
-        />
-      </Box>
-    );
-  }
-
-  if (reorder)
-    return (
-      <Box pad={{ bottom: 'small' }} gap="small">
-        <List data={value} pad="none" onOrder={onChange}>
-          {(column) => (
-            <Box>
-              <Text>{column.header || column.property}</Text>
-            </Box>
-          )}
-        </List>
-        <Footer>
-          <BackButton
-            title="back to columns"
-            onClick={() => setReorder(false)}
-          />
-        </Footer>
-      </Box>
-    );
-
-  return (
-    <Box gap="small" pad={{ top: 'small' }}>
-      <List
-        data={value}
-        pad="small"
-        onClickItem={({ index }) => setActive(index)}
-      >
-        {(column, i) => (
-          <Box
-            key={i}
-            flex="grow"
-            direction="row"
-            align="center"
-            justify="between"
-            gap="medium"
-          >
-            <Text>{column.header || column.property}</Text>
-            <FormNext />
-          </Box>
-        )}
-      </List>
-      <Footer>
-        <Button
-          icon={<Add />}
-          tip={{
-            content: 'Add column',
-            dropProps: { align: { left: 'right' } },
-          }}
-          hoverIndicator
-          onClick={() => {
-            const nextValue = JSON.parse(JSON.stringify(value || []));
-            nextValue.push({});
-            onChange(nextValue);
-            setActive(nextValue.length - 1);
-          }}
-        />
-        <Button
-          icon={<ReorderIcon />}
-          tip={{
-            content: 'Re-order columns',
-            dropProps: { align: { right: 'left' } },
-          }}
-          hoverIndicator
-          onClick={() => setReorder(true)}
-        />
-      </Footer>
-    </Box>
-  );
-};
+const DataTableColumns = (props) => (
+  <ArrayOfObjects name="columns" labelKey="property" Edit={Column} {...props} />
+);
 
 export default DataTableColumns;
