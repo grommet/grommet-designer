@@ -65,7 +65,7 @@ const Publish = ({ design, setDesign }) => {
       email,
       password,
       pin,
-      onChange: nextDesign => {
+      onChange: (nextDesign) => {
         setPublishing(false);
         setDesign(nextDesign);
         ReactGA.event({
@@ -73,7 +73,7 @@ const Publish = ({ design, setDesign }) => {
           action: 'publish design',
         });
       },
-      onError: error => {
+      onError: (error) => {
         setPublishing(false);
         setError(error);
       },
@@ -214,7 +214,9 @@ const SaveLocally = ({ design, onClose }) => (
     <Button
       label="Download"
       hoverIndicator
-      href={`data:application/json;charset=utf-8,${JSON.stringify(design)}`}
+      href={`data:application/json;charset=utf-8,${encodeURIComponent(
+        JSON.stringify(design),
+      )}`}
       download={`${design.name || 'design'}.json`}
       onClick={() => {
         onClose();
