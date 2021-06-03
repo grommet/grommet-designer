@@ -11,7 +11,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Add, FormNext, Previous, Trash } from 'grommet-icons';
+import { Add, FormNext, Trash } from 'grommet-icons';
 import useDebounce from './useDebounce';
 import BackButton from './BackButton';
 import ReorderIcon from './ReorderIcon';
