@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Box,
-  Button,
   CheckBox,
   FormField,
   Select,
@@ -9,7 +8,7 @@ import {
   TextInput,
   ThemeContext,
 } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+import ArrayOfObjects from './ArrayOfObjects';
 
 const ColorLabel = ({ color, theme }) => (
   <Box pad="small" direction="row" gap="small" align="center">
@@ -20,7 +19,7 @@ const ColorLabel = ({ color, theme }) => (
   </Box>
 );
 
-const MeterValues = ({ value, theme, onChange }) => {
+const Value = ({ value, theme, onChange }) => {
   const baseTheme = React.useContext(ThemeContext);
   const [searchText, setSearchText] = React.useState('');
   const searchExp = searchText && new RegExp(searchText, 'i');
@@ -30,100 +29,82 @@ const MeterValues = ({ value, theme, onChange }) => {
   }).sort();
 
   return (
-    <Box direction="row" gap="medium">
-      {(value || []).map((item, i) => (
-        <Box flex="grow" key={i}>
-          <Box flex="grow">
-            <FormField label="label">
-              <TextInput
-                value={item.label || ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].label = event.target.value;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="value">
-              <TextInput
-                value={item.value !== undefined ? item.value : ''}
-                onChange={(event) => {
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].value =
-                    // allow for data references
-                    event.target.value === '{'
-                      ? event.target.value
-                      : parseInt(event.target.value, 10);
-                  // eslint-disable-next-line no-self-compare
-                  if (nextValue[i].value !== nextValue[i].value)
-                    // NaN check
-                    nextValue[i].value = undefined;
-                  onChange(nextValue);
-                }}
-              />
-            </FormField>
-            <FormField label="color">
-              <Select
-                plain
-                id="color"
-                name="color"
-                options={
-                  searchExp
-                    ? [...colors.filter((c) => searchExp.test(c)), 'undefined']
-                    : [...colors, 'undefined']
-                }
-                value={item.color || ''}
-                valueLabel={<ColorLabel color={item.color} theme={theme} />}
-                onChange={({ option }) => {
-                  setSearchText(undefined);
-                  const nextValue = JSON.parse(JSON.stringify(value));
-                  nextValue[i].color =
-                    option === 'undefined' ? undefined : option;
-                  onChange(nextValue);
-                }}
-                onSearch={
-                  colors.length > 20
-                    ? (nextSearchText) => setSearchText(nextSearchText)
-                    : undefined
-                }
-              >
-                {(option) => <ColorLabel color={option} theme={theme} />}
-              </Select>
-            </FormField>
-            <FormField label="highlight">
-              <Box pad="small">
-                <CheckBox
-                  checked={item.highlight || false}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].highlight = event.target.checked;
-                    onChange(nextValue);
-                  }}
-                />
-              </Box>
-            </FormField>
-          </Box>
-          <Button
-            icon={<Trash />}
-            onClick={() => {
+    <Box flex="grow" align="end">
+      <Box flex="grow">
+        <FormField label="value">
+          <TextInput
+            value={value.value !== undefined ? value.value : ''}
+            onChange={(event) => {
               const nextValue = JSON.parse(JSON.stringify(value));
-              nextValue.splice(i, 1);
-              onChange(nextValue.length === 0 ? undefined : nextValue);
+              nextValue.value =
+                // allow for data references
+                event.target.value === '{'
+                  ? event.target.value
+                  : parseInt(event.target.value, 10);
+              // eslint-disable-next-line no-self-compare
+              if (nextValue.value !== nextValue.value)
+                // NaN check
+                nextValue.value = undefined;
+              onChange(nextValue);
             }}
           />
-        </Box>
-      ))}
-      <Button
-        icon={<Add />}
-        hoverIndicator
-        onClick={() => {
-          const nextValue = JSON.parse(JSON.stringify(value || []));
-          nextValue.push({});
-          onChange(nextValue);
-        }}
-      />
+        </FormField>
+        <FormField label="label">
+          <TextInput
+            value={value.label || ''}
+            onChange={(event) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.label = event.target.value;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField label="color">
+          <Select
+            plain
+            id="color"
+            name="color"
+            options={
+              searchExp
+                ? [...colors.filter((c) => searchExp.test(c)), 'undefined']
+                : [...colors, 'undefined']
+            }
+            value={value.color || ''}
+            valueLabel={<ColorLabel color={value.color} theme={theme} />}
+            onChange={({ option }) => {
+              setSearchText(undefined);
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.color = option === 'undefined' ? undefined : option;
+              onChange(nextValue);
+            }}
+            onSearch={
+              colors.length > 20
+                ? (nextSearchText) => setSearchText(nextSearchText)
+                : undefined
+            }
+          >
+            {(option) => <ColorLabel color={option} theme={theme} />}
+          </Select>
+        </FormField>
+        <FormField label="highlight">
+          <Box pad="small">
+            <CheckBox
+              checked={value.highlight || false}
+              onChange={(event) => {
+                const nextValue = JSON.parse(JSON.stringify(value));
+                nextValue.highlight = event.target.checked;
+                onChange(nextValue);
+              }}
+            />
+          </Box>
+        </FormField>
+      </Box>
     </Box>
   );
 };
+
+const MeterValues = (props) => (
+  <ArrayOfObjects name="values" labelKey="value" Edit={Value} {...props} />
+);
 
 export default MeterValues;
