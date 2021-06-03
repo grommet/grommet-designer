@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Button, CheckBox, FormField, Select, TextInput } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+import { Box, CheckBox, FormField, Select, TextInput } from 'grommet';
 import { ThemeContext } from 'styled-components';
+import ArrayOfObjects from './ArrayOfObjects';
 
-const DataChartChart = ({ value, onChange, theme }) => {
+const Chart = ({ value, onChange, theme }) => {
   const baseTheme = React.useContext(ThemeContext);
   const colorOptions = React.useMemo(() => {
     const merged = { ...baseTheme.global.colors, ...theme.global.colors };
@@ -12,172 +12,153 @@ const DataChartChart = ({ value, onChange, theme }) => {
     return names;
   }, [baseTheme.global.colors, theme.global.colors]);
   return (
-    <Box direction="row" gap="medium">
-      {(value || [])
-        .filter((item) => item)
-        .map((item, i) => (
-          <Box basis="xsmall" flex="grow" key={i}>
-            <Box flex="grow">
-              <FormField
-                label="property"
-                help={
-                  item.type === 'bars' ? 'space separated for multiple' : ''
+    <Box flex="grow" align="end">
+      <Box flex="grow">
+        <FormField
+          label="property"
+          help={value.type === 'bars' ? 'space separated for multiple' : ''}
+        >
+          <TextInput
+            value={
+              value.type === 'bars'
+                ? value.property.join(' ')
+                : value.property || ''
+            }
+            onChange={(event) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.property =
+                value.type === 'bars'
+                  ? event.target.value.split(' ')
+                  : event.target.value;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField label="type">
+          <Select
+            options={['bar', 'bars', 'area', 'line', 'point', 'undefined']}
+            value={value.type}
+            onChange={({ option }) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              if (option === 'undefined') delete nextValue.type;
+              else nextValue.type = option;
+              if (option === 'bars') {
+                if (typeof value.property === 'string') {
+                  nextValue.property = value.property.split(' ');
                 }
-              >
-                <TextInput
-                  value={
-                    item.type === 'bars'
-                      ? item.property.join(' ')
-                      : item.property || ''
-                  }
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].property =
-                      item.type === 'bars'
-                        ? event.target.value.split(' ')
-                        : event.target.value;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="type">
-                <Select
-                  options={[
-                    'bar',
-                    'bars',
-                    'area',
-                    'line',
-                    'point',
-                    'undefined',
-                  ]}
-                  value={item.type}
-                  onChange={({ option }) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') delete nextValue[i].type;
-                    else nextValue[i].type = option;
-                    if (option === 'bars') {
-                      if (typeof item.property === 'string') {
-                        nextValue[i].property = item.property.split(' ');
-                      }
-                    } else if (Array.isArray(item.property)) {
-                      nextValue[i].property = item.property[0] || '';
-                    }
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              {item.type === 'point' && (
-                <FormField label="point">
-                  <Select
-                    options={[
-                      'circle',
-                      'diamond',
-                      'square',
-                      'star',
-                      'triangle',
-                      'triangleDown',
-                    ]}
-                    value={item.point}
-                    onChange={({ option }) => {
-                      const nextValue = JSON.parse(JSON.stringify(value));
-                      if (option === 'undefined') delete nextValue[i].point;
-                      else nextValue[i].point = option;
-                      onChange(nextValue);
-                    }}
-                  />
-                </FormField>
-              )}
-              <FormField label="color">
-                <Select
-                  options={colorOptions}
-                  value={item.color || ''}
-                  onChange={({ option }) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') delete nextValue[i].color;
-                    else nextValue[i].color = option;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="opacity">
-                <Select
-                  options={['weak', 'medium', 'strong', 'undefined']}
-                  value={item.opacity || ''}
-                  onChange={({ option }) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') delete nextValue[i].opacity;
-                    else nextValue[i].opacity = option;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="thickness">
-                <Select
-                  options={[
-                    'hair',
-                    'xsmall',
-                    'small',
-                    'medium',
-                    'large',
-                    'xlarge',
-                    'undefined',
-                  ]}
-                  value={item.thickness || ''}
-                  onChange={({ option }) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    if (option === 'undefined') delete nextValue[i].thickness;
-                    else nextValue[i].thickness = option;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField>
-                <CheckBox
-                  label="dash"
-                  checked={item.dash}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].dash = event.target.checked;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField>
-                <CheckBox
-                  label="round"
-                  checked={item.round}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].round = event.target.checked;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-            </Box>
-            <Button
-              icon={<Trash />}
-              onClick={() => {
-                let nextValue = JSON.parse(JSON.stringify(value || []));
-                nextValue.splice(i, 1);
-                // prune empty values
-                nextValue = nextValue.filter((i) => i);
-                if (!nextValue.length) nextValue = undefined;
+              } else if (Array.isArray(value.property)) {
+                nextValue.property = value.property[0] || '';
+              }
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        {value.type === 'point' && (
+          <FormField label="point">
+            <Select
+              options={[
+                'circle',
+                'diamond',
+                'square',
+                'star',
+                'triangle',
+                'triangleDown',
+              ]}
+              value={value.point}
+              onChange={({ option }) => {
+                const nextValue = JSON.parse(JSON.stringify(value));
+                if (option === 'undefined') delete nextValue.point;
+                else nextValue.point = option;
                 onChange(nextValue);
               }}
             />
-          </Box>
-        ))}
-      <Button
-        icon={<Add />}
-        hoverIndicator
-        onClick={() => {
-          const nextValue = JSON.parse(JSON.stringify(value || []));
-          nextValue.push({});
-          onChange(nextValue);
-        }}
-      />
+          </FormField>
+        )}
+        <FormField label="color">
+          <Select
+            options={colorOptions}
+            value={value.color || ''}
+            onChange={({ option }) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              if (option === 'undefined') delete nextValue.color;
+              else nextValue.color = option;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField label="opacity">
+          <Select
+            options={['weak', 'medium', 'strong', 'undefined']}
+            value={value.opacity || ''}
+            onChange={({ option }) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              if (option === 'undefined') delete nextValue.opacity;
+              else nextValue.opacity = option;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField label="thickness">
+          <Select
+            options={[
+              'hair',
+              'xsmall',
+              'small',
+              'medium',
+              'large',
+              'xlarge',
+              'undefined',
+            ]}
+            value={value.thickness || ''}
+            onChange={({ option }) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              if (option === 'undefined') delete nextValue.thickness;
+              else nextValue.thickness = option;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField>
+          <CheckBox
+            label="dash"
+            checked={value.dash}
+            onChange={(event) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.dash = event.target.checked;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+        <FormField>
+          <CheckBox
+            label="round"
+            checked={value.round}
+            onChange={(event) => {
+              const nextValue = JSON.parse(JSON.stringify(value));
+              nextValue.round = event.target.checked;
+              onChange(nextValue);
+            }}
+          />
+        </FormField>
+      </Box>
     </Box>
   );
 };
+
+// convert array of strings to be an object for editing, back if can be
+const DataChartChart = ({ value = [], onChange, ...rest }) => (
+  <ArrayOfObjects
+    value={value.map((v) => (typeof v === 'string' ? { property: v } : v))}
+    name="series"
+    labelKey="property"
+    Edit={Chart}
+    onChange={(nextValue) =>
+      onChange(
+        nextValue.map((v) => (Object.keys(v).length === 1 ? v.property : v)),
+      )
+    }
+    {...rest}
+  />
+);
 
 export default DataChartChart;

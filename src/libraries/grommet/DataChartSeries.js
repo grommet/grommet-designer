@@ -1,80 +1,61 @@
 import React from 'react';
-import { Box, Button, FormField, TextInput } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+import { Box, FormField, TextInput } from 'grommet';
+import ArrayOfObjects from './ArrayOfObjects';
 
-const DataChartSeries = ({ value, onChange, theme }) => {
+const Series = ({ value, onChange }) => {
+  const setField = (name, fieldValue) => {
+    const nextValue = JSON.parse(JSON.stringify(value));
+    if (fieldValue) nextValue[name] = fieldValue;
+    else delete nextValue[name];
+    onChange(nextValue);
+  };
+
   return (
-    <Box direction="row" gap="medium">
-      {(value || [])
-        .filter((item) => item)
-        .map((item, i) => (
-          <Box basis="xsmall" flex="grow" key={i}>
-            <Box flex="grow">
-              <FormField label="property">
-                <TextInput
-                  value={item.property || ''}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].property = event.target.value;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="label">
-                <TextInput
-                  value={item.label || ''}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].label = event.target.value;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="prefix">
-                <TextInput
-                  value={item.prefix || ''}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].prefix = event.target.value;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-              <FormField label="suffix">
-                <TextInput
-                  value={item.suffix || ''}
-                  onChange={(event) => {
-                    const nextValue = JSON.parse(JSON.stringify(value));
-                    nextValue[i].suffix = event.target.value;
-                    onChange(nextValue);
-                  }}
-                />
-              </FormField>
-            </Box>
-            <Button
-              icon={<Trash />}
-              onClick={() => {
-                let nextValue = JSON.parse(JSON.stringify(value));
-                nextValue.splice(i, 1);
-                // prune empty values
-                nextValue = nextValue.filter((i) => i);
-                if (!nextValue.length) nextValue = undefined;
-                onChange(nextValue);
-              }}
-            />
-          </Box>
-        ))}
-      <Button
-        icon={<Add />}
-        hoverIndicator
-        onClick={() => {
-          const nextValue = JSON.parse(JSON.stringify(value || []));
-          nextValue.push({});
-          onChange(nextValue);
-        }}
-      />
+    <Box flex="grow" align="end">
+      <Box flex="grow">
+        <FormField label="property">
+          <TextInput
+            value={value.property || ''}
+            onChange={(event) => setField('property', event.target.value)}
+          />
+        </FormField>
+        <FormField label="label">
+          <TextInput
+            value={value.label || ''}
+            onChange={(event) => setField('label', event.target.value)}
+          />
+        </FormField>
+        <FormField label="prefix">
+          <TextInput
+            value={value.prefix || ''}
+            onChange={(event) => setField('prefix', event.target.value)}
+          />
+        </FormField>
+        <FormField label="suffix">
+          <TextInput
+            value={value.suffix || ''}
+            onChange={(event) => setField('suffix', event.target.value)}
+          />
+        </FormField>
+      </Box>
     </Box>
   );
 };
+
+// convert array of strings to be an object for editing, back if can be
+const DataChartSeries = ({ value = [], onChange, ...rest }) => (
+  <ArrayOfObjects
+    value={value.map((v) => (typeof v === 'string' ? { property: v } : v))}
+    name="series"
+    labelKey="property"
+    Edit={Series}
+    onChange={(nextValue) =>
+      onChange(
+        nextValue.map((v) => (Object.keys(v).length === 1 ? v.property : v)),
+      )
+    }
+    {...rest}
+  />
+);
 
 export default DataChartSeries;
