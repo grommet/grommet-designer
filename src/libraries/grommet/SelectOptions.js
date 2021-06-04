@@ -3,8 +3,10 @@ import { Box, Button, Footer, FormField, List, Text, TextInput } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
 import BackButton from './BackButton';
 import ReorderIcon from './ReorderIcon';
+import useDebounce from './useDebounce';
 
-const SelectOptions = ({ value = [], onChange }) => {
+const SelectOptions = ({ value: valueProp = [], onChange: onChangeProp }) => {
+  const [value, onChange] = useDebounce(valueProp, onChangeProp);
   const [reorder, setReorder] = useState();
 
   if (reorder)
@@ -28,12 +30,18 @@ const SelectOptions = ({ value = [], onChange }) => {
 
   return (
     <Box gap="medium">
-      <List data={value} border={false} pad="none">
+      <List
+        // convert to objects so key doesn't change when editing
+        data={value.map((option, id) => ({ id, option }))}
+        primaryKey="id"
+        border={false}
+        pad="none"
+      >
         {(item, i) => (
           <Box key={i} direction="row" align="center" justify="end" flex="grow">
             <FormField>
               <TextInput
-                value={item || ''}
+                value={item.option || ''}
                 onChange={(event) => {
                   const nextValue = JSON.parse(JSON.stringify(value));
                   nextValue[i] = event.target.value;
