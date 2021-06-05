@@ -58,11 +58,11 @@ const parsePath = (text) =>
 const find = (data, path) => {
   const pathParts = typeof path === 'string' ? parsePath(path) : path;
   let value;
-  if (typeof data === 'object') {
+  if (typeof data === 'object') value = data[pathParts[0]];
+  else if (Array.isArray(data) && typeof pathParts[0] === 'number')
     value = data[pathParts[0]];
-  } else if (Array.isArray(data) && typeof pathParts[0] === 'number') {
-    value = data[pathParts[0]];
-  }
+  else if (typeof data === 'string' && pathParts.length === 1 && !pathParts[0])
+    value = data;
 
   if (value && pathParts.length > 1) {
     if (Array.isArray(value) || typeof value === 'object') {
