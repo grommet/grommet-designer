@@ -1163,6 +1163,8 @@ export const components = {
       ) {
         result.options = designProps.data;
       }
+      if (props.valueKey)
+        result.valueKey = { key: props.valueKey, reduce: true };
       if (children) {
         result.children = (option) =>
           renderComponent(children[0], { datum: option });
