@@ -1,4 +1,10 @@
-import React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import ReactGA from 'react-ga';
 import {
   Anchor,
@@ -35,11 +41,11 @@ const AddComponent = ({
   setSelected,
   onClose,
 }) => {
-  const libraries = React.useMemo(
+  const libraries = useMemo(
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
-  const starters = React.useMemo(() => {
+  const starters = useMemo(() => {
     const result = {};
     libraries
       .filter((l) => l.starters)
@@ -69,16 +75,16 @@ const AddComponent = ({
       });
     return result;
   }, [libraries]);
-  const [addTypeName, setAddTypeName] = React.useState();
-  const [addStarters, setAddStarters] = React.useState();
-  const [addLocation, setAddLocation] = React.useState();
+  const [addTypeName, setAddTypeName] = useState();
+  const [addStarters, setAddStarters] = useState();
+  const [addLocation, setAddLocation] = useState();
 
-  const [search, setSearch] = React.useState('');
-  const [addMode, setAddMode] = React.useState();
+  const [search, setSearch] = useState('');
+  const [addMode, setAddMode] = useState();
 
-  const inputRef = React.useRef();
+  const inputRef = useRef();
 
-  const templates = React.useMemo(() => {
+  const templates = useMemo(() => {
     const buildTemplates = (design) => {
       const templates = {};
       Object.keys(design.components)
@@ -102,76 +108,96 @@ const AddComponent = ({
     return result;
   }, [design, imports]);
 
+  // TODO: remove this hacky garbage
   React.useLayoutEffect(() => {
     // 40ms was empirically determined for Chrome on Windows, improve sometime
     setTimeout(() => inputRef.current && inputRef.current.focus(), 40);
   });
 
-  const add = ({ typeName, starter, template, templateDesign, url }) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const nextSelected = { ...selected };
+  const add = useCallback(
+    ({ typeName, starter, template, templateDesign, url }) => {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      const nextSelected = { ...selected };
 
-    if (typeName) {
-      if (typeName === 'designer.Screen') {
-        if (starter && starter !== 'default') {
-          copyScreen(nextDesign, nextSelected, starter);
+      if (typeName) {
+        if (typeName === 'designer.Screen') {
+          if (starter && starter !== 'default') {
+            copyScreen(nextDesign, nextSelected, starter);
+          } else {
+            addScreen(nextDesign, nextSelected);
+          }
         } else {
-          addScreen(nextDesign, nextSelected);
+          if (starter && starter !== 'default') {
+            const id = copyComponent({
+              nextDesign,
+              templateDesign: starter.starters,
+              id: starter.id,
+              screen: nextSelected.screen,
+            });
+            nextDesign.components[id].name = starter.name;
+            nextSelected.component = id;
+          } else {
+            addComponent(nextDesign, libraries, nextSelected, typeName);
+          }
         }
-      } else {
-        if (starter && starter !== 'default') {
+      } else if (template) {
+        if (addMode === 'copy') {
           const id = copyComponent({
             nextDesign,
-            templateDesign: starter.starters,
-            id: starter.id,
+            templateDesign,
+            id: template.id,
             screen: nextSelected.screen,
           });
-          nextDesign.components[id].name = starter.name;
+          nextDesign.components[id].name = template.name;
           nextSelected.component = id;
-        } else {
-          addComponent(nextDesign, libraries, nextSelected, typeName);
+        } else if (addMode === 'reference') {
+          addComponent(
+            nextDesign,
+            libraries,
+            nextSelected,
+            'designer.Reference',
+          );
+          nextDesign.components[nextSelected.component].props.component =
+            template.id;
+          if (url) {
+            nextDesign.components[nextSelected.component].props.design = {
+              url,
+            };
+          }
         }
       }
-    } else if (template) {
-      if (addMode === 'copy') {
-        const id = copyComponent({
+
+      if (selected.screen === nextSelected.screen) {
+        insertComponent({
           nextDesign,
-          templateDesign,
-          id: template.id,
-          screen: nextSelected.screen,
+          libraries,
+          selected,
+          id: nextSelected.component,
+          location: addLocation,
         });
-        nextDesign.components[id].name = template.name;
-        nextSelected.component = id;
-      } else if (addMode === 'reference') {
-        addComponent(nextDesign, libraries, nextSelected, 'designer.Reference');
-        nextDesign.components[nextSelected.component].props.component =
-          template.id;
-        if (url) {
-          nextDesign.components[nextSelected.component].props.design = { url };
-        }
       }
-    }
 
-    if (selected.screen === nextSelected.screen) {
-      insertComponent({
-        nextDesign,
-        libraries,
-        selected,
-        id: nextSelected.component,
-        location: addLocation,
+      setDesign(nextDesign);
+      setSelected(nextSelected);
+      onClose();
+
+      ReactGA.event({
+        category: 'edit',
+        action: 'add component',
+        label: typeName,
       });
-    }
-
-    setDesign(nextDesign);
-    setSelected(nextSelected);
-    onClose();
-
-    ReactGA.event({
-      category: 'edit',
-      action: 'add component',
-      label: typeName,
-    });
-  };
+    },
+    [
+      addLocation,
+      addMode,
+      design,
+      libraries,
+      onClose,
+      selected,
+      setDesign,
+      setSelected,
+    ],
+  );
 
   const searchExp = search ? new RegExp(search, 'i') : undefined;
 
