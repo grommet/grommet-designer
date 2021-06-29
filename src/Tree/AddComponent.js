@@ -1,22 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
-import {
-  Anchor,
-  Box,
-  Button,
-  Header,
-  Heading,
-  Keyboard,
-  Layer,
-  TextInput,
-} from 'grommet';
-import { Close, Next } from 'grommet-icons';
+import { Box, Button, Heading, Layer } from 'grommet';
+import { Close } from 'grommet-icons';
 import {
   addComponent,
   addScreen,
@@ -24,14 +9,8 @@ import {
   copyScreen,
   insertComponent,
 } from '../design';
+import AddComponents from './AddComponents';
 import AddLocation from './AddLocation';
-import AddMethod from './AddMethod';
-
-const AddButton = ({ label, onClick }) => (
-  <Button hoverIndicator onClick={onClick}>
-    <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>{label}</Box>
-  </Button>
-);
 
 const AddComponent = ({
   design,
@@ -45,77 +24,10 @@ const AddComponent = ({
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
-  const starters = useMemo(() => {
-    const result = {};
-    libraries
-      .filter((l) => l.starters)
-      .forEach(({ starters }) => {
-        // find all screen and components that have names
-        const type = 'designer.Screen';
-        Object.keys(starters.screens)
-          .map((id) => starters.screens[id])
-          .filter((s) => s.name)
-          .forEach((screen) => {
-            if (!result[type]) result[type] = [];
-            result[type] = [
-              ...result[type],
-              { id: screen.id, name: screen.name, starters },
-            ];
-          });
-        Object.keys(starters.components)
-          .map((id) => starters.components[id])
-          .filter((c) => c.name)
-          .forEach((component) => {
-            if (!result[component.type]) result[component.type] = [];
-            result[component.type] = [
-              ...result[component.type],
-              { id: component.id, name: component.name, starters },
-            ];
-          });
-      });
-    return result;
-  }, [libraries]);
-  const [addTypeName, setAddTypeName] = useState();
-  const [addStarters, setAddStarters] = useState();
   const [addLocation, setAddLocation] = useState();
 
-  const [search, setSearch] = useState('');
-  const [addMode, setAddMode] = useState();
-
-  const inputRef = useRef();
-
-  const templates = useMemo(() => {
-    const buildTemplates = (design) => {
-      const templates = {};
-      Object.keys(design.components)
-        .map((id) => design.components[id])
-        .filter((component) => component.name)
-        .forEach((component) => {
-          if (!templates[component.name]) {
-            templates[component.name] = component;
-          }
-        });
-      return { design, name: design.name, templates };
-    };
-
-    const result = [];
-    result.push(buildTemplates(design));
-
-    imports
-      .filter((i) => i.design)
-      .forEach((i) => result.push({ ...i, ...buildTemplates(i.design) }));
-
-    return result;
-  }, [design, imports]);
-
-  // TODO: remove this hacky garbage
-  React.useLayoutEffect(() => {
-    // 40ms was empirically determined for Chrome on Windows, improve sometime
-    setTimeout(() => inputRef.current && inputRef.current.focus(), 40);
-  });
-
-  const add = useCallback(
-    ({ typeName, starter, template, templateDesign, url }) => {
+  const onAdd = useCallback(
+    ({ addMode, typeName, starter, template, templateDesign, url }) => {
       const nextDesign = JSON.parse(JSON.stringify(design));
       const nextSelected = { ...selected };
 
@@ -187,189 +99,7 @@ const AddComponent = ({
         label: typeName,
       });
     },
-    [
-      addLocation,
-      addMode,
-      design,
-      libraries,
-      onClose,
-      selected,
-      setDesign,
-      setSelected,
-    ],
-  );
-
-  const searchExp = search ? new RegExp(search, 'i') : undefined;
-
-  const Library = ({ name: libraryName, components, structure }) =>
-    structure
-      .filter(
-        ({ components: names }) =>
-          !searchExp || names.some((name) => name.match(searchExp)),
-      )
-      .map(({ name, Icon, components: names }) => (
-        <Box flex={false}>
-          <Box
-            direction="row"
-            gap="medium"
-            align="center"
-            justify="between"
-            pad={{ horizontal: 'small', vertical: 'xsmall' }}
-          >
-            <Heading level={4} size="small" margin="none">
-              {name}
-            </Heading>
-            {Icon && <Icon color="text-xweak" />}
-          </Box>
-          {names &&
-            names
-              .filter((name) => !searchExp || name.match(searchExp))
-              .map((name) => {
-                const typeName = `${libraryName}.${name}`;
-                let content = (
-                  <AddButton
-                    key={name}
-                    label={components[name].name}
-                    onClick={(event) =>
-                      add({
-                        typeName,
-                        containSelected: event.metaKey || event.ctrlKey,
-                      })
-                    }
-                  />
-                );
-                if (starters[typeName]) {
-                  content = (
-                    <Box key={name} direction="row" align="center">
-                      <Box flex="grow">{content}</Box>
-                      <Button
-                        icon={<Next />}
-                        hoverIndicator
-                        onClick={() => {
-                          setAddTypeName(typeName);
-                          setAddStarters(starters[typeName]);
-                        }}
-                      />
-                    </Box>
-                  );
-                }
-                return content;
-              })}
-        </Box>
-      ));
-
-  const Template = ({ name, design: tempDesign, templates: temps, url }) => (
-    <Box flex={false} border="top">
-      <Box
-        pad={{ horizontal: 'small', vertical: 'xsmall' }}
-        margin={{ top: 'small' }}
-      >
-        <Heading level="3" size="small" margin="none">
-          {url ? (
-            <Anchor target="_blank" href={`${url}&mode=edit`} label={name} />
-          ) : (
-            name
-          )}
-        </Heading>
-      </Box>
-      {Object.keys(temps)
-        .filter((name) => !searchExp || name.match(searchExp))
-        .map((name) => (
-          <AddButton
-            key={name}
-            label={name}
-            onClick={(event) =>
-              add({
-                containSelected: event.metaKey || event.ctrlKey,
-                templateDesign: tempDesign,
-                template: temps[name],
-                url,
-              })
-            }
-          />
-        ))}
-      <Box pad="small">
-        <AddMethod id={name} value={addMode} onChange={setAddMode} />
-      </Box>
-    </Box>
-  );
-
-  const Components = () => (
-    <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
-      <Box flex={false} pad="small">
-        <Keyboard
-          onEnter={
-            searchExp
-              ? (event) => {
-                  // find first match
-                  let typeName;
-                  libraries.some(({ name, components }) => {
-                    const first = Object.keys(components).filter((n) =>
-                      n.match(searchExp),
-                    )[0];
-                    if (first) typeName = `${name}.${first}`;
-                    return !!typeName;
-                  });
-                  if (typeName) {
-                    add({
-                      typeName,
-                      containSelected: event.metaKey || event.ctrlKey,
-                    });
-                  }
-                }
-              : undefined
-          }
-        >
-          <TextInput
-            ref={inputRef}
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-        </Keyboard>
-      </Box>
-
-      {libraries.map((library) => (
-        <Library key={library.name} {...library} />
-      ))}
-
-      {templates
-        .filter(
-          ({ templates }) =>
-            !searchExp ||
-            Object.keys(templates).some((name) => name.match(searchExp)),
-        )
-        .map((template) => (
-          <Template key={template.name} {...template} />
-        ))}
-    </Box>
-  );
-
-  const Starters = () => (
-    <Box flex={false}>
-      <Header pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-        <Heading level={4} size="small" margin="none">
-          {addTypeName}
-        </Heading>
-        <Button
-          icon={<Close />}
-          hoverIndicator
-          onClick={() => setAddStarters(undefined)}
-        />
-      </Header>
-      {addStarters.map((starter) => (
-        <AddButton
-          key={starter.name}
-          label={starter.name}
-          onClick={(event) =>
-            add({
-              typeName: addTypeName,
-              containSelected: event.metaKey || event.ctrlKey,
-              starter,
-            })
-          }
-        />
-      ))}
-    </Box>
+    [addLocation, design, libraries, onClose, selected, setDesign, setSelected],
   );
 
   return (
@@ -377,7 +107,6 @@ const AddComponent = ({
       position="top-left"
       margin="medium"
       full="vertical"
-      animation="fadeIn"
       onEsc={onClose}
       onClickOutside={onClose}
     >
@@ -408,7 +137,7 @@ const AddComponent = ({
           </Box>
         )}
         <Box flex overflow="auto">
-          {addStarters ? <Starters /> : <Components />}
+          <AddComponents design={design} imports={imports} onAdd={onAdd} />
         </Box>
       </Box>
     </Layer>
