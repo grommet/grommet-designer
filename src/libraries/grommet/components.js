@@ -733,6 +733,7 @@ export const components = {
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       hoverIndicator: BoxHoverIndicator,
       href: '',
+      kind: ['-theme-'],
       margin: Edge,
       plain: [true, false],
       primary: false,

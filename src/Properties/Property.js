@@ -63,6 +63,21 @@ const Property = React.forwardRef(
       if (property.includes('-reference-')) {
         return <ReferenceProperty ref={ref} value={value} {...rest} />;
       }
+      if (property.includes('-theme-')) {
+        // get options from theme, special casing
+        const { design, selected, theme } = rest;
+        const component = design.components[selected.component];
+        if (component.type === 'grommet.Button' && theme.button.toolbar)
+          return (
+            <ArrayProperty
+              ref={ref}
+              options={['toolbar']}
+              value={value}
+              {...rest}
+            />
+          );
+        return null;
+      }
       if (
         property.some((p) => typeof p === 'string' && p.includes('-property-'))
       ) {
