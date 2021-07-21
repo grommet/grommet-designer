@@ -1166,7 +1166,7 @@ export const components = {
       }
       if (props.valueKey)
         result.valueKey = { key: props.valueKey, reduce: true };
-      if (children) {
+      if (children && children[0]) {
         result.children = (option) =>
           renderComponent(children[0], { datum: option });
       }
