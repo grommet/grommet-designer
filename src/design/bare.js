@@ -13,49 +13,11 @@ export const bare = {
       },
     },
   },
-  // components: {
-  //   2: {
-  //     id: 2,
-  //     type: 'grommet.Main',
-  //     props: {
-  //       fill: 'vertical',
-  //       flex: 'grow',
-  //       overflow: 'auto'
-  //     },
-  //     children: [3, 4, 5],
-  //   },
-  //   3: {
-  //     id: 3,
-  //     type: 'grommet.Header',
-  //     props: {
-  //       align: 'center',
-  //       direction: 'row',
-  //       flex: false,
-  //       justify: 'between',
-  //       gap: 'medium'
-  //     },
-  //   },
-  //   4: {
-  //     id: 4,
-  //     type: 'grommet.Box',
-  //     props: {
-  //       align: 'center',
-  //       justify: 'center',
-  //       flex: 'grow',
-  //     },
-  //   },
-  //   5: {
-  //     id: 5,
-  //     type: 'grommet.Footer',
-  //     props: {
-  //       align: 'center',
-  //       direction: 'row',
-  //       flex: false,
-  //       justify: 'between',
-  //       gap: 'medium'
-  //     },
-  //   },
-  // },
   theme: 'grommet',
   imports: [],
+  // state
+  // local: whether this design exists in local storage
+  // date: date this design was last updated
+  // publishedUrl: where this design was published
+  // modified: whether a published design has been modified since it was published
 };

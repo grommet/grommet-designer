@@ -16,6 +16,7 @@ export const publish = ({
   nextDesign.date = date.toISOString();
   nextDesign.password = password;
   delete nextDesign.local;
+  delete nextDesign.modified;
 
   const body = JSON.stringify(nextDesign);
   fetch(apiUrl, {
@@ -26,9 +27,9 @@ export const publish = ({
     },
     body,
   })
-    .then(response => {
+    .then((response) => {
       if (response.ok) {
-        return response.text().then(id => {
+        return response.text().then((id) => {
           const nextUploadUrl = [
             window.location.protocol,
             '//',
@@ -45,5 +46,5 @@ export const publish = ({
       }
       return response.text().then(onError);
     })
-    .catch(e => onError(e.message));
+    .catch((e) => onError(e.message));
 };

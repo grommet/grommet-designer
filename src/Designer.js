@@ -24,7 +24,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   const [selected, setSelected] = React.useState({});
   const [imports, setImports] = React.useState(defaultImports);
   const libraries = React.useMemo(
-    () => imports.filter(i => i.library).map(i => i.library),
+    () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
   const [theme, setTheme] = React.useState();
@@ -79,12 +79,13 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   React.useEffect(() => {
     // remove any imports we don't want anymore
     const nextImports = imports.filter(
-      ({ url }) => !url || design.imports.findIndex(i => i.url === url) !== -1,
+      ({ url }) =>
+        !url || design.imports.findIndex((i) => i.url === url) !== -1,
     );
     let changed = nextImports.length !== imports.length;
     // add any imports we don't have yet
     design.imports.forEach(({ url }) => {
-      if (nextImports.findIndex(i => i.url === url) === -1) {
+      if (nextImports.findIndex((i) => i.url === url) === -1) {
         nextImports.push({ url });
         changed = true;
       }
@@ -94,7 +95,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
 
   // load any imports we don't have yet
   React.useEffect(() => {
-    loadImports(imports, f => {
+    loadImports(imports, (f) => {
       const nextImports = f(imports);
       setImports(nextImports);
     });
@@ -170,7 +171,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
     const timer = setTimeout(() => {
       // If we already have this design object, we must be doing an undo or
       // redo, and therefore no need to add a change
-      if (!changes.some(change => change === design)) {
+      if (!changes.some((change) => change === design)) {
         let nextChanges;
         nextChanges = [...changes];
         nextChanges = nextChanges.slice(changeIndex, 10);
@@ -194,19 +195,25 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
     }
   }, [design, selected]);
 
-  const changeDesign = design => {
+  const changeDesign = (design) => {
     // We are trying to change a published design when we have a local
     // copy with the same name. Need the user to confirm.
     if (design && !design.local && localStorage.getItem(design.name)) {
       setConfirmReplace(design);
     } else {
-      if (design) design.local = true;
+      if (design) {
+        design.local = true;
+        if (design.publishedUrl) {
+          // remember that we've changed this design since it was published
+          design.modified = true;
+        }
+      }
       updateDesign(design);
     }
   };
 
   const onKey = React.useCallback(
-    event => {
+    (event) => {
       if (event.metaKey || event.ctrlKey) {
         if (event.key === 'e' || event.key === 'E' || event.key === '.') {
           event.preventDefault();
@@ -222,7 +229,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
               design,
               ...identity,
               onChange: updateDesign,
-              onError: error => console.error(error),
+              onError: (error) => console.error(error),
             });
           } else {
             console.warn('You need to have published to be able to re-publish');
@@ -327,7 +334,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
           <ConfirmReplace
             design={design}
             nextDesign={confirmReplace}
-            onDone={nextDesign => {
+            onDone={(nextDesign) => {
               if (nextDesign) updateDesign(nextDesign);
               setConfirmReplace(undefined);
             }}
