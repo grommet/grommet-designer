@@ -195,6 +195,8 @@ const App = () => {
             )}`}
             onClick={() => {
               setSubsequent(undefined);
+              // keep the published one
+              published.local = true;
               setDesign(published);
             }}
           />
