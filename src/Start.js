@@ -14,7 +14,9 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Search } from 'grommet-icons';
+import { Configure, Search } from 'grommet-icons';
+import { parseUrlParams } from './utils';
+import Manage from './Manage';
 
 const tutorials = [
   {
@@ -108,13 +110,18 @@ const Start = ({
   setRtl,
 }) => {
   const [designs, setDesigns] = useState([]);
+  const [designsFetched, setDesignsFetched] = useState([]);
   const [readme, setReadme] = useState();
   const [search, setSearch] = useState();
   const [error, setError] = useState();
+  const [manage, setManage] = useState();
+
+  useEffect(() => {
+    document.title = 'Grommet Designer';
+  }, []);
 
   // load design names from local storage
   useEffect(() => {
-    document.title = 'Grommet Designer';
     let stored = localStorage.getItem('designs');
     if (stored) {
       // prune out non-existing designs
@@ -146,6 +153,14 @@ const Start = ({
           }
         }
       }
+    }
+  }, []);
+
+  // load previously fetched designs from local storage
+  useEffect(() => {
+    let stored = localStorage.getItem('designs-fetched');
+    if (stored) {
+      setDesignsFetched(JSON.parse(stored));
     }
   }, []);
 
@@ -246,17 +261,22 @@ const Start = ({
               <Heading level={2}>my designs</Heading>
               {designs.length > 5 && (
                 <Box
-                  basis="small"
+                  basis="medium"
                   flex={false}
                   direction="row"
                   align="center"
                   justify="end"
+                  gap="small"
                 >
                   <TextInput
                     icon={<Search />}
                     reverse
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
+                  />
+                  <Button
+                    icon={<Configure />}
+                    onClick={() => setManage(true)}
                   />
                 </Box>
               )}
@@ -277,7 +297,7 @@ const Start = ({
                       onClick={(event) => {
                         if (!event.ctrlKey && !event.metaKey) {
                           event.preventDefault();
-                          chooseDesign(name);
+                          chooseDesign({ name });
                         }
                       }}
                     >
@@ -285,6 +305,33 @@ const Start = ({
                     </Button>
                   );
                 })}
+            </Box>
+          </Box>
+        )}
+
+        {designsFetched && designsFetched.length > 0 && (
+          <Box flex={false}>
+            <Header>
+              <Heading level={2}>fetched designs</Heading>
+            </Header>
+            <Box direction="row" overflow="auto" gap="medium" border="right">
+              {designsFetched.map(({ name, url }, index) => {
+                return (
+                  <Button
+                    key={name}
+                    plain
+                    href={url}
+                    onClick={(event) => {
+                      if (!event.ctrlKey && !event.metaKey) {
+                        event.preventDefault();
+                        chooseDesign({ id: parseUrlParams(url).id });
+                      }
+                    }}
+                  >
+                    <Thumbnail title={name} url={url} />
+                  </Button>
+                );
+              })}
             </Box>
           </Box>
         )}
@@ -329,6 +376,7 @@ const Start = ({
             <Markdown>{readme}</Markdown>
           </Box>
         )}
+        {manage && <Manage onClose={() => setManage(false)} />}
       </Box>
     </Box>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Box,
@@ -15,7 +15,7 @@ import Designer from './Designer';
 import Loading from './Loading';
 import Start from './Start';
 import { loadDesign } from './design/load';
-import { getParams } from './utils';
+import { parseUrlParams } from './utils';
 
 const designerTheme = {
   ...grommet,
@@ -45,18 +45,18 @@ const setUrl = (design, method = 'push') => {
 };
 
 const App = () => {
-  const [start, setStart] = React.useState();
-  const [error, setError] = React.useState();
-  const [auth, setAuth] = React.useState();
-  const [password, setPassword] = React.useState();
-  const [subsequent, setSubsequent] = React.useState();
-  const [design, setDesign] = React.useState();
-  const [colorMode, setColorMode] = React.useState('dark');
-  const [rtl, setRtl] = React.useState();
-  const [needSave, setNeedSave] = React.useState(0);
+  const [start, setStart] = useState();
+  const [error, setError] = useState();
+  const [auth, setAuth] = useState();
+  const [password, setPassword] = useState();
+  const [subsequent, setSubsequent] = useState();
+  const [design, setDesign] = useState();
+  const [colorMode, setColorMode] = useState('dark');
+  const [rtl, setRtl] = useState();
+  const [needSave, setNeedSave] = useState(0);
 
   // initialize analytics
-  React.useEffect(() => {
+  useEffect(() => {
     if (window.location.host !== 'localhost') {
       const {
         location: { pathname },
@@ -67,11 +67,11 @@ const App = () => {
   }, []);
 
   // load initial design
-  React.useEffect(() => {
+  useEffect(() => {
     const {
       location: { pathname },
     } = window;
-    const params = getParams();
+    const params = parseUrlParams(window.location.search);
     const options = {
       initial: true,
       onAuth: () =>
@@ -85,6 +85,27 @@ const App = () => {
           delete nextDesign.subsequentPublish;
         } else {
           setDesign(nextDesign);
+
+          if (!nextDesign.local && nextDesign.publishedUrl) {
+            // remember a bit about this design so we can find it again if needed
+            const stored = localStorage.getItem('designs-fetched');
+            const designsFetched = stored ? JSON.parse(stored) : [];
+            const index = designsFetched.findIndex(
+              ({ name }) => name === nextDesign.name,
+            );
+            if (index !== 0) {
+              const nextDesignsFetched = [...designsFetched];
+              if (index !== -1) nextDesignsFetched.splice(index, 1);
+              nextDesignsFetched.unshift({
+                name: nextDesign.name,
+                url: nextDesign.publishedUrl,
+              });
+              localStorage.setItem(
+                'designs-fetched',
+                JSON.stringify(nextDesignsFetched),
+              );
+            }
+          }
         }
       },
       onError: (message) => setError(message),
@@ -100,7 +121,7 @@ const App = () => {
     loadDesign(options);
   }, [password]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const stored = localStorage.getItem('colorMode');
     if (stored) setColorMode(stored);
     else if (window.matchMedia) {
@@ -112,10 +133,10 @@ const App = () => {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       if (needSave) {
-        const params = getParams();
+        const params = parseUrlParams(window.location.search);
         if (params.name !== design.name) setUrl(design, 'replace');
         const stored = localStorage.getItem('designs');
         const designs = stored ? JSON.parse(stored) : [];
@@ -231,9 +252,9 @@ const App = () => {
   } else if (start) {
     content = (
       <Start
-        chooseDesign={(name) => {
+        chooseDesign={(args) => {
           loadDesign({
-            name,
+            ...args,
             onLoad: (nextDesign) => {
               if (nextDesign.subsequentPublish) {
                 setSubsequent({

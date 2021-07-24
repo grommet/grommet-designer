@@ -10,7 +10,7 @@ export const getComponentType = (libraries, typeName) => {
   return component || undefined;
 };
 
-export const displayName = component =>
+export const displayName = (component) =>
   component.name ||
   component.text ||
   component.props.name ||
@@ -22,20 +22,16 @@ export const displayName = component =>
 export const getReferenceDesign = (imports, referenceComponent) => {
   if (referenceComponent.props.design)
     return imports
-      .filter(i => i.url === referenceComponent.props.design.url)
-      .map(i => i.design)[0];
+      .filter((i) => i.url === referenceComponent.props.design.url)
+      .map((i) => i.design)[0];
   return undefined;
 };
 
-export const getParams = () => {
-  const { location } = window;
+export const parseUrlParams = (url) => {
   const params = {};
-  location.search
-    .slice(1)
-    .split('&')
-    .forEach(p => {
-      const [k, v] = p.split('=');
-      params[k] = decodeURIComponent(v);
-    });
+  (url.split('?')[1] || '').split('&').forEach((p) => {
+    const [k, v] = p.split('=');
+    params[k] = decodeURIComponent(v);
+  });
   return params;
 };

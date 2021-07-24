@@ -12,7 +12,7 @@ import ScreenDetails from './Properties/ScreenDetails';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
 import { loadImports, loadTheme } from './design/load';
-import { getParams } from './utils';
+import { parseUrlParams } from './utils';
 
 const defaultImports = [
   { name: grommetLibrary.name, library: grommetLibrary },
@@ -51,7 +51,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
         else setSelected(getInitialSelected(design));
       };
 
-      const params = getParams();
+      const params = parseUrlParams(window.location.search);
       if (params.mode) {
         setMode(params.mode);
         initializeSelected();
