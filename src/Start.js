@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import {
   Box,
@@ -21,16 +21,14 @@ const tutorials = [
     title: 'introduction',
     thumb:
       'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
-    url:
-      'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
+    url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
   },
 ];
 
 const inspirations = [
   {
     title: 'HPE design system',
-    url:
-      'https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com',
+    url: 'https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com',
   },
   {
     title: 'Card',
@@ -49,9 +47,11 @@ const ThumbnailFrame = styled.iframe`
 `;
 
 const Thumbnail = ({ title, url }) => {
-  const [show, setShow] = React.useState();
-  const ref = React.useRef();
-  React.useEffect(() => {
+  const [show, setShow] = useState();
+  const ref = useRef();
+
+  // only show content when visible to the user
+  useEffect(() => {
     const scroller = ref.current.parentNode.parentNode;
     const update = () => {
       const scrollerRect = scroller.getBoundingClientRect();
@@ -107,12 +107,13 @@ const Start = ({
   setColorMode,
   setRtl,
 }) => {
-  const [designs, setDesigns] = React.useState([]);
-  const [readme, setReadme] = React.useState();
-  const [search, setSearch] = React.useState();
-  const [error, setError] = React.useState();
+  const [designs, setDesigns] = useState([]);
+  const [readme, setReadme] = useState();
+  const [search, setSearch] = useState();
+  const [error, setError] = useState();
 
-  React.useEffect(() => {
+  // load design names from local storage
+  useEffect(() => {
     document.title = 'Grommet Designer';
     let stored = localStorage.getItem('designs');
     if (stored) {
@@ -148,7 +149,8 @@ const Start = ({
     }
   }, []);
 
-  React.useEffect(() => {
+  // get README from GitHub
+  useEffect(() => {
     fetch(
       'https://raw.githubusercontent.com/grommet/grommet-designer/master/README.md',
     ).then((response) => {
