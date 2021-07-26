@@ -39,7 +39,7 @@ const Manage = ({ onClose }) => {
         <Button icon={<Close />} hoverIndicator onClick={onClose} />
       </Header>
       <Box flex overflow="auto">
-        <Box margin="small">
+        <Box flex={false} margin="small">
           <Paragraph margin="none">
             Your designs are stored in browser local storage, which has limited
             space. You can offload designs you have published to reclaim local
