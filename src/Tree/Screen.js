@@ -1,26 +1,17 @@
 import React, { useContext } from 'react';
 import { Box, Button, Heading, Stack } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import Component from './Component';
-import DesignContext from './DesignContext';
 import DragDropContext from './DragDropContext';
 import ScreenDropArea from './ScreenDropArea';
 
 const Screen = ({ firstScreen, screenId }) => {
-  const {
-    design,
-    selected,
-    selectedRef,
-    setSelected,
-    updateDesign,
-  } = useContext(DesignContext);
+  const { design, selected, selectedRef, setSelected, updateDesign } =
+    useContext(DesignContext);
 
-  const {
-    draggingScreen,
-    moveScreen,
-    setDraggingScreen,
-    setDropScreenTarget,
-  } = useContext(DragDropContext);
+  const { draggingScreen, moveScreen, setDraggingScreen, setDropScreenTarget } =
+    useContext(DragDropContext);
 
   const screen = design.screens[screenId];
   const isSelected = selected.screen === screenId && !selected.component;

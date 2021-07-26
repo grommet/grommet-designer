@@ -11,6 +11,7 @@ import { findDOMNode } from 'react-dom';
 import styled from 'styled-components';
 import { Box, Grommet, Paragraph, ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
+import DesignContext from './DesignContext';
 import { getParent } from './design';
 import { getComponentType, getReferenceDesign } from './utils';
 import useDebounce from './useDebounce';
@@ -90,16 +91,10 @@ const replace = (text, data, contextPath) =>
     return match;
   });
 
-const Canvas = ({
-  design,
-  imports,
-  mode,
-  selected,
-  theme,
-  setDesign,
-  setSelected,
-}) => {
+const Canvas = () => {
   const responsiveSize = useContext(ResponsiveContext);
+  const { changeDesign, design, imports, mode, selected, setSelected, theme } =
+    useContext(DesignContext);
   const [data, setData] = useState();
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
@@ -108,7 +103,7 @@ const Canvas = ({
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.text = text;
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
   });
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
@@ -170,7 +165,7 @@ const Canvas = ({
   const setHide = (id, hide) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     nextDesign.components[id].hide = hide;
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
   };
 
   const moveComponent = () => {
@@ -192,7 +187,7 @@ const Canvas = ({
     setDragging(undefined);
     setDropTarget(undefined);
     setDropAt(undefined);
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
   };
 
   const followLink = useCallback(
@@ -201,12 +196,12 @@ const Canvas = ({
         // when to is an Array, lazily create nextDesign and re-use
         const ref = {};
         to.forEach((t) => followLink(t, { dataContextPath, nextRef: ref }));
-        if (ref.design) setDesign(ref.design);
+        if (ref.design) changeDesign(ref.design);
       } else if (to.control === 'toggleThemeMode') {
         const nextDesign =
           (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
         nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
-        nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+        nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
       } else if (to.component) {
         const target = design.components[to.component];
         const hideable =
@@ -221,12 +216,12 @@ const Canvas = ({
           if (component.props.active > component.children.length) {
             component.props.active = 1;
           }
-          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+          nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
         } else if (hideable) {
           const nextDesign =
             (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
           nextDesign.components[target.id].hide = !target.hide;
-          nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+          nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
           if (target.hide) setSelected({ ...to, dataContextPath });
         } else if (target) {
           // might not have anymore
@@ -239,7 +234,7 @@ const Canvas = ({
         }
       }
     },
-    [design, libraries, setDesign, setSelected],
+    [design, libraries, setSelected, changeDesign],
   );
 
   const followLinkOption = useCallback(
@@ -275,7 +270,9 @@ const Canvas = ({
                 if (component.props.active > component.children.length) {
                   component.props.active = 1;
                 }
-                nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+                nextRef
+                  ? (nextRef.design = nextDesign)
+                  : changeDesign(nextDesign);
               } else if (hideable) {
                 let hide;
                 // -link-checked- cases
@@ -302,9 +299,9 @@ const Canvas = ({
           if (Array.isArray(options[name])) options[name].forEach(updateLink);
           else updateLink(options[name]);
         });
-      nextRef ? (nextRef.design = nextDesign) : setDesign(nextDesign);
+      nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
     },
-    [design, libraries, setDesign],
+    [design, libraries, changeDesign],
   );
 
   // Initialize components who have asked for it, one at a time in case

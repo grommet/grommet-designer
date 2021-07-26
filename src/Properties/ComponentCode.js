@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Header, Heading, Layer, TextArea } from 'grommet';
 import { Close } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { generateJSX } from '../design';
 
-const ComponentCode = ({ component, design, imports, theme, onDone }) => {
-  const [code, setCode] = React.useState();
-  React.useEffect(() => {
+const ComponentCode = ({ component, onDone }) => {
+  const { design, imports, theme } = useContext(DesignContext);
+  const [code, setCode] = useState();
+  useEffect(() => {
     setCode(generateJSX({ component, design, imports, theme }));
   }, [component, design, imports, theme]);
   return (

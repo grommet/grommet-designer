@@ -41,6 +41,7 @@ export const publish = ({
           nextDesign.publishedUrl = nextUploadUrl;
           nextDesign.id = id;
           nextDesign.local = true;
+          nextDesign.modified = false;
           onChange(nextDesign);
         });
       }

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import DesignContext from '../DesignContext';
 import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
@@ -17,6 +18,7 @@ import StringProperty from './StringProperty';
 
 const Property = React.forwardRef(
   ({ property: propertyArg, value, ...rest }, ref) => {
+    const { design, selected, theme } = useContext(DesignContext);
     let property =
       propertyArg && propertyArg.dynamicProperty
         ? propertyArg.dynamicProperty({ value })
@@ -65,7 +67,6 @@ const Property = React.forwardRef(
       }
       if (property.includes('-theme-')) {
         // get options from theme, special casing
-        const { design, selected, theme } = rest;
         const component = design.components[selected.component];
         if (component.type === 'grommet.Button' && theme.button.toolbar)
           return (

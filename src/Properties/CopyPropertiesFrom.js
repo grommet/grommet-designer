@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -10,16 +10,18 @@ import {
   Text,
 } from 'grommet';
 import { Close } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { getDisplayName } from '../design';
 
-const CopyPropertiesFrom = ({ component, design, setDesign, onDone }) => {
+const CopyPropertiesFrom = ({ component, onDone }) => {
+  const { changeDesign, design } = useContext(DesignContext);
   const [value, setValue] = useState();
   const allOptions = useMemo(
     () =>
       Object.keys(design.components)
-        .map(i => parseInt(i, 10))
+        .map((i) => parseInt(i, 10))
         .filter(
-          id =>
+          (id) =>
             id !== component.id &&
             design.components[id].type === component.type,
         ),
@@ -60,7 +62,7 @@ const CopyPropertiesFrom = ({ component, design, setDesign, onDone }) => {
             const nextComponent = nextDesign.components[component.id];
             const fromComponent = nextDesign.components[value];
             nextComponent.props = { ...fromComponent.props };
-            setDesign(nextDesign);
+            changeDesign(nextDesign);
           }
           onDone();
         }}
@@ -71,10 +73,10 @@ const CopyPropertiesFrom = ({ component, design, setDesign, onDone }) => {
             placeholder="component ..."
             value={value}
             valueLabel={value ? <OptionLabel option={value} selected /> : ''}
-            onSearch={text => {
+            onSearch={(text) => {
               const exp = new RegExp(`${text}`, 'i');
               setOptions(
-                allOptions.filter(option =>
+                allOptions.filter((option) =>
                   exp.test(getDisplayName(design, option)),
                 ),
               );

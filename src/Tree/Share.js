@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Box,
@@ -15,6 +15,7 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { dependencies, generateJSX, publish } from '../design';
 import Action from '../components/Action';
 
@@ -28,15 +29,16 @@ const Summary = ({ Icon, label, guidance }) => (
   </Box>
 );
 
-const Publish = ({ design, setDesign }) => {
-  const [publication, setPublication] = React.useState();
-  const [publishing, setPublishing] = React.useState();
-  const [message, setMessage] = React.useState();
-  const [error, setError] = React.useState();
-  const previewRef = React.useRef();
-  const commentRef = React.useRef();
+const Publish = () => {
+  const { design, updateDesign } = useContext(DesignContext);
+  const [publication, setPublication] = useState();
+  const [publishing, setPublishing] = useState();
+  const [message, setMessage] = useState();
+  const [error, setError] = useState();
+  const previewRef = useRef();
+  const commentRef = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     let stored = localStorage.getItem(`${design.name}--identity`);
     if (stored) {
       const identity = JSON.parse(stored);
@@ -67,7 +69,7 @@ const Publish = ({ design, setDesign }) => {
       pin,
       onChange: (nextDesign) => {
         setPublishing(false);
-        setDesign(nextDesign);
+        updateDesign(nextDesign);
         ReactGA.event({
           category: 'share',
           action: 'publish design',
@@ -199,38 +201,42 @@ const Publish = ({ design, setDesign }) => {
   );
 };
 
-const SaveLocally = ({ design, onClose }) => (
-  <Box align="center">
-    <Summary
-      Icon={Download}
-      label="Download"
-      guidance={`
-      Download the design to a JSON file. You can use this as a separate
-      backup copy, inspect and transform it with a program, or share
-      it with someone else. You can upload it via the top left control
-      that shows all of your designs.
-    `}
-    />
-    <Button
-      label="Download"
-      hoverIndicator
-      href={`data:application/json;charset=utf-8,${encodeURIComponent(
-        JSON.stringify(design),
-      )}`}
-      download={`${design.name || 'design'}.json`}
-      onClick={() => {
-        onClose();
-        ReactGA.event({
-          category: 'share',
-          action: 'download design',
-        });
-      }}
-    />
-  </Box>
-);
+const SaveLocally = ({ onClose }) => {
+  const { design } = useContext(DesignContext);
+  return (
+    <Box align="center">
+      <Summary
+        Icon={Download}
+        label="Download"
+        guidance={`
+        Download the design to a JSON file. You can use this as a separate
+        backup copy, inspect and transform it with a program, or share
+        it with someone else. You can upload it via the top left control
+        that shows all of your designs.
+      `}
+      />
+      <Button
+        label="Download"
+        hoverIndicator
+        href={`data:application/json;charset=utf-8,${encodeURIComponent(
+          JSON.stringify(design),
+        )}`}
+        download={`${design.name || 'design'}.json`}
+        onClick={() => {
+          onClose();
+          ReactGA.event({
+            category: 'share',
+            action: 'download design',
+          });
+        }}
+      />
+    </Box>
+  );
+};
 
-const Developer = ({ design, imports, theme }) => {
-  const [code, setCode] = React.useState();
+const Developer = () => {
+  const { design, imports, theme } = useContext(DesignContext);
+  const [code, setCode] = useState();
 
   return (
     <Box align="center">
@@ -275,16 +281,16 @@ const Developer = ({ design, imports, theme }) => {
   );
 };
 
-const Share = ({ design, imports, theme, onClose, setDesign }) => (
+const Share = ({ onClose }) => (
   <Action label="share" full="horizontal" animation="fadeIn" onClose={onClose}>
     <Grid
       fill="horizontal"
       columns={{ count: 'fit', size: 'small' }}
       gap="large"
     >
-      <Publish design={design} setDesign={setDesign} />
-      <SaveLocally design={design} onClose={onClose} />
-      <Developer design={design} imports={imports} theme={theme} />
+      <Publish />
+      <SaveLocally onClose={onClose} />
+      <Developer />
     </Grid>
   </Action>
 );

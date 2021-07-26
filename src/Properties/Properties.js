@@ -1,4 +1,11 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import ReactGA from 'react-ga';
 import {
   Anchor,
@@ -17,6 +24,7 @@ import {
   TextInput,
 } from 'grommet';
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
@@ -43,16 +51,17 @@ const responsiveSizePad = {
   large: 'medium',
 };
 
-const Properties = ({
-  component,
-  design,
-  imports,
-  libraries,
-  selected,
-  theme,
-  setDesign,
-  setSelected,
-}) => {
+const Properties = () => {
+  const {
+    changeDesign,
+    component,
+    design,
+    imports,
+    libraries,
+    selected,
+    setSelected,
+  } = useContext(DesignContext);
+
   const type = useMemo(
     () => getComponentType(libraries, component.type) || {},
     [component, libraries],
@@ -121,14 +130,14 @@ const Properties = ({
     }
     if (value !== undefined) props[propName] = value;
     else delete props[propName];
-    if (!nextDesignArg) setDesign(nextDesign);
+    if (!nextDesignArg) changeDesign(nextDesign);
   };
 
   const setHide = (hide) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
     component.hide = hide;
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
   };
 
   const reset = () => {
@@ -137,7 +146,7 @@ const Properties = ({
     component.props = {};
     delete component.responsive;
     if (!component.text) component.text = undefined;
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
 
     ReactGA.event({
       category: 'edit',
@@ -147,7 +156,7 @@ const Properties = ({
 
   const newDesignFrom = () => {
     const [nextDesign, nextSelected] = newFrom({ design, imports, selected });
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
     setSelected(nextSelected);
 
     ReactGA.event({ category: 'switch', action: 'new design from' });
@@ -161,7 +170,7 @@ const Properties = ({
       imports,
     });
     if (newId) {
-      setDesign(nextDesign);
+      changeDesign(nextDesign);
       setSelected({ ...selected, component: newId });
 
       ReactGA.event({
@@ -174,7 +183,7 @@ const Properties = ({
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const newId = duplicateComponent(nextDesign, selected.component);
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
     setSelected({ ...selected, component: newId });
 
     ReactGA.event({
@@ -190,7 +199,7 @@ const Properties = ({
       deleteComponent(nextDesign, selected.component, nextSelected);
       upgradeDesign(nextDesign); // clean up links
       setSelected(nextSelected);
-      setDesign(nextDesign);
+      changeDesign(nextDesign);
 
       ReactGA.event({
         category: 'edit',
@@ -249,8 +258,6 @@ const Properties = ({
           <Property
             ref={searchExp && !firstRef ? defaultRef : undefined}
             first={index === 0}
-            design={design}
-            theme={theme}
             linkOptions={linkOptions}
             alternativeOptions={alternativeOptions}
             componentId={component.id}
@@ -258,9 +265,6 @@ const Properties = ({
             property={properties[propName]}
             props={props}
             responsiveSize={responsiveSize}
-            selected={selected}
-            setDesign={setDesign}
-            setSelected={setSelected}
             value={props ? props[propName] : undefined}
             onChange={(value, nextDesign) =>
               setProp(propName, value, nextDesign)
@@ -306,17 +310,12 @@ const Properties = ({
             {showCode && (
               <ComponentCode
                 component={component}
-                design={design}
-                imports={imports}
-                theme={theme}
                 onDone={() => setShowCode(false)}
               />
             )}
             {copyFrom && (
               <CopyPropertiesFrom
                 component={component}
-                design={design}
-                setDesign={setDesign}
                 onDone={() => setCopyFrom(false)}
               />
             )}
@@ -406,7 +405,7 @@ const Properties = ({
                     component.name = value;
                     // don't let unnamed components stay hidden
                     if (!value) delete component.hide;
-                    setDesign(nextDesign);
+                    changeDesign(nextDesign);
                   }}
                 />
               )}
@@ -419,7 +418,7 @@ const Properties = ({
                     const nextDesign = JSON.parse(JSON.stringify(design));
                     const component = nextDesign.components[selected.component];
                     component.text = value === '' ? undefined : value;
-                    setDesign(nextDesign);
+                    changeDesign(nextDesign);
                   }}
                 />
               )}
@@ -478,7 +477,7 @@ const Properties = ({
                         large: { props: {} },
                         hide: [],
                       };
-                      setDesign(nextDesign);
+                      changeDesign(nextDesign);
                       setResponsiveSize('medium');
                     }}
                   />
@@ -541,7 +540,7 @@ const Properties = ({
                           const component =
                             nextDesign.components[selected.component];
                           delete component.responsive;
-                          setDesign(nextDesign);
+                          changeDesign(nextDesign);
                         }}
                       />
                     </Box>
@@ -568,7 +567,7 @@ const Properties = ({
                             component.responsive.hide.filter(
                               (s) => s !== responsiveSize,
                             );
-                        setDesign(nextDesign);
+                        changeDesign(nextDesign);
                       }}
                     />
                   </Field>

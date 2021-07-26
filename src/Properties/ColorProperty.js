@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { forwardRef, useContext, useMemo } from 'react';
 import { Box, Text, ThemeContext } from 'grommet';
 import { deepMerge } from 'grommet/utils';
+import DesignContext from '../DesignContext';
 import ArrayProperty from './ArrayProperty';
 
 // input is due to a bug in grommet-theme-hpe v1.0.5
@@ -14,22 +15,26 @@ const internalColors = [
   'input',
 ];
 
-const ColorLabel = theme => ({ selected, value }) => (
-  <Box pad="small" direction="row" gap="small" align="center">
-    <ThemeContext.Extend value={theme}>
-      <Box pad="small" background={value} />
-    </ThemeContext.Extend>
-    <Text weight={selected ? 'bold' : undefined}>{value}</Text>
-  </Box>
-);
+const ColorLabel =
+  (theme) =>
+  ({ selected, value }) =>
+    (
+      <Box pad="small" direction="row" gap="small" align="center">
+        <ThemeContext.Extend value={theme}>
+          <Box pad="small" background={value} />
+        </ThemeContext.Extend>
+        <Text weight={selected ? 'bold' : undefined}>{value}</Text>
+      </Box>
+    );
 
-const ColorProperty = React.forwardRef(
-  ({ first, name, onChange, sub, theme, value }, ref) => {
-    const baseTheme = React.useContext(ThemeContext);
-    const options = React.useMemo(() => {
+const ColorProperty = forwardRef(
+  ({ first, name, onChange, sub, value }, ref) => {
+    const { theme } = useContext(DesignContext);
+    const baseTheme = useContext(ThemeContext);
+    const options = useMemo(() => {
       const merged = deepMerge(baseTheme.global.colors, theme.global.colors);
       return Object.keys(merged)
-        .filter(c => merged[c] && !internalColors.includes(c))
+        .filter((c) => merged[c] && !internalColors.includes(c))
         .sort();
     }, [baseTheme.global.colors, theme.global.colors]);
 

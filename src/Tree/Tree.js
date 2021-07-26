@@ -1,4 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Box, Button, Keyboard, Text } from 'grommet';
 import { Previous } from 'grommet-icons';
 import {
@@ -15,8 +22,9 @@ import {
   serialize,
 } from '../design';
 import { displayName } from '../utils';
+import DesignContext from '../DesignContext';
+import TreeContext from './TreeContext';
 import Component from './Component';
-import DesignContext from './DesignContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
 import Screen from './Screen';
@@ -27,18 +35,16 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Tree = ({
-  design,
-  imports,
-  selected,
-  setSelected,
-  updateDesign,
-  ...rest
-}) => {
-  const libraries = useMemo(
-    () => imports.filter((i) => i.library).map((i) => i.library),
-    [imports],
-  );
+const Tree = () => {
+  const {
+    changeDesign,
+    design,
+    libraries,
+    selected,
+    setSelected,
+    updateDesign,
+  } = useContext(DesignContext);
+
   const selectedAncestors = useMemo(() => {
     const result = [];
     if (selected.component) {
@@ -50,6 +56,7 @@ const Tree = ({
     }
     return result;
   }, [design, selected]);
+
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
   const [dropWhere, setDropWhere] = useState();
@@ -60,7 +67,7 @@ const Tree = ({
   const selectedRef = useRef();
 
   // ensure selected component is visible in the tree
-  React.useEffect(() => {
+  useEffect(() => {
     // we use a timeout to give any expansion a chance to complete first
     const timer = setTimeout(() => {
       if (selectedRef.current) {
@@ -77,7 +84,7 @@ const Tree = ({
   }, [selected]);
 
   // ensure selected component is expanded in the tree
-  React.useEffect(() => {
+  useEffect(() => {
     // only change local designs, otherwise we might have to prompt for change
     if (design.local && selected.component) {
       let parent = getParent(design, selected.component);
@@ -128,16 +135,16 @@ const Tree = ({
     const nextScreen = getScreenForComponent(nextDesign, dragging);
     setDragging(undefined);
     setDropTarget(undefined);
-    updateDesign(nextDesign);
+    changeDesign(nextDesign);
     setSelected({ ...selected, screen: nextScreen, component: dragging });
   }, [
+    changeDesign,
     design,
     dragging,
     dropTarget,
     dropWhere,
     selected,
     setSelected,
-    updateDesign,
   ]);
 
   const moveScreen = useCallback(() => {
@@ -152,8 +159,8 @@ const Tree = ({
     );
     setDraggingScreen(undefined);
     setDropScreenTarget(undefined);
-    updateDesign(nextDesign);
-  }, [design, draggingScreen, dropScreenTarget, dropWhere, updateDesign]);
+    changeDesign(nextDesign);
+  }, [changeDesign, design, draggingScreen, dropScreenTarget, dropWhere]);
 
   // const toggleScreenCollapse = (id) => {
   //   const nextDesign = JSON.parse(JSON.stringify(design));
@@ -165,26 +172,9 @@ const Tree = ({
   //   setSelected(nextSelected);
   // };
 
-  const designContext = useMemo(
-    () => ({
-      design,
-      imports,
-      libraries,
-      selected,
-      selectedAncestors,
-      selectedRef,
-      setSelected,
-      updateDesign,
-    }),
-    [
-      design,
-      imports,
-      libraries,
-      selected,
-      selectedAncestors,
-      setSelected,
-      updateDesign,
-    ],
+  const treeContext = useMemo(
+    () => ({ selectedAncestors, selectedRef }),
+    [selectedAncestors],
   );
 
   const dragDropContext = useMemo(
@@ -257,15 +247,13 @@ const Tree = ({
             copied.component,
             selected.component,
           );
-          updateDesign(nextDesign);
+          changeDesign(nextDesign);
           setSelected({ ...selected, component: newId });
         } else {
           if (navigator.clipboard && navigator.clipboard.readText) {
             navigator.clipboard.readText().then((clipText) => {
-              const {
-                design: copiedDesign,
-                selected: copiedSelected,
-              } = JSON.parse(clipText);
+              const { design: copiedDesign, selected: copiedSelected } =
+                JSON.parse(clipText);
               const nextDesign = JSON.parse(JSON.stringify(design));
               const newId = copyComponent({
                 nextDesign,
@@ -274,7 +262,7 @@ const Tree = ({
               });
               insertComponent({ nextDesign, libraries, selected, id: newId });
 
-              updateDesign(nextDesign);
+              changeDesign(nextDesign);
               setSelected({ ...selected, component: newId });
             });
           }
@@ -285,10 +273,10 @@ const Tree = ({
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <DesignContext.Provider value={designContext}>
+      <TreeContext.Provider value={treeContext}>
         <DragDropContext.Provider value={dragDropContext}>
           <Box ref={treeRef} fill="vertical" overflow="auto" border="right">
-            <Header {...rest} />
+            <Header />
 
             <Box flex overflow="auto">
               <Box flex={false}>
@@ -338,7 +326,7 @@ const Tree = ({
             </Box>
           </Box>
         </DragDropContext.Provider>
-      </DesignContext.Provider>
+      </TreeContext.Provider>
     </Keyboard>
   );
 };

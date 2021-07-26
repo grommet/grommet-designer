@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import {
   Box,
@@ -156,6 +156,18 @@ const Start = ({
     }
   }, []);
 
+  const urls = useMemo(() => {
+    const result = {};
+    designs.forEach((name) => {
+      const stored = localStorage.getItem(name);
+      const design = JSON.parse(stored);
+      result[name] = design.screens
+        ? `/?name=${encodeURIComponent(name)}`
+        : `/?id=${encodeURIComponent(design.id)}`;
+    });
+    return result;
+  }, [designs]);
+
   // load previously fetched designs from local storage
   useEffect(() => {
     let stored = localStorage.getItem('designs-fetched');
@@ -288,7 +300,7 @@ const Start = ({
                     !search || name.search(new RegExp(search, 'i')) !== -1,
                 )
                 .map((name, index) => {
-                  const url = `/?name=${encodeURIComponent(name)}`;
+                  const url = urls[name];
                   return (
                     <Button
                       key={name}
@@ -297,7 +309,11 @@ const Start = ({
                       onClick={(event) => {
                         if (!event.ctrlKey && !event.metaKey) {
                           event.preventDefault();
-                          chooseDesign({ name });
+                          // if we've offloaded this design, re-load it
+                          const stored = localStorage.getItem(name);
+                          const design = JSON.parse(stored);
+                          if (!design.screens) chooseDesign({ id: design.id });
+                          else chooseDesign({ name });
                         }
                       }}
                     >
@@ -315,7 +331,7 @@ const Start = ({
               <Heading level={2}>fetched designs</Heading>
             </Header>
             <Box direction="row" overflow="auto" gap="medium" border="right">
-              {designsFetched.map(({ name, url }, index) => {
+              {designsFetched.map(({ name, url }) => {
                 return (
                   <Button
                     key={name}
@@ -376,7 +392,14 @@ const Start = ({
             <Markdown>{readme}</Markdown>
           </Box>
         )}
-        {manage && <Manage onClose={() => setManage(false)} />}
+        {manage && (
+          <Manage
+            onClose={() => {
+              setManage(false);
+              setDesigns([...designs]); // trigger re-load of offloaded state
+            }}
+          />
+        )}
       </Box>
     </Box>
   );

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Text } from 'grommet';
-import ArrayProperty from './ArrayProperty';
+import DesignContext from '../DesignContext';
 import { getDisplayName } from '../design';
+import ArrayProperty from './ArrayProperty';
 
-const LinkLabel = (design) => ({ selected, value }) => {
+const LinkLabel = ({ selected, value }) => {
+  const { design } = useContext(DesignContext);
   let label;
   if (!value || value.length === 0) {
     label = '';
@@ -36,7 +38,7 @@ const LinkProperty = React.forwardRef(
         name={name}
         sub={sub}
         first={first}
-        Label={LinkLabel(design)}
+        Label={LinkLabel}
         options={linkOptions}
         multiple
         value={value}

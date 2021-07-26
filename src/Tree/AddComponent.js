@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Box, Button, Heading, Layer } from 'grommet';
 import { Close } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import {
   addComponent,
   addScreen,
@@ -12,14 +13,9 @@ import {
 import AddComponents from './AddComponents';
 import AddLocation from './AddLocation';
 
-const AddComponent = ({
-  design,
-  imports,
-  selected,
-  setDesign,
-  setSelected,
-  onClose,
-}) => {
+const AddComponent = ({ onClose }) => {
+  const { changeDesign, design, imports, selected, setSelected } =
+    useContext(DesignContext);
   const libraries = useMemo(
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
@@ -89,7 +85,7 @@ const AddComponent = ({
         });
       }
 
-      setDesign(nextDesign);
+      changeDesign(nextDesign);
       setSelected(nextSelected);
       onClose();
 
@@ -99,7 +95,15 @@ const AddComponent = ({
         label: typeName,
       });
     },
-    [addLocation, design, libraries, onClose, selected, setDesign, setSelected],
+    [
+      addLocation,
+      changeDesign,
+      design,
+      libraries,
+      onClose,
+      selected,
+      setSelected,
+    ],
   );
 
   return (

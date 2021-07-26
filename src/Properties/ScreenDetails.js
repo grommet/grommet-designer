@@ -1,30 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactGA from 'react-ga';
 import { Box, Button, Keyboard, Menu, Text } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { addScreen, deleteScreen, newFrom, slugify } from '../design';
 import TextInputField from './TextInputField';
 
-const ScreenDetails = ({
-  design,
-  imports,
-  selected,
-  setDesign,
-  setSelected,
-}) => {
+const ScreenDetails = () => {
+  const { changeDesign, design, imports, selected, setSelected } =
+    useContext(DesignContext);
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextScreen = deleteScreen(nextDesign, selected.screen);
     const nextSelected = { screen: nextScreen };
     setSelected(nextSelected);
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
   };
 
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
     addScreen(nextDesign, nextSelected, nextDesign.screens[selected.screen]);
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
     setSelected(nextSelected);
   };
 
@@ -35,7 +32,7 @@ const ScreenDetails = ({
       imports,
       selected,
     });
-    setDesign(nextDesign);
+    changeDesign(nextDesign);
     setSelected(nextSelected);
 
     ReactGA.event({ category: 'switch', action: 'new design from' });
@@ -109,7 +106,7 @@ const ScreenDetails = ({
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.screens[selected.screen].name = value;
                 nextDesign.screens[selected.screen].path = slugify(value);
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
             />
             <TextInputField
@@ -119,7 +116,7 @@ const ScreenDetails = ({
               onChange={(value) => {
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.screens[selected.screen].path = value;
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
             />
           </Box>

@@ -10,7 +10,7 @@ import {
 } from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
 import AddComponent from './AddComponent';
-import DesignContext from './DesignContext';
+import DesignContext from '../DesignContext';
 import DesignSettings from './DesignSettings';
 import Sharing from './Share';
 
@@ -20,16 +20,8 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Header = ({
-  base,
-  chooseDesign,
-  colorMode,
-  theme,
-  setMode,
-  onUndo,
-  onRedo,
-}) => {
-  const { design, imports, selected, setSelected, updateDesign } =
+const Header = () => {
+  const { chooseDesign, design, onRedo, onUndo, setMode } =
     useContext(DesignContext);
   const [adding, setAdding] = useState();
   const [editing, setEditing] = useState();
@@ -144,35 +136,9 @@ const Header = ({
             </Box>
           </Layer>
         )}
-        {sharing && (
-          <Sharing
-            design={design}
-            imports={imports}
-            theme={theme}
-            colorMode={colorMode}
-            setDesign={updateDesign}
-            onClose={() => setSharing(false)}
-          />
-        )}
-        {adding && (
-          <AddComponent
-            design={design}
-            imports={imports}
-            base={base}
-            selected={selected}
-            setDesign={updateDesign}
-            setSelected={setSelected}
-            onClose={() => setAdding(false)}
-          />
-        )}
-        {editing && (
-          <DesignSettings
-            design={design}
-            theme={theme}
-            setDesign={updateDesign}
-            onClose={() => setEditing(false)}
-          />
-        )}
+        {sharing && <Sharing onClose={() => setSharing(false)} />}
+        {adding && <AddComponent onClose={() => setAdding(false)} />}
+        {editing && <DesignSettings onClose={() => setEditing(false)} />}
       </Box>
     </Keyboard>
   );

@@ -1,18 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Grid, Select, Text } from 'grommet';
+import DesignContext from '../DesignContext';
 
 const specialNames = {
   '-any-': '<any option>',
   '-none-': '<no option>',
 };
 
-const LinkOptionsProperty = ({
-  componentId,
-  design,
-  linkOptions,
-  value,
-  onChange,
-}) => {
+const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
+  const { design } = useContext(DesignContext);
   const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
       <Text weight={selected ? 'bold' : undefined}>

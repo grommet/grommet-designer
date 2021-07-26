@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { Box, Button, Stack, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { canParent } from '../design';
 import { displayName, getReferenceDesign } from '../utils';
+import TreeContext from './TreeContext';
 import ComponentDropArea from './ComponentDropArea';
-import DesignContext from './DesignContext';
 import DragDropContext from './DragDropContext';
 
 const treeSubName = (component) =>
@@ -17,16 +18,10 @@ const treeSubName = (component) =>
     : component.type.split('.')[1] || component.type;
 
 const Component = ({ screen, id, firstChild }) => {
-  const {
-    design,
-    imports,
-    libraries,
-    selected,
-    selectedAncestors,
-    selectedRef,
-    setSelected,
-    updateDesign,
-  } = useContext(DesignContext);
+  const { design, imports, libraries, selected, setSelected, updateDesign } =
+    useContext(DesignContext);
+
+  const { selectedAncestors, selectedRef } = useContext(TreeContext);
 
   const {
     dragging,

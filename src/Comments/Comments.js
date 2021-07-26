@@ -1,4 +1,10 @@
-import React from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Box,
   Button,
@@ -10,6 +16,7 @@ import {
   TextArea,
 } from 'grommet';
 import { Blank, Close, Edit, Trash } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import { apiUrl } from '../design';
 
 const friendlyDate = (iso) => {
@@ -29,17 +36,18 @@ const friendlyDate = (iso) => {
 
 const breakLines = (text) => text.replace(/(\S)\n/g, (_, c) => `${c}  \n`);
 
-const Comments = ({ design, selected, setMode, setSelected }) => {
-  const [comments, setComments] = React.useState(design.comments);
-  const [active, setActive] = React.useState();
-  const [adding, setAdding] = React.useState();
-  const [addValue, setAddValue] = React.useState({ text: '' });
-  const [deleting, setDeleting] = React.useState();
-  const [editing, setEditing] = React.useState();
-  const [editValue, setEditValue] = React.useState({ text: '' });
-  const addAreaRef = React.useRef();
+const Comments = () => {
+  const { design, selected, setMode, setSelected } = useContext(DesignContext);
+  const [comments, setComments] = useState(design.comments);
+  const [active, setActive] = useState();
+  const [adding, setAdding] = useState();
+  const [addValue, setAddValue] = useState({ text: '' });
+  const [deleting, setDeleting] = useState();
+  const [editing, setEditing] = useState();
+  const [editValue, setEditValue] = useState({ text: '' });
+  const addAreaRef = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (design.id) {
       // TODO: password
       fetch(`${apiUrl}/${design.id}/comments`).then((response) => {
@@ -51,16 +59,16 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
   }, [design.id]);
 
   // focus on add TextArea to start with
-  React.useEffect(() => addAreaRef.current.focus(), []);
+  useEffect(() => addAreaRef.current.focus(), []);
 
   // scroll to bottom when comments change but add TextArea has focus
-  React.useEffect(() => {
+  useEffect(() => {
     if (document.activeElement === addAreaRef.current) {
       addAreaRef.current.scrollIntoView();
     }
   }, [comments]);
 
-  const addComment = React.useCallback(
+  const addComment = useCallback(
     (comment) => {
       setAdding(true);
       const nextComments = [...comments];
@@ -90,7 +98,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
     [comments, design.id, selected],
   );
 
-  const updateComment = React.useCallback(
+  const updateComment = useCallback(
     (comment) => {
       const nextComments = [...comments];
       const index = nextComments.findIndex((c) => c.id === comment.id);
@@ -113,7 +121,7 @@ const Comments = ({ design, selected, setMode, setSelected }) => {
     [comments, selected],
   );
 
-  const deleteComment = React.useCallback(
+  const deleteComment = useCallback(
     (id) => {
       const nextComments = comments.filter((c) => c.id !== id);
       setComments(nextComments);

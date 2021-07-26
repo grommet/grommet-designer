@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Anchor,
   Box,
@@ -14,6 +14,7 @@ import { Add, Trash } from 'grommet-icons';
 import Action from '../components/Action';
 import Field from '../components/Field';
 import themes from '../themes';
+import DesignContext from '../DesignContext';
 
 const themeSuggestions = themes.map(
   ({ label, name, designerUrl, packageName, jsUrl }) => {
@@ -30,7 +31,8 @@ const themeSuggestions = themes.map(
   },
 );
 
-const DesignSettings = ({ design, onClose, setDesign, theme }) => {
+const DesignSettings = ({ onClose }) => {
+  const { changeDesign, design, theme } = useContext(DesignContext);
   return (
     <Action label="design" onClose={onClose}>
       <Box flex={false} gap="medium">
@@ -43,7 +45,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
             onChange={(event) => {
               const nextDesign = JSON.parse(JSON.stringify(design));
               nextDesign.name = event.target.value;
-              setDesign(nextDesign);
+              changeDesign(nextDesign);
             }}
             style={{ textAlign: 'end' }}
           />
@@ -78,7 +80,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 if (!nextDesign.imports) nextDesign.imports = [];
                 nextDesign.imports.push({});
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
             />
           </Box>
@@ -102,7 +104,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                         onChange={(event) => {
                           const nextDesign = JSON.parse(JSON.stringify(design));
                           nextDesign.imports[index].url = event.target.value;
-                          setDesign(nextDesign);
+                          changeDesign(nextDesign);
                         }}
                         style={{ textAlign: 'end' }}
                       />
@@ -116,7 +118,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                     onClick={() => {
                       const nextDesign = JSON.parse(JSON.stringify(design));
                       nextDesign.imports.splice(index, 1);
-                      setDesign(nextDesign);
+                      changeDesign(nextDesign);
                     }}
                   />
                 </Box>
@@ -150,12 +152,12 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                 const themeValue = event.target.value;
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.theme = themeValue;
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
               onSelect={({ suggestion }) => {
                 const nextDesign = JSON.parse(JSON.stringify(design));
                 nextDesign.theme = suggestion.value;
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
               style={{ textAlign: 'end' }}
             />
@@ -174,7 +176,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                 onChange={(event) => {
                   const nextDesign = JSON.parse(JSON.stringify(design));
                   nextDesign.themeMode = event.target.value;
-                  setDesign(nextDesign);
+                  changeDesign(nextDesign);
                 }}
               />
             </Field>
@@ -200,7 +202,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                     `data-${Object.keys(nextDesign.data).length}`
                   ] = '';
                 }
-                setDesign(nextDesign);
+                changeDesign(nextDesign);
               }}
             />
           </Box>
@@ -230,7 +232,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                             nextDesign.data[event.target.value] =
                               nextDesign.data[key];
                             delete nextDesign.data[key];
-                            setDesign(nextDesign);
+                            changeDesign(nextDesign);
                           }
                         }}
                         style={{ textAlign: 'end' }}
@@ -247,7 +249,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                         onChange={(event) => {
                           const nextDesign = JSON.parse(JSON.stringify(design));
                           nextDesign.data[key] = event.target.value;
-                          setDesign(nextDesign);
+                          changeDesign(nextDesign);
                         }}
                         style={{ textAlign: 'end' }}
                       />
@@ -264,7 +266,7 @@ const DesignSettings = ({ design, onClose, setDesign, theme }) => {
                       if (Object.keys(nextDesign.data).length === 0) {
                         delete nextDesign.data;
                       }
-                      setDesign(nextDesign);
+                      changeDesign(nextDesign);
                     }}
                   />
                 </Box>

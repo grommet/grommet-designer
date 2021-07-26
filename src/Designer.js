@@ -1,5 +1,12 @@
-import React from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Grid, Keyboard, ResponsiveContext } from 'grommet';
+import DesignContext from './DesignContext';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
 import Loading from './Loading';
@@ -19,27 +26,27 @@ const defaultImports = [
   { name: designerLibrary.name, library: designerLibrary },
 ];
 
-const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
-  const responsive = React.useContext(ResponsiveContext);
-  const [selected, setSelected] = React.useState({});
-  const [imports, setImports] = React.useState(defaultImports);
-  const libraries = React.useMemo(
+const Designer = ({ design, chooseDesign, updateDesign }) => {
+  const responsive = useContext(ResponsiveContext);
+  const [selected, setSelected] = useState({});
+  const [imports, setImports] = useState(defaultImports);
+  const libraries = useMemo(
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
-  const [theme, setTheme] = React.useState();
-  const [mode, setMode] = React.useState();
-  const [confirmReplace, setConfirmReplace] = React.useState();
-  const [changes, setChanges] = React.useState([]);
-  const [changeIndex, setChangeIndex] = React.useState();
-  const selectedComponent = React.useMemo(
+  const [theme, setTheme] = useState();
+  const [mode, setMode] = useState();
+  const [confirmReplace, setConfirmReplace] = useState();
+  const [changes, setChanges] = useState([]);
+  const [changeIndex, setChangeIndex] = useState();
+  const selectedComponent = useMemo(
     () =>
       selected.component ? design.components[selected.component] : undefined,
     [design, selected.component],
   );
 
   // load state
-  React.useEffect(() => {
+  useEffect(() => {
     if (!mode) {
       const initializeSelected = () => {
         const {
@@ -73,10 +80,10 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [design, mode]);
 
   // load theme
-  React.useEffect(() => loadTheme(design.theme, setTheme), [design.theme]);
+  useEffect(() => loadTheme(design.theme, setTheme), [design.theme]);
 
   // align imports with design.imports
-  React.useEffect(() => {
+  useEffect(() => {
     // remove any imports we don't want anymore
     const nextImports = imports.filter(
       ({ url }) =>
@@ -94,7 +101,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [design.imports, imports]);
 
   // load any imports we don't have yet
-  React.useEffect(() => {
+  useEffect(() => {
     loadImports(imports, (f) => {
       const nextImports = f(imports);
       setImports(nextImports);
@@ -104,7 +111,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   // browser navigation
 
   // react when user uses browser back and forward buttons
-  React.useEffect(() => {
+  useEffect(() => {
     const onPopState = () => {
       const {
         location: { pathname },
@@ -119,7 +126,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [design]);
 
   // push state when the user navigates
-  React.useEffect(() => {
+  useEffect(() => {
     if (selected.screen) {
       const {
         location: { pathname },
@@ -134,12 +141,12 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
     }
   }, [design, selected.screen]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = design.name;
   }, [design.name]);
 
   // store design
-  React.useEffect(() => {
+  useEffect(() => {
     if (design && design.local) {
       // do this stuff lazily, so we don't bog down the UI
       const timer = setTimeout(() => {
@@ -153,7 +160,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [design]);
 
   // store state
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       if (mode && mode !== 'thumb' && selected.screen) {
         localStorage.setItem(
@@ -166,7 +173,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [design.name, mode, selected]);
 
   // add to changes, if needed
-  React.useEffect(() => {
+  useEffect(() => {
     // do this stuff lazily to ride out typing sprees
     const timer = setTimeout(() => {
       // If we already have this design object, we must be doing an undo or
@@ -184,7 +191,7 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   }, [changes, changeIndex, design]);
 
   // if selected doesn't exist anymore, reset it
-  React.useEffect(() => {
+  useEffect(() => {
     if (selected.screen && !design.screens[selected.screen]) {
       setSelected(getInitialSelected(design));
     } else if (selected.component && !design.components[selected.component]) {
@@ -195,24 +202,29 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
     }
   }, [design, selected]);
 
-  const changeDesign = (design) => {
-    // We are trying to change a published design when we have a local
-    // copy with the same name. Need the user to confirm.
-    if (design && !design.local && localStorage.getItem(design.name)) {
-      setConfirmReplace(design);
-    } else {
-      if (design) {
-        design.local = true;
-        if (design.publishedUrl) {
-          // remember that we've changed this design since it was published
-          design.modified = true;
+  const changeDesign = useCallback(
+    (design) => {
+      // We are trying to change a published design when we have a local
+      // copy with the same name. Need the user to confirm.
+      if (design && !design.local && localStorage.getItem(design.name)) {
+        setConfirmReplace(design);
+      } else {
+        if (design) {
+          design.local = true;
+          // TODO: don't want to set modified when we are just publishing,
+          // even though we've updated the email and pin
+          if (design.publishedUrl) {
+            // remember that we've changed this design since it was published
+            design.modified = true;
+          }
         }
+        updateDesign(design);
       }
-      updateDesign(design);
-    }
-  };
+    },
+    [updateDesign],
+  );
 
-  const onKey = React.useCallback(
+  const onKey = useCallback(
     (event) => {
       if (event.metaKey || event.ctrlKey) {
         if (event.key === 'e' || event.key === 'E' || event.key === '.') {
@@ -240,19 +252,56 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
     [design, mode, updateDesign],
   );
 
-  const onUndo = React.useCallback(() => {
+  const onUndo = useCallback(() => {
     const nextChangeIndex = Math.min(changeIndex + 1, changes.length - 1);
     const nextDesign = changes[nextChangeIndex];
     updateDesign(nextDesign);
     setChangeIndex(nextChangeIndex);
   }, [changes, changeIndex, updateDesign]);
 
-  const onRedo = React.useCallback(() => {
+  const onRedo = useCallback(() => {
     const nextChangeIndex = Math.max(changeIndex - 1, 0);
     const nextDesign = changes[nextChangeIndex];
     updateDesign(nextDesign);
     setChangeIndex(nextChangeIndex);
   }, [changes, changeIndex, updateDesign]);
+
+  const designContext = useMemo(
+    () => ({
+      changeDesign,
+      chooseDesign,
+      component: selectedComponent,
+      design,
+      imports,
+      libraries,
+      mode,
+      onRedo: changeIndex > 0 && onRedo,
+      onUndo: changeIndex < changes.length - 1 && onUndo,
+      selected,
+      setMode,
+      setSelected,
+      theme,
+      updateDesign,
+    }),
+    [
+      changeDesign,
+      changeIndex,
+      changes,
+      chooseDesign,
+      design,
+      imports,
+      libraries,
+      mode,
+      onRedo,
+      onUndo,
+      selected,
+      selectedComponent,
+      setMode,
+      setSelected,
+      theme,
+      updateDesign,
+    ],
+  );
 
   let columns;
   if (responsive === 'small' || mode === 'preview') columns = 'flex';
@@ -272,76 +321,37 @@ const Designer = ({ colorMode, design, chooseDesign, updateDesign }) => {
   if (!theme) return <Loading />;
 
   return (
-    <Keyboard target="document" onKeyDown={onKey}>
-      <Grid fill columns={columns} rows="full">
-        {responsive !== 'small' && mode === 'edit' && (
-          <Tree
-            design={design}
-            imports={imports}
-            selected={selected}
-            theme={theme}
-            colorMode={colorMode}
-            chooseDesign={chooseDesign}
-            setMode={setMode}
-            setSelected={setSelected}
-            updateDesign={changeDesign}
-            onRedo={changeIndex > 0 && onRedo}
-            onUndo={changeIndex < changes.length - 1 && onUndo}
-          />
-        )}
+    <DesignContext.Provider value={designContext}>
+      <Keyboard target="document" onKeyDown={onKey}>
+        <Grid fill columns={columns} rows="full">
+          {responsive !== 'small' && mode === 'edit' && <Tree />}
 
-        <ErrorCatcher>
-          <Canvas
-            design={design}
-            imports={imports}
-            selected={selected}
-            mode={mode}
-            setDesign={changeDesign}
-            setSelected={setSelected}
-            theme={theme}
-          />
-        </ErrorCatcher>
+          <ErrorCatcher>
+            <Canvas />
+          </ErrorCatcher>
 
-        {responsive !== 'small' &&
-          mode !== 'preview' &&
-          (mode === 'comments' ? (
-            <Comments
+          {responsive !== 'small' &&
+            mode !== 'preview' &&
+            (mode === 'comments' ? (
+              <Comments />
+            ) : selectedComponent ? (
+              <Properties />
+            ) : selected.screen ? (
+              <ScreenDetails />
+            ) : null)}
+          {confirmReplace && (
+            <ConfirmReplace
               design={design}
-              selected={selected}
-              setMode={setMode}
-              setSelected={setSelected}
+              nextDesign={confirmReplace}
+              onDone={(nextDesign) => {
+                if (nextDesign) updateDesign(nextDesign);
+                setConfirmReplace(undefined);
+              }}
             />
-          ) : selectedComponent ? (
-            <Properties
-              design={design}
-              libraries={libraries}
-              imports={imports}
-              theme={theme}
-              selected={selected}
-              component={selectedComponent}
-              setDesign={changeDesign}
-              setSelected={setSelected}
-            />
-          ) : selected.screen ? (
-            <ScreenDetails
-              design={design}
-              selected={selected}
-              setDesign={changeDesign}
-              setSelected={setSelected}
-            />
-          ) : null)}
-        {confirmReplace && (
-          <ConfirmReplace
-            design={design}
-            nextDesign={confirmReplace}
-            onDone={(nextDesign) => {
-              if (nextDesign) updateDesign(nextDesign);
-              setConfirmReplace(undefined);
-            }}
-          />
-        )}
-      </Grid>
-    </Keyboard>
+          )}
+        </Grid>
+      </Keyboard>
+    </DesignContext.Provider>
   );
 };
 
