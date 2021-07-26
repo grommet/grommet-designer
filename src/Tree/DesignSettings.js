@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import {
   Anchor,
   Box,
@@ -31,8 +31,16 @@ const themeSuggestions = themes.map(
   },
 );
 
-const DesignSettings = ({ onClose }) => {
+const DesignSettings = ({ onClose: onCloseProp }) => {
   const { changeDesign, design, theme } = useContext(DesignContext);
+  const [tmpDesign, setTmpDesign] = useState(
+    JSON.parse(JSON.stringify(design)),
+  );
+  const onClose = useCallback(() => {
+    changeDesign(tmpDesign);
+    onCloseProp();
+  }, [changeDesign, onCloseProp, tmpDesign]);
+
   return (
     <Action label="design" onClose={onClose}>
       <Box flex={false} gap="medium">
@@ -41,16 +49,16 @@ const DesignSettings = ({ onClose }) => {
             id="name"
             name="name"
             plain
-            value={design.name || ''}
+            value={tmpDesign.name || ''}
             onChange={(event) => {
-              const nextDesign = JSON.parse(JSON.stringify(design));
+              const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
               nextDesign.name = event.target.value;
-              changeDesign(nextDesign);
+              setTmpDesign(nextDesign);
             }}
             style={{ textAlign: 'end' }}
           />
         </Field>
-        {design.derivedFromId && (
+        {tmpDesign.derivedFromId && (
           <Box
             align="end"
             margin={{ vertical: 'xsmall', horizontal: 'medium' }}
@@ -59,8 +67,8 @@ const DesignSettings = ({ onClose }) => {
               derived from{' '}
               <Anchor
                 size="small"
-                label={design.derivedFromId}
-                href={`//designer.grommet.io?${design.derivedFromId}`}
+                label={tmpDesign.derivedFromId}
+                href={`//designer.grommet.io?${tmpDesign.derivedFromId}`}
               />
             </Text>
           </Box>
@@ -77,16 +85,16 @@ const DesignSettings = ({ onClose }) => {
               icon={<Add />}
               hoverIndicator
               onClick={() => {
-                const nextDesign = JSON.parse(JSON.stringify(design));
+                const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                 if (!nextDesign.imports) nextDesign.imports = [];
                 nextDesign.imports.push({});
-                changeDesign(nextDesign);
+                setTmpDesign(nextDesign);
               }}
             />
           </Box>
-          {design.imports && (
+          {tmpDesign.imports && (
             <Box flex={false}>
-              {design.imports.map((impor, index) => (
+              {tmpDesign.imports.map((impor, index) => (
                 <Box
                   key={index}
                   direction="row"
@@ -102,9 +110,11 @@ const DesignSettings = ({ onClose }) => {
                         placeholder="url"
                         value={impor.url}
                         onChange={(event) => {
-                          const nextDesign = JSON.parse(JSON.stringify(design));
+                          const nextDesign = JSON.parse(
+                            JSON.stringify(tmpDesign),
+                          );
                           nextDesign.imports[index].url = event.target.value;
-                          changeDesign(nextDesign);
+                          setTmpDesign(nextDesign);
                         }}
                         style={{ textAlign: 'end' }}
                       />
@@ -116,9 +126,9 @@ const DesignSettings = ({ onClose }) => {
                     icon={<Trash />}
                     hoverIndicator
                     onClick={() => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                       nextDesign.imports.splice(index, 1);
-                      changeDesign(nextDesign);
+                      setTmpDesign(nextDesign);
                     }}
                   />
                 </Box>
@@ -133,7 +143,7 @@ const DesignSettings = ({ onClose }) => {
               Theme
             </Heading>
             <Anchor
-              href={design.theme || 'https://theme-designer.grommet.io'}
+              href={tmpDesign.theme || 'https://theme-designer.grommet.io'}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -146,18 +156,18 @@ const DesignSettings = ({ onClose }) => {
               id="theme"
               name="theme"
               plain
-              value={design.theme || ''}
+              value={tmpDesign.theme || ''}
               suggestions={themeSuggestions}
               onChange={(event) => {
                 const themeValue = event.target.value;
-                const nextDesign = JSON.parse(JSON.stringify(design));
+                const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                 nextDesign.theme = themeValue;
-                changeDesign(nextDesign);
+                setTmpDesign(nextDesign);
               }}
               onSelect={({ suggestion }) => {
-                const nextDesign = JSON.parse(JSON.stringify(design));
+                const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                 nextDesign.theme = suggestion.value;
-                changeDesign(nextDesign);
+                setTmpDesign(nextDesign);
               }}
               style={{ textAlign: 'end' }}
             />
@@ -172,11 +182,11 @@ const DesignSettings = ({ onClose }) => {
                 gap="medium"
                 margin={{ right: 'small' }}
                 options={['dark', 'light']}
-                value={design.themeMode}
+                value={tmpDesign.themeMode}
                 onChange={(event) => {
-                  const nextDesign = JSON.parse(JSON.stringify(design));
+                  const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                   nextDesign.themeMode = event.target.value;
-                  changeDesign(nextDesign);
+                  setTmpDesign(nextDesign);
                 }}
               />
             </Field>
@@ -194,7 +204,7 @@ const DesignSettings = ({ onClose }) => {
               icon={<Add />}
               hoverIndicator
               onClick={() => {
-                const nextDesign = JSON.parse(JSON.stringify(design));
+                const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                 if (!nextDesign.data) {
                   nextDesign.data = { data: '' };
                 } else {
@@ -202,11 +212,11 @@ const DesignSettings = ({ onClose }) => {
                     `data-${Object.keys(nextDesign.data).length}`
                   ] = '';
                 }
-                changeDesign(nextDesign);
+                setTmpDesign(nextDesign);
               }}
             />
           </Box>
-          {design.data && (
+          {tmpDesign.data && (
             <Box flex={false}>
               <Paragraph margin={{ horizontal: 'medium' }}>
                 Data sources can be used to provide consistent content across
@@ -215,7 +225,7 @@ const DesignSettings = ({ onClose }) => {
                 notation within component text. For example:{' '}
                 {`{<dataname>.<property>}`}.
               </Paragraph>
-              {Object.keys(design.data).map((key, index) => (
+              {Object.keys(tmpDesign.data).map((key, index) => (
                 <Box key={key} direction="row" align="start">
                   <Box>
                     <Field label="Name" htmlFor={`name-${index}`}>
@@ -227,12 +237,12 @@ const DesignSettings = ({ onClose }) => {
                         onChange={(event) => {
                           if (event.target.value !== key) {
                             const nextDesign = JSON.parse(
-                              JSON.stringify(design),
+                              JSON.stringify(tmpDesign),
                             );
                             nextDesign.data[event.target.value] =
                               nextDesign.data[key];
                             delete nextDesign.data[key];
-                            changeDesign(nextDesign);
+                            setTmpDesign(nextDesign);
                           }
                         }}
                         style={{ textAlign: 'end' }}
@@ -245,11 +255,13 @@ const DesignSettings = ({ onClose }) => {
                         plain
                         cols={30}
                         rows={4}
-                        value={design.data[key]}
+                        value={tmpDesign.data[key]}
                         onChange={(event) => {
-                          const nextDesign = JSON.parse(JSON.stringify(design));
+                          const nextDesign = JSON.parse(
+                            JSON.stringify(tmpDesign),
+                          );
                           nextDesign.data[key] = event.target.value;
-                          changeDesign(nextDesign);
+                          setTmpDesign(nextDesign);
                         }}
                         style={{ textAlign: 'end' }}
                       />
@@ -261,12 +273,12 @@ const DesignSettings = ({ onClose }) => {
                     icon={<Trash />}
                     hoverIndicator
                     onClick={() => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
+                      const nextDesign = JSON.parse(JSON.stringify(tmpDesign));
                       delete nextDesign.data[key];
                       if (Object.keys(nextDesign.data).length === 0) {
                         delete nextDesign.data;
                       }
-                      changeDesign(nextDesign);
+                      setTmpDesign(nextDesign);
                     }}
                   />
                 </Box>
