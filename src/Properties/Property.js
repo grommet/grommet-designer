@@ -132,6 +132,7 @@ const Property = React.forwardRef(
           ref={ref}
           value={value}
           property={property}
+          theme={theme}
           {...rest}
         />
       );
