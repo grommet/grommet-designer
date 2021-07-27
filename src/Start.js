@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Configure, Search } from 'grommet-icons';
+import { List, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
@@ -286,10 +286,7 @@ const Start = ({
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
-                  <Button
-                    icon={<Configure />}
-                    onClick={() => setManage(true)}
-                  />
+                  <Button icon={<List />} onClick={() => setManage(true)} />
                 </Box>
               )}
             </Header>
