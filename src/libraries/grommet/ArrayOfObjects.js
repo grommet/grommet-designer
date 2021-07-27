@@ -41,10 +41,10 @@ const ArrayOfObjects = ({
         )}
         <Edit
           value={item}
-          onChange={(nextItem) => {
+          onChange={(nextItem, nextDesign) => {
             const nextValue = JSON.parse(JSON.stringify(value));
             nextValue[active] = nextItem;
-            onChange(nextValue);
+            onChange(nextValue, nextDesign);
           }}
           {...rest}
         />
