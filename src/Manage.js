@@ -32,7 +32,7 @@ const Section = ({ heading, instructions, designs, onOffloaded }) => (
         >
           <Text weight="bold">{design.name}</Text>
           <Box direction="row" align="center" gap="small">
-            <Text>{`${Math.floor(design.size / 1024)} K`}</Text>
+            <Text>{design.size}</Text>
             {onOffloaded ? (
               <Button
                 icon={<Archive />}
@@ -45,13 +45,13 @@ const Section = ({ heading, instructions, designs, onOffloaded }) => (
                     name: design.name,
                     id: design.id,
                     publishedUrl: design.publishedUrl,
-                    size: design.size,
+                    size: `was ${design.size}`,
                   };
                   localStorage.setItem(
                     offloadedDesign.name,
                     JSON.stringify(offloadedDesign),
                   );
-                  design.size = '0';
+                  design.size = offloadedDesign.size;
                   delete design.modified;
                   onOffloaded(design.name);
                 }}
@@ -84,7 +84,7 @@ const Manage = ({ onClose }) => {
             id,
             name,
             publishedUrl,
-            size: size || stored2.length,
+            size: size || `${Math.round(stored2.length / 1024)} K`,
           };
           if (publishedUrl) {
             if (!screens) {
@@ -130,7 +130,6 @@ const Manage = ({ onClose }) => {
                   (d) => d.name === name,
                 );
                 const design = buckets.offloadable[index];
-                console.log('!!! onOffloaded', buckets, index, design);
                 buckets.offloadable.splice(index, 1);
                 if (!buckets.offloaded) buckets.offloaded = [];
                 buckets.offloaded.push(design);
