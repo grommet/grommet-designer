@@ -1,7 +1,7 @@
 import { getComponentType, getReferenceDesign } from '../utils';
 import { themeForValue } from '../themes';
 
-export const dependencies = design => {
+export const dependencies = (design) => {
   const result = ['styled-components'];
   result.push('https://github.com/grommet/grommet/tarball/stable');
   result.push('https://github.com/grommet/grommet-icons/tarball/stable');
@@ -11,7 +11,7 @@ export const dependencies = design => {
   return result;
 };
 
-const router = firstPath => `
+const router = (firstPath) => `
 const RouterContext = React.createContext({})
 
 const Router = ({ children }) => {
@@ -64,7 +64,7 @@ export const generateJSX = ({
   imports: importsArg,
   theme: themeArg,
 }) => {
-  const libraries = importsArg.filter(i => i.library).map(i => i.library);
+  const libraries = importsArg.filter((i) => i.library).map((i) => i.library);
   const imports = { Grommet: true };
   const iconImports = {};
   const theme = themeForValue(design.theme);
@@ -77,15 +77,17 @@ export const generateJSX = ({
     const component = (referenceDesign || design).components[id];
     const type = getComponentType(libraries, component.type);
     if (component.type === 'designer.Icon' || component.type === 'Icon') {
+      // convert icons to the appropriate <Icon />
       const { icon, ...rest } = component.props;
       iconImports[icon] = true;
       result = `${indent}<${icon} ${Object.keys(rest)
-        .map(k => `${k}="${rest[k]}"`)
+        .map((k) => `${k}="${rest[k]}"`)
         .join(' ')} />`;
     } else if (
       component.type === 'designer.Repeater' ||
       component.type === 'Repeater'
     ) {
+      // repeat for Repeater
       const childId = component.children && component.children[0];
       result = childId
         ? (
@@ -101,25 +103,27 @@ export const generateJSX = ({
       component.type === 'designer.Reference' ||
       component.type === 'Reference'
     ) {
+      // convert References, these are just copies for now
+      // someday, we'll make them their own reusable components here
       const nextReferenceDesign = getReferenceDesign(importsArg, component);
-      result = nextReferenceDesign
-        ? componentToJSX({
-            screen,
-            id: component.props.component,
-            indent,
-            referenceDesign: nextReferenceDesign,
-          })
-        : '';
+      result = componentToJSX({
+        screen,
+        id: component.props.component,
+        indent,
+        referenceDesign: nextReferenceDesign || design,
+      });
     } else {
+      // no component level conversion, generate grommet component
       if (component.type === 'grommet.Layer') {
         layers[id] = true;
       }
       imports[type.name] = true;
 
+      // generate any children
       let children =
         (component.children &&
           component.children
-            .map(cId =>
+            .map((cId) =>
               componentToJSX({
                 screen,
                 id: cId,
@@ -131,23 +135,37 @@ export const generateJSX = ({
         (component.text && `${indent}  ${component.text}`);
       if (children && children.length === 0) children = undefined;
 
-      let nav;
-      if (component.designProps && component.designProps.link) {
-        const link = component.designProps.link;
-        (Array.isArray(link) ? link : [link]).forEach(aLink => {
+      // ensure List children are functions
+      if (component.type === 'grommet.List' && children) {
+        children = `${indent}{() => (\n${children}\n${indent})}`;
+      }
+
+      const generateLinkCode = (link) => {
+        let result = [];
+        (Array.isArray(link) ? link : [link]).forEach((aLink) => {
           if (aLink.component) {
             if (design.components[aLink.component]) {
-              nav = `setLayer(layer ? undefined : ${aLink.component})`;
+              result.push(`setLayer(layer ? undefined : ${aLink.component})`);
             }
           } else {
             const screen = design.screens[aLink.screen];
-            if (screen) nav = `push("${screen.path}")`;
+            if (screen) result.push(`push("${screen.path}")`);
           }
         });
+        return result.join(';\n');
+      };
+
+      // if we have a link prop, generate the appropriate code to
+      // follow the link. We'll add an onClick handler as the last property.
+      let nav;
+      if (component.designProps && component.designProps.link) {
+        nav = generateLinkCode(component.designProps.link);
       }
 
+      // generate the component JSX
       result = `${indent}<${type.name}${Object.keys(component.props)
-        .filter(name => {
+        // strip properties with no real value
+        .filter((name) => {
           const value = component.props[name];
           return !(
             (typeof value === 'object' && Object.keys(value).length === 0) ||
@@ -155,9 +173,12 @@ export const generateJSX = ({
             value === undefined
           );
         })
-        .map(name => {
+        // convert properties that need any conversion
+        .map((name) => {
           const value = component.props[name];
           // TODO: handle -component- props
+
+          // convert DropButton dropContent to JSX property value
           if (
             component.type === 'grommet.DropButton' &&
             name === 'dropContent'
@@ -169,16 +190,49 @@ export const generateJSX = ({
               referenceDesign,
             })}\n${indent})}\n${indent}`;
           }
+          // handle any DataTable render columns
+          // TODO: this seems a bit too messy
+          if (component.type === 'grommet.DataTable' && name === 'columns') {
+            return `\n${indent}  ${name}={[\n${indent}    ${value
+              .map(
+                (col) =>
+                  `{${Object.keys(col)
+                    .map((n) => {
+                      if (n === 'render') {
+                        return `render: () => (\n${componentToJSX({
+                          screen,
+                          id: col[n],
+                          indent: `${indent}      `,
+                          referenceDesign,
+                        })}\n${indent}    )\n${indent}    `;
+                      }
+                      return `${n}: ${JSON.stringify(col[n])}`;
+                    })
+                    .join(', ')}}`,
+              )
+              .join(`,\n${indent}    `)}]}\n${indent}  `;
+          }
+          // convert -link- properties to navigation
+          if (
+            Array.isArray(type.properties[name]) &&
+            type.properties[name][0] === '-link-'
+          ) {
+            return ` ${name}={() => {${generateLinkCode(value)}}}`;
+          }
           if (typeof value === 'string') {
+            // convert icon property values to inline JSX
             if (name === 'icon') {
               iconImports[value] = true;
               return ` ${name}={<${value} />}`;
             }
+            // just set string property value
             return ` ${name}="${value}"`;
           }
+          // set true boolean values to just the property name
           if (typeof value === 'boolean' && value) {
             return ` ${name}`;
           }
+          // stringify all other values
           return ` ${name}={${JSON.stringify(value)}}`;
         })
         .join('')}${nav ? ` onClick={() => ${nav}}` : ''}${
@@ -205,15 +259,15 @@ ${result}
       publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
     }
 
-    Object.keys(design.screens).forEach(sId => {
+    Object.keys(design.screens).forEach((sId) => {
       const screen = design.screens[sId];
       screenNames[sId] = screenComponentName(screen);
     });
 
     const single = Object.keys(design.screens).length === 1;
     const screens = Object.keys(design.screens)
-      .map(sKey => design.screens[sKey])
-      .map(screen => {
+      .map((sKey) => design.screens[sKey])
+      .map((screen) => {
         layers = {};
         const root = componentToJSX({
           screen,
@@ -242,24 +296,26 @@ ${
     ? `import { ${Object.keys(iconImports).join(', ')} } from 'grommet-icons'`
     : ''
 }
-${(theme &&
-  !theme.designerUrl &&
-  `import { ${theme.name} as theme } from '${theme.packageName}'`) ||
-  ''}
+${
+  (theme &&
+    !theme.designerUrl &&
+    `import { ${theme.name} as theme } from '${theme.packageName}'`) ||
+  ''
+}
 ${!single ? router(design.screens[design.screenOrder[0]].path) : ''}
 ${publishedTheme || ''}
 ${screens}
 ${
   !single
     ? `
-export default () => (
+const App = () => (
   <Grommet full theme={theme}>
     <Router>
       <Routes>
         ${Object.keys(design.screens)
-          .map(id => design.screens[id])
+          .map((id) => design.screens[id])
           .map(
-            screen =>
+            (screen) =>
               `<Route path="${screen.path}" Component={${screenComponentName(
                 screen,
               )}} />`,
@@ -268,7 +324,9 @@ export default () => (
       </Routes>
     </Router>
   </Grommet>
-)
+);
+
+export default App;
 `
     : ''
 }`;
