@@ -1638,7 +1638,7 @@ export const components = {
       round: false,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
-      type: ['bar', 'circle', 'pie'],
+      type: ['bar', 'circle', 'pie', 'semicircle'],
       value: 0,
       values: MeterValues,
     },
