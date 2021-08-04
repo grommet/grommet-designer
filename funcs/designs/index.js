@@ -1,13 +1,10 @@
 const { Storage } = require('@google-cloud/storage');
 const crypto = require('crypto');
-// const sgMail = require('@sendgrid/mail');
-
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const storage = new Storage();
 const bucket = storage.bucket('grommet-designs');
 
-const hashPassword = design => {
+const hashPassword = (design) => {
   if (design.password) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto.createHmac('sha512', salt);
@@ -57,16 +54,13 @@ exports.designs = (req, res) => {
     const file = bucket.file(`${id}.json`);
     return file
       .download()
-      .then(data => {
+      .then((data) => {
         const design = JSON.parse(data[0]);
         if (
           design.password &&
           (!password || !checkPassword(design, password))
         ) {
-          return res
-            .header('WWW-Authenticate', 'Basic')
-            .status(401)
-            .send();
+          return res.header('WWW-Authenticate', 'Basic').status(401).send();
         }
 
         design.id = id;
@@ -81,19 +75,19 @@ exports.designs = (req, res) => {
             delimiter: '/',
             prefix: `${id}/comments/`,
           })
-          .then(data =>
+          .then((data) =>
             Promise.all(
-              data[0].map(file =>
-                file.download().then(data => JSON.parse(data[0])),
+              data[0].map((file) =>
+                file.download().then((data) => JSON.parse(data[0])),
               ),
             ),
           )
-          .then(comments => {
+          .then((comments) => {
             design.comments = comments;
             return design;
           })
-          .catch(e => design) // no comments
-          .then(design => {
+          .catch((e) => design) // no comments
+          .then((design) => {
             res
               .status(200)
               .type('json')
@@ -104,7 +98,7 @@ exports.designs = (req, res) => {
               );
           });
       })
-      .catch(e => res.status(400).send(e.message));
+      .catch((e) => res.status(400).send(e.message));
   }
 
   if (req.method === 'POST') {
@@ -119,32 +113,12 @@ exports.designs = (req, res) => {
       comment.createdAt = createdAt;
       comment.id = id;
       const file = bucket.file(`${id}.json`);
-      return (
-        file
-          .save(JSON.stringify(comment), { resumable: false })
-          .then(() =>
-            res
-              .status(201)
-              .type('json')
-              .send(JSON.stringify({ id, createdAt })),
-          )
-          // .then(() => {
-          //   const file = bucket.file(`${designId}.json`);
-          //   return file
-          //     .download()
-          //     .then(data => {
-          //       const design = JSON.parse(data[0]);
-          //       const msg = {
-          //         to: design.email,
-          //         from: design.email,
-          //         subject: `New comment on ${design.name}`,
-          //         text: comment.text,
-          //       };
-          //       sgMail.send(msg);
-          //     });
-          // })
-          .catch(e => res.status(500).send(e.message))
-      );
+      return file
+        .save(JSON.stringify(comment), { resumable: false })
+        .then(() =>
+          res.status(201).type('json').send(JSON.stringify({ id, createdAt })),
+        )
+        .catch((e) => res.status(500).send(e.message));
     } else if (parts.length === 2) {
       // new design
       const design = req.body;
@@ -158,7 +132,7 @@ exports.designs = (req, res) => {
 
       return file
         .download()
-        .then(data => {
+        .then((data) => {
           const existingDesign = JSON.parse(data[0]);
 
           const existingPin = new Date(existingDesign.date).getMilliseconds();
@@ -171,26 +145,16 @@ exports.designs = (req, res) => {
           hashPassword(design);
           file
             .save(JSON.stringify(design), { resumable: false })
-            .then(() =>
-              res
-                .status(200)
-                .type('text')
-                .send(id),
-            )
-            .catch(e => res.status(500).send(e.message));
+            .then(() => res.status(200).type('text').send(id))
+            .catch((e) => res.status(500).send(e.message));
         })
         .catch(() => {
           // doesn't exist yet, add it
           hashPassword(design);
           file
             .save(JSON.stringify(design), { resumable: false })
-            .then(() =>
-              res
-                .status(201)
-                .type('text')
-                .send(id),
-            )
-            .catch(e => res.status(500).send(e.message));
+            .then(() => res.status(201).type('text').send(id))
+            .catch((e) => res.status(500).send(e.message));
         });
     }
   }
