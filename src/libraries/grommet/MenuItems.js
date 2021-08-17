@@ -14,16 +14,23 @@ const optionValue = (options) => (option) => {
   return result;
 };
 
-const MenuItem = ({ linkOptions, value, onChange }) => {
-  const [item, setItem] = useDebounce(value, onChange);
-
-  const LinkLabel = ({ selected, value }) => (
+const LinkLabel = ({ selected, value }) => {
+  let content;
+  if (Array.isArray(value)) {
+    if (value.length > 1) content = 'multiple';
+    else if (value.length === 1) content = value[0].label;
+  } else if (value === 'undefined') content = 'undefined';
+  else if (value) content = value.label;
+  if (!content) content = <>&nbsp;</>;
+  return (
     <Box pad="small">
-      <Text weight={selected ? 'bold' : undefined}>
-        {(value === 'undefined' && 'undefined') || (value && value.label) || ''}
-      </Text>
+      <Text weight={selected ? 'bold' : undefined}>{content}</Text>
     </Box>
   );
+};
+
+const MenuItem = ({ linkOptions, value, onChange }) => {
+  const [item, setItem] = useDebounce(value, onChange);
 
   return (
     <Box flex="grow" align="end">
@@ -40,11 +47,12 @@ const MenuItem = ({ linkOptions, value, onChange }) => {
         </FormField>
         <FormField label="link">
           <Select
+            multiple
             options={linkOptions}
-            value={item.link || ''}
-            onChange={({ option }) => {
+            value={item.link || []}
+            onChange={({ value }) => {
               const nextItem = JSON.parse(JSON.stringify(item));
-              nextItem.link = option;
+              nextItem.link = value;
               onChange(nextItem);
             }}
             valueLabel={<LinkLabel selected value={item.link} />}
