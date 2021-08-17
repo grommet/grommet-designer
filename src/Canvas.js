@@ -204,10 +204,16 @@ const Canvas = () => {
         nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
       } else if (to.component) {
         const target = design.components[to.component];
-        const hideable =
-          target && getComponentType(libraries, target.type).hideable;
-        const selectable =
-          target && getComponentType(libraries, target.type).selectable;
+
+        let type;
+        // if this is a reference, check the target type
+        if (!target) type = {};
+        else if (target.type === 'designer.Reference') {
+          const referencedComponent = design.components[target.props.component];
+          type = getComponentType(libraries, referencedComponent.type);
+        } else type = getComponentType(libraries, target.type);
+        const { hideable, selectable } = type;
+
         if (selectable) {
           const nextDesign =
             (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
@@ -388,24 +394,29 @@ const Canvas = () => {
 
     let parent;
     let referenceDesign = referenceDesignProp;
+    let hide = !component || component.hide;
     if (
       component &&
       (component.type === 'designer.Reference' ||
         component.type === 'Reference')
     ) {
+      const referringComponent = component;
       if (mergedProps.includeChildren === false) {
         parent = component;
       }
       referenceDesign = getReferenceDesign(imports, component);
       component = (referenceDesign || design).components[mergedProps.component];
       if (component) {
+        // If the referring component doesn't have a name,
+        // use hide from linked component
+        if (!referringComponent.name) hide = component.name;
         // don't render if hiding at this size
         if (
           component.responsive &&
           component.responsive.hide &&
           component.responsive.hide.includes(responsiveSize)
         )
-          return null;
+          hide = true;
 
         responsiveProps =
           component.responsive &&
@@ -416,7 +427,7 @@ const Canvas = () => {
           : component.props;
       }
     }
-    if (!component || component.hide) return null;
+    if (hide) return null;
 
     const type = getComponentType(libraries, component.type);
     if (!type) {

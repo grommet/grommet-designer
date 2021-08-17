@@ -100,7 +100,14 @@ export const getLinkOptions = (design, libraries, selected) => {
     ...screenComponents
       .map((k) => design.components[k])
       .filter((c) => {
-        const type = getComponentType(libraries, c.type);
+        let type;
+        // if this is a reference, check the target type
+        if (c.type === 'designer.Reference') {
+          const referencedComponent = design.components[c.props.component];
+          type = getComponentType(libraries, referencedComponent.type);
+        } else {
+          type = getComponentType(libraries, c.type);
+        }
         // must have a name
         return (type.hideable || type.selectable) && c.name;
       })
