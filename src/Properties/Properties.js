@@ -66,6 +66,18 @@ const Properties = () => {
     () => getComponentType(libraries, component.type) || {},
     [component, libraries],
   );
+  const hideable = useMemo(() => {
+    // for Reference component, hideable is driven by where the reference points
+    if (type.name === 'Reference') {
+      const referencedComponent = design.components[component.props.component];
+      const referencedType = getComponentType(
+        libraries,
+        referencedComponent.type,
+      );
+      return referencedType && referencedType.hideable;
+    }
+    return type.hideable;
+  }, [component, design, libraries, type]);
   const references = useMemo(
     () => getReferences(design, component.id),
     [component, design],
@@ -422,7 +434,7 @@ const Properties = () => {
                   }}
                 />
               )}
-              {type.hideable &&
+              {hideable &&
                 component.name &&
                 (!searchExp || searchExp.test('hide')) && (
                   <Field label="hide" htmlFor="hide">
