@@ -53,6 +53,7 @@ const ReferenceProperty = forwardRef(
         {referenceSelected && (
           <Button
             icon={<Location />}
+            tip="go to"
             hoverIndicator
             onClick={() => setSelected(referenceSelected)}
           />

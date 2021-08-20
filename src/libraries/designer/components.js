@@ -69,9 +69,10 @@ export const components = {
   Reference: {
     name: 'Reference',
     help: `Reference is a designer specific component for
-    use with this design tool. It has a single property which is a reference
-    to the component that should be used. Changes to that referenced component
-    will be shown for all References to it.`,
+    use with this design tool. The key property is 'component'
+    which is a reference to the component that should be used.
+    Changes to that referenced component will be shown for all
+    References to it.`,
     defaultProps: {
       includeChildren: true,
     },

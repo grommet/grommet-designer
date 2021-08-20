@@ -111,6 +111,8 @@ const Canvas = () => {
   const grommetRef = useRef();
   const inputRef = useRef();
   const rendered = useRef({});
+  // referenced maps rendered referenced component to its Reference
+  const referenced = useRef({});
   const [initialize, setInitialize] = useState({});
 
   const libraries = useMemo(
@@ -203,7 +205,10 @@ const Canvas = () => {
         nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
         nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
       } else if (to.component) {
-        const target = design.components[to.component];
+        let target = design.components[to.component];
+        // if we have rendered this via a Reference, use the Reference
+        if (referenced.current[target.id])
+          target = design.components[referenced.current[target.id]];
 
         let type;
         // if this is a reference, check the target type
@@ -407,9 +412,11 @@ const Canvas = () => {
       referenceDesign = getReferenceDesign(imports, component);
       component = (referenceDesign || design).components[mergedProps.component];
       if (component) {
+        // remember that we used a Reference in case a link is followed
+        referenced.current[component.id] = referringComponent.id;
         // If the referring component doesn't have a name,
         // use hide from linked component
-        if (!referringComponent.name) hide = component.name;
+        if (!referringComponent.name) hide = component.hide;
         // don't render if hiding at this size
         if (
           component.responsive &&
@@ -633,6 +640,10 @@ const Canvas = () => {
       children,
     );
   };
+
+  // reset referenced to clear out any old ones so it only reflects the
+  // latest rendering
+  referenced.current = {};
 
   const screen = design.screens[selected.screen];
   let content;
