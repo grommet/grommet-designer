@@ -995,6 +995,59 @@ export const components = {
       </Paragraph>
     ),
     name: 'Form',
+    designProperties: {
+      dataPath: '',
+    },
+    // action to auto-build FormFields based on dataPath
+    actions: (
+      { designProps, id },
+      { addChildComponent, changeDesign, data, design },
+    ) => {
+      if (
+        designProps.dataPath &&
+        typeof data?.[designProps.dataPath] === 'object'
+      ) {
+        return (
+          <Button
+            label="Generate"
+            onClick={() => {
+              // add FormField and TextInput children for all keys in the data
+              const nextDesign = JSON.parse(JSON.stringify(design));
+              const nextForm = nextDesign.components[id];
+              Object.keys(data[designProps.dataPath]).forEach((key) => {
+                // see if we already have a FormField with this name
+                if (
+                  !nextForm.children ||
+                  !nextForm.children.some(
+                    (childId) =>
+                      nextDesign.components[childId].props?.name === key,
+                  )
+                ) {
+                  const fieldId = addChildComponent(nextDesign, id, {
+                    type: 'grommet.FormField',
+                    props: { label: key, name: key },
+                  });
+                  addChildComponent(nextDesign, fieldId, {
+                    type: 'grommet.TextInput',
+                    props: { name: key },
+                  });
+                }
+              });
+              changeDesign(nextDesign);
+            }}
+          />
+        );
+      }
+    },
+    override: ({ designProps }, { data, setData }) => {
+      const result = {};
+      if (designProps.dataPath && typeof data === 'object') {
+        result.value = data;
+        result.onChange = setData;
+        result.onReset = () => setData(undefined);
+      }
+      return result;
+    },
   },
   FormField: {
     component: FormField,

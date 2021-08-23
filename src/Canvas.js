@@ -93,9 +93,16 @@ const replace = (text, data, contextPath) =>
 
 const Canvas = () => {
   const responsiveSize = useContext(ResponsiveContext);
-  const { changeDesign, design, imports, mode, selected, setSelected, theme } =
-    useContext(DesignContext);
-  const [data, setData] = useState();
+  const {
+    changeDesign,
+    data,
+    design,
+    imports,
+    mode,
+    selected,
+    setSelected,
+    theme,
+  } = useContext(DesignContext);
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
   // inlineEditText is used to debounce inline edit changes
@@ -108,6 +115,7 @@ const Canvas = () => {
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
   const [dropAt, setDropAt] = useState();
+  const [dirtyData, setDirtyData] = useState({});
   const grommetRef = useRef();
   const inputRef = useRef();
   const rendered = useRef({});
@@ -119,35 +127,6 @@ const Canvas = () => {
     () => imports.filter((i) => i.library).map((i) => i.library),
     [imports],
   );
-
-  // load data, if needed
-  useEffect(() => {
-    if (design.data) {
-      Object.keys(design.data).forEach((key) => {
-        if (design.data[key].slice(0, 4) === 'http') {
-          fetch(design.data[key])
-            .then((response) => response.json())
-            .then((response) => {
-              setData((prevData) => {
-                const nextData = JSON.parse(JSON.stringify(prevData || {}));
-                nextData[key] = response;
-                return nextData;
-              });
-            });
-        } else if (design.data[key]) {
-          setData((prevData) => {
-            const nextData = JSON.parse(JSON.stringify(prevData || {}));
-            try {
-              nextData[key] = JSON.parse(design.data[key]);
-            } catch (e) {
-              console.warn(e.message);
-            }
-            return nextData;
-          });
-        }
-      });
-    }
-  }, [design.data]);
 
   // clear inline edit when selection changes
   useEffect(() => {
@@ -464,7 +443,8 @@ const Canvas = () => {
         dataPath = dataContextPath
           ? [...dataContextPath, ...parsePath(dataPath)]
           : parsePath(dataPath);
-        dataValue = find(data, dataPath);
+        // prefer dirtyData, if we have any
+        dataValue = dirtyData[dataPath.join('.')] || find(data, dataPath);
       }
       specialProps = type.override(component, {
         dataContextPath: dataPath,
@@ -475,6 +455,16 @@ const Canvas = () => {
         setHide: (value) => setHide(id, value),
         data: dataValue || undefined,
         renderComponent,
+        // setData is used by Form to track Form changes.
+        // These changes are stored within the dirtyData here.
+        // Passing undefined will delete the dirtyData, when resetting the Form
+        setData: (nextDataValue) => {
+          const nextDirtyData = JSON.parse(JSON.stringify(dirtyData));
+          if (nextDataValue === undefined)
+            delete nextDirtyData[dataPath.join('.')];
+          else nextDirtyData[dataPath.join('.')] = nextDataValue;
+          setDirtyData(nextDirtyData);
+        },
       });
     } else {
       specialProps = {};

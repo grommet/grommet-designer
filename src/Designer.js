@@ -36,6 +36,7 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
   );
   const [theme, setTheme] = useState();
   const [mode, setMode] = useState();
+  const [data, setData] = useState();
   const [confirmReplace, setConfirmReplace] = useState();
   const [changes, setChanges] = useState([]);
   const [changeIndex, setChangeIndex] = useState();
@@ -107,6 +108,35 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
       setImports(nextImports);
     });
   }, [imports]);
+
+  // load data, if needed
+  useEffect(() => {
+    if (design.data) {
+      Object.keys(design.data).forEach((key) => {
+        if (design.data[key].slice(0, 4) === 'http') {
+          fetch(design.data[key])
+            .then((response) => response.json())
+            .then((response) => {
+              setData((prevData) => {
+                const nextData = JSON.parse(JSON.stringify(prevData || {}));
+                nextData[key] = response;
+                return nextData;
+              });
+            });
+        } else if (design.data[key]) {
+          setData((prevData) => {
+            const nextData = JSON.parse(JSON.stringify(prevData || {}));
+            try {
+              nextData[key] = JSON.parse(design.data[key]);
+            } catch (e) {
+              console.warn(e.message);
+            }
+            return nextData;
+          });
+        }
+      });
+    }
+  }, [design.data]);
 
   // browser navigation
 
@@ -271,6 +301,7 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
       changeDesign,
       chooseDesign,
       component: selectedComponent,
+      data,
       design,
       imports,
       libraries,
@@ -288,6 +319,7 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
       changeIndex,
       changes,
       chooseDesign,
+      data,
       design,
       imports,
       libraries,

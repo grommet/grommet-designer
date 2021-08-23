@@ -70,6 +70,18 @@ export const addComponent = (nextDesign, libraries, nextSelected, typeName) => {
   return id;
 };
 
+// used by actions() from component libraries when generating content
+export const addChildComponent = (nextDesign, parentId, { type, props }) => {
+  const parent = nextDesign.components[parentId];
+  const id = nextDesign.nextId;
+  nextDesign.nextId += 1;
+  const component = { type, id, props };
+  nextDesign.components[component.id] = component;
+  if (!parent.children) parent.children = [];
+  parent.children.push(id);
+  return id;
+};
+
 export const copyComponent = ({
   nextDesign,
   templateDesign,

@@ -31,6 +31,7 @@ import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
 import CopyPropertiesFrom from './CopyPropertiesFrom';
 import {
+  addChildComponent,
   deleteComponent,
   disconnectReference,
   duplicateComponent,
@@ -55,6 +56,7 @@ const Properties = () => {
   const {
     changeDesign,
     component,
+    data,
     design,
     imports,
     libraries,
@@ -129,7 +131,8 @@ const Properties = () => {
       component = component.responsive[responsiveSize];
     }
     let props;
-    if (type.properties[propName] !== undefined) props = component.props;
+    if (type.properties && type.properties[propName] !== undefined)
+      props = component.props;
     else if (
       type.designProperties &&
       type.designProperties[propName] !== undefined
@@ -463,6 +466,13 @@ const Properties = () => {
                   )}
                 </Box>
               )}
+              {type.actions &&
+                type.actions(component, {
+                  addChildComponent,
+                  changeDesign,
+                  data,
+                  design,
+                })}
             </Box>
 
             <Box flex={false} border={type.structure ? 'bottom' : undefined}>
