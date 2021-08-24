@@ -78,14 +78,16 @@ const replace = (text, datas, contextPath) =>
     const dataPath = parsePath(match.slice(1, match.length - 1));
     const path = contextPath ? [...contextPath, ...dataPath] : dataPath;
     let replaced;
-    datas.some((data) => (replaced = find(data, path)));
+    datas.some((data) => (replaced = find(data, path)) !== undefined);
     if (replaced !== undefined) {
       if (typeof replaced === 'function') {
         // need to get the context to call this function from
         const funcPath = [...path];
         funcPath.pop();
         let funcContext;
-        datas.some((data) => (funcContext = find(data, funcPath)));
+        datas.some(
+          (data) => (funcContext = find(data, funcPath)) !== undefined,
+        );
         return replaced.call(funcContext);
       }
       return replaced;
