@@ -1043,8 +1043,8 @@ export const components = {
     },
     override: ({ designProps }, { data, setData }) => {
       const result = {};
-      if (designProps?.dataPath && typeof data === 'object') {
-        result.value = data;
+      if (designProps?.dataPath) {
+        result.value = data || {};
         result.onChange = setData;
         result.onReset = () => setData(undefined);
       }

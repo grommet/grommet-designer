@@ -73,17 +73,19 @@ const find = (data, path) => {
   return value;
 };
 
-const replace = (text, data, contextPath) =>
+const replace = (text, datas, contextPath) =>
   (text || '').replace(/\{[^}]*\}/g, (match) => {
     const dataPath = parsePath(match.slice(1, match.length - 1));
     const path = contextPath ? [...contextPath, ...dataPath] : dataPath;
-    const replaced = find(data, path);
+    let replaced;
+    datas.some((data) => (replaced = find(data, path)));
     if (replaced !== undefined) {
       if (typeof replaced === 'function') {
         // need to get the context to call this function from
         const funcPath = [...path];
         funcPath.pop();
-        const funcContext = find(data, funcPath);
+        let funcContext;
+        datas.some((data) => (funcContext = find(data, funcPath)));
         return replaced.call(funcContext);
       }
       return replaced;
@@ -180,7 +182,7 @@ const Canvas = () => {
         if (ref.design) changeDesign(ref.design);
       } else if (to.control === 'toggleThemeMode') {
         const nextDesign =
-          (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+          nextRef?.design || JSON.parse(JSON.stringify(design));
         nextDesign.themeMode = design.themeMode === 'dark' ? 'light' : 'dark';
         nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
       } else if (to.component) {
@@ -200,7 +202,7 @@ const Canvas = () => {
 
         if (selectable) {
           const nextDesign =
-            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+            nextRef?.design || JSON.parse(JSON.stringify(design));
           const component = nextDesign.components[target.id];
           component.props.active = component.props.active + 1;
           if (component.props.active > component.children.length) {
@@ -209,7 +211,7 @@ const Canvas = () => {
           nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
         } else if (hideable) {
           const nextDesign =
-            (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+            nextRef?.design || JSON.parse(JSON.stringify(design));
           nextDesign.components[target.id].hide = !target.hide;
           nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
           if (target.hide) setSelected({ ...to, dataContextPath });
@@ -229,8 +231,7 @@ const Canvas = () => {
 
   const followLinkOption = useCallback(
     (options, selected, { nextRef } = {}) => {
-      const nextDesign =
-        (nextRef && nextRef.design) || JSON.parse(JSON.stringify(design));
+      const nextDesign = nextRef?.design || JSON.parse(JSON.stringify(design));
       // figure out which link to use, if any
       Object.keys(options)
         .filter((n) => options[n])
@@ -316,7 +317,7 @@ const Canvas = () => {
     } = component;
     const dataPath = designProps ? designProps.dataPath : undefined;
     let contents;
-    if (children && children.length === 1) {
+    if (children?.length === 1) {
       if (data && dataPath) {
         const path = dataContextPath
           ? [...dataContextPath, ...parsePath(dataPath)]
@@ -438,7 +439,7 @@ const Canvas = () => {
     if (type.override) {
       let dataValue;
       let dataPath = dataContextPath;
-      if (component.designProps && component.designProps.dataPath) {
+      if (component.designProps?.dataPath) {
         ({ dataPath } = component.designProps);
         dataPath = dataContextPath
           ? [...dataContextPath, ...parsePath(dataPath)]
@@ -451,7 +452,8 @@ const Canvas = () => {
         design: referenceDesignProp || design,
         followLink,
         followLinkOption,
-        replaceData: (text) => replace(text, datum || data, contextPath),
+        replaceData: (text) =>
+          replace(text, [datum, dirtyData, data], contextPath),
         setHide: (value) => setHide(id, value),
         data: dataValue || undefined,
         renderComponent,
@@ -514,10 +516,10 @@ const Canvas = () => {
 
     if (!parent) parent = component;
     let children;
-    if (specialProps && specialProps.children) {
+    if (specialProps?.children) {
       children = specialProps.children;
       delete specialProps.children;
-    } else if (parent.children && parent.children.length > 0) {
+    } else if (parent.children?.length > 0) {
       if (parent.children.length > 0) {
         children = parent.children.map((childId) =>
           renderComponent(childId, { dataContextPath, datum, referenceDesign }),
@@ -538,7 +540,11 @@ const Canvas = () => {
     } else if (component.text !== undefined) {
       if (datum || data) {
         // resolve any data references
-        children = replace(component.text, datum || data, contextPath);
+        children = replace(
+          component.text,
+          [datum, dirtyData, data],
+          contextPath,
+        );
       } else {
         children = component.text;
       }
@@ -654,7 +660,7 @@ const Canvas = () => {
           </Paragraph>
         </Box>
       );
-  else if (screen && screen.root) content = renderComponent(screen.root);
+  else if (screen?.root) content = renderComponent(screen.root);
   else
     content = (
       <Box align="center">
