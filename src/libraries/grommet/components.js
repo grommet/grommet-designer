@@ -1004,7 +1004,7 @@ export const components = {
       { addChildComponent, changeDesign, data, design },
     ) => {
       if (
-        designProps.dataPath &&
+        designProps?.dataPath &&
         typeof data?.[designProps.dataPath] === 'object'
       ) {
         return (
@@ -1043,7 +1043,7 @@ export const components = {
     },
     override: ({ designProps }, { data, setData }) => {
       const result = {};
-      if (designProps.dataPath && typeof data === 'object') {
+      if (designProps?.dataPath && typeof data === 'object') {
         result.value = data;
         result.onChange = setData;
         result.onReset = () => setData(undefined);
