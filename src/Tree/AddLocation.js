@@ -99,12 +99,16 @@ const AddLocation = ({ design, libraries, onChange, selected }) => {
     const parent = getParent(design, selected.component);
     if (!parent)
       return allLocations.filter((l) => l === 'within' || l === 'container of');
-    if (selectedType && selectedType.container) return allLocations;
+    if (selectedType?.container) return allLocations;
     return allLocations.filter((l) => l !== 'within');
   }, [design, selected.component, selectedType]);
 
   const [addLocation, setAddLocation] = React.useState();
-  React.useEffect(() => setAddLocation(locations[0]), [locations]);
+  React.useEffect(
+    () =>
+      setAddLocation(locations[selectedType?.container === 'rarely' ? 1 : 0]),
+    [locations, selectedType],
+  );
   React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
 
   const Option = ({ option, checked, hover }) => {

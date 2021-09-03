@@ -683,7 +683,7 @@ export const components = {
   Anchor: {
     component: Anchor,
     name: 'Anchor',
-    container: true,
+    container: 'rarely',
     defaultProps: {
       label: 'anchor',
     },
@@ -718,7 +718,7 @@ export const components = {
   Button: {
     component: Button,
     name: 'Button',
-    container: true,
+    container: 'rarely',
     defaultProps: {
       label: 'Button',
     },
@@ -763,7 +763,7 @@ export const components = {
   DropButton: {
     component: DropButton,
     name: 'DropButton',
-    container: true,
+    container: 'rarely',
     help: `The dropContent of DropButton can be seen by setting the 'open'
     property to 'true', allowing you to populate the contents. You can then
     restore 'open' to 'undefined', so the button is interactive again.`,
@@ -1173,7 +1173,7 @@ export const components = {
   Select: {
     component: Select,
     name: 'Select',
-    container: true,
+    container: 'rarely',
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1308,7 +1308,7 @@ export const components = {
     name: 'Calendar',
     help: `The 'date' and 'reference' properties needs to be in ISO8601 format.
     `,
-    container: true,
+    container: 'rarely',
     defaultProps: {
       locale: 'en-US',
       showAdjacentDays: true,
