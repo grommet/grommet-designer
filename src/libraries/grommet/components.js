@@ -1653,6 +1653,7 @@ export const components = {
     properties: {
       data: JsonData,
       onClickItem: ['-link-'],
+      onOrder: false,
       pad: BoxPad,
       paginate: false,
       primaryKey: '',
@@ -1663,7 +1664,7 @@ export const components = {
     },
     override: (
       { children, props },
-      { data, dataContextPath, followLink, renderComponent },
+      { data, dataContextPath, followLink, renderComponent, setData },
     ) => {
       const result = {};
       // need to use retrieved data for data property
@@ -1675,6 +1676,9 @@ export const components = {
           const path = dataContextPath ? [...dataContextPath, index] : [index];
           followLink(props.onClickItem, { dataContextPath: path });
         };
+      }
+      if (props.onOrder) {
+        result.onOrder = setData;
       }
       if (children) {
         result.children = (value) =>
