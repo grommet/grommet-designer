@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Box, Keyboard, TextInput } from 'grommet';
 import AddLibrary from './AddLibrary';
 import AddTemplate from './AddTemplate';
@@ -37,7 +37,9 @@ const AddComponents = ({ design, imports, onAdd }) => {
     return result;
   }, [design, imports]);
 
-  useEffect(() => inputRef.current?.focus(), []);
+  // Ensure we always keep focus on the search input, even after the user
+  // selects a location.
+  useLayoutEffect(() => inputRef.current?.focus());
 
   const searchExp = search ? new RegExp(search, 'i') : undefined;
 
