@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -23,16 +24,12 @@ const InlineInput = styled.input`
   line-height: inherit;
   border: none;
   -webkit-appearance: none;
-  outline: none;
   background: transparent;
   color: inherit;
   font-weight: inherit;
   text-align: inherit;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: auto;
-  resize: none;
   ::-webkit-search-decoration {
     -webkit-appearance: none;
   }
@@ -109,18 +106,23 @@ const Canvas = () => {
   } = useContext(DesignContext);
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
+  // inlineEditSize is the size of the component being edited inline
+  const [inlineEditSize, setInlineEditSize] = useState();
   // inlineEditText is used to debounce inline edit changes
   const [inlineEditText, setInlineEditText] = useDebounce(undefined, (text) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const component = nextDesign.components[selected.component];
-    component.text = text;
-    changeDesign(nextDesign);
+    if (component) {
+      component.text = text;
+      changeDesign(nextDesign);
+    }
   });
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
   const [dropAt, setDropAt] = useState();
   const [dirtyData, setDirtyData] = useState({});
   const grommetRef = useRef();
+  const selectedRef = useRef();
   const inputRef = useRef();
   const rendered = useRef({});
   // referenced maps rendered referenced component to its Reference
@@ -139,12 +141,9 @@ const Canvas = () => {
     }
   }, [inlineEdit, selected.component]);
 
-  // set Input height based on contents
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
-    }
+  // maintain focus when editing inline
+  useLayoutEffect(() => {
+    if (inlineEdit && inputRef.current) inputRef.current.focus();
   });
 
   const setHide = (id, hide) => {
@@ -511,7 +510,7 @@ const Canvas = () => {
     } else if (dropAt === id) {
       style = { outline: '1px dashed blue' };
     } else if (inlineEdit === id) {
-      style = { outline: '2px dashed red' };
+      style = {};
     } else if (mode === 'edit' && selected.component === id) {
       style = { outline: '1px dashed red' };
     }
@@ -529,14 +528,22 @@ const Canvas = () => {
         if (children.length === 0) children = undefined;
       }
     } else if (inlineEdit === id) {
+      const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
       children = (
         <InlineInput
-          ref={type.name === 'Paragraph' ? inputRef : undefined}
-          as={type.name === 'Paragraph' ? 'textarea' : undefined}
+          ref={inputRef}
+          as={useArea ? 'textarea' : undefined}
           placeholder={type.text}
           value={inlineEditText}
-          size={inlineEditText ? inlineEditText.length : 4}
           onChange={(event) => setInlineEditText(event.target.value)}
+          onClick={(event) => event.stopPropagation()}
+          // don't let Enter trigger onClick in ancestors
+          onKeyDown={(event) => event.stopPropagation()}
+          style={{
+            width: inlineEditSize.width,
+            height: inlineEditSize.height,
+            minWidth: 48,
+          }}
         />
       );
     } else if (component.text !== undefined) {
@@ -601,9 +608,10 @@ const Canvas = () => {
         if (selected.component !== id) {
           setSelected({ ...selected, component: id });
           setInlineEdit(undefined);
-        } else if (type.text && !referenceDesign) {
-          setInlineEdit(id);
+        } else if (type.text && !referenceDesign && selectedRef.current) {
+          setInlineEditSize(selectedRef.current.getBoundingClientRect());
           setInlineEditText(component.text || '');
+          setInlineEdit(id);
         }
         if (specialProps.onClick) specialProps.onClick(event);
       };
@@ -615,6 +623,7 @@ const Canvas = () => {
       ) {
         selectProps.focusIndicator = false;
       }
+      selectProps.tabIndex = '-1';
     }
 
     if (!type.component) {
@@ -626,7 +635,9 @@ const Canvas = () => {
     if (type.initialize) nextRendered[id] = component;
 
     return createElement(
-      type.component,
+      // Markdown can't handle react children, when editing inline,
+      // put in a div.
+      inlineEdit === id && type.name === 'Markdown' ? 'div' : type.component,
       {
         key: key || id,
         ...dragProps,
@@ -634,6 +645,7 @@ const Canvas = () => {
         ...mergedProps,
         ...specialProps,
         ...selectProps,
+        ...(selected.component === id ? { ref: selectedRef } : {}),
       },
       children,
     );
