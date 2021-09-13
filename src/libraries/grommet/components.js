@@ -1773,14 +1773,31 @@ export const components = {
       loop: false,
     },
     designProperties: {
+      camera: false,
       source: '',
     },
-    override: ({ designProps }, { replaceData }) => {
-      if (designProps && designProps.source) {
+    override: ({ designProps, id }, { replaceData }) => {
+      const result = {};
+      if (designProps?.source) {
         const source = replaceData(designProps.source);
-        return { children: <source src={source} /> };
+        result.children = <source src={source} />;
       }
-      return null;
+      if (designProps?.camera) {
+        result.id = id;
+        if (navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then(function (stream) {
+              const video = document.getElementById(id);
+              video.srcObject = stream;
+            })
+            .catch(function (err) {
+              console.error('Something went wrong!', err);
+            });
+        }
+        result.style = { transform: 'scale(-1, 1)' };
+      }
+      return result;
     },
   },
   WorldMap: {
