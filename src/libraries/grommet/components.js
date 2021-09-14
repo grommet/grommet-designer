@@ -796,6 +796,7 @@ export const components = {
       primary: false,
       reverse: false,
       secondary: false,
+      size: ['small', 'medium', 'large'],
       tip: '',
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
