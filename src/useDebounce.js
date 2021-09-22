@@ -1,8 +1,8 @@
-import React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Performs updates from Properties but accomodates updates from Canvas.
 const useDebounce = (valueProp, onChange) => {
-  const [value, setValue] = React.useState(valueProp);
+  const [value, setValue] = useState(valueProp);
 
   // setting tracks when we're between setValue() and onChange().
   // When the user is typing, we set it to true. When he stops typing and
@@ -11,17 +11,18 @@ const useDebounce = (valueProp, onChange) => {
   // value if setting isn't true.
   // This is so we don't throw out subsequent characters that user has typed
   // since we called onChange() but haven't received it via valueProp yet.
-  const [setting, setSetting] = React.useState(false);
-  React.useEffect(() => {
-    if (!setting) setValue(valueProp);
-  }, [setting, valueProp]);
+  const [setting, setSetting] = useState(false);
 
-  const set = React.useCallback((nextValue) => {
+  const set = useCallback((nextValue) => {
     setSetting(true);
     setValue(nextValue);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!setting) setValue(valueProp);
+  }, [setting, valueProp]);
+
+  useEffect(() => {
     if (value !== valueProp && setting) {
       // lazily update, so we don't slow down typing
       const timer = setTimeout(() => {
@@ -32,6 +33,7 @@ const useDebounce = (valueProp, onChange) => {
     }
     return undefined;
   }, [onChange, setting, value, valueProp]);
+
   return [value, set];
 };
 

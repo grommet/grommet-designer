@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -15,25 +14,7 @@ import Icon from './libraries/designer/Icon';
 import DesignContext from './DesignContext';
 import { getParent } from './design';
 import { getComponentType, getReferenceDesign } from './utils';
-import useDebounce from './useDebounce';
-
-const InlineInput = styled.input`
-  box-sizing: border-box;
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  border: none;
-  -webkit-appearance: none;
-  background: transparent;
-  color: inherit;
-  font-weight: inherit;
-  text-align: inherit;
-  margin: 0;
-  padding: 0;
-  ::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-`;
+import InlineEditInput from './InlineEditInput';
 
 const Placeholder = styled.div`
   pointer-events: none;
@@ -106,24 +87,25 @@ const Canvas = () => {
   } = useContext(DesignContext);
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
+  const inlineEditOnChange = useCallback(
+    (nextText) => {
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      const component = nextDesign.components[inlineEdit];
+      if (component) {
+        component.text = nextText;
+        changeDesign(nextDesign);
+      }
+    },
+    [changeDesign, design, inlineEdit],
+  );
   // inlineEditSize is the size of the component being edited inline
   const [inlineEditSize, setInlineEditSize] = useState();
-  // inlineEditText is used to debounce inline edit changes
-  const [inlineEditText, setInlineEditText] = useDebounce(undefined, (text) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    if (component) {
-      component.text = text;
-      changeDesign(nextDesign);
-    }
-  });
   const [dragging, setDragging] = useState();
   const [dropTarget, setDropTarget] = useState();
   const [dropAt, setDropAt] = useState();
   const [dirtyData, setDirtyData] = useState({});
   const grommetRef = useRef();
   const selectedRef = useRef();
-  const inputRef = useRef();
   const rendered = useRef({});
   // referenced maps rendered referenced component to its Reference
   const referenced = useRef({});
@@ -140,11 +122,6 @@ const Canvas = () => {
       setInlineEdit(undefined);
     }
   }, [inlineEdit, selected.component]);
-
-  // maintain focus when editing inline
-  useLayoutEffect(() => {
-    if (inlineEdit && inputRef.current) inputRef.current.focus();
-  });
 
   const setHide = (id, hide) => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -530,20 +507,12 @@ const Canvas = () => {
     } else if (inlineEdit === id) {
       const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
       children = (
-        <InlineInput
-          ref={inputRef}
+        <InlineEditInput
           as={useArea ? 'textarea' : undefined}
           placeholder={type.text}
-          value={inlineEditText}
-          onChange={(event) => setInlineEditText(event.target.value)}
-          onClick={(event) => event.stopPropagation()}
-          // don't let Enter trigger onClick in ancestors
-          onKeyDown={(event) => event.stopPropagation()}
-          style={{
-            width: inlineEditSize.width,
-            height: inlineEditSize.height,
-            minWidth: 48,
-          }}
+          defaultValue={component.text || ''}
+          size={inlineEditSize}
+          onChange={inlineEditOnChange}
         />
       );
     } else if (component.text !== undefined) {
@@ -606,11 +575,10 @@ const Canvas = () => {
       selectProps.onClick = (event) => {
         event.stopPropagation();
         if (selected.component !== id) {
-          setSelected({ ...selected, component: id });
           setInlineEdit(undefined);
+          setSelected({ ...selected, component: id });
         } else if (type.text && !referenceDesign && selectedRef.current) {
           setInlineEditSize(selectedRef.current.getBoundingClientRect());
-          setInlineEditText(component.text || '');
           setInlineEdit(id);
         }
         if (specialProps.onClick) specialProps.onClick(event);
