@@ -67,8 +67,7 @@ const Property = React.forwardRef(
       }
       if (property.includes('-theme-')) {
         // get options from theme, special casing
-        const component = design.components[selected.component];
-        if (component.type === 'grommet.Button' && theme.button.toolbar)
+        if (rest.name === 'kind' && theme.button.toolbar)
           return (
             <ArrayProperty
               ref={ref}
