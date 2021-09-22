@@ -18,7 +18,7 @@ import StringProperty from './StringProperty';
 
 const Property = React.forwardRef(
   ({ property: propertyArg, value, ...rest }, ref) => {
-    const { design, selected, theme } = useContext(DesignContext);
+    const { theme } = useContext(DesignContext);
     let property =
       propertyArg && propertyArg.dynamicProperty
         ? propertyArg.dynamicProperty({ value })
