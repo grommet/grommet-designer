@@ -886,14 +886,18 @@ export const components = {
       defaultChecked: false,
       disabled: false,
       label: 'enabled?',
+      name: '',
       reverse: false,
       toggle: false,
     },
     designProperties: {
       link: ['-link-checked-'],
     },
-    override: ({ designProps }, { dataContextPath, followLinkOption }) => {
-      return {
+    override: (
+      { designProps, props },
+      { dataContextPath, followLinkOption, replaceData },
+    ) => {
+      const result = {
         onChange:
           designProps && designProps.link
             ? (event) => {
@@ -903,6 +907,10 @@ export const components = {
               }
             : undefined,
       };
+      if (props.label) {
+        result.label = replaceData(props.label);
+      }
+      return result;
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
