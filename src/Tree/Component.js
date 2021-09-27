@@ -103,7 +103,9 @@ const Component = ({ screen, id, firstChild }) => {
             }
           >
             <Text size="medium" truncate>
-              {displayName(reference || component)}
+              {displayName(
+                component?.name ? component : reference || component,
+              )}
             </Text>
             <Text size="small" truncate>
               {reference ? 'Reference' : treeSubName(component)}
