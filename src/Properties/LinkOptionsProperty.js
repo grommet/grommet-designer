@@ -9,6 +9,16 @@ const specialNames = {
 
 const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
   const { design } = useContext(DesignContext);
+  const [searchText, setSearchText] = React.useState('');
+  const searchExp = React.useMemo(
+    () => searchText && new RegExp(`${searchText}`, 'i'),
+    [searchText],
+  );
+  let selectOptions = linkOptions;
+  if (searchExp) {
+    selectOptions = linkOptions.filter((o) => searchExp.test(o.label || o));
+  }
+
   const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
       <Text weight={selected ? 'bold' : undefined}>
@@ -35,7 +45,7 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
         </Text>,
         <Select
           key="value"
-          options={[...linkOptions, 'undefined']}
+          options={[...selectOptions, 'undefined']}
           value={(value && value[name]) || ''}
           onChange={({ option }) => {
             const nextValue =
@@ -44,6 +54,11 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
             else nextValue[name] = option;
             onChange(nextValue);
           }}
+          onSearch={
+            linkOptions.length > 10 || searchExp
+              ? (nextSearchText) => setSearchText(nextSearchText)
+              : undefined
+          }
           valueLabel={<LinkLabel selected value={value && value[name]} />}
         >
           {(option) => (
