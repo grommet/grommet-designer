@@ -73,6 +73,7 @@ export const components = {
     which is a reference to the component that should be used.
     Changes to that referenced component will be shown for all
     References to it.`,
+    hideable: true,
     defaultProps: {
       includeChildren: true,
     },
