@@ -72,11 +72,13 @@ const Properties = () => {
     // for Reference component, hideable is driven by where the reference points
     if (type.name === 'Reference') {
       const referencedComponent = design.components[component.props.component];
-      const referencedType = getComponentType(
-        libraries,
-        referencedComponent.type,
-      );
-      return referencedType && referencedType.hideable;
+      if (referencedComponent) {
+        const referencedType = getComponentType(
+          libraries,
+          referencedComponent.type,
+        );
+        return referencedType?.hideable;
+      }
     }
     return type.hideable;
   }, [component, design, libraries, type]);
