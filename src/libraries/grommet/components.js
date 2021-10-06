@@ -253,6 +253,7 @@ export const components = {
     component: Main,
     name: 'Main',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -273,6 +274,7 @@ export const components = {
     component: Nav,
     name: 'Nav',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -292,6 +294,7 @@ export const components = {
     component: Header,
     name: 'Header',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -314,6 +317,7 @@ export const components = {
     component: Footer,
     name: 'Footer',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -336,6 +340,7 @@ export const components = {
     component: Sidebar,
     name: 'Sidebar',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
