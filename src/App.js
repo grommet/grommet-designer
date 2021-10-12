@@ -22,11 +22,14 @@ const designerTheme = {
   global: {
     ...grommet.global,
     colors: { background: { dark: '#282828', light: '#f8f8f8' } },
+    drop: {
+      zIndex: 40,
+    },
   },
   // so designer layers are on top of Canvas layers
   layer: {
     ...grommet.layer,
-    zIndex: 15,
+    zIndex: 30,
   },
   tip: {
     content: {
