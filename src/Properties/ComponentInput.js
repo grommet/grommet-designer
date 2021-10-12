@@ -7,6 +7,8 @@ import { deleteComponent, upgradeDesign } from '../design';
 const ComponentInput = ({ componentId, name, onChange, value }) => {
   const { changeDesign, design, selected, setSelected } =
     useContext(DesignContext);
+  // if we have a value ensure we have a component there. if not, clear it
+  if (value && !design.components[value]) onChange(undefined);
   return (
     <Box direction="row">
       {value ? (
