@@ -5,6 +5,7 @@ import BackButton from './BackButton';
 import ReorderIcon from './ReorderIcon';
 
 const ArrayOfObjects = ({
+  defaultObject = {},
   name,
   value = [],
   labelKey,
@@ -122,7 +123,7 @@ const ArrayOfObjects = ({
           hoverIndicator
           onClick={() => {
             const nextValue = JSON.parse(JSON.stringify(value || []));
-            nextValue.push({});
+            nextValue.push(defaultObject);
             onChange(nextValue);
             setActive(nextValue.length - 1);
           }}

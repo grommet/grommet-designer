@@ -88,6 +88,7 @@ import TextAlign from './TextAlign';
 import TextAreaValue from './TextAreaValue';
 import TextInputSuggestions from './TextInputSuggestions';
 import WeightOptions from './WeightOptions';
+import WorldMapPlaces from './WorldMapPlaces';
 import DropAlign from './DropAlign';
 import Edge from './Edge';
 
@@ -1825,6 +1826,18 @@ export const components = {
       gridArea: BoxGridArea,
       hoverColor: ['-color-'],
       margin: Edge,
+      places: WorldMapPlaces,
+    },
+    override: ({ props }, { renderComponent }) => {
+      const result = {};
+      if (props.places) {
+        // adjust places content
+        result.places = props.places.map((p) => ({
+          ...p,
+          content: p.content ? renderComponent(p.content) : undefined,
+        }));
+      }
+      return result;
     },
   },
 };
