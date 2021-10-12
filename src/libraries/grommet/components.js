@@ -557,7 +557,7 @@ export const components = {
     },
     properties: {
       animate: false,
-      full: ['horizontal', 'vertical'],
+      full: ['horizontal', 'vertical', true],
       margin: ['none', 'xsmall', 'small', 'medium', 'large'],
       modal: false,
       onClickOutside: ['hide', 'ignore'],
