@@ -183,7 +183,11 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
         const date = new Date();
         date.setMilliseconds(0);
         design.date = date.toISOString();
-        localStorage.setItem(design.name, JSON.stringify(design));
+        try {
+          localStorage.setItem(design.name, JSON.stringify(design));
+        } catch (e) {
+          console.error('Failed to save design locally', e);
+        }
       }, 1000);
       return () => clearTimeout(timer);
     }
