@@ -23,13 +23,14 @@ const designerTheme = {
     ...grommet.global,
     colors: { background: { dark: '#282828', light: '#f8f8f8' } },
     drop: {
-      zIndex: 40,
+      zIndex: 300,
     },
   },
   // so designer layers are on top of Canvas layers
+  // HPE theme uses 110 due to common header, so need to higher
   layer: {
     ...grommet.layer,
-    zIndex: 30,
+    zIndex: 300,
   },
   tip: {
     content: {
