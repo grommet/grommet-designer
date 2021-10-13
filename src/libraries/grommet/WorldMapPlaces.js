@@ -26,7 +26,9 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
             onChange={(event) => {
               const nextPlace = JSON.parse(JSON.stringify(place));
               if (!nextPlace.location) nextPlace.location = [];
-              nextPlace.location[0] = parseFloat(event.target.value, 10);
+              let lat = parseFloat(event.target.value, 10);
+              nextPlace.location[0] =
+                `${lat}` === event.target.value ? lat : event.target.value;
               setPlace(nextPlace);
             }}
           />
@@ -36,7 +38,9 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
             onChange={(event) => {
               const nextPlace = JSON.parse(JSON.stringify(place));
               if (!nextPlace.location) nextPlace.location = [];
-              nextPlace.location[1] = parseFloat(event.target.value, 10);
+              let lon = parseFloat(event.target.value, 10);
+              nextPlace.location[1] =
+                `${lon}` === event.target.value ? lon : event.target.value;
               setPlace(nextPlace);
             }}
           />
