@@ -73,35 +73,73 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
             <Heading level={3} size="small">
               dropProps
             </Heading>
-            <FormField label="align">
+            <FormField label="align top">
               <Select
-                name="align-from"
-                options={['top', 'bottom', 'left', 'right']}
-                value={
-                  (place.dropProps && Object.keys(place.dropProps?.align)[0]) ||
-                  ''
-                }
+                name="align-top"
+                options={['top', 'bottom', 'undefined']}
+                value={place.dropProps?.align?.top || ''}
                 onChange={({ option }) => {
                   const nextPlace = JSON.parse(JSON.stringify(place));
                   if (!nextPlace.dropProps) nextPlace.dropProps = {};
-                  nextPlace.dropProps.align = { [option]: option };
+                  if (!nextPlace.dropProps.align)
+                    nextPlace.dropProps.align = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.align.top;
+                  else nextPlace.dropProps.align.top = option;
                   setPlace(nextPlace);
                 }}
               />
-              {place.dropProps?.align && (
-                <Select
-                  name="align-to"
-                  options={['top', 'bottom', 'left', 'right']}
-                  value={Object.values(place.dropProps?.align)[0] || ''}
-                  onChange={({ option }) => {
-                    const nextPlace = JSON.parse(JSON.stringify(place));
-                    nextPlace.dropProps.align[
-                      Object.keys(nextPlace.dropProps.align)[0]
-                    ] = option;
-                    setPlace(nextPlace);
-                  }}
-                />
-              )}
+            </FormField>
+            <FormField label="align bottom">
+              <Select
+                name="align-bottom"
+                options={['top', 'bottom', 'undefined']}
+                value={place.dropProps?.align?.bottom || ''}
+                onChange={({ option }) => {
+                  const nextPlace = JSON.parse(JSON.stringify(place));
+                  if (!nextPlace.dropProps) nextPlace.dropProps = {};
+                  if (!nextPlace.dropProps.align)
+                    nextPlace.dropProps.align = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.align.bottom;
+                  else nextPlace.dropProps.align.bottom = option;
+                  setPlace(nextPlace);
+                }}
+              />
+            </FormField>
+            <FormField label="align left">
+              <Select
+                name="align-left"
+                options={['left', 'right', 'undefined']}
+                value={place.dropProps?.align?.left || ''}
+                onChange={({ option }) => {
+                  const nextPlace = JSON.parse(JSON.stringify(place));
+                  if (!nextPlace.dropProps) nextPlace.dropProps = {};
+                  if (!nextPlace.dropProps.align)
+                    nextPlace.dropProps.align = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.align.left;
+                  else nextPlace.dropProps.align.left = option;
+                  setPlace(nextPlace);
+                }}
+              />
+            </FormField>
+            <FormField label="align right">
+              <Select
+                name="align-right"
+                options={['left', 'right', 'undefined']}
+                value={place.dropProps?.align?.right || ''}
+                onChange={({ option }) => {
+                  const nextPlace = JSON.parse(JSON.stringify(place));
+                  if (!nextPlace.dropProps) nextPlace.dropProps = {};
+                  if (!nextPlace.dropProps.align)
+                    nextPlace.dropProps.align = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.align.right;
+                  else nextPlace.dropProps.align.right = option;
+                  setPlace(nextPlace);
+                }}
+              />
             </FormField>
             <FormField label="elevation">
               <Select
@@ -116,15 +154,56 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
                 }}
               />
             </FormField>
-            <FormField label="margin">
+            <FormField label="margin horizontal">
               <Select
-                name="margin"
-                options={['xsmall', 'small', 'medium', 'large', 'xlarge']}
-                value={place.dropProps?.margin || ''}
+                name="margin-horizontal"
+                options={[
+                  'xsmall',
+                  'small',
+                  'medium',
+                  'large',
+                  'xlarge',
+                  'undefined',
+                ]}
+                value={place.dropProps?.margin?.horizontal || ''}
                 onChange={({ option }) => {
                   const nextPlace = JSON.parse(JSON.stringify(place));
                   if (!nextPlace.dropProps) nextPlace.dropProps = {};
-                  nextPlace.dropProps.margin = option;
+                  if (
+                    !nextPlace.dropProps.margin ||
+                    typeof nextPlace.dropProps.margin !== 'object'
+                  )
+                    nextPlace.dropProps.margin = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.margin.horizontal;
+                  else nextPlace.dropProps.margin.horizontal = option;
+                  setPlace(nextPlace);
+                }}
+              />
+            </FormField>
+            <FormField label="margin vertical">
+              <Select
+                name="margin-vertical"
+                options={[
+                  'xsmall',
+                  'small',
+                  'medium',
+                  'large',
+                  'xlarge',
+                  'undefined',
+                ]}
+                value={place.dropProps?.margin?.vertical || ''}
+                onChange={({ option }) => {
+                  const nextPlace = JSON.parse(JSON.stringify(place));
+                  if (!nextPlace.dropProps) nextPlace.dropProps = {};
+                  if (
+                    !nextPlace.dropProps.margin ||
+                    typeof nextPlace.dropProps.margin !== 'object'
+                  )
+                    nextPlace.dropProps.margin = {};
+                  if (option === 'undefined')
+                    delete nextPlace.dropProps.margin.vertical;
+                  else nextPlace.dropProps.margin.vertical = option;
                   setPlace(nextPlace);
                 }}
               />
