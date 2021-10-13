@@ -1898,14 +1898,14 @@
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
 "@types/node@*":
-  version "16.10.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.5.tgz#7fe4123b061753f1a58a6cd077ff0bb069ee752d"
-  integrity sha512-9iI3OOlkyOjLQQ9s+itIJNMRepDhB/96jW3fqduJ2FTPQj1dJjw6Q3QCImF9FE1wmdBs5QSun4FjDSFS8d8JLw==
+  version "16.10.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.8.tgz#2a30cec3635d8903b65256d4319a2c1988325074"
+  integrity sha512-atlRPM4gM/BABQ2MiXm38veMVL+kz6vFAj1hvqC1wDxWNrnr3t58PozLSecgLBrKNGISunQl2SxxIJcYV3tO2w==
 
 "@types/node@^12.20.10":
-  version "12.20.29"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.29.tgz#f80f1e2156a376a23838d90905f68b816d486733"
-  integrity sha512-dU2ypz+gO5va1OBvs0iT3BNHG5SgTqRvq8r+kU3e/LAseKapUJ8zTUE9Ve9fTpi27tN/7ahOAhCJwQWsffvsyw==
+  version "12.20.32"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.32.tgz#16ff82a7c8e705da2cc7d3101a37ebc6d438867d"
+  integrity sha512-KnuOtJLSoqJX/8bkzy15+5DwsPZZBaPjG5XVb8f6Hq8J1ehGHYbGeIiA+m9en2nzclRs0dkfZiNFoGeMZz3Qsg==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -4879,9 +4879,9 @@ eslint-import-resolver-node@^0.3.6:
     resolve "^1.20.0"
 
 eslint-module-utils@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.0.tgz#9e97c12688113401259b39d960e6a1f09f966435"
-  integrity sha512-hqSE88MmHl3ru9SYvDyGrlo0JwROlf9fiEMplEV7j/EAuq9iSlIlyCFbBT6pdULQBSnBYtYKiMLps+hKkyP7Gg==
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.1.tgz#b435001c9f8dd4ab7f6d0efcae4b9696d4c24b7c"
+  integrity sha512-fjoetBXQZq2tSTWZ9yWVl2KuFrTZZH3V+9iD1V1RfpDgxzJR+mPd/KZmMiA8gbPqdBzpNiEHOuT7IYEWxrH0zQ==
   dependencies:
     debug "^3.2.7"
     find-up "^2.1.0"
@@ -6834,9 +6834,9 @@ istanbul-lib-source-maps@^4.0.0:
     source-map "^0.6.1"
 
 istanbul-reports@^3.0.2:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.0.4.tgz#5c38ce8136edf484c0fcfbf7514aafb0363ed1db"
-  integrity sha512-bFjUnc95rHjdCR63WMHUS7yfJJh8T9IPSWavvR02hhjVwezWALZ5axF9EqjmwZHpXqkzbgAMP8DmAtiyNxrdrQ==
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.0.5.tgz#a2580107e71279ea6d661ddede929ffc6d693384"
+  integrity sha512-5+19PlhnGabNWB7kOFnuxT8H3T/iIyQzIbQMxXsURmmvKg86P2sbkrGOT77VnHw0Qr0gc2XzRaRfMZYYbSQCJQ==
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
