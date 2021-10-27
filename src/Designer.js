@@ -356,36 +356,46 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
 
   if (!theme) return <Loading />;
 
+  let content = (
+    <ErrorCatcher>
+      <Canvas />
+    </ErrorCatcher>
+  );
+
+  if (confirmReplace || (responsive !== 'small' && mode !== 'preview')) {
+    content = (
+      <Grid fill columns={columns} rows="full">
+        {responsive !== 'small' && mode === 'edit' && <Tree />}
+
+        {content}
+
+        {responsive !== 'small' &&
+          mode !== 'preview' &&
+          (mode === 'comments' ? (
+            <Comments />
+          ) : selectedComponent ? (
+            <Properties />
+          ) : selected.screen ? (
+            <ScreenDetails />
+          ) : null)}
+        {confirmReplace && (
+          <ConfirmReplace
+            design={design}
+            nextDesign={confirmReplace}
+            onDone={(nextDesign) => {
+              if (nextDesign) updateDesign(nextDesign);
+              setConfirmReplace(undefined);
+            }}
+          />
+        )}
+      </Grid>
+    );
+  }
+
   return (
     <DesignContext.Provider value={designContext}>
       <Keyboard target="document" onKeyDown={onKey}>
-        <Grid fill columns={columns} rows="full">
-          {responsive !== 'small' && mode === 'edit' && <Tree />}
-
-          <ErrorCatcher>
-            <Canvas />
-          </ErrorCatcher>
-
-          {responsive !== 'small' &&
-            mode !== 'preview' &&
-            (mode === 'comments' ? (
-              <Comments />
-            ) : selectedComponent ? (
-              <Properties />
-            ) : selected.screen ? (
-              <ScreenDetails />
-            ) : null)}
-          {confirmReplace && (
-            <ConfirmReplace
-              design={design}
-              nextDesign={confirmReplace}
-              onDone={(nextDesign) => {
-                if (nextDesign) updateDesign(nextDesign);
-                setConfirmReplace(undefined);
-              }}
-            />
-          )}
-        </Grid>
+        {content}
       </Keyboard>
     </DesignContext.Provider>
   );
