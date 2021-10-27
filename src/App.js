@@ -314,7 +314,6 @@ const App = () => {
       theme={designerTheme}
       themeMode={colorMode}
       dir={rtl ? 'rtl' : undefined}
-      style={{ height: '100%' }}
     >
       {content}
     </Grommet>

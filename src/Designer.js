@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Grid, Keyboard, ResponsiveContext } from 'grommet';
+import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
 import DesignContext from './DesignContext';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas';
@@ -364,20 +364,20 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
 
   if (confirmReplace || (responsive !== 'small' && mode !== 'preview')) {
     content = (
-      <Grid fill columns={columns} rows="full">
+      <Grid columns={columns}>
         {responsive !== 'small' && mode === 'edit' && <Tree />}
 
-        {content}
+        <Box height="100vh" overflow="auto">
+          {content}
+        </Box>
 
-        {responsive !== 'small' &&
-          mode !== 'preview' &&
-          (mode === 'comments' ? (
-            <Comments />
-          ) : selectedComponent ? (
-            <Properties />
-          ) : selected.screen ? (
-            <ScreenDetails />
-          ) : null)}
+        {responsive !== 'small' && mode !== 'preview' && (
+          <Box height="100vh">
+            {(mode === 'comments' && <Comments />) ||
+              (selectedComponent && <Properties />) ||
+              (selected.screen && <ScreenDetails />)}
+          </Box>
+        )}
         {confirmReplace && (
           <ConfirmReplace
             design={design}
