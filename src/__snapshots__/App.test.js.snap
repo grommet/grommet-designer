@@ -268,28 +268,24 @@ exports[`App empty 2`] = `
   style="height: 100%;"
 >
   <div
-    class="StyledGrid-sc-1wofa1l-0 PhHZq"
+    class="StyledGrommet-sc-19lkkz7-0 clFdPv"
+    id="designer-canvas"
+    style="height: 100%; max-width: 100vw;"
   >
     <div
-      class="StyledGrommet-sc-19lkkz7-0 clFdPv"
-      id="designer-canvas"
-      style="height: 100%; max-width: 100vw;"
+      class="StyledBox-sc-13pk1d4-0 bcQhQk"
+      draggable="true"
+      style="outline: 1px dashed red;"
+      tabindex="-1"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 bcQhQk"
-        draggable="true"
-        style="outline: 1px dashed red;"
-        tabindex="-1"
+        class="sc-gsDKAQ JDWSK"
       >
-        <div
-          class="sc-gsDKAQ JDWSK"
+        <p
+          class="StyledParagraph-sc-tbetod-0 tJUDG"
         >
-          <p
-            class="StyledParagraph-sc-tbetod-0 tJUDG"
-          >
-            This Box is currently empty. Add components to it, so it can do its layout thing.
-          </p>
-        </div>
+          This Box is currently empty. Add components to it, so it can do its layout thing.
+        </p>
       </div>
     </div>
   </div>
