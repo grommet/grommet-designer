@@ -77,6 +77,8 @@ export const structure = [
       'Distribution',
       'List',
       'Meter',
+      'NameValueList',
+      'NameValuePair',
       'Pagination',
       'Spinner',
       'WorldMap',

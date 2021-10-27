@@ -38,6 +38,8 @@ import {
   Menu,
   Meter,
   Nav,
+  NameValueList,
+  NameValuePair,
   Pagination,
   Paragraph,
   RadioButtonGroup,
@@ -1724,6 +1726,55 @@ export const components = {
           ? replaceData(props.value)
           : props.value,
     }),
+  },
+  NameValueList: {
+    component: NameValueList,
+    name: 'NameValueList',
+    container: true,
+    documentation: 'https://v2.grommet.io/namevaluelist',
+    defaultProps: {
+      layout: 'column',
+    },
+    properties: {
+      align: ['stretch', 'start', 'center', 'end'],
+      layout: ['column', 'grid'],
+      margin: Edge,
+      nameProps: {
+        align: ['stretch', 'start', 'center', 'end'],
+        width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      },
+      pairProps: {
+        direction: ['column', 'column-reverse', 'row'],
+      },
+      valueProps: {
+        align: ['stretch', 'start', 'center', 'end'],
+        width: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      },
+    },
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This NameValueList is currently empty. Add NameValuePair components to
+        it.
+      </Paragraph>
+    ),
+  },
+  NameValuePair: {
+    component: NameValuePair,
+    name: 'NameValuePair',
+    container: true,
+    documentation: 'https://v2.grommet.io/namevaluepair',
+    properties: {
+      name: '',
+    },
+    designProperties: {
+      value: '',
+    },
+    override: ({ designProps, props }, { replaceData }) => {
+      const result = {};
+      if (designProps?.value !== undefined)
+        result.children = replaceData(designProps.value);
+      return result;
+    },
   },
   Pagination: {
     component: Pagination,
