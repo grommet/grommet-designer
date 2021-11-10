@@ -671,6 +671,7 @@ const Canvas = () => {
       theme={theme}
       themeMode={design.themeMode}
       full="min"
+      style={{ height: '1px' }}
     >
       {content}
     </Grommet>

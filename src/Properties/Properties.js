@@ -311,7 +311,7 @@ const Properties = () => {
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box border="left">
+      <Box border="left" fill="vertical">
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
             <Menu
