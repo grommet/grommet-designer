@@ -32,8 +32,7 @@ const CoordinateInput = ({ value, index, name, max, onChange }) => (
   />
 );
 
-const GridAreas = ({ design, responsiveSize, selected, value, onChange }) => {
-  const component = design.components[selected.component];
+const GridAreas = ({ component, responsiveSize, value, onChange }) => {
   let { columns, rows } = component.props;
   if (component.responsive && component.responsive[responsiveSize]) {
     const responsiveProps = component.responsive[responsiveSize].props;

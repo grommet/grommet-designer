@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Button, Heading, Layer, Text } from 'grommet';
 import { Close, FormDown } from 'grommet-icons';
+import DesignContext from '../DesignContext';
 import Field from '../components/Field';
 import ComponentInput from './ComponentInput';
 
@@ -9,6 +10,9 @@ const jsonValue = (value) =>
 
 const FunctionProperty = React.forwardRef(
   ({ first, linkOptions, name, property, sub, theme, value, ...rest }, ref) => {
+    // need 'component' for GridAreas
+    const { design, selected } = useContext(DesignContext);
+    const component = design.components[selected.component];
     const [expand, setExpand] = React.useState();
     const CustomProperty = property;
     if (property.inline) {
@@ -28,6 +32,7 @@ const FunctionProperty = React.forwardRef(
             linkOptions={linkOptions}
             dropTarget={ref && ref.current}
             ComponentInput={ComponentInput}
+            component={component}
             {...rest}
           />
         </Field>
@@ -88,6 +93,7 @@ const FunctionProperty = React.forwardRef(
                   theme={theme}
                   linkOptions={linkOptions}
                   ComponentInput={ComponentInput}
+                  component={component}
                   {...rest}
                 />
               </Box>
