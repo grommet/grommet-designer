@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, FormField, Paragraph, Select } from 'grommet';
 import { getParent } from '../../design'; // TODO: fix
 
-const BoxGridArea = ({ value, onChange, design, selected }) => {
+const BoxGridArea = ({ value, onChange, design, component }) => {
   let message;
-  const parent = getParent(design, selected.component);
+  const parent = getParent(design, component.id);
   let areas;
   if (!parent) {
     message = `

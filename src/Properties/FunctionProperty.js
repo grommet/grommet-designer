@@ -10,8 +10,9 @@ const jsonValue = (value) =>
 
 const FunctionProperty = React.forwardRef(
   ({ first, linkOptions, name, property, sub, theme, value, ...rest }, ref) => {
-    // need 'component' for GridAreas
+    // need 'design' for BoxGridArea
     const { design, selected } = useContext(DesignContext);
+    // need 'component' for BoxGridArea and GridAreas
     const component = design.components[selected.component];
     const [expand, setExpand] = React.useState();
     const CustomProperty = property;
@@ -33,6 +34,7 @@ const FunctionProperty = React.forwardRef(
             dropTarget={ref && ref.current}
             ComponentInput={ComponentInput}
             component={component}
+            design={design}
             {...rest}
           />
         </Field>
@@ -94,6 +96,7 @@ const FunctionProperty = React.forwardRef(
                   linkOptions={linkOptions}
                   ComponentInput={ComponentInput}
                   component={component}
+                  design={design}
                   {...rest}
                 />
               </Box>
