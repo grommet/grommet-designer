@@ -134,6 +134,7 @@ exports[`App empty 1`] = `
         />
         <label
           class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 dMiheO"
+          label="right to left"
         >
           <div
             class="StyledBox-sc-13pk1d4-0 gPcvHA StyledCheckBox-sc-1dbk5ju-6 cQZdeZ"
