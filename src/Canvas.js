@@ -392,7 +392,7 @@ const Canvas = () => {
           : component.props;
       }
     }
-    if (hide) return null;
+    if (hide || !component) return null;
 
     const type = getComponentType(libraries, component.type);
     if (!type) {
