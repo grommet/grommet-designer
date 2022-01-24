@@ -99,6 +99,7 @@ export const getLinkOptions = (design, libraries, selected) => {
   return [
     ...screenComponents
       .map((k) => design.components[k])
+      .filter((c) => c)
       .filter((c) => {
         let type;
         // if this is a reference, check the target type
