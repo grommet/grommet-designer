@@ -4,7 +4,7 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^1.1.1",
     "@google-cloud/storage": "^5.12.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.7"
   },
   "scripts": {
     "start": "functions-framework --target=designs"
