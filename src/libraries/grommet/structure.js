@@ -81,6 +81,7 @@ export const structure = [
       'NameValuePair',
       'Pagination',
       'Spinner',
+      'Tag',
       'WorldMap',
     ],
   },
