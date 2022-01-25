@@ -50,6 +50,7 @@ import {
   Stack,
   Tab,
   Tabs,
+  Tag,
   Text,
   TextArea,
   TextInput,
@@ -421,11 +422,17 @@ export const components = {
     documentation: 'https://v2.grommet.io/card',
     properties: {
       ...reusedBoxProps,
+      height: Dimension,
       hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
+      width: Dimension,
     },
     structure: [
       ...reusedBoxStructure,
+      {
+        label: 'Layout in container',
+        properties: ['flex', 'fill', 'margin', 'gridArea', 'width', 'height'],
+      },
       {
         label: 'Interaction',
         properties: ['onClick', 'hoverIndicator'],
@@ -1794,6 +1801,32 @@ export const components = {
     name: 'Spinner',
     properties: {
       size: ['small', 'medium', 'large'],
+    },
+  },
+  Tag: {
+    component: Tag,
+    name: 'Tag',
+    documentation: 'https://v2.grommet.io/tag',
+    defaultProps: {
+      value: 'Tag',
+    },
+    properties: {
+      name: '',
+      value: 'Tag',
+      onClick: ['-link-'],
+      removable: false,
+    },
+    override: ({ props }, { dataContextPath, followLink }) => {
+      return {
+        onClick:
+          props && props.onClick
+            ? (event) => {
+                event.stopPropagation();
+                followLink(props.onClick, { dataContextPath });
+              }
+            : undefined,
+        onRemove: props && props.removable ? () => {} : undefined,
+      };
     },
   },
   Carousel: {
