@@ -177,8 +177,18 @@ const Canvas = () => {
           type = getComponentType(libraries, referencedComponent.type);
         } else type = getComponentType(libraries, target.type);
         const { hideable, selectable } = type;
+        // get parent in case it's an Alternative
+        const parent = target && getParent(design, target.id);
 
-        if (selectable) {
+        if (parent?.type === 'designer.Alternative') {
+          // only show the target in the Alternative
+          const nextDesign =
+            nextRef?.design || JSON.parse(JSON.stringify(design));
+          const component = nextDesign.components[parent.id];
+          component.props.active =
+            component.children.findIndex((id) => id === target.id) + 1;
+          nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
+        } else if (selectable) {
           const nextDesign =
             nextRef?.design || JSON.parse(JSON.stringify(design));
           const component = nextDesign.components[target.id];

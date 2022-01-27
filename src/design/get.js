@@ -72,11 +72,12 @@ export const isDescendent = (design, id, checkId) => {
 const getDescendants = (design, id) => {
   let result = [];
   const component = design.components[id];
-  if (component.children) {
-    component.children.forEach((childId) => {
-      result = [...result, childId, ...getDescendants(design, childId)];
-    });
-  }
+  component.children?.forEach((childId) => {
+    result = [...result, childId, ...getDescendants(design, childId)];
+  });
+  component.propComponents?.forEach((propId) => {
+    result = [...result, propId, ...getDescendants(design, propId)];
+  });
   return result;
 };
 
