@@ -1187,9 +1187,9 @@ export const components = {
       max: 10,
       min: 0,
       step: 1,
-      value: 0,
     },
     properties: {
+      defaultValue: '',
       max: 10,
       min: 0,
       step: 1,
