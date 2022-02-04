@@ -15,7 +15,7 @@ const NumberProperty = React.forwardRef(
           plain
           mask={[
             {
-              regexp: /^\d*$|^\{|^\{.+/,
+              regexp: /^-?\d*$|^\{|^\{.+/,
             },
           ]}
           value={value !== undefined ? value : ''}
@@ -23,6 +23,7 @@ const NumberProperty = React.forwardRef(
             let nextValue;
             // data reference
             if (event.target.value[0] === '{') nextValue = event.target.value;
+            else if (event.target.value === '-') nextValue = event.target.value;
             else {
               nextValue = parseInt(event.target.value, 10);
               // NaN check
