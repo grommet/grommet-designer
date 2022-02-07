@@ -16,18 +16,22 @@ const Chart = ({ value, onChange, theme }) => {
       <Box flex="grow">
         <FormField
           label="property"
-          help={value.type === 'bars' ? 'space separated for multiple' : ''}
+          help={
+            value.type === 'bars' || value.type === 'areas'
+              ? 'space separated for multiple'
+              : ''
+          }
         >
           <TextInput
             value={
-              value.type === 'bars'
+              value.type === 'bars' || value.type === 'areas'
                 ? value.property.join(' ')
                 : value.property || ''
             }
             onChange={(event) => {
               const nextValue = JSON.parse(JSON.stringify(value));
               nextValue.property =
-                value.type === 'bars'
+                value.type === 'bars' || value.type === 'areas'
                   ? event.target.value.split(' ')
                   : event.target.value;
               onChange(nextValue);
@@ -36,13 +40,21 @@ const Chart = ({ value, onChange, theme }) => {
         </FormField>
         <FormField label="type">
           <Select
-            options={['bar', 'bars', 'area', 'line', 'point', 'undefined']}
+            options={[
+              'bar',
+              'bars',
+              'area',
+              'areas',
+              'line',
+              'point',
+              'undefined',
+            ]}
             value={value.type}
             onChange={({ option }) => {
               const nextValue = JSON.parse(JSON.stringify(value));
               if (option === 'undefined') delete nextValue.type;
               else nextValue.type = option;
-              if (option === 'bars') {
+              if (option === 'bars' || option === 'areas') {
                 if (typeof value.property === 'string') {
                   nextValue.property = value.property.split(' ');
                 }
