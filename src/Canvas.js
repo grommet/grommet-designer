@@ -85,6 +85,7 @@ const Canvas = () => {
     setSelected,
     theme,
   } = useContext(DesignContext);
+
   // inlineEdit is the component id of the component being edited inline
   const [inlineEdit, setInlineEdit] = useState();
   const inlineEditOnChange = useCallback(
@@ -432,8 +433,10 @@ const Canvas = () => {
         dataPath = dataContextPath
           ? [...dataContextPath, ...parsePath(dataPath)]
           : parsePath(dataPath);
-        // prefer dirtyData, if we have any
-        dataValue = dirtyData[dataPath.join('.')] || find(data, dataPath);
+        // prefer datum then dirtyData, if we have any
+        dataValue = find(datum, dataPath);
+        if (dataValue === undefined) dataValue = dirtyData[dataPath.join('.')];
+        if (dataValue === undefined) dataValue = find(data, dataPath);
       }
       specialProps = type.override(component, {
         dataContextPath: dataPath,
@@ -443,7 +446,7 @@ const Canvas = () => {
         replaceData: (text) =>
           replace(text, [datum, dirtyData, data], contextPath),
         setHide: (value) => setHide(id, value),
-        data: dataValue || undefined,
+        data: dataValue !== undefined ? dataValue : undefined,
         renderComponent,
         // setData is used by Form to track Form changes.
         // These changes are stored within the dirtyData here.
