@@ -908,11 +908,12 @@ export const components = {
       toggle: false,
     },
     designProperties: {
+      dataPath: '',
       link: ['-link-checked-'],
     },
     override: (
       { designProps, props },
-      { dataContextPath, followLinkOption, replaceData },
+      { data, dataContextPath, followLinkOption, replaceData },
     ) => {
       const result = {
         onChange:
@@ -927,13 +928,17 @@ export const components = {
       if (props.label) {
         result.label = replaceData(props.label);
       }
+      if (designProps.dataPath) {
+        result.checked =
+          typeof data === 'object' ? data[designProps.dataPath] : data;
+      }
       return result;
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
         followLinkOption(
           designProps.link,
-          props.value !== undefined ? props.checked : props.defaultChecked,
+          props.checked !== undefined ? props.checked : props.defaultChecked,
         );
       }
     },
