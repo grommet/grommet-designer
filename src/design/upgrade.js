@@ -126,8 +126,7 @@ export const upgradeDesign = (design) => {
     .forEach((component) => {
       const link = component.designProps && component.designProps.link;
       if (
-        link &&
-        link.component &&
+        link?.component &&
         design.screens[link.screen] &&
         design.screens[link.screen].root === link.component
       ) {
@@ -206,7 +205,7 @@ export const upgradeDesign = (design) => {
         l.control ||
         (design.screens[l.screen] &&
           (!l.component || design.components[l.component]));
-      if (component.designProps && component.designProps.link) {
+      if (component?.designProps?.link) {
         const link = component.designProps.link;
         if (Array.isArray(link)) {
           // Button
@@ -291,10 +290,7 @@ export const upgradeDesign = (design) => {
   Object.keys(design.components)
     .map((id) => design.components[id])
     .filter(
-      (component) =>
-        component.props.options &&
-        component.designProps &&
-        component.designProps.link,
+      (component) => component.props.options && component?.designProps?.link,
     )
     .forEach((component) => {
       Object.keys(component.designProps.link).forEach((name) => {
@@ -313,8 +309,7 @@ export const upgradeDesign = (design) => {
     .filter(
       (component) =>
         component.type === 'grommet.CheckBox' &&
-        component.designProps &&
-        component.designProps.link &&
+        component?.designProps?.link &&
         Array.isArray(component.designProps.link),
     )
     .forEach((component) => {
@@ -344,5 +339,23 @@ export const upgradeDesign = (design) => {
       else alignLabel(component.designProps.link);
     });
 
-  design.version = 3.6;
+  // update DataChart chart property from array of strings to array of objects
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter(
+      (component) =>
+        component.type === 'grommet.DataChart' && component?.props?.chart,
+    )
+    .forEach((component) => {
+      component.props.chart = component.props.chart.map((chart) => {
+        if (Array.isArray(chart.property)) {
+          chart.property = chart.property.map((property) =>
+            typeof property === 'string' ? { property } : property,
+          );
+        }
+        return chart;
+      });
+    });
+
+  design.version = 3.7;
 };
