@@ -916,26 +916,25 @@ export const components = {
       { data, dataContextPath, followLinkOption, replaceData },
     ) => {
       const result = {
-        onChange:
-          designProps && designProps.link
-            ? (event) => {
-                followLinkOption(designProps.link, event.target.checked, {
-                  dataContextPath,
-                });
-              }
-            : undefined,
+        onChange: designProps?.link
+          ? (event) => {
+              followLinkOption(designProps.link, event.target.checked, {
+                dataContextPath,
+              });
+            }
+          : undefined,
       };
       if (props.label) {
         result.label = replaceData(props.label);
       }
-      if (designProps.dataPath) {
+      if (designProps?.dataPath) {
         result.checked =
           typeof data === 'object' ? data[designProps.dataPath] : data;
       }
       return result;
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+      if (designProps?.link) {
         followLinkOption(
           designProps.link,
           props.checked !== undefined ? props.checked : props.defaultChecked,
