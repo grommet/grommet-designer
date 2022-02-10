@@ -1489,6 +1489,7 @@ export const components = {
       },
       legend: false,
       margin: Edge,
+      offset: false,
       series: DataChartSeries,
       size: {
         height: [
