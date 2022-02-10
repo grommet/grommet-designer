@@ -19,6 +19,7 @@ import {
   DataChart,
   DataTable,
   DateInput,
+  Diagram,
   Distribution,
   DropButton,
   FileInput,
@@ -72,6 +73,7 @@ import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
 import DataTableColumns from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
+import DiagramConnections from './DiagramConnections';
 import Dimension from './Dimension';
 import EdgeSizeOptions from './EdgeSizeOptions';
 import GridAreas from './GridAreas';
@@ -1668,6 +1670,14 @@ export const components = {
         );
       };
       return result;
+    },
+  },
+  Diagram: {
+    component: Diagram,
+    name: 'Diagram',
+    properties: {
+      amination: false,
+      connections: DiagramConnections,
     },
   },
   List: {

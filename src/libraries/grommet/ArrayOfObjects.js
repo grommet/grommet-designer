@@ -18,6 +18,9 @@ const ArrayOfObjects = ({
   const editRef = useRef();
   const [headerBack, setHeaderBack] = useState();
 
+  const getLabel = (item) =>
+    typeof labelKey === 'function' ? labelKey(item) : item[labelKey];
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
     if (editRef.current) {
@@ -79,7 +82,7 @@ const ArrayOfObjects = ({
         <List data={value} pad="none" onOrder={onChange}>
           {(item) => (
             <Box>
-              <Text>{item[labelKey]}</Text>
+              <Text>{getLabel(item)}</Text>
             </Box>
           )}
         </List>
@@ -108,7 +111,7 @@ const ArrayOfObjects = ({
             justify="between"
             gap="medium"
           >
-            <Text>{item[labelKey]}</Text>
+            <Text>{getLabel(item)}</Text>
             <FormNext />
           </Box>
         )}
@@ -134,6 +137,7 @@ const ArrayOfObjects = ({
             content: 'Re-order items',
             dropProps: { align: { right: 'left' } },
           }}
+          disabled={value.length <= 1}
           hoverIndicator
           onClick={() => setReorder(true)}
         />

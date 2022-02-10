@@ -621,6 +621,7 @@ const Canvas = () => {
       inlineEdit === id && type.name === 'Markdown' ? 'div' : type.component,
       {
         key: key || id,
+        id: id,
         ...dragProps,
         style,
         ...mergedProps,
