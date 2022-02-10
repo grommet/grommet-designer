@@ -1676,7 +1676,7 @@ export const components = {
     component: Diagram,
     name: 'Diagram',
     properties: {
-      amination: false,
+      animation: false,
       connections: DiagramConnections,
     },
   },
