@@ -274,6 +274,7 @@ exports[`App empty 2`] = `
     <div
       class="StyledBox-sc-13pk1d4-0 ezaGBh"
       draggable="true"
+      id="2"
       style="outline: 1px dashed red;"
       tabindex="-1"
     >

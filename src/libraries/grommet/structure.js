@@ -74,6 +74,7 @@ export const structure = [
       'Clock',
       'DataChart',
       'DataTable',
+      'Diagram',
       'Distribution',
       'List',
       'Meter',
