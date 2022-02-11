@@ -1,29 +1,36 @@
 import React from 'react';
+import { Box, Button, CheckBox, Tip } from 'grommet';
 import BoxBackgroundImage from './BoxBackgroundImage';
-import InlineOptions from './InlineOptions';
-import TrueOption, { trueOption } from './TrueOption';
 import UndefinedOption, { undefinedOption } from './UndefinedOption';
 import VariedOption, { variedOption } from './VariedOption';
 
-const options = [trueOption, variedOption];
-
 const BoxHoverIndicator = (props) => {
-  const { name, value } = props;
-  const adjustedOptions = [...options];
-  if (value) adjustedOptions.push(undefinedOption);
+  const { name, value, onChange } = props;
+  const content = [
+    <Tip key="check" content={value !== true ? 'true' : 'false'}>
+      <CheckBox
+        name={name}
+        checked={value === true}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+    </Tip>,
+  ];
+  if (value !== undefined) {
+    content.push(
+      <Button key="varied" onClick={() => onChange(variedOption.value)}>
+        <VariedOption />
+      </Button>,
+    );
+    content.push(
+      <Button key="undefined" onClick={() => onChange(undefinedOption.value)}>
+        <UndefinedOption />
+      </Button>,
+    );
+  }
   return (
-    <InlineOptions name={name} options={adjustedOptions} {...props}>
-      {(option, { checked, hover }) => {
-        if (option.label === undefinedOption.label) {
-          return <UndefinedOption checked={checked} hover={hover} />;
-        } else if (option.label === variedOption.label) {
-          return <VariedOption checked={checked} hover={hover} />;
-        } else if (option.label === trueOption.label) {
-          return <TrueOption checked={checked} hover={hover} />;
-        }
-        return null;
-      }}
-    </InlineOptions>
+    <Box direction="row" pad={{ horizontal: 'small' }}>
+      {content}
+    </Box>
   );
 };
 
