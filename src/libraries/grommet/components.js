@@ -430,11 +430,12 @@ export const components = {
       width: Dimension,
     },
     structure: [
-      ...reusedBoxStructure,
+      reusedBoxStructure[0],
       {
         label: 'Layout in container',
         properties: ['flex', 'fill', 'margin', 'gridArea', 'width', 'height'],
       },
+      reusedBoxStructure[2],
       {
         label: 'Interaction',
         properties: ['onClick', 'hoverIndicator'],
