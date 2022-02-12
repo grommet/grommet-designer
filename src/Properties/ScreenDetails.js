@@ -7,7 +7,7 @@ import { addScreen, deleteScreen, newFrom, slugify } from '../design';
 import TextInputField from './TextInputField';
 
 const ScreenDetails = () => {
-  const { changeDesign, design, imports, selected, setSelected } =
+  const { changeDesign, design, imports, libraries, selected, setSelected } =
     useContext(DesignContext);
   const delet = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
@@ -20,7 +20,12 @@ const ScreenDetails = () => {
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
     const nextSelected = { ...selected };
-    addScreen(nextDesign, nextSelected, nextDesign.screens[selected.screen]);
+    addScreen({
+      nextDesign,
+      nextSelected,
+      copyScreen: nextDesign.screens[selected.screen],
+      libraries,
+    });
     changeDesign(nextDesign);
     setSelected(nextSelected);
   };
@@ -30,6 +35,7 @@ const ScreenDetails = () => {
       design,
       externalReferences: false,
       imports,
+      libraries,
       selected,
     });
     changeDesign(nextDesign);

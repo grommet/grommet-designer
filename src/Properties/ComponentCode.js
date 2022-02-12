@@ -5,11 +5,11 @@ import DesignContext from '../DesignContext';
 import { generateJSX } from '../design';
 
 const ComponentCode = ({ component, onDone }) => {
-  const { design, imports, theme } = useContext(DesignContext);
+  const { design, imports, libraries, theme } = useContext(DesignContext);
   const [code, setCode] = useState();
   useEffect(() => {
-    setCode(generateJSX({ component, design, imports, theme }));
-  }, [component, design, imports, theme]);
+    setCode(generateJSX({ component, design, imports, libraries, theme }));
+  }, [component, design, imports, libraries, theme]);
   return (
     <Layer onClickOutside={onDone} onEsc={onDone}>
       <Header>

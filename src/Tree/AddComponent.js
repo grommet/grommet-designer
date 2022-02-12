@@ -14,12 +14,8 @@ import AddComponents from './AddComponents';
 import AddLocation from './AddLocation';
 
 const AddComponent = ({ onClose }) => {
-  const { changeDesign, design, imports, selected, setSelected } =
+  const { changeDesign, design, imports, libraries, selected, setSelected } =
     useContext(DesignContext);
-  const libraries = useMemo(
-    () => imports.filter((i) => i.library).map((i) => i.library),
-    [imports],
-  );
   const [addLocation, setAddLocation] = useState();
 
   const onAdd = useCallback(
@@ -30,9 +26,9 @@ const AddComponent = ({ onClose }) => {
       if (typeName) {
         if (typeName === 'designer.Screen') {
           if (starter && starter !== 'default') {
-            copyScreen(nextDesign, nextSelected, starter);
+            copyScreen({ nextDesign, nextSelected, starter, libraries });
           } else {
-            addScreen(nextDesign, nextSelected);
+            addScreen({ nextDesign, nextSelected, libraries });
           }
         } else {
           if (starter && starter !== 'default') {
@@ -40,6 +36,7 @@ const AddComponent = ({ onClose }) => {
               nextDesign,
               templateDesign: starter.starters,
               id: starter.id,
+              libraries,
               screen: nextSelected.screen,
             });
             nextDesign.components[id].name = starter.name;
@@ -54,6 +51,7 @@ const AddComponent = ({ onClose }) => {
             nextDesign,
             templateDesign,
             id: template.id,
+            libraries,
             screen: nextSelected.screen,
           });
           nextDesign.components[id].name = template.name;
@@ -141,7 +139,12 @@ const AddComponent = ({ onClose }) => {
           </Box>
         )}
         <Box flex overflow="auto">
-          <AddComponents design={design} imports={imports} onAdd={onAdd} />
+          <AddComponents
+            design={design}
+            imports={imports}
+            libraries={libraries}
+            onAdd={onAdd}
+          />
         </Box>
       </Box>
     </Layer>

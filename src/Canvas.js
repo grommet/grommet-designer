@@ -80,6 +80,7 @@ const Canvas = () => {
     data,
     design,
     imports,
+    libraries,
     mode,
     selected,
     setSelected,
@@ -111,11 +112,6 @@ const Canvas = () => {
   // referenced maps rendered referenced component to its Reference
   const referenced = useRef({});
   const [initialize, setInitialize] = useState({});
-
-  const libraries = useMemo(
-    () => imports.filter((i) => i.library).map((i) => i.library),
-    [imports],
-  );
 
   // clear inline edit when selection changes
   useEffect(() => {

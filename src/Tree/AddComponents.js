@@ -3,12 +3,7 @@ import { Box, Keyboard, TextInput } from 'grommet';
 import AddLibrary from './AddLibrary';
 import AddTemplate from './AddTemplate';
 
-const AddComponents = ({ design, imports, onAdd }) => {
-  const libraries = useMemo(
-    () => imports.filter((i) => i.library).map((i) => i.library),
-    [imports],
-  );
-
+const AddComponents = ({ design, imports, libraries, onAdd }) => {
   const [search, setSearch] = useState('');
 
   const inputRef = useRef();

@@ -185,6 +185,7 @@ const Properties = () => {
       nextDesign,
       id: selected.component,
       imports,
+      libraries,
     });
     if (newId) {
       changeDesign(nextDesign);
@@ -199,7 +200,11 @@ const Properties = () => {
 
   const duplicate = () => {
     const nextDesign = JSON.parse(JSON.stringify(design));
-    const newId = duplicateComponent(nextDesign, selected.component);
+    const newId = duplicateComponent({
+      nextDesign,
+      id: selected.component,
+      libraries,
+    });
     changeDesign(nextDesign);
     setSelected({ ...selected, component: newId });
 

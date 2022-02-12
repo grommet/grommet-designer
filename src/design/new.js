@@ -8,7 +8,13 @@ const empty = {
   components: {},
 };
 
-export const newFrom = ({ design, externalReferences, imports, selected }) => {
+export const newFrom = ({
+  design,
+  externalReferences,
+  imports,
+  libraries,
+  selected,
+}) => {
   const nextDesign = setupDesign(empty);
   upgradeDesign(nextDesign);
   const screen = design.screens[selected.screen];
@@ -18,6 +24,7 @@ export const newFrom = ({ design, externalReferences, imports, selected }) => {
     templateDesign: design,
     id: selected.component || screen.root,
     imports,
+    libraries,
     screen: selected.screen,
   });
   nextDesign.name =
