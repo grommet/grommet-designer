@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Box, Button, Heading, Layer } from 'grommet';
 import { Close } from 'grommet-icons';
