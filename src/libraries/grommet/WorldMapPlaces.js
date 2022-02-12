@@ -28,7 +28,9 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
               if (!nextPlace.location) nextPlace.location = [];
               let lat = parseFloat(event.target.value, 10);
               nextPlace.location[0] =
-                `${lat}` === event.target.value ? lat : event.target.value;
+                `${lat}` === (event.target.value !== '')
+                  ? lat
+                  : event.target.value;
               setPlace(nextPlace);
             }}
           />
@@ -40,7 +42,9 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
               if (!nextPlace.location) nextPlace.location = [];
               let lon = parseFloat(event.target.value, 10);
               nextPlace.location[1] =
-                `${lon}` === event.target.value ? lon : event.target.value;
+                `${lon}` === (event.target.value !== '')
+                  ? lon
+                  : event.target.value;
               setPlace(nextPlace);
             }}
           />

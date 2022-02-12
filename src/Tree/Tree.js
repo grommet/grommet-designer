@@ -242,11 +242,12 @@ const Tree = () => {
       if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
         if (copied) {
           const nextDesign = JSON.parse(JSON.stringify(design));
-          const newId = duplicateComponent(
+          const newId = duplicateComponent({
             nextDesign,
-            copied.component,
-            selected.component,
-          );
+            id: copied.component,
+            libraries,
+            parentId: selected.component,
+          });
           changeDesign(nextDesign);
           setSelected({ ...selected, component: newId });
         } else {
@@ -259,6 +260,7 @@ const Tree = () => {
                 nextDesign,
                 templateDesign: copiedDesign,
                 id: copiedSelected.component,
+                libraries,
               });
               insertComponent({ nextDesign, libraries, selected, id: newId });
 

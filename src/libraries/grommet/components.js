@@ -1602,6 +1602,19 @@ export const components = {
       }));
       return result;
     },
+    copy: (source, copy, { nextDesign, duplicateComponent }) => {
+      // duplicate any columns render components
+      if (source.props?.columns) {
+        source.props.columns.forEach((column, index) => {
+          if (column.render) {
+            copy.props.columns[index].render = duplicateComponent({
+              nextDesign,
+              id: column.render,
+            });
+          }
+        });
+      }
+    },
   },
   Distribution: {
     component: Distribution,
@@ -1938,6 +1951,19 @@ export const components = {
         }));
       }
       return result;
+    },
+    copy: (source, copy, { nextDesign, duplicateComponent }) => {
+      // duplicate any places content components
+      if (source.props?.places) {
+        source.props.places.forEach((place, index) => {
+          if (place.content) {
+            copy.props.places[index].content = duplicateComponent({
+              nextDesign,
+              id: place.content,
+            });
+          }
+        });
+      }
     },
   },
 };

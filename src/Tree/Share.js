@@ -235,7 +235,7 @@ const SaveLocally = ({ onClose }) => {
 };
 
 const Developer = () => {
-  const { design, imports, theme } = useContext(DesignContext);
+  const { design, imports, libraries, theme } = useContext(DesignContext);
   const [code, setCode] = useState();
 
   return (
@@ -254,7 +254,7 @@ const Developer = () => {
           label="Generate Code"
           hoverIndicator
           onClick={() => {
-            setCode(generateJSX({ design, imports, theme }));
+            setCode(generateJSX({ design, imports, libraries, theme }));
             ReactGA.event({
               category: 'share',
               action: 'generate code',

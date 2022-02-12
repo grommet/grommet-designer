@@ -62,9 +62,9 @@ export const generateJSX = ({
   component,
   design,
   imports: importsArg,
+  libraries,
   theme: themeArg,
 }) => {
-  const libraries = importsArg.filter((i) => i.library).map((i) => i.library);
   const imports = { Grommet: true };
   const iconImports = {};
   const theme = themeForValue(design.theme);

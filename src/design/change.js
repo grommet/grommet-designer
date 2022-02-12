@@ -87,7 +87,7 @@ export const copyComponent = ({
   templateDesign,
   id,
   idMap: idMapArg, // only set when descending into children
-  imports,
+  libraries,
   screen,
   externalReferences = true,
 }) => {
@@ -101,6 +101,7 @@ export const copyComponent = ({
         nextDesign,
         templateDesign,
         id: referenceComponent.id,
+        libraries,
         externalReferences,
       });
       return newId;
@@ -125,6 +126,7 @@ export const copyComponent = ({
         templateDesign,
         id: childId,
         idMap,
+        libraries,
         screen,
         externalReferences,
       });
@@ -132,6 +134,7 @@ export const copyComponent = ({
     });
   }
 
+  // copy components where a property is an embedded component
   if (component.propComponents) {
     nextComponent.propComponents = component.propComponents.map((childId) => {
       const nextChildId = copyComponent({
@@ -139,6 +142,7 @@ export const copyComponent = ({
         templateDesign,
         id: childId,
         idMap,
+        libraries,
         screen,
         externalReferences,
       });
@@ -149,6 +153,16 @@ export const copyComponent = ({
         }
       });
       return nextChildId;
+    });
+  }
+
+  // handle any deeper component copying, like DataTable columns render
+  const type = getComponentType(libraries, component.type);
+  if (type.copy) {
+    type.copy(component, nextComponent, {
+      nextDesign,
+      duplicateComponent: (props) =>
+        duplicateComponent({ ...props, libraries, parentId: false }),
     });
   }
 
@@ -255,7 +269,12 @@ export const copyComponent = ({
   return nextId;
 };
 
-export const addScreen = (nextDesign, nextSelected, copyScreen) => {
+export const addScreen = ({
+  nextDesign,
+  nextSelected,
+  copyScreen,
+  libraries,
+}) => {
   // create new screen
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
@@ -269,6 +288,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
         nextDesign,
         templateDesign: nextDesign,
         id: copyScreen.root,
+        libraries,
         screen: screenId, // so links can be re-linked
       });
     } else {
@@ -277,6 +297,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
         nextDesign,
         templateDesign: copyScreen,
         id: copyScreen.root,
+        libraries,
         screen: screenId, // so links can be re-linked
       });
     }
@@ -285,6 +306,7 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
       nextDesign,
       templateDesign: bare,
       id: bare.screens[1].root,
+      libraries,
       screen: screenId, // so links can be re-linked
     });
   }
@@ -310,7 +332,12 @@ export const addScreen = (nextDesign, nextSelected, copyScreen) => {
   nextSelected.component = screen.root;
 };
 
-export const copyScreen = (nextDesign, nextSelected, starter) => {
+export const copyScreen = ({
+  nextDesign,
+  nextSelected,
+  starter,
+  libraries,
+}) => {
   // create new screen
   const screenId = nextDesign.nextId;
   nextDesign.nextId += 1;
@@ -320,6 +347,7 @@ export const copyScreen = (nextDesign, nextSelected, starter) => {
     nextDesign,
     templateDesign: starter.starters,
     id: starter.starters.screens[starter.id].root,
+    libraries,
     screen: screenId, // so links can be re-linked
   });
   nextDesign.screens[screenId].name = starter.name;
@@ -341,15 +369,25 @@ export const deleteScreen = (nextDesign, id) => {
   return nextScreenId;
 };
 
-export const duplicateComponent = (nextDesign, id, parentId) => {
-  const newId = copyComponent({ nextDesign, templateDesign: nextDesign, id });
-  const parent = parentId
-    ? nextDesign.components[parentId]
-    : getParent(nextDesign, id);
-  if (!parent.children) parent.children = [];
-  const index = parent.children.indexOf(id);
-  if (index !== -1) parent.children.splice(index + 1, 0, newId);
-  else parent.children.push(newId);
+export const duplicateComponent = ({ nextDesign, id, libraries, parentId }) => {
+  const newId = copyComponent({
+    nextDesign,
+    templateDesign: nextDesign,
+    id,
+    libraries,
+  });
+  const parent =
+    (parentId && nextDesign.components[parentId]) ||
+    (parentId === undefined && getParent(nextDesign, id)) ||
+    undefined;
+  // might have no parent if this is a property component,
+  // like DataTable columns render
+  if (parent) {
+    if (!parent.children) parent.children = [];
+    const index = parent.children.indexOf(id);
+    if (index !== -1) parent.children.splice(index + 1, 0, newId);
+    else parent.children.push(newId);
+  }
   return newId;
 };
 
@@ -442,7 +480,7 @@ export const insertComponent = ({
   }
 };
 
-export const disconnectReference = ({ id, imports, nextDesign }) => {
+export const disconnectReference = ({ id, imports, libraries, nextDesign }) => {
   const component = nextDesign.components[id];
   const parent = getParent(nextDesign, component.id);
 
@@ -456,6 +494,7 @@ export const disconnectReference = ({ id, imports, nextDesign }) => {
       nextDesign,
       templateDesign: referenceDesign || nextDesign,
       id: referenceComponent.id,
+      libraries,
     });
     // copiedComponent has been inserted into the nextDesign already.
     // Place it to where this component is.
