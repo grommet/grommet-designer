@@ -1799,16 +1799,22 @@ export const components = {
     name: 'NameValuePair',
     container: true,
     documentation: 'https://v2.grommet.io/namevaluepair',
+    defaultProps: {
+      name: 'name',
+    },
     properties: {
-      name: '',
+      name: '-string-or-component-',
     },
     designProperties: {
       value: '',
     },
-    override: ({ designProps, props }, { replaceData }) => {
+    override: ({ designProps, props }, { renderComponent, replaceData }) => {
       const result = {};
       if (designProps?.value !== undefined)
         result.children = replaceData(designProps.value);
+      if (props.name && typeof props.name === 'number') {
+        result.name = renderComponent(props.name);
+      }
       return result;
     },
   },

@@ -15,6 +15,7 @@ import ObjectProperty from './ObjectProperty';
 import OptionsProperty from './OptionsProperty';
 import ReferenceProperty from './ReferenceProperty';
 import StringProperty from './StringProperty';
+import StringOrComponentProperty from './StringOrComponentProperty';
 
 const Property = React.forwardRef(
   ({ property: propertyArg, value, ...rest }, ref) => {
@@ -106,6 +107,9 @@ const Property = React.forwardRef(
             {...rest}
           />
         );
+      }
+      if (property.includes('-string-or-component-')) {
+        return <StringOrComponentProperty ref={ref} value={value} {...rest} />;
       }
       if (property.includes('-component-')) {
         return <ComponentProperty ref={ref} value={value} {...rest} />;
