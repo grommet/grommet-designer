@@ -4993,7 +4993,7 @@ grommet-styles@^0.2.0:
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.20.1"
-  resolved "https://github.com/grommet/grommet/tarball/stable#e7390446a6bf5352382dfe3b1ad4d749c5cfbfdb"
+  resolved "https://github.com/grommet/grommet/tarball/stable#a97695856990c38d192be717cad034b9d858c6cb"
   dependencies:
     grommet-icons "^4.7.0"
     hoist-non-react-statics "^3.2.0"
@@ -6766,9 +6766,9 @@ mustache@^2.1.1, mustache@^2.1.2, mustache@^2.2.1:
   integrity sha512-KpMNwdQsYz3O/SBS1qJ/o3sqUJ5wSb8gb0pul8CO0S56b9Y2ALm8zCfsjPXsqGFfoNBkDwZuZIAjhsZI03gYVQ==
 
 nanoid@^3.1.12, nanoid@^3.1.31, nanoid@^3.2.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.0.tgz#5906f776fd886c66c24f3653e0c46fcb1d4ad6b0"
-  integrity sha512-JzxqqT5u/x+/KOFSd7JP15DOo9nOoHpx6DYatqIHUW2+flybkm+mdcraotSQR5WcnZr+qhGVh8Ted0KdfSMxlg==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.1.tgz#6347a18cac88af88f58af0b3594b723d5e99bb35"
+  integrity sha512-n6Vs/3KGyxPQd6uO0eH4Bv0ojGSUvuLlIHtC3Y0kEO23YRge8H9x1GCzLn28YX0H66pMkxuaeESFq4tKISKwdw==
 
 natural-compare@^1.4.0:
   version "1.4.0"

@@ -1491,6 +1491,7 @@ export const components = {
       legend: false,
       margin: Edge,
       offset: false,
+      pad: BoxPad,
       series: DataChartSeries,
       size: {
         height: [
