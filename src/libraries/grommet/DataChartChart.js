@@ -101,6 +101,7 @@ const Chart = ({ value, onChange, theme }) => {
             'area',
             'areas',
             'line',
+            'lines',
             'point',
             'undefined',
           ]}
@@ -109,7 +110,7 @@ const Chart = ({ value, onChange, theme }) => {
             const nextValue = JSON.parse(JSON.stringify(value));
             if (option === 'undefined') delete nextValue.type;
             else nextValue.type = option;
-            if (option === 'bars' || option === 'areas') {
+            if (option === 'bars' || option === 'areas' || option === 'lines') {
               if (typeof value.property === 'string') {
                 nextValue.property = [{ property: value.property }];
               }
@@ -120,7 +121,9 @@ const Chart = ({ value, onChange, theme }) => {
           }}
         />
       </FormField>
-      {value.type === 'bars' || value.type === 'areas' ? (
+      {value.type === 'bars' ||
+      value.type === 'areas' ||
+      value.type === 'lines' ? (
         <Box
           flex="grow"
           pad={{ left: 'medium', bottom: 'medium', top: 'small' }}
