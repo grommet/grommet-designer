@@ -170,7 +170,8 @@ const Canvas = () => {
         if (!target) type = {};
         else if (target.type === 'designer.Reference') {
           const referencedComponent = design.components[target.props.component];
-          type = getComponentType(libraries, referencedComponent.type);
+          if (referencedComponent)
+            type = getComponentType(libraries, referencedComponent.type);
         } else type = getComponentType(libraries, target.type);
         const { hideable, selectable } = type;
         // get parent in case it's an Alternative
