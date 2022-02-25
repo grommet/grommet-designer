@@ -560,7 +560,7 @@ export const components = {
     documentation: 'https://v2.grommet.io/layer',
     help: `The Layer can be seen by giving it a name and turning off 'hide',
     allowing you to populate its contents. Wire up a Layer so it can be
-    dynamically shown via a Button link, List onClickItem,
+    dynamically shown via a Button or Menu link, List onClickItem,
     or DataTable onClickRow.
     `,
     defaultProps: {
