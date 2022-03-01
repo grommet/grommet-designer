@@ -55,6 +55,7 @@ import {
   Text,
   TextArea,
   TextInput,
+  Tip,
   Video,
   WorldMap,
 } from 'grommet';
@@ -893,6 +894,16 @@ export const components = {
       title: 'tab',
       plain: false,
       reverse: false,
+    },
+  },
+  Tip: {
+    component: Tip,
+    name: 'Tip',
+    container: true,
+    documentation: 'https://v2.grommet.io/tip',
+    properties: {
+      content: '',
+      plain: false,
     },
   },
   CheckBox: {

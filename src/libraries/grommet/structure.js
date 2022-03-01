@@ -44,6 +44,7 @@ export const structure = [
       'Menu',
       'Tabs',
       'Tab',
+      'Tip',
     ],
   },
   {
