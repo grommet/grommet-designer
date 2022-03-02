@@ -22,7 +22,10 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
   const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
       <Text weight={selected ? 'bold' : undefined}>
-        {(value === 'undefined' && 'undefined') || (value && value.label)}&nbsp;
+        {(typeof value === 'string' && value) ||
+          (typeof value === 'object' && value?.label) ||
+          (Array.isArray(value) && value.map((v) => v?.label).join(', '))}
+        &nbsp;
       </Text>
     </Box>
   );
@@ -45,13 +48,15 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
         </Text>,
         <Select
           key="value"
-          options={[...selectOptions, 'undefined']}
-          value={(value && value[name]) || ''}
-          onChange={({ option }) => {
+          options={[...selectOptions, { label: 'undefined', key: 0 }]}
+          multiple
+          valueKey="key"
+          value={value?.[name] || ''}
+          onChange={({ option, value: nextValueArg }) => {
             const nextValue =
               (value && JSON.parse(JSON.stringify(value))) || {};
-            if (option === 'undefined') delete nextValue[name];
-            else nextValue[name] = option;
+            if (option?.label === 'undefined') delete nextValue[name];
+            else nextValue[name] = nextValueArg;
             onChange(nextValue);
           }}
           onSearch={
@@ -59,17 +64,10 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
               ? (nextSearchText) => setSearchText(nextSearchText)
               : undefined
           }
-          valueLabel={<LinkLabel selected value={value && value[name]} />}
+          valueLabel={<LinkLabel selected value={value?.[name]} />}
         >
-          {(option) => (
-            <LinkLabel
-              selected={
-                value &&
-                value[name] &&
-                option.component === value[name].component
-              }
-              value={option}
-            />
+          {(option, index, options, { selected }) => (
+            <LinkLabel value={option} selected={selected} />
           )}
         </Select>,
       ])}
