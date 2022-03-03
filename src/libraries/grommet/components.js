@@ -41,6 +41,9 @@ import {
   Nav,
   NameValueList,
   NameValuePair,
+  Notification,
+  Page,
+  PageContent,
   Pagination,
   Paragraph,
   RadioButtonGroup,
@@ -342,6 +345,38 @@ export const components = {
     },
     properties: reusedBoxProps,
     structure: reusedBoxStructure,
+  },
+  Page: {
+    component: Page,
+    name: 'Page',
+    container: true,
+    hideable: true,
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Page is currently empty. Add a PageContent to it.
+      </Paragraph>
+    ),
+    documentation: 'https://v2.grommet.io/page',
+    properties: {
+      background: reusedBoxProps.background,
+      fill: reusedBoxProps.fill,
+      kind: ['wide', 'narrow', 'full'],
+    },
+  },
+  PageContent: {
+    component: PageContent,
+    name: 'PageContent',
+    container: true,
+    hideable: true,
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This PageContent is currently empty. Add some content to it.
+      </Paragraph>
+    ),
+    documentation: 'https://v2.grommet.io/page',
+    properties: {
+      background: { ...reusedBoxProps.background, fill: ['horizontal'] },
+    },
   },
   Sidebar: {
     component: Sidebar,
@@ -1828,6 +1863,34 @@ export const components = {
         result.name = renderComponent(props.name);
       }
       return result;
+    },
+  },
+  Notification: {
+    component: Notification,
+    name: 'Notification',
+    hideable: true,
+    documentation: 'https://v2.grommet.io/notification',
+    defaultProps: {
+      message: 'Special message',
+    },
+    properties: {
+      status: ['critical', 'warning', 'normal', 'unknown'],
+      message: '',
+      title: '',
+      toast: false,
+      global: false,
+      onClose: ['-link-'],
+    },
+    override: ({ props }, { dataContextPath, followLink }) => {
+      return {
+        onClose:
+          props && props.onClose
+            ? (event) => {
+                event.stopPropagation();
+                followLink(props.onClose, { dataContextPath });
+              }
+            : undefined,
+      };
     },
   },
   Pagination: {

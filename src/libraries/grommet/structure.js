@@ -14,6 +14,8 @@ export const structure = [
     components: [
       'Box',
       'Grid',
+      'Page',
+      'PageContent',
       'Main',
       'Nav',
       'Header',
@@ -81,6 +83,7 @@ export const structure = [
       'Meter',
       'NameValueList',
       'NameValuePair',
+      'Notification',
       'Pagination',
       'Spinner',
       'Tag',
