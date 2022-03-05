@@ -5,12 +5,22 @@ import ArrayOfObjects from './ArrayOfObjects';
 
 const PropertyFields = ({ value, onChange, theme, type }) => {
   const baseTheme = React.useContext(ThemeContext);
+
+  // search for colors
+  const [searchText, setSearchText] = React.useState('');
+  const searchExp = React.useMemo(
+    () => searchText && new RegExp(`${searchText}`, 'i'),
+    [searchText],
+  );
+
   const colorOptions = React.useMemo(() => {
     const merged = { ...baseTheme.global.colors, ...theme.global.colors };
-    const names = Object.keys(merged).sort();
-    names.push('undefined');
+    const names = Object.keys(merged)
+      .sort()
+      .filter((n) => !searchExp || searchExp.test(n));
+    if (value.color) names.push('undefined');
     return names;
-  }, [baseTheme.global.colors, theme.global.colors]);
+  }, [baseTheme.global.colors, theme.global.colors, searchExp, value]);
 
   const set = (name, valueArg) => {
     const nextValue = JSON.parse(JSON.stringify(value));
@@ -47,7 +57,11 @@ const PropertyFields = ({ value, onChange, theme, type }) => {
         <Select
           options={colorOptions}
           value={value.color || ''}
-          onChange={({ option }) => set('color', option)}
+          onChange={({ option }) => {
+            setSearchText(undefined);
+            set('color', option);
+          }}
+          onSearch={(nextSearchText) => setSearchText(nextSearchText)}
         />
       </FormField>
       <FormField label="opacity">
