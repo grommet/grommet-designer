@@ -73,6 +73,7 @@ import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
+import DataChartBounds from './DataChartBounds';
 import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
 import DataTableColumns from './DataTableColumns';
@@ -1519,6 +1520,7 @@ export const components = {
           granularity: ['coarse', 'medium', 'fine'],
         },
       },
+      bounds: DataChartBounds,
       chart: DataChartChart,
       data: JsonData,
       detail: false,
