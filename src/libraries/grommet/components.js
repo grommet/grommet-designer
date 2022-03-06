@@ -1535,6 +1535,7 @@ export const components = {
       margin: Edge,
       offset: false,
       pad: BoxPad,
+      placeholder: '-string-or-component-',
       series: DataChartSeries,
       size: {
         height: [
@@ -1609,6 +1610,7 @@ export const components = {
       pad: BoxPad,
       paginate: false,
       pin: [true, 'header', 'footer', false],
+      placeholder: '-string-or-component-',
       primaryKey: DataTablePrimaryKey,
       replace: false,
       resizeable: false,
