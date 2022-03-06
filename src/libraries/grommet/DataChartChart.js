@@ -1,7 +1,50 @@
 import React from 'react';
-import { Box, CheckBox, FormField, Select, TextInput } from 'grommet';
+import { Box, CheckBox, FormField, Select, Text, TextInput } from 'grommet';
 import { ThemeContext } from 'styled-components';
 import ArrayOfObjects from './ArrayOfObjects';
+
+const ShareableFields = ({ value, onChange, theme, type }) => {
+  const set = (name, valueArg) => {
+    const nextValue = JSON.parse(JSON.stringify(value));
+    if (valueArg === 'undefined') delete nextValue[name];
+    else nextValue[name] = valueArg;
+    onChange(nextValue);
+  };
+
+  return (
+    <>
+      <FormField label="thickness">
+        <Select
+          options={[
+            'hair',
+            'xsmall',
+            'small',
+            'medium',
+            'large',
+            'xlarge',
+            'undefined',
+          ]}
+          value={value.thickness || ''}
+          onChange={({ option }) => set('thickness', option)}
+        />
+      </FormField>
+      <FormField>
+        <CheckBox
+          label="dash"
+          checked={value.dash}
+          onChange={(event) => set('dash', event.target.checked)}
+        />
+      </FormField>
+      <FormField>
+        <CheckBox
+          label="round"
+          checked={value.round}
+          onChange={(event) => set('round', event.target.checked)}
+        />
+      </FormField>
+    </>
+  );
+};
 
 const PropertyFields = ({ value, onChange, theme, type }) => {
   const baseTheme = React.useContext(ThemeContext);
@@ -71,35 +114,12 @@ const PropertyFields = ({ value, onChange, theme, type }) => {
           onChange={({ option }) => set('opacity', option)}
         />
       </FormField>
-      <FormField label="thickness">
-        <Select
-          options={[
-            'hair',
-            'xsmall',
-            'small',
-            'medium',
-            'large',
-            'xlarge',
-            'undefined',
-          ]}
-          value={value.thickness || ''}
-          onChange={({ option }) => set('thickness', option)}
-        />
-      </FormField>
-      <FormField>
-        <CheckBox
-          label="dash"
-          checked={value.dash}
-          onChange={(event) => set('thickness', event.target.checked)}
-        />
-      </FormField>
-      <FormField>
-        <CheckBox
-          label="round"
-          checked={value.round}
-          onChange={(event) => set('round', event.target.checked)}
-        />
-      </FormField>
+      <ShareableFields
+        value={value}
+        onChange={onChange}
+        theme={theme}
+        type={type}
+      />
     </>
   );
 };
@@ -138,25 +158,35 @@ const Chart = ({ value, onChange, theme }) => {
       {value.type === 'bars' ||
       value.type === 'areas' ||
       value.type === 'lines' ? (
-        <Box
-          flex="grow"
-          pad={{ left: 'medium', bottom: 'medium', top: 'small' }}
-          border="bottom"
-        >
-          <ArrayOfObjects
-            value={value.property}
-            name="property"
-            labelKey="property"
-            Edit={PropertyFields}
-            onChange={(nextProperty) => {
-              const nextValue = JSON.parse(JSON.stringify(value));
-              nextValue.property = nextProperty;
-              onChange(nextValue);
-            }}
+        <>
+          <Text margin={{ start: 'small' }}>property</Text>
+          <Box
+            flex={false}
+            pad={{ left: 'medium', bottom: 'small', top: 'small' }}
+            margin={{ bottom: 'small' }}
+            border="bottom"
+          >
+            <ArrayOfObjects
+              value={value.property}
+              name="property"
+              labelKey="property"
+              Edit={PropertyFields}
+              onChange={(nextProperty) => {
+                const nextValue = JSON.parse(JSON.stringify(value));
+                nextValue.property = nextProperty;
+                onChange(nextValue);
+              }}
+              type={value.type}
+              theme={theme}
+            />
+          </Box>
+          <ShareableFields
+            value={value}
+            onChange={onChange}
             type={value.type}
             theme={theme}
           />
-        </Box>
+        </>
       ) : (
         <PropertyFields
           value={value}

@@ -111,7 +111,7 @@ const ArrayOfObjects = ({
             justify="between"
             gap="medium"
           >
-            <Text>{getLabel(item)}</Text>
+            <Text weight="bold">{getLabel(item)}</Text>
             <FormNext />
           </Box>
         )}
