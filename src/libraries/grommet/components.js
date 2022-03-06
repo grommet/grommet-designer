@@ -73,6 +73,7 @@ import BoxPad from './BoxPad';
 import BoxRound from './BoxRound';
 import ChartBounds from './ChartBounds';
 import ChartValues from './ChartValues';
+import DataChartAxis from './DataChartAxis';
 import DataChartBounds from './DataChartBounds';
 import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
@@ -1141,6 +1142,7 @@ export const components = {
       </Paragraph>
     ),
     name: 'FormField',
+    documentation: 'https://v2.grommet.io/formfield',
     defaultProps: {
       label: 'FormField',
     },
@@ -1157,6 +1159,7 @@ export const components = {
   MaskedInput: {
     component: MaskedInput,
     name: 'MaskedInput',
+    documentation: 'https://v2.grommet.io/maskedinput',
     properties: {
       disabled: false,
       mask: MaskedInputMask,
@@ -1189,6 +1192,7 @@ export const components = {
   RadioButtonGroup: {
     component: RadioButtonGroup,
     name: 'RadioButtonGroup',
+    documentation: 'https://v2.grommet.io/radiobuttongroup',
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1237,6 +1241,7 @@ export const components = {
   RangeInput: {
     component: RangeInput,
     name: 'RangeInput',
+    documentation: 'https://v2.grommet.io/rangeinput',
     defaultProps: {
       max: 10,
       min: 0,
@@ -1254,6 +1259,7 @@ export const components = {
     component: Select,
     name: 'Select',
     container: 'rarely',
+    documentation: 'https://v2.grommet.io/select',
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1316,6 +1322,7 @@ export const components = {
   TextArea: {
     component: TextArea,
     name: 'TextArea',
+    documentation: 'https://v2.grommet.io/textarea',
     properties: {
       defaultValue: '',
       disabled: false,
@@ -1331,6 +1338,7 @@ export const components = {
   TextInput: {
     component: TextInput,
     name: 'TextInput',
+    documentation: 'https://v2.grommet.io/textinput',
     properties: {
       defaultValue: '',
       disabled: false,
@@ -1389,6 +1397,7 @@ export const components = {
     help: `The 'date' and 'reference' properties needs to be in ISO8601 format.
     `,
     container: 'rarely',
+    documentation: 'https://v2.grommet.io/calendar',
     defaultProps: {
       locale: 'en-US',
       showAdjacentDays: true,
@@ -1495,31 +1504,17 @@ export const components = {
   DataChart: {
     component: DataChart,
     name: 'DataChart',
+    documentation: 'https://v2.grommet.io/datachart',
+    help: `The DataChart can be seen by giving it some 'data' and 'series'.
+    You can then customize it from the default by defining 'chart'.
+    `,
     defaultProps: {
-      axis: { x: { granularity: 'coarse' }, y: { granularity: 'coarse' } },
-      chart: [{ property: 'amount' }],
-      data: [
-        { date: '2020-01-15', amount: 22 },
-        { date: '2020-02-15', amount: 11 },
-        { date: '2020-03-15', amount: 33 },
-        { date: '2020-04-15', amount: 77 },
-        { date: '2020-05-15', amount: 88 },
-      ],
-      gap: 'xsmall',
-      guide: { x: { granularity: 'coarse' }, y: { granularity: 'coarse' } },
-      series: ['date', 'amount'],
+      axis: true,
+      data: [{ amount: 5 }, { amount: 80 }],
+      series: ['amount'],
     },
     properties: {
-      axis: {
-        x: {
-          property: '',
-          granularity: ['coarse', 'medium', 'fine'],
-        },
-        y: {
-          property: '',
-          granularity: ['coarse', 'medium', 'fine'],
-        },
-      },
+      axis: DataChartAxis,
       bounds: DataChartBounds,
       chart: DataChartChart,
       data: JsonData,
