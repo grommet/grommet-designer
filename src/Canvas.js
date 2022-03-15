@@ -152,7 +152,9 @@ const Canvas = () => {
       if (Array.isArray(to)) {
         // when to is an Array, lazily create nextDesign and re-use
         const ref = {};
-        to.forEach((t) => followLink(t, { dataContextPath, nextRef: ref }));
+        to.forEach((t) =>
+          followLink(t, { dataContextPath, fromId, nextRef: ref }),
+        );
         if (ref.design) changeDesign(ref.design);
       } else if (to.control === 'toggleThemeMode') {
         const nextDesign =
