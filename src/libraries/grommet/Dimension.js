@@ -20,7 +20,7 @@ const Dimension = ({ name, value, onChange }) => {
       <Box>
         {typeof value === 'object' ? (
           <Fragment>
-            {['min', 'max', 'width'].map((threshold) => (
+            {['min', 'max', name].map((threshold) => (
               <FormField key={threshold} label={threshold}>
                 <Select
                   options={options.filter((o) => o !== 'min/max')}
