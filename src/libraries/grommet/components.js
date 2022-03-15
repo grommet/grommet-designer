@@ -322,8 +322,26 @@ export const components = {
       justify: 'between',
       gap: 'medium',
     },
-    properties: reusedBoxProps,
-    structure: reusedBoxStructure,
+    properties: {
+      ...reusedBoxProps,
+      wrap: false,
+    },
+    structure: [
+      {
+        label: 'Content layout',
+        properties: [
+          'direction',
+          'justify',
+          'align',
+          'pad',
+          'gap',
+          'overflow',
+          'wrap',
+        ],
+      },
+      reusedBoxStructure[1],
+      reusedBoxStructure[2],
+    ],
   },
   Footer: {
     component: Footer,
@@ -345,8 +363,26 @@ export const components = {
       justify: 'between',
       gap: 'medium',
     },
-    properties: reusedBoxProps,
-    structure: reusedBoxStructure,
+    properties: {
+      ...reusedBoxProps,
+      wrap: false,
+    },
+    structure: [
+      {
+        label: 'Content layout',
+        properties: [
+          'direction',
+          'justify',
+          'align',
+          'pad',
+          'gap',
+          'overflow',
+          'wrap',
+        ],
+      },
+      reusedBoxStructure[1],
+      reusedBoxStructure[2],
+    ],
   },
   Page: {
     component: Page,
