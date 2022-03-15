@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { Box, Grommet, Paragraph, ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import DesignContext from './DesignContext';
-import { getParent } from './design';
+import { getParent, getScreenForComponent } from './design';
 import { getComponentType, getReferenceDesign } from './utils';
 import InlineEditInput from './InlineEditInput';
 
@@ -148,7 +148,7 @@ const Canvas = () => {
   };
 
   const followLink = useCallback(
-    (to, { dataContextPath, nextRef } = {}) => {
+    (to, { dataContextPath, fromId, nextRef } = {}) => {
       if (Array.isArray(to)) {
         // when to is an Array, lazily create nextDesign and re-use
         const ref = {};
@@ -199,7 +199,14 @@ const Canvas = () => {
             nextRef?.design || JSON.parse(JSON.stringify(design));
           nextDesign.components[target.id].hide = !target.hide;
           nextRef ? (nextRef.design = nextDesign) : changeDesign(nextDesign);
-          if (target.hide) setSelected({ ...to, dataContextPath });
+          // Change selection when the target it was hidden and it isn't
+          // on the same screen. This allows references to include Layers.
+          if (target.hide) {
+            const screenId = getScreenForComponent(design, fromId);
+            if (screenId !== to.screen) {
+              setSelected({ ...to, dataContextPath });
+            }
+          }
         } else if (target) {
           // might not have anymore
           setSelected({ ...to, dataContextPath });

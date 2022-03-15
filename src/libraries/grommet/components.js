@@ -249,13 +249,13 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ props }, { dataContextPath, followLink }) => {
+    override: ({ id, props }, { dataContextPath, followLink }) => {
       return {
         onClick:
           props && props.onClick
             ? (event) => {
                 event.stopPropagation();
-                followLink(props.onClick, { dataContextPath });
+                followLink(props.onClick, { dataContextPath, fromId: id });
               }
             : undefined,
       };
@@ -479,13 +479,13 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ props }, { dataContextPath, followLink }) => {
+    override: ({ id, props }, { dataContextPath, followLink }) => {
       return {
         onClick:
           props && props.onClick
             ? (event) => {
                 event.stopPropagation();
-                followLink(props.onClick, { dataContextPath });
+                followLink(props.onClick, { dataContextPath, fromId: id });
               }
             : undefined,
       };
@@ -756,7 +756,7 @@ export const components = {
     },
     advancedProperties: ['margin', 'color'],
     override: (
-      { designProps, props },
+      { designProps, id, props },
       { dataContextPath, followLink, replaceData },
     ) => {
       return {
@@ -765,7 +765,7 @@ export const components = {
           designProps && designProps.link
             ? (event) => {
                 event.stopPropagation();
-                followLink(designProps.link, { dataContextPath });
+                followLink(designProps.link, { dataContextPath, fromId: id });
               }
             : undefined,
       };
@@ -803,14 +803,14 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
-    override: ({ designProps, props }, { dataContextPath, followLink }) => {
+    override: ({ designProps, id, props }, { dataContextPath, followLink }) => {
       return {
         badge: props.badge === 0 ? true : props.badge,
         onClick:
           designProps && designProps.link
             ? (event) => {
                 event.stopPropagation();
-                followLink(designProps.link, { dataContextPath });
+                followLink(designProps.link, { dataContextPath, fromId: id });
               }
             : undefined,
       };
@@ -885,13 +885,13 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       tip: '',
     },
-    override: ({ props }, { followLink }) => {
+    override: ({ id, props }, { followLink }) => {
       const result = {};
       result.items = (props.items || []).map((item) => ({
         ...item,
         onClick: (event) => {
           event.stopPropagation();
-          followLink(item.link);
+          followLink(item.link, { fromId: id });
         },
       }));
       return result;
@@ -1764,7 +1764,7 @@ export const components = {
       dataPath: '',
     },
     override: (
-      { children, props },
+      { children, id, props },
       { data, dataContextPath, followLink, renderComponent, setData },
     ) => {
       const result = {};
@@ -1775,7 +1775,7 @@ export const components = {
           event.stopPropagation();
           const { index } = event;
           const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink(props.onClickItem, { dataContextPath: path });
+          followLink(props.onClickItem, { dataContextPath: path, fromId: id });
         };
       }
       if (props.onOrder) {
@@ -1880,13 +1880,13 @@ export const components = {
       global: false,
       onClose: ['-link-'],
     },
-    override: ({ props }, { dataContextPath, followLink }) => {
+    override: ({ id, props }, { dataContextPath, followLink }) => {
       return {
         onClose:
           props && props.onClose
             ? (event) => {
                 event.stopPropagation();
-                followLink(props.onClose, { dataContextPath });
+                followLink(props.onClose, { dataContextPath, fromId: id });
               }
             : undefined,
       };
@@ -1925,13 +1925,13 @@ export const components = {
       onClick: ['-link-'],
       removable: false,
     },
-    override: ({ props }, { dataContextPath, followLink }) => {
+    override: ({ id, props }, { dataContextPath, followLink }) => {
       return {
         onClick:
           props && props.onClick
             ? (event) => {
                 event.stopPropagation();
-                followLink(props.onClick, { dataContextPath });
+                followLink(props.onClick, { dataContextPath, fromId: id });
               }
             : undefined,
         onRemove: props && props.removable ? () => {} : undefined,
