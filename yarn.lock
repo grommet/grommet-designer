@@ -1826,9 +1826,9 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/json-schema@*", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
-  version "7.0.9"
-  resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
-  integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
+  version "7.0.10"
+  resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.10.tgz#9b05b7896166cd00e9cbd59864853abf65d9ac23"
+  integrity sha512-BLO9bBq59vW3fxCpD4o0N4U+DXsvwvIcl+jofw0frQo/GrBFC+/jRZj1E7kgp6dvTyNmA4y6JCV5Id/r3mNP5A==
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -2559,9 +2559,9 @@ atob@^2.1.2:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 autoprefixer@^10.4.2:
-  version "10.4.3"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.3.tgz#d4b9358be607c30d1900c1412d0d668f98bb5a6a"
-  integrity sha512-3EIK6tHl2SyJWCoPsQzL3NEqKOdjCWbPzoOInjVAQYo/y/OCEFG9KwB5162dehG5GadiGfgxu7nrWCpExCfRFQ==
+  version "10.4.4"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.4.tgz#3e85a245b32da876a893d3ac2ea19f01e7ea5a1e"
+  integrity sha512-Tm8JxsB286VweiZ5F0anmbyGiNI3v3wGv3mz9W+cxEDYB/6jbnj6GM9H9mK3wIL8ftgl+C07Lcwb8PG5PCCPzA==
   dependencies:
     browserslist "^4.20.2"
     caniuse-lite "^1.0.30001317"
@@ -4002,9 +4002,9 @@ ejs@^3.1.6:
     jake "^10.6.1"
 
 electron-to-chromium@^1.4.84:
-  version "1.4.85"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.85.tgz#a3666ba42147026b9f34d4d8d4caf0740e80f751"
-  integrity sha512-K9AsQ41WS2bjZUFpRWfvaS4RjEcRCamEkBJN1Z1TQILBfP1H8QnJ9ti0wiLiMv0sRjX3EHKzgs9jDnmGFx2jXg==
+  version "1.4.86"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.86.tgz#90fe4a9787f48d6522957213408e08a8126b2ebc"
+  integrity sha512-EVTZ+igi8x63pK4bPuA95PXIs2b2Cowi3WQwI9f9qManLiZJOD1Lash1J3W4TvvcUCcIR4o/rgi9o8UicXSO+w==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -4994,7 +4994,7 @@ grommet-styles@^0.2.0:
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.21.0"
-  resolved "https://github.com/grommet/grommet/tarball/stable#3cd2dc7e1c7029067f76e896a2f11a59fbb3af35"
+  resolved "https://github.com/grommet/grommet/tarball/stable#3847da0441b880c7400ee0ee887f260504be148a"
   dependencies:
     grommet-icons "^4.7.0"
     hoist-non-react-statics "^3.2.0"
@@ -6489,9 +6489,9 @@ lodash.uniq@^4.5.0:
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-update-async-hook@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/log-update-async-hook/-/log-update-async-hook-2.0.5.tgz#6826e5e0bdd695acfd615898612975ff9971f321"
-  integrity sha512-YqKX8tvQsBHBoJTpMNfs3mf6YfLJrTtpnaOwN0g4dSCEFhSIAC/Bcq0eqEP5OAOBgGvOhhFq4LgxmesyWaGG6g==
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/log-update-async-hook/-/log-update-async-hook-2.0.6.tgz#33fa4414e73799920edaa64f2f931d2b6f627f68"
+  integrity sha512-UIFPlCpCxrSVL38TXzk34JhhDnvvhsjzuyqooCYy9TtTaVdBLNsuJiTWX9unO/wzBF7RwY1WTCmEmBSI3iPDCA==
   dependencies:
     ansi-escapes "^2.0.0"
     async-exit-hook "^1.1.2"
@@ -7821,9 +7821,9 @@ postcss@^7.0.35:
     source-map "^0.6.1"
 
 postcss@^8.3.5, postcss@^8.4.4, postcss@^8.4.6, postcss@^8.4.7:
-  version "8.4.11"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.11.tgz#a06229f23820b4ddd46500a3e38dbca1598a8e8d"
-  integrity sha512-D+jFLnT0ilGfy4CVBGbC+XE68HkVpT8+CUkDrcSpgxmo4RKco2uaZ4kIoyVGEm+m8KN/+Vwgs8MtpNbQ3/ma9w==
+  version "8.4.12"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.12.tgz#1e7de78733b28970fa4743f7da6f3763648b1905"
+  integrity sha512-lg6eITwYe9v6Hr5CncVbK70SoioNQIq81nsaG86ev5hAidQvmOeETBqs7jm43K2F5/Ley3ytDtriImV6TpNiSg==
   dependencies:
     nanoid "^3.3.1"
     picocolors "^1.0.0"
@@ -7849,9 +7849,9 @@ prelude-ls@~1.1.2:
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
 prettier@^2.1.2:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
-  integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.0.tgz#12f8f504c4d8ddb76475f441337542fa799207d4"
+  integrity sha512-m2FgJibYrBGGgQXNzfd0PuDGShJgRavjUoRCw1mZERIWVSXF0iLzLm+aOqTAbLnC3n6JzUhAA8uZnFVghHJ86A==
 
 pretty-bytes@^5.3.0, pretty-bytes@^5.4.1:
   version "5.6.0"
