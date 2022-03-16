@@ -1357,7 +1357,11 @@ export const components = {
       }
       if (props.valueLabel) {
         result.valueLabel = renderComponent(props.valueLabel, {
-          datum: props.value || inputValues[id] || props.placeholder,
+          datum:
+            props.value ||
+            inputValues[id] ||
+            props.defaultValue ||
+            props.placeholder,
         });
       }
       return result;
