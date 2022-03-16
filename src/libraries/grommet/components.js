@@ -163,6 +163,9 @@ const reusedBoxStructure = [
   },
 ];
 
+// where we hold changed input values so we can track uncontrolled components
+const inputValues = {}; // { component-id: value }
+
 export const components = {
   Box: {
     component: Box,
@@ -1317,21 +1320,26 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
       valueKey: '',
+      valueLabel: '-component-',
     },
     designProperties: {
       data: JsonData,
       link: ['-link-options-'],
     },
     override: (
-      { children, props, designProps },
+      { children, id, props, designProps },
       { followLinkOption, renderComponent },
     ) => {
       const result = {};
       if (props.searchPlaceholder) result.onSearch = (text) => {};
       if (!props.value) result.value = undefined;
       if (designProps && designProps.link) {
-        result.onChange = ({ value }) =>
+        result.onChange = ({ value }) => {
           followLinkOption(designProps.link, value);
+          inputValues[id] = value;
+        };
+      } else {
+        result.onChange = ({ value }) => (inputValues[id] = value);
       }
       if (
         props.options.length === 0 &&
@@ -1346,6 +1354,11 @@ export const components = {
       if (children && children[0]) {
         result.children = (option) =>
           renderComponent(children[0], { datum: option });
+      }
+      if (props.valueLabel) {
+        result.valueLabel = renderComponent(props.valueLabel, {
+          datum: props.value || inputValues[id] || props.placeholder,
+        });
       }
       return result;
     },
