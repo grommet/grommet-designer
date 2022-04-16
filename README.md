@@ -127,3 +127,9 @@ in the importing design, when the browser is refreshed.
 1. `yarn install`
 
 1. `yarn start`
+
+## Refactoring
+
+inline text edit in canvas
+convert Properties to only change component definition, not whole design
+convert Tree

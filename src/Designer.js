@@ -7,8 +7,10 @@ import React, {
 } from 'react';
 import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
 import DesignContext from './DesignContext';
+import Design2Context from './Design2Context';
+import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
-import Canvas from './Canvas';
+import Canvas from './Canvas2';
 import Loading from './Loading';
 import ConfirmReplace from './ConfirmReplace';
 import Properties from './Properties/Properties';
@@ -19,7 +21,7 @@ import ScreenDetails from './Properties/ScreenDetails';
 import designerLibrary from './libraries/designer';
 import grommetLibrary from './libraries/grommet';
 import { loadImports, loadTheme } from './design/load';
-import { parseUrlParams } from './utils';
+import { getComponentType, parseUrlParams } from './utils';
 
 const defaultImports = [
   { name: grommetLibrary.name, library: grommetLibrary },
@@ -339,6 +341,26 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
     ],
   );
 
+  const design2Context = useMemo(
+    () => ({
+      getComponent: (id) => design.components[id],
+      getType: (t) => getComponentType(libraries, t),
+      mode,
+      theme,
+      themeMode: design.themeMode,
+    }),
+    [design, libraries, mode, theme],
+  );
+
+  const selectionContext = useMemo(
+    () => ({
+      property: selected.property,
+      screen: design.screens[selected.screen],
+      setSelection: (s) => setSelected({ ...selected, ...s }),
+    }),
+    [design, selected],
+  );
+
   let columns;
   if (responsive === 'small' || mode === 'preview') columns = 'flex';
   else if (mode === 'comments') {
@@ -394,9 +416,13 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
 
   return (
     <DesignContext.Provider value={designContext}>
-      <Keyboard target="document" onKeyDown={onKey}>
-        {content}
-      </Keyboard>
+      <Design2Context.Provider value={design2Context}>
+        <SelectionContext.Provider value={selectionContext}>
+          <Keyboard target="document" onKeyDown={onKey}>
+            {content}
+          </Keyboard>
+        </SelectionContext.Provider>
+      </Design2Context.Provider>
     </DesignContext.Provider>
   );
 };
