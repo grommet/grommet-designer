@@ -1,11 +1,13 @@
 import React from 'react';
+import { useComponent } from '../../design2';
 import InlineOptions from './InlineOptions';
 import LayoutState from './LayoutState';
 
 const options = ['start', 'center', 'end', 'between'];
 
-const BoxJustify = ({ props, ...rest }) => {
-  const { align, direction } = props;
+const BoxJustify = ({ id, ...rest }) => {
+  const component = useComponent(id);
+  const { align, direction } = component.props;
   return (
     <InlineOptions name="justify" options={options} {...rest}>
       {(option, { checked, hover }) => (

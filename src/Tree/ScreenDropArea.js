@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Box } from 'grommet';
 import DragDropContext from './DragDropContext';
 
-const ScreenDropArea = ({ screenId, where }) => {
+const ScreenDropArea = ({ id, where }) => {
   const {
     draggingScreen,
     dropScreenTarget,
@@ -18,22 +18,22 @@ const ScreenDropArea = ({ screenId, where }) => {
       background={
         draggingScreen &&
         dropScreenTarget &&
-        dropScreenTarget === screenId &&
+        dropScreenTarget === id &&
         dropWhere === where
           ? 'focus'
           : undefined
       }
       onDragEnter={(event) => {
-        if (draggingScreen && draggingScreen !== screenId) {
+        if (draggingScreen && draggingScreen !== id) {
           event.preventDefault();
-          setDropScreenTarget(screenId);
+          setDropScreenTarget(id);
           setDropWhere(where);
         } else {
           setDropScreenTarget(undefined);
         }
       }}
       onDragOver={(event) => {
-        if (draggingScreen && draggingScreen !== screenId) {
+        if (draggingScreen && draggingScreen !== id) {
           event.preventDefault();
         }
       }}

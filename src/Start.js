@@ -101,10 +101,8 @@ const Thumbnail = ({ title, url }) => {
 };
 
 const Start = ({
-  chooseDesign,
   colorMode,
-  createDesign,
-  importDesign,
+  onLoadProps,
   rtl,
   setColorMode,
   setRtl,
@@ -130,43 +128,8 @@ const Start = ({
       );
       setDesigns(nextDesigns);
       localStorage.setItem('designs', JSON.stringify(nextDesigns));
-
-      // prune out orphaned designs
-      for (let i = 0; i < localStorage.length; i++) {
-        const name = localStorage.key(i);
-        if (!nextDesigns.includes(name)) {
-          stored = localStorage.getItem(name);
-          try {
-            const design = JSON.parse(stored);
-            if (
-              design.screens &&
-              design.components &&
-              design.version &&
-              design.name
-            ) {
-              // looks like a design, but it isn't in 'designs', remove it
-              console.log('Removed orphan design:', name);
-              localStorage.removeItem(name);
-            }
-          } catch {
-            // no-op
-          }
-        }
-      }
     }
   }, []);
-
-  const urls = useMemo(() => {
-    const result = {};
-    designs.forEach((name) => {
-      const stored = localStorage.getItem(name);
-      const design = JSON.parse(stored);
-      result[name] = design.screens
-        ? `/?name=${encodeURIComponent(name)}`
-        : `/?id=${encodeURIComponent(design.id)}`;
-    });
-    return result;
-  }, [designs]);
 
   // load previously fetched designs from local storage
   useEffect(() => {
@@ -202,7 +165,7 @@ const Start = ({
           onClick={(event) => {
             if (!event.ctrlKey && !event.metaKey) {
               event.preventDefault();
-              createDesign();
+              onLoadProps({});
             }
           }}
         />
@@ -225,8 +188,9 @@ const Start = ({
             const reader = new FileReader();
             reader.onload = () => {
               try {
-                const nextDesign = JSON.parse(reader.result);
-                importDesign(nextDesign);
+                const design = JSON.parse(reader.result);
+                // TODO: reconcile if we have existing already
+                onLoadProps({ design });
               } catch (e) {
                 setError(e.message);
               }
@@ -296,8 +260,8 @@ const Start = ({
                   (name) =>
                     !search || name.search(new RegExp(search, 'i')) !== -1,
                 )
-                .map((name, index) => {
-                  const url = urls[name];
+                .map((name) => {
+                  const url = `/?name=${encodeURIComponent(name)}`;
                   return (
                     <Button
                       key={name}
@@ -306,11 +270,7 @@ const Start = ({
                       onClick={(event) => {
                         if (!event.ctrlKey && !event.metaKey) {
                           event.preventDefault();
-                          // if we've offloaded this design, re-load it
-                          const stored = localStorage.getItem(name);
-                          const design = JSON.parse(stored);
-                          if (!design.screens) chooseDesign({ id: design.id });
-                          else chooseDesign({ name });
+                          onLoadProps({ name });
                         }
                       }}
                     >
@@ -337,7 +297,7 @@ const Start = ({
                     onClick={(event) => {
                       if (!event.ctrlKey && !event.metaKey) {
                         event.preventDefault();
-                        chooseDesign({ id: parseUrlParams(url).id });
+                        onLoadProps({ id: parseUrlParams(url).id });
                       }
                     }}
                   >

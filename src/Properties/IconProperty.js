@@ -3,13 +3,11 @@ import { aliases, names, SelectLabel } from '../libraries/designer/Icon';
 import ArrayProperty from './ArrayProperty';
 
 const IconProperty = React.forwardRef(
-  ({ first, name, onChange, sub, value }, ref) => {
+  ({ name, onChange, value }, ref) => {
     return (
       <ArrayProperty
         ref={ref}
         name={name}
-        sub={sub}
-        first={first}
         Label={SelectLabel}
         options={names}
         value={value}

@@ -1,58 +1,60 @@
 import React, { useContext } from 'react';
 import { Box, Button, Heading, Stack } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
-import DesignContext from '../DesignContext';
+import { toggleCollapsed, useScreen } from '../design2';
+// import DesignContext from '../DesignContext';
+import SelectionContext from '../SelectionContext';
 import Component from './Component';
 import DragDropContext from './DragDropContext';
 import ScreenDropArea from './ScreenDropArea';
 
-const Screen = ({ firstScreen, screenId }) => {
-  const { design, selected, selectedRef, setSelected, updateDesign } =
-    useContext(DesignContext);
+const Screen = ({ first, id }) => {
+  const [, setSelection] = useContext(SelectionContext);
+  const [dragDrop, setDragDrop] = useContext(DragDropContext);
+  // const { draggingScreen, moveScreen, setDraggingScreen, setDropScreenTarget } =
+  //   useContext(DragDropContext);
 
-  const { draggingScreen, moveScreen, setDraggingScreen, setDropScreenTarget } =
-    useContext(DragDropContext);
+  const screen = useScreen(id);
 
-  const screen = design.screens[screenId];
-  const isSelected = selected.screen === screenId && !selected.component;
-  const collapserColor = 'border';
+  if (!screen) return null;
+  const isSelected = false; // selected.screen === screenId && !selected.component;
 
-  const toggleScreenCollapse = () => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const screen = nextDesign.screens[screenId];
-    screen.collapsed = !screen.collapsed;
-    updateDesign(nextDesign);
-    const nextSelected = { ...selected };
-    delete nextSelected.component;
-    setSelected(nextSelected);
-  };
+  // const toggleScreenCollapse = () => {
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   const screen = nextDesign.screens[screenId];
+  //   screen.collapsed = !screen.collapsed;
+  //   updateDesign(nextDesign);
+  //   const nextSelected = { ...selected };
+  //   delete nextSelected.component;
+  //   setSelected(nextSelected);
+  // };
 
   return (
-    <Box flex={false} border={firstScreen ? undefined : 'top'}>
-      {firstScreen && <ScreenDropArea screenId={screenId} where="before" />}
+    <Box flex={false} border={first ? undefined : 'top'}>
+      {first && <ScreenDropArea id={id} where="before" />}
       <Stack anchor="left">
         <Button
           fill
           hoverIndicator
-          onClick={() => setSelected({ screen: screenId })}
+          onClick={() => setSelection(id)}
           draggable
-          onDragStart={(event) => {
-            event.dataTransfer.setData('text/plain', ''); // for Firefox
-            setDraggingScreen(screenId);
-          }}
-          onDragEnd={() => {
-            setDraggingScreen(undefined);
-            setDropScreenTarget(undefined);
-          }}
-          onDragOver={(event) => {
-            if (draggingScreen && draggingScreen !== screenId) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={moveScreen}
+          // onDragStart={(event) => {
+          //   event.dataTransfer.setData('text/plain', ''); // for Firefox
+          //   setDraggingScreen(screenId);
+          // }}
+          // onDragEnd={() => {
+          //   setDraggingScreen(undefined);
+          //   setDropScreenTarget(undefined);
+          // }}
+          // onDragOver={(event) => {
+          //   if (draggingScreen && draggingScreen !== screenId) {
+          //     event.preventDefault();
+          //   }
+          // }}
+          // onDrop={moveScreen}
         >
           <Box
-            ref={selected.component === screen.root ? selectedRef : undefined}
+            // ref={selected.component === screen.root ? selectedRef : undefined}
             direction="row"
             align="center"
             justify="between"
@@ -66,7 +68,7 @@ const Screen = ({ firstScreen, screenId }) => {
               margin="none"
               color="selected-text"
             >
-              {screen.name || `Screen ${screenId}`}
+              {screen.name || `Screen ${id}`}
             </Heading>
           </Box>
         </Button>
@@ -74,21 +76,21 @@ const Screen = ({ firstScreen, screenId }) => {
           <Button
             icon={
               screen.collapsed ? (
-                <FormNext color={collapserColor} />
+                <FormNext color="border" />
               ) : (
-                <FormDown color={collapserColor} />
+                <FormDown color="border" />
               )
             }
-            onClick={toggleScreenCollapse}
+            onClick={() => toggleCollapsed(id)}
           />
         )}
       </Stack>
       {!screen.collapsed && screen.root && (
         <Box flex={false}>
-          <Component screen={screen.id} id={screen.root} />
+          <Component id={screen.root} />
         </Box>
       )}
-      <ScreenDropArea screenId={screenId} where="after" />
+      <ScreenDropArea id={id} where="after" />
     </Box>
   );
 };

@@ -14,14 +14,12 @@ const ArrayProperty = React.forwardRef(
   (
     {
       children,
-      first,
       Label,
       multiple,
       name,
       onChange,
       options,
       searchTest,
-      sub,
       value,
       valueKey,
     },
@@ -29,7 +27,7 @@ const ArrayProperty = React.forwardRef(
   ) => {
     const SelectLabel = React.useMemo(() => Label || OptionLabel, [Label]);
     const [dropTarget, setDropTarget] = React.useState();
-    const fieldRef = React.useCallback(node => setDropTarget(node), []);
+    const fieldRef = React.useCallback((node) => setDropTarget(node), []);
     const [searchText, setSearchText] = React.useState('');
     const searchExp = React.useMemo(
       () => searchText && new RegExp(`${searchText}`, 'i'),
@@ -38,7 +36,7 @@ const ArrayProperty = React.forwardRef(
     let selectOptions = options;
     if (searchExp) {
       selectOptions = options.filter(
-        o =>
+        (o) =>
           searchExp.test(o.label || o) ||
           (searchTest && searchTest(o, searchExp)),
       );
@@ -48,14 +46,7 @@ const ArrayProperty = React.forwardRef(
     }
 
     return (
-      <Field
-        key={name}
-        sub={sub}
-        ref={ref || fieldRef}
-        first={first}
-        label={name}
-        htmlFor={name}
-      >
+      <Field key={name} ref={ref || fieldRef} label={name} htmlFor={name}>
         {children}
         <Select
           ref={ref}
@@ -78,7 +69,7 @@ const ArrayProperty = React.forwardRef(
           }}
           onSearch={
             options.length > 20 || searchExp
-              ? nextSearchText => setSearchText(nextSearchText)
+              ? (nextSearchText) => setSearchText(nextSearchText)
               : undefined
           }
         >

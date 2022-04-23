@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import { Box, Button, Stack, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import { canParent } from '../design';
+import SelectionContext from '../SelectionContext';
+// import DesignContext from '../DesignContext';
+import { toggleCollapsed, useComponent } from '../design2';
+// import { canParent } from '../design';
 import { displayName, getReferenceDesign } from '../utils';
-import TreeContext from './TreeContext';
+// import TreeContext from './TreeContext';
 import ComponentDropArea from './ComponentDropArea';
-import DragDropContext from './DragDropContext';
+// import DragDropContext from './DragDropContext';
 
 const treeSubName = (component) =>
   !component.name &&
@@ -18,41 +20,43 @@ const treeSubName = (component) =>
     : component.type.split('.')[1] || component.type;
 
 const Component = ({ screen, id, firstChild }) => {
-  const { design, imports, libraries, selected, setSelected, updateDesign } =
-    useContext(DesignContext);
+  const [selection, setSelection] = useContext(SelectionContext);
+  // const [dragDrop, setDragDrop] = useContext(DragDropContext);
 
-  const { selectedAncestors, selectedRef } = useContext(TreeContext);
+  // const { design, imports, libraries, selected, setSelected, updateDesign } =
+  //   useContext(DesignContext);
 
-  const {
-    dragging,
-    dropTarget,
-    dropWhere,
-    moveComponent,
-    setDragging,
-    setDropTarget,
-    setDropWhere,
-  } = useContext(DragDropContext);
+  // const { selectedAncestors, selectedRef } = useContext(TreeContext);
 
-  const component = design.components[id];
+  // const {
+  //   dragging,
+  //   dropTarget,
+  //   dropWhere,
+  //   moveComponent,
+  //   setDragging,
+  //   setDropTarget,
+  //   setDropWhere,
+  // } = useContext(DragDropContext);
+
+  const component = useComponent(id);
   if (!component) return null;
-  let reference;
-  if (component.type === 'designer.Reference') {
-    const referenceDesign = getReferenceDesign(imports, component);
-    reference = (referenceDesign || design).components[
-      component.props.component
-    ];
-  }
-  const collapserColor = selectedAncestors.includes(id)
-    ? 'selected-background'
-    : 'border';
 
-  const toggleCollapse = (id) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[id];
-    component.collapsed = !component.collapsed;
-    updateDesign(nextDesign);
-    setSelected({ ...selected, component: id });
-  };
+  let reference;
+  // if (component.type === 'designer.Reference') {
+  //   const referenceDesign = getReferenceDesign(imports, component);
+  //   reference = (referenceDesign || design).components[
+  //     component.props.component
+  //   ];
+  // }
+  const collapserColor = selection === id ? 'white' : 'border';
+  const CollapseIcon = component.collapsed ? FormNext : FormDown;
+  // const toggleCollapse = (id) => {
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   const component = nextDesign.components[id];
+  //   component.collapsed = !component.collapsed;
+  //   updateDesign(nextDesign);
+  //   setSelected({ ...selected, component: id });
+  // };
 
   return (
     <Box>
@@ -61,45 +65,43 @@ const Component = ({ screen, id, firstChild }) => {
         <Button
           fill
           hoverIndicator
-          onClick={() => setSelected({ ...selected, screen, component: id })}
-          draggable={!component.coupled}
-          onDragStart={(event) => {
-            event.dataTransfer.setData('text/plain', ''); // for Firefox
-            setDragging(id);
-          }}
-          onDragEnd={() => {
-            setDragging(undefined);
-            setDropTarget(undefined);
-          }}
-          onDragEnter={() => {
-            if (
-              dragging &&
-              dragging !== id &&
-              canParent(design, libraries, component)
-            ) {
-              setDropTarget(id);
-              setDropWhere('in');
-            }
-          }}
-          onDragOver={(event) => {
-            if (dragging && dragging !== id) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={moveComponent}
+          onClick={() => setSelection(id)}
+          // draggable={!component.coupled}
+          // onDragStart={(event) => {
+          //   event.dataTransfer.setData('text/plain', ''); // for Firefox
+          //   setDragging(id);
+          // }}
+          // onDragEnd={() => {
+          //   setDragging(undefined);
+          //   setDropTarget(undefined);
+          // }}
+          // onDragEnter={() => {
+          //   if (
+          //     dragging &&
+          //     dragging !== id &&
+          //     canParent(design, libraries, component)
+          //   ) {
+          //     setDropTarget(id);
+          //     setDropWhere('in');
+          //   }
+          // }}
+          // onDragOver={(event) => {
+          //   if (dragging && dragging !== id) {
+          //     event.preventDefault();
+          //   }
+          // }}
+          // onDrop={moveComponent}
         >
           <Box
-            ref={selected.component === id ? selectedRef : undefined}
+            // ref={selected.component === id ? selectedRef : undefined}
             direction="row"
             align="center"
             gap="medium"
             pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
             background={
-              dropTarget && dropTarget === id && dropWhere === 'in'
-                ? 'focus'
-                : selected.component === id
-                ? 'selected-background'
-                : undefined
+              // dropTarget && dropTarget === id && dropWhere === 'in'
+              //   ? 'focus' :
+              selection === id ? 'selected-background' : undefined
             }
           >
             <Text size="medium" truncate>
@@ -114,26 +116,15 @@ const Component = ({ screen, id, firstChild }) => {
         </Button>
         {component.children && (
           <Button
-            icon={
-              component.collapsed ? (
-                <FormNext color={collapserColor} />
-              ) : (
-                <FormDown color={collapserColor} />
-              )
-            }
-            onClick={() => toggleCollapse(id)}
+            icon={<CollapseIcon color={collapserColor} />}
+            onClick={() => toggleCollapsed(id)}
           />
         )}
       </Stack>
       {!component.collapsed && component.children && (
         <Box pad={{ left: 'small' }}>
           {component.children.map((childId, index) => (
-            <Component
-              key={childId}
-              screen={screen}
-              id={childId}
-              firstChild={index === 0}
-            />
+            <Component key={childId} id={childId} first={index === 0} />
           ))}
         </Box>
       )}

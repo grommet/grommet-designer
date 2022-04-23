@@ -29,14 +29,12 @@ const AlternativeLabel =
   };
 
 const AlternativeProperty = forwardRef(
-  ({ first, name, onChange, alternativeOptions, sub, value }, ref) => {
+  ({ name, onChange, alternativeOptions, value }, ref) => {
     const { design } = useContext(DesignContext);
     return (
       <ArrayProperty
         ref={ref}
         name={name}
-        sub={sub}
-        first={first}
         Label={AlternativeLabel(design)}
         options={alternativeOptions}
         multiple

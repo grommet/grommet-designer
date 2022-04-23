@@ -2,14 +2,14 @@ import React from 'react';
 import { Box, Paragraph, Text } from 'grommet';
 
 const Field = React.forwardRef(
-  ({ children, first, label, help, htmlFor, sub, ...rest }, ref) => (
+  ({ children, label, help, htmlFor, ...rest }, ref) => (
     <Box
       ref={ref}
       direction="row"
       align="center"
       justify="between"
-      border={first ? 'horizontal' : 'bottom'}
-      pad={{ left: sub ? 'none' : 'small', right: 'small' }}
+      border="bottom"
+      pad={{ horizontal: 'small' }}
       {...rest}
     >
       <Box

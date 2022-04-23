@@ -1,36 +1,13 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Box, Keyboard, TextInput } from 'grommet';
+import { getLibraries } from '../design2';
 import AddLibrary from './AddLibrary';
-import AddTemplate from './AddTemplate';
 
-const AddComponents = ({ design, imports, libraries, onAdd }) => {
+const AddComponents = ({ onAdd }) => {
+  const libraries = getLibraries();
   const [search, setSearch] = useState('');
 
   const inputRef = useRef();
-
-  const templates = useMemo(() => {
-    const buildTemplates = (design) => {
-      const templates = {};
-      Object.keys(design.components)
-        .map((id) => design.components[id])
-        .filter((component) => component.name)
-        .forEach((component) => {
-          if (!templates[component.name]) {
-            templates[component.name] = component;
-          }
-        });
-      return { design, name: design.name, templates };
-    };
-
-    const result = [];
-    result.push(buildTemplates(design));
-
-    imports
-      .filter((i) => i.design)
-      .forEach((i) => result.push({ ...i, ...buildTemplates(i.design) }));
-
-    return result;
-  }, [design, imports]);
 
   // Ensure we always keep focus on the search input, even after the user
   // selects a location.
@@ -80,21 +57,6 @@ const AddComponents = ({ design, imports, libraries, onAdd }) => {
           {...library}
         />
       ))}
-
-      {templates
-        .filter(
-          ({ templates }) =>
-            !searchExp ||
-            Object.keys(templates).some((name) => name.match(searchExp)),
-        )
-        .map((template) => (
-          <AddTemplate
-            key={template.name}
-            onAdd={onAdd}
-            searchExp={searchExp}
-            {...template}
-          />
-        ))}
     </Box>
   );
 };

@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import DesignContext from '../DesignContext';
+import React from 'react';
+import { getTheme } from '../design2';
 import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
@@ -18,31 +18,30 @@ import StringProperty from './StringProperty';
 import StringOrComponentProperty from './StringOrComponentProperty';
 
 const Property = React.forwardRef(
-  ({ property: propertyArg, value, ...rest }, ref) => {
-    const { theme } = useContext(DesignContext);
-    let property =
-      propertyArg && propertyArg.dynamicProperty
-        ? propertyArg.dynamicProperty({ value })
-        : propertyArg;
+  ({ definition: definitionProp, value, ...rest }, ref) => {
+    const theme = getTheme();
+    let definition = definitionProp?.dynamicProperty
+      ? definitionProp.dynamicProperty({ value })
+      : definitionProp;
 
-    if (Array.isArray(property)) {
-      if (property.includes('-color-')) {
+    if (Array.isArray(definition)) {
+      if (definition.includes('-color-')) {
         return <ColorProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-Icon-')) {
+      if (definition.includes('-Icon-')) {
         return <IconProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-link-options-')) {
+      if (definition.includes('-link-options-')) {
         return (
           <FunctionProperty
             ref={ref}
             value={value}
-            property={LinkOptionsProperty}
+            definition={LinkOptionsProperty}
             {...rest}
           />
         );
       }
-      if (property.includes('-link-checked-')) {
+      if (definition.includes('-link-checked-')) {
         return (
           <FunctionProperty
             ref={ref}
@@ -52,21 +51,21 @@ const Property = React.forwardRef(
               { label: 'unchecked', value: '-unchecked-' },
               { label: 'both', value: '-both-' },
             ]}
-            property={LinkPropertyOptions}
+            definition={LinkPropertyOptions}
             {...rest}
           />
         );
       }
-      if (property.includes('-link-')) {
+      if (definition.includes('-link-')) {
         return <LinkProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-alternative-')) {
+      if (definition.includes('-alternative-')) {
         return <AlternativeProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-reference-')) {
+      if (definition.includes('-reference-')) {
         return <ReferenceProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-theme-')) {
+      if (definition.includes('-theme-')) {
         // get options from theme, special casing
         if (rest.name === 'kind' && theme.button.toolbar)
           return (
@@ -80,9 +79,9 @@ const Property = React.forwardRef(
         return null;
       }
       if (
-        property.some((p) => typeof p === 'string' && p.includes('-property-'))
+        definition.some((p) => typeof p === 'string' && p.includes('-property-'))
       ) {
-        const [, from] = property[0].split(' ');
+        const [, from] = definition[0].split(' ');
         return (
           <OptionsProperty
             ref={ref}
@@ -94,11 +93,11 @@ const Property = React.forwardRef(
         );
       }
       return (
-        <ArrayProperty ref={ref} options={property} value={value} {...rest} />
+        <ArrayProperty ref={ref} options={definition} value={value} {...rest} />
       );
-    } else if (typeof property === 'string') {
-      if (property.includes('-property-')) {
-        const [, from] = property.split(' ');
+    } else if (typeof definition === 'string') {
+      if (definition.includes('-property-')) {
+        const [, from] = definition.split(' ');
         return (
           <OptionsProperty
             ref={ref}
@@ -108,34 +107,33 @@ const Property = React.forwardRef(
           />
         );
       }
-      if (property.includes('-string-or-component-')) {
+      if (definition.includes('-string-or-component-')) {
         return <StringOrComponentProperty ref={ref} value={value} {...rest} />;
       }
-      if (property.includes('-component-')) {
+      if (definition.includes('-component-')) {
         return <ComponentProperty ref={ref} value={value} {...rest} />;
       }
       return <StringProperty ref={ref} value={value} {...rest} />;
-    } else if (typeof property === 'number') {
+    } else if (typeof definition === 'number') {
       return <NumberProperty ref={ref} value={value} {...rest} />;
-    } else if (typeof property === 'boolean') {
+    } else if (typeof definition === 'boolean') {
       return <BooleanProperty ref={ref} value={value} {...rest} />;
-    } else if (typeof property === 'object') {
+    } else if (typeof definition === 'object') {
       return (
         <ObjectProperty
           ref={ref}
           value={value}
-          property={property}
+          definition={definition}
           Property={Property}
           {...rest}
         />
       );
-    } else if (typeof property === 'function') {
+    } else if (typeof definition === 'function') {
       return (
         <FunctionProperty
           ref={ref}
           value={value}
-          property={property}
-          theme={theme}
+          definition={definition}
           {...rest}
         />
       );

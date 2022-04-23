@@ -1,32 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, Grommet, Paragraph } from 'grommet';
-import DesignContext from './Design2Context';
-import SelectionContext from './SelectionContext';
+import { getTheme } from './design2';
+// import DesignContext from './Design2Context';
 import DesignComponent from './DesignComponent';
 
-const Canvas = () => {
-  const { theme, themeMode } = useContext(DesignContext);
-  const { property, screen } = useContext(SelectionContext);
+const Canvas = ({ root }) => {
+  // const { theme, themeMode } = useContext(DesignContext);
+  const theme = getTheme();
 
   let content;
-  if (property)
-    if (property.component)
+  if (root.property)
+    if (root.property.component)
       // showing just a property component, no screen
       content = (
         <Box align="center" justify="center">
-          <DesignComponent id={property.component} />
+          <DesignComponent id={root.property.component} />
         </Box>
       );
     else
       content = (
         <Box align="center">
           <Paragraph size="large" textAlign="center" color="placeholder">
-            {property.name} is currently empty. Add a component to it to to
+            {root.property.name} is currently empty. Add a component to it to to
             start building it out.
           </Paragraph>
         </Box>
       );
-  else if (screen?.root) content = <DesignComponent id={screen?.root} />;
+  else if (root) content = <DesignComponent id={root} />;
   else
     content = (
       <Box align="center">
@@ -41,7 +41,7 @@ const Canvas = () => {
     <Grommet
       id="designer-canvas"
       theme={theme}
-      themeMode={themeMode}
+      // themeMode={themeMode}
       full="min"
       style={{ height: '1px' }}
     >

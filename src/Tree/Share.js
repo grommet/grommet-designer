@@ -15,8 +15,8 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import { dependencies, generateJSX, publish } from '../design';
+import { useDesign } from '../design2';
+// import { dependencies, generateJSX, publish } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -30,7 +30,8 @@ const Summary = ({ Icon, label, guidance }) => (
 );
 
 const Publish = () => {
-  const { design, updateDesign } = useContext(DesignContext);
+  // const { design, updateDesign } = useContext(DesignContext);
+  const design = useDesign();
   const [publication, setPublication] = useState();
   const [publishing, setPublishing] = useState();
   const [message, setMessage] = useState();
@@ -62,24 +63,24 @@ const Publish = () => {
     );
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
     setPublishing(true);
-    publish({
-      design,
-      email,
-      password,
-      pin,
-      onChange: (nextDesign) => {
-        setPublishing(false);
-        updateDesign(nextDesign);
-        ReactGA.event({
-          category: 'share',
-          action: 'publish design',
-        });
-      },
-      onError: (error) => {
-        setPublishing(false);
-        setError(error);
-      },
-    });
+    // publish({
+    //   design,
+    //   email,
+    //   password,
+    //   pin,
+    //   onChange: (nextDesign) => {
+    //     setPublishing(false);
+    //     updateDesign(nextDesign);
+    //     ReactGA.event({
+    //       category: 'share',
+    //       action: 'publish design',
+    //     });
+    //   },
+    //   onError: (error) => {
+    //     setPublishing(false);
+    //     setError(error);
+    //   },
+    // });
   };
 
   return (
@@ -202,7 +203,7 @@ const Publish = () => {
 };
 
 const SaveLocally = ({ onClose }) => {
-  const { design } = useContext(DesignContext);
+  const design = useDesign();
   return (
     <Box align="center">
       <Summary
@@ -235,7 +236,7 @@ const SaveLocally = ({ onClose }) => {
 };
 
 const Developer = () => {
-  const { design, imports, libraries, theme } = useContext(DesignContext);
+  // const { design, imports, libraries, theme } = useContext(DesignContext);
   const [code, setCode] = useState();
 
   return (
@@ -253,18 +254,18 @@ const Developer = () => {
         <Button
           label="Generate Code"
           hoverIndicator
-          onClick={() => {
-            setCode(generateJSX({ design, imports, libraries, theme }));
-            ReactGA.event({
-              category: 'share',
-              action: 'generate code',
-            });
-          }}
+          // onClick={() => {
+          //   setCode(generateJSX({ design, imports, libraries, theme }));
+          //   ReactGA.event({
+          //     category: 'share',
+          //     action: 'generate code',
+          //   });
+          // }}
         />
       )}
       {code && (
         <Box>
-          <Markdown>
+          {/* <Markdown>
             {`
 * install nodejs, npm, yarn, and create-react-app (if needed)
 * \`# npx create-react-app my-app\`
@@ -273,7 +274,7 @@ const Developer = () => {
 * replace the contents of \`src/App.js\` with the text below
 * \`# yarn start\`
             `}
-          </Markdown>
+          </Markdown> */}
           <TextArea value={code} rows={20} cols={40} readOnly />
         </Box>
       )}

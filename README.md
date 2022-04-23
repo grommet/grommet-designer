@@ -130,6 +130,8 @@ in the importing design, when the browser is refreshed.
 
 ## Refactoring
 
+how to handle selection state?
 inline text edit in canvas
 convert Properties to only change component definition, not whole design
 convert Tree
+edit property component

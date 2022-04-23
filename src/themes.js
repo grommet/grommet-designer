@@ -1,3 +1,5 @@
+import { grommet } from 'grommet';
+
 const themes = [
   {
     name: 'aruba',
@@ -65,3 +67,39 @@ export const themeForValue = (value) =>
 
 export const themeForUrl = (url) =>
   themes.find((theme) => url.search(`/${theme.packageName}/`) !== -1);
+
+const npmTheme = {};
+
+export const loadThemePackage = async ({ url, name, packageName }) => {
+  const nameParts = packageName.split('-'); // [grommet, theme, hpe]
+  const varName = nameParts
+    .map((p) => `${p[0].toUpperCase()}${p.slice(1)}`)
+    .join(''); // GrommetThemeHpe
+  if (!document.getElementById(packageName)) {
+    // we haven't loaded this theme, add it in its own script tag
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = url;
+      script.id = packageName;
+      document.body.appendChild(script);
+      script.onload = () => {
+        try {
+          npmTheme[packageName] = window[varName][name];
+          resolve(npmTheme[packageName]);
+        } catch {
+          reject(undefined);
+        }
+      };
+    });
+  }
+  return npmTheme[packageName];
+};
+
+export const loadTheme = async (themeValue) => {
+  const themeDesc = themeForValue(themeValue);
+  if (themeDesc?.jsUrl) {
+    const { packageName, name } = themeDesc;
+    return await loadThemePackage({ name, packageName, url: themeDesc.jsUrl });
+  }
+  return grommet;
+};

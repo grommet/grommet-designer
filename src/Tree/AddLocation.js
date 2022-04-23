@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Blank } from 'grommet-icons';
-import { getParent } from '../design';
-import { displayName, getComponentType } from '../utils';
+import SelectionContext from '../SelectionContext';
+import { getName, getParent, getType, useComponent } from '../design2';
 
-const allLocations = ['within', 'after', 'before', 'container of'];
+const allLocations = ['within', 'after', 'before', 'containing'];
 
 const locationVisuals = {
   after: [
@@ -47,7 +47,7 @@ const locationVisuals = {
       stroke="#666"
     />,
   ],
-  'container of': [
+  containing: [
     <rect
       key="out"
       x={2}
@@ -81,39 +81,30 @@ const locationVisuals = {
   ],
 };
 
-const AddLocation = ({ design, libraries, onChange, selected }) => {
-  const selectedComponent = design.components[selected.component];
-  const selectedType = React.useMemo(
-    () =>
-      selectedComponent
-        ? getComponentType(libraries, selectedComponent.type)
-        : undefined,
-    [libraries, selectedComponent],
-  );
-  const selectedName = React.useMemo(
-    () => displayName(selectedComponent),
-    [selectedComponent],
-  );
+const AddLocation = ({ onChange }) => {
+  const [selection] = useContext(SelectionContext);
+  const component = useComponent(selection);
+  const type = getType(component.type);
 
   const locations = React.useMemo(() => {
-    const parent = getParent(design, selected.component);
+    const parent = getParent(component);
     if (!parent)
-      return allLocations.filter((l) => l === 'within' || l === 'container of');
-    if (selectedType?.container) return allLocations;
+      return allLocations.filter((l) => l === 'within' || l === 'containing');
+    if (type?.container) return allLocations;
     return allLocations.filter((l) => l !== 'within');
-  }, [design, selected.component, selectedType]);
+  }, [component, type]);
 
   const [addLocation, setAddLocation] = React.useState();
   React.useEffect(
     () =>
-      setAddLocation(locations[selectedType?.container === 'rarely' ? 1 : 0]),
-    [locations, selectedType],
+      setAddLocation(locations[type?.container === 'rarely' ? 1 : 0]),
+    [locations, type],
   );
   React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
 
   const Option = ({ option, checked, hover }) => {
     return (
-      <Tip content={`${option} ${selectedName}`}>
+      <Tip content={`${option} ${getName(component)}`}>
         <Box
           pad="xsmall"
           background={hover && !checked ? { color: 'active' } : undefined}

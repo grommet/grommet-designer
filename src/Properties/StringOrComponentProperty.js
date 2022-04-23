@@ -6,12 +6,12 @@ import ComponentInput from './ComponentInput';
 
 const StringOrComponentProperty = React.forwardRef(
   (
-    { componentId, first, name, onChange, sub, value: valueProp, ...rest },
+    { componentId, name, onChange, value: valueProp, ...rest },
     ref,
   ) => {
     const [value, setValue] = useDebounce(valueProp, onChange);
     return (
-      <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
+      <Field key={name} label={name} htmlFor={name}>
         <Box direction="row" gap="small">
           <ComponentInput
             componentId={componentId}

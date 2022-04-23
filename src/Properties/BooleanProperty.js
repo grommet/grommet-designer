@@ -4,8 +4,8 @@ import { FormClose } from 'grommet-icons';
 import Field from '../components/Field';
 
 const BooleanProperty = React.forwardRef(
-  ({ first, name, onChange, sub, value }, ref) => (
-    <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
+  ({ name, onChange, value }, ref) => (
+    <Field key={name} label={name} htmlFor={name}>
       <Box pad="small" direction="row" gap="small">
         <CheckBox
           ref={ref}

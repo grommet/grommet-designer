@@ -1,7 +1,7 @@
 import React, { forwardRef, useContext, useMemo } from 'react';
 import { Box, Text, ThemeContext } from 'grommet';
 import { deepMerge } from 'grommet/utils';
-import DesignContext from '../DesignContext';
+import { getTheme } from '../design2';
 import ArrayProperty from './ArrayProperty';
 
 // input is due to a bug in grommet-theme-hpe v1.0.5
@@ -29,7 +29,7 @@ const ColorLabel =
 
 const ColorProperty = forwardRef(
   ({ first, name, onChange, sub, value }, ref) => {
-    const { theme } = useContext(DesignContext);
+    const theme = getTheme();
     const baseTheme = useContext(ThemeContext);
     const options = useMemo(() => {
       const merged = deepMerge(baseTheme.global.colors, theme.global.colors);

@@ -1,16 +1,18 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Button,
+  Footer,
   Header as GrommetHeader,
   Keyboard,
   Layer,
   Menu,
+  Paragraph,
   Text,
 } from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
+import { getDesign, removeDesign, useChanges } from '../design2';
 import AddComponent from './AddComponent';
-import DesignContext from '../DesignContext';
 import DesignSettings from './DesignSettings';
 import Sharing from './Share';
 
@@ -20,13 +22,12 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Header = () => {
-  const { chooseDesign, design, onRedo, onUndo, setMode } =
-    useContext(DesignContext);
+const Header = ({ onClose, setMode }) => {
   const [adding, setAdding] = useState();
   const [editing, setEditing] = useState();
   const [sharing, setSharing] = useState();
   const [deleting, setDeleting] = useState();
+  const { undo, redo } = useChanges();
   const ref = useRef();
 
   const onKey = (event) => {
@@ -37,16 +38,18 @@ const Header = () => {
       if (event.key === 'a') {
         setAdding(true);
       }
-      if (onUndo && event.key === 'z' && !event.shiftKey) {
+      if (undo && event.key === 'z' && !event.shiftKey) {
         event.preventDefault();
-        onUndo();
+        undo();
       }
-      if (onRedo && event.key === 'z' && event.shiftKey) {
+      if (redo && event.key === 'z' && event.shiftKey) {
         event.preventDefault();
-        onRedo();
+        redo();
       }
     }
   };
+
+  const name = getDesign().name;
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
@@ -71,7 +74,7 @@ const Header = () => {
                   };`,
                   onClick: () => setMode('comments'),
                 },
-                { label: 'close', onClick: () => chooseDesign(undefined) },
+                { label: 'close', onClick: onClose },
                 { label: 'delete ...', onClick: () => setDeleting(true) },
               ]}
             >
@@ -85,9 +88,9 @@ const Header = () => {
                 <Text
                   weight="bold"
                   truncate
-                  size={design.name.length > 20 ? 'small' : undefined}
+                  size={name.length > 20 ? 'small' : undefined}
                 >
-                  {design.name}
+                  {name}
                 </Text>
                 <FormDown color="control" />
               </Box>
@@ -98,15 +101,15 @@ const Header = () => {
               title="undo last change"
               tip="undo last change"
               icon={<Undo />}
-              disabled={!onUndo}
-              onClick={onUndo || undefined}
+              disabled={!undo}
+              onClick={undo}
             />
             <Button
               title="redo last change"
               tip="redo last change"
               icon={<Redo />}
-              disabled={!onRedo}
-              onClick={onRedo || undefined}
+              disabled={!redo}
+              onClick={redo}
             />
             <Button
               title="add a component"
@@ -124,15 +127,23 @@ const Header = () => {
             onEsc={() => setDeleting(false)}
             onClickOutside={() => setDeleting(false)}
           >
-            <Box flex elevation="medium" pad="large">
-              <Button
-                label="Confirm delete"
-                onClick={() => {
-                  localStorage.removeItem(`${design.name}--state`);
-                  localStorage.removeItem(design.name);
-                  chooseDesign(undefined);
-                }}
-              />
+            <Box flex elevation="medium" pad="large" gap="medium">
+              <Paragraph>
+                Just checking, are you sure you want to delete
+                <Text weight="bold"> {name}</Text>?
+              </Paragraph>
+              <Footer justify="start">
+                <Button
+                  label="Yes, delete"
+                  primary
+                  onClick={() => {
+                    localStorage.removeItem(`${name}--state`);
+                    removeDesign();
+                    onClose();
+                  }}
+                />
+                <Button label="No, cancel" onClick={() => setDeleting(false)} />
+              </Footer>
             </Box>
           </Layer>
         )}
