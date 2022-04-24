@@ -87,12 +87,12 @@ const AddLocation = ({ onChange }) => {
   const type = getType(component.type);
 
   const locations = React.useMemo(() => {
-    const parent = getParent(component);
+    const parent = getParent(selection);
     if (!parent)
       return allLocations.filter((l) => l === 'within' || l === 'containing');
     if (type?.container) return allLocations;
     return allLocations.filter((l) => l !== 'within');
-  }, [component, type]);
+  }, [selection, type]);
 
   const [addLocation, setAddLocation] = React.useState();
   React.useEffect(

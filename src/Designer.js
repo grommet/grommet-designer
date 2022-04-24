@@ -16,7 +16,13 @@ import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 // import Comments from './Comments/Comments';
 // import { getInitialSelected, getScreenByPath, publish } from './design';
-import { load as loadDesign, getRoot, getScreen, useDesign } from './design2';
+import {
+  load as loadDesign,
+  getRoot,
+  getScreen,
+  getScreenByPath,
+  useDesignName,
+} from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
 import { /* getComponentType, */ parseUrlParams } from './utils';
 
@@ -35,10 +41,11 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   const responsive = useContext(ResponsiveContext);
   const [name, setName] = useState();
   const [ready, setReady] = useState(false);
-  const [root, setRoot] = useState();
+  const [canvasRoot, setCanvasRoot] = useState();
   const [selection, setSelection] = useState();
   const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
   // const [confirmReplace, setConfirmReplace] = useState();
+
   // load state
   useEffect(() => {
     // if (!mode) {
@@ -72,8 +79,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   }, []);
 
   // when the document name changes, update title and URL
-  const design = useDesign();
-  if (design && design.name !== name) setName(design.name);
+  const nextName = useDesignName();
+  if (nextName !== name) setName(nextName);
 
   useEffect(() => {
     if (name) {
@@ -158,9 +165,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         }
       })
       .then(() => {
-        // TODO: decide where to start, tie to routing
-        const nextRoot = getRoot();
-        setRoot(nextRoot);
+        setCanvasRoot(getScreen(getRoot()).root);
       })
       .then(() => {
         ReactGA.event({ category: 'switch', action: 'published design' });
@@ -174,36 +179,40 @@ const Designer = ({ loadProps, onClose, thumb }) => {
 
   // browser navigation
 
-  // // react when user uses browser back and forward buttons
-  // useEffect(() => {
-  //   const onPopState = () => {
-  //     const {
-  //       location: { pathname },
-  //     } = document;
-  //     const screen = getScreenByPath(design, pathname);
-  //     if (screen)
-  //       setSelected({ screen, component: design.screens[screen].root });
-  //   };
+  // react when user uses browser back and forward buttons
+  useEffect(() => {
+    const onPopState = () => {
+      const {
+        location: { pathname },
+      } = document;
+      const screen = getScreenByPath(pathname);
+      if (screen) {
+        setSelection(screen.id);
+        setCanvasRoot(screen.root);
+      }
+    };
 
-  //   window.addEventListener('popstate', onPopState);
-  //   return () => window.removeEventListener('popstate', onPopState);
-  // }, [design]);
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
 
-  // // push state when the user navigates
-  // useEffect(() => {
-  //   if (selected.screen) {
-  //     const {
-  //       location: { pathname },
-  //     } = document;
-  //     // track selected screen in browser location, so browser
-  //     // backward/forward controls work
-  //     const screen = design.screens[selected.screen];
-  //     if (screen && screen.path !== pathname) {
-  //       const url = screen.path + window.location.search;
-  //       window.history.pushState(undefined, undefined, url);
-  //     }
-  //   }
-  // }, [design, selected.screen]);
+  // push state when the user navigates via selection
+  useEffect(() => {
+    if (selection) {
+      const root = getRoot(selection);
+      const {
+        location: { pathname },
+      } = document;
+      // track selected screen in browser location, so browser
+      // backward/forward controls work
+      const screen = getScreen(root);
+      if (screen?.path !== pathname) {
+        const url = screen.path + window.location.search;
+        window.history.pushState(undefined, undefined, url);
+        setCanvasRoot(screen.root);
+      }
+    }
+  }, [selection]);
 
   // store state
   useEffect(() => {
@@ -283,8 +292,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   // const listeners = useRef({});
 
   const selectionContext = useMemo(
-    () => [selection, setSelection],
-    [selection],
+    () => (mode === 'edit' ? [selection, setSelection] : []),
+    [mode, selection],
   );
 
   if (!ready) return <Loading />;
@@ -294,7 +303,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
 
   let content = (
     <ErrorCatcher>
-      <Canvas root={root} />
+      <Canvas root={canvasRoot} />
     </ErrorCatcher>
   );
 

@@ -1,15 +1,13 @@
 import React from 'react';
 import { Box, Grommet, Paragraph } from 'grommet';
 import { getTheme } from './design2';
-// import DesignContext from './Design2Context';
 import DesignComponent from './DesignComponent';
 
 const Canvas = ({ root }) => {
-  // const { theme, themeMode } = useContext(DesignContext);
   const theme = getTheme();
 
   let content;
-  if (root.property)
+  if (root?.property)
     if (root.property.component)
       // showing just a property component, no screen
       content = (

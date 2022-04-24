@@ -26,6 +26,7 @@ import {
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import {
+  duplicateComponent,
   getComponent,
   getParent,
   getType,
@@ -39,13 +40,13 @@ import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
 import CopyPropertiesFrom from './CopyPropertiesFrom';
 import Field from '../components/Field';
-import { getComponentType } from '../utils';
+// import { getComponentType } from '../utils';
 
-const responsiveSizePad = {
-  small: 'xsmall',
-  medium: 'small',
-  large: 'medium',
-};
+// const responsiveSizePad = {
+//   small: 'xsmall',
+//   medium: 'small',
+//   large: 'medium',
+// };
 
 const Properties = () => {
   const [selection, setSelection] = useContext(SelectionContext);
@@ -139,26 +140,19 @@ const Properties = () => {
   //   }
   // };
 
-  // const duplicate = () => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const newId = duplicateComponent({
-  //     nextDesign,
-  //     id: selected.component,
-  //     libraries,
-  //   });
-  //   changeDesign(nextDesign);
-  //   setSelected({ ...selected, component: newId });
+  const duplicate = () => {
+    setSelection(duplicateComponent(selection));
 
-  //   ReactGA.event({
-  //     category: 'edit',
-  //     action: 'duplicate component',
-  //   });
-  // };
+    ReactGA.event({
+      category: 'edit',
+      action: 'duplicate component',
+    });
+  };
 
   const delet = () => {
     if (!component.coupled) {
-      console.log('!!! delete', selection, parent);
       removeComponent(selection);
+      // TODO: set selection to previous sibling instead of parent
       setSelection(parent);
 
       ReactGA.event({
@@ -179,10 +173,10 @@ const Properties = () => {
         event.preventDefault();
         delet();
       }
-      // if (event.key === 'd') {
-      //   event.preventDefault();
-      //   duplicate();
-      // }
+      if (event.key === 'd') {
+        event.preventDefault();
+        duplicate();
+      }
     }
   };
 
@@ -256,12 +250,12 @@ const Properties = () => {
           </Box>
           {!component.coupled && (
             <Box flex={false} direction="row" align="center">
-              {/* <Button
+              <Button
                 title="duplicate"
                 tip="duplicate"
                 icon={<Duplicate />}
                 onClick={duplicate}
-              /> */}
+              />
               {/* {references.length === 0 ? ( */}
               <Button
                 title="delete"

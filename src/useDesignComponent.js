@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
-// import DesignContext from './Design2Context';
-// import SelectionContext from './SelectionContext';
-import { getComponent, getType, listen } from './design2';
+import SelectionContext from './SelectionContext';
+import { getType, useComponent } from './design2';
 import DesignComponent from './DesignComponent';
 
 const renderNull = {};
@@ -14,16 +13,9 @@ const Placeholder = styled.div`
 `;
 
 const useDesignComponent = (id) => {
-  // const { getComponent, getType, listen, mode } = useContext(DesignContext);
-  // const { component: selectionComponent, setSelection } =
-  //   useContext(SelectionContext);
+  const [selection, setSelection] = useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
-  const [component, setComponent] = useState(getComponent(id));
-
-  useEffect(() => {
-    const remove = listen(id, setComponent);
-    return remove;
-  }, [id]);
+  const component = useComponent(id);
 
   // get component definition in the design
   if (!component) return renderNull;
@@ -72,20 +64,24 @@ const useDesignComponent = (id) => {
 
   // TODO: inline edit
   
-  // if (mode === 'edit') {
-  //   props.onClick = (event) => {
-  //     event.stopPropagation();
-  //     if (selectionComponent !== component) {
-  //       // setInlineEdit(undefined);
-  //       setSelection({ component: id });
-  //       // } else if (type.text && !referenceDesign && selectedRef.current) {
-  //       //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
-  //       //   setInlineEdit(id);
-  //     }
-  //     if (props.onClick) props.onClick(event);
-  //   };
-  //   props.tabIndex = '-1';
-  // }
+  if (setSelection) {
+    const priorClick = props.onClick;
+    props.onClick = (event) => {
+      event.stopPropagation();
+      if (selection !== id) {
+        // setInlineEdit(undefined);
+        setSelection(id);
+        // } else if (type.text && !referenceDesign && selectedRef.current) {
+        //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
+        //   setInlineEdit(id);
+      }
+      if (priorClick) priorClick(event);
+    };
+    props.tabIndex = '-1';
+    if (selection === id) {
+      props.style = { ...(props.style || {}), outline: '1px dashed red' };
+    }
+  }
 
   // render children
   let children;

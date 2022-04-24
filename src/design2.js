@@ -125,6 +125,9 @@ const lazilyStore = () => {
 
 export const getScreen = (id) => design.screens[id];
 
+export const getScreenByPath = (path) =>
+  Object.values(design.screens).find((s) => s.path === path);
+
 export const getComponent = (id) => design.components[id];
 
 // returns parent's id, could be a component or a screen
@@ -150,8 +153,8 @@ export const getParent = (id) => {
 };
 
 export const getRoot = (id) => {
-  if (!id) return design.screens[design.screenOrder[0]].root;
-  if (design.screens[id]) return design.screens[id].root;
+  if (!id) return design.screenOrder[0];
+  if (design.screens[id]) return id;
 
   // check if this is the root of a screen
   let root;
@@ -241,6 +244,12 @@ const updateDesign = (func) => {
   return nextDesign;
 };
 
+const getNextId = () => {
+  const id = design.nextId;
+  design.nextId += 1;
+  return id;
+};
+
 const generateName = (base, existing = []) => {
   const nameAvailable = (name) => !existing.some((n) => n === name) && name;
   let name = nameAvailable(base);
@@ -305,8 +314,7 @@ const slugify = (name) =>
     .replace(/[^\w-]+/g, '')}`;
 
 export const addScreen = () => {
-  const id = design.nextId;
-  design.nextId += 1;
+  const id = getNextId();
   const name = generateName(
     'Screen',
     Object.values(design.screens).map((s) => s.name),
@@ -329,11 +337,23 @@ export const removeScreen = (id) => {
   notify(id);
 };
 
+export const duplicateScreen = (id) => {
+  const source = design.screens[id];
+  const screen = JSON.parse(JSON.stringify(source));
+  screen.id = getNextId();
+  screen.name = `${source.name} - copy`;
+  screen.path = slugify(screen.name);
+  design.screens[screen.id] = screen;
+  design.screenOrder.push(screen.id);
+  if (screen.root) {
+    screen.root = duplicateComponent(screen.root, {});
+  }
+  return screen.id;
+};
+
 export const addComponent = (typeName, options) => {
   const type = getType(typeName);
-
-  const id = design.nextId;
-  design.nextId += 1;
+  const id = getNextId();
 
   const component = {
     type: typeName,
@@ -377,12 +397,15 @@ export const addComponent = (typeName, options) => {
       });
   }
 
-  // reference this component from the right place
+  // insert this component into the right parent
   if (options.within) {
-    updateComponent(options.within, (nextComponent) => {
-      if (!nextComponent.children) nextComponent.children = [];
-      nextComponent.children.push(id);
-    });
+    if (design.screens[options.within])
+      updateScreen(options.within, (nextScreen) => (nextScreen.root = id));
+    else
+      updateComponent(options.within, (nextComponent) => {
+        if (!nextComponent.children) nextComponent.children = [];
+        nextComponent.children.push(id);
+      });
   } else if (options.before) {
     updateComponent(getParent(options.before), (nextComponent) => {
       const index = nextComponent.children.indexOf(options.before);
@@ -390,7 +413,7 @@ export const addComponent = (typeName, options) => {
     });
   } else if (options.after) {
     updateComponent(getParent(options.after), (nextComponent) => {
-      const index = nextComponent.children.indexOf(options.before);
+      const index = nextComponent.children.indexOf(options.after);
       nextComponent.children.splice(index + 1, 0, id);
     });
   } else if (options.containing) {
@@ -417,14 +440,19 @@ export const removeComponent = (id) => {
       updateScreen(parentId, (nextScreen) => delete nextScreen.root);
     else
       updateComponent(parentId, (nextComponent) => {
-        if (nextComponent.children)
+        if (nextComponent.children) {
           nextComponent.children = nextComponent.children.filter(
             (i) => i !== id,
           );
-        if (nextComponent.propComponents)
+          if (!nextComponent.children.length) delete nextComponent.children;
+        }
+        if (nextComponent.propComponents) {
           nextComponent.propComponents = nextComponent.propComponents.filter(
             (i) => i !== id,
           );
+          if (!nextComponent.propComponents.length)
+            delete nextComponent.propComponents;
+        }
       });
   }
 
@@ -456,6 +484,62 @@ export const removeComponent = (id) => {
   // if (nextSelected) nextSelected.component = nextSelectedComponent;
 
   notify(id);
+};
+
+export const duplicateComponent = (id, idMapArg) => {
+  const component = JSON.parse(JSON.stringify(design.components[id]));
+  component.id = getNextId();
+  design.components[component.id] = component;
+
+  const type = getType(component.type);
+
+  // idMap maps the source id to the copied to id. This allows us to
+  // fix up links to be within what was copied.
+  const idMap = idMapArg || {};
+  idMap[id] = component.id;
+
+  if (component.children) {
+    component.children = component.children.map((childId) =>
+      duplicateComponent(childId, idMap),
+    );
+  }
+
+  // copy property components
+  if (component.propComponents) {
+    component.propComponents = component.propComponents.map((childId) =>
+      duplicateComponent(childId, idMap),
+    );
+    // update corresponding property references
+    Object.keys(type.properties).forEach((name) => {
+      const definition = type.properties[name];
+      if (
+        definition.includes('-string-or-component-') ||
+        definition.includes('-component-')
+      ) {
+        component.props[name] =
+          idMap[component.props[name]] || component.props[name];
+      }
+    });
+  }
+
+  // handle any deeper component copying, like DataTable columns render
+  if (type.copy) {
+    type.copy(design.components[id], component, {
+      duplicateComponent: (id) => duplicateComponent(id, idMap),
+    });
+  }
+
+  // TOOD: update links
+
+  if (!idMapArg) {
+    // this is the top of our duplication tree, insert as a peer of the source
+    updateComponent(getParent(id), (nextComponent) => {
+      const index = nextComponent.children.indexOf(id);
+      nextComponent.children.splice(index + 1, 0, component.id);
+    });
+  }
+
+  return component.id;
 };
 
 const coreProps = ['hide', 'name', 'text'];
@@ -512,30 +596,39 @@ export const toggleCollapsed = (id) => {
 // hooks
 
 export const useDesign = () => {
-  const [stateDesign, setStateDesign] = useState(design);
+  const [, setStateDesign] = useState(design);
   useEffect(() => listen('all', setStateDesign), []);
-  return stateDesign;
+  return design;
+};
+
+export const useDesignName = () => {
+  const [name, setName] = useState(design?.name);
+  useEffect(
+    () =>
+      listen('all', (d2) => {
+        setName((prev) => (d2.name !== prev ? d2.name : prev));
+      }),
+    [],
+  );
+  return name;
 };
 
 export const useScreens = () => {
-  const [screens, setScreens] = useState(design.screenOrder);
+  const [, setScreens] = useState(design.screenOrder);
   useEffect(() => listen('all', (d) => setScreens(d.screenOrder)), []);
-  return screens;
+  return design.screenOrder;
 };
 
 export const useScreen = (id) => {
-  const [screen, setScreen] = useState(design.screens[id]);
+  const [, setScreen] = useState(design.screens[id]);
   useEffect(() => listen(id, setScreen), [id]);
-  return screen;
+  return design.screens[id];
 };
 
 export const useComponent = (id) => {
-  const [component, setComponent] = useState(design.components[id]);
-  useEffect(() => {
-    setComponent(design.components[id]);
-    listen(id, setComponent);
-  }, [id]);
-  return component;
+  const [, setComponent] = useState(design.components[id]);
+  useEffect(() => listen(id, setComponent), [id]);
+  return design.components[id];
 };
 
 export const useChanges = () => {

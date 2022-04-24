@@ -9,7 +9,7 @@ import DragDropContext from './DragDropContext';
 import ScreenDropArea from './ScreenDropArea';
 
 const Screen = ({ first, id }) => {
-  const [, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection] = useContext(SelectionContext);
   const [dragDrop, setDragDrop] = useContext(DragDropContext);
   // const { draggingScreen, moveScreen, setDraggingScreen, setDropScreenTarget } =
   //   useContext(DragDropContext);
@@ -17,7 +17,6 @@ const Screen = ({ first, id }) => {
   const screen = useScreen(id);
 
   if (!screen) return null;
-  const isSelected = false; // selected.screen === screenId && !selected.component;
 
   // const toggleScreenCollapse = () => {
   //   const nextDesign = JSON.parse(JSON.stringify(design));
@@ -28,6 +27,9 @@ const Screen = ({ first, id }) => {
   //   delete nextSelected.component;
   //   setSelected(nextSelected);
   // };
+
+  const collapserColor = selection === id ? 'white' : 'border';
+  const CollapseIcon = screen.collapsed ? FormNext : FormDown;
 
   return (
     <Box flex={false} border={first ? undefined : 'top'}>
@@ -60,7 +62,7 @@ const Screen = ({ first, id }) => {
             justify="between"
             gap="medium"
             pad={{ vertical: 'small', left: 'large', right: 'small' }}
-            background={isSelected ? 'selected-background' : undefined}
+            background={selection === id ? 'selected-background' : undefined}
           >
             <Heading
               level={3}
@@ -74,13 +76,7 @@ const Screen = ({ first, id }) => {
         </Button>
         {screen.root && (
           <Button
-            icon={
-              screen.collapsed ? (
-                <FormNext color="border" />
-              ) : (
-                <FormDown color="border" />
-              )
-            }
+            icon={<CollapseIcon color={collapserColor} />}
             onClick={() => toggleCollapsed(id)}
           />
         )}

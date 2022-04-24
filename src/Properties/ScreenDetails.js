@@ -1,9 +1,14 @@
 import React, { useContext } from 'react';
-// import ReactGA from 'react-ga';
+import ReactGA from 'react-ga';
 import { Box, Button, Keyboard, Menu, Text } from 'grommet';
 import { Duplicate, Trash } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
-import { removeScreen, setScreenProperty, useScreen } from '../design2';
+import {
+  duplicateScreen,
+  removeScreen,
+  setScreenProperty,
+  useScreen,
+} from '../design2';
 // import { addScreen, deleteScreen, newFrom, slugify } from '../design';
 import TextInputField from './TextInputField';
 
@@ -16,20 +21,17 @@ const ScreenDetails = () => {
   const delet = () => {
     removeScreen(selection);
     setSelection(undefined);
-  }
+  };
 
-  // const duplicate = () => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const nextSelected = { ...selected };
-  //   addScreen({
-  //     nextDesign,
-  //     nextSelected,
-  //     copyScreen: nextDesign.screens[selected.screen],
-  //     libraries,
-  //   });
-  //   changeDesign(nextDesign);
-  //   setSelected(nextSelected);
-  // };
+  const duplicate = () => {
+    // empty object prevents trying to add as a child
+    setSelection(duplicateScreen(selection));
+
+    ReactGA.event({
+      category: 'edit',
+      action: 'duplicate screen',
+    });
+  };
 
   // const newDesignFrom = () => {
   //   const [nextDesign, nextSelected] = newFrom({
@@ -84,21 +86,21 @@ const ScreenDetails = () => {
             items={menuItems}
           />
           <Box flex={false} direction="row" align="center">
-            {/* <Button
+            <Button
               title="duplicate"
               tip="duplicate"
               icon={<Duplicate />}
               hoverIndicator
               onClick={duplicate}
-            /> */}
+            />
             {/* {design.screenOrder.length > 1 && ( */}
-              <Button
-                title="delete"
-                tip="delete"
-                icon={<Trash />}
-                hoverIndicator
-                onClick={delet}
-              />
+            <Button
+              title="delete"
+              tip="delete"
+              icon={<Trash />}
+              hoverIndicator
+              onClick={delet}
+            />
             {/* )} */}
           </Box>
         </Box>
