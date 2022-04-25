@@ -96,6 +96,7 @@ export const load = async ({ design: designProp, id, name, password }) => {
   theme = await loadTheme(design.theme);
   // TODO: load any imports
   // TODO: load any data
+  data = design.data; // TODO: for now, just local
   return design;
 };
 
@@ -159,7 +160,7 @@ export const getRoot = (id) => {
   // check if this is the root of a screen
   let root;
   Object.keys(design.screens).some((sId) => {
-    if (design.screens[sId].root === id) root = sId;
+    if (design.screens[sId].root === id) root = parseInt(sId, 10);
     return !!root;
   });
   if (root) return root;
@@ -205,7 +206,21 @@ export const getDesign = () => design;
 
 export const getTheme = () => theme;
 
-export const getData = () => data;
+export const getData = (id) => data[id];
+
+export const replaceWithData = (text) =>
+  // replace {data-name.key-name} with with data[data-name][key-name] content
+  (text || '').replace(/\{[^}]*\}/g, (match) => {
+    const path = match.slice(1, match.length - 1).split('.');
+    let key = path.shift();
+    let node = Object.values(data).find(d => d.name === key)?.data;
+    while (path.length && node) {
+      const key = path.shift();
+      // TODO: remember active index and use here
+      node = Array.isArray(node) ? node[0][key] : node[key];
+    }
+    return node || match;
+  });
 
 export const getImports = () => imports;
 
@@ -244,19 +259,29 @@ const updateDesign = (func) => {
   return nextDesign;
 };
 
+const updateData = (id, func) => {
+  const nextData = JSON.parse(JSON.stringify(design.data[id]));
+  if (func) {
+    func(nextData);
+    design.data[id] = nextData;
+    notify(id, nextData);
+  }
+  return nextData;
+};
+
 const getNextId = () => {
   const id = design.nextId;
   design.nextId += 1;
   return id;
 };
 
-const generateName = (base, existing = []) => {
+const generateName = (base, existing = [], separator = ' ') => {
   const nameAvailable = (name) => !existing.some((n) => n === name) && name;
   let name = nameAvailable(base);
   let suffix = existing.length;
   while (!name) {
     suffix += 1;
-    name = nameAvailable(`${base} ${suffix}`);
+    name = nameAvailable(`${base}${separator}${suffix}`);
   }
   return name;
 };
@@ -577,6 +602,13 @@ export const setDesignProperty = (name, value) => {
   });
 };
 
+export const setDataProperty = (id, name, value) => {
+  updateData(id, (nextData) => {
+    if (value === undefined) delete nextData[name];
+    else nextData[name] = value;
+  });
+};
+
 export const moveComponent = (id, { after, into }) => {
   // TODO:
 };
@@ -592,6 +624,27 @@ export const toggleCollapsed = (id) => {
       id,
       (nextComponent) => (nextComponent.collapsed = !nextComponent.collapsed),
     );
+};
+
+export const addData = () => {
+  const id = getNextId();
+  const name = generateName(
+    'data',
+    Object.values(design.data).map((d) => d.name),
+    '-',
+  );
+
+  design.data[id] = { id, name };
+  data = design.data; // TODO: for now, just local
+
+  notify();
+
+  return design.data[id];
+};
+
+export const removeData = (id) => {
+  delete design.data[id];
+  notify(id);
 };
 
 // hooks
@@ -630,6 +683,18 @@ export const useComponent = (id) => {
   const [, setComponent] = useState(design.components[id]);
   useEffect(() => listen(id, setComponent), [id]);
   return design.components[id];
+};
+
+export const useAllData = () => {
+  const [, setData] = useState(data);
+  useEffect(() => listen('data', setData), []);
+  return data;
+};
+
+export const useData = (id) => {
+  const [, setData] = useState(data[id]);
+  useEffect(() => listen(id, setData), []);
+  return data[id];
 };
 
 export const useChanges = () => {

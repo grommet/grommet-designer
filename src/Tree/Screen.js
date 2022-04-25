@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Box, Button, Heading, Stack } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import { toggleCollapsed, useScreen } from '../design2';
-// import DesignContext from '../DesignContext';
 import SelectionContext from '../SelectionContext';
 import Component from './Component';
 import DragDropContext from './DragDropContext';
@@ -17,16 +16,6 @@ const Screen = ({ first, id }) => {
   const screen = useScreen(id);
 
   if (!screen) return null;
-
-  // const toggleScreenCollapse = () => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const screen = nextDesign.screens[screenId];
-  //   screen.collapsed = !screen.collapsed;
-  //   updateDesign(nextDesign);
-  //   const nextSelected = { ...selected };
-  //   delete nextSelected.component;
-  //   setSelected(nextSelected);
-  // };
 
   const collapserColor = selection === id ? 'white' : 'border';
   const CollapseIcon = screen.collapsed ? FormNext : FormDown;

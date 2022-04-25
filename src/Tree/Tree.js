@@ -30,6 +30,7 @@ import { useScreens } from '../design2';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
 import Screen from './Screen';
+import Data from './Data';
 
 // const within = (node, container) => {
 //   if (!node) return false;
@@ -182,7 +183,7 @@ const Tree = ({ onClose, setMode }) => {
   //   [selectedAncestors],
   // );
 
-  const dragDropContext = useMemo(() => ([dragDrop, setDragDrop]), [dragDrop]);
+  const dragDropContext = useMemo(() => [dragDrop, setDragDrop], [dragDrop]);
 
   // const toggleCollapse = (id) => {
   //   const nextDesign = JSON.parse(JSON.stringify(design));
@@ -254,13 +255,12 @@ const Tree = ({ onClose, setMode }) => {
   return (
     // <Keyboard target="document" onKeyDown={onKey}>
     //   <TreeContext.Provider value={treeContext}>
-        <DragDropContext.Provider value={dragDropContext}>
-          <Box ref={treeRef} height="100vh" overflow="auto" border="right">
-            <Header setMode={setMode} onClose={onClose} />
+    <DragDropContext.Provider value={dragDropContext}>
+      <Box ref={treeRef} height="100vh" overflow="auto" border="right">
+        <Header setMode={setMode} onClose={onClose} />
 
-            <Box flex overflow="auto">
-              <Box flex={false}>
-                {/* {selected.property ? (
+        <Box flex="grow">
+          {/* {selected.property ? (
                   <>
                     <Button
                       hoverIndicator
@@ -294,14 +294,14 @@ const Tree = ({ onClose, setMode }) => {
                     />
                   </>
                 ) : ( */}
-                  {screens.map((id, index) => (
-                    <Screen key={id} id={id} first={index === 0} />
-                  ))}
-                {/* )} */}
-              </Box>
-            </Box>
-          </Box>
-        </DragDropContext.Provider>
+          {screens.map((id, index) => (
+            <Screen key={id} id={id} first={index === 0} />
+          ))}
+          {/* )} */}
+        </Box>
+        <Data />
+      </Box>
+    </DragDropContext.Provider>
     //   </TreeContext.Provider>
     // </Keyboard>
   );

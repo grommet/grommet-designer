@@ -10,6 +10,7 @@ import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
 import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
 import Canvas from './Canvas2';
+import Data from './Data';
 import Loading from './Loading';
 // import ConfirmReplace from './ConfirmReplace';
 import Properties from './Properties/Properties';
@@ -18,6 +19,8 @@ import Tree from './Tree/Tree';
 // import { getInitialSelected, getScreenByPath, publish } from './design';
 import {
   load as loadDesign,
+  getComponent,
+  getData,
   getRoot,
   getScreen,
   getScreenByPath,
@@ -206,10 +209,14 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       // track selected screen in browser location, so browser
       // backward/forward controls work
       const screen = getScreen(root);
-      if (screen && screen.path !== pathname) {
-        const url = screen.path + window.location.search;
-        window.history.pushState(undefined, undefined, url);
+      if (screen) {
+        if (screen.path !== pathname) {
+          const url = screen.path + window.location.search;
+          window.history.pushState(undefined, undefined, url);
+        }
         setCanvasRoot(screen.root);
+      } else {
+        setCanvasRoot(undefined);
       }
     }
   }, [selection]);
@@ -301,11 +308,14 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   const Details =
     selection && ((getScreen(selection) && ScreenDetails) || Properties);
 
-  let content = (
-    <ErrorCatcher>
-      <Canvas root={canvasRoot} />
-    </ErrorCatcher>
-  );
+  let content;
+  if (canvasRoot)
+    content = (
+      <ErrorCatcher>
+        <Canvas root={canvasRoot} />
+      </ErrorCatcher>
+    );
+  else if (selection) content = <Data id={selection} />;
 
   if (!thumb && responsive !== 'small') {
     if (mode === 'edit') {

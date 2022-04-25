@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import SelectionContext from './SelectionContext';
-import { getType, useComponent } from './design2';
+import { getType, replaceWithData, useComponent } from './design2';
 import DesignComponent from './DesignComponent';
 
 const renderNull = {};
@@ -35,7 +35,6 @@ const useDesignComponent = (id) => {
   // allow the type to adjust props if needed
   if (type.adjustProps) props = type.adjustProps(props, { component, type });
 
-  // TODO: move these customizations into the library via adjustProps
   // render -component- and -Icon- properties
   if (type.properties) {
     // handle any special props
@@ -93,7 +92,7 @@ const useDesignComponent = (id) => {
     ));
   } else if (component.text || type.text) {
     // TODO: handle replacing with data
-    children = component.text || type.text;
+    children = replaceWithData(component.text || type.text);
   } else if (type.placeholder && !component.coupled) {
     children = <Placeholder>{type.placeholder(props)}</Placeholder>;
   }
