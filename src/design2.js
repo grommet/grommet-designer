@@ -179,9 +179,9 @@ export const getDescendants = (id) => {
   component?.children?.forEach((childId) => {
     result = [...result, childId, ...getDescendants(childId)];
   });
-  component?.propComponents?.forEach((propId) => {
-    result = [...result, propId, ...getDescendants(propId)];
-  });
+  // component?.propComponents?.forEach((propId) => {
+  //   result = [...result, propId, ...getDescendants(propId)];
+  // });
   return result;
 };
 
@@ -351,6 +351,40 @@ export const duplicateScreen = (id) => {
   return screen.id;
 };
 
+const insertComponent = (id, options) => {
+  // insert this component into the right parent
+  if (options.within) {
+    if (design.screens[options.within])
+      updateScreen(options.within, (nextScreen) => (nextScreen.root = id));
+    else
+      updateComponent(options.within, (nextComponent) => {
+        if (!nextComponent.children) nextComponent.children = [];
+        nextComponent.children.push(id);
+      });
+  } else if (options.before) {
+    updateComponent(getParent(options.before), (nextComponent) => {
+      const index = nextComponent.children.indexOf(options.before);
+      nextComponent.children.splice(index, 0, id);
+    });
+  } else if (options.after) {
+    updateComponent(getParent(options.after), (nextComponent) => {
+      const index = nextComponent.children.indexOf(options.after);
+      nextComponent.children.splice(index + 1, 0, id);
+    });
+  } else if (options.containing) {
+    const parentId = getParent(options.containing);
+    if (design.screens[parentId]) {
+      updateScreen(parentId, (nextScreen) => (nextScreen.root = id));
+    } else {
+      updateComponent(parentId, (nextComponent) => {
+        const index = nextComponent.children.indexOf(options.containing);
+        nextComponent.children[index] = id;
+      });
+    }
+    design.components[id].children = [options.containing];
+  }
+};
+
 export const addComponent = (typeName, options) => {
   const type = getType(typeName);
   const id = getNextId();
@@ -397,37 +431,7 @@ export const addComponent = (typeName, options) => {
       });
   }
 
-  // insert this component into the right parent
-  if (options.within) {
-    if (design.screens[options.within])
-      updateScreen(options.within, (nextScreen) => (nextScreen.root = id));
-    else
-      updateComponent(options.within, (nextComponent) => {
-        if (!nextComponent.children) nextComponent.children = [];
-        nextComponent.children.push(id);
-      });
-  } else if (options.before) {
-    updateComponent(getParent(options.before), (nextComponent) => {
-      const index = nextComponent.children.indexOf(options.before);
-      nextComponent.children.splice(index, 0, id);
-    });
-  } else if (options.after) {
-    updateComponent(getParent(options.after), (nextComponent) => {
-      const index = nextComponent.children.indexOf(options.after);
-      nextComponent.children.splice(index + 1, 0, id);
-    });
-  } else if (options.containing) {
-    const parentId = getParent(options.containing);
-    if (design.screens[parentId]) {
-      updateScreen(parentId, (nextScreen) => (nextScreen.root = id));
-    } else {
-      updateComponent(parentId, (nextComponent) => {
-        const index = nextComponent.children.indexOf(options.containing);
-        nextComponent.children[index] = id;
-      });
-    }
-    component.children = [options.containing];
-  }
+  insertComponent(id, options);
 
   return component;
 };
@@ -486,7 +490,7 @@ export const removeComponent = (id) => {
   notify(id);
 };
 
-export const duplicateComponent = (id, idMapArg) => {
+export const duplicateComponent = (id, options, idMapArg) => {
   const component = JSON.parse(JSON.stringify(design.components[id]));
   component.id = getNextId();
   design.components[component.id] = component;
@@ -500,14 +504,14 @@ export const duplicateComponent = (id, idMapArg) => {
 
   if (component.children) {
     component.children = component.children.map((childId) =>
-      duplicateComponent(childId, idMap),
+      duplicateComponent(childId, {}, idMap),
     );
   }
 
   // copy property components
   if (component.propComponents) {
     component.propComponents = component.propComponents.map((childId) =>
-      duplicateComponent(childId, idMap),
+      duplicateComponent(childId, {}, idMap),
     );
     // update corresponding property references
     Object.keys(type.properties).forEach((name) => {
@@ -525,18 +529,15 @@ export const duplicateComponent = (id, idMapArg) => {
   // handle any deeper component copying, like DataTable columns render
   if (type.copy) {
     type.copy(design.components[id], component, {
-      duplicateComponent: (id) => duplicateComponent(id, idMap),
+      duplicateComponent: (id) => duplicateComponent(id, {}, idMap),
     });
   }
 
   // TOOD: update links
 
   if (!idMapArg) {
-    // this is the top of our duplication tree, insert as a peer of the source
-    updateComponent(getParent(id), (nextComponent) => {
-      const index = nextComponent.children.indexOf(id);
-      nextComponent.children.splice(index + 1, 0, component.id);
-    });
+    // this is the top of our duplication tree, insert it appropriately
+    insertComponent(component.id, options || { after: id });
   }
 
   return component.id;

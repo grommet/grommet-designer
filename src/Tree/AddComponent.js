@@ -1,37 +1,22 @@
-import React, { useCallback, useContext, useState } from 'react';
-import ReactGA from 'react-ga';
-import { Box, Button, Heading, Layer } from 'grommet';
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import { Box, Button, Heading, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
-import { addComponent, addScreen, useComponent } from '../design2';
-import AddComponents from './AddComponents';
+import { useComponent } from '../design2';
+import AddLibraries from './AddLibraries';
 import AddLocation from './AddLocation';
+import AddTemplates from './AddTemplates';
 
 const AddComponent = ({ onClose }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection] = useContext(SelectionContext);
   const component = useComponent(selection);
   const [addLocation, setAddLocation] = useState('within');
+  const [search, setSearch] = useState('');
+  const inputRef = useRef();
 
-  const onAdd = useCallback(
-    ({ typeName }) => {
-      if (typeName === 'designer.Screen') {
-        const screen = addScreen();
-        setSelection(screen.id);
-      } else {
-        const component = addComponent(typeName, { [addLocation]: selection });
-        setSelection(component.id);
-      }
+  useLayoutEffect(() => inputRef.current?.focus());
 
-      onClose();
-
-      ReactGA.event({
-        category: 'edit',
-        action: 'add component',
-        label: typeName,
-      });
-    },
-    [ addLocation, onClose, selection, setSelection ],
-  );
+  const searchExp = search ? new RegExp(search, 'i') : undefined;
 
   return (
     <Layer
@@ -65,7 +50,25 @@ const AddComponent = ({ onClose }) => {
           </Box>
         )}
         <Box flex overflow="auto">
-          <AddComponents onAdd={onAdd} />
+          <Box flex={false} pad="small">
+            <TextInput
+              ref={inputRef}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </Box>
+
+          <AddLibraries
+            addLocation={addLocation}
+            onClose={onClose}
+            searchExp={searchExp}
+          />
+
+          <AddTemplates
+            addLocation={addLocation}
+            onClose={onClose}
+            searchExp={searchExp}
+          />
         </Box>
       </Box>
     </Layer>

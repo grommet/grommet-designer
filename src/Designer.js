@@ -206,7 +206,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       // track selected screen in browser location, so browser
       // backward/forward controls work
       const screen = getScreen(root);
-      if (screen?.path !== pathname) {
+      if (screen && screen.path !== pathname) {
         const url = screen.path + window.location.search;
         window.history.pushState(undefined, undefined, url);
         setCanvasRoot(screen.root);
@@ -310,21 +310,19 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   if (!thumb && responsive !== 'small') {
     if (mode === 'edit') {
       content = (
-        <SelectionContext.Provider value={selectionContext}>
-          <Grid columns={editGridColumns}>
-            <Tree
-              setMode={setMode}
-              onClose={() => {
-                window.history.pushState(undefined, undefined, '/');
-                onClose();
-              }}
-            />
-            <Box height="100vh" overflow="auto">
-              {content}
-            </Box>
-            {Details && <Details />}
-          </Grid>
-        </SelectionContext.Provider>
+        <Grid columns={editGridColumns}>
+          <Tree
+            setMode={setMode}
+            onClose={() => {
+              window.history.pushState(undefined, undefined, '/');
+              onClose();
+            }}
+          />
+          <Box height="100vh" overflow="auto">
+            {content}
+          </Box>
+          {Details && <Details />}
+        </Grid>
       );
     } else if (mode === 'comments') {
       content = (
@@ -370,7 +368,9 @@ const Designer = ({ loadProps, onClose, thumb }) => {
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      {content}
+      <SelectionContext.Provider value={selectionContext}>
+        {content}
+      </SelectionContext.Provider>
     </Keyboard>
   );
 };

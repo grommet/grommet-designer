@@ -1,66 +1,51 @@
 import React, { forwardRef, useContext } from 'react';
 import { Box, Button, Text } from 'grommet';
 import { Location } from 'grommet-icons';
-import { getDisplayName, getScreenForComponent } from '../design';
-import DesignContext from '../DesignContext';
+import SelectionContext from '../SelectionContext';
+import { useDesign } from '../design2';
 import ArrayProperty from './ArrayProperty';
 
-const ReferenceLabel = ({ selected, value }) => {
-  const { design } = useContext(DesignContext);
+const ReferenceLabel = ({ selected, option }) => {
   return (
     <Box pad="small">
-      <Text weight={selected ? 'bold' : undefined}>
-        {(value === 'undefined' && 'undefined') ||
-          (value && getDisplayName(design, value)) ||
+      <Text weight={selected ? 'bold' : undefined} truncate>
+        {(option === 'undefined' && 'undefined') ||
+          (option &&
+            (option.name || option.text || `${option.type} ${option.id}`)) ||
           ''}
       </Text>
     </Box>
   );
 };
 
-const ReferenceProperty = forwardRef(
-  ({ first, name, onChange, sub, value }, ref) => {
-    const { design, selected, setSelected } = useContext(DesignContext);
-    const isReferenceable = (component) =>
-      component.type !== 'Grommet' && component.type !== 'Reference';
-    const options = Object.keys(design.components).filter((id) =>
-      isReferenceable(design.components[id]),
-    );
-    let referenceSelected;
-    if (value) {
-      const component = parseInt(value, 10);
-      if (component) {
-        const screen = getScreenForComponent(design, component);
-        if (screen) {
-          referenceSelected = { ...selected, screen, component };
-        }
-      }
-    }
-    return (
-      <ArrayProperty
-        ref={ref}
-        name={name}
-        sub={sub}
-        first={first}
-        Label={ReferenceLabel}
-        options={options}
-        value={value}
-        searchTest={(option, searchExp) =>
-          searchExp.test(getDisplayName(design, option))
-        }
-        onChange={onChange}
-      >
-        {referenceSelected && (
-          <Button
-            icon={<Location />}
-            tip="go to"
-            hoverIndicator
-            onClick={() => setSelected(referenceSelected)}
-          />
-        )}
-      </ArrayProperty>
-    );
-  },
-);
+const ReferenceProperty = forwardRef(({ name, onChange, value }, ref) => {
+  const [, setSelection] = useContext(SelectionContext);
+  const design = useDesign();
+  const options = Object.values(design.components).filter(
+    (c) => c.type !== 'designer.Reference',
+  );
+
+  return (
+    <ArrayProperty
+      ref={ref}
+      name={name}
+      Label={ReferenceLabel}
+      options={options}
+      value={value}
+      valueKey={{ key: 'id', reduce: true }}
+      searchTest={(option, searchExp) => searchExp.test(option.name)}
+      onChange={onChange}
+    >
+      {value && (
+        <Button
+          icon={<Location />}
+          tip="go to"
+          hoverIndicator
+          onClick={() => setSelection(value)}
+        />
+      )}
+    </ArrayProperty>
+  );
+});
 
 export default ReferenceProperty;

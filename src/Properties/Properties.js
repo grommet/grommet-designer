@@ -24,7 +24,6 @@ import {
   TextInput,
 } from 'grommet';
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
-import SelectionContext from '../SelectionContext';
 import {
   duplicateComponent,
   getComponent,
@@ -34,6 +33,7 @@ import {
   setProperty,
   useComponent,
 } from '../design2';
+import SelectionContext from '../SelectionContext';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';

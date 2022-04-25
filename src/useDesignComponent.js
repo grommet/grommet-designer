@@ -32,11 +32,10 @@ const useDesignComponent = (id) => {
   const type = getType(component.type);
   if (!type) return renderNull;
 
-  // TODO: handle Reference and Repeater
-
   // allow the type to adjust props if needed
   if (type.adjustProps) props = type.adjustProps(props, { component, type });
 
+  // TODO: move these customizations into the library via adjustProps
   // render -component- and -Icon- properties
   if (type.properties) {
     // handle any special props
@@ -55,7 +54,7 @@ const useDesignComponent = (id) => {
       if (
         typeof property === 'string' &&
         property.startsWith('-component-') &&
-        !props[prop]
+        props[prop]
       ) {
         props[prop] = <DesignComponent id={props[prop]} />;
       }
@@ -63,7 +62,7 @@ const useDesignComponent = (id) => {
   }
 
   // TODO: inline edit
-  
+
   if (setSelection) {
     const priorClick = props.onClick;
     props.onClick = (event) => {

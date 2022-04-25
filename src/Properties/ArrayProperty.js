@@ -44,6 +44,12 @@ const ArrayProperty = React.forwardRef(
     if (value !== undefined) {
       selectOptions = [...selectOptions, 'undefined'];
     }
+    let option;
+    if (value !== undefined) {
+      if (valueKey?.reduce)
+        option = options.find((o) => o[valueKey.key] === value);
+      else if (!valueKey) option = value;
+    }
 
     return (
       <Field key={name} ref={ref || fieldRef} label={name} htmlFor={name}>
@@ -57,11 +63,11 @@ const ArrayProperty = React.forwardRef(
           options={selectOptions}
           multiple={multiple}
           value={typeof value === 'boolean' ? value.toString() : value || ''}
-          valueLabel={<SelectLabel value={value} selected />}
+          valueLabel={<SelectLabel option={option} value={value} selected />}
           valueKey={valueKey}
           onChange={({ option, value: nextValue }) => {
             setSearchText(undefined);
-            if (multiple) {
+            if (multiple || valueKey?.reduce) {
               onChange(option === 'undefined' ? undefined : nextValue);
             } else {
               onChange(option === 'undefined' ? undefined : option);
@@ -74,7 +80,7 @@ const ArrayProperty = React.forwardRef(
           }
         >
           {(option, index, options, { selected }) => (
-            <SelectLabel value={option} selected={selected} />
+            <SelectLabel option={option} value={option} selected={selected} />
           )}
         </Select>
       </Field>

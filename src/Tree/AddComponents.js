@@ -1,13 +1,37 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Box, Keyboard, TextInput } from 'grommet';
-import { getLibraries } from '../design2';
-import AddLibrary from './AddLibrary';
+import { getLibraries, useDesign } from '../design2';
+import AddLibraries from './AddLibraries';
+import AddTemplates from './AddTemplates';
 
 const AddComponents = ({ onAdd }) => {
-  const libraries = getLibraries();
+  // const libraries = getLibraries();
   const [search, setSearch] = useState('');
 
   const inputRef = useRef();
+
+  // const design = useDesign();
+  // const templates = useMemo(() => {
+  //   const buildTemplates = (design) => {
+  //     const templates = {};
+  //     Object.values(design.components)
+  //       .filter((component) => component.name) // must have a name
+  //       .forEach((component) => {
+  //         if (!templates[component.name])
+  //           templates[component.name] = component;
+  //       });
+  //     return { name: design.name, templates };
+  //   };
+
+  //   const result = [];
+  //   result.push(buildTemplates(design));
+
+  //   // imports
+  //   //   .filter((i) => i.design)
+  //   //   .forEach((i) => result.push({ ...i, ...buildTemplates(i.design) }));
+
+  //   return result;
+  // }, [design]);
 
   // Ensure we always keep focus on the search input, even after the user
   // selects a location.
@@ -19,27 +43,27 @@ const AddComponents = ({ onAdd }) => {
     <Box flex={false} gap="medium" margin={{ bottom: 'medium' }}>
       <Box flex={false} pad="small">
         <Keyboard
-          onEnter={
-            searchExp
-              ? (event) => {
-                  // find first match
-                  let typeName;
-                  libraries.some(({ name, components }) => {
-                    const first = Object.keys(components).filter((n) =>
-                      n.match(searchExp),
-                    )[0];
-                    if (first) typeName = `${name}.${first}`;
-                    return !!typeName;
-                  });
-                  if (typeName) {
-                    onAdd({
-                      typeName,
-                      containSelected: event.metaKey || event.ctrlKey,
-                    });
-                  }
-                }
-              : undefined
-          }
+        // onEnter={
+        //   searchExp
+        //     ? (event) => {
+        //         // find first match
+        //         let typeName;
+        //         libraries.some(({ name, components }) => {
+        //           const first = Object.keys(components).filter((n) =>
+        //             n.match(searchExp),
+        //           )[0];
+        //           if (first) typeName = `${name}.${first}`;
+        //           return !!typeName;
+        //         });
+        //         if (typeName) {
+        //           onAdd({
+        //             typeName,
+        //             containSelected: event.metaKey || event.ctrlKey,
+        //           });
+        //         }
+        //       }
+        //     : undefined
+        // }
         >
           <TextInput
             ref={inputRef}
@@ -49,14 +73,9 @@ const AddComponents = ({ onAdd }) => {
         </Keyboard>
       </Box>
 
-      {libraries.map((library) => (
-        <AddLibrary
-          key={library.name}
-          onAdd={onAdd}
-          searchExp={searchExp}
-          {...library}
-        />
-      ))}
+      <AddLibraries searchExp={searchExp} />
+
+      <AddTemplates searchExp={searchExp} />
     </Box>
   );
 };
