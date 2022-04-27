@@ -12,7 +12,7 @@ import {
   Box,
   Button,
   CheckBox,
-  Drop,
+  DropButton,
   Header,
   Heading,
   Keyboard,
@@ -28,6 +28,7 @@ import {
   duplicateComponent,
   getComponent,
   getParent,
+  getReferences,
   getType,
   removeComponent,
   setProperty,
@@ -67,12 +68,8 @@ const Properties = () => {
     //   }
     // }
     return type?.hideable;
-  }, [/* component, design, libraries, */ type]);
-  // const references = useMemo(
-  //   () => getReferences(design, component.id),
-  //   [component, design],
-  // );
-  // const [showReferences, setShowReferences] = useState();
+  }, [type]);
+  const references = useMemo(() => getReferences(selection), [selection]);
   const [showAdvanced, setShowAdvanced] = useState();
   const [responsiveSize, setResponsiveSize] = useState('medium');
   const [showCode, setShowCode] = useState();
@@ -81,7 +78,7 @@ const Properties = () => {
     component?.style ? JSON.stringify(component.style, null, 2) : '',
   );
 
-  // const referencesRef = useRef();
+  const referencesRef = useRef();
 
   // persist showAdvanced state when it changes
   useEffect(() => {
@@ -180,7 +177,7 @@ const Properties = () => {
     }
   };
 
-  const renderProperties = (definitions, values) =>
+  const renderProperties = (section, definitions, values) =>
     Object.keys(definitions)
       .filter(
         (propName) =>
@@ -197,7 +194,9 @@ const Properties = () => {
             values={values}
             responsiveSize={responsiveSize}
             value={values?.[propName]}
-            onChange={(value) => setProperty(selection, propName, value)}
+            onChange={(value) =>
+              setProperty(selection, section, propName, value)
+            }
           />
         </Fragment>
       ));
@@ -256,50 +255,39 @@ const Properties = () => {
                 icon={<Duplicate />}
                 onClick={duplicate}
               />
-              {/* {references.length === 0 ? ( */}
-              <Button
-                title="delete"
-                tip="delete"
-                icon={<Trash />}
-                onClick={delet}
-              />
-              {/* }
-              // ) : (
-              //   <Button
-              //     ref={referencesRef}
-              //     title="references"
-              //     tip="references"
-              //     icon={<Location />}
-              //     onClick={() => setShowReferences(!showReferences)}
-              //   />
-              // )}
-              {/* {showReferences && (
-                <Drop
-                  target={referencesRef.current}
-                  align={{ top: 'bottom', right: 'right' }}
-                  onClickOutside={() => setShowReferences(false)}
-                  onEsc={() => setShowReferences(false)}
-                >
-                  <Box>
-                    {references.map((r) => (
-                      <Button
-                        hoverIndicator
-                        onClick={() => {
-                          setSelected({
-                            ...selected,
-                            screen: getScreenForComponent(design, r.id),
-                            component: r.id,
-                          });
-                        }}
-                      >
-                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                          <Text>{r.id}</Text>
-                        </Box>
-                      </Button>
-                    ))}
-                  </Box>
-                </Drop>
-              )} */}
+              {references.length === 0 ? (
+                <Button
+                  title="delete"
+                  tip="delete"
+                  icon={<Trash />}
+                  onClick={delet}
+                />
+              ) : (
+                <DropButton
+                  ref={referencesRef}
+                  title="references"
+                  tip="references"
+                  icon={<Location />}
+                  dropAlign={{ top: 'bottom' }}
+                  dropContent={
+                    <Box>
+                      {references.map((rId) => (
+                        <Button
+                          key={rId}
+                          hoverIndicator
+                          onClick={() => setSelection(rId)}
+                        >
+                          <Box
+                            pad={{ horizontal: 'small', vertical: 'xsmall' }}
+                          >
+                            <Text>{rId}</Text>
+                          </Box>
+                        </Button>
+                      ))}
+                    </Box>
+                  }
+                />
+              )}
             </Box>
           )}
         </Box>
@@ -316,14 +304,18 @@ const Properties = () => {
                 name="name"
                 componentId={component.id}
                 value={component.name || ''}
-                onChange={(value) => setProperty(selection, 'name', value)}
+                onChange={(value) =>
+                  setProperty(selection, undefined, 'name', value)
+                }
               />
               {type.text && (
                 <TextAreaField
                   name="text"
                   componentId={component.id}
                   value={component.text || ''}
-                  onChange={(value) => setProperty(selection, 'text', value)}
+                  onChange={(value) =>
+                    setProperty(selection, undefined, 'text', value)
+                  }
                 />
               )}
               {hideable && component.name && (
@@ -334,7 +326,12 @@ const Properties = () => {
                       name="hide"
                       checked={!!component.hide}
                       onChange={() =>
-                        setProperty(selection, 'hide', !component.hide)
+                        setProperty(
+                          selection,
+                          undefined,
+                          'hide',
+                          !component.hide,
+                        )
                       }
                     />
                   </Box>
@@ -343,6 +340,7 @@ const Properties = () => {
               {type.designProperties && (
                 <Box flex="grow" border="top">
                   {renderProperties(
+                    'designProps',
                     type.designProperties,
                     (
                       (component.responsive &&
@@ -512,6 +510,7 @@ const Properties = () => {
                               {label}
                             </Heading>
                             {renderProperties(
+                              'props',
                               sectionProperties,
                               (
                                 (component.responsive &&
@@ -527,6 +526,7 @@ const Properties = () => {
                 ) : (
                   <Box flex="grow" border="top">
                     {renderProperties(
+                      'props',
                       type.properties,
                       (
                         (component.responsive &&
@@ -568,7 +568,7 @@ const Properties = () => {
                       try {
                         // only save it when it's valid
                         const json = JSON.parse(value);
-                        setProperty(selection, 'style', json);
+                        setProperty(selection, undefined, 'style', json);
                       } catch (e) {
                         // console.log('!!! catch');
                       }

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -20,6 +20,9 @@ const Data = ({ id }) => {
   const [json, setJson] = React.useState(
     data ? JSON.stringify(data.data, null, 2) : '',
   );
+  useEffect(() => {
+    if (data) setJson(JSON.stringify(data.data, null, 2));
+  }, [data]);
   const [error, setError] = React.useState(false);
 
   if (!data) return null;

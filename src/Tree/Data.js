@@ -25,7 +25,7 @@ const Data = () => {
         />
       </Header>
       {Object.keys(allData).map((id) => (
-        <Box key={id} flex={false} border="top">
+        <Box key={id} flex={false}>
           <Button fill hoverIndicator onClick={() => setSelection(id)}>
             <Box
               direction="row"

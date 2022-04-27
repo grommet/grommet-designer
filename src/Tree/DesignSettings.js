@@ -71,66 +71,6 @@ const DesignSettings = ({ onClose }) => {
         <Box>
           <Box direction="row" justify="between" align="center">
             <Heading level={3} size="small">
-              Imports
-            </Heading>
-            <Button
-              title="add an import"
-              tip="add an import"
-              icon={<Add />}
-              hoverIndicator
-              onClick={() => {
-                const nextImports = (design.imports || []).slice(0);
-                nextImports.push({});
-                setDesignProperty('imports', nextImports);
-              }}
-            />
-          </Box>
-          {design.imports && (
-            <Box flex={false}>
-              {design.imports.map((impor, index) => (
-                <Box
-                  key={index}
-                  direction="row"
-                  align="start"
-                  justify="between"
-                >
-                  <Box flex="grow">
-                    <Field htmlFor={`url-${index}`}>
-                      <TextInput
-                        id={`url-${index}`}
-                        name={`url-${index}`}
-                        plain
-                        placeholder="url"
-                        value={impor.url}
-                        onChange={(event) => {
-                          const nextImports = design.imports.slice(0);
-                          nextImports[index].url = event.target.value;
-                          setDesignProperty('imports', nextImports);
-                        }}
-                        style={{ textAlign: 'end' }}
-                      />
-                    </Field>
-                  </Box>
-                  <Button
-                    title="remove import"
-                    tip="remove import"
-                    icon={<Trash />}
-                    hoverIndicator
-                    onClick={() => {
-                      const nextImports = design.imports.slice(0);
-                      nextImports.splice(index, 1);
-                      setDesignProperty('imports', nextImports);
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
-
-        <Box>
-          <Box direction="row" justify="between" align="center">
-            <Heading level={3} size="small">
               Theme
             </Heading>
             <Anchor
@@ -180,80 +120,55 @@ const DesignSettings = ({ onClose }) => {
         <Box>
           <Box direction="row" justify="between" align="center">
             <Heading level={3} size="small">
-              Data
+              Imports
             </Heading>
             <Button
-              title="add a data source"
-              tip="add a data source"
+              title="add an import"
+              tip="add an import"
               icon={<Add />}
               hoverIndicator
               onClick={() => {
-                let nextData;
-                if (!design.data) {
-                  nextData = { data: '' };
-                } else {
-                  nextData = { ...design.data };
-                  nextData[`data-${Object.keys(nextData).length}`] = '';
-                }
-                setDesignProperty('data', nextData);
+                const nextImports = (design.imports || []).slice(0);
+                nextImports.push({});
+                setDesignProperty('imports', nextImports);
               }}
             />
           </Box>
-          {design.data && (
+          {design.imports && (
             <Box flex={false}>
-              <Paragraph margin={{ horizontal: 'medium' }}>
-                Data sources can be used to provide consistent content across
-                your design. These can be JSON or a URL to a REST+json API
-                endpoint. Reference the data using curly braces to wrap a path
-                notation within component text. For example:{' '}
-                {`{<dataname>.<property>}`}.
-              </Paragraph>
-              {Object.keys(design.data).map((key, index) => (
-                <Box key={key} direction="row" align="start">
-                  <Box>
-                    <Field label="Name" htmlFor={`name-${index}`}>
+              {design.imports.map((impor, index) => (
+                <Box
+                  key={index}
+                  direction="row"
+                  align="start"
+                  justify="between"
+                >
+                  <Box flex="grow">
+                    <Field htmlFor={`url-${index}`}>
                       <TextInput
-                        id={`name-${index}`}
-                        name={`name-${index}`}
+                        id={`url-${index}`}
+                        name={`url-${index}`}
                         plain
-                        value={key || ''}
+                        placeholder="url"
+                        value={impor.url}
                         onChange={(event) => {
-                          if (event.target.value !== key) {
-                            const nextData = { ...design.data };
-                            nextData[event.target.value] = nextData[key];
-                            delete nextData[key];
-                            setDesignProperty('data', nextData);
-                          }
-                        }}
-                        style={{ textAlign: 'end' }}
-                      />
-                    </Field>
-                    <Field label="Source" htmlFor={`source-${index}`}>
-                      <TextArea
-                        id={`source-${index}`}
-                        name={`source-${index}`}
-                        plain
-                        cols={30}
-                        rows={4}
-                        value={design.data[key]}
-                        onChange={(event) => {
-                          const nextData = { ...design.data };
-                          nextData[key] = event.target.value;
-                          setDesignProperty('data', nextData);
+                          const nextImports = design.imports.slice(0);
+                          nextImports[index].url = event.target.value;
+                          setDesignProperty('imports', nextImports);
                         }}
                         style={{ textAlign: 'end' }}
                       />
                     </Field>
                   </Box>
                   <Button
-                    title="delete data source"
-                    tip="delete data source"
+                    title="remove import"
+                    tip="remove import"
                     icon={<Trash />}
                     hoverIndicator
                     onClick={() => {
-                      const nextData = { ...design.data };
-                      delete nextData[key];
-                      setDesignProperty('data', nextData);
+                      const nextImports = design.imports.slice(0);
+                      nextImports.splice(index, 1);
+                      setDesignProperty('imports', nextImports);
                     }}
                   />
                 </Box>

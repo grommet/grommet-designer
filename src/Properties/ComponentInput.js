@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import { Box, Button } from 'grommet';
 import { Add, Close, Edit } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import { deleteComponent, upgradeDesign } from '../design';
+import { getComponent } from '../design2';
+import SelectionContext from '../SelectionContext';
 
 const ComponentInput = ({ componentId, name, onChange, value }) => {
-  const { changeDesign, design, selected, setSelected } =
-    useContext(DesignContext);
+  const [selection, setSelection] = useContext(SelectionContext);
   if (value && typeof value === 'string') return null;
   // if we have a value ensure we have a component there. if not, clear it
-  if (value && !design.components[value]) onChange(undefined);
+  if (value && !getComponent(value)) onChange(undefined);
   return (
     <Box direction="row">
       {value ? (
@@ -17,8 +16,7 @@ const ComponentInput = ({ componentId, name, onChange, value }) => {
           <Button
             icon={<Edit />}
             onClick={() => {
-              setSelected({
-                ...selected,
+              setSelection({
                 property: {
                   source: componentId,
                   name,
@@ -32,13 +30,13 @@ const ComponentInput = ({ componentId, name, onChange, value }) => {
           <Button
             icon={<Close />}
             onClick={() => {
-              const nextDesign = JSON.parse(JSON.stringify(design));
-              const nextSelected = { ...selected };
-              onChange(undefined, nextDesign);
-              deleteComponent(nextDesign, value, nextSelected);
-              upgradeDesign(nextDesign); // clean up links
-              setSelected(nextSelected);
-              changeDesign(nextDesign);
+              // const nextDesign = JSON.parse(JSON.stringify(design));
+              // const nextSelected = { ...selected };
+              // onChange(undefined, nextDesign);
+              // deleteComponent(nextDesign, value, nextSelected);
+              // upgradeDesign(nextDesign); // clean up links
+              // setSelected(nextSelected);
+              // changeDesign(nextDesign);
             }}
           />
         </>
@@ -46,8 +44,7 @@ const ComponentInput = ({ componentId, name, onChange, value }) => {
         <Button
           icon={<Add />}
           onClick={() => {
-            setSelected({
-              ...selected,
+            setSelection({
               property: {
                 source: componentId,
                 name,

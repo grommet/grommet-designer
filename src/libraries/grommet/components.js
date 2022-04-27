@@ -62,6 +62,8 @@ import {
   Video,
   WorldMap,
 } from 'grommet';
+import { getDataByPath, resetDataByPath, setDataByPath } from '../../design2';
+import DesignComponent from '../../DesignComponent';
 import BoxAlign from './BoxAlign';
 import BoxAnimation from './BoxAnimation';
 import BoxBackgroundImage from './BoxBackgroundImage';
@@ -842,17 +844,16 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
-    override: ({ designProps, id, props }, { dataContextPath, followLink }) => {
-      return {
-        badge: props.badge === 0 ? true : props.badge,
-        onClick:
-          designProps && designProps.link
-            ? (event) => {
-                event.stopPropagation();
-                followLink(designProps.link, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { component, followLink }) => {
+      const result = {};
+      if (props.badge !== undefined)
+        result.badge = props.badge === 0 ? true : props.badge;
+      if (component?.designProps?.link)
+        result.onClick = (event) => {
+          event.stopPropagation();
+          followLink(component.designProps.link);
+        };
+      return { ...props, ...result };
     },
   },
   DropButton: {
@@ -1108,6 +1109,7 @@ export const components = {
   Form: {
     component: Form,
     container: true,
+    hideable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Form is currently empty. Add some FormField components to it so it
@@ -1118,57 +1120,66 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    // action to auto-build FormFields based on dataPath
-    actions: (
-      { designProps, id },
-      { addChildComponent, changeDesign, data, design },
-    ) => {
-      if (
-        designProps?.dataPath &&
-        typeof data?.[designProps.dataPath] === 'object'
-      ) {
-        return (
-          <Box direction="row" justify="end" pad="small">
-            <Button
-              label="generate fields"
-              onClick={() => {
-                // add FormField and TextInput children for all keys in the data
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                const nextForm = nextDesign.components[id];
-                Object.keys(data[designProps.dataPath]).forEach((key) => {
-                  // see if we already have a FormField with this name
-                  if (
-                    !nextForm.children ||
-                    !nextForm.children.some(
-                      (childId) =>
-                        nextDesign.components[childId].props?.name === key,
-                    )
-                  ) {
-                    const fieldId = addChildComponent(nextDesign, id, {
-                      type: 'grommet.FormField',
-                      props: { label: key, name: key },
-                    });
-                    addChildComponent(nextDesign, fieldId, {
-                      type: 'grommet.TextInput',
-                      props: { name: key },
-                    });
-                  }
-                });
-                changeDesign(nextDesign);
-              }}
-            />
-          </Box>
-        );
+    // // action to auto-build FormFields based on dataPath
+    // actions: (
+    //   { designProps, id },
+    //   { addChildComponent, changeDesign, data, design },
+    // ) => {
+    //   if (
+    //     designProps?.dataPath &&
+    //     typeof data?.[designProps.dataPath] === 'object'
+    //   ) {
+    //     return (
+    //       <Box direction="row" justify="end" pad="small">
+    //         <Button
+    //           label="generate fields"
+    //           onClick={() => {
+    //             // add FormField and TextInput children for all keys in the data
+    //             const nextDesign = JSON.parse(JSON.stringify(design));
+    //             const nextForm = nextDesign.components[id];
+    //             Object.keys(data[designProps.dataPath]).forEach((key) => {
+    //               // see if we already have a FormField with this name
+    //               if (
+    //                 !nextForm.children ||
+    //                 !nextForm.children.some(
+    //                   (childId) =>
+    //                     nextDesign.components[childId].props?.name === key,
+    //                 )
+    //               ) {
+    //                 const fieldId = addChildComponent(nextDesign, id, {
+    //                   type: 'grommet.FormField',
+    //                   props: { label: key, name: key },
+    //                 });
+    //                 addChildComponent(nextDesign, fieldId, {
+    //                   type: 'grommet.TextInput',
+    //                   props: { name: key },
+    //                 });
+    //               }
+    //             });
+    //             changeDesign(nextDesign);
+    //           }}
+    //         />
+    //       </Box>
+    //     );
+    //   }
+    // },
+    adjustProps: (props, { component, rerender }) => {
+      let adjusted = {};
+      const dataPath = component?.designProps?.dataPath;
+      if (dataPath) {
+        adjusted = {
+          value: getDataByPath(dataPath) || {},
+          onChange: (value) => {
+            setDataByPath(dataPath, value);
+            rerender(value);
+          },
+          onReset: () => {
+            resetDataByPath(dataPath);
+            rerender(undefined);
+          },
+        };
       }
-    },
-    override: ({ designProps }, { data, setData }) => {
-      const result = {};
-      if (designProps?.dataPath) {
-        result.value = data || {};
-        result.onChange = setData;
-        result.onReset = () => setData(undefined);
-      }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   FormField: {
@@ -1674,32 +1685,57 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (
-      { props },
-      { data, dataContextPath, followLink, renderComponent },
-    ) => {
+    // override: (
+    //   { props },
+    //   { data, dataContextPath, followLink, renderComponent },
+    // ) => {
+    //   const result = {};
+    //   // need to use retrieved data for data property
+    //   if (data) result.data = data;
+    //   if (props.onClickRow) {
+    //     result.onClickRow = (event) => {
+    //       event.stopPropagation();
+    //       const { index } = event;
+    //       const path = dataContextPath ? [...dataContextPath, index] : [index];
+    //       followLink(props.onClickRow, { dataContextPath: path });
+    //     };
+    //   }
+    //   if (props.onSelect) result.onSelect = (text) => {};
+    //   if (props.select)
+    //     result.select = props.select.split(',').map((s) => s.trim());
+    //   // adjust render columns
+    //   result.columns = props.columns.map((c) => ({
+    //     ...c,
+    //     render: c.render
+    //       ? (datum) => renderComponent(c.render, { datum })
+    //       : undefined,
+    //   }));
+    //   return result;
+    // },
+    adjustProps: (props, { component: { children, designProps } }) => {
       const result = {};
       // need to use retrieved data for data property
-      if (data) result.data = data;
-      if (props.onClickRow) {
-        result.onClickRow = (event) => {
-          event.stopPropagation();
-          const { index } = event;
-          const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink(props.onClickRow, { dataContextPath: path });
-        };
-      }
+      if (designProps?.dataPath)
+        result.data = getDataByPath(designProps.dataPath);
+      //   if (props.onClickRow) {
+      //     result.onClickRow = (event) => {
+      //       event.stopPropagation();
+      //       const { index } = event;
+      //       const path = dataContextPath ? [...dataContextPath, index] : [index];
+      //       followLink(props.onClickRow, { dataContextPath: path });
+      //     };
+      //   }
       if (props.onSelect) result.onSelect = (text) => {};
       if (props.select)
         result.select = props.select.split(',').map((s) => s.trim());
-      // adjust render columns
       result.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
-          ? (datum) => renderComponent(c.render, { datum })
+          ? // TODO: how does DesignComponent get datum?
+            (datum) => <DesignComponent id={c.render} />
           : undefined,
       }));
-      return result;
+      return { ...props, ...result };
     },
     copy: (source, copy, { nextDesign, duplicateComponent }) => {
       // duplicate any columns render components
@@ -1816,29 +1852,26 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (
-      { children, id, props },
-      { data, dataContextPath, followLink, renderComponent, setData },
-    ) => {
+    adjustProps: (props, { component: { children, designProps } }) => {
       const result = {};
       // need to use retrieved data for data property
-      if (data) result.data = data;
-      if (props.onClickItem) {
-        result.onClickItem = (event) => {
-          event.stopPropagation();
-          const { index } = event;
-          const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink(props.onClickItem, { dataContextPath: path, fromId: id });
-        };
-      }
-      if (props.onOrder) {
-        result.onOrder = setData;
+      if (designProps?.dataPath)
+        result.data = getDataByPath(designProps.dataPath);
+      // if (props.onClickItem) {
+      //   result.onClickItem = (event) => {
+      //     event.stopPropagation();
+      //     const { index } = event;
+      //     const path = dataContextPath ? [...dataContextPath, index] : [index];
+      //     followLink(props.onClickItem, { dataContextPath: path, fromId: id });
+      //   };
+      // }
+      if (props.onOrder && designProps?.dataPath) {
+        result.onOrder = (data) => setDataByPath(designProps.dataPath, data);
       }
       if (children) {
-        result.children = (value) =>
-          renderComponent(children[0], { datum: value });
+        result.children = (value) => <DesignComponent id={children[0]} />;
       }
-      return result;
+      return { ...props, ...result };
     },
   },
   Meter: {

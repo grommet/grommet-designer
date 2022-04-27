@@ -95,8 +95,20 @@ export const load = async ({ design: designProp, id, name, password }) => {
 
   theme = await loadTheme(design.theme);
   // TODO: load any imports
-  // TODO: load any data
-  data = design.data; // TODO: for now, just local
+
+  // load data: copy from design, fetch remote ones
+  data = JSON.parse(JSON.stringify(design.data));
+  Object.keys(data)
+    .filter((id) => data[id].url)
+    .forEach((id) =>
+      fetch(data[id].url)
+        .then((response) => response.json())
+        .then((response) => {
+          data[id].data = response;
+          notify(id);
+        })
+    );
+
   return design;
 };
 
@@ -186,6 +198,17 @@ export const getDescendants = (id) => {
   return result;
 };
 
+export const getReferences = (id) =>
+  Object.keys(design.components)
+    .filter((id2) => {
+      const component = design.components[id2];
+      return (
+        component.type === 'designer.Reference' &&
+        component.props.component === id
+      );
+    })
+    .map((id2) => parseInt(id2, 10));
+
 export const getType = (typeName) => {
   if (!typeName) return undefined;
   const [libraryName, componentName] = typeName.split('.');
@@ -208,19 +231,24 @@ export const getTheme = () => theme;
 
 export const getData = (id) => data[id];
 
+export const getDataByPath = (path) => {
+  const parts = path.split('.');
+  const name = parts.shift();
+  let node = Object.values(data).find((d) => d.name === name)?.data;
+  while (parts.length && node) {
+    const key = parts.shift();
+    // TODO: remember active index and use here
+    node = Array.isArray(node) ? node[0][key] : node[key];
+  }
+  return node;
+};
+
 export const replaceWithData = (text) =>
   // replace {data-name.key-name} with with data[data-name][key-name] content
-  (text || '').replace(/\{[^}]*\}/g, (match) => {
-    const path = match.slice(1, match.length - 1).split('.');
-    let key = path.shift();
-    let node = Object.values(data).find(d => d.name === key)?.data;
-    while (path.length && node) {
-      const key = path.shift();
-      // TODO: remember active index and use here
-      node = Array.isArray(node) ? node[0][key] : node[key];
-    }
-    return node || match;
-  });
+  (text || '').replace(
+    /\{[^}]*\}/g,
+    (match) => getDataByPath(match.slice(1, match.length - 1)) || match,
+  );
 
 export const getImports = () => imports;
 
@@ -568,16 +596,12 @@ export const duplicateComponent = (id, options, idMapArg) => {
   return component.id;
 };
 
-const coreProps = ['hide', 'name', 'text'];
-
-export const setProperty = (id, name, value) => {
+export const setProperty = (id, section, name, value) => {
   updateComponent(id, (nextComponent) => {
-    const type = getType(nextComponent.type);
     let props;
-    if (coreProps.includes(name)) props = nextComponent;
-    else if (type?.properties?.[name] !== undefined)
-      props = nextComponent.props;
-    else if (type?.designProperties?.[name] !== undefined) {
+    if (!section) props = nextComponent;
+    else if (section === 'props') props = nextComponent.props;
+    else if (section === 'designProps') {
       if (!nextComponent.designProps) nextComponent.designProps = {};
       props = nextComponent.designProps;
     }
@@ -647,6 +671,38 @@ export const removeData = (id) => {
   notify(id);
 };
 
+export const setDataByPath = (path, value) => {
+  const parts = path.split('.');
+  const name = parts.shift();
+  const id = Object.keys(data).find((id) => data[id].name === name);
+  if (id && !parts.length) {
+    data[id].data = value;
+    notify(id);
+  } else {
+    let node = data[id].data;
+    while (parts.length > 1 && node) {
+      const key = parts.shift();
+      // TODO: remember active index and use here
+      node = Array.isArray(node) ? node[0][key] : node[key];
+    }
+    // TODO: handle array case
+    if (node) {
+      node[parts[0]] = value;
+      notify(id);
+    }
+  }
+};
+
+export const resetDataByPath = (path) => {
+  const parts = path.split('.');
+  const name = parts.shift();
+  const id = Object.keys(data).find((id) => data[id].name === name);
+  if (id && !parts.length) {
+    data[id] = JSON.parse(JSON.stringify(design.data[id]));
+    notify(id);
+  }
+};
+
 // hooks
 
 export const useDesign = () => {
@@ -693,7 +749,7 @@ export const useAllData = () => {
 
 export const useData = (id) => {
   const [, setData] = useState(data[id]);
-  useEffect(() => listen(id, setData), []);
+  useEffect(() => listen(id, setData), [id]);
   return data[id];
 };
 

@@ -256,11 +256,12 @@ const Tree = ({ onClose, setMode }) => {
     // <Keyboard target="document" onKeyDown={onKey}>
     //   <TreeContext.Provider value={treeContext}>
     <DragDropContext.Provider value={dragDropContext}>
-      <Box ref={treeRef} height="100vh" overflow="auto" border="right">
+      <Box ref={treeRef} height="100vh" border="right">
         <Header setMode={setMode} onClose={onClose} />
 
-        <Box flex="grow">
-          {/* {selected.property ? (
+        <Box flex overflow="auto">
+          <Box flex="grow">
+            {/* {selected.property ? (
                   <>
                     <Button
                       hoverIndicator
@@ -294,12 +295,13 @@ const Tree = ({ onClose, setMode }) => {
                     />
                   </>
                 ) : ( */}
-          {screens.map((id, index) => (
-            <Screen key={id} id={id} first={index === 0} />
-          ))}
-          {/* )} */}
+            {screens.map((id, index) => (
+              <Screen key={id} id={id} first={index === 0} />
+            ))}
+            {/* )} */}
+          </Box>
+          <Data />
         </Box>
-        <Data />
       </Box>
     </DragDropContext.Provider>
     //   </TreeContext.Provider>

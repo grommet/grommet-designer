@@ -20,10 +20,12 @@ import Tree from './Tree/Tree';
 import {
   load as loadDesign,
   getComponent,
-  getData,
+  getDesign,
   getRoot,
   getScreen,
   getScreenByPath,
+  setDesignProperty,
+  setProperty,
   useDesignName,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
@@ -150,6 +152,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   //   }
   // }, [design.data]);
 
+  // load design when we start
+
   useEffect(() => {
     loadDesign(loadProps)
       .then((design) => {
@@ -182,6 +186,35 @@ const Designer = ({ loadProps, onClose, thumb }) => {
 
   // browser navigation
 
+  const followLink = useCallback((link) => {
+    let screen;
+    if (Array.isArray(link)) link.forEach(followLink);
+    else if (link.control === 'toggleThemeMode') {
+      const design = getDesign();
+      setDesignProperty(
+        'themeMode',
+        design.themeMode === 'dark' ? 'light' : 'dark',
+      );
+    } else if (link.component) {
+      screen = getScreen(getRoot(link.component));
+      const component = getComponent(link.component);
+      setProperty(link.component, undefined, 'hide', !component.hide);
+    } else if (link.screen) {
+      screen = getScreen(link.screen);
+    }
+    setSelection(undefined);
+    if (screen) {
+      setCanvasRoot(screen.root);
+      const {
+        location: { pathname },
+      } = document;
+      if (screen.path !== pathname) {
+        const url = screen.path + window.location.search;
+        window.history.pushState(undefined, undefined, url);
+      }
+    }
+  }, []);
+
   // react when user uses browser back and forward buttons
   useEffect(() => {
     const onPopState = () => {
@@ -190,7 +223,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       } = document;
       const screen = getScreenByPath(pathname);
       if (screen) {
-        setSelection(screen.id);
+        setSelection(undefined);
         setCanvasRoot(screen.root);
       }
     };
@@ -199,17 +232,17 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // push state when the user navigates via selection
+  // push state when the user changes selection
   useEffect(() => {
     if (selection) {
       const root = getRoot(selection);
-      const {
-        location: { pathname },
-      } = document;
       // track selected screen in browser location, so browser
       // backward/forward controls work
       const screen = getScreen(root);
       if (screen) {
+        const {
+          location: { pathname },
+        } = document;
         if (screen.path !== pathname) {
           const url = screen.path + window.location.search;
           window.history.pushState(undefined, undefined, url);
@@ -299,8 +332,11 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   // const listeners = useRef({});
 
   const selectionContext = useMemo(
-    () => (mode === 'edit' ? [selection, setSelection] : []),
-    [mode, selection],
+    () =>
+      mode === 'edit'
+        ? [selection, setSelection, { followLink }]
+        : [undefined, undefined, {}],
+    [followLink, mode, selection],
   );
 
   if (!ready) return <Loading />;

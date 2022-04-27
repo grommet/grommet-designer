@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
@@ -13,9 +13,11 @@ const Placeholder = styled.div`
 `;
 
 const useDesignComponent = (id) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { followLink }] =
+    useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
   const component = useComponent(id);
+  const [, rerender] = useState();
 
   // get component definition in the design
   if (!component) return renderNull;
@@ -33,7 +35,8 @@ const useDesignComponent = (id) => {
   if (!type) return renderNull;
 
   // allow the type to adjust props if needed
-  if (type.adjustProps) props = type.adjustProps(props, { component, type });
+  if (type.adjustProps)
+    props = type.adjustProps(props, { component, type, followLink, rerender });
 
   // render -component- and -Icon- properties
   if (type.properties) {
@@ -66,14 +69,14 @@ const useDesignComponent = (id) => {
     const priorClick = props.onClick;
     props.onClick = (event) => {
       event.stopPropagation();
-      if (selection !== id) {
+      if (!event.shiftKey && selection !== id) {
         // setInlineEdit(undefined);
         setSelection(id);
         // } else if (type.text && !referenceDesign && selectedRef.current) {
         //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
         //   setInlineEdit(id);
       }
-      if (priorClick) priorClick(event);
+      if (event.shiftKey && priorClick) priorClick(event);
     };
     props.tabIndex = '-1';
     if (selection === id) {
