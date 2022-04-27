@@ -9,9 +9,7 @@ import ScreenDropArea from './ScreenDropArea';
 
 const Screen = ({ first, id }) => {
   const [selection, setSelection] = useContext(SelectionContext);
-  const [dragDrop, setDragDrop] = useContext(DragDropContext);
-  // const { draggingScreen, moveScreen, setDraggingScreen, setDropScreenTarget } =
-  //   useContext(DragDropContext);
+  const [dragging, setDragging] = useContext(DragDropContext);
 
   const screen = useScreen(id);
 
@@ -27,31 +25,25 @@ const Screen = ({ first, id }) => {
         <Button
           fill
           hoverIndicator
-          onClick={() => setSelection(id)}
+          onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
           draggable
-          // onDragStart={(event) => {
-          //   event.dataTransfer.setData('text/plain', ''); // for Firefox
-          //   setDraggingScreen(screenId);
-          // }}
-          // onDragEnd={() => {
-          //   setDraggingScreen(undefined);
-          //   setDropScreenTarget(undefined);
-          // }}
-          // onDragOver={(event) => {
-          //   if (draggingScreen && draggingScreen !== screenId) {
-          //     event.preventDefault();
-          //   }
-          // }}
-          // onDrop={moveScreen}
+          onDragStart={(event) => {
+            event.dataTransfer.setData('text/plain', ''); // for Firefox
+            setDragging(id);
+          }}
+          onDragEnd={() => {
+            if (dragging === id) setDragging(undefined);
+          }}
         >
           <Box
-            // ref={selected.component === screen.root ? selectedRef : undefined}
             direction="row"
             align="center"
             justify="between"
             gap="medium"
             pad={{ vertical: 'small', left: 'large', right: 'small' }}
-            background={selection === id ? 'selected-background' : undefined}
+            background={
+              (selection === id && 'selected-background') || undefined
+            }
           >
             <Heading
               level={3}

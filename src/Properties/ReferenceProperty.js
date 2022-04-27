@@ -22,7 +22,7 @@ const ReferenceProperty = forwardRef(({ name, onChange, value }, ref) => {
   const [, setSelection] = useContext(SelectionContext);
   const design = useDesign();
   const options = Object.values(design.components).filter(
-    (c) => c.type !== 'designer.Reference',
+    (c) => c.type !== 'designer.Reference' && c.name,
   );
 
   return (

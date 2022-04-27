@@ -1,40 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box } from 'grommet';
+import { getComponent, moveComponent } from '../design2';
 import DragDropContext from './DragDropContext';
 
 const ComponentDropArea = ({ id, where }) => {
-  const {
-    dragging,
-    dropTarget,
-    dropWhere,
-    moveComponent,
-    setDropTarget,
-    setDropWhere,
-  } = useContext(DragDropContext);
+  const [dragging] = useContext(DragDropContext);
+  const [dragOver, setDragOver] = useState();
 
   return (
     <Box
       pad="xxsmall"
-      background={
-        dragging && dropTarget && dropTarget === id && dropWhere === where
-          ? 'focus'
-          : undefined
-      }
+      background={(dragOver && 'focus') || undefined}
       onDragEnter={(event) => {
-        if (dragging && dragging !== id) {
+        if (dragging && dragging !== id && getComponent(dragging)) {
           event.preventDefault();
-          setDropTarget(id);
-          setDropWhere(where);
-        } else {
-          setDropTarget(undefined);
+          setDragOver(true);
         }
       }}
       onDragOver={(event) => {
-        if (dragging && dragging !== id) {
-          event.preventDefault();
+        if (dragOver) event.preventDefault();
+      }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={() => {
+        if (dragOver) {
+          moveComponent(dragging, { [where]: id });
+          setDragOver(false);
         }
       }}
-      onDrop={moveComponent}
     />
   );
 };

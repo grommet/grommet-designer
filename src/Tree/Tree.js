@@ -1,6 +1,6 @@
 import React, {
-  // useCallback,
-  // useContext,
+  useCallback,
+  useContext,
   // useEffect,
   useMemo,
   useRef,
@@ -8,47 +8,22 @@ import React, {
 } from 'react';
 import { Box, Button, Keyboard, Text } from 'grommet';
 // import { Previous } from 'grommet-icons';
-// import {
-//   childSelected,
-//   copyComponent,
-//   duplicateComponent,
-//   getParent,
-//   getScreenForComponent,
-//   insertComponent,
-//   nextSiblingSelected,
-//   parentSelected,
-//   previousSiblingSelected,
-//   isDescendent,
-//   serialize,
-// } from '../design';
-import { useScreens } from '../design2';
-// import { displayName } from '../utils';
-// import DesignContext from '../DesignContext';
-// import SelectionContext from '../SelectionContext';
-// import TreeContext from './TreeContext';
-// import Component from './Component';
+import { duplicateComponent, useScreens } from '../design2';
+import SelectionContext from '../SelectionContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
 import Screen from './Screen';
 import Data from './Data';
 
-// const within = (node, container) => {
-//   if (!node) return false;
-//   if (node === container) return true;
-//   return within(node.parentNode, container);
-// };
+const within = (node, container) => {
+  if (!node) return false;
+  if (node === container) return true;
+  return within(node.parentNode, container);
+};
 
 const Tree = ({ onClose, setMode }) => {
+  const [selection, setSelection] = useContext(SelectionContext);
   const screens = useScreens();
-  // const {
-  //   changeDesign,
-  //   design,
-  //   libraries,
-  //   selected,
-  //   setSelected,
-  //   updateDesign,
-  // } = useContext(DesignContext);
-  // const { selection, select } = useContext(SelectionContext);
 
   // const selectedAncestors = useMemo(() => {
   //   const result = [];
@@ -62,13 +37,7 @@ const Tree = ({ onClose, setMode }) => {
   //   return result;
   // }, [design, selected]);
 
-  const [dragDrop, setDragDrop] = useState();
-  // const [dragging, setDragging] = useState();
-  // const [dropTarget, setDropTarget] = useState();
-  // const [dropWhere, setDropWhere] = useState();
-  // const [draggingScreen, setDraggingScreen] = useState();
-  // const [dropScreenTarget, setDropScreenTarget] = useState();
-  // const [copied, setCopied] = useState();
+  const [copied, setCopied] = useState();
   const treeRef = useRef();
   // const selectionRef = useRef();
 
@@ -112,156 +81,56 @@ const Tree = ({ onClose, setMode }) => {
   //   }
   // }, [design, selected, updateDesign]);
 
-  // const moveComponent = useCallback(() => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   // remove from old parent
-  //   const priorParent = getParent(nextDesign, dragging);
-  //   const priorIndex = priorParent.children.indexOf(dragging);
-  //   priorParent.children.splice(priorIndex, 1);
-  //   // if we're moving within children, promote children first
-  //   if (isDescendent(design, dropTarget, dragging)) {
-  //     const component = nextDesign.components[dragging];
-  //     priorParent.children = [...priorParent.children, ...component.children];
-  //     component.children = undefined;
-  //   }
-  //   // insert into new parent
-  //   if (dropWhere === 'in') {
-  //     const nextParent = nextDesign.components[dropTarget];
-  //     if (!nextParent.children) nextParent.children = [];
-  //     nextParent.children.unshift(dragging);
-  //   } else {
-  //     const nextParent = getParent(nextDesign, dropTarget);
-  //     const nextIndex = nextParent.children.indexOf(dropTarget);
-  //     nextParent.children.splice(
-  //       dropWhere === 'before' ? nextIndex : nextIndex + 1,
-  //       0,
-  //       dragging,
-  //     );
-  //   }
-  //   const nextScreen = getScreenForComponent(nextDesign, dragging);
-  //   setDragging(undefined);
-  //   setDropTarget(undefined);
-  //   changeDesign(nextDesign);
-  //   setSelected({ ...selected, screen: nextScreen, component: dragging });
-  // }, [
-  //   changeDesign,
-  //   design,
-  //   dragging,
-  //   dropTarget,
-  //   dropWhere,
-  //   selected,
-  //   setSelected,
-  // ]);
+  const [dragging, setDragging] = useState();
+  const dragDropContext = useMemo(() => [dragging, setDragging], [dragging]);
 
-  // const moveScreen = useCallback(() => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const moveIndex = nextDesign.screenOrder.indexOf(draggingScreen);
-  //   nextDesign.screenOrder.splice(moveIndex, 1);
-  //   const targetIndex = nextDesign.screenOrder.indexOf(dropScreenTarget);
-  //   nextDesign.screenOrder.splice(
-  //     dropWhere === 'before' ? targetIndex : targetIndex + 1,
-  //     0,
-  //     draggingScreen,
-  //   );
-  //   setDraggingScreen(undefined);
-  //   setDropScreenTarget(undefined);
-  //   changeDesign(nextDesign);
-  // }, [changeDesign, design, draggingScreen, dropScreenTarget, dropWhere]);
-
-  // const toggleScreenCollapse = (id) => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const screen = nextDesign.screens[id];
-  //   screen.collapsed = !screen.collapsed;
-  //   updateDesign(nextDesign);
-  //   const nextSelected = { ...selected };
-  //   delete nextSelected.component;
-  //   setSelected(nextSelected);
-  // };
-
-  // const treeContext = useMemo(
-  //   () => ({ selectedAncestors, selectionRef }),
-  //   [selectedAncestors],
-  // );
-
-  const dragDropContext = useMemo(() => [dragDrop, setDragDrop], [dragDrop]);
-
-  // const toggleCollapse = (id) => {
-  //   const nextDesign = JSON.parse(JSON.stringify(design));
-  //   const component = nextDesign.components[id];
-  //   component.collapsed = !component.collapsed;
-  //   updateDesign(nextDesign);
-  //   setSelected({ ...selected, component: id });
-  // };
-
-  // const onKey = (event) => {
-  //   if (
-  //     document.activeElement === document.body ||
-  //     within(event.target, treeRef.current)
-  //   ) {
-  //     if (event.key === 'ArrowDown') {
-  //       setSelected(nextSiblingSelected(design, selected) || selected);
-  //     }
-  //     if (event.key === 'ArrowUp') {
-  //       setSelected(previousSiblingSelected(design, selected) || selected);
-  //     }
-  //     if (event.key === 'ArrowLeft') {
-  //       setSelected(parentSelected(design, selected) || selected);
-  //     }
-  //     if (event.key === 'ArrowRight') {
-  //       setSelected(childSelected(design, selected) || selected);
-  //     }
-  //     if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
-  //       setCopied(selected);
-  //       if (navigator.clipboard && navigator.clipboard.writeText) {
-  //         navigator.clipboard.writeText(serialize(design, selected));
-  //       }
-  //     } else if (event.key === 'c') {
-  //       toggleCollapse(selected.component);
-  //     }
-  //     if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
-  //       if (copied) {
-  //         const nextDesign = JSON.parse(JSON.stringify(design));
-  //         const newId = duplicateComponent({
-  //           nextDesign,
-  //           id: copied.component,
-  //           libraries,
-  //           parentId: selected.component,
-  //         });
-  //         changeDesign(nextDesign);
-  //         setSelected({ ...selected, component: newId });
-  //       } else {
-  //         if (navigator.clipboard && navigator.clipboard.readText) {
-  //           navigator.clipboard.readText().then((clipText) => {
-  //             const { design: copiedDesign, selected: copiedSelected } =
-  //               JSON.parse(clipText);
-  //             const nextDesign = JSON.parse(JSON.stringify(design));
-  //             const newId = copyComponent({
-  //               nextDesign,
-  //               templateDesign: copiedDesign,
-  //               id: copiedSelected.component,
-  //               libraries,
-  //             });
-  //             insertComponent({ nextDesign, libraries, selected, id: newId });
-
-  //             changeDesign(nextDesign);
-  //             setSelected({ ...selected, component: newId });
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
+  const onKey = (event) => {
+    if (
+      document.activeElement === document.body ||
+      within(event.target, treeRef.current)
+    ) {
+      // if (event.key === 'ArrowDown') {
+      //   setSelected(nextSiblingSelected(design, selected) || selected);
+      // }
+      // if (event.key === 'ArrowUp') {
+      //   setSelected(previousSiblingSelected(design, selected) || selected);
+      // }
+      // if (event.key === 'ArrowLeft') {
+      //   setSelected(parentSelected(design, selected) || selected);
+      // }
+      // if (event.key === 'ArrowRight') {
+      //   setSelected(childSelected(design, selected) || selected);
+      // }
+      if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
+        setCopied(selection);
+        // if (navigator.clipboard && navigator.clipboard.writeText) {
+        //   navigator.clipboard.writeText(serialize(design, selected));
+        // }
+        // } else if (event.key === 'c') {
+        //   toggleCollapse(selected.component);
+      } else if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
+        // 'v' -> within
+        if (copied && copied !== selection) {
+          setSelection(duplicateComponent(copied, { within: selection }));
+        }
+      } else if (event.key === 'V' && (event.metaKey || event.ctrlKey)) {
+        // 'V' -> after
+        if (copied && copied !== selection) {
+          setSelection(duplicateComponent(copied, { after: selection }));
+        }
+      }
+    }
+  };
 
   return (
-    // <Keyboard target="document" onKeyDown={onKey}>
-    //   <TreeContext.Provider value={treeContext}>
-    <DragDropContext.Provider value={dragDropContext}>
-      <Box ref={treeRef} height="100vh" border="right">
-        <Header setMode={setMode} onClose={onClose} />
+    <Keyboard target="document" onKeyDown={onKey}>
+      <DragDropContext.Provider value={dragDropContext}>
+        <Box ref={treeRef} height="100vh" border="right">
+          <Header setMode={setMode} onClose={onClose} />
 
-        <Box flex overflow="auto">
-          <Box flex="grow">
-            {/* {selected.property ? (
+          <Box flex overflow="auto">
+            <Box flex="grow">
+              {/* {selected.property ? (
                   <>
                     <Button
                       hoverIndicator
@@ -295,17 +164,16 @@ const Tree = ({ onClose, setMode }) => {
                     />
                   </>
                 ) : ( */}
-            {screens.map((id, index) => (
-              <Screen key={id} id={id} first={index === 0} />
-            ))}
-            {/* )} */}
+              {screens.map((id, index) => (
+                <Screen key={id} id={id} first={index === 0} />
+              ))}
+              {/* )} */}
+            </Box>
+            <Data />
           </Box>
-          <Data />
         </Box>
-      </Box>
-    </DragDropContext.Provider>
-    //   </TreeContext.Provider>
-    // </Keyboard>
+      </DragDropContext.Provider>
+    </Keyboard>
   );
 };
 

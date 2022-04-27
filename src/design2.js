@@ -106,7 +106,7 @@ export const load = async ({ design: designProp, id, name, password }) => {
         .then((response) => {
           data[id].data = response;
           notify(id);
-        })
+        }),
     );
 
   return design;
@@ -633,8 +633,32 @@ export const setDataProperty = (id, name, value) => {
   });
 };
 
-export const moveComponent = (id, { after, into }) => {
-  // TODO:
+export const moveComponent = (id, options) => {
+  // remove from old parent
+  const priorParent = getComponent(getParent(id));
+  const priorIndex = priorParent.children.indexOf(id);
+  priorParent.children.splice(priorIndex, 1);
+  // // if we're moving within children, promote children first
+  // if (isDescendent(design, dropTarget, dragging)) {
+  //   const component = nextDesign.components[dragging];
+  //   priorParent.children = [...priorParent.children, ...component.children];
+  //   component.children = undefined;
+  // }
+  // insert into new parent
+  insertComponent(id, options);
+};
+
+export const moveScreen = (id, options) => {
+  const nextScreenOrder = design.screenOrder.filter((i) => i !== id);
+  if (options.before) {
+    const index = nextScreenOrder.indexOf(options.before);
+    nextScreenOrder.splice(index, 0, id);
+  } else if (options.after) {
+    const index = nextScreenOrder.indexOf(options.after);
+    nextScreenOrder.splice(index + 1, 0, id);
+  }
+  design.screenOrder = nextScreenOrder;
+  notify();
 };
 
 export const toggleCollapsed = (id) => {
