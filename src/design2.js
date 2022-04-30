@@ -144,7 +144,7 @@ export const getScreenByPath = (path) =>
 export const getComponent = (id) => design.components[id];
 
 // returns parent's id, could be a component or a screen
-export const getParent = (id) => {
+export const getParent = (id, traverseProps = true) => {
   let result;
   Object.keys(design.components).some((id2) => {
     const component = design.components[id2];
@@ -152,7 +152,7 @@ export const getParent = (id) => {
     const children = component.children;
     if (children?.includes(id)) result = parseInt(id2, 10);
     // check if this component has id as a prop component
-    if (!result && component?.propComponents?.includes(id))
+    if (traverseProps && !result && component?.propComponents?.includes(id))
       result = parseInt(id2, 10);
     return !!result;
   });
@@ -165,7 +165,7 @@ export const getParent = (id) => {
   return result;
 };
 
-export const getRoot = (id) => {
+export const getRoot = (id, traverseProps = true) => {
   if (!id) return design.screenOrder[0];
   if (design.screens[id]) return id;
 
@@ -178,10 +178,18 @@ export const getRoot = (id) => {
   if (root) return root;
 
   // ascend, if possible
-  const parent = getParent(id);
+  const parent = getParent(id, traverseProps);
   if (parent) return getRoot(parent);
 
   return id;
+};
+
+export const getPath = (id, name) => {
+  if (id && name) return `/-${id}-${name}`;
+  const root = getRoot(id);
+  const screen = design.screens[root];
+  if (screen) return screen.path;
+  return '/';
 };
 
 export const getDescendants = (id) => {
@@ -435,6 +443,13 @@ const insertComponent = (id, options) => {
       });
     }
     design.components[id].children = [options.containing];
+  } else if (options.for) {
+    const { id: parentId, name } = options.for;
+    updateComponent(parentId, (nextComponent) => {
+      if (!nextComponent.propComponents) nextComponent.propComponents = [];
+      nextComponent.propComponents.push(id);
+      nextComponent.props[name] = id;
+    });
   }
 };
 
@@ -521,24 +536,11 @@ export const removeComponent = (id) => {
   // remove children
   if (component.children) component.children.forEach(removeComponent);
 
-  // if (
-  //   nextSelected &&
-  //   nextSelected.property &&
-  //   nextSelected.property.component === id
-  // ) {
-  //   // handle removing a property component when editing it
-  //   nextSelected.property.onChange(undefined, nextDesign);
-  //   const source = nextDesign.components[nextSelected.property.source];
-  //   if (source.propComponents)
-  //     source.propComponents = source.propComponents.filter((pId) => pId !== id);
-  // }
-
   // NOTE: We might still have references in Button and Menu.items links or
   // Reference. We leave them alone and let upgrade() clean up eventually.
 
   // delete component
   delete design.components[id];
-  // if (nextSelected) nextSelected.component = nextSelectedComponent;
 
   notify(id);
 };

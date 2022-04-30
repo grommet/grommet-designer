@@ -254,16 +254,14 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const result = {};
+      if (props?.onClick)
+        result.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      return { ...props, ...result };
     },
   },
   Main: {
@@ -520,16 +518,14 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const result = {};
+      if (props?.onClick)
+        result.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      return { ...props, ...result };
     },
   },
   CardHeader: {
@@ -1966,16 +1962,14 @@ export const components = {
       global: false,
       onClose: ['-link-'],
     },
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClose:
-          props && props.onClose
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClose, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const result = {};
+      if (props?.onClose)
+        result.onClose = (event) => {
+          event.stopPropagation();
+          followLink(props.onClose);
+        };
+      return { ...props, ...result };
     },
   },
   Pagination: {
@@ -2011,17 +2005,15 @@ export const components = {
       onClick: ['-link-'],
       removable: false,
     },
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-        onRemove: props && props.removable ? () => {} : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const result = {};
+      if (props?.onClick)
+        result.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      if (props?.removable) result.onRemove = () => {};
+      return { ...props, ...result };
     },
   },
   Carousel: {

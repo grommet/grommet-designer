@@ -8,7 +8,8 @@ import DragDropContext from './DragDropContext';
 import ScreenDropArea from './ScreenDropArea';
 
 const Screen = ({ first, id }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
 
   const screen = useScreen(id);
@@ -25,7 +26,13 @@ const Screen = ({ first, id }) => {
         <Button
           fill
           hoverIndicator
-          onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
+          onClick={(event) => {
+            if (event.shiftKey) setSelection(undefined);
+            else {
+              setLocation({ screen: id });
+              setSelection(id);
+            }
+          }}
           draggable
           onDragStart={(event) => {
             event.dataTransfer.setData('text/plain', ''); // for Firefox

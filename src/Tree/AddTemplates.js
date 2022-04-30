@@ -5,7 +5,7 @@ import SelectionContext from '../SelectionContext';
 import AddButton from './AddButton';
 import AddMethod from './AddMethod';
 
-const AddTemplates = ({ addLocation, onClose, searchExp }) => {
+const AddTemplates = ({ addOptions, onClose, searchExp }) => {
   const [selection, setSelection] = useContext(SelectionContext);
   const [addMode, setAddMode] = useState();
 
@@ -68,13 +68,11 @@ const AddTemplates = ({ addLocation, onClose, searchExp }) => {
                   const templateId = templates[name].id;
                   let component;
                   if (addMode === 'copy') {
-                    component = duplicateComponent(templateId, {
-                      [addLocation]: selection,
-                    });
+                    component = duplicateComponent(templateId, addOptions);
                   } else if (addMode === 'reference') {
                     component = addComponent('designer.Reference', {
+                      ...addOptions,
                       props: { component: templateId },
-                      [addLocation]: selection,
                     });
                   }
                   if (component) setSelection(component.id);

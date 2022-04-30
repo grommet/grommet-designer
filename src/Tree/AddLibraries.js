@@ -5,8 +5,8 @@ import { addComponent, addScreen, getLibraries } from '../design2';
 import SelectionContext from '../SelectionContext';
 import AddButton from './AddButton';
 
-const AddLibraries = ({ addLocation, onClose, searchExp }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+const AddLibraries = ({ addOptions, onClose, property, searchExp }) => {
+  const [, setSelection] = useContext(SelectionContext);
   const libraries = getLibraries();
 
   const onAdd = useCallback(
@@ -15,9 +15,8 @@ const AddLibraries = ({ addLocation, onClose, searchExp }) => {
         const screen = addScreen();
         setSelection(screen.id);
       } else {
-        const component = addComponent(typeName, {
-          [addLocation]: selection,
-        });
+        console.log('!!! onAdd', { typeName, addOptions });
+        const component = addComponent(typeName, addOptions);
         setSelection(component.id);
       }
 
@@ -29,7 +28,7 @@ const AddLibraries = ({ addLocation, onClose, searchExp }) => {
 
       onClose();
     },
-    [addLocation, onClose, selection, setSelection],
+    [addOptions, onClose, setSelection],
   );
 
   return libraries.map((library) => {

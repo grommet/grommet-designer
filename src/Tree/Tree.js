@@ -1,5 +1,5 @@
 import React, {
-  useCallback,
+  // useCallback,
   useContext,
   // useEffect,
   useMemo,
@@ -7,13 +7,44 @@ import React, {
   useState,
 } from 'react';
 import { Box, Button, Keyboard, Text } from 'grommet';
-// import { Previous } from 'grommet-icons';
-import { duplicateComponent, useScreens } from '../design2';
+import { Previous } from 'grommet-icons';
+import {
+  duplicateComponent,
+  getComponent,
+  getRoot,
+  useScreens,
+  useComponent,
+} from '../design2';
+import { displayName } from '../utils';
 import SelectionContext from '../SelectionContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
 import Screen from './Screen';
+import Component from './Component';
 import Data from './Data';
+
+const PropertyComponent = ({ id, name }) => {
+  const [, setSelection, { setLocation }] = useContext(SelectionContext);
+  const contextComponent = useComponent(id);
+  const valueComponent = contextComponent.props[name];
+  return (
+    <>
+      <Button
+        hoverIndicator
+        onClick={() => {
+          setLocation({ screen: getRoot(id) });
+          setSelection(id);
+        }}
+      >
+        <Box direction="row" pad="small" gap="small" border="bottom">
+          <Previous />
+          <Text>back to {displayName(getComponent(id))}</Text>
+        </Box>
+      </Button>
+      <Component id={valueComponent} />
+    </>
+  );
+};
 
 const within = (node, container) => {
   if (!node) return false;
@@ -21,8 +52,11 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Tree = ({ onClose, setMode }) => {
+// root is either undefined for all screens
+// or { id, name } for property components
+const Tree = ({ onClose, root, setMode }) => {
   const [selection, setSelection] = useContext(SelectionContext);
+
   const screens = useScreens();
 
   // const selectedAncestors = useMemo(() => {
@@ -126,48 +160,21 @@ const Tree = ({ onClose, setMode }) => {
     <Keyboard target="document" onKeyDown={onKey}>
       <DragDropContext.Provider value={dragDropContext}>
         <Box ref={treeRef} height="100vh" border="right">
-          <Header setMode={setMode} onClose={onClose} />
+          <Header
+            setMode={setMode}
+            onClose={onClose}
+            property={selection ? undefined : root}
+          />
 
           <Box flex overflow="auto">
             <Box flex="grow">
-              {/* {selected.property ? (
-                  <>
-                    <Button
-                      hoverIndicator
-                      onClick={() => {
-                        const {
-                          property: { source },
-                          ...nextSelected
-                        } = selected;
-                        nextSelected.component = source;
-                        setSelected(nextSelected);
-                      }}
-                    >
-                      <Box
-                        direction="row"
-                        pad="small"
-                        gap="small"
-                        border="bottom"
-                      >
-                        <Previous />
-                        <Text>
-                          back to{' '}
-                          {displayName(
-                            design.components[selected.property.source],
-                          )}
-                        </Text>
-                      </Box>
-                    </Button>
-                    <Component
-                      screen={selected.screen}
-                      id={selected.property.component}
-                    />
-                  </>
-                ) : ( */}
-              {screens.map((id, index) => (
-                <Screen key={id} id={id} first={index === 0} />
-              ))}
-              {/* )} */}
+              {root ? (
+                <PropertyComponent {...root} />
+              ) : (
+                screens.map((id, index) => (
+                  <Screen key={id} id={id} first={index === 0} />
+                ))
+              )}
             </Box>
             <Data />
           </Box>

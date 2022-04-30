@@ -93,7 +93,7 @@ const Properties = () => {
 
   if (!component) return null;
 
-  const parent = getParent(selection);
+  const parent = getParent(selection, false);
   const parentType = parent && getType(getComponent(parent)?.type);
 
   // const reset = () => {
@@ -147,16 +147,16 @@ const Properties = () => {
   };
 
   const delet = () => {
-    if (!component.coupled) {
-      removeComponent(selection);
-      // TODO: set selection to previous sibling instead of parent
-      setSelection(parent);
+    // if (!component.coupled) {
+    removeComponent(selection);
+    // TODO: set selection to previous sibling instead of parent
+    setSelection(parent);
 
-      ReactGA.event({
-        category: 'edit',
-        action: 'delete component',
-      });
-    }
+    ReactGA.event({
+      category: 'edit',
+      action: 'delete component',
+    });
+    // }
   };
 
   const onKey = (event) => {
@@ -247,49 +247,47 @@ const Properties = () => {
               />
             )}
           </Box>
-          {!component.coupled && (
-            <Box flex={false} direction="row" align="center">
+          <Box flex={false} direction="row" align="center">
+            {!component.coupled && (
               <Button
                 title="duplicate"
                 tip="duplicate"
                 icon={<Duplicate />}
                 onClick={duplicate}
               />
-              {references.length === 0 ? (
-                <Button
-                  title="delete"
-                  tip="delete"
-                  icon={<Trash />}
-                  onClick={delet}
-                />
-              ) : (
-                <DropButton
-                  ref={referencesRef}
-                  title="references"
-                  tip="references"
-                  icon={<Location />}
-                  dropAlign={{ top: 'bottom' }}
-                  dropContent={
-                    <Box>
-                      {references.map((rId) => (
-                        <Button
-                          key={rId}
-                          hoverIndicator
-                          onClick={() => setSelection(rId)}
-                        >
-                          <Box
-                            pad={{ horizontal: 'small', vertical: 'xsmall' }}
-                          >
-                            <Text>{rId}</Text>
-                          </Box>
-                        </Button>
-                      ))}
-                    </Box>
-                  }
-                />
-              )}
-            </Box>
-          )}
+            )}
+            {references.length === 0 ? (
+              <Button
+                title="delete"
+                tip="delete"
+                icon={<Trash />}
+                onClick={delet}
+              />
+            ) : (
+              <DropButton
+                ref={referencesRef}
+                title="references"
+                tip="references"
+                icon={<Location />}
+                dropAlign={{ top: 'bottom' }}
+                dropContent={
+                  <Box>
+                    {references.map((rId) => (
+                      <Button
+                        key={rId}
+                        hoverIndicator
+                        onClick={() => setSelection(rId)}
+                      >
+                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
+                          <Text>{rId}</Text>
+                        </Box>
+                      </Button>
+                    ))}
+                  </Box>
+                }
+              />
+            )}
+          </Box>
         </Box>
 
         <Box flex overflow="auto">

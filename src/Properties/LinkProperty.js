@@ -19,7 +19,7 @@ const getLinkOptions = (id) => {
   return [
     ...screenComponents
       .map((k) => getComponent(k))
-      .filter((c) => c)
+      .filter((c) => c && c.name)
       // .filter((c) => {
       //   let type;
       //   // if this is a reference, check the target type

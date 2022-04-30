@@ -22,7 +22,7 @@ const within = (node, container) => {
   return within(node.parentNode, container);
 };
 
-const Header = ({ onClose, setMode }) => {
+const Header = ({ onClose, property, setMode }) => {
   const [adding, setAdding] = useState();
   const [editing, setEditing] = useState();
   const [sharing, setSharing] = useState();
@@ -148,7 +148,9 @@ const Header = ({ onClose, setMode }) => {
           </Layer>
         )}
         {sharing && <Sharing onClose={() => setSharing(false)} />}
-        {adding && <AddComponent onClose={() => setAdding(false)} />}
+        {adding && (
+          <AddComponent onClose={() => setAdding(false)} property={property} />
+        )}
         {editing && <DesignSettings onClose={() => setEditing(false)} />}
       </Box>
     </Keyboard>

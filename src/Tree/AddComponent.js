@@ -1,4 +1,10 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Box, Button, Heading, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -7,12 +13,23 @@ import AddLibraries from './AddLibraries';
 import AddLocation from './AddLocation';
 import AddTemplates from './AddTemplates';
 
-const AddComponent = ({ onClose }) => {
+const AddComponent = ({ onClose, property }) => {
   const [selection] = useContext(SelectionContext);
   const component = useComponent(selection);
-  const [addLocation, setAddLocation] = useState('within');
+
+  // addOptions is what eventually gets passed to addComponent()
+  const [addOptions, setAddOptions] = useState(
+    (property && { for: property }) || // property
+      (!component && { within: selection }) || // screen
+      undefined, // let AddLocation tell us
+  );
   const [search, setSearch] = useState('');
   const inputRef = useRef();
+
+  const onChangeLocation = useCallback(
+    (nextAddOptions) => setAddOptions(nextAddOptions),
+    [],
+  );
 
   useLayoutEffect(() => inputRef.current?.focus());
 
@@ -44,9 +61,7 @@ const AddComponent = ({ onClose }) => {
         </Box>
         {component && (
           <Box flex={false} pad="small">
-            <AddLocation
-              onChange={(nextAddLocation) => setAddLocation(nextAddLocation)}
-            />
+            <AddLocation onChange={onChangeLocation} />
           </Box>
         )}
         <Box flex overflow="auto">
@@ -59,14 +74,16 @@ const AddComponent = ({ onClose }) => {
           </Box>
 
           <AddLibraries
-            addLocation={addLocation}
+            addOptions={addOptions}
             onClose={onClose}
+            property={property}
             searchExp={searchExp}
           />
 
           <AddTemplates
-            addLocation={addLocation}
+            addOptions={addOptions}
             onClose={onClose}
+            property={property}
             searchExp={searchExp}
           />
         </Box>

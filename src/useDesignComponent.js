@@ -68,13 +68,15 @@ const useDesignComponent = (id) => {
   if (setSelection) {
     const priorClick = props.onClick;
     props.onClick = (event) => {
-      event.stopPropagation();
-      if (!event.shiftKey && selection !== id) {
-        // setInlineEdit(undefined);
-        setSelection(id);
-        // } else if (type.text && !referenceDesign && selectedRef.current) {
-        //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
-        //   setInlineEdit(id);
+      if (!event.shiftKey) {
+        event.stopPropagation();
+        if (selection !== id) {
+          // setInlineEdit(undefined);
+          setSelection(id);
+          // } else if (type.text && !referenceDesign && selectedRef.current) {
+          //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
+          //   setInlineEdit(id);
+        }
       }
       if (event.shiftKey && priorClick) priorClick(event);
     };
@@ -96,7 +98,7 @@ const useDesignComponent = (id) => {
   } else if (component.text || type.text) {
     // TODO: handle replacing with data
     children = replaceWithData(component.text || type.text);
-  } else if (type.placeholder && !component.coupled) {
+  } else if (type.placeholder) {
     children = <Placeholder>{type.placeholder(props)}</Placeholder>;
   }
 

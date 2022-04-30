@@ -1,9 +1,7 @@
 import React from 'react';
 import { Box, Button, Heading, Layer, Text } from 'grommet';
 import { Close, FormDown } from 'grommet-icons';
-// import DesignContext from '../DesignContext';
 import Field from '../components/Field';
-import ComponentInput from './ComponentInput';
 
 const jsonValue = (value) =>
   typeof value === 'string' ? value : JSON.stringify(value);
@@ -23,7 +21,6 @@ const FunctionProperty = React.forwardRef(
             name={name}
             value={value}
             dropTarget={ref && ref.current}
-            ComponentInput={ComponentInput}
             {...rest}
           />
         </Field>
@@ -78,12 +75,7 @@ const FunctionProperty = React.forwardRef(
               pad={{ horizontal: 'medium', bottom: 'medium' }}
             >
               <Box flex={false}>
-                <CustomProperty
-                  name={name}
-                  value={value}
-                  ComponentInput={ComponentInput}
-                  {...rest}
-                />
+                <CustomProperty name={name} value={value} {...rest} />
               </Box>
             </Box>
           </Layer>

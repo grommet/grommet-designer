@@ -16,12 +16,11 @@ import Loading from './Loading';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 // import Comments from './Comments/Comments';
-// import { getInitialSelected, getScreenByPath, publish } from './design';
 import {
   load as loadDesign,
   getComponent,
   getDesign,
-  getRoot,
+  getPath,
   getScreen,
   getScreenByPath,
   setDesignProperty,
@@ -29,7 +28,7 @@ import {
   useDesignName,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
-import { /* getComponentType, */ parseUrlParams } from './utils';
+import { parseUrlParams } from './utils';
 
 const editGridColumns = [
   ['small', 'medium'],
@@ -46,42 +45,10 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   const responsive = useContext(ResponsiveContext);
   const [name, setName] = useState();
   const [ready, setReady] = useState(false);
-  const [canvasRoot, setCanvasRoot] = useState();
+  const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
   const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
   // const [confirmReplace, setConfirmReplace] = useState();
-
-  // load state
-  useEffect(() => {
-    // if (!mode) {
-    // const initializeSelected = () => {
-    //   const {
-    //     location: { pathname },
-    //   } = document;
-    //   const screen = getScreenByPath(design, pathname);
-    //   if (screen)
-    //     setSelected({ screen, component: design.screens[screen].root });
-    //   else setSelected(getInitialSelected(design));
-    // };
-    // if (params.mode) {
-    //   setMode(params.mode);
-    //   initializeSelected();
-    // } else if (!design.local) {
-    //   setMode('preview');
-    //   initializeSelected();
-    // } else {
-    //   const stored = localStorage.getItem(`${design.name}--state`);
-    //   if (stored) {
-    //     const { mode: nextMode, selected: nextSelected } = JSON.parse(stored);
-    //     setMode(nextMode);
-    //     setSelected(nextSelected);
-    //   } else {
-    //     setMode('edit');
-    //     initializeSelected();
-    //   }
-    // }
-    // }
-  }, []);
 
   // when the document name changes, update title and URL
   const nextName = useDesignName();
@@ -123,35 +90,6 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   //   });
   // }, [imports]);
 
-  // // load data, if needed
-  // useEffect(() => {
-  //   if (design.data) {
-  //     Object.keys(design.data).forEach((key) => {
-  //       if (design.data[key].slice(0, 4) === 'http') {
-  //         fetch(design.data[key])
-  //           .then((response) => response.json())
-  //           .then((response) => {
-  //             setData((prevData) => {
-  //               const nextData = JSON.parse(JSON.stringify(prevData || {}));
-  //               nextData[key] = response;
-  //               return nextData;
-  //             });
-  //           });
-  //       } else if (design.data[key]) {
-  //         setData((prevData) => {
-  //           const nextData = JSON.parse(JSON.stringify(prevData || {}));
-  //           try {
-  //             nextData[key] = JSON.parse(design.data[key]);
-  //           } catch (e) {
-  //             console.warn(e.message);
-  //           }
-  //           return nextData;
-  //         });
-  //       }
-  //     });
-  //   }
-  // }, [design.data]);
-
   // load design when we start
 
   useEffect(() => {
@@ -172,7 +110,14 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         }
       })
       .then(() => {
-        setCanvasRoot(getScreen(getRoot()).root);
+        const path = window.location.pathname;
+        const screen = getScreenByPath(path);
+        if (screen) setLocation({ screen: screen.id });
+        else {
+          const [, id, name] = /^\/-(\d+)-(\S+)$/.exec(path);
+          if (id && name)
+            setLocation({ property: { id: parseInt(id, 10), name } });
+        }
       })
       .then(() => {
         ReactGA.event({ category: 'switch', action: 'published design' });
@@ -186,8 +131,9 @@ const Designer = ({ loadProps, onClose, thumb }) => {
 
   // browser navigation
 
+  // following a link changes component hide or screen path
   const followLink = useCallback((link) => {
-    let screen;
+    setSelection(undefined);
     if (Array.isArray(link)) link.forEach(followLink);
     else if (link.control === 'toggleThemeMode') {
       const design = getDesign();
@@ -196,65 +142,46 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         design.themeMode === 'dark' ? 'light' : 'dark',
       );
     } else if (link.component) {
-      screen = getScreen(getRoot(link.component));
       const component = getComponent(link.component);
       setProperty(link.component, undefined, 'hide', !component.hide);
     } else if (link.screen) {
-      screen = getScreen(link.screen);
-    }
-    setSelection(undefined);
-    if (screen) {
-      setCanvasRoot(screen.root);
-      const {
-        location: { pathname },
-      } = document;
-      if (screen.path !== pathname) {
-        const url = screen.path + window.location.search;
-        window.history.pushState(undefined, undefined, url);
-      }
+      setLocation({ screen: link.screen });
+      setSelection(link.screen);
     }
   }, []);
 
-  // react when user uses browser back and forward buttons
+  // when user uses browser back and forward buttons,
+  // clear selection and set path
   useEffect(() => {
     const onPopState = () => {
-      const {
-        location: { pathname },
-      } = document;
-      const screen = getScreenByPath(pathname);
-      if (screen) {
-        setSelection(undefined);
-        setCanvasRoot(screen.root);
-      }
+      const screen = getScreenByPath(window.location.pathname);
+      setLocation({ screen: screen.id });
+      setSelection(undefined);
     };
-
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // push state when the user changes selection
   useEffect(() => {
-    if (selection) {
-      const root = getRoot(selection);
-      // track selected screen in browser location, so browser
-      // backward/forward controls work
-      const screen = getScreen(root);
-      if (screen) {
-        const {
-          location: { pathname },
-        } = document;
-        if (screen.path !== pathname) {
-          const url = screen.path + window.location.search;
-          window.history.pushState(undefined, undefined, url);
-        }
-        setCanvasRoot(screen.root);
-      } else {
-        setCanvasRoot(undefined);
+    let nextPath = '/';
+    if (location) {
+      if (location.screen) {
+        const screen = getScreen(location.screen);
+        nextPath = screen.path;
+      } else if (location.property) {
+        const { id, name } = location.property;
+        nextPath = getPath(id, name);
+      }
+      if (nextPath !== window.location.pathname) {
+        // track location in browser location, so browser
+        // backward/forward controls work
+        const url = nextPath + window.location.search;
+        window.history.pushState(undefined, undefined, url);
       }
     }
-  }, [selection]);
+  }, [location]);
 
-  // store state
+  // store mode and selection state if they change
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!thumb && mode && selection) {
@@ -310,45 +237,42 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         } else if (event.key === ';') {
           event.preventDefault();
           setMode(mode !== 'comments' ? 'comments' : 'preview');
-          // } else if (event.key === 'p' && event.shiftKey) {
-          //   const stored = localStorage.getItem(`${design.name}--identity`);
-          //   if (stored) {
-          //     const identity = JSON.parse(stored);
-          //     publish({
-          //       design,
-          //       ...identity,
-          //       onChange: updateDesign,
-          //       onError: (error) => console.error(error),
-          //     });
-          //   } else {
-          //     console.warn('You need to have published to be able to re-publish');
-          //   }
         }
       }
     },
     [mode],
   );
 
-  // const listeners = useRef({});
+  const [treeRoot, canvasRoot] = useMemo(() => {
+    if (!location) return [];
+    if (location.screen) return [undefined, getScreen(location.screen).root];
+    if (location.property) {
+      const { id, name } = location.property;
+      return [{ id, name }, getComponent(id).props[name]];
+    }
+    return [];
+  }, [location]);
 
   const selectionContext = useMemo(
     () =>
       mode === 'edit'
-        ? [selection, setSelection, { followLink }]
+        ? [selection, setSelection, { followLink, setLocation }]
         : [undefined, undefined, {}],
     [followLink, mode, selection],
   );
 
   if (!ready) return <Loading />;
 
+  // console.log('!!! Designer', { location, selection, treeRoot, canvasRoot });
+
   const Details =
     selection && ((getScreen(selection) && ScreenDetails) || Properties);
 
   let content;
-  if (canvasRoot)
+  if (canvasRoot || treeRoot)
     content = (
       <ErrorCatcher>
-        <Canvas root={canvasRoot} />
+        <Canvas root={treeRoot?.component || canvasRoot} />
       </ErrorCatcher>
     );
   else if (selection) content = <Data id={selection} />;
@@ -358,6 +282,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       content = (
         <Grid columns={editGridColumns}>
           <Tree
+            root={treeRoot}
             setMode={setMode}
             onClose={() => {
               window.history.pushState(undefined, undefined, '/');

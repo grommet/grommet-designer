@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Blank } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import { getName, getParent, getType, useComponent } from '../design2';
-
-const allLocations = ['within', 'after', 'before', 'containing'];
 
 const locationVisuals = {
   after: [
@@ -88,19 +86,33 @@ const AddLocation = ({ onChange }) => {
 
   const locations = React.useMemo(() => {
     const parent = getParent(selection);
-    if (!parent)
-      return allLocations.filter((l) => l === 'within' || l === 'containing');
-    if (type?.container) return allLocations;
-    return allLocations.filter((l) => l !== 'within');
+    if (!parent) return ['within', 'containing'];
+    if (type?.container) return ['within', 'after', 'before', 'containing'];
+    return ['after', 'before', 'containing'];
   }, [selection, type]);
 
-  const [addLocation, setAddLocation] = React.useState();
-  React.useEffect(
-    () =>
-      setAddLocation(locations[type?.container === 'rarely' ? 1 : 0]),
-    [locations, type],
+  const [addLocation, setAddLocation] = React.useState(
+    locations[type?.container === 'rarely' ? 1 : 0],
   );
-  React.useEffect(() => onChange(addLocation), [addLocation, onChange]);
+
+  const changeAddLocation = useCallback(
+    (nextAddLocation) => {
+      setAddLocation(nextAddLocation);
+      onChange({ [nextAddLocation]: selection });
+    },
+    [onChange, selection],
+  );
+
+  useEffect(
+    () =>
+      // this feels like too much of a hack :(
+      setTimeout(
+        () =>
+          changeAddLocation(locations[type?.container === 'rarely' ? 1 : 0]),
+        1,
+      ),
+    [changeAddLocation, locations, type],
+  );
 
   const Option = ({ option, checked, hover }) => {
     return (
@@ -123,7 +135,7 @@ const AddLocation = ({ onChange }) => {
       options={locations}
       disabled={locations.length === 1}
       value={addLocation}
-      onChange={(event) => setAddLocation(event.target.value)}
+      onChange={(event) => changeAddLocation(event.target.value)}
       direction="row"
     >
       {(option, { checked, hover }) => (
