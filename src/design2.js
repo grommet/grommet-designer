@@ -138,9 +138,6 @@ const lazilyStore = () => {
 
 export const getScreen = (id) => design.screens[id];
 
-export const getScreenByPath = (path) =>
-  Object.values(design.screens).find((s) => s.path === path);
-
 export const getComponent = (id) => design.components[id];
 
 // returns parent's id, could be a component or a screen
@@ -184,12 +181,22 @@ export const getRoot = (id, traverseProps = true) => {
   return id;
 };
 
-export const getPath = (id, name) => {
-  if (id && name) return `/-${id}-${name}`;
-  const root = getRoot(id);
-  const screen = design.screens[root];
-  if (screen) return screen.path;
-  return '/';
+export const getPathForLocation = (location) => {
+  if (location.screen) return getScreen(location.screen).path;
+  if (location.data) return `/-data-${location.data}`;
+  if (location.property) {
+    const { id, name } = location.property;
+    return `/-${id}-${name}`;
+  }
+};
+
+export const getLocationForPath = (path) => {
+  const screen = Object.values(design.screens).find((s) => s.path === path);
+  if (screen) return { screen: screen.id };
+  let match = /^\/-(\d+)-(\S+)$/.exec(path);
+  if (match) return { property: { id: match[1], name: match[2] } };
+  match = /^\/-data-(\d+)$/.exec(path);
+  if (match) return { data: match[1] };
 };
 
 export const getDescendants = (id) => {

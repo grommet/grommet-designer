@@ -4,6 +4,7 @@ import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import {
   getComponent,
+  getRoot,
   moveComponent,
   toggleCollapsed,
   useComponent,
@@ -22,7 +23,8 @@ const treeSubName = (component) =>
     : component.type.split('.')[1] || component.type;
 
 const Component = ({ screen, id, first }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
 
@@ -43,7 +45,10 @@ const Component = ({ screen, id, first }) => {
         <Button
           fill
           hoverIndicator
-          onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
+          onClick={(event) => {
+            setLocation({ screen: getRoot(id) });
+            setSelection(event.shiftKey ? undefined : id);
+          }}
           draggable={!component.coupled}
           onDragStart={(event) => {
             event.dataTransfer.setData('text/plain', ''); // for Firefox

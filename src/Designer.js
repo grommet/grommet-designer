@@ -20,9 +20,9 @@ import {
   load as loadDesign,
   getComponent,
   getDesign,
-  getPath,
+  getLocationForPath,
+  getPathForLocation,
   getScreen,
-  getScreenByPath,
   setDesignProperty,
   setProperty,
   useDesignName,
@@ -110,20 +110,14 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         }
       })
       .then(() => {
-        const path = window.location.pathname;
-        const screen = getScreenByPath(path);
-        if (screen) setLocation({ screen: screen.id });
-        else {
-          const [, id, name] = /^\/-(\d+)-(\S+)$/.exec(path);
-          if (id && name)
-            setLocation({ property: { id: parseInt(id, 10), name } });
-        }
+        setLocation(getLocationForPath(window.location.pathname));
       })
       .then(() => {
         ReactGA.event({ category: 'switch', action: 'published design' });
       })
       .then(() => setReady(true))
-      .catch(() => {
+      .catch((e) => {
+        console.error(e);
         // TODO: handle error, especially 401 prompt for password
       });
     return () => setReady(false);
@@ -154,8 +148,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   // clear selection and set path
   useEffect(() => {
     const onPopState = () => {
-      const screen = getScreenByPath(window.location.pathname);
-      setLocation({ screen: screen.id });
+      setLocation(getLocationForPath(window.location.pathname));
       setSelection(undefined);
     };
     window.addEventListener('popstate', onPopState);
@@ -163,15 +156,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   }, []);
 
   useEffect(() => {
-    let nextPath = '/';
     if (location) {
-      if (location.screen) {
-        const screen = getScreen(location.screen);
-        nextPath = screen.path;
-      } else if (location.property) {
-        const { id, name } = location.property;
-        nextPath = getPath(id, name);
-      }
+      let nextPath = getPathForLocation(location);
       if (nextPath !== window.location.pathname) {
         // track location in browser location, so browser
         // backward/forward controls work

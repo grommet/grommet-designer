@@ -5,7 +5,8 @@ import { addData, useAllData } from '../design2';
 import SelectionContext from '../SelectionContext';
 
 const Data = () => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const allData = useAllData();
 
   return (
@@ -26,7 +27,14 @@ const Data = () => {
       </Header>
       {Object.keys(allData).map((id) => (
         <Box key={id} flex={false}>
-          <Button fill hoverIndicator onClick={() => setSelection(id)}>
+          <Button
+            fill
+            hoverIndicator
+            onClick={() => {
+              setLocation({ data: id });
+              setSelection(id);
+            }}
+          >
             <Box
               direction="row"
               align="center"
