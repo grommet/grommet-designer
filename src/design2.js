@@ -609,15 +609,20 @@ export const setProperty = (id, section, name, value) => {
   updateComponent(id, (nextComponent) => {
     let props;
     if (!section) props = nextComponent;
-    else if (section === 'props') props = nextComponent.props;
-    else if (section === 'designProps') {
-      if (!nextComponent.designProps) nextComponent.designProps = {};
-      props = nextComponent.designProps;
+    else if (Array.isArray(section)) {
+      // e.g. ['responsive', 'small', 'props']
+      props = nextComponent;
+      while (section.length) {
+        const key = section.shift();
+        if (!props[key]) props[key] = {};
+        props = props[key];
+      }
+    } else {
+      if (!nextComponent[section]) nextComponent[section] = {};
+      props = nextComponent[section];
     }
-    if (props) {
-      if (value === undefined) delete props[name];
-      else props[name] = value;
-    }
+    if (value === undefined) delete props[name];
+    else props[name] = value;
   });
 };
 

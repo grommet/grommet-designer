@@ -43,11 +43,11 @@ import CopyPropertiesFrom from './CopyPropertiesFrom';
 import Field from '../components/Field';
 // import { getComponentType } from '../utils';
 
-// const responsiveSizePad = {
-//   small: 'xsmall',
-//   medium: 'small',
-//   large: 'medium',
-// };
+const responsiveSizePad = {
+  small: 'xsmall',
+  medium: 'small',
+  large: 'medium',
+};
 
 const Properties = () => {
   const [selection, setSelection] = useContext(SelectionContext);
@@ -90,6 +90,8 @@ const Properties = () => {
     const stored = localStorage.getItem('advanced');
     if (stored) setShowAdvanced(JSON.parse(stored));
   }, []);
+
+  useEffect(() => setResponsiveSize('medium'), [selection]);
 
   if (!component) return null;
 
@@ -177,8 +179,13 @@ const Properties = () => {
     }
   };
 
-  const renderProperties = (section, definitions, values) =>
-    Object.keys(definitions)
+  const renderProperties = (section, definitions) => {
+    const values =
+      responsiveSize !== 'medium' && component.responsive
+        ? component.responsive[responsiveSize][section]
+        : component[section];
+
+    return Object.keys(definitions)
       .filter(
         (propName) =>
           !type.advancedProperties ||
@@ -194,12 +201,22 @@ const Properties = () => {
             values={values}
             responsiveSize={responsiveSize}
             value={values?.[propName]}
-            onChange={(value) =>
-              setProperty(selection, section, propName, value)
-            }
+            onChange={(value) => {
+              if (responsiveSize && responsiveSize !== 'medium') {
+                setProperty(
+                  selection,
+                  ['responsive', responsiveSize, section],
+                  propName,
+                  value,
+                );
+              } else {
+                setProperty(selection, section, propName, value);
+              }
+            }}
           />
         </Fragment>
       ));
+  };
 
   const menuItems = [
     { label: 'show code ...', onClick: () => setShowCode(true) },
@@ -337,15 +354,7 @@ const Properties = () => {
               )}
               {type.designProperties && (
                 <Box flex="grow" border="top">
-                  {renderProperties(
-                    'designProps',
-                    type.designProperties,
-                    (
-                      (component.responsive &&
-                        component.responsive[responsiveSize]) ||
-                      component
-                    ).designProps,
-                  )}
+                  {renderProperties('designProps', type.designProperties)}
                 </Box>
               )}
               {/* {type.actions &&
@@ -366,28 +375,24 @@ const Properties = () => {
                 >
                   Properties
                 </Heading>
-                {/* {type.respondable && !component.responsive && (
+                {type.respondable && !component.responsive && (
                   <Button
                     title="ResponsiveContext variations"
                     tip="responsive context variations"
                     icon={<Multiple />}
                     hoverIndicator
                     onClick={() => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      const component =
-                        nextDesign.components[selected.component];
-                      component.responsive = {
+                      setProperty(selection, undefined, 'responsive', {
                         small: { props: {} },
                         large: { props: {} },
                         hide: [],
-                      };
-                      changeDesign(nextDesign);
+                      });
                       setResponsiveSize('medium');
                     }}
                   />
-                )} */}
+                )}
               </Header>
-              {/* {component.responsive && (
+              {component.responsive && (
                 <>
                   <Box
                     border="top"
@@ -440,11 +445,12 @@ const Properties = () => {
                         icon={<Trash />}
                         hoverIndicator
                         onClick={() => {
-                          const nextDesign = JSON.parse(JSON.stringify(design));
-                          const component =
-                            nextDesign.components[selected.component];
-                          delete component.responsive;
-                          changeDesign(nextDesign);
+                          setProperty(
+                            selection,
+                            undefined,
+                            'responsive',
+                            undefined,
+                          );
                         }}
                       />
                     </Box>
@@ -461,22 +467,21 @@ const Properties = () => {
                         responsiveSize,
                       )}
                       onChange={({ target: { checked } }) => {
-                        const nextDesign = JSON.parse(JSON.stringify(design));
-                        const component =
-                          nextDesign.components[selected.component];
-                        if (checked)
-                          component.responsive.hide.push(responsiveSize);
-                        else
-                          component.responsive.hide =
-                            component.responsive.hide.filter(
-                              (s) => s !== responsiveSize,
-                            );
-                        changeDesign(nextDesign);
+                        const prevHide = component.responsive.hide;
+                        const nextHide = checked
+                          ? [...prevHide, responsiveSize]
+                          : prevHide.filter((s) => s !== responsiveSize);
+                        setProperty(
+                          selection,
+                          ['responsive'],
+                          'hide',
+                          nextHide,
+                        );
                       }}
                     />
                   </Field>
                 </>
-              )} */}
+              )}
             </Box>
 
             {type.properties && (
@@ -507,15 +512,7 @@ const Properties = () => {
                             >
                               {label}
                             </Heading>
-                            {renderProperties(
-                              'props',
-                              sectionProperties,
-                              (
-                                (component.responsive &&
-                                  component.responsive[responsiveSize]) ||
-                                component
-                              ).props,
-                            )}
+                            {renderProperties('props', sectionProperties)}
                           </Box>
                         );
                       },
@@ -523,15 +520,7 @@ const Properties = () => {
                   </Box>
                 ) : (
                   <Box flex="grow" border="top">
-                    {renderProperties(
-                      'props',
-                      type.properties,
-                      (
-                        (component.responsive &&
-                          component.responsive[responsiveSize]) ||
-                        component
-                      ).props,
-                    )}
+                    {renderProperties('props', type.properties)}
                     {parentType?.container && (
                       <Box pad="medium">
                         <Paragraph size="small" color="text-xweak">

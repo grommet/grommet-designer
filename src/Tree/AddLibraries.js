@@ -15,7 +15,6 @@ const AddLibraries = ({ addOptions, onClose, property, searchExp }) => {
         const screen = addScreen();
         setSelection(screen.id);
       } else {
-        console.log('!!! onAdd', { typeName, addOptions });
         const component = addComponent(typeName, addOptions);
         setSelection(component.id);
       }
