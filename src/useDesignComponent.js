@@ -1,10 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import SelectionContext from './SelectionContext';
-import { getType, replaceWithData, useComponent } from './design2';
+import { getType, replaceWithData, setProperty, useComponent } from './design2';
 import DesignComponent from './DesignComponent';
+import InlineEditInput from './InlineEditInput';
 
 const renderNull = {};
 
@@ -17,6 +24,19 @@ const useDesignComponent = (id) => {
     useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
   const component = useComponent(id);
+  const ref = useRef();
+
+  // inlineEdit is the component id of the component being edited inline
+  const inlineEditOnChange = useCallback(
+    (nextText) => setProperty(id, undefined, 'text', nextText),
+    [id],
+  );
+  // inlineEditSize is the size of the component being edited inline
+  const [inlineEditSize, setInlineEditSize] = useState();
+
+  // clear inline edit size when selection changes
+  useEffect(() => setInlineEditSize(undefined), [selection]);
+
   const [, rerender] = useState();
 
   // get component definition in the design
@@ -63,20 +83,16 @@ const useDesignComponent = (id) => {
     });
   }
 
-  // TODO: inline edit
-
   if (setSelection) {
     const priorClick = props.onClick;
     props.onClick = (event) => {
       if (!event.shiftKey) {
         event.stopPropagation();
-        if (selection !== id) {
-          // setInlineEdit(undefined);
-          setSelection(id);
-          // } else if (type.text && !referenceDesign && selectedRef.current) {
-          //   setInlineEditSize(selectedRef.current.getBoundingClientRect());
-          //   setInlineEdit(id);
-        }
+        if (selection !== id) setSelection(id);
+        else
+          setInlineEditSize(
+            document.getElementById(id).getBoundingClientRect(),
+          );
       }
       if (event.shiftKey && priorClick) priorClick(event);
     };
@@ -95,6 +111,17 @@ const useDesignComponent = (id) => {
     children = component.children.map((childId) => (
       <DesignComponent id={childId} />
     ));
+  } else if (inlineEditSize) {
+    const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
+    children = (
+      <InlineEditInput
+        as={useArea ? 'textarea' : undefined}
+        placeholder={type.text}
+        defaultValue={component.text || ''}
+        size={inlineEditSize}
+        onChange={inlineEditOnChange}
+      />
+    );
   } else if (component.text || type.text) {
     // TODO: handle replacing with data
     children = replaceWithData(component.text || type.text);
@@ -102,7 +129,7 @@ const useDesignComponent = (id) => {
     children = <Placeholder>{type.placeholder(props)}</Placeholder>;
   }
 
-  return { Component: type.component, props, children };
+  return { Component: type.component, props, children, ref };
 };
 
 export default useDesignComponent;

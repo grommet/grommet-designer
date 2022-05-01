@@ -21,7 +21,6 @@ import {
   Paragraph,
   RadioButtonGroup,
   Text,
-  TextInput,
 } from 'grommet';
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
 import {
