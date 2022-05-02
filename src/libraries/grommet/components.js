@@ -2110,7 +2110,7 @@ export const components = {
       margin: Edge,
       places: WorldMapPlaces,
     },
-    adjustedProps: (props) => {
+    adjustProps: (props) => {
       const adjusted = {};
       if (props.places) {
         // adjust places content

@@ -185,16 +185,16 @@ export const getPathForLocation = (location) => {
   if (location.screen) return getScreen(location.screen).path;
   if (location.data) return `/-data-${location.data}`;
   if (location.property) {
-    const { id, name } = location.property;
-    return `/-${id}-${name}`;
+    const { id } = location.property;
+    return `/-component-${id}`;
   }
 };
 
 export const getLocationForPath = (path) => {
   const screen = Object.values(design.screens).find((s) => s.path === path);
   if (screen) return { screen: screen.id };
-  let match = /^\/-(\d+)-(\S+)$/.exec(path);
-  if (match) return { property: { id: match[1], name: match[2] } };
+  let match = /^\/-component-(\d+)$/.exec(path);
+  if (match) return { property: { id: match[1] } };
   match = /^\/-data-(\d+)$/.exec(path);
   if (match) return { data: match[1] };
 };
@@ -496,6 +496,8 @@ const insertComponent = (id, options) => {
       nextComponent.propComponents.push(id);
       nextComponent.props[name] = id;
     });
+  } else if (options.onChange) {
+    options.onChange(id);
   }
 };
 

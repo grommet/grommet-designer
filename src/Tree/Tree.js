@@ -10,10 +10,9 @@ import { Box, Button, Keyboard, Text } from 'grommet';
 import { Previous } from 'grommet-icons';
 import {
   duplicateComponent,
-  getComponent,
   getRoot,
-  useScreens,
   useComponent,
+  useScreens,
 } from '../design2';
 import { displayName } from '../utils';
 import SelectionContext from '../SelectionContext';
@@ -23,10 +22,10 @@ import Screen from './Screen';
 import Component from './Component';
 import Data from './Data';
 
-const PropertyComponent = ({ id, name }) => {
+const PropertyComponent = ({ id, value }) => {
   const [, setSelection, { setLocation }] = useContext(SelectionContext);
-  const contextComponent = useComponent(id);
-  const valueComponent = contextComponent.props[name];
+  const component = useComponent(id);
+
   return (
     <>
       <Button
@@ -38,10 +37,10 @@ const PropertyComponent = ({ id, name }) => {
       >
         <Box direction="row" pad="small" gap="small" border="bottom">
           <Previous />
-          <Text>back to {displayName(getComponent(id))}</Text>
+          <Text>back to {displayName(component)}</Text>
         </Box>
       </Button>
-      <Component id={valueComponent} />
+      {value && <Component id={value} />}
     </>
   );
 };
@@ -53,7 +52,7 @@ const within = (node, container) => {
 };
 
 // root is either undefined for all screens
-// or { id, name } for property components
+// or { id, value, onChange } for property components
 const Tree = ({ onClose, root, setMode }) => {
   const [selection, setSelection] = useContext(SelectionContext);
 

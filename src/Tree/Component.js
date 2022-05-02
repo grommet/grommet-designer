@@ -22,7 +22,7 @@ const treeSubName = (component) =>
     ? undefined
     : component.type.split('.')[1] || component.type;
 
-const Component = ({ screen, id, first }) => {
+const Component = ({ id, first }) => {
   const [selection, setSelection, { setLocation }] =
     useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
@@ -45,10 +45,7 @@ const Component = ({ screen, id, first }) => {
         <Button
           fill
           hoverIndicator
-          onClick={(event) => {
-            setLocation({ screen: getRoot(id) });
-            setSelection(event.shiftKey ? undefined : id);
-          }}
+          onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
           draggable={!component.coupled}
           onDragStart={(event) => {
             event.dataTransfer.setData('text/plain', ''); // for Firefox

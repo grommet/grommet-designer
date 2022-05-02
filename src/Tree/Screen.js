@@ -70,7 +70,11 @@ const Screen = ({ first, id }) => {
         )}
       </Stack>
       {!screen.collapsed && screen.root && (
-        <Box flex={false}>
+        <Box
+          flex={false}
+          onClick={() => setLocation({ screen: id })}
+          focusIndicator={false}
+        >
           <Component id={screen.root} />
         </Box>
       )}

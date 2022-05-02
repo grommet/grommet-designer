@@ -5,7 +5,7 @@ import { addComponent, addScreen, getLibraries } from '../design2';
 import SelectionContext from '../SelectionContext';
 import AddButton from './AddButton';
 
-const AddLibraries = ({ addOptions, onClose, property, searchExp }) => {
+const AddLibraries = ({ addOptions, onClose, searchExp }) => {
   const [, setSelection] = useContext(SelectionContext);
   const libraries = getLibraries();
 

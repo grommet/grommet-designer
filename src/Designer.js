@@ -233,8 +233,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     if (!location) return [];
     if (location.screen) return [undefined, getScreen(location.screen).root];
     if (location.property) {
-      const { id, name } = location.property;
-      return [{ id, name }, getComponent(id).props[name]];
+      const { id, value, ...rest } = location.property;
+      return [{ id, value, ...rest }, value];
     }
     return [];
   }, [location]);
@@ -258,7 +258,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   if (canvasRoot || treeRoot)
     content = (
       <ErrorCatcher>
-        <Canvas root={treeRoot?.component || canvasRoot} />
+        <Canvas root={treeRoot?.value || canvasRoot} />
       </ErrorCatcher>
     );
   else if (selection) content = <Data id={selection} />;

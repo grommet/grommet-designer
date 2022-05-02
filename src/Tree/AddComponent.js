@@ -19,7 +19,10 @@ const AddComponent = ({ onClose, property }) => {
 
   // addOptions is what eventually gets passed to addComponent()
   const [addOptions, setAddOptions] = useState(
-    (property && { for: property }) || // property
+    (property &&
+      ((property.onChange && { onChange: property.onChange }) || {
+        for: property, // TODO: can I remove the 'for' option?
+      })) || // property
       (!component && { within: selection }) || // screen
       undefined, // let AddLocation tell us
   );
