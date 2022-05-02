@@ -89,7 +89,7 @@ const useDesignComponent = (id) => {
       if (!event.shiftKey) {
         event.stopPropagation();
         if (selection !== id) setSelection(id);
-        else
+        else if (type.text)
           setInlineEditSize(
             document.getElementById(id).getBoundingClientRect(),
           );

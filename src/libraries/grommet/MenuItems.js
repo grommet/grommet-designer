@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, FormField, Select, Text, TextInput } from 'grommet';
+import { getLinkOptions } from '../../design2';
 import useDebounce from './useDebounce';
 import ArrayOfObjects from './ArrayOfObjects';
 
@@ -29,7 +30,8 @@ const LinkLabel = ({ selected, value }) => {
   );
 };
 
-const MenuItem = ({ linkOptions, value, onChange }) => {
+const MenuItem = ({ id, value, onChange }) => {
+  const linkOptions = getLinkOptions(id);
   const [item, setItem] = useDebounce(value, onChange);
 
   return (

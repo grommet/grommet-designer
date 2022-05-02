@@ -62,7 +62,13 @@ import {
   Video,
   WorldMap,
 } from 'grommet';
-import { getDataByPath, resetDataByPath, setDataByPath } from '../../design2';
+import {
+  getDataByPath,
+  replaceWithData,
+  resetDataByPath,
+  setDataByPath,
+  setProperty,
+} from '../../design2';
 import DesignComponent from '../../DesignComponent';
 import BoxAlign from './BoxAlign';
 import BoxAnimation from './BoxAnimation';
@@ -255,13 +261,13 @@ export const components = {
       },
     ],
     adjustProps: (props, { followLink }) => {
-      const result = {};
+      const adjusted = {};
       if (props?.onClick)
-        result.onClick = (event) => {
+        adjusted.onClick = (event) => {
           event.stopPropagation();
           followLink(props.onClick);
         };
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
   },
   Main: {
@@ -519,13 +525,13 @@ export const components = {
       },
     ],
     adjustProps: (props, { followLink }) => {
-      const result = {};
+      const adjusted = {};
       if (props?.onClick)
-        result.onClick = (event) => {
+        adjusted.onClick = (event) => {
           event.stopPropagation();
           followLink(props.onClick);
         };
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
   },
   CardHeader: {
@@ -653,25 +659,25 @@ export const components = {
       responsive: false,
     },
     advancedProperties: ['animate', 'responsive'],
-    override: ({ props }, { setHide }) => {
-      const result = {};
+    adjustProps: (props, { component: { id } }) => {
+      const adjusted = {};
       if (props.modal !== false && props.onClickOutside !== 'ignore') {
-        result.onClickOutside = (event) => {
+        adjusted.onClickOutside = (event) => {
           let node = event.target;
           // only hide if clicking the modal overlay, which is outside root
           while (node && node.id !== 'root') node = node.parentNode;
-          if (!node) setHide(true);
+          if (!node) setProperty(id, undefined, 'hide', true);
         };
       } else if (props.modal === false && props.onClickOutside === 'hide') {
-        result.onClickOutside = (event) => {
+        adjusted.onClickOutside = (event) => {
           let node = event.target;
           // only hide if clicking within the Canvas
           while (node && node.id !== 'designer-canvas') node = node.parentNode;
-          if (node) setHide(true);
+          if (node) setProperty(id, undefined, 'hide', true);
         };
-      } else result.onClickOutside = undefined;
-      result.onEsc = () => setHide(true);
-      return result;
+      } else adjusted.onClickOutside = undefined;
+      adjusted.onEsc = () => setProperty(id, undefined, 'hide', true);
+      return { ...props, ...adjusted };
     },
   },
   Grommet: { component: Grommet, name: 'Grommet', container: true },
@@ -792,20 +798,15 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['margin', 'color'],
-    override: (
-      { designProps, id, props },
-      { dataContextPath, followLink, replaceData },
-    ) => {
-      return {
-        label: replaceData(props.label),
-        onClick:
-          designProps && designProps.link
-            ? (event) => {
-                event.stopPropagation();
-                followLink(designProps.link, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { component, followLink }) => {
+      const adjusted = {};
+      adjusted.label = replaceWithData(props.label);
+      if (component?.designProps?.link)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(component.designProps.link);
+        };
+      return { ...props, ...adjusted };
     },
   },
   Button: {
@@ -841,15 +842,15 @@ export const components = {
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
     adjustProps: (props, { component, followLink }) => {
-      const result = {};
+      const adjusted = {};
       if (props.badge !== undefined)
-        result.badge = props.badge === 0 ? true : props.badge;
+        adjusted.badge = props.badge === 0 ? true : props.badge;
       if (component?.designProps?.link)
-        result.onClick = (event) => {
+        adjusted.onClick = (event) => {
           event.stopPropagation();
           followLink(component.designProps.link);
         };
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
   },
   DropButton: {
@@ -893,11 +894,11 @@ export const components = {
       tip: '',
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
-    override: ({ props }) => {
-      const result = {};
+    adjustProps: (props, { component, followLink }) => {
+      const adjusted = {};
       if (props.badge !== undefined)
-        result.badge = props.badge === 0 ? true : props.badge;
-      return result;
+        adjusted.badge = props.badge === 0 ? true : props.badge;
+      return { ...props, ...adjusted };
     },
   },
   Menu: {
@@ -921,16 +922,16 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       tip: '',
     },
-    override: ({ id, props }, { followLink }) => {
-      const result = {};
-      result.items = (props.items || []).map((item) => ({
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      adjusted.items = (props.items || []).map((item) => ({
         ...item,
         onClick: (event) => {
           event.stopPropagation();
-          followLink(item.link, { fromId: id });
+          followLink(item.link);
         },
       }));
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Tabs: {
@@ -1215,11 +1216,11 @@ export const components = {
       textAlign: ['start', 'center', 'end'],
       value: '',
     },
-    override: ({ props }) => {
-      const result = {};
+    adjustProps: (props) => {
+      const adjusted = {};
       if (props.mask) {
         // convert regexp from string to RegExp
-        result.mask = props.mask.map((m) => {
+        adjusted.mask = props.mask.map((m) => {
           let regexp;
           if (m.regexp && m.regexp.match) {
             const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
@@ -1232,7 +1233,7 @@ export const components = {
           return { ...m, regexp };
         });
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   RadioButtonGroup: {
@@ -1413,12 +1414,15 @@ export const components = {
       type: ['text', 'password'],
       value: '',
     },
-    override: ({ props }, { replaceData }) => ({
-      defaultValue:
-        typeof props.defaultValue === 'string'
-          ? replaceData(props.defaultValue)
-          : props.defaultValue,
-    }),
+    adjustProps: (props) => {
+      const adjusted = {
+        defaultValue:
+          typeof props.defaultValue === 'string'
+            ? replaceWithData(props.defaultValue)
+            : props.defaultValue,
+      };
+      return { ...props, ...adjusted };
+    },
   },
   Avatar: {
     component: Avatar,
@@ -1708,30 +1712,34 @@ export const components = {
     //   }));
     //   return result;
     // },
-    adjustProps: (props, { component: { children, designProps } }) => {
-      const result = {};
+    adjustProps: (
+      props,
+      { component: { children, designProps }, followLink },
+    ) => {
+      const adjusted = {};
       // need to use retrieved data for data property
       if (designProps?.dataPath)
-        result.data = getDataByPath(designProps.dataPath);
-      //   if (props.onClickRow) {
-      //     result.onClickRow = (event) => {
-      //       event.stopPropagation();
-      //       const { index } = event;
-      //       const path = dataContextPath ? [...dataContextPath, index] : [index];
-      //       followLink(props.onClickRow, { dataContextPath: path });
-      //     };
-      //   }
-      if (props.onSelect) result.onSelect = (text) => {};
+        adjusted.data = getDataByPath(designProps.dataPath);
+      if (props.onClickRow) {
+        adjusted.onClickRow = (event) => {
+          event.stopPropagation();
+          // const { index } = event;
+          // const path = dataContextPath ? [...dataContextPath, index] : [index];
+          // followLink(props.onClickRow, { dataContextPath: path });
+          followLink(props.onClickRow);
+        };
+      }
+      if (props.onSelect) adjusted.onSelect = (text) => {};
       if (props.select)
-        result.select = props.select.split(',').map((s) => s.trim());
-      result.columns = props.columns.map((c) => ({
+        adjusted.select = props.select.split(',').map((s) => s.trim());
+      adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
           ? // TODO: how does DesignComponent get datum?
             (datum) => <DesignComponent id={c.render} />
           : undefined,
       }));
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
     copy: (source, copy, { nextDesign, duplicateComponent }) => {
       // duplicate any columns render components
@@ -1849,10 +1857,10 @@ export const components = {
       dataPath: '',
     },
     adjustProps: (props, { component: { children, designProps } }) => {
-      const result = {};
+      const adjusted = {};
       // need to use retrieved data for data property
       if (designProps?.dataPath)
-        result.data = getDataByPath(designProps.dataPath);
+        adjusted.data = getDataByPath(designProps.dataPath);
       // if (props.onClickItem) {
       //   result.onClickItem = (event) => {
       //     event.stopPropagation();
@@ -1862,12 +1870,12 @@ export const components = {
       //   };
       // }
       if (props.onOrder && designProps?.dataPath) {
-        result.onOrder = (data) => setDataByPath(designProps.dataPath, data);
+        adjusted.onOrder = (data) => setDataByPath(designProps.dataPath, data);
       }
       if (children) {
-        result.children = (value) => <DesignComponent id={children[0]} />;
+        adjusted.children = (value) => <DesignComponent id={children[0]} />;
       }
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
   },
   Meter: {
@@ -1884,12 +1892,15 @@ export const components = {
       value: 0,
       values: MeterValues,
     },
-    override: ({ props }, { replaceData }) => ({
-      value:
-        typeof props.value === 'string'
-          ? replaceData(props.value)
-          : props.value,
-    }),
+    adjustProps: (props) => {
+      const adjusted = {
+        value:
+          typeof props.value === 'string'
+            ? replaceWithData(props.value)
+            : props.value,
+      };
+      return { ...props, ...adjusted };
+    },
   },
   NameValueList: {
     component: NameValueList,
@@ -1936,14 +1947,14 @@ export const components = {
     designProperties: {
       value: '',
     },
-    override: ({ designProps, props }, { renderComponent, replaceData }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps} }) => {
+      const adjusted = {};
       if (designProps?.value !== undefined)
-        result.children = replaceData(designProps.value);
+        adjusted.children = replaceWithData(designProps.value);
       if (props.name && typeof props.name === 'number') {
-        result.name = renderComponent(props.name);
+        adjusted.name = <DesignComponent id={props.name} />;
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Notification: {
@@ -1963,13 +1974,13 @@ export const components = {
       onClose: ['-link-'],
     },
     adjustProps: (props, { followLink }) => {
-      const result = {};
+      const adjusted = {};
       if (props?.onClose)
-        result.onClose = (event) => {
+        adjusted.onClose = (event) => {
           event.stopPropagation();
           followLink(props.onClose);
         };
-      return { ...props, ...result };
+      return { ...props, ...adjusted };
     },
   },
   Pagination: {
@@ -2006,14 +2017,14 @@ export const components = {
       removable: false,
     },
     adjustProps: (props, { followLink }) => {
-      const result = {};
+      const adjusted = {};
       if (props?.onClick)
-        result.onClick = (event) => {
+        adjusted.onClick = (event) => {
           event.stopPropagation();
           followLink(props.onClick);
         };
-      if (props?.removable) result.onRemove = () => {};
-      return { ...props, ...result };
+      if (props?.removable) adjusted.onRemove = () => {};
+      return { ...props, ...adjusted };
     },
   },
   Carousel: {
@@ -2047,8 +2058,8 @@ export const components = {
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
     },
-    override: ({ props }, { replaceData }) => {
-      return { src: replaceData(props.src) };
+    adjustProps: (props) => {
+      return { ...props, src: replaceWithData(props.src) };
     },
   },
   Video: {
@@ -2064,14 +2075,14 @@ export const components = {
       camera: false,
       source: '',
     },
-    override: ({ designProps, id }, { replaceData }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps, id } }) => {
+      const adjusted = {};
       if (designProps?.source) {
-        const source = replaceData(designProps.source);
-        result.children = <source src={source} />;
+        const source = replaceWithData(designProps.source);
+        adjusted.children = <source src={source} />;
       }
       if (designProps?.camera) {
-        result.id = id;
+        adjusted.id = id;
         if (navigator.mediaDevices.getUserMedia) {
           navigator.mediaDevices
             .getUserMedia({ video: true })
@@ -2083,9 +2094,9 @@ export const components = {
               console.error('Something went wrong!', err);
             });
         }
-        result.style = { transform: 'scale(-1, 1)' };
+        adjusted.style = { transform: 'scale(-1, 1)' };
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   WorldMap: {
@@ -2099,16 +2110,16 @@ export const components = {
       margin: Edge,
       places: WorldMapPlaces,
     },
-    override: ({ props }, { renderComponent }) => {
-      const result = {};
+    adjustedProps: (props) => {
+      const adjusted = {};
       if (props.places) {
         // adjust places content
-        result.places = props.places.map((p) => ({
+        adjusted.places = props.places.map((p) => ({
           ...p,
-          content: p.content ? renderComponent(p.content) : undefined,
+          content: p.content ? <DesignComponent id={p.content} /> : undefined,
         }));
       }
-      return result;
+      return { ...props, ...adjusted };
     },
     copy: (source, copy, { nextDesign, duplicateComponent }) => {
       // duplicate any places content components
