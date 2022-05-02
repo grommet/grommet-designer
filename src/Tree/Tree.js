@@ -10,11 +10,10 @@ import { Box, Button, Keyboard, Text } from 'grommet';
 import { Previous } from 'grommet-icons';
 import {
   duplicateComponent,
+  getName,
   getRoot,
-  useComponent,
   useScreens,
 } from '../design2';
-import { displayName } from '../utils';
 import SelectionContext from '../SelectionContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
@@ -24,7 +23,6 @@ import Data from './Data';
 
 const PropertyComponent = ({ id, value }) => {
   const [, setSelection, { setLocation }] = useContext(SelectionContext);
-  const component = useComponent(id);
 
   return (
     <>
@@ -37,7 +35,7 @@ const PropertyComponent = ({ id, value }) => {
       >
         <Box direction="row" pad="small" gap="small" border="bottom">
           <Previous />
-          <Text>back to {displayName(component)}</Text>
+          <Text>back to {getName(id)}</Text>
         </Box>
       </Button>
       {value && <Component id={value} />}

@@ -4,36 +4,28 @@ import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import {
   getComponent,
-  getRoot,
+  getName,
   moveComponent,
   toggleCollapsed,
   useComponent,
 } from '../design2';
-import { displayName } from '../utils';
 import ComponentDropArea from './ComponentDropArea';
 import DragDropContext from './DragDropContext';
 
-const treeSubName = (component) =>
-  !component.name &&
-  !component.text &&
-  !component.props.name &&
-  !component.props.label &&
-  !component.props.icon
-    ? undefined
-    : component.type.split('.')[1] || component.type;
-
 const Component = ({ id, first }) => {
-  const [selection, setSelection, { setLocation }] =
-    useContext(SelectionContext);
+  const [selection, setSelection] = useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
 
   const component = useComponent(id);
   if (!component) return null;
 
-  let reference;
-  if (component.type === 'designer.Reference')
-    reference = getComponent(component.props.component);
+  const name = getName(id);
+  const subName = component.type.split('.')[1] || component.type;
+
+  // let reference;
+  // if (component.type === 'designer.Reference')
+  //   reference = getComponent(component.props.component);
 
   const collapserColor = selection === id ? 'white' : 'border';
   const CollapseIcon = component.collapsed ? FormNext : FormDown;
@@ -83,13 +75,13 @@ const Component = ({ id, first }) => {
             }
           >
             <Text size="medium" truncate>
-              {displayName(
-                component?.name ? component : reference || component,
-              )}
+              {name}
             </Text>
-            <Text size="small" truncate>
-              {reference ? 'Reference' : treeSubName(component)}
-            </Text>
+            {subName !== name && (
+              <Text size="small" truncate>
+                {subName}
+              </Text>
+            )}
           </Box>
         </Button>
         {component.children && (

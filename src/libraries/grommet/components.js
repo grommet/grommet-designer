@@ -1480,17 +1480,18 @@ export const components = {
       showAdjacentDays: false,
       size: ['small', 'medium', 'large'],
     },
-    override: ({ children, props }, { renderComponent }) => {
-      const result = {};
-      if (props.header) {
-        result.header = (datum) => {
-          return renderComponent(props.header, { datum });
-        };
-      }
-      if (children) {
-        result.children = (datum) => renderComponent(children[0], { datum });
-      }
-      return result;
+    adjustProps: (props) => {
+      const adjusted = {};
+      // TODO: DesignComponent with datum
+      // if (props.header) {
+      //   result.header = (datum) => {
+      //     return renderComponent(props.header, { datum });
+      //   };
+      // }
+      // if (children) {
+      //   result.children = (datum) => renderComponent(children[0], { datum });
+      // }
+      return { ...props, ...adjusted };
     },
   },
   Chart: {

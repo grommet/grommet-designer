@@ -230,9 +230,16 @@ export const getType = (typeName) => {
   return librariesMap[libraryName]?.components[componentName];
 };
 
-export const getName = (id) => {
+export const getName = (id, includeId = false) => {
   const component = design.components[id];
-  if (component) return component.name || `${component.type} ${component.id}`;
+  if (component)
+    return (
+      component.name ||
+      (typeof component.props.name === 'string' && component.props.name) ||
+      `${component.type.split('.')[1] || component.type}${
+        includeId ? ` ${component.id}` : ''
+      }`
+    );
   const screen = design.screens[id];
   if (screen) return screen.name || `Screen ${screen.id}`;
   return id;

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, Button, Heading, Stack } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
-import { toggleCollapsed, useScreen } from '../design2';
+import { getName, toggleCollapsed, useScreen } from '../design2';
 import SelectionContext from '../SelectionContext';
 import Component from './Component';
 import DragDropContext from './DragDropContext';
@@ -58,7 +58,7 @@ const Screen = ({ first, id }) => {
               margin="none"
               color="selected-text"
             >
-              {screen.name || `Screen ${id}`}
+              {getName(id)}
             </Heading>
           </Box>
         </Button>
