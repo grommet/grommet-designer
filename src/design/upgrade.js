@@ -8,6 +8,7 @@ export const upgradeDesign = (design) => {
       parseInt(id, 10),
     );
   }
+
   // move components out of screens (v2.0)
   if (!design.components) {
     design.components = {};
@@ -18,6 +19,10 @@ export const upgradeDesign = (design) => {
       delete screen.components;
     });
   }
+
+  // remove any screen from screenOrder that don't exist anymore
+  design.screenOrder = design.screenOrder.filter((id) => design.screens[id]);
+
   // remove any children where the component doesn't exist anymore
   Object.keys(design.components)
     .map((id) => design.components[id])

@@ -7,7 +7,7 @@ const jsonValue = (value) =>
   typeof value === 'string' ? value : JSON.stringify(value);
 
 const ObjectProperty = React.forwardRef(
-  ({ name, onChange, property, Property, theme, value }, ref) => {
+  ({ name, onChange, definition, Property, value }, ref) => {
     const [expand, setExpand] = React.useState();
     return (
       <Box key={name}>
@@ -45,12 +45,11 @@ const ObjectProperty = React.forwardRef(
         </Box>
         {expand && (
           <Box pad={{ left: 'small' }} border="bottom">
-            {Object.keys(property).map((key) => (
+            {Object.keys(definition).map((key) => (
               <Property
                 key={key}
                 name={key}
-                property={property[key]}
-                theme={theme}
+                definition={definition[key]}
                 value={(value || {})[key]}
                 onChange={(subValue) => {
                   let nextValue = { ...(value || {}) };

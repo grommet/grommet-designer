@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, CheckBox, FormField, Select, TextInput } from 'grommet';
+import ComponentInput from '../../Properties/ComponentInput';
 import useDebounce from './useDebounce';
 import ArrayOfObjects from './ArrayOfObjects';
 
-const Column = ({ ComponentInput, value, onChange, ...rest }) => {
+const Column = ({ id, value, onChange }) => {
   const [column, setColumn] = useDebounce(value, onChange);
 
   const setField = (name, fieldValue) => {
@@ -38,14 +39,13 @@ const Column = ({ ComponentInput, value, onChange, ...rest }) => {
       </FormField>
       <FormField label="render">
         <ComponentInput
-          {...rest}
-          name="render"
+          id={id}
           value={column.render}
-          onChange={(id, nextDesign) => {
+          onChange={(id) => {
             const nextColumn = JSON.parse(JSON.stringify(column));
             if (id) nextColumn.render = id;
             else delete nextColumn.render;
-            onChange(nextColumn, nextDesign);
+            onChange(nextColumn);
           }}
         />
       </FormField>

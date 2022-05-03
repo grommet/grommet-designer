@@ -19,11 +19,10 @@ const AddComponent = ({ onClose, property }) => {
 
   // addOptions is what eventually gets passed to addComponent()
   const [addOptions, setAddOptions] = useState(
-    (property &&
-      ((property.onChange && { onChange: property.onChange }) || {
-        for: property, // TODO: can I remove the 'for' option?
-      })) || // property
-      (!component && { within: selection }) || // screen
+    // property
+    (property?.onChange && { id: property.id, onChange: property.onChange }) ||
+      // screen
+      (!component && { within: selection }) ||
       undefined, // let AddLocation tell us
   );
   const [search, setSearch] = useState('');

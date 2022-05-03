@@ -7,11 +7,14 @@ import SelectionContext from '../SelectionContext';
 const ComponentInput = ({ id, onChange, value }) => {
   const [, setSelection, { setLocation }] = useContext(SelectionContext);
 
-  const onChangeAndSet = useCallback((nextValue) => {
-    onChange(nextValue);
-    // update location so Tree knows about the new value to start with
-    setLocation({ property: { id, value: nextValue, onChangeAndSet } });
-  }, [id, onChange, setLocation]);
+  const onChangeAndSet = useCallback(
+    (nextValue) => {
+      onChange(nextValue);
+      // update location so Tree knows about the new value to start with
+      setLocation({ property: { id, value: nextValue, onChangeAndSet } });
+    },
+    [id, onChange, setLocation],
+  );
 
   if (value && typeof value === 'string') return null;
   // if we have a value ensure we have a component there. if not, clear it
@@ -24,14 +27,19 @@ const ComponentInput = ({ id, onChange, value }) => {
           <Button
             icon={<Edit />}
             onClick={() => {
-              setLocation({ property: { id, value, onChange: onChangeAndSet } });
+              setLocation({
+                property: { id, value, onChange: onChangeAndSet },
+              });
               setSelection(value);
             }}
           />
-          <Button icon={<Close />} onClick={() => {
-            onChange(undefined);
-            removeComponent(value);
-          }} />
+          <Button
+            icon={<Close />}
+            onClick={() => {
+              onChange(undefined);
+              removeComponent(value);
+            }}
+          />
         </>
       ) : (
         <Button

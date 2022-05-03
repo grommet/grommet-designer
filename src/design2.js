@@ -253,10 +253,12 @@ export const getTheme = () => theme;
 
 export const getData = (id) => data[id];
 
-export const getDataByPath = (path) => {
+export const getDataByPath = (path, datum) => {
   const parts = path.split('.');
   const name = parts.shift();
-  let node = Object.values(data).find((d) => d.name === name)?.data;
+  let node = datum
+    ? datum[name]
+    : Object.values(data).find((d) => d.name === name)?.data;
   while (parts.length && node) {
     const key = parts.shift();
     // TODO: remember active index and use here
@@ -265,11 +267,12 @@ export const getDataByPath = (path) => {
   return node;
 };
 
-export const replaceWithData = (text) =>
+export const replaceWithData = (text, datum) =>
   // replace {data-name.key-name} with with data[data-name][key-name] content
+  // OR replace {key-name} with datum[key-name] content
   (text || '').replace(
     /\{[^}]*\}/g,
-    (match) => getDataByPath(match.slice(1, match.length - 1)) || match,
+    (match) => getDataByPath(match.slice(1, match.length - 1), datum) || match,
   );
 
 export const getImports = () => imports;
@@ -448,6 +451,8 @@ export const removeScreen = (id) => {
   const screen = design.screens[id];
   if (screen?.root) removeComponent(screen.root);
   delete design.screens[id];
+  // remove from screenOrder
+  design.screenOrder = design.screenOrder.filter(sId => sId !== id);
   notify(id);
 };
 
@@ -505,6 +510,19 @@ const insertComponent = (id, options) => {
     });
   } else if (options.onChange) {
     options.onChange(id);
+    // update propComponents
+    updateComponent(options.id, (nextComponent) => {
+      if (id) {
+        if (!nextComponent.propComponents) nextComponent.propComponents = [];
+        nextComponent.propComponents.push(id);
+      } else {
+        nextComponent.propComponents = nextComponent.propComponents.filter(
+          (i) => i !== id,
+        );
+        if (!nextComponent.propComponents.length)
+          delete nextComponent.propComponents;
+      }
+    });
   }
 };
 

@@ -1480,17 +1480,18 @@ export const components = {
       showAdjacentDays: false,
       size: ['small', 'medium', 'large'],
     },
-    adjustProps: (props) => {
+    adjustProps: (props, { component: { children } }) => {
       const adjusted = {};
-      // TODO: DesignComponent with datum
-      // if (props.header) {
-      //   result.header = (datum) => {
-      //     return renderComponent(props.header, { datum });
-      //   };
-      // }
-      // if (children) {
-      //   result.children = (datum) => renderComponent(children[0], { datum });
-      // }
+      if (props.header) {
+        adjusted.header = (datum) => (
+          <DesignComponent id={props.header} datum={datum} />
+        );
+      }
+      if (children) {
+        adjusted.children = (datum) => (
+          <DesignComponent id={children[0]} darum={datum} />
+        );
+      }
       return { ...props, ...adjusted };
     },
   },
@@ -1626,10 +1627,12 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: ({ props }, { data }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
       // need to use retrieved data for data property
-      if (data) result.data = data;
+      if (designProps?.dataPath)
+        adjusted.data = getDataByPath(designProps.dataPath);
+      // if (data) adjusted.data = data;
       // if (props.xAxis && props.xAxis.render) {
       //   if (props.xAxis.key) {
       //     result.yAxis.render = (i) => {
@@ -1639,7 +1642,7 @@ export const components = {
       //     }
       //   }
       // }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   DataTable: {
@@ -1686,37 +1689,7 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    // override: (
-    //   { props },
-    //   { data, dataContextPath, followLink, renderComponent },
-    // ) => {
-    //   const result = {};
-    //   // need to use retrieved data for data property
-    //   if (data) result.data = data;
-    //   if (props.onClickRow) {
-    //     result.onClickRow = (event) => {
-    //       event.stopPropagation();
-    //       const { index } = event;
-    //       const path = dataContextPath ? [...dataContextPath, index] : [index];
-    //       followLink(props.onClickRow, { dataContextPath: path });
-    //     };
-    //   }
-    //   if (props.onSelect) result.onSelect = (text) => {};
-    //   if (props.select)
-    //     result.select = props.select.split(',').map((s) => s.trim());
-    //   // adjust render columns
-    //   result.columns = props.columns.map((c) => ({
-    //     ...c,
-    //     render: c.render
-    //       ? (datum) => renderComponent(c.render, { datum })
-    //       : undefined,
-    //   }));
-    //   return result;
-    // },
-    adjustProps: (
-      props,
-      { component: { children, designProps }, followLink },
-    ) => {
+    adjustProps: (props, { component: { designProps }, followLink }) => {
       const adjusted = {};
       // need to use retrieved data for data property
       if (designProps?.dataPath)
@@ -1724,6 +1697,7 @@ export const components = {
       if (props.onClickRow) {
         adjusted.onClickRow = (event) => {
           event.stopPropagation();
+          // TODO: set data index
           // const { index } = event;
           // const path = dataContextPath ? [...dataContextPath, index] : [index];
           // followLink(props.onClickRow, { dataContextPath: path });
@@ -1736,12 +1710,12 @@ export const components = {
       adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
-          ? // TODO: how does DesignComponent get datum?
-            (datum) => <DesignComponent id={c.render} />
+          ? (datum) => <DesignComponent id={c.render} datum={datum} />
           : undefined,
       }));
       return { ...props, ...adjusted };
     },
+    // TODO: copy
     copy: (source, copy, { nextDesign, duplicateComponent }) => {
       // duplicate any columns render components
       if (source.props?.columns) {
@@ -1801,14 +1775,14 @@ export const components = {
       dataPath: '',
       render: '-component-',
     },
-    override: ({ designProps, props }, { data, renderComponent }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
       // need to use retrieved data for values property
-      if (data) result.values = data;
-      result.children = (value) => {
-        const index = (result.values || props.values || []).indexOf(value);
-        if (designProps && designProps.render)
-          return renderComponent(designProps.render, { datum: value });
+      if (designProps?.dataPath) adjusted.values = getDataByPath(designProps.dataPath);
+      adjusted.children = (value) => {
+        const index = (adjusted.values || props.values || []).indexOf(value);
+        if (designProps?.render)
+          return <DesignComponent id={designProps.render} datum={value} />;
         return (
           <Box
             fill
@@ -1824,7 +1798,7 @@ export const components = {
           </Box>
         );
       };
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Diagram: {
@@ -1948,7 +1922,7 @@ export const components = {
     designProperties: {
       value: '',
     },
-    adjustProps: (props, { component: { designProps} }) => {
+    adjustProps: (props, { component: { designProps } }) => {
       const adjusted = {};
       if (designProps?.value !== undefined)
         adjusted.children = replaceWithData(designProps.value);

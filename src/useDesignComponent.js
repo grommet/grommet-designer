@@ -19,7 +19,7 @@ const Placeholder = styled.div`
   pointer-events: none;
 `;
 
-const useDesignComponent = (id) => {
+const useDesignComponent = (id, datum) => {
   const [selection, setSelection, { followLink }] =
     useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
@@ -56,7 +56,7 @@ const useDesignComponent = (id) => {
 
   // allow the type to adjust props if needed
   if (type.adjustProps)
-    props = type.adjustProps(props, { component, type, followLink, rerender });
+    props = type.adjustProps(props, { component, datum, type, followLink, rerender });
 
   // render -component- and -Icon- properties
   if (type.properties) {
@@ -78,7 +78,7 @@ const useDesignComponent = (id) => {
         property.startsWith('-component-') &&
         props[prop]
       ) {
-        props[prop] = <DesignComponent id={props[prop]} />;
+        props[prop] = <DesignComponent id={props[prop]} datum={datum} />;
       }
     });
   }
@@ -109,7 +109,7 @@ const useDesignComponent = (id) => {
     delete props.children;
   } else if (component.children?.length) {
     children = component.children.map((childId) => (
-      <DesignComponent id={childId} />
+      <DesignComponent id={childId} datum={datum} />
     ));
   } else if (inlineEditSize) {
     const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
@@ -123,8 +123,7 @@ const useDesignComponent = (id) => {
       />
     );
   } else if (component.text || type.text) {
-    // TODO: handle replacing with data
-    children = replaceWithData(component.text || type.text);
+    children = replaceWithData(component.text || type.text, datum);
   } else if (type.placeholder) {
     children = <Placeholder>{type.placeholder(props)}</Placeholder>;
   }

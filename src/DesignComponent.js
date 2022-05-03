@@ -1,8 +1,8 @@
 import { createElement } from 'react';
 import useDesignComponent from './useDesignComponent';
 
-const DesignComponent = ({ id }) => {
-  const { Component, props, children } = useDesignComponent(id);
+const DesignComponent = ({ id, datum }) => {
+  const { Component, props, children } = useDesignComponent(id, datum);
 
   if (!Component) return null;
 

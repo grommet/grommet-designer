@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeContext } from 'styled-components';
 import {
   Box,
   CheckBox,
@@ -6,8 +7,8 @@ import {
   Select,
   Text,
   TextInput,
-  ThemeContext,
 } from 'grommet';
+import { getTheme } from '../../design2';
 import ArrayOfObjects from './ArrayOfObjects';
 
 const ColorLabel = ({ color, theme }) => (
@@ -19,8 +20,9 @@ const ColorLabel = ({ color, theme }) => (
   </Box>
 );
 
-const Value = ({ value, theme, onChange }) => {
+const Value = ({ value, onChange }) => {
   const baseTheme = React.useContext(ThemeContext);
+  const theme = getTheme();
   const [searchText, setSearchText] = React.useState('');
   const searchExp = searchText && new RegExp(searchText, 'i');
   const colors = Object.keys({

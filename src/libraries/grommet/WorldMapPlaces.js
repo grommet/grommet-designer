@@ -63,7 +63,6 @@ const Place = ({ id, value, onChange }) => {
         <FormField label="content">
           <ComponentInput
             id={id}
-            name="places"
             value={place.content}
             onChange={(id) => {
               const nextPlace = JSON.parse(JSON.stringify(place));
