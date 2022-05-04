@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTheme } from '../design2';
+import { getComponent, getTheme } from '../design2';
 import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
@@ -81,13 +81,14 @@ const Property = React.forwardRef(
       if (
         definition.some((p) => typeof p === 'string' && p.includes('-property-'))
       ) {
+        const component = getComponent(rest.id);
         const [, from] = definition[0].split(' ');
         return (
           <OptionsProperty
             ref={ref}
             multiple
             value={value}
-            options={rest.props[from]}
+            options={component.props[from]}
             {...rest}
           />
         );
@@ -97,12 +98,13 @@ const Property = React.forwardRef(
       );
     } else if (typeof definition === 'string') {
       if (definition.includes('-property-')) {
+        const component = getComponent(rest.id);
         const [, from] = definition.split(' ');
         return (
           <OptionsProperty
             ref={ref}
             value={value}
-            options={rest.props[from]}
+            options={component.props[from]}
             {...rest}
           />
         );

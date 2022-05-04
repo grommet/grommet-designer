@@ -23,6 +23,7 @@ import {
   getLocationForPath,
   getPathForLocation,
   getScreen,
+  getType,
   setDesignProperty,
   setProperty,
   useDesignName,
@@ -144,6 +145,62 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     }
   }, []);
 
+  const followLinkOption = useCallback((link, value) => {
+    // figure out which link to use, if any
+    Object.keys(link)
+      .filter((n) => link[n])
+      .forEach((name) => {
+        // function shared by array and non-array cases
+        const follow = (link) => {
+          // TODO: refactor, maybe re-use followLink() above?
+          if (link.control) {
+            const design = getDesign();
+            setDesignProperty(
+              'themeMode',
+              design.themeMode === 'dark' ? 'light' : 'dark',
+            );
+          } else if (link.component) {
+            const component = getComponent(link.component);
+            const type = getType(component.type);
+            const { hideable, selectable } = type;
+            if (selectable) {
+              // -link-checked- cases
+              let active;
+              if (name === '-unchecked-' && !value) active = 1;
+              else if (name === '-checked-' && value) active = 2;
+              else if (name === '-both-')
+                active = component.props.active + 1;
+              if (component.props.active > component.children.length)
+                active = 1;
+              setProperty(link.component, 'props', 'active', active);
+            } else if (hideable) {
+              // -link-checked- cases
+              let hide;
+              if (name === '-checked-') hide = !value;
+              else if (name === '-unchecked-') hide = value;
+              // undefined ok
+              else if (name === '-both-') hide = !value;
+              // -link-option- cases
+              else if (name === '-any-') hide = !value || !value.length;
+              else if (name === '-none-')
+                hide = Array.isArray(value)
+                  ? !!value.length && value[0] !== name
+                  : !!value && value !== name;
+              else
+                hide = Array.isArray(value)
+                  ? !value.includes(name)
+                  : value !== name;
+              if (hide !== undefined)
+                setProperty(link.component, undefined, 'hide', hide);
+            }
+          }
+        };
+
+        if (Array.isArray(link[name])) link[name].forEach(follow);
+        else follow(link[name]);
+      });
+  }, []);
+
   // when user uses browser back and forward buttons,
   // clear selection and set path
   useEffect(() => {
@@ -242,9 +299,13 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   const selectionContext = useMemo(
     () =>
       mode === 'edit'
-        ? [selection, setSelection, { followLink, setLocation }]
+        ? [
+            selection,
+            setSelection,
+            { followLink, followLinkOption, setLocation },
+          ]
         : [undefined, undefined, {}],
-    [followLink, mode, selection],
+    [followLink, followLinkOption, mode, selection],
   );
 
   if (!ready) return <Loading />;

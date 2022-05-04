@@ -108,13 +108,11 @@ const ScreenDetails = () => {
           <Box flex={false}>
             <TextInputField
               name="name"
-              componentId={screen.id}
               value={screen.name || ''}
               onChange={(value) => setScreenProperty(selection, 'name', value)}
             />
             <TextInputField
               name="path"
-              componentId={screen.id}
               value={screen.path || ''}
               onChange={(value) => setScreenProperty(selection, 'path', value)}
             />

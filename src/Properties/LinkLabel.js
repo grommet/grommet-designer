@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
-import { getDisplayName } from '../design';
+import { getName } from '../design2';
 
-const LinkLabel = ({ design, selected, value }) => {
+const LinkLabel = ({ selected, value }) => {
   let label;
   if (!value || value.length === 0) {
     label = '';
   } else if (value.component) {
-    label = getDisplayName(design, value.component);
+    label = getName(value.component);
   } else if (value.screen) {
-    label = (design.screens[value.screen] || {}).name; // defensive
+    label = getName(value.screen);
   } else if (value.label) {
     label = value.label;
   } else if (Array.isArray(value)) {

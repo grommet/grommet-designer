@@ -316,7 +316,6 @@ const Properties = () => {
               )}
               <TextInputField
                 name="name"
-                componentId={component.id}
                 value={component.name || ''}
                 onChange={(value) =>
                   setProperty(selection, undefined, 'name', value)
@@ -325,7 +324,6 @@ const Properties = () => {
               {type.text && (
                 <TextAreaField
                   name="text"
-                  componentId={component.id}
                   value={component.text || ''}
                   onChange={(value) =>
                     setProperty(selection, undefined, 'text', value)
@@ -547,7 +545,6 @@ const Properties = () => {
                 {showAdvanced && (
                   <TextAreaField
                     name="style"
-                    componentId={component.id}
                     value={style}
                     onChange={(value) => {
                       setStyle(value);

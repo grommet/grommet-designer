@@ -1,23 +1,25 @@
 import React, { useContext } from 'react';
 import { Box, Grid, Select, Text } from 'grommet';
-import DesignContext from '../DesignContext';
+import { getComponent, getLinkOptions } from '../design2';
+import SelectionContext from '../SelectionContext';
 
 const specialNames = {
   '-any-': '<any option>',
   '-none-': '<no option>',
 };
 
-const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
-  const { design } = useContext(DesignContext);
+const LinkOptionsProperty = ({ value, onChange }) => {
+  const [selection] = useContext(SelectionContext);
+  const component = getComponent(selection);
+  const linkOptions = getLinkOptions(selection);
   const [searchText, setSearchText] = React.useState('');
   const searchExp = React.useMemo(
     () => searchText && new RegExp(`${searchText}`, 'i'),
     [searchText],
   );
-  let selectOptions = linkOptions;
-  if (searchExp) {
-    selectOptions = linkOptions.filter((o) => searchExp.test(o.label || o));
-  }
+  const selectOptions = searchExp
+    ? linkOptions.filter((o) => searchExp.test(o.label || o))
+    : linkOptions;
 
   const LinkLabel = ({ selected, value }) => (
     <Box pad="small">
@@ -32,7 +34,7 @@ const LinkOptionsProperty = ({ componentId, linkOptions, value, onChange }) => {
 
   const names = [
     ...Object.keys(specialNames),
-    ...design.components[componentId].props.options,
+    ...component.props.options,
   ];
 
   return (

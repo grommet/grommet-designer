@@ -20,7 +20,7 @@ const Placeholder = styled.div`
 `;
 
 const useDesignComponent = (id, datum) => {
-  const [selection, setSelection, { followLink }] =
+  const [selection, setSelection, { followLink, followLinkOption }] =
     useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
   const component = useComponent(id);
@@ -56,7 +56,14 @@ const useDesignComponent = (id, datum) => {
 
   // allow the type to adjust props if needed
   if (type.adjustProps)
-    props = type.adjustProps(props, { component, datum, type, followLink, rerender });
+    props = type.adjustProps(props, {
+      component,
+      datum,
+      type,
+      followLink,
+      followLinkOption,
+      rerender,
+    });
 
   // render -component- and -Icon- properties
   if (type.properties) {

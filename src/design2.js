@@ -12,10 +12,11 @@ const librariesMap = {
   [grommetLibrary.name]: grommetLibrary,
 };
 let theme;
-let data = {};
+let data = {}; // id -> value
+let dataIndexes = {}; // path -> index
 let imports = {};
 
-let listeners = {};
+let listeners = {}; // id -> [f(), ...]
 
 // TODO: first load published designs into local storage?
 
@@ -255,14 +256,16 @@ export const getData = (id) => data[id];
 
 export const getDataByPath = (path, datum) => {
   const parts = path.split('.');
-  const name = parts.shift();
+  let key = parts.shift();
+  let pathSoFar = key; // pathSoFar is used for dataIndexes as we go
   let node = datum
-    ? datum[name]
-    : Object.values(data).find((d) => d.name === name)?.data;
+    ? datum[key]
+    : Object.values(data).find((d) => d.name === key)?.data;
   while (parts.length && node) {
+    if (Array.isArray(node)) node = node[dataIndexes[pathSoFar] ?? 0];
     const key = parts.shift();
-    // TODO: remember active index and use here
-    node = Array.isArray(node) ? node[0][key] : node[key];
+    pathSoFar = `${pathSoFar}.${key}`;
+    node = node[key];
   }
   return node;
 };
@@ -452,7 +455,7 @@ export const removeScreen = (id) => {
   if (screen?.root) removeComponent(screen.root);
   delete design.screens[id];
   // remove from screenOrder
-  design.screenOrder = design.screenOrder.filter(sId => sId !== id);
+  design.screenOrder = design.screenOrder.filter((sId) => sId !== id);
   notify(id);
 };
 
@@ -805,6 +808,16 @@ export const resetDataByPath = (path) => {
     data[id] = JSON.parse(JSON.stringify(design.data[id]));
     notify(id);
   }
+};
+
+export const setDataIndex = (path, index) => {
+  const node = getDataByPath(path);
+  const nextIndex =
+    index !== undefined && typeof index !== 'number'
+      ? node.indexOf(index)
+      : index;
+  if (nextIndex === undefined) delete dataIndexes[path];
+  else dataIndexes[path] = nextIndex;
 };
 
 // hooks

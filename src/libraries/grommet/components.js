@@ -67,6 +67,7 @@ import {
   replaceWithData,
   resetDataByPath,
   setDataByPath,
+  setDataIndex,
   setProperty,
 } from '../../design2';
 import DesignComponent from '../../DesignComponent';
@@ -999,27 +1000,16 @@ export const components = {
       dataPath: '',
       link: ['-link-checked-'],
     },
-    override: (
-      { designProps, props },
-      { data, dataContextPath, followLinkOption, replaceData },
-    ) => {
-      const result = {
+    adjustProps: (props, { component: { designProps }, followLinkOption }) => {
+      const adjusted = {
         onChange: designProps?.link
-          ? (event) => {
-              followLinkOption(designProps.link, event.target.checked, {
-                dataContextPath,
-              });
-            }
+          ? (event) => followLinkOption(designProps.link, event.target.checked)
           : undefined,
       };
-      if (props.label) {
-        result.label = replaceData(props.label);
-      }
-      if (designProps?.dataPath) {
-        result.checked =
-          typeof data === 'object' ? data[designProps.dataPath] : data;
-      }
-      return result;
+      if (props.label) adjusted.label = replaceWithData(props.label);
+      if (designProps?.dataPath)
+        adjusted.checked = getDataByPath(designProps.dataPath);
+      return { ...props, ...adjusted };
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps?.link) {
@@ -1058,18 +1048,18 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    override: (
-      { id, props, designProps },
-      { dataContextPath, followLinkOption },
+    adjustProps: (
+      props,
+      { component: { designProps, id }, followLinkOption },
     ) => {
-      const result = {};
-      if (!props.id) result.id = props.name || id;
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ value }) =>
-          followLinkOption(designProps.link, value, { dataContextPath });
+      const adjusted = {};
+      if (!props.id) adjusted.id = props.name || id;
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ value }) =>
+          followLinkOption(designProps.link, value);
       }
-      return result;
+      return { ...props, ...adjusted };
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
@@ -1266,18 +1256,15 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    override: (
-      { id, props, designProps },
-      { dataContextPath, followLinkOption },
-    ) => {
-      const result = {};
-      if (!props.id) result.id = props.name || id;
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ target: { value } }) =>
-          followLinkOption(designProps.link, value, { dataContextPath });
+    adjustProps: (props, { component: { designProps, id }, followLinkOption }) => {
+      const adjusted = {};
+      if (!props.id) adjusted.id = props.name || id;
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ target: { value } }) =>
+          followLinkOption(designProps.link, value);
       }
-      return result;
+      return { ...props, ...adjusted };
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
@@ -1334,45 +1321,49 @@ export const components = {
       data: JsonData,
       link: ['-link-options-'],
     },
-    override: (
-      { children, id, props, designProps },
-      { followLinkOption, renderComponent },
+    adjustProps: (
+      props,
+      { component: { id, children, designProps }, followLinkOption },
     ) => {
-      const result = {};
-      if (props.searchPlaceholder) result.onSearch = (text) => {};
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ value }) => {
+      const adjusted = {};
+      if (props.searchPlaceholder) adjusted.onSearch = (text) => {};
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ value }) => {
           followLinkOption(designProps.link, value);
           inputValues[id] = value;
         };
       } else {
-        result.onChange = ({ value }) => (inputValues[id] = value);
+        adjusted.onChange = ({ value }) => (inputValues[id] = value);
       }
       if (
         props.options.length === 0 &&
-        designProps &&
-        designProps.data &&
+        designProps?.data &&
         Array.isArray(designProps.data)
       ) {
-        result.options = designProps.data;
+        adjusted.options = designProps.data;
       }
       if (props.valueKey)
-        result.valueKey = { key: props.valueKey, reduce: true };
+        adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
-        result.children = (option) =>
-          renderComponent(children[0], { datum: option });
+        adjusted.children = (option) => (
+          <DesignComponent id={children[0]} datum={option} />
+        );
       }
       if (props.valueLabel) {
-        result.valueLabel = renderComponent(props.valueLabel, {
-          datum:
-            props.value ||
-            inputValues[id] ||
-            props.defaultValue ||
-            props.placeholder,
-        });
+        adjusted.valueLabel = (
+          <DesignComponent
+            id={props.valueLabel}
+            datum={
+              props.value ||
+              inputValues[id] ||
+              props.defaultValue ||
+              props.placeholder
+            }
+          />
+        );
       }
-      return result;
+      return { ...props, ...adjusted };
     },
     initialize: ({ props, designProps }, { followLinkOption }) => {
       if (designProps && designProps.link) {
@@ -1549,11 +1540,11 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (_, { data }) => {
-      const result = {};
-      // need to use retrieved data for values property
-      if (data) result.values = data;
-      return result;
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
+      return { ...props, ...adjusted };
     },
   },
   Clock: {
@@ -1691,16 +1682,14 @@ export const components = {
     },
     adjustProps: (props, { component: { designProps }, followLink }) => {
       const adjusted = {};
-      // need to use retrieved data for data property
       if (designProps?.dataPath)
         adjusted.data = getDataByPath(designProps.dataPath);
       if (props.onClickRow) {
+        setDataIndex(designProps.dataPath, undefined);
         adjusted.onClickRow = (event) => {
           event.stopPropagation();
-          // TODO: set data index
-          // const { index } = event;
-          // const path = dataContextPath ? [...dataContextPath, index] : [index];
-          // followLink(props.onClickRow, { dataContextPath: path });
+          if (designProps?.dataPath)
+            setDataIndex(designProps.dataPath, event.index);
           followLink(props.onClickRow);
         };
       }
@@ -1778,7 +1767,8 @@ export const components = {
     adjustProps: (props, { component: { designProps } }) => {
       const adjusted = {};
       // need to use retrieved data for values property
-      if (designProps?.dataPath) adjusted.values = getDataByPath(designProps.dataPath);
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
       adjusted.children = (value) => {
         const index = (adjusted.values || props.values || []).indexOf(value);
         if (designProps?.render)
@@ -1831,19 +1821,23 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    adjustProps: (props, { component: { children, designProps } }) => {
+    adjustProps: (
+      props,
+      { component: { children, designProps }, followLink },
+    ) => {
       const adjusted = {};
       // need to use retrieved data for data property
       if (designProps?.dataPath)
         adjusted.data = getDataByPath(designProps.dataPath);
-      // if (props.onClickItem) {
-      //   result.onClickItem = (event) => {
-      //     event.stopPropagation();
-      //     const { index } = event;
-      //     const path = dataContextPath ? [...dataContextPath, index] : [index];
-      //     followLink(props.onClickItem, { dataContextPath: path, fromId: id });
-      //   };
-      // }
+      if (props.onClickItem) {
+        setDataIndex(designProps.dataPath, undefined);
+        adjusted.onClickItem = (event) => {
+          event.stopPropagation();
+          if (designProps?.dataPath)
+            setDataIndex(designProps.dataPath, event.index);
+          followLink(props.onClickItem);
+        };
+      }
       if (props.onOrder && designProps?.dataPath) {
         adjusted.onOrder = (data) => setDataByPath(designProps.dataPath, data);
       }
