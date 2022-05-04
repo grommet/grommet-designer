@@ -648,8 +648,9 @@ export const duplicateComponent = (id, options, idMapArg) => {
     Object.keys(type.properties).forEach((name) => {
       const definition = type.properties[name];
       if (
-        definition.includes('-string-or-component-') ||
-        definition.includes('-component-')
+        typeof definition === 'string' &&
+        (definition.includes('-string-or-component-') ||
+          definition.includes('-component-'))
       ) {
         component.props[name] =
           idMap[component.props[name]] || component.props[name];

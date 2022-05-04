@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Stack, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import {
   getComponent,
   getName,
+  getType,
   moveComponent,
   toggleCollapsed,
   useComponent,
@@ -13,11 +14,20 @@ import ComponentDropArea from './ComponentDropArea';
 import DragDropContext from './DragDropContext';
 
 const Component = ({ id, first }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { followLinkOption }] =
+    useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
 
   const component = useComponent(id);
+
+  useEffect(() => {
+    const comp = getComponent(id);
+    const type = getType(comp.type);
+    if (type.initialize)
+      type.initialize(comp.props, { component: comp, followLinkOption });
+  }, [id, followLinkOption]);
+
   if (!component) return null;
 
   const name = getName(id);

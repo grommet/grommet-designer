@@ -1011,7 +1011,7 @@ export const components = {
         adjusted.checked = getDataByPath(designProps.dataPath);
       return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
       if (designProps?.link) {
         followLinkOption(
           designProps.link,
@@ -1061,8 +1061,8 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value);
       }
     },
@@ -1256,7 +1256,10 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    adjustProps: (props, { component: { designProps, id }, followLinkOption }) => {
+    adjustProps: (
+      props,
+      { component: { designProps, id }, followLinkOption },
+    ) => {
       const adjusted = {};
       if (!props.id) adjusted.id = props.name || id;
       if (!props.value) adjusted.value = undefined;
@@ -1266,8 +1269,8 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value || props.defaultValue);
       }
     },
@@ -1365,8 +1368,8 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value || props.defaultValue);
       }
     },
@@ -1704,16 +1707,14 @@ export const components = {
       }));
       return { ...props, ...adjusted };
     },
-    // TODO: copy
-    copy: (source, copy, { nextDesign, duplicateComponent }) => {
+    copy: (source, copy, { duplicateComponent }) => {
       // duplicate any columns render components
       if (source.props?.columns) {
         source.props.columns.forEach((column, index) => {
           if (column.render) {
-            copy.props.columns[index].render = duplicateComponent({
-              nextDesign,
-              id: column.render,
-            });
+            copy.props.columns[index].render = duplicateComponent(
+              column.render,
+            );
           }
         });
       }
@@ -2095,10 +2096,9 @@ export const components = {
       if (source.props?.places) {
         source.props.places.forEach((place, index) => {
           if (place.content) {
-            copy.props.places[index].content = duplicateComponent({
-              nextDesign,
-              id: place.content,
-            });
+            copy.props.places[index].content = duplicateComponent(
+              place.content,
+            );
           }
         });
       }
