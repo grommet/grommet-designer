@@ -31,10 +31,10 @@ export const listen = (id = 'all', func) => {
   };
 };
 
-const notify = (id, data) => {
+const notify = (id, data, { immediateStore } = {}) => {
   if (id && listeners[id]) listeners[id].forEach((f) => f(data));
   if (listeners.all) listeners.all.forEach((f) => f(design));
-  lazilyStore();
+  immediateStore ? store() : lazilyStore();
 };
 
 const notifyChange = () => {
@@ -87,7 +87,7 @@ export const load = async ({ design: designProp, id, name, password }) => {
   } else if (id) {
     design = await fetchPublished(id, password);
   } else {
-    design = addDesign();
+    design = newDesign();
   }
 
   upgradeDesign(design);
@@ -98,7 +98,7 @@ export const load = async ({ design: designProp, id, name, password }) => {
   // TODO: load any imports
 
   // load data: copy from design, fetch remote ones
-  data = JSON.parse(JSON.stringify(design.data));
+  data = design.data ? JSON.parse(JSON.stringify(design.data)) : {};
   Object.keys(data)
     .filter((id) => data[id].url)
     .forEach((id) =>
@@ -381,30 +381,36 @@ const generateName = (base, existing = [], separator = ' ') => {
   return name;
 };
 
-const addDesign = () => {
-  // pick a good name
-  const stored = localStorage.getItem('designs');
-  const name = generateName('my design', stored ? JSON.parse(stored) : []);
+export const newDesign = (nameArg, theme = 'grommet') => {
+  let name = nameArg;
+  if (!name) {
+    // pick a good name
+    const stored = localStorage.getItem('designs');
+    name = generateName('my design', stored ? JSON.parse(stored) : []);
+  }
 
   design = {
     name,
-    screens: { 1: { id: 1, name: 'Screen', root: 2, path: '/' } },
+    theme,
+    screens: {1: { id: 1, name: 'Screen', root: 2, path: '/' },
+    },
     screenOrder: [1],
     components: {
       2: {
         id: 2,
-        type: 'grommet.Box',
-        props: {
-          fill: 'vertical',
-          overflow: 'auto',
-          align: 'center',
-          flex: 'grow',
-        },
+        type: 'grommet.Page',
+        props: {},
+        children: [3],
+      },
+      3: {
+        id: 3,
+        type: 'grommet.PageContent',
+        props: {},
       },
     },
-    nextId: 3,
+    nextId: 4,
   };
-  notify(undefined, design);
+  notify(undefined, design, { immediateStore: true });
   return design;
 };
 

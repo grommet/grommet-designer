@@ -29,7 +29,7 @@ import {
   useDesignName,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
-import { parseUrlParams } from './utils';
+import { parseUrlParams, pushPath, pushUrl } from './utils';
 
 const editGridColumns = [
   ['small', 'medium'],
@@ -107,15 +107,16 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             setSelection(nextSelection);
           } else {
             setMode(params.mode || 'edit');
+            if (loadProps.selection) setSelection(loadProps.selection);
           }
         }
       })
       .then(() => {
         setLocation(getLocationForPath(window.location.pathname));
       })
-      .then(() => {
-        ReactGA.event({ category: 'switch', action: 'published design' });
-      })
+      // .then(() => {
+      //   ReactGA.event({ category: 'switch', action: 'published design' });
+      // })
       .then(() => setReady(true))
       .catch((e) => {
         console.error(e);
@@ -218,8 +219,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       if (nextPath !== window.location.pathname) {
         // track location in browser location, so browser
         // backward/forward controls work
-        const url = nextPath + window.location.search;
-        window.history.pushState(undefined, undefined, url);
+        pushPath(nextPath);
       }
     }
   }, [location]);
@@ -332,7 +332,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             root={treeRoot}
             setMode={setMode}
             onClose={() => {
-              window.history.pushState(undefined, undefined, '/');
+              pushUrl('/');
               onClose();
             }}
           />

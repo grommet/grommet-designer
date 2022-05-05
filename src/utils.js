@@ -27,3 +27,11 @@ export const parseUrlParams = (url) => {
   });
   return params;
 };
+
+export const pushUrl = (url) => {
+  window.history.pushState(undefined, undefined, url);
+};
+
+export const pushPath = (path) => {
+  pushUrl(path + window.location.search);
+};

@@ -14,6 +14,7 @@ import { Next } from 'grommet-icons';
 import Designer from './Designer';
 import Loading from './Loading';
 import Start from './Start';
+import NewDesign from './NewDesign';
 import { parseUrlParams } from './utils';
 
 const designerTheme = {
@@ -49,6 +50,7 @@ const designerTheme = {
 
 const App = () => {
   const [start, setStart] = useState();
+  const [newDesign, setNewDesign] = useState();
   const [error, setError] = useState();
   const [auth, setAuth] = useState();
   const [password, setPassword] = useState();
@@ -76,7 +78,7 @@ const App = () => {
     } = window;
     const params = parseUrlParams(window.location.search);
     if (params.mode && params.mode === 'thumb') setThumb(true);
-    if (pathname === '/_new' || params.new) setLoadProps({});
+    if (pathname === '/_new' || params.new) setNewDesign(true);
     else if (params.name) setLoadProps({ name: params.name });
     else if (params.id) setLoadProps({ id: params.id });
     else setStart(true);
@@ -242,29 +244,43 @@ const App = () => {
         thumb={thumb}
       />
     );
+  } else if (newDesign) {
+    content = (
+      <NewDesign
+        onClose={() => {
+          setNewDesign(false);
+          setStart(true);
+        }}
+        onLoadProps={(props) => {
+          setNewDesign(false);
+          setLoadProps(props);
+        }}
+      />
+    );
   } else if (start) {
     content = (
       <Start
+        onNew={() => setNewDesign(true)}
         onLoadProps={(props) => {
           setStart(false);
           setLoadProps(props);
         }}
-          // TODO: if id, load, see if we have already, prompt which to replace
-          // loadDesign({
-          //   ...args,
-          //   onLoad: (nextDesign) => {
-          //     if (nextDesign.subsequentPublish) {
-          //       setSubsequent({
-          //         local: nextDesign,
-          //         published: nextDesign.subsequentPublish,
-          //       });
-          //       delete nextDesign.subsequentPublish;
-          //     } else {
-          //       setDesign(nextDesign);
-          //       setUrl(nextDesign);
-          //     }
-          //   },
-          // });
+        // TODO: if id, load, see if we have already, prompt which to replace
+        // loadDesign({
+        //   ...args,
+        //   onLoad: (nextDesign) => {
+        //     if (nextDesign.subsequentPublish) {
+        //       setSubsequent({
+        //         local: nextDesign,
+        //         published: nextDesign.subsequentPublish,
+        //       });
+        //       delete nextDesign.subsequentPublish;
+        //     } else {
+        //       setDesign(nextDesign);
+        //       setUrl(nextDesign);
+        //     }
+        //   },
+        // });
         colorMode={colorMode}
         // createDesign={() => {
         //   addDesign();

@@ -62,7 +62,8 @@ export const themeForValue = (value) =>
     (theme) =>
       theme.packageName === value ||
       theme.jsUrl === value ||
-      theme.designerUrl === value,
+      theme.designerUrl === value ||
+      theme.name === value,
   );
 
 export const themeForUrl = (url) =>

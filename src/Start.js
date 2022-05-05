@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import {
   Box,
@@ -103,6 +103,7 @@ const Thumbnail = ({ title, url }) => {
 const Start = ({
   colorMode,
   onLoadProps,
+  onNew,
   rtl,
   setColorMode,
   setRtl,
@@ -160,12 +161,12 @@ const Start = ({
         <Button
           title="create a new design"
           primary
-          label="Create"
+          label="Create New Design"
           href="/_new"
           onClick={(event) => {
             if (!event.ctrlKey && !event.metaKey) {
               event.preventDefault();
-              onLoadProps({});
+              onNew();
             }
           }}
         />
