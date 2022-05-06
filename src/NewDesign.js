@@ -21,7 +21,7 @@ const newPath = '/_new';
 const NewDesign = ({ onClose, onLoadProps }) => {
   const [value, setValue] = useState({
     name: '',
-    source: 'blank screen',
+    source: 'blank',
     theme: 'grommet',
     themeUrl: '',
   });
@@ -62,7 +62,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           onChange={setValue}
           onSubmit={() => {
             const design = newDesign(value.name, value.themeUrl || value.theme);
-            onLoadProps({ design, selection: 3 });
+            onLoadProps({ design, selection: 1 });
           }}
         >
           <FormField
@@ -78,10 +78,10 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           <FormField label="start with">
             <RadioButtonGroup
               name="source"
-              options={['blank screen', 'template', 'existing design']}
+              options={['blank', 'template', 'existing design']}
             />
           </FormField>
-          {value.source === 'blank screen' && (
+          {value.source === 'blank' && (
             <FormField label="theme" name="theme">
               <RadioButtonGroup
                 name="theme"

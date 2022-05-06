@@ -1,0 +1,35 @@
+{
+  "name": "blank page",
+  "theme": "grommet",
+  "screens": {
+    "1": {
+      "id": 1,
+      "name": "Screen",
+      "root": 2,
+      "path": "/"
+    }
+  },
+  "screenOrder": [
+    1
+  ],
+  "components": {
+    "2": {
+      "id": 2,
+      "type": "grommet.Page",
+      "props": {},
+      "children": [
+        3
+      ]
+    },
+    "3": {
+      "id": 3,
+      "type": "grommet.PageContent",
+      "props": {}
+    }
+  },
+  "nextId": 4,
+  "date": "2022-05-06T00:48:05.000Z",
+  "created": "2022-05-06T00:48:05.646Z",
+  "imports": [],
+  "version": 3.7
+}

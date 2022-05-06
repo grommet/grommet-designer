@@ -392,23 +392,22 @@ export const newDesign = (nameArg, theme = 'grommet') => {
   design = {
     name,
     theme,
-    screens: {1: { id: 1, name: 'Screen', root: 2, path: '/' },
-    },
+    screens: { 1: { id: 1, name: 'Screen', path: '/' } },
     screenOrder: [1],
     components: {
-      2: {
-        id: 2,
-        type: 'grommet.Page',
-        props: {},
-        children: [3],
-      },
-      3: {
-        id: 3,
-        type: 'grommet.PageContent',
-        props: {},
-      },
+      // 2: {
+      //   id: 2,
+      //   type: 'grommet.Page',
+      //   props: {},
+      //   children: [3],
+      // },
+      // 3: {
+      //   id: 3,
+      //   type: 'grommet.PageContent',
+      //   props: {},
+      // },
     },
-    nextId: 4,
+    nextId: 2,
   };
   notify(undefined, design, { immediateStore: true });
   return design;
@@ -538,13 +537,14 @@ const insertComponent = (id, options) => {
 export const addComponent = (typeName, options) => {
   const type = getType(typeName);
   const id = getNextId();
+  const source = options?.template || design;
 
   const component = {
     type: typeName,
     id,
     props: { ...type?.defaultProps, ...options?.props },
   };
-  design.components[id] = component;
+  source.components[id] = component;
 
   // nextSelected.component = id;
   // if (nextSelected.property && !nextSelected.property.component) {
@@ -570,6 +570,7 @@ export const addComponent = (typeName, options) => {
         if (propTypeName) {
           const propComponent = addComponent(propTypeName, {
             props: props ? JSON.parse(props) : {},
+            template: options?.template,
           });
           propComponent.name = prop;
           propComponent.coupled = true;
@@ -628,7 +629,8 @@ export const removeComponent = (id) => {
 };
 
 export const duplicateComponent = (id, options, idMapArg) => {
-  const component = JSON.parse(JSON.stringify(design.components[id]));
+  const source = options?.template || design;
+  const component = JSON.parse(JSON.stringify(source.components[id]));
   component.id = getNextId();
   design.components[component.id] = component;
 
@@ -641,14 +643,14 @@ export const duplicateComponent = (id, options, idMapArg) => {
 
   if (component.children) {
     component.children = component.children.map((childId) =>
-      duplicateComponent(childId, {}, idMap),
+      duplicateComponent(childId, { template: options?.template }, idMap),
     );
   }
 
   // copy property components
   if (component.propComponents) {
     component.propComponents = component.propComponents.map((childId) =>
-      duplicateComponent(childId, {}, idMap),
+      duplicateComponent(childId, { template: options?.template }, idMap),
     );
     // update corresponding property references
     Object.keys(type.properties).forEach((name) => {
@@ -667,7 +669,8 @@ export const duplicateComponent = (id, options, idMapArg) => {
   // handle any deeper component copying, like DataTable columns render
   if (type.copy) {
     type.copy(design.components[id], component, {
-      duplicateComponent: (id) => duplicateComponent(id, {}, idMap),
+      duplicateComponent: (id) =>
+        duplicateComponent(id, { template: options?.template }, idMap),
     });
   }
 

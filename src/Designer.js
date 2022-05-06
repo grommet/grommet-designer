@@ -9,6 +9,7 @@ import ReactGA from 'react-ga';
 import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
 import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
+import NewScreen from './NewScreen';
 import Canvas from './Canvas2';
 import Data from './Data';
 import Loading from './Loading';
@@ -322,6 +323,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         <Canvas root={treeRoot?.value || canvasRoot} />
       </ErrorCatcher>
     );
+  else if (getScreen(selection)) content = <NewScreen />
   else if (selection) content = <Data id={selection} />;
 
   if (!thumb && responsive !== 'small') {
