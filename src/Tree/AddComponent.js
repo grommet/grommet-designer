@@ -40,6 +40,7 @@ const AddComponent = ({ onClose, property }) => {
   return (
     <Layer
       position="top-left"
+      animation={false}
       margin="medium"
       full="vertical"
       onEsc={onClose}
@@ -70,6 +71,7 @@ const AddComponent = ({ onClose, property }) => {
           <Box flex={false} pad="small">
             <TextInput
               ref={inputRef}
+              placeholder="search ..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />

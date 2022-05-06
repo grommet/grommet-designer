@@ -26,6 +26,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     themeUrl: '',
   });
   const [designs, setDesigns] = useState([]);
+  const [sources, setSources] = useState(['blank']);
   const nameRef = useRef();
 
   useEffect(() => {
@@ -35,7 +36,11 @@ const NewDesign = ({ onClose, onLoadProps }) => {
 
   useEffect(() => {
     let stored = localStorage.getItem('designs');
-    if (stored) setDesigns(JSON.parse(stored));
+    if (stored) {
+      const nextDesigns = JSON.parse(stored);
+      setDesigns(nextDesigns);
+      setSources((prev) => [...prev, ...nextDesigns]);
+    }
   }, []);
 
   useEffect(() => nameRef.current.focus(), []);
@@ -45,7 +50,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
       <Box
         pad="large"
         height={{ min: '100vh' }}
-        width={{ max: 'large' }}
+        width={{ width: 'large', max: '100%' }}
         gap="medium"
       >
         <Header>
@@ -61,8 +66,20 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           value={value}
           onChange={setValue}
           onSubmit={() => {
-            const design = newDesign(value.name, value.themeUrl || value.theme);
-            onLoadProps({ design, selection: 1 });
+            const loadProps = {};
+            if (designs.includes(value.source)) {
+              // loading an existing design, load what we've got
+              // and change the name
+              loadProps.design = JSON.parse(localStorage.getItem(value.source));
+              loadProps.design.name = value.name;
+            } else {
+              loadProps.design = newDesign(
+                value.name,
+                value.themeUrl || value.theme,
+              );
+              loadProps.selection = 1;
+            }
+            onLoadProps(loadProps);
           }}
         >
           <FormField
@@ -76,22 +93,16 @@ const NewDesign = ({ onClose, onLoadProps }) => {
             <TextInput ref={nameRef} name="name" />
           </FormField>
           <FormField label="start with">
-            <RadioButtonGroup
-              name="source"
-              options={['blank', 'template', 'existing design']}
-            />
+            <Select name="source" options={sources} />
           </FormField>
           {value.source === 'blank' && (
             <FormField label="theme" name="theme">
               <RadioButtonGroup
                 name="theme"
+                direction="row"
+                gap="medium"
                 options={['grommet', 'hpe', 'other']}
               />
-            </FormField>
-          )}
-          {value.source === 'existing design' && (
-            <FormField label="duplicate design" name="duplicate">
-              <Select name="duplicate" options={designs} />
             </FormField>
           )}
           {value.theme === 'other' && (

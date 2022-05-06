@@ -4,52 +4,86 @@ import { Selector } from 'testcafe';
 // https://github.com/DevExpress/testcafe/issues/6844
 fixture('basic').page('http://localhost:3000');
 
-const tagline = Selector('p').withText('design with grommet components');
-const newControl = Selector('a').withAttribute(
-  'title',
-  'start a new design',
-);
-const designNameInput = Selector('input').withAttribute('name', 'name');
+// const tagline = Selector('p').withText('design with grommet components');
+const newControl = Selector('a').withAttribute('title', 'start a new design');
+const nameInput = Selector('input').withAttribute('name', 'name');
+const titleInput = Selector('input').withAttribute('name', 'title');
 const designName = 'test design';
 const createControl = Selector('button').withAttribute(
   'title',
   'create design',
 );
-const selectScreenTemplateLabel = Selector('label').withText('Select screen template');
 const selectScreenControl = Selector('button').withAttribute(
   'title',
   'select screen template',
 );
-const empty = Selector('p').withText(
+const empty = Selector('p').withExactText(
   'This PageContent is currently empty. Add some content to it.',
 );
-
+const pageContentControl = Selector('button').withExactText('PageContent');
+const pageContentMenu = pageContentControl.withAttribute(
+  'aria-label',
+  'Open Menu',
+);
+const addControl = Selector('button').withAttribute('title', 'add a component');
+// const addLayerHeading = Selector('h2').withText('add');
+const addSearchInput = Selector('input').withAttribute(
+  'placeholder',
+  'search ...',
+);
+const pageHeaderControl = Selector('button').withExactText('PageHeader');
+const pageHeaderMenu = pageHeaderControl.withAttribute(
+  'aria-label',
+  'Open Menu',
+);
+const pageTitle = Selector('h1').withExactText('Page Title');
+const closeControl = Selector('button').withAttribute('title', 'close');
 
 // const closeControl = Selector('button').withAttribute('title', 'close');
 // const addControl = Selector('button').withAttribute('title', 'add a component');
 
-test('initial', async (t) => {
-  await t.expect(tagline.exists).ok();
-});
+// test('initial', async (t) => {
+//   await t.expect(tagline.exists).ok();
+// });
 
 test('create design', async (t) => {
-  // const layerHeading = Selector('h2').withText('add');
-
   await t
-    .expect(tagline.exists)
+    // from the Start
+    .expect(newControl.exists)
     .ok()
     .click(newControl)
-    .expect(designNameInput.exists)
+    // NewDesign
+    .expect(nameInput.exists)
     .ok()
-    .typeText(designNameInput, designName)
+    .typeText(nameInput, designName)
     .expect(createControl.exists)
     .ok()
     .click(createControl)
-    .expect(selectScreenTemplateLabel.exists)
+    // NewScreen
+    .expect(selectScreenControl.exists)
     .ok()
     .click(selectScreenControl)
     .expect(empty.exists)
     .ok()
+    // select PageContent
+    .click(pageContentControl)
+    .expect(pageContentMenu.exists)
+    .ok()
+    // add PageHeader
+    .click(addControl)
+    .expect(addSearchInput.exists)
+    .ok()
+
+    .typeText(addSearchInput, 'Pag')
+    .expect(pageHeaderControl.exists)
+    .ok()
+    .click(pageHeaderControl)
+    .expect(pageHeaderMenu.exists)
+    .ok()
+    .typeText(titleInput, 'Test Page')
+    .expect(pageTitle.exists)
+    .ok();
+
     // .click(closeControl)
     // .expect(layerHeading.exists)
     // .notOk();

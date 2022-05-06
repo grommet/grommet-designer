@@ -84,6 +84,8 @@ export const load = async ({ design: designProp, id, name, password }) => {
     }
   } else if (designProp) {
     design = designProp;
+    // store if we don't have it, likely creating a new one
+    if (!localStorage.getItem(design.name)) store();
   } else if (id) {
     design = await fetchPublished(id, password);
   } else {

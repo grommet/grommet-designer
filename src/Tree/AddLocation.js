@@ -116,7 +116,7 @@ const AddLocation = ({ onChange }) => {
 
   const Option = ({ option, checked, hover }) => {
     return (
-      <Tip content={`${option} ${getName(component)}`}>
+      <Tip content={`${option} ${getName(selection)}`}>
         <Box
           pad="xsmall"
           background={hover && !checked ? { color: 'active' } : undefined}
