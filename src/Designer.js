@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
 import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
@@ -28,6 +28,7 @@ import {
   setDesignProperty,
   setProperty,
   useDesignName,
+  useScreen,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
 import { parseUrlParams, pushPath, pushUrl } from './utils';
@@ -287,15 +288,18 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     [mode],
   );
 
+  // we do this so we can detect when the root of the screen changes
+  const screen = useScreen(location?.screen);
+
   const [treeRoot, canvasRoot] = useMemo(() => {
     if (!location) return [];
-    if (location.screen) return [undefined, getScreen(location.screen).root];
+    if (location.screen && screen) return [undefined, screen.root];
     if (location.property) {
       const { id, value, ...rest } = location.property;
       return [{ id, value, ...rest }, value];
     }
     return [];
-  }, [location]);
+  }, [location, screen]);
 
   const selectionContext = useMemo(
     () =>

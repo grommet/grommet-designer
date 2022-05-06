@@ -159,9 +159,9 @@ const Start = ({
         <Heading margin={{ top: 'none' }}>grommet designer</Heading>
         <Paragraph size="xlarge">design with grommet components</Paragraph>
         <Button
-          title="create a new design"
+          title="start a new design"
           primary
-          label="Create New Design"
+          label="New Design"
           href="/_new"
           onClick={(event) => {
             if (!event.ctrlKey && !event.metaKey) {

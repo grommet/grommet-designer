@@ -56,6 +56,7 @@ const NewScreen = ({ onClose }) => {
           </FormField>
           <Footer margin={{ top: 'medium' }}>
             <Button
+              title="select screen template"
               type="submit"
               primary
               disabled={!templates[value.template]}

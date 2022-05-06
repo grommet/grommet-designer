@@ -851,21 +851,21 @@ export const useDesignName = () => {
 };
 
 export const useScreens = () => {
-  const [, setScreens] = useState(design.screenOrder);
+  const [, setScreens] = useState(design?.screenOrder);
   useEffect(() => listen('all', (d) => setScreens(d.screenOrder)), []);
-  return design.screenOrder;
+  return design?.screenOrder;
 };
 
 export const useScreen = (id) => {
-  const [, setScreen] = useState(design.screens[id]);
+  const [, setScreen] = useState(design?.screens[id]);
   useEffect(() => listen(id, setScreen), [id]);
-  return design.screens[id];
+  return design?.screens[id];
 };
 
 export const useComponent = (id) => {
-  const [, setComponent] = useState(design.components[id]);
+  const [, setComponent] = useState(design?.components[id]);
   useEffect(() => listen(id, setComponent), [id]);
-  return design.components[id];
+  return design?.components[id];
 };
 
 export const useAllData = () => {

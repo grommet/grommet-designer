@@ -110,6 +110,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           )}
           <Footer margin={{ top: 'medium' }}>
             <Button
+              title="create design"
               type="submit"
               primary
               disabled={value.source === 'template'}
