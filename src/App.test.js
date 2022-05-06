@@ -1,15 +1,33 @@
 import React from 'react';
-import { cleanup, render, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
 describe('App', () => {
-  afterEach(cleanup);
+  test('create', async () => {
+    const user = userEvent.setup();
+    const { asFragment } = render(<App />);
+    expect(asFragment()).toMatchSnapshot();
 
-  test('empty', () => {
-    const { getByTitle, container } = render(<App />);
-    expect(container.firstChild).toMatchSnapshot();
+    await user.click(screen.getByTitle('start a new design'));
+    expect(asFragment()).toMatchSnapshot();
 
-    fireEvent.click(getByTitle('create a new design'));
-    expect(container.firstChild).toMatchSnapshot();
+    await user.type(screen.getByLabelText('name'), 'test design');
+    expect(asFragment()).toMatchSnapshot();
+
+    await user.click(screen.getByTitle('create design'));
+    expect(asFragment()).toMatchSnapshot();
+
+    await user.click(screen.getByTitle('select screen template'));
+    expect(asFragment()).toMatchSnapshot();
+
+    // await user.click(screen.getByText('PageContent'));
+    // expect(asFragment()).toMatchSnapshot();
+
+    // await user.click(screen.getByText('PageContent'));
+    // expect(asFragment()).toMatchSnapshot();
+
+    // await user.click(screen.getByTitle('add a component'));
+    // expect(asFragment()).toMatchSnapshot();
   });
 });

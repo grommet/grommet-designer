@@ -84,13 +84,14 @@ const NewDesign = ({ onClose, onLoadProps }) => {
         >
           <FormField
             label="name"
+            htmlFor="name"
             name="name"
             required
             validate={(name) =>
               designs.find((n) => n === name) ? 'existing' : undefined
             }
           >
-            <TextInput ref={nameRef} name="name" />
+            <TextInput ref={nameRef} id="name" name="name" />
           </FormField>
           <FormField label="start with">
             <Select name="source" options={sources} />
