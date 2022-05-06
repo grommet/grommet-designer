@@ -44,6 +44,7 @@ import {
   Notification,
   Page,
   PageContent,
+  PageHeader,
   Pagination,
   Paragraph,
   RadioButtonGroup,
@@ -426,6 +427,29 @@ export const components = {
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
     },
   },
+  PageHeader: {
+    component: PageHeader,
+    name: 'PageHeader',
+    container: true,
+    hideable: true,
+    documentation: 'https://v2.grommet.io/page',
+    properties: {
+      actions: '-component-',
+      parent: '-string-or-component-',
+      title: '',
+      subtitle: '',
+    },
+    adjustProps: (props) => {
+      const adjusted = {};
+      if (props.parent) {
+        adjusted.parent = <DesignComponent id={props.parent} />;
+      }
+      if (props.actions) {
+        adjusted.actions = <DesignComponent id={props.actions} />;
+      }
+      return { ...props, ...adjusted };
+    },
+  },
   Sidebar: {
     component: Sidebar,
     name: 'Sidebar',
@@ -792,6 +816,7 @@ export const components = {
       color: ['-color-'],
       disabled: false,
       href: '',
+      icon: ['-Icon-'],
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
     },
