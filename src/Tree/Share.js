@@ -15,7 +15,7 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import { useDesign } from '../design2';
+import { publish, useDesign } from '../design2';
 // import { dependencies, generateJSX, publish } from '../design';
 import Action from '../components/Action';
 
@@ -63,24 +63,18 @@ const Publish = () => {
     );
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
     setPublishing(true);
-    // publish({
-    //   design,
-    //   email,
-    //   password,
-    //   pin,
-    //   onChange: (nextDesign) => {
-    //     setPublishing(false);
-    //     updateDesign(nextDesign);
-    //     ReactGA.event({
-    //       category: 'share',
-    //       action: 'publish design',
-    //     });
-    //   },
-    //   onError: (error) => {
-    //     setPublishing(false);
-    //     setError(error);
-    //   },
-    // });
+    publish({ email, password, pin })
+      .then(() => {
+        setPublishing(false);
+        ReactGA.event({
+          category: 'share',
+          action: 'publish design',
+        });
+      })
+      .catch((error) => {
+        setPublishing(false);
+        setError(error);
+      });
   };
 
   return (

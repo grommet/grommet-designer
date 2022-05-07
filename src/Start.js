@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 // import styled from 'styled-components';
 import {
   Box,
@@ -83,6 +83,20 @@ const Start = ({
     });
   }, []);
 
+  const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
+
+  const designsData = useMemo(() => {
+    return designs.filter(
+      (name) => !searchExp || name.search(searchExp) !== -1,
+    );
+  }, [designs, searchExp]);
+
+  const designsFetchedData = useMemo(() => {
+    return designsFetched.filter(
+      ({ name }) => !searchExp || name.search(searchExp) !== -1,
+    );
+  }, [designsFetched, searchExp]);
+
   return (
     <Page kind="narrow" gap="large">
       <PageContent gap="large">
@@ -122,13 +136,7 @@ const Start = ({
                 </Box>
               )}
             </Header>
-            <List
-              data={designs.filter(
-                (name) =>
-                  !search || name.search(new RegExp(search, 'i')) !== -1,
-              )}
-              pad="none"
-            >
+            <List data={designsData} pad="none">
               {(name) => {
                 const url = `/?name=${encodeURIComponent(name)}`;
                 return (
@@ -141,6 +149,7 @@ const Start = ({
                     onClick={(event) => {
                       if (!event.ctrlKey && !event.metaKey) {
                         event.preventDefault();
+                        window.history.pushState(undefined, undefined, url);
                         onLoadProps({ name });
                       }
                     }}
@@ -156,14 +165,10 @@ const Start = ({
         {designsFetched?.length > 0 && (
           <Box>
             <Heading level={2}>fetched designs</Heading>
-            <List
-              data={designsFetched.filter(
-                ({ name }) =>
-                  !search || name.search(new RegExp(search, 'i')) !== -1,
-              )}
-              pad="none"
-            >
-              {({ name, url }) => {
+            <List data={designsFetchedData} pad="none">
+              {({ name, url: publishedUrl }) => {
+                const { id } = parseUrlParams(publishedUrl);
+                const url = `/?id=${encodeURIComponent(id)}`;
                 return (
                   <Button
                     key={name}
@@ -174,7 +179,8 @@ const Start = ({
                     onClick={(event) => {
                       if (!event.ctrlKey && !event.metaKey) {
                         event.preventDefault();
-                        onLoadProps({ id: parseUrlParams(url).id });
+                        window.history.pushState(undefined, undefined, url);
+                        onLoadProps({ id });
                       }
                     }}
                   >

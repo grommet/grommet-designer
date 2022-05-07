@@ -27,7 +27,7 @@ import {
   getType,
   setDesignProperty,
   setProperty,
-  useDesignName,
+  useDesignSummary,
   useScreen,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
@@ -46,7 +46,7 @@ const commentGridColumns = [
 
 const Designer = ({ loadProps, onClose, thumb }) => {
   const responsive = useContext(ResponsiveContext);
-  const [name, setName] = useState();
+  // const [name, setName] = useState();
   const [ready, setReady] = useState(false);
   const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
@@ -54,18 +54,18 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   // const [confirmReplace, setConfirmReplace] = useState();
 
   // when the document name changes, update title and URL
-  const nextName = useDesignName();
-  if (nextName !== name) setName(nextName);
+  const summary = useDesignSummary();
+  // if (nextName !== name) setName(nextName);
 
   useEffect(() => {
-    if (name) {
-      document.title = name;
+    if (summary.local && summary.name) {
+      document.title = summary.name;
       const url = `${window.location.pathname}?name=${encodeURIComponent(
-        name,
+        summary.name,
       )}`;
       window.history.replaceState(undefined, undefined, url);
     }
-  }, [name]);
+  }, [summary]);
 
   // // align imports with design.imports
   // useEffect(() => {
@@ -112,6 +112,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             if (loadProps.selection) setSelection(loadProps.selection);
           }
         }
+        return design;
       })
       .then(() => {
         setLocation(getLocationForPath(window.location.pathname));
@@ -171,8 +172,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
               let active;
               if (name === '-unchecked-' && !value) active = 1;
               else if (name === '-checked-' && value) active = 2;
-              else if (name === '-both-')
-                active = component.props.active + 1;
+              else if (name === '-both-') active = component.props.active + 1;
               if (component.props.active > component.children.length)
                 active = 1;
               setProperty(link.component, 'props', 'active', active);
@@ -193,7 +193,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
                 hide = Array.isArray(value)
                   ? !value.includes(name)
                   : value !== name;
-              if (hide !== undefined)
+              if (hide !== undefined && component.hide !== hide)
                 setProperty(link.component, undefined, 'hide', hide);
             }
           }
@@ -231,13 +231,13 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     const timer = setTimeout(() => {
       if (!thumb && mode && selection) {
         localStorage.setItem(
-          `${name}--state`,
+          `${summary.name}--state`,
           JSON.stringify({ mode, selection }),
         );
       }
     }, 1000);
     return () => clearTimeout(timer);
-  }, [name, mode, selection, thumb]);
+  }, [mode, selection, summary.name, thumb]);
 
   // // if selected doesn't exist anymore, reset it
   // useEffect(() => {
@@ -327,7 +327,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         <Canvas root={treeRoot?.value || canvasRoot} />
       </ErrorCatcher>
     );
-  else if (getScreen(selection)) content = <NewScreen />
+  else if (getScreen(selection)) content = <NewScreen />;
   else if (selection) content = <Data id={selection} />;
 
   if (!thumb && responsive !== 'small') {

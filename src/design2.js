@@ -18,8 +18,6 @@ let imports = {};
 
 let listeners = {}; // id -> [f(), ...]
 
-// TODO: first load published designs into local storage?
-
 // listen for updates
 
 export const listen = (id = 'all', func) => {
@@ -56,19 +54,34 @@ const fetchPublished = async (id, password) => {
   if (password) {
     options.headers = { Authorization: `Basic ${btoa(password)}` };
   }
-  fetch(`${apiUrl}/${id}`, options).then((response) => {
-    if (response.status === 401) throw new Error(401);
-    else if (response.ok) {
-      response.json().then((publishedDesign) => {
-        // remember in case we make a change so we can set derivedFromId
-        publishedDesign.id = id;
-        publishedDesign.fetched = true;
-        return publishedDesign;
-      });
-    } else {
+  return fetch(`${apiUrl}/${id}`, options)
+    .then((response) => {
+      if (response.status === 401) throw new Error(401);
+      if (response.ok) return response.json();
       throw new Error(response.status);
-    }
-  });
+    })
+    .then((pubDesign) => {
+      // remember in case we make a change so we can set derivedFromId
+      pubDesign.id = id;
+      pubDesign.fetched = true;
+
+      // update our persistent list of fetched designs
+      const stored = localStorage.getItem('designs-fetched');
+      const designsFetched = stored ? JSON.parse(stored) : [];
+      const index = designsFetched.findIndex(
+        ({ name }) => name === pubDesign.name,
+      );
+      if (index !== 0) {
+        if (index !== -1) designsFetched.splice(index, 1);
+        designsFetched.unshift({
+          name: pubDesign.name,
+          url: pubDesign.publishedUrl,
+        });
+        localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
+      }
+
+      return pubDesign;
+    });
 };
 
 export const load = async ({ design: designProp, id, name, password }) => {
@@ -108,7 +121,6 @@ export const load = async ({ design: designProp, id, name, password }) => {
         .then((response) => response.json())
         .then((response) => {
           data[id].data = response;
-          notify(id);
         }),
     );
 
@@ -135,6 +147,45 @@ const store = () => {
 const lazilyStore = () => {
   if (storeTimer) clearTimeout(storeTimer);
   storeTimer = setTimeout(store, 1000);
+};
+
+const getUrlForId = (id) => {
+  const { protocol, host, pathname, hash } = window.location;
+  const search = `?id=${encodeURIComponent(id)}`;
+  return [protocol, '//', host, pathname, search, hash].join('');
+};
+
+export const publish = ({ email, password, pin }) => {
+  // add some metadata
+  const pubDesign = JSON.parse(JSON.stringify(design));
+  pubDesign.email = email;
+  const date = new Date();
+  date.setMilliseconds(pin);
+  pubDesign.date = date.toISOString();
+  pubDesign.password = password;
+  delete pubDesign.local;
+  delete pubDesign.modified;
+
+  const body = JSON.stringify(pubDesign);
+  return fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Content-Length': body.length,
+    },
+    body,
+  }).then((response) => {
+    if (response.ok) {
+      response.text().then((id) => {
+        pubDesign.publishedUrl = getUrlForId(id);
+        pubDesign.id = id;
+        pubDesign.local = true;
+        pubDesign.modified = false;
+        design = pubDesign;
+        store();
+      });
+    }
+  });
 };
 
 // read
@@ -396,19 +447,7 @@ export const newDesign = (nameArg, theme = 'grommet') => {
     theme,
     screens: { 1: { id: 1, name: 'Screen', path: '/' } },
     screenOrder: [1],
-    components: {
-      // 2: {
-      //   id: 2,
-      //   type: 'grommet.Page',
-      //   props: {},
-      //   children: [3],
-      // },
-      // 3: {
-      //   id: 3,
-      //   type: 'grommet.PageContent',
-      //   props: {},
-      // },
-    },
+    components: {},
     nextId: 2,
   };
   notify(undefined, design, { immediateStore: true });
@@ -840,16 +879,22 @@ export const useDesign = () => {
   return design;
 };
 
-export const useDesignName = () => {
-  const [name, setName] = useState(design?.name);
+export const useDesignSummary = () => {
+  const [summary, setSummary] = useState(
+    design ? { name: design.name, local: design.local } : {},
+  );
   useEffect(
     () =>
-      listen('all', (d2) => {
-        setName((prev) => (d2.name !== prev ? d2.name : prev));
+      listen('all', ({ name, local }) => {
+        setSummary((prev) => {
+          if (name !== prev.name || local !== prev.local)
+            return { name, local };
+          return prev;
+        });
       }),
     [],
   );
-  return name;
+  return summary;
 };
 
 export const useScreens = () => {
