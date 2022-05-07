@@ -1,0 +1,181 @@
+{
+  "name": "dashboard",
+  "theme": "grommet",
+  "screens": {
+    "1": {
+      "id": 1,
+      "name": "Dashboard",
+      "path": "/",
+      "root": 2
+    }
+  },
+  "screenOrder": [1],
+  "components": {
+    "2": {
+      "id": 2,
+      "type": "grommet.Page",
+      "props": {},
+      "children": [18, 3]
+    },
+    "3": {
+      "id": 3,
+      "type": "grommet.PageContent",
+      "props": {},
+      "children": [4, 5]
+    },
+    "4": {
+      "type": "grommet.PageHeader",
+      "id": 4,
+      "props": {
+        "title": "Dashboard",
+        "margin": {
+          "vertical": "medium"
+        }
+      },
+      "name": ""
+    },
+    "5": {
+      "type": "grommet.Grid",
+      "id": 5,
+      "props": {
+        "columns": "small",
+        "gap": "medium"
+      },
+      "children": [6]
+    },
+    "6": {
+      "type": "designer.Repeater",
+      "id": 6,
+      "props": {
+        "count": 6
+      },
+      "children": [7]
+    },
+    "7": {
+      "type": "grommet.Card",
+      "id": 7,
+      "props": {},
+      "children": [8, 9]
+    },
+    "8": {
+      "type": "grommet.CardHeader",
+      "id": 8,
+      "props": {
+        "align": "center",
+        "direction": "row",
+        "flex": false,
+        "justify": "between",
+        "gap": "medium",
+        "pad": "small"
+      },
+      "children": [11]
+    },
+    "9": {
+      "type": "grommet.CardBody",
+      "id": 9,
+      "props": {
+        "pad": "small"
+      },
+      "children": [14]
+    },
+    "11": {
+      "type": "grommet.Text",
+      "id": 11,
+      "props": {
+        "weight": "bold",
+        "size": "large"
+      },
+      "text": "Card title"
+    },
+    "12": {
+      "type": "grommet.Meter",
+      "id": 12,
+      "props": {
+        "type": "circle",
+        "size": "full",
+        "value": 40
+      }
+    },
+    "14": {
+      "type": "grommet.Stack",
+      "id": 14,
+      "props": {
+        "anchor": "center"
+      },
+      "children": [12, 17]
+    },
+    "15": {
+      "type": "grommet.Text",
+      "id": 15,
+      "props": {
+        "weight": "bold",
+        "size": "3xl"
+      },
+      "text": "40"
+    },
+    "16": {
+      "type": "grommet.Text",
+      "id": 16,
+      "props": {},
+      "text": "units"
+    },
+    "17": {
+      "type": "grommet.Box",
+      "id": 17,
+      "props": {
+        "align": "center",
+        "justify": "center"
+      },
+      "children": [15, 16]
+    },
+    "18": {
+      "type": "grommet.PageContent",
+      "id": 18,
+      "props": {
+        "border": {
+          "side": "bottom"
+        }
+      },
+      "children": [20]
+    },
+    "20": {
+      "type": "grommet.Header",
+      "id": 20,
+      "props": {
+        "align": "center",
+        "direction": "row",
+        "flex": false,
+        "justify": "between",
+        "gap": "medium"
+      },
+      "children": [21, 22]
+    },
+    "21": {
+      "type": "grommet.Text",
+      "id": 21,
+      "props": {
+        "weight": "bold"
+      },
+      "text": "Title"
+    },
+    "22": {
+      "type": "grommet.Menu",
+      "id": 22,
+      "props": {
+        "label": "",
+        "icon": "User",
+        "items": [
+          {
+            "label": "sign out"
+          }
+        ]
+      }
+    }
+  },
+  "nextId": 23,
+  "local": true,
+  "date": "2022-05-07T21:47:42.000Z",
+  "created": "2022-05-07T18:37:42.954Z",
+  "imports": [],
+  "version": 3.7
+}

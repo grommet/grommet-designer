@@ -10,8 +10,10 @@ import {
 import { duplicateComponent } from './design2';
 import SelectionContext from './SelectionContext';
 import blankPage from './templates/blankPage';
+import dashboard from './templates/dashboard';
 
 const templates = {
+  dashboard,
   'empty page': blankPage,
 };
 

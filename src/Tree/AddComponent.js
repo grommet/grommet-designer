@@ -25,7 +25,7 @@ const AddComponent = ({ onClose, property }) => {
       (!component && { within: selection }) ||
       undefined, // let AddLocation tell us
   );
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(selection ? '' : 'screen');
   const inputRef = useRef();
 
   const onChangeLocation = useCallback(
@@ -68,14 +68,16 @@ const AddComponent = ({ onClose, property }) => {
           </Box>
         )}
         <Box flex overflow="auto">
-          <Box flex={false} pad="small">
-            <TextInput
-              ref={inputRef}
-              placeholder="search ..."
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </Box>
+          {selection && (
+            <Box flex={false} pad="small">
+              <TextInput
+                ref={inputRef}
+                placeholder="search ..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </Box>
+          )}
 
           <AddLibraries
             addOptions={addOptions}

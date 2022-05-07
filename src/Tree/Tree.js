@@ -6,14 +6,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Box, Button, Keyboard, Text } from 'grommet';
+import { Box, Button, Keyboard, Paragraph, Text } from 'grommet';
 import { Previous } from 'grommet-icons';
-import {
-  duplicateComponent,
-  getName,
-  getRoot,
-  useScreens,
-} from '../design2';
+import { duplicateComponent, getName, getRoot, useScreens } from '../design2';
 import SelectionContext from '../SelectionContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
@@ -165,13 +160,15 @@ const Tree = ({ onClose, root, setMode }) => {
 
           <Box flex overflow="auto">
             <Box flex="grow">
-              {root ? (
-                <PropertyComponent {...root} />
-              ) : (
-                screens.map((id, index) => (
-                  <Screen key={id} id={id} first={index === 0} />
-                ))
-              )}
+              {(root && <PropertyComponent {...root} />) ||
+                (selection &&
+                  screens.map((id, index) => (
+                    <Screen key={id} id={id} first={index === 0} />
+                  ))) || (
+                  <Paragraph margin="small" color="placeholder" textAlign="end">
+                    Add a screen using the '+' above.
+                  </Paragraph>
+                )}
             </Box>
             <Data />
           </Box>

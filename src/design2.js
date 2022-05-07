@@ -372,6 +372,9 @@ export const getLinkOptions = (id) => {
   ];
 };
 
+export const isValidId = (id) =>
+  design?.screens?.[id] || design?.components?.[id] || design?.data?.[id];
+
 // update
 
 // passing a function to manage an update, make a copy, let the function
@@ -449,6 +452,7 @@ export const newDesign = (nameArg, theme = 'grommet') => {
     screenOrder: [1],
     components: {},
     nextId: 2,
+    local: true,
   };
   notify(undefined, design, { immediateStore: true });
   return design;

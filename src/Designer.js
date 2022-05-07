@@ -25,6 +25,7 @@ import {
   getPathForLocation,
   getScreen,
   getType,
+  isValidId,
   setDesignProperty,
   setProperty,
   useDesignSummary,
@@ -106,7 +107,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             const { mode: nextMode, selection: nextSelection } =
               JSON.parse(stored);
             setMode(params.mode || nextMode);
-            setSelection(nextSelection);
+            if (isValidId(nextSelection)) setSelection(nextSelection);
           } else {
             setMode(params.mode || 'edit');
             if (loadProps.selection) setSelection(loadProps.selection);

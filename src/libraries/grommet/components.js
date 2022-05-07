@@ -425,6 +425,7 @@ export const components = {
     documentation: 'https://v2.grommet.io/page',
     properties: {
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
+      border: reusedBoxProps.border,
     },
   },
   PageHeader: {
@@ -435,6 +436,7 @@ export const components = {
     documentation: 'https://v2.grommet.io/page',
     properties: {
       actions: '-component-',
+      margin: Edge,
       parent: '-string-or-component-',
       title: '',
       subtitle: '',
