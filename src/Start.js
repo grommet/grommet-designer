@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+// import styled from 'styled-components';
 import {
   Box,
   Button,
@@ -8,13 +8,16 @@ import {
   Header,
   Heading,
   Image,
+  List,
   Markdown,
-  Paragraph,
+  Page,
+  PageContent,
+  PageHeader,
   RadioButtonGroup,
   Text,
   TextInput,
 } from 'grommet';
-import { List, Search } from 'grommet-icons';
+import { List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
@@ -26,79 +29,6 @@ const tutorials = [
     url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
   },
 ];
-
-const inspirations = [
-  {
-    title: 'HPE design system',
-    url: 'https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com',
-  },
-  {
-    title: 'Card',
-    url: 'https://designer.grommet.io/?id=Card-eric-soderberg-hpe-com',
-  },
-];
-
-const ThumbnailContainer = styled.div`
-  transform: scale(0.25);
-  transform-origin: top left;
-  pointer-events: none;
-`;
-
-const ThumbnailFrame = styled.iframe`
-  border: none;
-`;
-
-const Thumbnail = ({ title, url }) => {
-  const [show, setShow] = useState();
-  const ref = useRef();
-
-  // only show content when visible to the user
-  useEffect(() => {
-    const scroller = ref.current.parentNode.parentNode;
-    const update = () => {
-      const scrollerRect = scroller.getBoundingClientRect();
-      const rect = ref.current.getBoundingClientRect();
-      setShow(rect.right > scrollerRect.left && rect.left < scrollerRect.right);
-    };
-    update();
-    let timer;
-    const delay = () => {
-      clearTimeout(timer);
-      timer = setTimeout(update, 1000);
-    };
-    scroller.addEventListener('scroll', delay);
-    return () => {
-      scroller.removeEventListener('scroll', delay);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  return (
-    <Box ref={ref} gap="xsmall">
-      <Box
-        width="medium"
-        height="small"
-        round="xsmall"
-        background="background-front"
-        overflow="hidden"
-      >
-        {show && (
-          <ThumbnailContainer>
-            <ThumbnailFrame
-              width="1536"
-              height="768"
-              title={title}
-              src={`${url}&mode=thumb`}
-            />
-          </ThumbnailContainer>
-        )}
-      </Box>
-      <Text weight="bold" size="large">
-        {title}
-      </Text>
-    </Box>
-  );
-};
 
 const Start = ({
   colorMode,
@@ -154,146 +84,92 @@ const Start = ({
   }, []);
 
   return (
-    <Box fill direction="row-responsive" gap="medium" border="between">
-      <Box align="start" pad="large" height="100vh">
-        <Heading margin={{ top: 'none' }}>grommet designer</Heading>
-        <Paragraph size="xlarge">design with grommet components</Paragraph>
-        <Button
-          title="start a new design"
-          primary
-          label="New Design"
-          href="/_new"
-          onClick={(event) => {
-            if (!event.ctrlKey && !event.metaKey) {
-              event.preventDefault();
-              onNew();
-            }
-          }}
-        />
-        <Box flex />
-        {error && (
-          <Box
-            background={{ color: 'status-error', opacity: 'weak' }}
-            pad="small"
-          >
-            <Text>{error}</Text>
-          </Box>
-        )}
-        <FileInput
-          accept=".json"
-          messages={{
-            dropPrompt: 'Import - drop design file here',
-          }}
-          onChange={(event) => {
-            setError(undefined);
-            const reader = new FileReader();
-            reader.onload = () => {
-              try {
-                const design = JSON.parse(reader.result);
-                // TODO: reconcile if we have existing already
-                onLoadProps({ design });
-              } catch (e) {
-                setError(e.message);
-              }
-            };
-            reader.readAsText(event.target.files[0]);
-          }}
-        />
-        <Box
-          flex={false}
-          direction="row"
-          justify="center"
-          gap="medium"
+    <Page kind="narrow" gap="large">
+      <PageContent gap="large">
+        <PageHeader
           margin={{ top: 'large' }}
-        >
-          <RadioButtonGroup
-            id="themeMode"
-            name="themeMode"
-            direction="row"
-            gap="medium"
-            options={['dark', 'light']}
-            value={colorMode || ''}
-            onChange={(event) => {
-              setColorMode(event.target.value);
-            }}
-          />
-          <CheckBox
-            label="right to left"
-            checked={rtl || false}
-            onChange={() => setRtl(!rtl)}
-          />
-        </Box>
-      </Box>
+          title="grommet designer"
+          subtitle="design with grommet components"
+          actions={
+            <Button
+              title="start a new design"
+              primary
+              label="New"
+              href="/_new"
+              onClick={(event) => {
+                if (!event.ctrlKey && !event.metaKey) {
+                  event.preventDefault();
+                  onNew();
+                }
+              }}
+            />
+          }
+        />
 
-      <Box
-        flex
-        fill
-        overflow="auto"
-        pad={{ vertical: 'medium', horizontal: 'large' }}
-        gap="large"
-      >
-        {designs && designs.length > 0 && (
-          <Box flex={false}>
+        {designs?.length > 0 && (
+          <Box>
             <Header>
               <Heading level={2}>my designs</Heading>
-              {designs.length > 5 && (
-                <Box
-                  basis="medium"
-                  flex={false}
-                  direction="row"
-                  align="center"
-                  justify="end"
-                  gap="small"
-                >
+              {designs.length > 1 && (
+                <Box direction="row">
                   <TextInput
                     icon={<Search />}
                     reverse
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
-                  <Button icon={<List />} onClick={() => setManage(true)} />
+                  <Button icon={<ListIcon />} onClick={() => setManage(true)} />
                 </Box>
               )}
             </Header>
-            <Box direction="row" overflow="auto" gap="medium" border="right">
-              {designs
-                .filter(
-                  (name) =>
-                    !search || name.search(new RegExp(search, 'i')) !== -1,
-                )
-                .map((name) => {
-                  const url = `/?name=${encodeURIComponent(name)}`;
-                  return (
-                    <Button
-                      key={name}
-                      plain
-                      href={`${url}&mode=edit`}
-                      onClick={(event) => {
-                        if (!event.ctrlKey && !event.metaKey) {
-                          event.preventDefault();
-                          onLoadProps({ name });
-                        }
-                      }}
-                    >
-                      <Thumbnail title={name} url={url} />
-                    </Button>
-                  );
-                })}
-            </Box>
-          </Box>
-        )}
-
-        {designsFetched && designsFetched.length > 0 && (
-          <Box flex={false}>
-            <Header>
-              <Heading level={2}>fetched designs</Heading>
-            </Header>
-            <Box direction="row" overflow="auto" gap="medium" border="right">
-              {designsFetched.map(({ name, url }) => {
+            <List
+              data={designs.filter(
+                (name) =>
+                  !search || name.search(new RegExp(search, 'i')) !== -1,
+              )}
+              pad="none"
+            >
+              {(name) => {
+                const url = `/?name=${encodeURIComponent(name)}`;
                 return (
                   <Button
                     key={name}
+                    fill
                     plain
+                    hoverIndicator
+                    href={`${url}&mode=edit`}
+                    onClick={(event) => {
+                      if (!event.ctrlKey && !event.metaKey) {
+                        event.preventDefault();
+                        onLoadProps({ name });
+                      }
+                    }}
+                  >
+                    <Box pad="small">{name}</Box>
+                  </Button>
+                );
+              }}
+            </List>
+          </Box>
+        )}
+
+        {designsFetched?.length > 0 && (
+          <Box>
+            <Heading level={2}>fetched designs</Heading>
+            <List
+              data={designsFetched.filter(
+                ({ name }) =>
+                  !search || name.search(new RegExp(search, 'i')) !== -1,
+              )}
+              pad="none"
+            >
+              {({ name, url }) => {
+                return (
+                  <Button
+                    key={name}
+                    fill
+                    plain
+                    hoverIndicator
                     href={url}
                     onClick={(event) => {
                       if (!event.ctrlKey && !event.metaKey) {
@@ -302,18 +178,47 @@ const Start = ({
                       }
                     }}
                   >
-                    <Thumbnail title={name} url={url} />
+                    <Box pad="small">{name}</Box>
                   </Button>
                 );
-              })}
-            </Box>
+              }}
+            </List>
           </Box>
         )}
 
-        <Box flex={false} alignSelf="start">
-          <Header alignSelf="stretch">
-            <Heading level={2}>tutorials</Heading>
-          </Header>
+        <Box>
+          {error && (
+            <Box
+              background={{ color: 'status-error', opacity: 'weak' }}
+              pad="small"
+            >
+              <Text>{error}</Text>
+            </Box>
+          )}
+          <FileInput
+            accept=".json"
+            messages={{
+              dropPrompt: 'Import - drop design file here',
+            }}
+            onChange={(event) => {
+              setError(undefined);
+              const reader = new FileReader();
+              reader.onload = () => {
+                try {
+                  const design = JSON.parse(reader.result);
+                  // TODO: reconcile if we have existing already
+                  onLoadProps({ design });
+                } catch (e) {
+                  setError(e.message);
+                }
+              };
+              reader.readAsText(event.target.files[0]);
+            }}
+          />
+        </Box>
+
+        <Box>
+          <Heading level={2}>tutorial</Heading>
           {tutorials.map(({ thumb, title, url }) => (
             <Button key={title} plain href={url} target="_blank">
               <Box gap="xsmall">
@@ -333,33 +238,54 @@ const Start = ({
             </Button>
           ))}
         </Box>
+      </PageContent>
 
-        <Box flex={false}>
-          <Heading level={2}>inspiration</Heading>
-          <Box direction="row" overflow="auto" gap="medium">
-            {inspirations.map(({ title, url }) => (
-              <Button key={title} plain href={`${url}&mode=edit`}>
-                <Thumbnail title={title} url={url} />
-              </Button>
-            ))}
-          </Box>
-        </Box>
-
+      <PageContent>
         {readme && (
           <Box flex={false}>
             <Markdown>{readme}</Markdown>
           </Box>
         )}
-        {manage && (
-          <Manage
-            onClose={() => {
-              setManage(false);
-              setDesigns([...designs]); // trigger re-load of offloaded state
+      </PageContent>
+
+      <PageContent
+        background={{ color: 'background-contrast', fill: 'horizontal' }}
+      >
+        <Box
+          flex={false}
+          direction="row"
+          justify="center"
+          gap="medium"
+          pad={{ vertical: 'medium' }}
+        >
+          <RadioButtonGroup
+            id="themeMode"
+            name="themeMode"
+            direction="row"
+            gap="medium"
+            options={['dark', 'light']}
+            value={colorMode || ''}
+            onChange={(event) => {
+              setColorMode(event.target.value);
             }}
           />
-        )}
-      </Box>
-    </Box>
+          <CheckBox
+            label="right to left"
+            checked={rtl || false}
+            onChange={() => setRtl(!rtl)}
+          />
+        </Box>
+      </PageContent>
+
+      {manage && (
+        <Manage
+          onClose={() => {
+            setManage(false);
+            setDesigns([...designs]); // trigger re-load of offloaded state
+          }}
+        />
+      )}
+    </Page>
   );
 };
 

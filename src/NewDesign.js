@@ -7,6 +7,9 @@ import {
   FormField,
   Header,
   Heading,
+  Page,
+  PageContent,
+  PageHeader,
   Paragraph,
   RadioButtonGroup,
   Select,
@@ -46,21 +49,19 @@ const NewDesign = ({ onClose, onLoadProps }) => {
   useEffect(() => nameRef.current.focus(), []);
 
   return (
-    <Box fill direction="row" justify="center">
-      <Box
-        pad="large"
-        height={{ min: '100vh' }}
-        width={{ width: 'large', max: '100%' }}
-        gap="medium"
-      >
-        <Header>
-          <Heading margin="none">new design</Heading>
-          <Button
-            tip="cancel creating a new design"
-            icon={<Close />}
-            onClick={onClose}
-          />
-        </Header>
+    <Page kind="narrow">
+      <PageContent>
+        <PageHeader
+          margin={{ vertical: 'large' }}
+          title="new design"
+          actions={
+            <Button
+              tip="cancel creating a new design"
+              icon={<Close />}
+              onClick={onClose}
+            />
+          }
+        />
         <Form
           validate="change"
           value={value}
@@ -120,7 +121,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
               construction.
             </Paragraph>
           )}
-          <Footer margin={{ top: 'medium' }}>
+          <Footer margin={{ vertical: 'large' }}>
             <Button
               title="create design"
               type="submit"
@@ -132,8 +133,8 @@ const NewDesign = ({ onClose, onLoadProps }) => {
             />
           </Footer>
         </Form>
-      </Box>
-    </Box>
+      </PageContent>
+    </Page>
   );
 };
 
