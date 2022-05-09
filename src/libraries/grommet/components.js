@@ -443,6 +443,8 @@ export const components = {
     },
     adjustProps: (props) => {
       const adjusted = {};
+      adjusted.title = replaceWithData(props.title);
+      adjusted.subtitle = replaceWithData(props.subtitle);
       if (props.parent) {
         adjusted.parent = <DesignComponent id={props.parent} />;
       }
@@ -817,6 +819,7 @@ export const components = {
       label: 'anchor',
       color: ['-color-'],
       disabled: false,
+      gap: reusedBoxProps.gap,
       href: '',
       icon: ['-Icon-'],
       margin: Edge,
@@ -1858,7 +1861,8 @@ export const components = {
       if (designProps?.dataPath)
         adjusted.data = getDataByPath(designProps.dataPath);
       if (props.onClickItem) {
-        setDataIndex(designProps.dataPath, undefined);
+        if (designProps?.dataPath)
+          setDataIndex(designProps.dataPath, undefined);
         adjusted.onClickItem = (event) => {
           event.stopPropagation();
           if (designProps?.dataPath)

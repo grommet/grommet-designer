@@ -21,34 +21,39 @@ const Data = () => {
           hoverIndicator
           onClick={() => {
             const newData = addData();
+            setLocation({ data: newData.id });
             setSelection(newData.id);
           }}
         />
       </Header>
-      {Object.keys(allData).map((id) => (
-        <Box key={id} flex={false}>
-          <Button
-            fill
-            hoverIndicator
-            onClick={() => {
-              setLocation({ data: id });
-              setSelection(id);
-            }}
-          >
-            <Box
-              direction="row"
-              align="center"
-              gap="medium"
-              pad={{ vertical: 'xsmall', horizontal: 'small' }}
-              background={selection === id ? 'selected-background' : undefined}
+      {Object.keys(allData)
+        .map((id) => parseInt(id, 10))
+        .map((id) => (
+          <Box key={id} flex={false}>
+            <Button
+              fill
+              hoverIndicator
+              onClick={() => {
+                setLocation({ data: id });
+                setSelection(id);
+              }}
             >
-              <Text size="medium" truncate>
-                {allData[id].name}
-              </Text>
-            </Box>
-          </Button>
-        </Box>
-      ))}
+              <Box
+                direction="row"
+                align="center"
+                gap="medium"
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                background={
+                  selection === id ? 'selected-background' : undefined
+                }
+              >
+                <Text size="medium" truncate>
+                  {allData[id].name}
+                </Text>
+              </Box>
+            </Button>
+          </Box>
+        ))}
     </Box>
   );
 };

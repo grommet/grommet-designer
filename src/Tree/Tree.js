@@ -161,10 +161,9 @@ const Tree = ({ onClose, root, setMode }) => {
           <Box flex overflow="auto">
             <Box flex="grow">
               {(root && <PropertyComponent {...root} />) ||
-                (selection &&
-                  screens.map((id, index) => (
-                    <Screen key={id} id={id} first={index === 0} />
-                  ))) || (
+                screens.map((id, index) => (
+                  <Screen key={id} id={id} first={index === 0} />
+                )) || (
                   <Paragraph margin="small" color="placeholder" textAlign="end">
                     Add a screen using the '+' above.
                   </Paragraph>

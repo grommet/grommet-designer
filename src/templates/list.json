@@ -1,0 +1,159 @@
+{
+  "name": "list",
+  "theme": "grommet",
+  "screens": {
+    "1": {
+      "id": 1,
+      "name": "List",
+      "path": "/",
+      "root": 2
+    }
+  },
+  "screenOrder": [1],
+  "components": {
+    "2": {
+      "id": 2,
+      "type": "grommet.Page",
+      "props": {},
+      "children": [18, 3]
+    },
+    "3": {
+      "id": 3,
+      "type": "grommet.PageContent",
+      "props": {},
+      "children": [4, 24, 23]
+    },
+    "4": {
+      "type": "grommet.PageHeader",
+      "id": 4,
+      "props": {
+        "title": "Items",
+        "margin": {
+          "vertical": "medium"
+        }
+      },
+      "name": "",
+      "children": []
+    },
+    "18": {
+      "type": "grommet.PageContent",
+      "id": 18,
+      "props": {
+        "border": {
+          "side": "bottom"
+        }
+      },
+      "children": [20]
+    },
+    "20": {
+      "type": "grommet.Header",
+      "id": 20,
+      "props": {
+        "align": "center",
+        "direction": "row",
+        "flex": false,
+        "justify": "between",
+        "gap": "medium"
+      },
+      "children": [21, 22],
+      "collapsed": true
+    },
+    "21": {
+      "type": "grommet.Text",
+      "id": 21,
+      "props": {
+        "weight": "bold"
+      },
+      "text": "Title"
+    },
+    "22": {
+      "type": "grommet.Menu",
+      "id": 22,
+      "props": {
+        "label": "",
+        "icon": "User",
+        "items": [
+          {
+            "label": "sign out"
+          }
+        ]
+      }
+    },
+    "23": {
+      "type": "grommet.List",
+      "id": 23,
+      "props": {
+        "data": [
+          {
+            "name": "Alpha",
+            "count": 5
+          },
+          {
+            "name": "Beta",
+            "count": 7
+          },
+          {
+            "name": "Gamma",
+            "count": 2
+          }
+        ]
+      }
+    },
+    "24": {
+      "type": "grommet.Header",
+      "id": 24,
+      "props": {
+        "align": "center",
+        "direction": "row",
+        "flex": false,
+        "justify": "between",
+        "gap": "medium",
+        "margin": {
+          "bottom": "small"
+        }
+      },
+      "children": [25, 26],
+      "collapsed": true
+    },
+    "25": {
+      "type": "grommet.Box",
+      "id": 25,
+      "props": {
+        "align": "center",
+        "justify": "center",
+        "direction": "row"
+      },
+      "children": [27, 28]
+    },
+    "26": {
+      "type": "grommet.Button",
+      "id": 26,
+      "props": {
+        "label": "Add Item"
+      }
+    },
+    "27": {
+      "type": "grommet.TextInput",
+      "id": 27,
+      "props": {
+        "icon": "Search",
+        "reverse": true
+      }
+    },
+    "28": {
+      "type": "grommet.Button",
+      "id": 28,
+      "props": {
+        "label": "",
+        "icon": "Filter",
+        "tip": "filter"
+      }
+    }
+  },
+  "nextId": 29,
+  "local": true,
+  "date": "2022-05-07T22:27:30.000Z",
+  "created": "2022-05-07T18:37:42.954Z",
+  "imports": [],
+  "version": 3.7
+}

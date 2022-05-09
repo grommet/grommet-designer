@@ -16,6 +16,7 @@ import AddTemplates from './AddTemplates';
 const AddComponent = ({ onClose, property }) => {
   const [selection] = useContext(SelectionContext);
   const component = useComponent(selection);
+  const onlyScreen = !selection && !property;
 
   // addOptions is what eventually gets passed to addComponent()
   const [addOptions, setAddOptions] = useState(
@@ -25,7 +26,7 @@ const AddComponent = ({ onClose, property }) => {
       (!component && { within: selection }) ||
       undefined, // let AddLocation tell us
   );
-  const [search, setSearch] = useState(selection ? '' : 'screen');
+  const [search, setSearch] = useState(onlyScreen ? 'screen' : '');
   const inputRef = useRef();
 
   const onChangeLocation = useCallback(
@@ -68,7 +69,7 @@ const AddComponent = ({ onClose, property }) => {
           </Box>
         )}
         <Box flex overflow="auto">
-          {selection && (
+          {!onlyScreen && (
             <Box flex={false} pad="small">
               <TextInput
                 ref={inputRef}

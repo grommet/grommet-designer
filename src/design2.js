@@ -248,9 +248,9 @@ export const getLocationForPath = (path) => {
   const screen = Object.values(design.screens).find((s) => s.path === path);
   if (screen) return { screen: screen.id };
   let match = /^\/-component-(\d+)$/.exec(path);
-  if (match) return { property: { id: match[1] } };
+  if (match) return { property: { id: parseInt(match[1], 10) } };
   match = /^\/-data-(\d+)$/.exec(path);
-  if (match) return { data: match[1] };
+  if (match) return { data: parseInt(match[1], 10) };
 };
 
 export const getDescendants = (id) => {
@@ -816,14 +816,15 @@ export const addData = () => {
   const id = getNextId();
   const name = generateName(
     'data',
-    Object.values(design.data).map((d) => d.name),
+    Object.values(design.data || {}).map((d) => d.name),
     '-',
   );
 
+  if (!design.data) design.data = {};
   design.data[id] = { id, name };
   data = design.data; // TODO: for now, just local
 
-  notify();
+  notify('data', design.data[id]);
 
   return design.data[id];
 };

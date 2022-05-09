@@ -11,10 +11,16 @@ import { duplicateComponent } from './design2';
 import SelectionContext from './SelectionContext';
 import blankPage from './templates/blankPage';
 import dashboard from './templates/dashboard';
+import details from './templates/details';
+import list from './templates/list';
+import table from './templates/table';
 
 const templates = {
   dashboard,
+  details,
   'empty page': blankPage,
+  list,
+  table,
 };
 
 const NewScreen = ({ onClose }) => {
