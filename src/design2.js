@@ -30,7 +30,13 @@ export const listen = (id = 'all', func) => {
 };
 
 const notify = (id, data, { immediateStore } = {}) => {
-  if (id && listeners[id]) listeners[id].forEach((f) => f(data));
+  if (id) {
+    if (Array.isArray(id))
+      id.forEach(
+        (id2) => listeners[id2] && listeners[id2].forEach((f) => f(data)),
+      );
+    else listeners[id] && listeners[id].forEach((f) => f(data));
+  }
   if (listeners.all) listeners.all.forEach((f) => f(design));
   immediateStore ? store() : lazilyStore();
 };
@@ -831,7 +837,7 @@ export const addData = () => {
 
 export const removeData = (id) => {
   delete design.data[id];
-  notify(id);
+  notify([id, 'data']);
 };
 
 export const setDataByPath = (path, value) => {
@@ -922,7 +928,7 @@ export const useComponent = (id) => {
 
 export const useAllData = () => {
   const [, setData] = useState(data);
-  useEffect(() => listen('data', setData), []);
+  useEffect(() => listen('data', () => setData(data)), []);
   return data;
 };
 
