@@ -44,6 +44,7 @@ import {
   Notification,
   Page,
   PageContent,
+  PageHeader,
   Pagination,
   Paragraph,
   RadioButtonGroup,
@@ -417,6 +418,25 @@ export const components = {
     documentation: 'https://v2.grommet.io/page',
     properties: {
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
+    },
+  },
+  PageHeader: {
+    component: PageHeader,
+    name: 'PageHeader',
+    container: true,
+    hideable: true,
+    documentation: 'https://v2.grommet.io/page',
+    properties: {
+      actions: '-component-',
+      margin: Edge,
+      parent: '-string-or-component-',
+      title: '',
+      subtitle: '',
+    },
+    override: ({ props }, { replaceData }) => {
+      return {
+        title: replaceData(props.title),
+      };
     },
   },
   Sidebar: {

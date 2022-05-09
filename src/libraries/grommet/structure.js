@@ -16,6 +16,7 @@ export const structure = [
       'Grid',
       'Page',
       'PageContent',
+      'PageHeader',
       'Main',
       'Nav',
       'Header',
