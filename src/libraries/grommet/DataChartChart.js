@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Box, CheckBox, FormField, Select, Text, TextInput } from 'grommet';
 import { ThemeContext } from 'styled-components';
+import { getTheme } from '../../design2';
 import ArrayOfObjects from './ArrayOfObjects';
 
-const ShareableFields = ({ value, onChange, theme, type }) => {
+const ShareableFields = ({ value, onChange }) => {
   const set = (name, valueArg) => {
     const nextValue = JSON.parse(JSON.stringify(value));
     if (valueArg === 'undefined') delete nextValue[name];
@@ -46,17 +47,18 @@ const ShareableFields = ({ value, onChange, theme, type }) => {
   );
 };
 
-const PropertyFields = ({ value, onChange, theme, type }) => {
-  const baseTheme = React.useContext(ThemeContext);
+const PropertyFields = ({ value, onChange, type }) => {
+  const baseTheme = useContext(ThemeContext);
+  const theme = getTheme();
 
   // search for colors
-  const [searchText, setSearchText] = React.useState('');
-  const searchExp = React.useMemo(
+  const [searchText, setSearchText] = useState('');
+  const searchExp = useMemo(
     () => searchText && new RegExp(`${searchText}`, 'i'),
     [searchText],
   );
 
-  const colorOptions = React.useMemo(() => {
+  const colorOptions = useMemo(() => {
     const merged = { ...baseTheme.global.colors, ...theme.global.colors };
     const names = Object.keys(merged)
       .sort()
@@ -114,17 +116,12 @@ const PropertyFields = ({ value, onChange, theme, type }) => {
           onChange={({ option }) => set('opacity', option)}
         />
       </FormField>
-      <ShareableFields
-        value={value}
-        onChange={onChange}
-        theme={theme}
-        type={type}
-      />
+      <ShareableFields value={value} onChange={onChange} type={type} />
     </>
   );
 };
 
-const Chart = ({ value, onChange, theme }) => {
+const Chart = ({ value, onChange }) => {
   return (
     <Box flex="grow" align="stretch" margin={{ bottom: 'medium' }}>
       <FormField label="type">
@@ -177,23 +174,16 @@ const Chart = ({ value, onChange, theme }) => {
                 onChange(nextValue);
               }}
               type={value.type}
-              theme={theme}
             />
           </Box>
           <ShareableFields
             value={value}
             onChange={onChange}
             type={value.type}
-            theme={theme}
           />
         </>
       ) : (
-        <PropertyFields
-          value={value}
-          onChange={onChange}
-          type={value.type}
-          theme={theme}
-        />
+        <PropertyFields value={value} onChange={onChange} type={value.type} />
       )}
     </Box>
   );
