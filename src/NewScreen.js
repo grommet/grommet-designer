@@ -24,7 +24,8 @@ const templates = {
 };
 
 const NewScreen = ({ onClose }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const [value, setValue] = useState({
     template: 'empty page',
   });
@@ -46,6 +47,7 @@ const NewScreen = ({ onClose }) => {
               template.screens[template.screenOrder[0]].root,
               { within: selection, template },
             );
+            setLocation({ screen: selection });
             setSelection(id);
           }}
         >

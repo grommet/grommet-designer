@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Paragraph } from 'grommet';
 import DesignComponent from '../../DesignComponent';
+import { replaceWithData } from '../../design2';
 import Alternative from './Alternative';
 import Icon from './Icon';
 import IFrame from './IFrame';
@@ -34,6 +35,12 @@ export const components = {
       color: ['-color-'],
       icon: ['-Icon-'],
       size: ['small', 'medium', 'large', 'xlarge'],
+    },
+    adjustProps: (props) => {
+      const adjusted = {};
+      if (props.color) adjusted.color = replaceWithData(props.color);
+      if (props.icon) adjusted.icon = replaceWithData(props.icon);
+      return { ...props, ...adjusted };
     },
   },
   IFrame: {

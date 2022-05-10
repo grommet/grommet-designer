@@ -104,10 +104,11 @@ const Designer = ({ loadProps, onClose, thumb }) => {
           const params = parseUrlParams(window.location.search);
           const stored = localStorage.getItem(`${design.name}--state`);
           if (stored) {
-            const { mode: nextMode, selection: nextSelection } =
-              JSON.parse(stored);
-            setMode(params.mode || nextMode);
-            if (isValidId(nextSelection)) setSelection(nextSelection);
+            const savedState = JSON.parse(stored);
+            setMode(params.mode || savedState.mode);
+            if (isValidId(savedState.selection))
+              setSelection(savedState.selection);
+            setLocation(savedState.location);
           } else {
             setMode(params.mode || 'edit');
             if (loadProps.selection) setSelection(loadProps.selection);
@@ -115,9 +116,9 @@ const Designer = ({ loadProps, onClose, thumb }) => {
         }
         return design;
       })
-      .then(() => {
-        setLocation(getLocationForPath(window.location.pathname));
-      })
+      // .then(() => {
+      //   setLocation(getLocationForPath(window.location.pathname));
+      // })
       // .then(() => {
       //   ReactGA.event({ category: 'switch', action: 'published design' });
       // })
@@ -233,12 +234,12 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       if (!thumb && mode && selection) {
         localStorage.setItem(
           `${summary.name}--state`,
-          JSON.stringify({ mode, selection }),
+          JSON.stringify({ location, mode, selection }),
         );
       }
     }, 1000);
     return () => clearTimeout(timer);
-  }, [mode, selection, summary.name, thumb]);
+  }, [location, mode, selection, summary.name, thumb]);
 
   // // if selected doesn't exist anymore, reset it
   // useEffect(() => {

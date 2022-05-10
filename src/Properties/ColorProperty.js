@@ -1,8 +1,10 @@
 import React, { forwardRef, useContext, useMemo } from 'react';
-import { Box, Text, ThemeContext } from 'grommet';
+import { Box, Button, Text, ThemeContext } from 'grommet';
+import { Edit } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 import { getTheme } from '../design2';
 import ArrayProperty from './ArrayProperty';
+import DataPathField from './DataPathField';
 
 // input is due to a bug in grommet-theme-hpe v1.0.5
 const internalColors = [
@@ -38,6 +40,9 @@ const ColorProperty = forwardRef(
         .sort();
     }, [baseTheme.global.colors, theme.global.colors]);
 
+    if (value === '' || value?.[0] === '{')
+      return <DataPathField name={name} onChange={onChange} value={value} />;
+
     return (
       <ArrayProperty
         ref={ref}
@@ -48,7 +53,9 @@ const ColorProperty = forwardRef(
         options={options}
         value={value}
         onChange={onChange}
-      />
+      >
+        {!value && <Button icon={<Edit />} onClick={() => onChange('{}')} />}
+      </ArrayProperty>
     );
   },
 );
