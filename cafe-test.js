@@ -266,10 +266,10 @@ test('create design', async (t) => {
     .click(firstScreenLink)
     .expect(pageTitle.exists)
     .notOk()
-    // with shift, should navigate
-    .click(firstScreenLink, { modifiers: { shift: true } })
-    .expect(pageTitle.exists)
-    .ok()
+    // // with shift, should navigate
+    // .click(firstScreenLink, { modifiers: { shift: true } })
+    // .expect(pageTitle.exists)
+    // .ok()
 
     .wait(2000);
 });
