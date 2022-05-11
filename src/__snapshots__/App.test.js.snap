@@ -82,44 +82,6 @@ exports[`App create 1`] = `
             />
           </div>
         </div>
-        <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
-        />
-        <div
-          class="StyledBox-sc-13pk1d4-0 iNDmPr"
-        >
-          <h2
-            class="StyledHeading-sc-1rdh4aw-0 hcNYla"
-          >
-            tutorial
-          </h2>
-          <a
-            class="StyledButton-sc-323bzc-0 iqZbKa"
-            href="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
-            target="_blank"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 iNDmPr"
-            >
-              <div
-                class="StyledBox-sc-13pk1d4-0 bhtNSP"
-              >
-                <img
-                  class="StyledImage-sc-ey4zx9-0 hxQdwK"
-                  src="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png"
-                />
-              </div>
-              <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 irsgiT"
-              />
-              <span
-                class="StyledText-sc-1sadyjn-0 issflU"
-              >
-                introduction
-              </span>
-            </div>
-          </a>
-        </div>
       </div>
       <div
         class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"

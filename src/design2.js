@@ -296,6 +296,7 @@ export const getName = (id, includeId = false) => {
     return (
       component.name ||
       (typeof component.props.name === 'string' && component.props.name) ||
+      (typeof component.props.label === 'string' && component.props.label) ||
       `${component.type.split('.')[1] || component.type}${
         includeId ? ` ${component.id}` : ''
       }`

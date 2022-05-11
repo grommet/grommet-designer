@@ -47,6 +47,7 @@ const Component = ({ id, first }) => {
         <Button
           fill
           hoverIndicator
+          aria-label={`Select ${name}`}
           onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
           draggable={!component.coupled}
           onDragStart={(event) => {
@@ -96,6 +97,7 @@ const Component = ({ id, first }) => {
         </Button>
         {component.children && (
           <Button
+            title={`toggle collapse ${name}`}
             icon={<CollapseIcon color={collapserColor} />}
             onClick={() => toggleCollapsed(id)}
           />

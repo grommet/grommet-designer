@@ -445,11 +445,8 @@ export const components = {
       const adjusted = {};
       adjusted.title = replaceWithData(props.title);
       adjusted.subtitle = replaceWithData(props.subtitle);
-      if (props.parent) {
+      if (props.parent && typeof props.parent === 'number') {
         adjusted.parent = <DesignComponent id={props.parent} />;
-      }
-      if (props.actions) {
-        adjusted.actions = <DesignComponent id={props.actions} />;
       }
       return { ...props, ...adjusted };
     },

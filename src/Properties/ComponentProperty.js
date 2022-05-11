@@ -4,9 +4,11 @@ import ComponentInput from './ComponentInput';
 
 const ComponentProperty = React.forwardRef(
   ({ name, onChange, value, ...rest }, ref) => {
+    const htmlId = `component-${name}`;
     return (
-      <Field key={name} label={name} htmlFor={name}>
+      <Field key={name} label={name} htmlFor={htmlId}>
         <ComponentInput
+          htmlId={htmlId}
           name={name}
           value={value}
           onChange={onChange}

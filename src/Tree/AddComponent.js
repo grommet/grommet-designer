@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useContext,
-  useLayoutEffect,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -34,7 +34,7 @@ const AddComponent = ({ onClose, property }) => {
     [],
   );
 
-  useLayoutEffect(() => inputRef.current?.focus());
+  useEffect(() => inputRef.current?.focus(), [addOptions]);
 
   const searchExp = search ? new RegExp(search, 'i') : undefined;
 

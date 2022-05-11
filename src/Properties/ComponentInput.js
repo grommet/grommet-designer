@@ -4,7 +4,7 @@ import { Add, Close, Edit } from 'grommet-icons';
 import { getComponent, removeComponent } from '../design2';
 import SelectionContext from '../SelectionContext';
 
-const ComponentInput = ({ id, onChange, value }) => {
+const ComponentInput = ({ id, htmlId, name, onChange, value }) => {
   const [, setSelection, { setLocation }] = useContext(SelectionContext);
 
   const onChangeAndSet = useCallback(
@@ -25,6 +25,8 @@ const ComponentInput = ({ id, onChange, value }) => {
       {value ? (
         <>
           <Button
+            id={htmlId}
+            aria-label={`Edit ${name}`}
             icon={<Edit />}
             onClick={() => {
               setLocation({
@@ -43,6 +45,8 @@ const ComponentInput = ({ id, onChange, value }) => {
         </>
       ) : (
         <Button
+          id={htmlId}
+          aria-label={`Add ${name}`}
           icon={<Add />}
           onClick={() => {
             setLocation({ property: { id, onChange: onChangeAndSet } });

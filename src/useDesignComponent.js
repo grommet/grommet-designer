@@ -100,8 +100,7 @@ const useDesignComponent = (id, datum) => {
           setInlineEditSize(
             document.getElementById(id).getBoundingClientRect(),
           );
-      }
-      if (event.shiftKey && priorClick) priorClick(event);
+      } else if (priorClick) priorClick(event);
     };
     props.tabIndex = '-1';
     if (selection === id) {

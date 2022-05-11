@@ -7,7 +7,7 @@ import {
   FileInput,
   Header,
   Heading,
-  Image,
+  // Image,
   List,
   Markdown,
   Page,
@@ -21,14 +21,14 @@ import { List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
-const tutorials = [
-  {
-    title: 'introduction',
-    thumb:
-      'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
-    url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
-  },
-];
+// const tutorials = [
+//   {
+//     title: 'introduction',
+//     thumb:
+//       'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
+//     url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
+//   },
+// ];
 
 const Start = ({
   colorMode,
@@ -223,7 +223,7 @@ const Start = ({
           />
         </Box>
 
-        <Box>
+        {/* <Box>
           <Heading level={2}>tutorial</Heading>
           {tutorials.map(({ thumb, title, url }) => (
             <Button key={title} plain href={url} target="_blank">
@@ -243,7 +243,7 @@ const Start = ({
               </Box>
             </Button>
           ))}
-        </Box>
+        </Box> */}
       </PageContent>
 
       <PageContent>
