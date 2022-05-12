@@ -3,10 +3,17 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
+// for README
+global.fetch = () =>
+  Promise.resolve({
+    ok: true,
+    text: () => Promise.resolve(''),
+  });
+
 describe('App', () => {
   test('create', async () => {
     const user = userEvent.setup();
-    const { asFragment } = render(<App />);
+    const { asFragment } = await render(<App />);
     expect(asFragment()).toMatchSnapshot();
 
     await user.click(screen.getByTitle('start a new design'));

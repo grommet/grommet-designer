@@ -115,7 +115,7 @@ const useDesignComponent = (id, datum) => {
     delete props.children;
   } else if (component.children?.length) {
     children = component.children.map((childId) => (
-      <DesignComponent id={childId} datum={datum} />
+      <DesignComponent key={childId} id={childId} datum={datum} />
     ));
   } else if (inlineEditSize) {
     const useArea = type.name === 'Paragraph' || type.name === 'Markdown';

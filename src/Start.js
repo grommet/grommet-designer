@@ -18,6 +18,7 @@ import {
   TextInput,
 } from 'grommet';
 import { List as ListIcon, Search } from 'grommet-icons';
+import readmePath from './README.md';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
@@ -70,17 +71,16 @@ const Start = ({
     }
   }, []);
 
-  // get README from GitHub
   useEffect(() => {
-    fetch(
-      'https://raw.githubusercontent.com/grommet/grommet-designer/master/README.md',
-    ).then((response) => {
-      if (response.ok) {
-        response
-          .text()
-          .then((text) => setReadme(text.split('\n').splice(8).join('\n')));
-      }
-    });
+    fetch(readmePath)
+      .then((response) => {
+        if (response.ok) {
+          response
+            .text()
+            .then((text) => setReadme(text.split('\n').splice(8).join('\n')));
+        }
+      })
+      .catch();
   }, []);
 
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);

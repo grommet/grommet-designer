@@ -10,22 +10,12 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 - **command-e** or **control-E** or **command-.**: toggles preview vs. edit mode
 - **command-;** or **control-;**: toggles preview vs. comment mode
-- **ArrowUp** and **ArrowDown**: traverses the selection across siblings
-- **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
-- **c**: toggles collapsing the currently selected component
-- **p**: initiates searching of the currently selected component's properties
-- **d**: duplicate the current component, and all of its children
 - **a**: opens the add component dialog
-- **command-click** or **control-click**: when adding a component, it
-  will be added as the parent of the currently selected component
-- **command-delete** or **control-backspace**: deletes the currently
-  selected component and all of its children
 - **z**: undo the most recent change
 - **Z**: redo the most recently undone change
 - **command-c** or **control-c**: copies the selected component
 - **command-v** or **control-v**: pastes the previously copied component
   into the selected component
-- **command-shift-p** or **control-shift-p**: re-publish
 
 ### Linking
 
@@ -127,11 +117,3 @@ in the importing design, when the browser is refreshed.
 1. `yarn install`
 
 1. `yarn start`
-
-## Refactoring
-
-how to handle selection state?
-inline text edit in canvas
-convert Properties to only change component definition, not whole design
-convert Tree
-edit property component
