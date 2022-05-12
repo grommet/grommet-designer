@@ -49,6 +49,7 @@ const notifyChange = () => {
       if (data) listeners[id].forEach((f) => f(data));
     }
   });
+  lazilyStore();
 };
 
 // loading and storing of the entire design
@@ -940,7 +941,10 @@ export const useData = (id) => {
 };
 
 export const useChanges = () => {
-  const [{ designs, index }, setChanges] = useState({ designs: [] });
+  const [{ designs, index }, setChanges] = useState({
+    designs: [JSON.parse(JSON.stringify(design))],
+    index: 0,
+  });
 
   useEffect(() => {
     listen('all', () => {
