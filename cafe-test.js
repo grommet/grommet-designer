@@ -34,6 +34,15 @@ const addSearchInput = Selector('input').withAttribute(
   'placeholder',
   'search ...',
 );
+const undoControl = Selector('button').withAttribute(
+  'title',
+  'undo last change',
+);
+const redoControl = Selector('button').withAttribute(
+  'title',
+  'redo last change',
+);
+
 const pageHeaderControl = Selector('button').withExactText('PageHeader');
 const pageHeaderSelectControl = pageHeaderControl.withAttribute(
   'aria-label',
@@ -251,6 +260,14 @@ test('create design', async (t) => {
     .ok()
     // set anchor label
     .typeText(labelInput, 'First Screen Link', { replace: true })
+    .expect(firstScreenLink.exists)
+    .ok()
+    // undo
+    .click(undoControl)
+    .expect(firstScreenLink.exists)
+    .notOk()
+    // redo
+    .click(redoControl)
     .expect(firstScreenLink.exists)
     .ok()
     // set anchor link
