@@ -8,6 +8,7 @@ const newControl = Selector('a').withAttribute('title', 'start a new design');
 const nameInput = Selector('input').withAttribute('name', 'name');
 const titleInput = Selector('input').withAttribute('name', 'title');
 const labelInput = Selector('input').withAttribute('name', 'label');
+const dataPathInput = Selector('input').withAttribute('name', 'dataPath');
 const designName = 'test design';
 const createControl = Selector('button').withAttribute(
   'title',
@@ -96,6 +97,23 @@ const firstScreenOption = Selector('button')
   .withAttribute('role', 'option')
   .withExactText('Screen');
 const secondScreenLink = Selector('a').withExactText('Second Screen Link');
+const addDataControl = Selector('button').withAttribute(
+  'aria-label',
+  'add a data source',
+);
+const dataControl = Selector('button').withExactText('data');
+const dataSelectControl = dataControl.withAttribute(
+  'aria-label',
+  'Select data',
+);
+const dataArea = Selector('textarea').withAttribute('name', 'data');
+const dataTableControl = Selector('button').withExactText('DataTable');
+const dataTableAddControl = dataTableControl.withAttribute(
+  'aria-label',
+  'Add DataTable',
+);
+const dataTableMenu = dataTableControl.withAttribute('aria-label', 'Open Menu');
+const alphaTableHeader = Selector('th').withExactText('alpha');
 
 // const closeControl = Selector('button').withAttribute('title', 'close');
 
@@ -283,10 +301,43 @@ test('create design', async (t) => {
     .click(firstScreenLink)
     .expect(pageTitle.exists)
     .notOk()
+    // TODO: the following isn't working, seems like TestCafe isn't sending
+    // the 'shift' modifier
     // // with shift, should navigate
     // .click(firstScreenLink, { modifiers: { shift: true } })
     // .expect(pageTitle.exists)
     // .ok()
+
+    // add data
+    // add
+    .click(addDataControl)
+    .expect(dataSelectControl.exists)
+    .ok()
+    .expect(dataArea.exists)
+    .ok()
+    // type data
+    .typeText(dataArea, '[{"name": "alpha"},{"name": "beta"}]', {
+      replace: true,
+    })
+    .expect(dataSelectControl.exists)
+    .ok()
+    // select PageContent
+    .click(pageContentSelectControl.nth(0))
+    .expect(pageContentMenu.exists)
+    .ok()
+    // add
+    // add
+    .click(addControl)
+    .expect(addSearchInput.exists)
+    .ok()
+    // add DataTable
+    .click(dataTableAddControl)
+    .expect(dataTableMenu.exists)
+    .ok()
+    // set dataPath to data
+    .typeText(dataPathInput, 'data', { replace: true })
+    .expect(alphaTableHeader.exists)
+    .ok()
 
     .wait(2000);
 });

@@ -33,6 +33,7 @@ const Data = () => {
             <Button
               fill
               hoverIndicator
+              aria-label={`Select ${allData[id].name}`}
               onClick={() => {
                 setLocation({ data: id });
                 setSelection(id);

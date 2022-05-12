@@ -426,6 +426,7 @@ export const components = {
     properties: {
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
       border: reusedBoxProps.border,
+      gap: reusedBoxProps.gap,
     },
   },
   PageHeader: {
@@ -523,6 +524,7 @@ export const components = {
     component: Card,
     name: 'Card',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
