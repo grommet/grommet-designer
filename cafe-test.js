@@ -1,8 +1,43 @@
 /* eslint-disable no-undef */
-import { Selector } from 'testcafe';
+import { Selector, t } from 'testcafe';
 
 // https://github.com/DevExpress/testcafe/issues/6844
 fixture('basic').page('http://localhost:3000');
+
+const typeButton = (type) => Selector('button').withExactText(type);
+const typeSelect = (type) =>
+  typeButton(type).withAttribute('aria-label', `Select ${type}`);
+const typeMenu = (type) =>
+  typeButton(type).withAttribute('aria-label', 'Open Menu');
+
+const select = async (type, index) => {
+  let selector = typeSelect(type);
+  if (index !== undefined) selector = selector.nth(index);
+  await t.click(selector).expect(typeMenu(type).exists).ok();
+};
+
+const add = async (type, search) => {
+  const addControl = Selector('button').withAttribute(
+    'title',
+    'add a component',
+  );
+  const typeAddControl = typeButton(type).withAttribute(
+    'aria-label',
+    `Add ${type}`,
+  );
+
+  // open add layer
+  await t.click(addControl).expect(typeAddControl.exists).ok();
+  if (search) {
+    const addSearchInput = Selector('input').withAttribute(
+      'placeholder',
+      'search ...',
+    );
+    await t.typeText(addSearchInput, search).expect(typeAddControl.exists).ok();
+  }
+  // add type
+  await t.click(typeAddControl).expect(typeMenu(type).exists).ok();
+};
 
 const newControl = Selector('a').withAttribute('title', 'start a new design');
 const nameInput = Selector('input').withAttribute('name', 'name');
@@ -21,20 +56,6 @@ const selectScreenControl = Selector('button').withAttribute(
 const empty = Selector('p').withExactText(
   'This PageContent is currently empty. Add some content to it.',
 );
-const pageContentControl = Selector('button').withExactText('PageContent');
-const pageContentSelectControl = pageContentControl.withAttribute(
-  'aria-label',
-  'Select PageContent',
-);
-const pageContentMenu = pageContentControl.withAttribute(
-  'aria-label',
-  'Open Menu',
-);
-const addControl = Selector('button').withAttribute('title', 'add a component');
-const addSearchInput = Selector('input').withAttribute(
-  'placeholder',
-  'search ...',
-);
 const undoControl = Selector('button').withAttribute(
   'title',
   'undo last change',
@@ -44,59 +65,25 @@ const redoControl = Selector('button').withAttribute(
   'redo last change',
 );
 
-const pageHeaderControl = Selector('button').withExactText('PageHeader');
-const pageHeaderSelectControl = pageHeaderControl.withAttribute(
-  'aria-label',
-  'Select PageHeader',
-);
-const pageHeaderAddControl = pageHeaderControl.withAttribute(
-  'aria-label',
-  'Add PageHeader',
-);
-const pageHeaderMenu = pageHeaderControl.withAttribute(
-  'aria-label',
-  'Open Menu',
-);
 const pageTitle = Selector('h1').withExactText('Test Page');
-const layerControl = Selector('button').withExactText('Layer');
-const layerAddControl = layerControl.withAttribute('aria-label', 'Add Layer');
-const layerMenu = layerControl.withAttribute('aria-label', 'Open Menu');
-const buttonControl = Selector('button').withExactText('Button');
-const buttonAddControl = buttonControl.withAttribute(
-  'aria-label',
-  'Add Button',
-);
-const buttonMenu = buttonControl.withAttribute('aria-label', 'Open Menu');
 const closeLayerControl = Selector('button').withExactText('Close Layer');
 const openLayerControl = Selector('button').withExactText('Open Layer');
 const linkLabel = Selector('label').withExactText('link');
 const testLayerOption = Selector('button')
   .withAttribute('role', 'option')
   .withExactText('test layer');
-const pageHeaderAddActionsControl = Selector('button').withAttribute(
+const addActionsControl = Selector('button').withAttribute(
   'aria-label',
   'Add actions',
 );
 const backPageHeaderControl =
   Selector('button').withExactText('back to PageHeader');
-const screenControl = Selector('button').withExactText('Screen');
-const screenAddControl = screenControl.withAttribute(
-  'aria-label',
-  'Add Screen',
-);
-const screenMenu = screenControl.withAttribute('aria-label', 'Open Menu');
 const secondScreenControl = Selector('button').withExactText('Second Screen');
-const anchorControl = Selector('button').withExactText('Anchor');
-const anchorAddControl = anchorControl.withAttribute(
-  'aria-label',
-  'Add Anchor',
-);
-const anchorMenu = anchorControl.withAttribute('aria-label', 'Open Menu');
 const firstScreenLink = Selector('a').withExactText('First Screen Link');
 const firstScreenOption = Selector('button')
   .withAttribute('role', 'option')
   .withExactText('Screen');
-const secondScreenLink = Selector('a').withExactText('Second Screen Link');
+// const secondScreenLink = Selector('a').withExactText('Second Screen Link');
 const addDataControl = Selector('button').withAttribute(
   'aria-label',
   'add a data source',
@@ -107,234 +94,132 @@ const dataSelectControl = dataControl.withAttribute(
   'Select data',
 );
 const dataArea = Selector('textarea').withAttribute('name', 'data');
-const dataTableControl = Selector('button').withExactText('DataTable');
-const dataTableAddControl = dataTableControl.withAttribute(
-  'aria-label',
-  'Add DataTable',
-);
-const dataTableMenu = dataTableControl.withAttribute('aria-label', 'Open Menu');
 const alphaTableHeader = Selector('th').withExactText('alpha');
 
 // const closeControl = Selector('button').withAttribute('title', 'close');
 
 test('create design', async (t) => {
+  // from the Start
+  await t.expect(newControl.exists).ok();
+  // NewDesign
+  await t.click(newControl).expect(nameInput.exists).ok();
+  // give it a name
+  await t.typeText(nameInput, designName).expect(createControl.exists).ok();
+  // NewScreen
+  await t.click(createControl).expect(selectScreenControl.exists).ok();
+  // select a blank screen
+  await t.click(selectScreenControl).expect(empty.exists).ok();
+
+  // add a PageHeader and give it a title
+
+  await select('PageContent');
+  await add('PageHeader', 'Page');
+  await t.typeText(titleInput, 'Test Page').expect(pageTitle.exists).ok();
+
+  // add a Layer with a Button that will close it
+
+  await select('PageContent');
+  await add('Layer');
+  await t.typeText(nameInput, 'test layer');
+  await add('Button');
+  // set button label
   await t
-    // from the Start
-    .expect(newControl.exists)
-    .ok()
-    .click(newControl)
-    // NewDesign
-    .expect(nameInput.exists)
-    .ok()
-    // give it a name
-    .typeText(nameInput, designName)
-    .expect(createControl.exists)
-    .ok()
-    .click(createControl)
-    // NewScreen
-    .expect(selectScreenControl.exists)
-    .ok()
-    // select a blank screen
-    .click(selectScreenControl)
-    .expect(empty.exists)
-    .ok()
-
-    // add a PageHeader and give it a title
-
-    // select PageContent
-    .click(pageContentSelectControl)
-    .expect(pageContentMenu.exists)
-    .ok()
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // search to narrow choices
-    .typeText(addSearchInput, 'page')
-    .expect(pageHeaderAddControl.exists)
-    .ok()
-    // add PageHeader
-    .click(pageHeaderAddControl)
-    .expect(pageHeaderMenu.exists)
-    .ok()
-    // set page title
-    .typeText(titleInput, 'Test Page')
-    .expect(pageTitle.exists)
-    .ok()
-
-    // add a Layer with a Button that will close it
-
-    // select PageContent
-    .click(pageContentSelectControl)
-    .expect(pageContentMenu.exists)
-    .ok()
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // add Layer
-    .click(layerAddControl)
-    .expect(layerMenu.exists)
-    .ok()
-    // set layer name
-    .typeText(nameInput, 'test layer')
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // add Button
-    .click(buttonAddControl)
-    .expect(buttonMenu.exists)
-    .ok()
-    // set button label
     .typeText(labelInput, 'Close Layer', { replace: true })
     .expect(closeLayerControl.exists)
-    .ok()
-    // set button link
-    .click(linkLabel)
-    .expect(testLayerOption.exists)
-    .ok()
-    .click(testLayerOption)
-    .expect(testLayerOption.exists)
-    .notOk()
+    .ok();
+  // set button link
+  await t.click(linkLabel).expect(testLayerOption.exists).ok();
+  await t.click(testLayerOption).expect(testLayerOption.exists).notOk();
 
-    // close the Layer
+  // close the Layer
+  await t
     .click(closeLayerControl, { modifiers: { shift: true } })
     .expect(closeLayerControl.exists)
-    .notOk()
+    .notOk();
 
-    // add actions to the PageHeader to open the layer
+  // add actions to the PageHeader to open the layer
 
-    // select PageHeader
-    .click(pageHeaderSelectControl)
-    .expect(pageHeaderMenu.exists)
-    .ok()
-    // add actions
-    .click(pageHeaderAddActionsControl)
-    .expect(backPageHeaderControl.exists)
-    .ok()
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // add Button
-    .click(buttonAddControl)
-    .expect(buttonMenu.exists)
-    .ok()
-    // set button label
+  await select('PageHeader');
+  // add actions
+  await t.click(addActionsControl).expect(backPageHeaderControl.exists).ok();
+  await add('Button');
+  await t
     .typeText(labelInput, 'Open Layer', { replace: true })
     .expect(openLayerControl.exists)
-    .ok()
-    // set button link
-    .click(linkLabel)
-    .expect(testLayerOption.exists)
-    .ok()
-    .click(testLayerOption)
-    .expect(testLayerOption.exists)
-    .notOk()
+    .ok();
+  // set button link
+  await t.click(linkLabel).expect(testLayerOption.exists).ok();
+  await t.click(testLayerOption).expect(testLayerOption.exists).notOk();
+  // done with PageHeader actions
+  await t
     .click(backPageHeaderControl)
     .expect(backPageHeaderControl.exists)
-    .notOk()
+    .notOk();
 
-    // open the Layer
+  // open the Layer
+  await t
     .click(openLayerControl, { modifiers: { shift: true } })
     .expect(closeLayerControl.exists)
-    .ok()
+    .ok();
 
-    // close the Layer
+  // close the Layer
+  await t
     .click(closeLayerControl, { modifiers: { shift: true } })
     .expect(closeLayerControl.exists)
-    .notOk()
+    .notOk();
 
-    // add a screen with a link to the first screen
+  // add a screen with a link to the first screen
 
-    // add
-    .click(addControl)
-    .expect(screenAddControl.exists)
-    .ok()
-    // add Screen
-    .click(screenAddControl)
-    .expect(screenMenu.exists)
-    .ok()
-    // set screen name
+  await add('Screen');
+  // set screen name
+  await t
     .typeText(nameInput, 'Second Screen', { replace: true })
     .expect(secondScreenControl.exists)
-    .ok()
-    // select simple page screen template
-    .click(selectScreenControl)
-    .expect(empty.exists)
-    .ok()
-    // select the second screen's PageContent
-    .click(pageContentSelectControl.nth(1))
-    .expect(pageContentMenu.exists)
-    .ok()
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // add Anchor
-    .click(anchorAddControl)
-    .expect(anchorMenu.exists)
-    .ok()
-    // set anchor label
+    .ok();
+  // select simple page screen template
+  await t.click(selectScreenControl).expect(empty.exists).ok();
+  // select the second screen's PageContent
+  await select('PageContent', 1);
+  await add('Anchor');
+  // set anchor label
+  await t
     .typeText(labelInput, 'First Screen Link', { replace: true })
     .expect(firstScreenLink.exists)
-    .ok()
-    // undo
-    .click(undoControl)
-    .expect(firstScreenLink.exists)
-    .notOk()
-    // redo
-    .click(redoControl)
-    .expect(firstScreenLink.exists)
-    .ok()
-    // set anchor link
-    .click(linkLabel)
-    .expect(firstScreenOption.exists)
-    .ok()
-    .click(firstScreenOption)
-    .expect(firstScreenOption.exists)
-    .notOk()
+    .ok();
+  // undo
+  await t.click(undoControl).expect(firstScreenLink.exists).notOk();
+  // redo
+  await t.click(redoControl).expect(firstScreenLink.exists).ok();
+  // set anchor link
+  await t.click(linkLabel).expect(firstScreenOption.exists).ok();
+  await t.click(firstScreenOption).expect(firstScreenOption.exists).notOk();
 
-    // follow link to first screen
-    // without shift key, shouldn't navigate
-    .click(firstScreenLink)
-    .expect(pageTitle.exists)
-    .notOk()
-    // TODO: the following isn't working, seems like TestCafe isn't sending
-    // the 'shift' modifier
-    // // with shift, should navigate
-    // .click(firstScreenLink, { modifiers: { shift: true } })
-    // .expect(pageTitle.exists)
-    // .ok()
+  // follow link to first screen
+  // without shift key, shouldn't navigate
+  await t.click(firstScreenLink).expect(pageTitle.exists).notOk();
+  // TODO: the following isn't working, seems like TestCafe isn't sending
+  // the 'shift' modifier
+  // // with shift, should navigate
+  // await t.click(firstScreenLink, { modifiers: { shift: true } })
+  // .expect(pageTitle.exists)
+  // .ok();
 
-    // add data
-    // add
-    .click(addDataControl)
-    .expect(dataSelectControl.exists)
-    .ok()
-    .expect(dataArea.exists)
-    .ok()
-    // type data
+  // add data
+  // add
+  await t.click(addDataControl).expect(dataSelectControl.exists).ok();
+  await t.expect(dataArea.exists).ok();
+  // type data
+  await t
     .typeText(dataArea, '[{"name": "alpha"},{"name": "beta"}]', {
       replace: true,
     })
     .expect(dataSelectControl.exists)
-    .ok()
-    // select PageContent
-    .click(pageContentSelectControl.nth(0))
-    .expect(pageContentMenu.exists)
-    .ok()
-    // add
-    // add
-    .click(addControl)
-    .expect(addSearchInput.exists)
-    .ok()
-    // add DataTable
-    .click(dataTableAddControl)
-    .expect(dataTableMenu.exists)
-    .ok()
-    // set dataPath to data
+    .ok();
+  // select first screen's PageContent
+  await select('PageContent', 0);
+  await add('DataTable');
+  // set dataPath to data
+  await t
     .typeText(dataPathInput, 'data', { replace: true })
     .expect(alphaTableHeader.exists)
     .ok()
