@@ -61,8 +61,20 @@ const useDesignComponent = (id, datum) => {
     // handle any special props
     Object.keys(props).forEach((prop) => {
       const property = type.properties[prop];
-      if (Array.isArray(property) && property[0] === '-color-')
-        props[prop] = replaceWithData(props[prop], datum);
+      if (Array.isArray(property)) {
+        if (property[0] === '-color-')
+          props[prop] = replaceWithData(props[prop], datum);
+      } else if (typeof property === 'object') {
+        // handle things like: background.color = ['-color-']
+        props[prop] = { ...props[prop] };
+        Object.keys(property).forEach((subProp) => {
+          if (
+            Array.isArray(property[subProp]) &&
+            property[subProp][0] === '-color-'
+          )
+            props[prop][subProp] = replaceWithData(props[prop][subProp], datum);
+        });
+      }
     });
   }
 

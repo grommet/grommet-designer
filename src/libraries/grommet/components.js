@@ -566,6 +566,7 @@ export const components = {
     component: CardHeader,
     name: 'CardHeader',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -589,6 +590,7 @@ export const components = {
     component: CardBody,
     name: 'CardBody',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -607,6 +609,7 @@ export const components = {
     component: CardFooter,
     name: 'CardFooter',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -962,6 +965,11 @@ export const components = {
         },
       }));
       return { ...props, ...adjusted };
+    },
+    relink: (component, { relink }) => {
+      component.props?.items.forEach((item) => {
+        if (item?.link) item.link = relink(item.link);
+      });
     },
   },
   Tabs: {

@@ -723,7 +723,46 @@ export const duplicateComponent = (id, options, idMapArg) => {
     });
   }
 
-  // TOOD: update links
+  // update links
+  if (!idMapArg) {
+    const relink = (link) => {
+      if (Array.isArray(link)) return link.map(relink);
+      if (link.component) {
+        const targetId = idMap[link.component];
+        return targetId ? { ...link, component: targetId } : link;
+      }
+      if (typeof link === 'object') {
+        const result = { ...link };
+        Object.keys(result).forEach((name) => {
+          result[name] = relink(result[name]);
+        });
+        return result;
+      }
+      return link;
+    };
+
+    Object.keys(idMap).forEach((sourceId) => {
+      const component = design.components[idMap[sourceId]];
+      const type = getType(component.type);
+
+      Object.keys(type.properties).forEach((prop) => {
+        const definition = type.properties[prop];
+        if (component.props[prop] && definition === '-link-') {
+          component.props[prop] = relink(component.props[prop]);
+        }
+      });
+
+      if (type.designProperties)
+        Object.keys(type.designProperties).forEach((prop) => {
+          const definition = type.designProperties[prop];
+          if (component?.designProps?.[prop] && definition === '-link-') {
+            component.designProps[prop] = relink(component.designProps[prop]);
+          }
+        });
+
+      if (type.relink) type.relink(component, { relink });
+    });
+  }
 
   if (!idMapArg) {
     // this is the top of our duplication tree, insert it appropriately
