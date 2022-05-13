@@ -1,10 +1,11 @@
-import { getComponentType, getReferenceDesign } from '../utils';
 import { themeForValue } from '../themes';
+import { getComponent, getDesign, getType } from '../design2';
 
-export const dependencies = (design) => {
-  const result = ['styled-components'];
-  result.push('https://github.com/grommet/grommet/tarball/stable');
-  result.push('https://github.com/grommet/grommet-icons/tarball/stable');
+export const dependencies = () => {
+  const design = getDesign();
+  const result = ['styled-components', 'grommet', 'grommet-icons'];
+  // result.push('https://github.com/grommet/grommet/tarball/stable');
+  // result.push('https://github.com/grommet/grommet-icons/tarball/stable');
   const theme = themeForValue(design.theme);
   if (theme && (theme.packageUrl || theme.packageName))
     result.push(theme.packageUrl || theme.packageName);
@@ -58,13 +59,8 @@ const screenComponentName = ({ id, name }) =>
     ? `${name.charAt(0).toUpperCase()}${name.replace(/\s/g, '').slice(1)}`
     : `Screen${id}`;
 
-export const generateJSX = ({
-  component,
-  design,
-  imports: importsArg,
-  libraries,
-  theme: themeArg,
-}) => {
+export const generateJSX = (id) => {
+  const design = getDesign();
   const imports = { Grommet: true };
   const iconImports = {};
   const theme = themeForValue(design.theme);
@@ -72,10 +68,10 @@ export const generateJSX = ({
   let layers = {};
   let publishedTheme;
 
-  const componentToJSX = ({ screen, id, indent = '  ', referenceDesign }) => {
+  const componentToJSX = (id, indent = '  ') => {
     let result;
-    const component = (referenceDesign || design).components[id];
-    const type = getComponentType(libraries, component.type);
+    const component = getComponent(id);
+    const type = getType(component.type);
     if (component.type === 'designer.Icon' || component.type === 'Icon') {
       // convert icons to the appropriate <Icon />
       const { icon, ...rest } = component.props;
@@ -90,14 +86,9 @@ export const generateJSX = ({
       // repeat for Repeater
       const childId = component.children && component.children[0];
       result = childId
-        ? (
-            componentToJSX({
-              screen,
-              id: childId,
-              indent: `${indent}  `,
-              referenceDesign,
-            }) + '\n'
-          ).repeat(component.props.count)
+        ? (componentToJSX(childId, `${indent}  `) + '\n').repeat(
+            component.props.count,
+          )
         : '';
     } else if (
       component.type === 'designer.Reference' ||
@@ -105,13 +96,7 @@ export const generateJSX = ({
     ) {
       // convert References, these are just copies for now
       // someday, we'll make them their own reusable components here
-      const nextReferenceDesign = getReferenceDesign(importsArg, component);
-      result = componentToJSX({
-        screen,
-        id: component.props.component,
-        indent,
-        referenceDesign: nextReferenceDesign || design,
-      });
+      result = componentToJSX(component.props.component, indent);
     } else {
       // no component level conversion, generate grommet component
       if (component.type === 'grommet.Layer') {
@@ -123,14 +108,7 @@ export const generateJSX = ({
       let children =
         (component.children &&
           component.children
-            .map((cId) =>
-              componentToJSX({
-                screen,
-                id: cId,
-                indent: `${indent}  `,
-                referenceDesign,
-              }),
-            )
+            .map((cId) => componentToJSX(cId, `${indent}  `))
             .join('\n')) ||
         (component.text && `${indent}  ${component.text}`);
       if (children && children.length === 0) children = undefined;
@@ -183,12 +161,10 @@ export const generateJSX = ({
             component.type === 'grommet.DropButton' &&
             name === 'dropContent'
           ) {
-            return `  dropContent={(\n${componentToJSX({
-              screen,
-              id: value,
-              indent: `${indent}  `,
-              referenceDesign,
-            })}\n${indent})}\n${indent}`;
+            return `  dropContent={(\n${componentToJSX(
+              value,
+              `${indent}  `,
+            )}\n${indent})}\n${indent}`;
           }
           // handle any DataTable render columns
           // TODO: this seems a bit too messy
@@ -199,12 +175,10 @@ export const generateJSX = ({
                   `{${Object.keys(col)
                     .map((n) => {
                       if (n === 'render') {
-                        return `render: () => (\n${componentToJSX({
-                          screen,
-                          id: col[n],
-                          indent: `${indent}      `,
-                          referenceDesign,
-                        })}\n${indent}    )\n${indent}    `;
+                        return `render: () => (\n${componentToJSX(
+                          col[n],
+                          `${indent}      `,
+                        )}\n${indent}    )\n${indent}    `;
                       }
                       return `${n}: ${JSON.stringify(col[n])}`;
                     })
@@ -250,14 +224,14 @@ ${result}
     return result;
   };
 
-  if (component) {
-    return componentToJSX({ id: component.id, indent: '' });
+  if (id) {
+    return componentToJSX(id);
   } else {
-    if (!theme || theme.designerUrl) {
-      // embed any theme from the designer, since code can't depend on it
-      // directly
-      publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
-    }
+    // if (!theme || theme.designerUrl) {
+    //   // embed any theme from the designer, since code can't depend on it
+    //   // directly
+    //   publishedTheme = `const theme = ${JSON.stringify(themeArg, null, 2)}`;
+    // }
 
     Object.keys(design.screens).forEach((sId) => {
       const screen = design.screens[sId];
@@ -269,11 +243,7 @@ ${result}
       .map((sKey) => design.screens[sKey])
       .map((screen) => {
         layers = {};
-        const root = componentToJSX({
-          screen,
-          id: screen.root,
-          indent: single ? '      ' : '    ',
-        });
+        const root = componentToJSX(screen.root, single ? '      ' : '    ');
         return `${
           single ? 'export default' : `const ${screenComponentName(screen)} =`
         } () => {

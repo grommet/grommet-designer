@@ -3,9 +3,9 @@ import { Button, Header, Heading, Layer, TextArea } from 'grommet';
 import { Close } from 'grommet-icons';
 import { generateJSX } from '../design';
 
-const ComponentCode = ({ component, onDone }) => {
+const ComponentCode = ({ id, onDone }) => {
   const [code, setCode] = useState();
-  useEffect(() => setCode(generateJSX({ component })), [component]);
+  useEffect(() => setCode(generateJSX(id)), [id]);
   return (
     <Layer onClickOutside={onDone} onEsc={onDone}>
       <Header>

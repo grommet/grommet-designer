@@ -251,10 +251,7 @@ const Properties = () => {
               items={menuItems}
             />
             {showCode && (
-              <ComponentCode
-                component={component}
-                onDone={() => setShowCode(false)}
-              />
+              <ComponentCode id={selection} onDone={() => setShowCode(false)} />
             )}
             {copyFrom && (
               <CopyPropertiesFrom

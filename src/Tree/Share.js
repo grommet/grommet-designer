@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Box,
@@ -16,7 +16,7 @@ import {
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
 import { publish, useDesign } from '../design2';
-// import { dependencies, generateJSX, publish } from '../design';
+import { dependencies, generateJSX } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -30,7 +30,6 @@ const Summary = ({ Icon, label, guidance }) => (
 );
 
 const Publish = () => {
-  // const { design, updateDesign } = useContext(DesignContext);
   const design = useDesign();
   const [publication, setPublication] = useState();
   const [publishing, setPublishing] = useState();
@@ -248,27 +247,27 @@ const Developer = () => {
         <Button
           label="Generate Code"
           hoverIndicator
-          // onClick={() => {
-          //   setCode(generateJSX({ design, imports, libraries, theme }));
-          //   ReactGA.event({
-          //     category: 'share',
-          //     action: 'generate code',
-          //   });
-          // }}
+          onClick={() => {
+            setCode(generateJSX());
+            ReactGA.event({
+              category: 'share',
+              action: 'generate code',
+            });
+          }}
         />
       )}
       {code && (
         <Box>
-          {/* <Markdown>
+          <Markdown>
             {`
 * install nodejs, npm, yarn, and create-react-app (if needed)
 * \`# npx create-react-app my-app\`
 * \`# cd my-app\`
-* \`# yarn add ${dependencies(design).join(' ')}\`
+* \`# yarn add ${dependencies().join(' ')}\`
 * replace the contents of \`src/App.js\` with the text below
 * \`# yarn start\`
             `}
-          </Markdown> */}
+          </Markdown>
           <TextArea value={code} rows={20} cols={40} readOnly />
         </Box>
       )}
