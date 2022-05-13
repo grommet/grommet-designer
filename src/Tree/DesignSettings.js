@@ -2,15 +2,15 @@ import React, { useCallback, useState } from 'react';
 import {
   Anchor,
   Box,
-  Button,
+  // Button,
   Heading,
-  Paragraph,
+  // Paragraph,
   RadioButtonGroup,
   Text,
-  TextArea,
+  // TextArea,
   TextInput,
 } from 'grommet';
-import { Add, Trash } from 'grommet-icons';
+// import { Add, Trash } from 'grommet-icons';
 import { getTheme, setDesignProperty, useDesign } from '../design2';
 import useDebounce from '../useDebounce';
 import Action from '../components/Action';
@@ -117,7 +117,7 @@ const DesignSettings = ({ onClose }) => {
           )}
         </Box>
 
-        <Box>
+        {/* <Box>
           <Box direction="row" justify="between" align="center">
             <Heading level={3} size="small">
               Imports
@@ -175,7 +175,7 @@ const DesignSettings = ({ onClose }) => {
               ))}
             </Box>
           )}
-        </Box>
+        </Box> */}
       </Box>
     </Action>
   );
