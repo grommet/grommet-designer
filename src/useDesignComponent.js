@@ -28,7 +28,9 @@ const useDesignComponent = (id, datum) => {
 
   // inlineEdit is the component id of the component being edited inline
   const inlineEditOnChange = useCallback(
-    (nextText) => setProperty(id, undefined, 'text', nextText),
+    (nextText) => {
+      setProperty(id, undefined, 'text', nextText);
+    },
     [id],
   );
   // inlineEditSize is the size of the component being edited inline
@@ -136,6 +138,7 @@ const useDesignComponent = (id, datum) => {
         defaultValue={component.text || ''}
         size={inlineEditSize}
         onChange={inlineEditOnChange}
+        onDone={() => setInlineEditSize(undefined)}
       />
     );
   } else if (component.text || type.text) {
