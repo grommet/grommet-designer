@@ -311,7 +311,7 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             setSelection,
             { followLink, followLinkOption, setLocation },
           ]
-        : [undefined, undefined, {}],
+        : [undefined, undefined, { followLink, followLinkOption }],
     [followLink, followLinkOption, mode, selection],
   );
 

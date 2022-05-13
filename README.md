@@ -16,6 +16,9 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 - **command-c** or **control-c**: copies the selected component
 - **command-v** or **control-v**: pastes the previously copied component
   into the selected component
+- **command-V** or **control-V**: pastes the previously copied component
+  after the selected component
+- **s**: toggles collapsing all screens in the component tree
 
 ### Linking
 

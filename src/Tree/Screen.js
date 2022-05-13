@@ -72,8 +72,9 @@ const Screen = ({ first, id }) => {
       {!screen.collapsed && screen.root && (
         <Box
           flex={false}
+          tabIndex="-1"
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => setLocation({ screen: id })}
-          focusIndicator={false}
         >
           <Component id={screen.root} />
         </Box>

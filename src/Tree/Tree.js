@@ -8,7 +8,13 @@ import React, {
 } from 'react';
 import { Box, Button, Keyboard, Paragraph, Text } from 'grommet';
 import { Previous } from 'grommet-icons';
-import { duplicateComponent, getName, getRoot, useScreens } from '../design2';
+import {
+  duplicateComponent,
+  getName,
+  getRoot,
+  setScreenProperty,
+  useScreens,
+} from '../design2';
 import SelectionContext from '../SelectionContext';
 import DragDropContext from './DragDropContext';
 import Header from './Header';
@@ -64,6 +70,7 @@ const Tree = ({ onClose, root, setMode }) => {
   // }, [design, selected]);
 
   const [copied, setCopied] = useState();
+  const [collapsed, setCollapsed] = useState(false);
   const treeRef = useRef();
   // const selectionRef = useRef();
 
@@ -115,35 +122,28 @@ const Tree = ({ onClose, root, setMode }) => {
       document.activeElement === document.body ||
       within(event.target, treeRef.current)
     ) {
-      // if (event.key === 'ArrowDown') {
-      //   setSelected(nextSiblingSelected(design, selected) || selected);
-      // }
-      // if (event.key === 'ArrowUp') {
-      //   setSelected(previousSiblingSelected(design, selected) || selected);
-      // }
-      // if (event.key === 'ArrowLeft') {
-      //   setSelected(parentSelected(design, selected) || selected);
-      // }
-      // if (event.key === 'ArrowRight') {
-      //   setSelected(childSelected(design, selected) || selected);
-      // }
       if (event.key === 'c' && (event.metaKey || event.ctrlKey)) {
         setCopied(selection);
         // if (navigator.clipboard && navigator.clipboard.writeText) {
         //   navigator.clipboard.writeText(serialize(design, selected));
         // }
-        // } else if (event.key === 'c') {
-        //   toggleCollapse(selected.component);
+      } else if (
+        event.key === 'v' &&
+        event.shiftKey &&
+        (event.metaKey || event.ctrlKey)
+      ) {
+        // 'V' -> after
+        if (copied && copied !== selection) {
+          setSelection(duplicateComponent(copied, { after: selection }));
+        }
       } else if (event.key === 'v' && (event.metaKey || event.ctrlKey)) {
         // 'v' -> within
         if (copied && copied !== selection) {
           setSelection(duplicateComponent(copied, { within: selection }));
         }
-      } else if (event.key === 'V' && (event.metaKey || event.ctrlKey)) {
-        // 'V' -> after
-        if (copied && copied !== selection) {
-          setSelection(duplicateComponent(copied, { after: selection }));
-        }
+      } else if (event.key === 's') {
+        screens.forEach((id) => setScreenProperty(id, 'collapsed', !collapsed));
+        setCollapsed(!collapsed);
       }
     }
   };
