@@ -1,6 +1,12 @@
-import React, { forwardRef, useContext, useMemo } from 'react';
+import React, {
+  forwardRef,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Box, Button, Text, ThemeContext } from 'grommet';
-import { Edit } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 import { getTheme } from '../design2';
 import ArrayProperty from './ArrayProperty';
@@ -40,8 +46,25 @@ const ColorProperty = forwardRef(
         .sort();
     }, [baseTheme.global.colors, theme.global.colors]);
 
+    const [focusDataPath, setFocusDataPath] = useState();
+    const dpRef = useRef();
+
+    useEffect(() => {
+      if (focusDataPath) {
+        dpRef.current.focus();
+        setFocusDataPath(false);
+      }
+    }, [focusDataPath]);
+
     if (value === '' || value?.[0] === '{')
-      return <DataPathField name={name} onChange={onChange} value={value} />;
+      return (
+        <DataPathField
+          ref={dpRef}
+          name={name}
+          onChange={onChange}
+          value={value}
+        />
+      );
 
     return (
       <ArrayProperty
@@ -54,7 +77,15 @@ const ColorProperty = forwardRef(
         value={value}
         onChange={onChange}
       >
-        {!value && <Button icon={<Edit />} onClick={() => onChange('{}')} />}
+        {!value && (
+          <Button
+            icon={<Text color="text-weak">{'{}'}</Text>}
+            onClick={() => {
+              onChange('{}');
+              setFocusDataPath(true);
+            }}
+          />
+        )}
       </ArrayProperty>
     );
   },

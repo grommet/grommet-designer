@@ -54,6 +54,16 @@ const useDesignComponent = (id, datum) => {
   const type = getType(component.type);
   if (!type) return renderNull;
 
+  // replace data for properties we know about
+  if (type.properties) {
+    // handle any special props
+    Object.keys(props).forEach((prop) => {
+      const property = type.properties[prop];
+      if (Array.isArray(property) && property[0] === '-color-')
+        props[prop] = replaceWithData(props[prop], datum);
+    });
+  }
+
   // allow the type to adjust props if needed
   if (type.adjustProps)
     props = type.adjustProps(props, {

@@ -1892,11 +1892,11 @@ export const components = {
       value: 0,
       values: MeterValues,
     },
-    adjustProps: (props) => {
+    adjustProps: (props, { datum }) => {
       const adjusted = {
         value:
           typeof props.value === 'string'
-            ? replaceWithData(props.value)
+            ? replaceWithData(props.value, datum)
             : props.value,
       };
       return { ...props, ...adjusted };

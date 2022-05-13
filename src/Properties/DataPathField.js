@@ -1,10 +1,15 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Button, TextInput } from 'grommet';
-import { Trash } from 'grommet-icons';
+import { FormClose } from 'grommet-icons';
 import Field from '../components/Field';
 
 const DataPathField = forwardRef(({ name, onChange, value }, ref) => {
   const [dataPath, setDataPath] = useState(value);
+
+  useEffect(() => {
+    if (document.activeElement === ref.current)
+      ref.current.setSelectionRange(1, 1);
+  }, [ref]);
 
   return (
     <Field label={name} htmlFor={name}>
@@ -23,7 +28,7 @@ const DataPathField = forwardRef(({ name, onChange, value }, ref) => {
       />
 
       <Button
-        icon={<Trash />}
+        icon={<FormClose />}
         onClick={() => {
           setDataPath(undefined);
           onChange(undefined);
