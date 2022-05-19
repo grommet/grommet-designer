@@ -15,7 +15,7 @@ exports[`App create 1`] = `
           class="StyledBox-sc-13pk1d4-0 eTttHY"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 bYjkCH"
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
           >
             <div
               class="StyledBox-sc-13pk1d4-0 laNGQF"
@@ -33,7 +33,7 @@ exports[`App create 1`] = `
               class="StyledBox-sc-13pk1d4-0 iEzZsk"
             >
               <p
-                class="StyledParagraph-sc-tbetod-0 ekoyds"
+                class="StyledParagraph-sc-tbetod-0 dXMFEr"
               >
                 design with grommet components
               </p>
@@ -218,7 +218,7 @@ exports[`App create 2`] = `
           class="StyledBox-sc-13pk1d4-0 hzTDiM"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 bYjkCH"
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
           >
             <div
               class="StyledBox-sc-13pk1d4-0 laNGQF"
@@ -489,7 +489,7 @@ exports[`App create 3`] = `
           class="StyledBox-sc-13pk1d4-0 hzTDiM"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 bYjkCH"
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
           >
             <div
               class="StyledBox-sc-13pk1d4-0 laNGQF"
