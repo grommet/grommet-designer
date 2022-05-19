@@ -181,7 +181,7 @@ const Start = ({
       <PageContent flex align="center" justify="center" animation="fadeIn">
         {!designs?.length && (
           <Text size="3xl" color="text-weak">
-            Maybe ... create something?
+            Hi, ... maybe create a new design?
           </Text>
         )}
       </PageContent>
