@@ -29,14 +29,15 @@ export const listen = (id = 'all', func) => {
   };
 };
 
-const notify = (id, data, { immediateStore } = {}) => {
+const notify = (id, dataArg, { immediateStore } = {}) => {
   if (id) {
     if (Array.isArray(id))
       id.forEach(
-        (id2) => listeners[id2] && listeners[id2].forEach((f) => f(data)),
+        (id2) => listeners[id2] && listeners[id2].forEach((f) => f(dataArg)),
       );
-    else listeners[id] && listeners[id].forEach((f) => f(data));
+    else listeners[id] && listeners[id].forEach((f) => f(dataArg));
   }
+  if (listeners.data && data[id]) listeners.data.forEach((f) => f(data));
   if (listeners.all) listeners.all.forEach((f) => f(design));
   immediateStore ? store() : lazilyStore();
 };
@@ -419,6 +420,16 @@ const updateData = (id, func) => {
   if (func) {
     func(nextData);
     design.data[id] = nextData;
+    if (nextData.remote) {
+      if (nextData[id].url) {
+        // update from URL
+        fetch(nextData[id].url)
+          .then((response) => response.json())
+          .then((response) => {
+            data[id].data = response;
+          });
+      }
+    } else data[id] = nextData;
     notify(id, nextData);
   }
   return nextData;
@@ -965,7 +976,13 @@ export const useComponent = (id) => {
 
 export const useAllData = () => {
   const [, setData] = useState(data);
-  useEffect(() => listen('data', () => setData(data)), []);
+  useEffect(
+    () =>
+      listen('data', () => {
+        setData({ ...data });
+      }),
+    [],
+  );
   return data;
 };
 
