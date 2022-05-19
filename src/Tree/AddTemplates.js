@@ -6,7 +6,7 @@ import AddButton from './AddButton';
 import AddMethod from './AddMethod';
 
 const AddTemplates = ({ addOptions, onClose, searchExp }) => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [, /* selection */ setSelection] = useContext(SelectionContext);
   const [addMode, setAddMode] = useState();
 
   const design = useDesign();

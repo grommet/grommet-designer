@@ -51,9 +51,9 @@ const designerTheme = {
 const App = () => {
   const [start, setStart] = useState();
   const [newDesign, setNewDesign] = useState();
-  const [error, setError] = useState();
+  const [error /* setError */] = useState();
   const [auth, setAuth] = useState();
-  const [password, setPassword] = useState();
+  const [, /* password */ setPassword] = useState();
   // const [subsequent, setSubsequent] = useState();
   const [loadProps, setLoadProps] = useState();
   const [colorMode, setColorMode] = useState('dark');
