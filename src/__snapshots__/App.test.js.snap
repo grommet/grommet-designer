@@ -6,7 +6,7 @@ exports[`App create 1`] = `
     class="StyledGrommet-sc-19lkkz7-0 jWa-Dst"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 PVrDc"
+      class="StyledBox-sc-13pk1d4-0 ciHyFu"
     >
       <div
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
@@ -51,44 +51,50 @@ exports[`App create 1`] = `
             </div>
           </div>
         </header>
-        <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
-        />
-        <div
-          class="StyledBox-sc-13pk1d4-0 iNDmPr"
+      </div>
+      <div
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
+      />
+      <div
+        class="StyledBox-sc-13pk1d4-0 uBxuw"
+      >
+        <span
+          class="StyledText-sc-1sadyjn-0 cRNSBJ"
         >
-          <div
-            class="StyledBox-sc-13pk1d4-0 fvmIiV FileInput__ContentsBox-sc-1jzq7im-0 cWXikG"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 USRwM"
-            >
-              <span
-                class="StyledText-sc-1sadyjn-0 bsTMTM FileInput__Message-sc-1jzq7im-2 gfzwDx"
-              >
-                Import - drop design file here
-              </span>
-              <a
-                class="StyledAnchor-sc-1rp7lwl-0 eysSdj"
-                tabindex="0"
-              >
-                browse
-              </a>
-            </div>
-            <input
-              accept=".json"
-              class="StyledFileInput-sc-rl7ywv-0 jBwQTO"
-              type="file"
-            />
-          </div>
-        </div>
+          Maybe ... create something?
+        </span>
       </div>
       <div
         class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
       />
       <div
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
-      />
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 fvmIiV FileInput__ContentsBox-sc-1jzq7im-0 cWXikG"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 USRwM"
+          >
+            <span
+              class="StyledText-sc-1sadyjn-0 bsTMTM FileInput__Message-sc-1jzq7im-2 gfzwDx"
+            >
+              Import - drop design file here
+            </span>
+            <a
+              class="StyledAnchor-sc-1rp7lwl-0 eysSdj"
+              tabindex="0"
+            >
+              browse
+            </a>
+          </div>
+          <input
+            accept=".json"
+            class="StyledFileInput-sc-rl7ywv-0 jBwQTO"
+            type="file"
+          />
+        </div>
+      </div>
       <div
         class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
       />

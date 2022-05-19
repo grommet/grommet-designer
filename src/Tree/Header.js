@@ -14,6 +14,7 @@ import { Add, FormDown, Redo, Undo } from 'grommet-icons';
 import { getDesign, removeDesign, useChanges } from '../design2';
 import AddComponent from './AddComponent';
 import DesignSettings from './DesignSettings';
+import Help from './Help';
 import Sharing from './Share';
 
 const within = (node, container) => {
@@ -27,6 +28,7 @@ const Header = ({ onClose, property, setMode }) => {
   const [editing, setEditing] = useState();
   const [sharing, setSharing] = useState();
   const [deleting, setDeleting] = useState();
+  const [help, setHelp] = useState();
   const { undo, redo } = useChanges();
   const ref = useRef();
 
@@ -74,6 +76,7 @@ const Header = ({ onClose, property, setMode }) => {
                   };`,
                   onClick: () => setMode('comments'),
                 },
+                { label: 'help', onClick: () => setHelp(true) },
                 { label: 'close', onClick: onClose },
                 { label: 'delete ...', onClick: () => setDeleting(true) },
               ]}
@@ -152,6 +155,7 @@ const Header = ({ onClose, property, setMode }) => {
           <AddComponent onClose={() => setAdding(false)} property={property} />
         )}
         {editing && <DesignSettings onClose={() => setEditing(false)} />}
+        {help && <Help onClose={() => setHelp(false)} />}
       </Box>
     </Keyboard>
   );

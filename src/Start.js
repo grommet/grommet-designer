@@ -9,7 +9,6 @@ import {
   Heading,
   // Image,
   List,
-  Markdown,
   Page,
   PageContent,
   PageHeader,
@@ -17,8 +16,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { List as ListIcon, Search } from 'grommet-icons';
-import readmePath from './README.md';
+import { Grommet, List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
@@ -41,7 +39,6 @@ const Start = ({
 }) => {
   const [designs, setDesigns] = useState([]);
   const [designsFetched, setDesignsFetched] = useState([]);
-  const [readme, setReadme] = useState();
   const [search, setSearch] = useState();
   const [error, setError] = useState();
   const [manage, setManage] = useState();
@@ -71,18 +68,6 @@ const Start = ({
     }
   }, []);
 
-  useEffect(() => {
-    fetch(readmePath)
-      .then((response) => {
-        if (response.ok) {
-          response
-            .text()
-            .then((text) => setReadme(text.split('\n').splice(8).join('\n')));
-        }
-      })
-      .catch();
-  }, []);
-
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
   const designsData = useMemo(() => {
@@ -98,7 +83,7 @@ const Start = ({
   }, [designsFetched, searchExp]);
 
   return (
-    <Page kind="narrow" gap="large">
+    <Page kind="narrow" gap="large" height={{ min: '100vh' }}>
       <PageContent gap="large">
         <PageHeader
           margin={{ top: 'large' }}
@@ -191,39 +176,48 @@ const Start = ({
             </List>
           </Box>
         )}
+      </PageContent>
 
-        <Box>
-          {error && (
-            <Box
-              background={{ color: 'status-error', opacity: 'weak' }}
-              pad="small"
-            >
-              <Text>{error}</Text>
-            </Box>
-          )}
-          <FileInput
-            accept=".json"
-            messages={{
-              dropPrompt: 'Import - drop design file here',
-            }}
-            onChange={(event) => {
-              setError(undefined);
-              const reader = new FileReader();
-              reader.onload = () => {
-                try {
-                  const design = JSON.parse(reader.result);
-                  // TODO: reconcile if we have existing already
-                  onLoadProps({ design });
-                } catch (e) {
-                  setError(e.message);
-                }
-              };
-              reader.readAsText(event.target.files[0]);
-            }}
-          />
-        </Box>
+      <PageContent flex align="center" justify="center" animation="fadeIn">
+        {!designs?.length && (
+          <Text size="3xl" color="text-weak">
+            Maybe ... create something?
+          </Text>
+        )}
+      </PageContent>
 
-        {/* <Box>
+      <PageContent>
+        {error && (
+          <Box
+            background={{ color: 'status-error', opacity: 'weak' }}
+            pad="small"
+          >
+            <Text>{error}</Text>
+          </Box>
+        )}
+        <FileInput
+          accept=".json"
+          messages={{
+            dropPrompt: 'Import - drop design file here',
+          }}
+          onChange={(event) => {
+            setError(undefined);
+            const reader = new FileReader();
+            reader.onload = () => {
+              try {
+                const design = JSON.parse(reader.result);
+                // TODO: reconcile if we have existing already
+                onLoadProps({ design });
+              } catch (e) {
+                setError(e.message);
+              }
+            };
+            reader.readAsText(event.target.files[0]);
+          }}
+        />
+      </PageContent>
+
+      {/* <Box>
           <Heading level={2}>tutorial</Heading>
           {tutorials.map(({ thumb, title, url }) => (
             <Button key={title} plain href={url} target="_blank">
@@ -244,15 +238,6 @@ const Start = ({
             </Button>
           ))}
         </Box> */}
-      </PageContent>
-
-      <PageContent>
-        {readme && (
-          <Box flex={false}>
-            <Markdown>{readme}</Markdown>
-          </Box>
-        )}
-      </PageContent>
 
       <PageContent
         background={{ color: 'background-contrast', fill: 'horizontal' }}
