@@ -105,102 +105,26 @@ exports[`App create 1`] = `
           class="StyledBox-sc-13pk1d4-0 bVaHlQ"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 ldzWvk"
+            class="StyledBox-sc-13pk1d4-0 bepZbk"
           >
-            <div
-              class="StyledBox-sc-13pk1d4-0 jzOfgr"
-              id="themeMode"
-              role="radiogroup"
+            <button
+              class="StyledButton-sc-323bzc-0 dCpDhA"
+              title="Toggle settings"
+              type="button"
             >
-              <label
-                class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 hZkGAh"
-                for="themeMode-dark"
+              <svg
+                aria-label="Configure"
+                class="StyledIcon-sc-ofa7kd-0 cnewlt"
+                viewBox="0 0 24 24"
               >
-                <div
-                  class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
-                >
-                  <input
-                    checked=""
-                    class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
-                    id="themeMode-dark"
-                    name="themeMode"
-                    tabindex="0"
-                    type="radio"
-                    value="dark"
-                  />
-                  <div
-                    class="StyledBox-sc-13pk1d4-0 yCrnp StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
-                  >
-                    <svg
-                      class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 ebEcYD"
-                      preserveAspectRatio="xMidYMid meet"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="6"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <span
-                  class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
-                >
-                  dark
-                </span>
-              </label>
-              <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
-              />
-              <label
-                class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 hZkGAh"
-                for="themeMode-light"
-              >
-                <div
-                  class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
-                >
-                  <input
-                    class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
-                    id="themeMode-light"
-                    name="themeMode"
-                    tabindex="-1"
-                    type="radio"
-                    value="light"
-                  />
-                  <div
-                    class="StyledBox-sc-13pk1d4-0 bKTvBx StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
-                  />
-                </div>
-                <span
-                  class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
-                >
-                  light
-                </span>
-              </label>
-            </div>
-            <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
-            />
-            <label
-              class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 Ecyyo"
-              label="right to left"
-            >
-              <div
-                class="StyledBox-sc-13pk1d4-0 gibDHu StyledCheckBox-sc-1dbk5ju-6 eJWclz"
-              >
-                <input
-                  class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 cUmXGB"
-                  type="checkbox"
+                <path
+                  d="M16 15c4.009-.065 7-3.033 7-7 0-3.012-.997-2.015-2-1-.991.98-3 3-3 3l-4-4s2.02-2.009 3-3c1.015-1.003 1.015-2-1-2-3.967 0-6.947 2.991-7 7 .042.976 0 3 0 3-1.885 1.897-4.34 4.353-6 6-2.932 2.944 1.056 6.932 4 4 1.65-1.662 4.113-4.125 6-6 0 0 2.024-.042 3 0z"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
                 />
-                <div
-                  class="StyledBox-sc-13pk1d4-0 iZMNbh StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 bNwZfh"
-                />
-              </div>
-              <span>
-                right to left
-              </span>
-            </label>
+              </svg>
+            </button>
           </div>
         </div>
       </div>

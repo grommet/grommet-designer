@@ -16,7 +16,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { List as ListIcon, Search } from 'grommet-icons';
+import { Configure, List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 
@@ -42,6 +42,7 @@ const Start = ({
   const [search, setSearch] = useState();
   const [error, setError] = useState();
   const [manage, setManage] = useState();
+  const [settings, setSettings] = useState();
 
   useEffect(() => {
     document.title = 'Grommet Designer';
@@ -245,26 +246,35 @@ const Start = ({
         <Box
           flex={false}
           direction="row"
-          justify="center"
           gap="medium"
-          pad={{ vertical: 'medium' }}
+          pad={{ vertical: 'small' }}
         >
-          <RadioButtonGroup
-            id="themeMode"
-            name="themeMode"
-            direction="row"
-            gap="medium"
-            options={['dark', 'light']}
-            value={colorMode || ''}
-            onChange={(event) => {
-              setColorMode(event.target.value);
-            }}
+          <Button
+            icon={<Configure />}
+            title="Toggle settings"
+            hoverIndicator
+            onClick={() => setSettings(!settings)}
           />
-          <CheckBox
-            label="right to left"
-            checked={rtl || false}
-            onChange={() => setRtl(!rtl)}
-          />
+          {settings && [
+            <RadioButtonGroup
+              key="themeMode"
+              id="themeMode"
+              name="themeMode"
+              direction="row"
+              gap="medium"
+              options={['dark', 'light']}
+              value={colorMode || ''}
+              onChange={(event) => {
+                setColorMode(event.target.value);
+              }}
+            />,
+            <CheckBox
+              key="rtl"
+              label="right to left"
+              checked={rtl || false}
+              onChange={() => setRtl(!rtl)}
+            />,
+          ]}
         </Box>
       </PageContent>
 
