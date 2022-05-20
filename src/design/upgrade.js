@@ -362,5 +362,22 @@ export const upgradeDesign = (design) => {
       });
     });
 
-  design.version = 3.7;
+  if (design.data) {
+    // update data to use ids
+    const nextData = {};
+    Object.keys(design.data).forEach((key) => {
+      let id = parseInt(key, 10);
+      if (id) nextData[id] = design.data[key];
+      else {
+        // using old style which was just name => serialized data
+        // convert to id => { name, url, data: object }
+        id = design.nextId;
+        design.nextId += 1;
+        nextData[id] = { id, name: key, data: JSON.parse(design.data[key]) };
+      }
+    });
+    design.data = nextData;
+  }
+
+  design.version = 4.0;
 };
