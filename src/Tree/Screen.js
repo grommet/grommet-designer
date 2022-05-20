@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Box, Button, Heading, Stack } from 'grommet';
+import { Box, Button, Heading } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import { getName, toggleCollapsed, useScreen } from '../design2';
 import SelectionContext from '../SelectionContext';
@@ -16,13 +16,25 @@ const Screen = ({ first, id }) => {
 
   if (!screen) return null;
 
-  const collapserColor = selection === id ? 'white' : 'border';
+  const name = getName(id);
+
   const CollapseIcon = screen.collapsed ? FormNext : FormDown;
 
   return (
     <Box flex={false} border={first ? undefined : 'top'}>
       {first && <ScreenDropArea id={id} where="before" />}
-      <Stack anchor="left">
+      <Box direction="row">
+        {screen.root && (
+          <Button
+            title={`toggle collapse ${name}`}
+            hoverIndicator
+            onClick={() => toggleCollapsed(id)}
+          >
+            <Box pad="xsmall">
+              <CollapseIcon color="border" />
+            </Box>
+          </Button>
+        )}
         <Button
           fill
           hoverIndicator
@@ -43,11 +55,7 @@ const Screen = ({ first, id }) => {
           }}
         >
           <Box
-            direction="row"
-            align="center"
-            justify="between"
-            gap="medium"
-            pad={{ vertical: 'small', left: 'large', right: 'small' }}
+            pad={{ vertical: 'small', horizontal: 'small' }}
             background={
               (selection === id && 'selected-background') || undefined
             }
@@ -58,22 +66,16 @@ const Screen = ({ first, id }) => {
               margin="none"
               color="selected-text"
             >
-              {getName(id)}
+              {name}
             </Heading>
           </Box>
         </Button>
-        {screen.root && (
-          <Button
-            icon={<CollapseIcon color={collapserColor} />}
-            onClick={() => toggleCollapsed(id)}
-          />
-        )}
-      </Stack>
+      </Box>
+
       {!screen.collapsed && screen.root && (
         <Box
           flex={false}
           tabIndex="-1"
-          onMouseDown={(event) => event.preventDefault()}
           onClick={() => setLocation({ screen: id })}
         >
           <Component id={screen.root} />

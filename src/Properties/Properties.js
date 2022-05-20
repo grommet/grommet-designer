@@ -266,6 +266,7 @@ const Properties = () => {
                 title="duplicate"
                 tip="duplicate"
                 icon={<Duplicate />}
+                hoverIndicator
                 onClick={duplicate}
               />
             )}
@@ -274,6 +275,7 @@ const Properties = () => {
                 title="delete"
                 tip="delete"
                 icon={<Trash />}
+                hoverIndicator
                 onClick={delet}
               />
             ) : (
@@ -282,6 +284,7 @@ const Properties = () => {
                 title="references"
                 tip="references"
                 icon={<Location />}
+                hoverIndicator
                 dropAlign={{ top: 'bottom' }}
                 dropContent={
                   <Box>

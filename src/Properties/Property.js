@@ -78,8 +78,21 @@ const Property = React.forwardRef(
           );
         return null;
       }
+      if (definition.includes('-data-')) {
+        return (
+          <ArrayProperty
+            ref={ref}
+            dataPath
+            options={definition.filter((o) => o !== '-data-')}
+            value={value}
+            {...rest}
+          />
+        );
+      }
       if (
-        definition.some((p) => typeof p === 'string' && p.includes('-property-'))
+        definition.some(
+          (p) => typeof p === 'string' && p.includes('-property-'),
+        )
       ) {
         const component = getComponent(rest.id);
         const [, from] = definition[0].split(' ');

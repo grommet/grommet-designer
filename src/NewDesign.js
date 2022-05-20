@@ -18,6 +18,9 @@ import {
 import { Close } from 'grommet-icons';
 import { pushPath } from './utils';
 import { newDesign } from './design2';
+import app from './templates/app';
+
+const templates = { app };
 
 const newPath = '/_new';
 
@@ -29,7 +32,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     themeUrl: '',
   });
   const [designs, setDesigns] = useState([]);
-  const [sources, setSources] = useState(['blank']);
+  const [sources, setSources] = useState(['blank', ...Object.keys(templates)]);
   const nameRef = useRef();
 
   useEffect(() => {
@@ -72,7 +75,12 @@ const NewDesign = ({ onClose, onLoadProps }) => {
               // loading an existing design, load what we've got
               // and change the name
               loadProps.design = JSON.parse(localStorage.getItem(value.source));
-              loadProps.design.name = value.name;
+            } else if (templates[value.source]) {
+              const template = templates[value.source];
+              loadProps.design = template;
+              loadProps.theme = value.themeUrl || value.theme;
+              loadProps.location =
+                template.screens[template.screenOrder[0]].path;
             } else {
               loadProps.design = newDesign(
                 value.name,
@@ -80,6 +88,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
               );
               loadProps.selection = 1;
             }
+            loadProps.design.name = value.name;
             onLoadProps(loadProps);
           }}
         >
@@ -97,7 +106,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           <FormField label="start with">
             <Select name="source" options={sources} />
           </FormField>
-          {value.source === 'blank' && (
+          {(value.source === 'blank' || templates[value.source]) && (
             <FormField label="theme" name="theme">
               <RadioButtonGroup
                 name="theme"

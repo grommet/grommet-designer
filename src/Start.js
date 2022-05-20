@@ -16,7 +16,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Grommet, List as ListIcon, Search } from 'grommet-icons';
+import { List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
 import Manage from './Manage';
 

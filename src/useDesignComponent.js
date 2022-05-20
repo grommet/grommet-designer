@@ -64,6 +64,8 @@ const useDesignComponent = (id, datum) => {
       if (Array.isArray(property)) {
         if (property[0] === '-color-')
           props[prop] = replaceWithData(props[prop], datum);
+        else if (property.includes('-data-'))
+          props[prop] = replaceWithData(props[prop], datum);
       } else if (typeof property === 'object') {
         // handle things like: background.color = ['-color-']
         props[prop] = { ...props[prop] };

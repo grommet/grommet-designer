@@ -1,6 +1,7 @@
-import React from 'react';
-import { Box, Select, Text } from 'grommet';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, Select, Text } from 'grommet';
 import Field from '../components/Field';
+import DataPathField from './DataPathField';
 
 const OptionLabel = ({ selected, value }) => (
   <Box pad="small">
@@ -14,6 +15,7 @@ const ArrayProperty = React.forwardRef(
   (
     {
       children,
+      dataPath,
       Label,
       multiple,
       name,
@@ -51,9 +53,38 @@ const ArrayProperty = React.forwardRef(
       else if (!valueKey) option = value;
     }
 
+    const [focusDataPath, setFocusDataPath] = useState();
+    const dpRef = useRef();
+
+    useEffect(() => {
+      if (focusDataPath) {
+        dpRef.current.focus();
+        setFocusDataPath(false);
+      }
+    }, [focusDataPath]);
+
+    if (dataPath && (value === '' || value?.[0] === '{'))
+      return (
+        <DataPathField
+          ref={dpRef}
+          name={name}
+          onChange={onChange}
+          value={value}
+        />
+      );
+
     return (
       <Field key={name} ref={ref || fieldRef} label={name} htmlFor={name}>
-        {children}
+        {(dataPath && !value && (
+          <Button
+            icon={<Text color="text-weak">{'{}'}</Text>}
+            onClick={() => {
+              onChange('{}');
+              setFocusDataPath(true);
+            }}
+          />
+        )) ||
+          children}
         <Select
           ref={ref}
           plain

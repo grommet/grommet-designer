@@ -111,6 +111,8 @@ const Designer = ({ loadProps, onClose, thumb }) => {
             setLocation(savedState.location);
           } else {
             setMode(params.mode || 'edit');
+            if (loadProps.location)
+              setLocation(getLocationForPath(loadProps.location));
             if (loadProps.selection) setSelection(loadProps.selection);
           }
         }

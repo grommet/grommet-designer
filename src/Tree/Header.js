@@ -103,6 +103,7 @@ const Header = ({ onClose, property, setMode }) => {
             <Button
               title="undo last change"
               tip="undo last change"
+              hoverIndicator
               icon={<Undo />}
               disabled={!undo}
               onClick={undo}
@@ -111,6 +112,7 @@ const Header = ({ onClose, property, setMode }) => {
               title="redo last change"
               tip="redo last change"
               icon={<Redo />}
+              hoverIndicator
               disabled={!redo}
               onClick={redo}
             />
@@ -118,6 +120,7 @@ const Header = ({ onClose, property, setMode }) => {
               title="add a component"
               tip="add a component"
               icon={<Add />}
+              hoverIndicator
               onClick={() => setAdding(true)}
             />
           </Box>

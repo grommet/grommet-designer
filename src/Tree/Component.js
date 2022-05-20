@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Button, Stack, Text } from 'grommet';
+import { Box, Button, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
 import {
@@ -37,13 +37,28 @@ const Component = ({ id, first }) => {
   // if (component.type === 'designer.Reference')
   //   reference = getComponent(component.props.component);
 
-  const collapserColor = selection === id ? 'white' : 'border';
   const CollapseIcon = component.collapsed ? FormNext : FormDown;
 
   return (
     <Box>
       {first && <ComponentDropArea id={id} where="before" />}
-      <Stack anchor="left">
+      <Box direction="row">
+        {component.children ? (
+          <Button
+            title={`toggle collapse ${name}`}
+            aria-label={`${
+              component.collapsed ? 'Expand' : 'Collapse'
+            } ${name}`}
+            hoverIndicator
+            onClick={() => toggleCollapsed(id)}
+          >
+            <Box pad="xsmall">
+              <CollapseIcon color="border" />
+            </Box>
+          </Button>
+        ) : (
+          <Box pad="small" />
+        )}
         <Button
           fill
           hoverIndicator
@@ -78,7 +93,7 @@ const Component = ({ id, first }) => {
             direction="row"
             align="center"
             gap="medium"
-            pad={{ vertical: 'xsmall', left: 'large', right: 'small' }}
+            pad={{ vertical: 'xsmall', horizontal: 'small' }}
             background={
               (dragOver && 'focus') ||
               (selection === id && 'selected-background') ||
@@ -95,14 +110,7 @@ const Component = ({ id, first }) => {
             )}
           </Box>
         </Button>
-        {component.children && (
-          <Button
-            title={`toggle collapse ${name}`}
-            icon={<CollapseIcon color={collapserColor} />}
-            onClick={() => toggleCollapsed(id)}
-          />
-        )}
-      </Stack>
+      </Box>
       {!component.collapsed && component.children && (
         <Box pad={{ left: 'small' }}>
           {component.children.map((childId, index) => (

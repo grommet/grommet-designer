@@ -1974,7 +1974,7 @@ export const components = {
       message: 'Special message',
     },
     properties: {
-      status: ['critical', 'warning', 'normal', 'unknown'],
+      status: ['critical', 'warning', 'normal', 'unknown', '-data-'],
       message: '',
       title: '',
       toast: false,
@@ -1988,6 +1988,11 @@ export const components = {
           event.stopPropagation();
           followLink(props.onClose);
         };
+      adjusted.title = replaceWithData(props.title);
+      adjusted.message = replaceWithData(props.message);
+      // workaround for Notification not being very defensive
+      if (props?.status && (props.status[0] === '{' || props.status[0] === '['))
+        adjusted.status = undefined;
       return { ...props, ...adjusted };
     },
   },
