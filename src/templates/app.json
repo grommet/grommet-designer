@@ -265,7 +265,9 @@
             "label": "Details",
             "key": 35
           }
-        ]
+        ],
+        "primaryKey": "name",
+        "secondaryKey": "count"
       },
       "designProps": {
         "dataPath": "dataSet"

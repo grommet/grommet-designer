@@ -78,7 +78,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
             } else if (templates[value.source]) {
               const template = templates[value.source];
               loadProps.design = template;
-              loadProps.theme = value.themeUrl || value.theme;
+              template.theme = value.themeUrl || value.theme;
               loadProps.location =
                 template.screens[template.screenOrder[0]].path;
             } else {
