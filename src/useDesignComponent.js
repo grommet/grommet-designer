@@ -2,7 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
+  useMemo,
   useState,
 } from 'react';
 import styled from 'styled-components';
@@ -24,7 +24,6 @@ const useDesignComponent = (id, datum) => {
     useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
   const component = useComponent(id);
-  const ref = useRef();
 
   // inlineEdit is the component id of the component being edited inline
   const inlineEditOnChange = useCallback(
@@ -41,127 +40,151 @@ const useDesignComponent = (id, datum) => {
 
   const [, rerender] = useState();
 
-  // get component definition in the design
-  if (!component) return renderNull;
+  const type = useMemo(
+    () => (component ? getType(component.type) : undefined),
+    [component],
+  );
 
-  // don't render if hiding at this size
-  if (component.hide || component.responsive?.hide?.includes(responsiveSize))
-    return renderNull;
+  // Ensure we don't change props or children if not needed, to avoid
+  // re-rendering when not needed. Tabs+Tab+children is vulnerable.
+  const [props, children] = useMemo(() => {
+    if (
+      !component ||
+      component.hide ||
+      component.responsive?.hide?.includes(responsiveSize)
+    )
+      return [undefined, null];
 
-  let props = { ...component.props };
-  // use any responsive props
-  const responsiveProps = component.responsive?.[responsiveSize]?.props;
-  if (responsiveProps) props = { ...props, ...responsiveProps };
+    let props = { ...component.props };
+    // use any responsive props
+    const responsiveProps = component.responsive?.[responsiveSize]?.props;
+    if (responsiveProps) props = { ...props, ...responsiveProps };
 
-  const type = getType(component.type);
-  if (!type) return renderNull;
-
-  // replace data for properties we know about
-  if (type.properties) {
-    // handle any special props
-    Object.keys(props).forEach((prop) => {
-      const property = type.properties[prop];
-      if (Array.isArray(property)) {
-        if (property[0] === '-color-')
-          props[prop] = replaceWithData(props[prop], datum);
-        else if (property.includes('-data-'))
-          props[prop] = replaceWithData(props[prop], datum);
-      } else if (typeof property === 'object') {
-        // handle things like: background.color = ['-color-']
-        props[prop] = { ...props[prop] };
-        Object.keys(property).forEach((subProp) => {
-          if (
-            Array.isArray(property[subProp]) &&
-            property[subProp][0] === '-color-'
-          )
-            props[prop][subProp] = replaceWithData(props[prop][subProp], datum);
-        });
-      }
-    });
-  }
-
-  // allow the type to adjust props if needed
-  if (type.adjustProps)
-    props = type.adjustProps(props, {
-      component,
-      datum,
-      type,
-      followLink,
-      followLinkOption,
-      rerender,
-    });
-
-  // render -component- and -Icon- properties
-  if (type.properties) {
-    // handle any special props
-    Object.keys(props).forEach((prop) => {
-      const property = type.properties[prop];
-      // use designer Icon for icons
-      if (
-        Array.isArray(property) &&
-        component.type !== 'designer.Icon' &&
-        component.type !== 'Icon' &&
-        property.includes('-Icon-')
-      ) {
-        // pass along size so we can adjust the icon size as well
-        props[prop] = <Icon icon={props[prop]} size={props.size} />;
-      }
-      if (
-        typeof property === 'string' &&
-        property.startsWith('-component-') &&
-        props[prop]
-      ) {
-        props[prop] = <DesignComponent id={props[prop]} datum={datum} />;
-      }
-    });
-  }
-
-  if (setSelection) {
-    const priorClick = props.onClick;
-    props.onClick = (event) => {
-      if (!event.shiftKey) {
-        event.stopPropagation();
-        if (selection !== id) setSelection(id);
-        else if (type.text)
-          setInlineEditSize(
-            document.getElementById(id).getBoundingClientRect(),
-          );
-      } else if (priorClick) priorClick(event);
-    };
-    props.tabIndex = '-1';
-    if (selection === id) {
-      props.style = { ...(props.style || {}), outline: '1px dashed red' };
+    // replace data for properties we know about
+    if (type.properties) {
+      // handle any special props
+      Object.keys(props).forEach((prop) => {
+        const property = type.properties[prop];
+        if (Array.isArray(property)) {
+          if (property[0] === '-color-')
+            props[prop] = replaceWithData(props[prop], datum);
+          else if (property.includes('-data-'))
+            props[prop] = replaceWithData(props[prop], datum);
+        } else if (typeof property === 'object') {
+          // handle things like: background.color = ['-color-']
+          props[prop] = { ...props[prop] };
+          Object.keys(property).forEach((subProp) => {
+            if (
+              Array.isArray(property[subProp]) &&
+              property[subProp][0] === '-color-'
+            )
+              props[prop][subProp] = replaceWithData(
+                props[prop][subProp],
+                datum,
+              );
+          });
+        }
+      });
     }
-  }
 
-  // render children
-  let children;
-  if (props?.children) {
-    children = props.children;
-    delete props.children;
-  } else if (component.children?.length) {
-    children = component.children.map((childId) => (
-      <DesignComponent key={childId} id={childId} datum={datum} />
-    ));
-  } else if (inlineEditSize) {
-    const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
-    children = (
-      <InlineEditInput
-        as={useArea ? 'textarea' : undefined}
-        placeholder={type.text}
-        defaultValue={component.text || ''}
-        size={inlineEditSize}
-        onChange={inlineEditOnChange}
-        onDone={() => setInlineEditSize(undefined)}
-      />
-    );
-  } else if (component.text || type.text) {
-    children = replaceWithData(component.text || type.text, datum);
-  } else if (type.placeholder) {
-    children = <Placeholder>{type.placeholder(props)}</Placeholder>;
-  }
+    // allow the type to adjust props if needed
+    if (type.adjustProps)
+      props = type.adjustProps(props, {
+        component,
+        datum,
+        type,
+        followLink,
+        followLinkOption,
+        rerender,
+      });
 
-  return { Component: type.component, props, children, ref };
+    // render -component- and -Icon- properties
+    if (type.properties) {
+      // handle any special props
+      Object.keys(props).forEach((prop) => {
+        const property = type.properties[prop];
+        // use designer Icon for icons
+        if (
+          Array.isArray(property) &&
+          component.type !== 'designer.Icon' &&
+          component.type !== 'Icon' &&
+          property.includes('-Icon-')
+        ) {
+          // pass along size so we can adjust the icon size as well
+          props[prop] = <Icon icon={props[prop]} size={props.size} />;
+        }
+        if (
+          typeof property === 'string' &&
+          property.startsWith('-component-') &&
+          props[prop]
+        ) {
+          props[prop] = <DesignComponent id={props[prop]} datum={datum} />;
+        }
+      });
+    }
+
+    if (setSelection) {
+      const priorClick = props.onClick;
+      props.onClick = (event) => {
+        if (!event.shiftKey) {
+          event.stopPropagation();
+          if (selection !== id) setSelection(id);
+          else if (type.text)
+            setInlineEditSize(
+              document.getElementById(id).getBoundingClientRect(),
+            );
+        } else if (priorClick) priorClick(event);
+      };
+      props.tabIndex = '-1';
+      if (selection === id) {
+        props.style = { ...(props.style || {}), outline: '1px dashed red' };
+      }
+    }
+
+    let children;
+    if (props?.children) {
+      children = props.children;
+      delete props.children;
+    } else if (component.children?.length) {
+      children = component.children.map((childId) => (
+        <DesignComponent key={childId} id={childId} datum={datum} />
+      ));
+    } else if (inlineEditSize) {
+      const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
+      children = (
+        <InlineEditInput
+          as={useArea ? 'textarea' : undefined}
+          placeholder={type.text}
+          defaultValue={component.text || ''}
+          size={inlineEditSize}
+          onChange={inlineEditOnChange}
+          onDone={() => setInlineEditSize(undefined)}
+        />
+      );
+    } else if (component.text || type.text) {
+      children = replaceWithData(component.text || type.text, datum);
+    } else if (type.placeholder) {
+      children = <Placeholder>{type.placeholder(props)}</Placeholder>;
+    }
+
+    return [props, children];
+  }, [
+    component,
+    datum,
+    followLink,
+    followLinkOption,
+    id,
+    inlineEditOnChange,
+    inlineEditSize,
+    responsiveSize,
+    selection,
+    setSelection,
+    type,
+  ]);
+
+  if (props === undefined) return renderNull;
+
+  return { Component: type.component, props, children };
 };
 
 export default useDesignComponent;
