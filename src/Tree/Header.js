@@ -44,7 +44,7 @@ const Header = ({ onClose, property, setMode }) => {
         event.preventDefault();
         undo();
       }
-      if (redo && event.key === 'z' && event.shiftKey) {
+      if (redo && (event.key === 'z' || event.key === 'Z') && event.shiftKey) {
         event.preventDefault();
         redo();
       }
@@ -65,15 +65,11 @@ const Header = ({ onClose, property, setMode }) => {
                 { label: 'configure', onClick: () => setEditing(true) },
                 { label: 'share', onClick: () => setSharing(true) },
                 {
-                  label: `preview ${
-                    /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
-                  }.`,
+                  label: 'preview [control .]',
                   onClick: () => setMode('preview'),
                 },
                 {
-                  label: `comments ${
-                    /Mac/i.test(navigator.platform) ? '⌘' : 'Ctrl+'
-                  };`,
+                  label: 'comments [control ;]',
                   onClick: () => setMode('comments'),
                 },
                 { label: 'help', onClick: () => setHelp(true) },
@@ -102,7 +98,7 @@ const Header = ({ onClose, property, setMode }) => {
           <Box flex={false} direction="row" align="center">
             <Button
               title="undo last change"
-              tip="undo last change"
+              tip="undo last change [control z]"
               hoverIndicator
               icon={<Undo />}
               disabled={!undo}
@@ -110,7 +106,7 @@ const Header = ({ onClose, property, setMode }) => {
             />
             <Button
               title="redo last change"
-              tip="redo last change"
+              tip="redo last change [control shift z]"
               icon={<Redo />}
               hoverIndicator
               disabled={!redo}
@@ -118,7 +114,7 @@ const Header = ({ onClose, property, setMode }) => {
             />
             <Button
               title="add a component"
-              tip="add a component"
+              tip="add a component [control a]"
               icon={<Add />}
               hoverIndicator
               onClick={() => setAdding(true)}
