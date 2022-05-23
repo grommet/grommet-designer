@@ -116,7 +116,7 @@ const useDesignComponent = (id, datum) => {
         if (
           typeof property === 'string' &&
           property.startsWith('-component-') &&
-          props[prop]
+          typeof props[prop] === 'number'
         ) {
           props[prop] = <DesignComponent id={props[prop]} datum={datum} />;
         }

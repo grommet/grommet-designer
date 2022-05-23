@@ -1514,13 +1514,18 @@ export const components = {
     adjustProps: (props, { component: { children } }) => {
       const adjusted = {};
       if (props.header) {
-        adjusted.header = (datum) => (
-          <DesignComponent id={props.header} datum={datum} />
+        adjusted.header = ({ date }) => (
+          <DesignComponent
+            id={props.header}
+            datum={{
+              month: date.toLocaleDateString(undefined, { month: 'long' }),
+            }}
+          />
         );
       }
       if (children) {
         adjusted.children = (datum) => (
-          <DesignComponent id={children[0]} darum={datum} />
+          <DesignComponent id={children[0]} datum={datum} />
         );
       }
       return { ...props, ...adjusted };
