@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 // import ReactGA from 'react-ga';
 import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
+import AppContext from './AppContext';
 import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
 import NewScreen from './NewScreen';
@@ -46,6 +47,7 @@ const commentGridColumns = [
 ];
 
 const Designer = ({ loadProps, onClose, thumb }) => {
+  const { grommetThemeMode, setThemeMode } = useContext(AppContext);
   const responsive = useContext(ResponsiveContext);
   // const [name, setName] = useState();
   const [ready, setReady] = useState(false);
@@ -135,23 +137,22 @@ const Designer = ({ loadProps, onClose, thumb }) => {
   // browser navigation
 
   // following a link changes component hide or screen path
-  const followLink = useCallback((link) => {
-    setSelection(undefined);
-    if (Array.isArray(link)) link.forEach(followLink);
-    else if (link.control === 'toggleThemeMode') {
-      const design = getDesign();
-      setDesignProperty(
-        'themeMode',
-        design.themeMode === 'dark' ? 'light' : 'dark',
-      );
-    } else if (link.component) {
-      const component = getComponent(link.component);
-      setProperty(link.component, undefined, 'hide', !component.hide);
-    } else if (link.screen) {
-      setLocation({ screen: link.screen });
-      setSelection(link.screen);
-    }
-  }, []);
+  const followLink = useCallback(
+    (link) => {
+      if (Array.isArray(link)) link.forEach(followLink);
+      else if (link.control === 'toggleThemeMode') {
+        setThemeMode(grommetThemeMode === 'dark' ? 'light' : 'dark');
+      } else if (link.component) {
+        const component = getComponent(link.component);
+        setProperty(link.component, undefined, 'hide', !component.hide);
+        if (!component.hide) setSelection(undefined);
+      } else if (link.screen) {
+        setLocation({ screen: link.screen });
+        setSelection(link.screen);
+      }
+    },
+    [grommetThemeMode, setThemeMode],
+  );
 
   const followLinkOption = useCallback((link, value) => {
     // figure out which link to use, if any

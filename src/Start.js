@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
-  CheckBox,
   FileInput,
   Header,
   Heading,
@@ -12,12 +11,12 @@ import {
   Page,
   PageContent,
   PageHeader,
-  RadioButtonGroup,
   Text,
   TextInput,
 } from 'grommet';
-import { Configure, List as ListIcon, Search } from 'grommet-icons';
+import { Brush, List as ListIcon, Search } from 'grommet-icons';
 import { parseUrlParams } from './utils';
+import AppSettings from './AppSettings';
 import Manage from './Manage';
 
 // const tutorials = [
@@ -29,14 +28,7 @@ import Manage from './Manage';
 //   },
 // ];
 
-const Start = ({
-  colorMode,
-  onLoadProps,
-  onNew,
-  rtl,
-  setColorMode,
-  setRtl,
-}) => {
+const Start = ({ onLoadProps, onNew }) => {
   const [designs, setDesigns] = useState([]);
   const [designsFetched, setDesignsFetched] = useState([]);
   const [search, setSearch] = useState();
@@ -243,41 +235,17 @@ const Start = ({
       <PageContent
         background={{ color: 'background-contrast', fill: 'horizontal' }}
       >
-        <Box
-          flex={false}
-          direction="row"
-          gap="medium"
-          pad={{ vertical: 'small' }}
-        >
+        <Box flex={false} align="center" pad={{ vertical: 'small' }}>
           <Button
-            icon={<Configure />}
-            title="Toggle settings"
+            icon={<Brush />}
+            tip="Change settings"
             hoverIndicator
-            onClick={() => setSettings(!settings)}
+            onClick={() => setSettings(true)}
           />
-          {settings && [
-            <RadioButtonGroup
-              key="themeMode"
-              id="themeMode"
-              name="themeMode"
-              direction="row"
-              gap="medium"
-              options={['dark', 'light']}
-              value={colorMode || ''}
-              onChange={(event) => {
-                setColorMode(event.target.value);
-              }}
-            />,
-            <CheckBox
-              key="rtl"
-              label="right to left"
-              checked={rtl || false}
-              onChange={() => setRtl(!rtl)}
-            />,
-          ]}
         </Box>
       </PageContent>
 
+      {settings && <AppSettings onClose={() => setSettings(false)} />}
       {manage && (
         <Manage
           onClose={() => {

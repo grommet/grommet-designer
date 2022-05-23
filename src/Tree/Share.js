@@ -229,7 +229,6 @@ const SaveLocally = ({ onClose }) => {
 };
 
 const Developer = () => {
-  // const { design, imports, libraries, theme } = useContext(DesignContext);
   const [code, setCode] = useState();
 
   return (

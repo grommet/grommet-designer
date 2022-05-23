@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Box,
@@ -11,6 +11,7 @@ import {
   grommet,
 } from 'grommet';
 import { Next } from 'grommet-icons';
+import AppContext from './AppContext';
 import Designer from './Designer';
 import Loading from './Loading';
 import Start from './Start';
@@ -39,6 +40,14 @@ const designerTheme = {
   },
 };
 
+const calculateGrommetThemeMode = (themeMode) =>
+  (themeMode === 'auto' &&
+    window.matchMedia &&
+    (window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light')) ||
+  themeMode;
+
 // const setUrl = (name, method = 'push') => {
 //   const url = name
 //     ? `${window.location.pathname}?name=${encodeURIComponent(name)}`
@@ -56,9 +65,41 @@ const App = () => {
   const [, /* password */ setPassword] = useState();
   // const [subsequent, setSubsequent] = useState();
   const [loadProps, setLoadProps] = useState();
-  const [colorMode, setColorMode] = useState('dark');
-  const [rtl, setRtl] = useState();
+  const [appSettings, setAppSettings] = useState({});
   const [thumb, setThumb] = useState();
+
+  const appContextValue = useMemo(
+    () => ({
+      ...appSettings,
+      setThemeMode: (nextThemeMode) => {
+        const nextAppSettings = {
+          ...appSettings,
+          themeMode: nextThemeMode,
+          grommetThemeMode: calculateGrommetThemeMode(nextThemeMode),
+        };
+        setAppSettings(nextAppSettings);
+        localStorage.setItem('_settings', JSON.stringify(nextAppSettings));
+      },
+      setDirection: (nextDirection) => {
+        const nextAppSettings = { ...appSettings, direction: nextDirection };
+        setAppSettings(nextAppSettings);
+        localStorage.setItem('_settings', JSON.stringify(nextAppSettings));
+      },
+    }),
+    [appSettings],
+  );
+
+  // initialize app context from storage
+  useEffect(() => {
+    const stored = localStorage.getItem('_settings');
+    if (stored) {
+      const nextAppSettings = JSON.parse(stored);
+      nextAppSettings.grommetThemeMode = calculateGrommetThemeMode(
+        nextAppSettings.themeMode,
+      );
+      setAppSettings(nextAppSettings);
+    }
+  }, []);
 
   // initialize analytics
   useEffect(() => {
@@ -138,19 +179,6 @@ const App = () => {
   //   if (password) options.password = password;
   //   loadDesign(options);
   // }, [password]);
-
-  // initialize color mode from storage or browser
-  useEffect(() => {
-    const stored = localStorage.getItem('colorMode');
-    if (stored) setColorMode(stored);
-    else if (window.matchMedia) {
-      setColorMode(
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light',
-      );
-    }
-  }, []);
 
   let content;
   if (error) {
@@ -281,7 +309,6 @@ const App = () => {
         //     }
         //   },
         // });
-        colorMode={colorMode}
         // createDesign={() => {
         //   addDesign();
         //   setStart(false);
@@ -303,9 +330,6 @@ const App = () => {
         //     },
         //   });
         // }}
-        rtl={rtl}
-        setColorMode={setColorMode}
-        setRtl={setRtl}
       />
     );
   } else {
@@ -313,13 +337,15 @@ const App = () => {
   }
 
   return (
-    <Grommet
-      theme={designerTheme}
-      themeMode={colorMode}
-      dir={rtl ? 'rtl' : undefined}
-    >
-      {content}
-    </Grommet>
+    <AppContext.Provider value={appContextValue}>
+      <Grommet
+        theme={designerTheme}
+        themeMode={appSettings.grommetThemeMode}
+        dir={appSettings.direction}
+      >
+        {content}
+      </Grommet>
+    </AppContext.Provider>
   );
 };
 

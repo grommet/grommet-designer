@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Grommet, Paragraph } from 'grommet';
 import { getTheme } from './design2';
+import AppContext from './AppContext';
 import DesignComponent from './DesignComponent';
 
 const Canvas = ({ root }) => {
+  const { direction, grommetThemeMode } = useContext(AppContext);
   const theme = getTheme();
 
   const content = root ? (
@@ -21,7 +23,8 @@ const Canvas = ({ root }) => {
     <Grommet
       id="designer-canvas"
       theme={theme}
-      // themeMode={themeMode}
+      themeMode={grommetThemeMode}
+      dir={direction}
       full="min"
       style={{ height: '1px' }}
     >

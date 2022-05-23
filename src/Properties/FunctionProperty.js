@@ -8,10 +8,6 @@ const jsonValue = (value) =>
 
 const FunctionProperty = React.forwardRef(
   ({ definition, name, value, ...rest }, ref) => {
-    // need 'design' for BoxGridArea
-    // const { design, selected } = useContext(DesignContext);
-    // need 'component' for BoxGridArea and GridAreas
-    // const component = design.components[selected.component];
     const [expand, setExpand] = React.useState();
     const CustomProperty = definition;
     if (definition.inline) {
