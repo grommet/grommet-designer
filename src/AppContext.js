@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const DesignContext = createContext(undefined);
+const AppContext = createContext(undefined);
 
-export default DesignContext;
+export default AppContext;

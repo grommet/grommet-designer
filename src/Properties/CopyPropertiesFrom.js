@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -10,30 +10,25 @@ import {
   Text,
 } from 'grommet';
 import { Close } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import { getDisplayName } from '../design';
+import { copyProperties, getComponent, getDesign, getName } from '../design2';
 
-const CopyPropertiesFrom = ({ component, onDone }) => {
-  const { changeDesign, design } = useContext(DesignContext);
+const CopyPropertiesFrom = ({ targetId, onDone }) => {
+  const design = getDesign();
   const [value, setValue] = useState();
+  const { type } = getComponent(targetId);
+  // other component ids having the same type
   const allOptions = useMemo(
     () =>
       Object.keys(design.components)
         .map((i) => parseInt(i, 10))
-        .filter(
-          (id) =>
-            id !== component.id &&
-            design.components[id].type === component.type,
-        ),
-    [component, design],
+        .filter((id) => id !== targetId && design.components[id].type === type),
+    [design, targetId, type],
   );
   const [options, setOptions] = useState(allOptions);
 
   const OptionLabel = ({ option, selected }) => (
     <Box pad="small">
-      <Text weight={selected ? 'bold' : undefined}>
-        {getDisplayName(design, option)}
-      </Text>
+      <Text weight={selected ? 'bold' : undefined}>{getName(option)}</Text>
     </Box>
   );
 
@@ -57,13 +52,7 @@ const CopyPropertiesFrom = ({ component, onDone }) => {
       </Header>
       <Form
         onSubmit={() => {
-          if (value) {
-            const nextDesign = JSON.parse(JSON.stringify(design));
-            const nextComponent = nextDesign.components[component.id];
-            const fromComponent = nextDesign.components[value];
-            nextComponent.props = { ...fromComponent.props };
-            changeDesign(nextDesign);
-          }
+          if (value) copyProperties(value, targetId);
           onDone();
         }}
       >
@@ -76,9 +65,7 @@ const CopyPropertiesFrom = ({ component, onDone }) => {
             onSearch={(text) => {
               const exp = new RegExp(`${text}`, 'i');
               setOptions(
-                allOptions.filter((option) =>
-                  exp.test(getDisplayName(design, option)),
-                ),
+                allOptions.filter((option) => exp.test(getName(option))),
               );
             }}
             onChange={({ value }) => setValue(value)}

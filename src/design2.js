@@ -804,6 +804,19 @@ export const setProperty = (id, section, name, value) => {
   });
 };
 
+export const copyProperties = (sourceId, targetId) => {
+  updateComponent(targetId, (nextComponent) => {
+    const source = getComponent(sourceId);
+    nextComponent.props = JSON.parse(JSON.stringify(source.props));
+    if (source.designProps)
+      nextComponent.designProps = JSON.parse(
+        JSON.stringify(source.designProps),
+      );
+    if (source.responsive)
+      nextComponent.responsive = JSON.parse(JSON.stringify(source.responsive));
+  });
+};
+
 export const setScreenProperty = (id, name, value) => {
   updateScreen(id, (nextScreen) => {
     if (value === undefined) delete nextScreen[name];

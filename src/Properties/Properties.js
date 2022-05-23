@@ -255,7 +255,7 @@ const Properties = () => {
             )}
             {copyFrom && (
               <CopyPropertiesFrom
-                component={component}
+                targetId={selection}
                 onDone={() => setCopyFrom(false)}
               />
             )}

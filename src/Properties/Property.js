@@ -1,6 +1,5 @@
 import React from 'react';
 import { getComponent, getTheme } from '../design2';
-import AlternativeProperty from './AlternativeProperty';
 import ArrayProperty from './ArrayProperty';
 import BooleanProperty from './BooleanProperty';
 import ColorProperty from './ColorProperty';
@@ -58,9 +57,6 @@ const Property = React.forwardRef(
       }
       if (definition.includes('-link-')) {
         return <LinkProperty ref={ref} value={value} {...rest} />;
-      }
-      if (definition.includes('-alternative-')) {
-        return <AlternativeProperty ref={ref} value={value} {...rest} />;
       }
       if (definition.includes('-reference-')) {
         return <ReferenceProperty ref={ref} value={value} {...rest} />;
