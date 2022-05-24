@@ -28,6 +28,24 @@ import Manage from './Manage';
 //   },
 // ];
 
+const DesignButton = ({ label, onClick, url }) => (
+  <Button
+    fill
+    plain
+    hoverIndicator
+    href={`${url}&mode=edit`}
+    onClick={(event) => {
+      if (!event.ctrlKey && !event.metaKey) {
+        event.preventDefault();
+        window.history.pushState(undefined, undefined, url);
+        onClick();
+      }
+    }}
+  >
+    <Box pad="small">{label}</Box>
+  </Button>
+);
+
 const Start = ({ onLoadProps, onNew }) => {
   const [designs, setDesigns] = useState([]);
   const [designsFetched, setDesignsFetched] = useState([]);
@@ -118,22 +136,12 @@ const Start = ({ onLoadProps, onNew }) => {
               {(name) => {
                 const url = `/?name=${encodeURIComponent(name)}`;
                 return (
-                  <Button
+                  <DesignButton
                     key={name}
-                    fill
-                    plain
-                    hoverIndicator
-                    href={`${url}&mode=edit`}
-                    onClick={(event) => {
-                      if (!event.ctrlKey && !event.metaKey) {
-                        event.preventDefault();
-                        window.history.pushState(undefined, undefined, url);
-                        onLoadProps({ name });
-                      }
-                    }}
-                  >
-                    <Box pad="small">{name}</Box>
-                  </Button>
+                    label={name}
+                    url={url}
+                    onClick={() => onLoadProps({ name })}
+                  />
                 );
               }}
             </List>
@@ -144,26 +152,15 @@ const Start = ({ onLoadProps, onNew }) => {
           <Box>
             <Heading level={2}>fetched designs</Heading>
             <List data={designsFetchedData} pad="none">
-              {({ name, url: publishedUrl }) => {
-                const { id } = parseUrlParams(publishedUrl);
+              {({ name, id }) => {
                 const url = `/?id=${encodeURIComponent(id)}`;
                 return (
-                  <Button
+                  <DesignButton
                     key={name}
-                    fill
-                    plain
-                    hoverIndicator
-                    href={url}
-                    onClick={(event) => {
-                      if (!event.ctrlKey && !event.metaKey) {
-                        event.preventDefault();
-                        window.history.pushState(undefined, undefined, url);
-                        onLoadProps({ id });
-                      }
-                    }}
-                  >
-                    <Box pad="small">{name}</Box>
-                  </Button>
+                    label={name}
+                    url={url}
+                    onClick={() => onLoadProps({ id })}
+                  />
                 );
               }}
             </List>
@@ -172,7 +169,7 @@ const Start = ({ onLoadProps, onNew }) => {
       </PageContent>
 
       <PageContent flex align="center" justify="center" animation="fadeIn">
-        {!designs?.length && (
+        {!designs?.length && !designsFetched?.length && (
           <Text size="3xl" color="text-weak">
             Hi, ... maybe create a new design?
           </Text>
@@ -235,7 +232,7 @@ const Start = ({ onLoadProps, onNew }) => {
       <PageContent
         background={{ color: 'background-contrast', fill: 'horizontal' }}
       >
-        <Box flex={false} align="center" pad={{ vertical: 'small' }}>
+        <Box flex={false} align="end">
           <Button
             icon={<Brush />}
             tip="Change settings"

@@ -1,16 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
-import {
-  Box,
-  Button,
-  Form,
-  Grommet,
-  Paragraph,
-  Text,
-  TextInput,
-  grommet,
-} from 'grommet';
-import { Next } from 'grommet-icons';
+import { Grommet, grommet } from 'grommet';
 import AppContext from './AppContext';
 import Designer from './Designer';
 import Loading from './Loading';
@@ -48,21 +38,9 @@ const calculateGrommetThemeMode = (themeMode) =>
       : 'light')) ||
   themeMode;
 
-// const setUrl = (name, method = 'push') => {
-//   const url = name
-//     ? `${window.location.pathname}?name=${encodeURIComponent(name)}`
-//     : '/';
-//   if (method === 'replace')
-//     window.history.replaceState(undefined, undefined, url);
-//   else window.history.pushState(undefined, undefined, url);
-// };
-
 const App = () => {
   const [start, setStart] = useState();
   const [newDesign, setNewDesign] = useState();
-  const [error /* setError */] = useState();
-  const [auth, setAuth] = useState();
-  const [, /* password */ setPassword] = useState();
   // const [subsequent, setSubsequent] = useState();
   const [loadProps, setLoadProps] = useState();
   const [appSettings, setAppSettings] = useState({});
@@ -125,143 +103,55 @@ const App = () => {
     else setStart(true);
   }, []);
 
-  // // load initial design
-  // useEffect(() => {
-  //   const {
-  //     location: { pathname },
-  //   } = window;
-  //   const params = parseUrlParams(window.location.search);
-  //   const options = {
-  //     initial: true,
-  //     onAuth: () =>
-  //       setAuth(password ? "Hmm, that password didn't work." : true),
-  //     onLoad: (nextDesign) => {
-  //       if (nextDesign.subsequentPublish) {
-  //         setSubsequent({
-  //           local: nextDesign,
-  //           published: nextDesign.subsequentPublish,
-  //         });
-  //         delete nextDesign.subsequentPublish;
-  //       } else {
-  //         setDesign(nextDesign);
-
-  //         if (!nextDesign.local && nextDesign.publishedUrl) {
-  //           // remember a bit about this design so we can find it again if needed
-  //           const stored = localStorage.getItem('designs-fetched');
-  //           const designsFetched = stored ? JSON.parse(stored) : [];
-  //           const index = designsFetched.findIndex(
-  //             ({ name }) => name === nextDesign.name,
-  //           );
-  //           if (index !== 0) {
-  //             const nextDesignsFetched = [...designsFetched];
-  //             if (index !== -1) nextDesignsFetched.splice(index, 1);
-  //             nextDesignsFetched.unshift({
-  //               name: nextDesign.name,
-  //               url: nextDesign.publishedUrl,
-  //             });
-  //             localStorage.setItem(
-  //               'designs-fetched',
-  //               JSON.stringify(nextDesignsFetched),
-  //             );
-  //           }
-  //         }
-  //       }
-  //     },
-  //     onError: (message) => setError(message),
-  //   };
-  //   if (pathname === '/_new' || params.new) options.fresh = true;
-  //   else if (params.id) options.id = params.id;
-  //   else if (params.name) options.name = params.name;
-  //   else {
-  //     setStart(true);
-  //     return;
-  //   }
-  //   if (password) options.password = password;
-  //   loadDesign(options);
-  // }, [password]);
-
   let content;
-  if (error) {
-    content = (
-      <Box fill align="center" justify="center">
-        <Paragraph size="xlarge" textAlign="center">
-          {error}
-        </Paragraph>
-      </Box>
-    );
-  } else if (auth) {
-    content = (
-      <Box fill align="center" justify="center">
-        <Form
-          onSubmit={({ value: { password: nextPassword } }) => {
-            setPassword(nextPassword);
-            setAuth(false);
-          }}
-        >
-          <Box direction="row" gap="medium">
-            <TextInput
-              size="large"
-              name="password"
-              placeholder="password"
-              type="password"
-              onChange={() => setAuth(true)}
-            />
-            <Button type="submit" icon={<Next />} hoverIndicator />
-          </Box>
-          <Box pad="small">
-            <Text>{typeof auth === 'string' ? auth : ''}&nbsp;</Text>
-          </Box>
-        </Form>
-      </Box>
-    );
-    // } else if (subsequent) {
-    //   const { local, published } = subsequent;
-    //   const publishDate = new Date(published.date);
-    //   const localDate = new Date(local.date);
-    //   let options;
-    //   if (publishDate.getUTCFullYear() !== localDate.getUTCFullYear()) {
-    //     options = { year: 'numeric' };
-    //   } else if (publishDate.getUTCMonth() !== localDate.getUTCMonth()) {
-    //     options = { month: 'long' };
-    //   } else if (publishDate.getUTCDate() !== localDate.getUTCDate()) {
-    //     options = { month: 'short', day: 'numeric' };
-    //   } else {
-    //     options = { hour: 'numeric', minute: '2-digit' };
-    //   }
+  // if (subsequent) {
+  //   const { local, published } = subsequent;
+  //   const publishDate = new Date(published.date);
+  //   const localDate = new Date(local.date);
+  //   let options;
+  //   if (publishDate.getUTCFullYear() !== localDate.getUTCFullYear()) {
+  //     options = { year: 'numeric' };
+  //   } else if (publishDate.getUTCMonth() !== localDate.getUTCMonth()) {
+  //     options = { month: 'long' };
+  //   } else if (publishDate.getUTCDate() !== localDate.getUTCDate()) {
+  //     options = { month: 'short', day: 'numeric' };
+  //   } else {
+  //     options = { hour: 'numeric', minute: '2-digit' };
+  //   }
 
-    //   content = (
-    //     <Box fill align="center" justify="center" pad="large">
-    //       <Paragraph size="large" textAlign="center">
-    //         A newer published version of this design has been detected. Which one
-    //         would you like to use?
-    //       </Paragraph>
-    //       <Box direction="row" align="center" gap="medium">
-    //         <Button
-    //           label={`use published ${publishDate.toLocaleString(
-    //             undefined,
-    //             options,
-    //           )}`}
-    //           onClick={() => {
-    //             setSubsequent(undefined);
-    //             // keep the published one
-    //             published.local = true;
-    //             setDesign(published);
-    //           }}
-    //         />
-    //         <Button
-    //           label={`use current local ${localDate.toLocaleString(
-    //             undefined,
-    //             options,
-    //           )}`}
-    //           onClick={() => {
-    //             setSubsequent(undefined);
-    //             setDesign(local);
-    //           }}
-    //         />
-    //       </Box>
-    //     </Box>
-    //   );
-  } else if (loadProps) {
+  //   content = (
+  //     <Box fill align="center" justify="center" pad="large">
+  //       <Paragraph size="large" textAlign="center">
+  //         A newer published version of this design has been detected. Which one
+  //         would you like to use?
+  //       </Paragraph>
+  //       <Box direction="row" align="center" gap="medium">
+  //         <Button
+  //           label={`use published ${publishDate.toLocaleString(
+  //             undefined,
+  //             options,
+  //           )}`}
+  //           onClick={() => {
+  //             setSubsequent(undefined);
+  //             // keep the published one
+  //             published.local = true;
+  //             setDesign(published);
+  //           }}
+  //         />
+  //         <Button
+  //           label={`use current local ${localDate.toLocaleString(
+  //             undefined,
+  //             options,
+  //           )}`}
+  //           onClick={() => {
+  //             setSubsequent(undefined);
+  //             setDesign(local);
+  //           }}
+  //         />
+  //       </Box>
+  //     </Box>
+  //   );
+  if (loadProps) {
     content = (
       <Designer
         loadProps={loadProps}
@@ -293,43 +183,6 @@ const App = () => {
           setStart(false);
           setLoadProps(props);
         }}
-        // TODO: if id, load, see if we have already, prompt which to replace
-        // loadDesign({
-        //   ...args,
-        //   onLoad: (nextDesign) => {
-        //     if (nextDesign.subsequentPublish) {
-        //       setSubsequent({
-        //         local: nextDesign,
-        //         published: nextDesign.subsequentPublish,
-        //       });
-        //       delete nextDesign.subsequentPublish;
-        //     } else {
-        //       setDesign(nextDesign);
-        //       setUrl(nextDesign);
-        //     }
-        //   },
-        // });
-        // createDesign={() => {
-        //   addDesign();
-        //   setStart(false);
-        // }}
-        // importDesign={(jsonDesign) => {
-        //   loadDesign({
-        //     json: jsonDesign,
-        //     onLoad: (nextDesign) => {
-        //       if (nextDesign.subsequentPublish) {
-        //         setSubsequent({
-        //           local: nextDesign,
-        //           published: nextDesign.subsequentPublish,
-        //         });
-        //         delete nextDesign.subsequentPublish;
-        //       } else {
-        //         setDesign(nextDesign);
-        //         setUrl(nextDesign);
-        //       }
-        //     },
-        //   });
-        // }}
       />
     );
   } else {

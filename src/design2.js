@@ -81,10 +81,7 @@ const fetchPublished = async (id, password) => {
       );
       if (index !== 0) {
         if (index !== -1) designsFetched.splice(index, 1);
-        designsFetched.unshift({
-          name: pubDesign.name,
-          url: pubDesign.publishedUrl,
-        });
+        designsFetched.unshift({ name: pubDesign.name, id });
         localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
       }
 

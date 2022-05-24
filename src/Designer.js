@@ -14,6 +14,7 @@ import NewScreen from './NewScreen';
 import Canvas from './Canvas2';
 import Data from './Data';
 import Loading from './Loading';
+import Auth from './Auth';
 // import ConfirmReplace from './ConfirmReplace';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
@@ -46,10 +47,12 @@ const commentGridColumns = [
   ['small', 'medium'],
 ];
 
-const Designer = ({ loadProps, onClose, thumb }) => {
+const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   const { grommetThemeMode, setThemeMode } = useContext(AppContext);
   const responsive = useContext(ResponsiveContext);
+  const [loadProps, setLoadProps] = useState(loadPropsProp);
   // const [name, setName] = useState();
+  const [auth, setAuth] = useState();
   const [ready, setReady] = useState(false);
   const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
@@ -128,8 +131,10 @@ const Designer = ({ loadProps, onClose, thumb }) => {
       // })
       .then(() => setReady(true))
       .catch((e) => {
-        console.error(e);
-        // TODO: handle error, especially 401 prompt for password
+        if (e.message === '401') {
+          // need to prompt user for password
+          setAuth(true);
+        } else throw e;
       });
     return () => setReady(false);
   }, [loadProps, thumb]);
@@ -318,6 +323,15 @@ const Designer = ({ loadProps, onClose, thumb }) => {
     [followLink, followLinkOption, mode, selection],
   );
 
+  if (auth)
+    return (
+      <Auth
+        onChange={(password) => {
+          setLoadProps({ ...loadProps, password });
+          setAuth(false);
+        }}
+      />
+    );
   if (!ready) return <Loading />;
 
   // console.log('!!! Designer', { location, selection, treeRoot, canvasRoot });
