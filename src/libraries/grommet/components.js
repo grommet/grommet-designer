@@ -761,6 +761,7 @@ export const components = {
         '6xl',
       ],
       textAlign: TextAlign,
+      tip: '',
       truncate: false,
       weight: WeightOptions({ options: ['normal', 'bold'] }),
       margin: Edge,
