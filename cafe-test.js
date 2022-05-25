@@ -51,7 +51,7 @@ const createControl = Selector('button').withAttribute(
 );
 const selectScreenControl = Selector('button').withAttribute(
   'title',
-  'select screen template',
+  'Use selected screen template',
 );
 const empty = Selector('p').withExactText(
   'This PageContent is currently empty. Add some content to it.',
