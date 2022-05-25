@@ -1,38 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import ReactGA from 'react-ga';
 import {
-  // Box,
   Button,
   Footer,
   Form,
   FormField,
-  // Header,
-  // Heading,
   Page,
   PageContent,
   PageHeader,
-  Paragraph,
   RadioButtonGroup,
   Select,
   TextInput,
 } from 'grommet';
 import { Close } from 'grommet-icons';
 import { pushPath } from './utils';
-import { newDesign } from './design2';
+import { newDesign, useDesigns } from './design2';
 import app from './templates/app';
 
-const templates = { app };
+const builtInTemplates = { 'generic app': app };
 
 const newPath = '/_new';
+
+const startWithOptions = [
+  'start with a blank design',
+  'duplicate an existing design',
+];
 
 const NewDesign = ({ onClose, onLoadProps }) => {
   const [value, setValue] = useState({
     name: '',
-    source: 'blank',
+    startWith: startWithOptions[0],
     theme: 'grommet',
     themeUrl: '',
   });
-  const [designs, setDesigns] = useState([]);
-  const [sources, setSources] = useState(['blank', ...Object.keys(templates)]);
+  const designs = useDesigns();
   const nameRef = useRef();
 
   useEffect(() => {
@@ -40,19 +41,15 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     return () => pushPath('/');
   }, []);
 
-  useEffect(() => {
-    let stored = localStorage.getItem('designs');
-    if (stored) {
-      const nextDesigns = JSON.parse(stored);
-      setDesigns(nextDesigns);
-      setSources((prev) => [...prev, ...nextDesigns]);
-    }
-  }, []);
+  const templates = useMemo(
+    () => [...Object.keys(builtInTemplates), ...designs],
+    [designs],
+  );
 
   useEffect(() => nameRef.current.focus(), []);
 
   return (
-    <Page kind="narrow">
+    <Page kind="narrow" height={{ min: '100vh' }}>
       <PageContent>
         <PageHeader
           margin={{ vertical: 'large' }}
@@ -75,18 +72,22 @@ const NewDesign = ({ onClose, onLoadProps }) => {
               // loading an existing design, load what we've got
               // and change the name
               loadProps.design = JSON.parse(localStorage.getItem(value.source));
-            } else if (templates[value.source]) {
-              const template = templates[value.source];
+              ReactGA.event({ category: 'switch', action: 'duplicate design' });
+            } else if (builtInTemplates[value.source]) {
+              const template = builtInTemplates[value.source];
               loadProps.design = template;
               template.theme = value.themeUrl || value.theme;
               loadProps.location =
                 template.screens[template.screenOrder[0]].path;
+              ReactGA.event({ category: 'switch', action: 'template design' });
             } else {
               loadProps.design = newDesign(
                 value.name,
                 value.themeUrl || value.theme,
               );
               loadProps.selection = 1;
+              loadProps.includes = value.includes;
+              ReactGA.event({ category: 'switch', action: 'new design' });
             }
             loadProps.design.name = value.name;
             onLoadProps(loadProps);
@@ -103,10 +104,21 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           >
             <TextInput ref={nameRef} id="name" name="name" />
           </FormField>
-          <FormField label="start with">
-            <Select name="source" options={sources} />
-          </FormField>
-          {(value.source === 'blank' || templates[value.source]) && (
+          <RadioButtonGroup
+            id="startWith"
+            name="startWith"
+            direction="row"
+            gap="medium"
+            pad={{ vertical: 'medium', horizontal: 'small' }}
+            options={startWithOptions}
+          />
+          {value.startWith === startWithOptions[1] && (
+            <FormField label="template" htmlFor="template" name="template">
+              <Select name="template" options={templates} />
+            </FormField>
+          )}
+          {(value.startWith === startWithOptions[0] ||
+            builtInTemplates[value.template]) && (
             <FormField label="theme" name="theme">
               <RadioButtonGroup
                 name="theme"
@@ -124,18 +136,25 @@ const NewDesign = ({ onClose, onLoadProps }) => {
               />
             </FormField>
           )}
-          {value.source === 'template' && (
-            <Paragraph>
-              Alas, creating a new design from a template is still under
-              construction.
-            </Paragraph>
+          {value.startWith === startWithOptions[0] && (
+            <FormField
+              label="include other designs to be able to copy their components"
+              htmlFor="includes"
+              name="includes"
+            >
+              <Select
+                name="includes"
+                placeholder="none"
+                multiple
+                options={designs}
+              />
+            </FormField>
           )}
           <Footer margin={{ vertical: 'large' }}>
             <Button
               title="create design"
               type="submit"
               primary
-              disabled={value.source === 'template'}
               label={`${
                 value.source === 'existing design' ? 'Duplicate' : 'Create'
               } Design`}

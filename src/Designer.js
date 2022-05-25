@@ -15,7 +15,6 @@ import Canvas from './Canvas2';
 import Data from './Data';
 import Loading from './Loading';
 import Auth from './Auth';
-// import ConfirmReplace from './ConfirmReplace';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
 // import Comments from './Comments/Comments';
@@ -51,17 +50,14 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   const { grommetThemeMode, setThemeMode } = useContext(AppContext);
   const responsive = useContext(ResponsiveContext);
   const [loadProps, setLoadProps] = useState(loadPropsProp);
-  // const [name, setName] = useState();
   const [auth, setAuth] = useState();
   const [ready, setReady] = useState(false);
   const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
   const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
-  // const [confirmReplace, setConfirmReplace] = useState();
 
   // when the document name changes, update title and URL
   const summary = useDesignSummary();
-  // if (nextName !== name) setName(nextName);
 
   useEffect(() => {
     if (summary.local && summary.name) {
@@ -72,32 +68,6 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
       window.history.replaceState(undefined, undefined, url);
     }
   }, [summary]);
-
-  // // align imports with design.imports
-  // useEffect(() => {
-  //   // remove any imports we don't want anymore
-  //   const nextImports = imports.filter(
-  //     ({ url }) =>
-  //       !url || design.imports.findIndex((i) => i.url === url) !== -1,
-  //   );
-  //   let changed = nextImports.length !== imports.length;
-  //   // add any imports we don't have yet
-  //   design.imports.forEach(({ url }) => {
-  //     if (nextImports.findIndex((i) => i.url === url) === -1) {
-  //       nextImports.push({ url });
-  //       changed = true;
-  //     }
-  //   });
-  //   if (changed) setImports(nextImports);
-  // }, [design.imports, imports]);
-
-  // // load any imports we don't have yet
-  // useEffect(() => {
-  //   loadImports(imports, (f) => {
-  //     const nextImports = f(imports);
-  //     setImports(nextImports);
-  //   });
-  // }, [imports]);
 
   // load design when we start
 
@@ -123,18 +93,11 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         }
         return design;
       })
-      // .then(() => {
-      //   setLocation(getLocationForPath(window.location.pathname));
-      // })
-      // .then(() => {
-      //   ReactGA.event({ category: 'switch', action: 'published design' });
-      // })
       .then(() => setReady(true))
       .catch((e) => {
-        if (e.message === '401') {
-          // need to prompt user for password
-          setAuth(true);
-        } else throw e;
+        // need to prompt user for password?
+        if (e.message === '401') setAuth(true);
+        else throw e;
       });
     return () => setReady(false);
   }, [loadProps, thumb]);
@@ -248,40 +211,6 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [location, mode, selection, summary.name, thumb]);
-
-  // // if selected doesn't exist anymore, reset it
-  // useEffect(() => {
-  //   if (selected.screen && !design.screens[selected.screen]) {
-  //     setSelected(getInitialSelected(design));
-  //   } else if (selected.component && !design.components[selected.component]) {
-  //     setSelected({
-  //       ...selected,
-  //       component: design.screens[selected.screen].root,
-  //     });
-  //   }
-  // }, [design, selected]);
-
-  // const changeDesign = useCallback(
-  //   (design) => {
-  //     // We are trying to change a published design when we have a local
-  //     // copy with the same name. Need the user to confirm.
-  //     if (design && !design.local && localStorage.getItem(design.name)) {
-  //       setConfirmReplace(design);
-  //     } else {
-  //       if (design) {
-  //         design.local = true;
-  //         // TODO: don't want to set modified when we are just publishing,
-  //         // even though we've updated the email and pin
-  //         if (design.publishedUrl) {
-  //           // remember that we've changed this design since it was published
-  //           design.modified = true;
-  //         }
-  //       }
-  //       updateDesign(design);
-  //     }
-  //   },
-  //   [updateDesign],
-  // );
 
   const onKey = useCallback(
     (event) => {

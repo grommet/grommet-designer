@@ -1,32 +1,33 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Anchor, Box, Heading } from 'grommet';
-import { addComponent, duplicateComponent, useDesign } from '../design2';
+import { duplicateComponent, useDesign } from '../design2';
 import SelectionContext from '../SelectionContext';
 import AddButton from './AddButton';
-import AddMethod from './AddMethod';
 
 const AddTemplates = ({ addOptions, onClose, searchExp }) => {
-  const [, /* selection */ setSelection] = useContext(SelectionContext);
-  const [addMode, setAddMode] = useState();
+  const [, setSelection] = useContext(SelectionContext);
 
   const design = useDesign();
   const templates = useMemo(() => {
     const buildTemplates = (design) => {
-      const templates = {};
+      const result = {};
       Object.values(design.components)
         .filter((component) => component.name) // must have a name
         .forEach((component) => {
-          if (!templates[component.name]) templates[component.name] = component;
+          if (!result[component.name]) result[component.name] = component;
         });
-      return { name: design.name, templates };
+      return { design, templates: result };
     };
 
     const result = [];
     result.push(buildTemplates(design));
 
-    // imports
-    //   .filter((i) => i.design)
-    //   .forEach((i) => result.push({ ...i, ...buildTemplates(i.design) }));
+    if (design.includes) {
+      design.includes.forEach((name) => {
+        const stored = localStorage.getItem(name);
+        if (stored) result.push(buildTemplates(JSON.parse(stored)));
+      });
+    }
 
     return result;
   }, [design]);
@@ -38,7 +39,8 @@ const AddTemplates = ({ addOptions, onClose, searchExp }) => {
       ),
     )
     .map((template) => {
-      const { name, templates, url } = template;
+      const { design, templates, url } = template;
+      const { name } = design;
 
       return (
         <Box flex={false} border="top">
@@ -66,23 +68,15 @@ const AddTemplates = ({ addOptions, onClose, searchExp }) => {
                 label={name}
                 onClick={(event) => {
                   const templateId = templates[name].id;
-                  let component;
-                  if (addMode === 'copy') {
-                    component = duplicateComponent(templateId, addOptions);
-                  } else if (addMode === 'reference') {
-                    component = addComponent('designer.Reference', {
-                      ...addOptions,
-                      props: { component: templateId },
-                    });
-                  }
-                  if (component) setSelection(component.id);
+                  const id = duplicateComponent(templateId, {
+                    ...addOptions,
+                    template: design,
+                  });
+                  if (id) setSelection(id);
                   onClose();
                 }}
               />
             ))}
-          <Box pad="small">
-            <AddMethod id={name} value={addMode} onChange={setAddMode} />
-          </Box>
         </Box>
       );
     });

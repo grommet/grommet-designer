@@ -1,13 +1,6 @@
-import React, { useContext, useState } from 'react';
-import {
-  Box,
-  Button,
-  Footer,
-  Form,
-  FormField,
-  RadioButtonGroup,
-} from 'grommet';
-import { duplicateComponent } from './design2';
+import React, { useContext, useMemo, useState } from 'react';
+import { Box, Button, Footer, Form, FormField, Select, Text } from 'grommet';
+import { duplicateComponent, useDesign } from './design2';
 import SelectionContext from './SelectionContext';
 import blankPage from './templates/blankPage';
 import dashboard from './templates/dashboard';
@@ -15,19 +8,53 @@ import details from './templates/details';
 import list from './templates/list';
 import table from './templates/table';
 
-const templates = {
+const builtInTemplates = {
+  'empty page': blankPage,
   dashboard,
   details,
-  'empty page': blankPage,
   list,
   table,
 };
 
-const NewScreen = ({ onClose }) => {
+const label = (option) => (
+  <Box direction="row" justify="between" pad="small" gap="medium">
+    <Text weight="bold">{option.name}</Text>
+    <Text color="text-weak">{option.contextName}</Text>
+  </Box>
+);
+
+const addTemplates = (include, name) =>
+  Object.values(include.screens).map((s) => ({
+    name: s.name,
+    root: s.root,
+    contextName: name || include.name,
+    include,
+  }));
+
+const NewScreen = () => {
   const [selection, setSelection, { setLocation }] =
     useContext(SelectionContext);
+  const design = useDesign();
+
+  const templates = useMemo(() => {
+    const result = [];
+    if (design.includes) {
+      design.includes.forEach((name) => {
+        const stored = localStorage.getItem(name);
+        if (stored) {
+          const include = JSON.parse(stored);
+          result.push(...addTemplates(include));
+        }
+      });
+    }
+    Object.values(builtInTemplates).forEach((include) =>
+      result.push(...addTemplates(include, 'generic')),
+    );
+    return result;
+  }, [design.includes]);
+
   const [value, setValue] = useState({
-    template: 'empty page',
+    template: templates.find((t) => t.name === 'empty page'),
   });
 
   return (
@@ -35,42 +62,33 @@ const NewScreen = ({ onClose }) => {
       <Box
         pad="large"
         height={{ min: '100vh' }}
-        width={{ max: 'large' }}
+        width={{ max: 'large', min: 'medium' }}
         gap="medium"
       >
         <Form
           value={value}
           onChange={setValue}
           onSubmit={() => {
-            const template = templates[value.template];
-            const id = duplicateComponent(
-              template.screens[template.screenOrder[0]].root,
-              { within: selection, template },
-            );
+            const { root, include } = value.template;
+            const id = duplicateComponent(root, {
+              within: selection,
+              template: include,
+            });
             setLocation({ screen: selection });
             setSelection(id);
           }}
         >
-          <FormField label="Select screen template" name="template">
-            <RadioButtonGroup
-              name="template"
-              options={[
-                'empty page',
-                'dashboard',
-                'list',
-                'table',
-                'details',
-                'wizard',
-              ]}
-            />
+          <FormField label="screen template" name="template">
+            <Select name="template" options={templates} valueLabel={label}>
+              {label}
+            </Select>
           </FormField>
           <Footer margin={{ top: 'medium' }}>
             <Button
-              title="select screen template"
+              title="Use selected screen template"
               type="submit"
               primary
-              disabled={!templates[value.template]}
-              label="Select"
+              label="Use template"
             />
           </Footer>
         </Form>

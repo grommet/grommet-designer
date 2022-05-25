@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import ReactGA from 'react-ga';
 import {
   Box,
   Button,
@@ -11,16 +12,11 @@ import {
   TextInput,
 } from 'grommet';
 import { Close } from 'grommet-icons';
-import { getDesign, load } from '../design2';
+import { getDesign, load, useDesigns } from '../design2';
 
 const Duplicate = ({ onClose }) => {
-  const [designs, setDesigns] = useState([]);
+  const designs = useDesigns();
   const nameRef = useRef();
-
-  useEffect(() => {
-    let stored = localStorage.getItem('designs');
-    if (stored) setDesigns(JSON.parse(stored));
-  }, []);
 
   // useEffect(() => nameRef.current.focus(), []);
 
@@ -51,6 +47,7 @@ const Duplicate = ({ onClose }) => {
             design.name = value.name;
             delete design.readonly; // in case this was fetched
             load({ design });
+            ReactGA.event({ category: 'switch', action: 'duplicate design' });
             onClose();
           }}
         >

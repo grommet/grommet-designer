@@ -1,27 +1,19 @@
 import React, { useState } from 'react';
-import { Anchor, Box, RadioButtonGroup, Text, TextInput } from 'grommet';
-import { setDesignProperty, setTheme, useDesign } from '../design2';
+import {
+  Anchor,
+  Box,
+  RadioButtonGroup,
+  Select,
+  Text,
+  TextInput,
+} from 'grommet';
+import { setDesignProperty, setTheme, useDesign, useDesigns } from '../design2';
 import useDebounce from '../useDebounce';
 import Action from '../components/Action';
 import Field from '../components/Field';
-// import themes from '../themes';
-
-// const themeSuggestions = themes.map(
-//   ({ label, name, designerUrl, packageName, jsUrl }) => {
-//     const value = jsUrl || designerUrl || packageName;
-//     return {
-//       label: (
-//         <Box pad={{ horizontal: 'small', vertical: 'xsmall' }} gap="xsmall">
-//           <Text weight="bold">{label || name}</Text>
-//           <Text>{value}</Text>
-//         </Box>
-//       ),
-//       value,
-//     };
-//   },
-// );
 
 const DesignSettings = ({ onClose }) => {
+  const designs = useDesigns();
   const design = useDesign();
   const [name, setName] = useDebounce(design.name || '', (nextName) =>
     setDesignProperty('name', nextName),
@@ -87,66 +79,17 @@ const DesignSettings = ({ onClose }) => {
             />
           </Field>
         )}
-
-        {/* <Box>
-          <Box direction="row" justify="between" align="center">
-            <Heading level={3} size="small">
-              Imports
-            </Heading>
-            <Button
-              title="add an import"
-              tip="add an import"
-              icon={<Add />}
-              hoverIndicator
-              onClick={() => {
-                const nextImports = (design.imports || []).slice(0);
-                nextImports.push({});
-                setDesignProperty('imports', nextImports);
-              }}
-            />
-          </Box>
-          {design.imports && (
-            <Box flex={false}>
-              {design.imports.map((impor, index) => (
-                <Box
-                  key={index}
-                  direction="row"
-                  align="start"
-                  justify="between"
-                >
-                  <Box flex="grow">
-                    <Field htmlFor={`url-${index}`}>
-                      <TextInput
-                        id={`url-${index}`}
-                        name={`url-${index}`}
-                        plain
-                        placeholder="url"
-                        value={impor.url}
-                        onChange={(event) => {
-                          const nextImports = design.imports.slice(0);
-                          nextImports[index].url = event.target.value;
-                          setDesignProperty('imports', nextImports);
-                        }}
-                        style={{ textAlign: 'end' }}
-                      />
-                    </Field>
-                  </Box>
-                  <Button
-                    title="remove import"
-                    tip="remove import"
-                    icon={<Trash />}
-                    hoverIndicator
-                    onClick={() => {
-                      const nextImports = design.imports.slice(0);
-                      nextImports.splice(index, 1);
-                      setDesignProperty('imports', nextImports);
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box> */}
+        <Field label="includes" htmlFor="includes" name="includes">
+          <Select
+            name="includes"
+            placeholder="none"
+            multiple
+            plain
+            options={designs}
+            value={design.includes || []}
+            onChange={({ value }) => setDesignProperty('includes', value)}
+          />
+        </Field>
       </Box>
     </Action>
   );

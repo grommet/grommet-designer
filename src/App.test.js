@@ -25,7 +25,7 @@ describe('App', () => {
     await user.click(screen.getByTitle('create design'));
     expect(asFragment()).toMatchSnapshot();
 
-    await user.click(screen.getByTitle('select screen template'));
+    await user.click(screen.getByTitle('Use selected screen template'));
     expect(asFragment()).toMatchSnapshot();
 
     // await user.click(screen.getByText('PageContent'));

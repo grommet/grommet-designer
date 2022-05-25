@@ -4,22 +4,18 @@
   "screens": {
     "1": {
       "id": 1,
-      "name": "Screen",
+      "name": "empty page",
       "root": 2,
       "path": "/"
     }
   },
-  "screenOrder": [
-    1
-  ],
+  "screenOrder": [1],
   "components": {
     "2": {
       "id": 2,
       "type": "grommet.Page",
       "props": {},
-      "children": [
-        3
-      ]
+      "children": [3]
     },
     "3": {
       "id": 3,

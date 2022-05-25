@@ -92,7 +92,13 @@ const fetchPublished = async (id, password) => {
     });
 };
 
-export const load = async ({ design: designProp, id, name, password }) => {
+export const load = async ({
+  design: designProp,
+  id,
+  includes,
+  name,
+  password,
+}) => {
   if (storeTimer) clearTimeout(storeTimer);
 
   if (name) {
@@ -113,12 +119,13 @@ export const load = async ({ design: designProp, id, name, password }) => {
     design = newDesign();
   }
 
+  if (includes) design.includes = includes;
+
   upgradeDesign(design);
 
   notifyChange();
 
   theme = await loadTheme(design.theme);
-  // TODO: load any imports
 
   // load data: copy from design, fetch remote ones
   data = design.data ? JSON.parse(JSON.stringify(design.data)) : {};
@@ -729,7 +736,7 @@ export const duplicateComponent = (id, options, idMapArg) => {
 
   // handle any deeper component copying, like DataTable columns render
   if (type.copy) {
-    type.copy(design.components[id], component, {
+    type.copy(source.components[id], component, {
       duplicateComponent: (id) =>
         duplicateComponent(id, { template: options?.template }, idMap),
     });
@@ -779,6 +786,9 @@ export const duplicateComponent = (id, options, idMapArg) => {
   if (!idMapArg) {
     // this is the top of our duplication tree, insert it appropriately
     insertComponent(component.id, options || { after: id });
+
+    // ensure we aren't hiding the new one to start with
+    delete component.hide;
   }
 
   return component.id;
@@ -953,6 +963,15 @@ export const setDataIndex = (path, index) => {
 };
 
 // hooks
+
+export const useDesigns = () => {
+  const [designs, setDesigns] = useState([]);
+  useEffect(() => {
+    let stored = localStorage.getItem('designs');
+    if (stored) setDesigns(JSON.parse(stored));
+  }, []);
+  return designs;
+};
 
 export const useDesign = () => {
   const [, setStateDesign] = useState(design);
