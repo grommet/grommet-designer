@@ -41,7 +41,6 @@ const calculateGrommetThemeMode = (themeMode) =>
 const App = () => {
   const [start, setStart] = useState();
   const [newDesign, setNewDesign] = useState();
-  // const [subsequent, setSubsequent] = useState();
   const [loadProps, setLoadProps] = useState();
   const [appSettings, setAppSettings] = useState({});
   const [thumb, setThumb] = useState();
@@ -104,53 +103,6 @@ const App = () => {
   }, []);
 
   let content;
-  // if (subsequent) {
-  //   const { local, published } = subsequent;
-  //   const publishDate = new Date(published.date);
-  //   const localDate = new Date(local.date);
-  //   let options;
-  //   if (publishDate.getUTCFullYear() !== localDate.getUTCFullYear()) {
-  //     options = { year: 'numeric' };
-  //   } else if (publishDate.getUTCMonth() !== localDate.getUTCMonth()) {
-  //     options = { month: 'long' };
-  //   } else if (publishDate.getUTCDate() !== localDate.getUTCDate()) {
-  //     options = { month: 'short', day: 'numeric' };
-  //   } else {
-  //     options = { hour: 'numeric', minute: '2-digit' };
-  //   }
-
-  //   content = (
-  //     <Box fill align="center" justify="center" pad="large">
-  //       <Paragraph size="large" textAlign="center">
-  //         A newer published version of this design has been detected. Which one
-  //         would you like to use?
-  //       </Paragraph>
-  //       <Box direction="row" align="center" gap="medium">
-  //         <Button
-  //           label={`use published ${publishDate.toLocaleString(
-  //             undefined,
-  //             options,
-  //           )}`}
-  //           onClick={() => {
-  //             setSubsequent(undefined);
-  //             // keep the published one
-  //             published.local = true;
-  //             setDesign(published);
-  //           }}
-  //         />
-  //         <Button
-  //           label={`use current local ${localDate.toLocaleString(
-  //             undefined,
-  //             options,
-  //           )}`}
-  //           onClick={() => {
-  //             setSubsequent(undefined);
-  //             setDesign(local);
-  //           }}
-  //         />
-  //       </Box>
-  //     </Box>
-  //   );
   if (loadProps) {
     content = (
       <Designer

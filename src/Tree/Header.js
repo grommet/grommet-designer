@@ -2,17 +2,16 @@ import React, { useRef, useState } from 'react';
 import {
   Box,
   Button,
-  Footer,
   Header as GrommetHeader,
   Keyboard,
-  Layer,
   Menu,
-  Paragraph,
   Text,
 } from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
-import { getDesign, removeDesign, useChanges } from '../design2';
+import { useChanges, useDesignSummary } from '../design2';
 import AddComponent from './AddComponent';
+import ConfirmDelete from './ConfirmDelete';
+import Duplicate from './Duplicate';
 import DesignSettings from './DesignSettings';
 import Help from './Help';
 import Sharing from './Share';
@@ -28,8 +27,10 @@ const Header = ({ onClose, property, setMode }) => {
   const [editing, setEditing] = useState();
   const [sharing, setSharing] = useState();
   const [deleting, setDeleting] = useState();
+  const [duplicating, setDuplicating] = useState();
   const [help, setHelp] = useState();
   const { undo, redo } = useChanges();
+  const { name } = useDesignSummary();
   const ref = useRef();
 
   const onKey = (event) => {
@@ -51,8 +52,6 @@ const Header = ({ onClose, property, setMode }) => {
     }
   };
 
-  const name = getDesign().name;
-
   return (
     <Keyboard target="document" onKeyDown={onKey}>
       <Box ref={ref} flex={false} border="bottom">
@@ -72,6 +71,7 @@ const Header = ({ onClose, property, setMode }) => {
                   label: 'comments [control ;]',
                   onClick: () => setMode('comments'),
                 },
+                { label: 'duplicate', onClick: () => setDuplicating(true) },
                 { label: 'help', onClick: () => setHelp(true) },
                 { label: 'close', onClick: onClose },
                 { label: 'delete ...', onClick: () => setDeleting(true) },
@@ -122,34 +122,9 @@ const Header = ({ onClose, property, setMode }) => {
           </Box>
         </GrommetHeader>
         {deleting && (
-          <Layer
-            position="center"
-            margin="medium"
-            animation="fadeIn"
-            onEsc={() => setDeleting(false)}
-            onClickOutside={() => setDeleting(false)}
-          >
-            <Box flex elevation="medium" pad="large" gap="medium">
-              <Paragraph>
-                Just checking, are you sure you want to delete
-                <br />
-                <Text weight="bold"> {name}</Text>?
-              </Paragraph>
-              <Footer justify="start">
-                <Button
-                  label="Yes, delete"
-                  primary
-                  onClick={() => {
-                    localStorage.removeItem(`${name}--state`);
-                    removeDesign();
-                    onClose();
-                  }}
-                />
-                <Button label="No, cancel" onClick={() => setDeleting(false)} />
-              </Footer>
-            </Box>
-          </Layer>
+          <ConfirmDelete onClose={() => setDeleting(false)} onDone={onClose} />
         )}
+        {duplicating && <Duplicate onClose={() => setDuplicating(false)} />}
         {sharing && <Sharing onClose={() => setSharing(false)} />}
         {adding && (
           <AddComponent onClose={() => setAdding(false)} property={property} />

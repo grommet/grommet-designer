@@ -1022,8 +1022,8 @@ export const useData = (id) => {
 
 export const useChanges = () => {
   const [{ designs, index }, setChanges] = useState({
-    designs: [JSON.parse(JSON.stringify(design))],
-    index: 0,
+    designs: design ? [JSON.parse(JSON.stringify(design))] : [],
+    index: design ? 0 : -1,
   });
 
   useEffect(() => {
