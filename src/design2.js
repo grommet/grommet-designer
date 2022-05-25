@@ -828,6 +828,14 @@ export const setDesignProperty = (name, value) => {
   });
 };
 
+export const setTheme = (nextTheme) => {
+  updateDesign(async (nextDesign) => {
+    nextDesign.theme = nextTheme;
+    theme = await loadTheme(nextDesign.theme);
+    notify('theme', theme);
+  });
+};
+
 export const setDataProperty = (id, name, value) => {
   updateData(id, (nextData) => {
     if (value === undefined) delete nextData[name];
@@ -964,6 +972,12 @@ export const useDesignSummary = () => {
     [],
   );
   return summary;
+};
+
+export const useTheme = () => {
+  const [, setStateTheme] = useState(theme);
+  useEffect(() => listen('theme', setStateTheme), []);
+  return theme;
 };
 
 export const useScreens = () => {

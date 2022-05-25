@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { Box, Grommet, Paragraph } from 'grommet';
-import { getTheme } from './design2';
+import { useTheme } from './design2';
 import AppContext from './AppContext';
 import DesignComponent from './DesignComponent';
 
 const Canvas = ({ root }) => {
   const { direction, grommetThemeMode } = useContext(AppContext);
-  const theme = getTheme();
+  const theme = useTheme();
 
   const content = root ? (
     <DesignComponent id={root} />

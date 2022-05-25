@@ -1,48 +1,37 @@
-import React /*, { useCallback, useState } */ from 'react';
-import {
-  Anchor,
-  Box,
-  // Button,
-  Heading,
-  // Paragraph,
-  RadioButtonGroup,
-  Text,
-  // TextArea,
-  TextInput,
-} from 'grommet';
-// import { Add, Trash } from 'grommet-icons';
-import { getTheme, setDesignProperty, useDesign } from '../design2';
+import React, { useState } from 'react';
+import { Anchor, Box, RadioButtonGroup, Text, TextInput } from 'grommet';
+import { setDesignProperty, setTheme, useDesign } from '../design2';
 import useDebounce from '../useDebounce';
 import Action from '../components/Action';
 import Field from '../components/Field';
-import themes from '../themes';
+// import themes from '../themes';
 
-const themeSuggestions = themes.map(
-  ({ label, name, designerUrl, packageName, jsUrl }) => {
-    const value = jsUrl || designerUrl || packageName;
-    return {
-      label: (
-        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }} gap="xsmall">
-          <Text weight="bold">{label || name}</Text>
-          <Text>{value}</Text>
-        </Box>
-      ),
-      value,
-    };
-  },
-);
+// const themeSuggestions = themes.map(
+//   ({ label, name, designerUrl, packageName, jsUrl }) => {
+//     const value = jsUrl || designerUrl || packageName;
+//     return {
+//       label: (
+//         <Box pad={{ horizontal: 'small', vertical: 'xsmall' }} gap="xsmall">
+//           <Text weight="bold">{label || name}</Text>
+//           <Text>{value}</Text>
+//         </Box>
+//       ),
+//       value,
+//     };
+//   },
+// );
 
 const DesignSettings = ({ onClose }) => {
   const design = useDesign();
-  const theme = getTheme();
   const [name, setName] = useDebounce(design.name || '', (nextName) =>
     setDesignProperty('name', nextName),
   );
+  const [themeOther, setThemeOther] = useState(design.theme.startsWith('http'));
 
   return (
     <Action label="design" onClose={onClose}>
       <Box flex={false} gap="medium">
-        <Field label="Name" htmlFor="name">
+        <Field label="name" htmlFor="name">
           <TextInput
             id="name"
             name="name"
@@ -68,54 +57,36 @@ const DesignSettings = ({ onClose }) => {
           </Box>
         )}
 
-        <Box>
-          <Box direction="row" justify="between" align="center">
-            <Heading level={3} size="small">
-              Theme
-            </Heading>
-            <Anchor
-              href={design.theme || 'https://theme-designer.grommet.io'}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              theme designer
-            </Anchor>
-          </Box>
-
-          <Field label="url" htmlFor="theme" align="start">
+        <Field label="theme" htmlFor="theme" align="center" gap="large">
+          <RadioButtonGroup
+            name="theme"
+            direction="row"
+            gap="medium"
+            options={['grommet', 'hpe', 'other']}
+            value={design.theme.startsWith('http') ? 'other' : design.theme}
+            onChange={(event) => {
+              if (event.target.value === 'other') {
+                setTheme('https://theme-designer.grommet.io/');
+                setThemeOther(true);
+              } else {
+                setTheme(event.target.value);
+                setThemeOther(false);
+              }
+            }}
+          />
+        </Field>
+        {themeOther && (
+          <Field label="theme url" htmlFor="themeUrl">
             <TextInput
-              id="theme"
-              name="theme"
+              id="themeUrl"
+              name="themeUrl"
               plain
-              value={design.theme || ''}
-              suggestions={themeSuggestions}
-              onChange={(event) =>
-                setDesignProperty('theme', event.target.value)
-              }
-              onSelect={({ suggestion }) =>
-                setDesignProperty('theme', suggestion.value)
-              }
+              value={design.theme}
+              onChange={(event) => setTheme(event.target.value)}
               style={{ textAlign: 'end' }}
             />
           </Field>
-
-          {theme && typeof theme.global.colors.background === 'object' && (
-            <Field label="mode" htmlFor="themeMode">
-              <RadioButtonGroup
-                id="themeMode"
-                name="themeMode"
-                direction="row"
-                gap="medium"
-                margin={{ right: 'small' }}
-                options={['dark', 'light']}
-                value={design.themeMode}
-                onChange={(event) =>
-                  setDesignProperty('themeMode', event.target.value)
-                }
-              />
-            </Field>
-          )}
-        </Box>
+        )}
 
         {/* <Box>
           <Box direction="row" justify="between" align="center">
