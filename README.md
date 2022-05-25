@@ -102,16 +102,15 @@ you want inside '{}'. For example: `{data-source-name[0].property-name}`.
 You can also reference data in Repeater `dataPath`, so that Repeater will
 iterate over an array.
 
-### Imports
+### Includes
 
-Any published design can be used as a "import" from another design. Any
-components in the imported design that have been explicitly given a name will
-be shown in the list of components that can be added. When added, these can
-be copied into the current design by value. In this case, any changes
-published to the imported design will not be reflected in components already
-added in the design using it. Or, components can be added as a reference. In
-this case, any changes published to the imported design will be reflected
-in the importing design, when the browser is refreshed.
+Design can be "included" in another design. Any
+components in the included design that have been explicitly given a name will
+be shown in the list of components that can be added. When added, these
+will copied into the current design by value. If components used from
+the included design are subsequently modified, the modifications can be
+carried propogated via "copy properties from ..." in the component top menu
+on the right side.
 
 ## Local development
 
