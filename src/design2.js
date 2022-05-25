@@ -71,7 +71,7 @@ const fetchPublished = async (id, password) => {
     .then((pubDesign) => {
       // remember in case we make a change so we can set derivedFromId
       pubDesign.id = id;
-      pubDesign.fetched = true;
+      pubDesign.readonly = true;
 
       // update our persistent list of fetched designs
       const stored = localStorage.getItem('designs-fetched');
@@ -84,6 +84,9 @@ const fetchPublished = async (id, password) => {
         designsFetched.unshift({ name: pubDesign.name, id });
         localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
       }
+
+      // cache locally, in case we want to import for templates
+      localStorage.setItem(pubDesign.id, JSON.stringify(pubDesign));
 
       return pubDesign;
     });
@@ -133,6 +136,7 @@ export const load = async ({ design: designProp, id, name, password }) => {
 };
 
 const store = () => {
+  if (design.readonly) return;
   const date = new Date();
   date.setMilliseconds(0);
   design.date = date.toISOString();

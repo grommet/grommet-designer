@@ -132,6 +132,7 @@ const Header = ({ onClose, property, setMode }) => {
             <Box flex elevation="medium" pad="large" gap="medium">
               <Paragraph>
                 Just checking, are you sure you want to delete
+                <br />
                 <Text weight="bold"> {name}</Text>?
               </Paragraph>
               <Footer justify="start">
