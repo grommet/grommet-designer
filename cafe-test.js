@@ -4,11 +4,23 @@ import { Selector, t } from 'testcafe';
 // https://github.com/DevExpress/testcafe/issues/6844
 fixture('basic').page('http://localhost:3000');
 
-const typeButton = (type) => Selector('button').withExactText(type);
+// generic button selectors
+const textButton = (text) => Selector('button').withExactText(text);
+const titleButton = (title) => Selector('button').withAttribute('title', title);
+const labelButton = (label) =>
+  Selector('button').withAttribute('aria-label', label);
+
+// generic input selectors
+const nameInput = (name) => Selector('input').withAttribute('name', name);
+const placeholderInput = (placeholder) =>
+  Selector('input').withAttribute('placeholder', placeholder);
+const valueInput = (name, value) =>
+  nameInput(name).withAttribute('value', value);
+
 const typeSelect = (type) =>
-  typeButton(type).withAttribute('aria-label', `Select ${type}`);
+  textButton(type).withAttribute('aria-label', `Select ${type}`);
 const typeMenu = (type) =>
-  typeButton(type).withAttribute('aria-label', 'Open Menu');
+  textButton(type).withAttribute('aria-label', 'Open Menu');
 
 const select = async (type, index) => {
   let selector = typeSelect(type);
@@ -17,22 +29,13 @@ const select = async (type, index) => {
 };
 
 const add = async (type, search) => {
-  const addControl = Selector('button').withAttribute(
-    'title',
-    'add a component',
-  );
-  const typeAddControl = typeButton(type).withAttribute(
-    'aria-label',
-    `Add ${type}`,
-  );
+  const addControl = titleButton('add a component');
+  const typeAddControl = labelButton(`Add ${type}`);
 
   // open add layer
   await t.click(addControl).expect(typeAddControl.exists).ok();
   if (search) {
-    const addSearchInput = Selector('input').withAttribute(
-      'placeholder',
-      'search ...',
-    );
+    const addSearchInput = placeholderInput('search ...');
     await t.typeText(addSearchInput, search).expect(typeAddControl.exists).ok();
   }
   // add type
@@ -40,55 +43,35 @@ const add = async (type, search) => {
 };
 
 const newControl = Selector('a').withAttribute('title', 'start a new design');
-const nameInput = Selector('input').withAttribute('name', 'name');
-const titleInput = Selector('input').withAttribute('name', 'title');
-const labelInput = Selector('input').withAttribute('name', 'label');
-const dataPathInput = Selector('input').withAttribute('name', 'dataPath');
+
 const designName = 'test design';
-const createControl = Selector('button').withAttribute(
-  'title',
-  'create design',
-);
-const selectScreenControl = Selector('button').withAttribute(
-  'title',
-  'Use selected screen template',
-);
+const createDesignControl = titleButton('create design');
+const useScreenControl = titleButton('Use selected screen template');
 const empty = Selector('p').withExactText(
   'This PageContent is currently empty. Add some content to it.',
 );
-const undoControl = Selector('button').withAttribute(
-  'title',
-  'undo last change',
-);
-const redoControl = Selector('button').withAttribute(
-  'title',
-  'redo last change',
-);
+const undoControl = titleButton('undo last change');
+const redoControl = titleButton('redo last change');
 
 const pageTitle = Selector('h1').withExactText('Test Page');
-const closeLayerControl = Selector('button').withExactText('Close Layer');
-const openLayerControl = Selector('button').withExactText('Open Layer');
+const closeLayerControl = textButton('Close Layer');
+const openLayerControl = textButton('Open Layer');
 const linkLabel = Selector('label').withExactText('link');
-const testLayerOption = Selector('button')
-  .withAttribute('role', 'option')
-  .withExactText('test layer');
-const addActionsControl = Selector('button').withAttribute(
-  'aria-label',
-  'Add actions',
+const testLayerOption = textButton('test layer').withAttribute(
+  'role',
+  'option',
 );
-const backPageHeaderControl =
-  Selector('button').withExactText('back to PageHeader');
-const secondScreenControl = Selector('button').withExactText('Second Screen');
+const addActionsControl = labelButton('Add actions');
+const backPageHeaderControl = textButton('back to PageHeader');
+const secondScreenControl = textButton('Second Screen');
 const firstScreenLink = Selector('a').withExactText('First Screen Link');
-const firstScreenOption = Selector('button')
-  .withAttribute('role', 'option')
-  .withExactText('Test Screen');
-// const secondScreenLink = Selector('a').withExactText('Second Screen Link');
-const addDataControl = Selector('button').withAttribute(
-  'aria-label',
-  'add a data source',
+const firstScreenOption = textButton('Test Screen').withAttribute(
+  'role',
+  'option',
 );
-const dataControl = Selector('button').withExactText('data');
+// const secondScreenLink = Selector('a').withExactText('Second Screen Link');
+const addDataControl = labelButton('add a data source');
+const dataControl = textButton('data');
 const dataSelectControl = dataControl.withAttribute(
   'aria-label',
   'Select data',
@@ -102,36 +85,42 @@ test('create design', async (t) => {
   // from the Start
   await t.expect(newControl.exists).ok();
   // NewDesign
-  await t.click(newControl).expect(nameInput.exists).ok();
+  await t.click(newControl).expect(nameInput('name').exists).ok();
   // give it a name
-  await t.typeText(nameInput, designName).expect(createControl.exists).ok();
+  await t
+    .typeText(nameInput('name'), designName)
+    .expect(createDesignControl.exists)
+    .ok();
   // NewScreen
-  await t.click(createControl).expect(selectScreenControl.exists).ok();
+  await t.click(createDesignControl).expect(useScreenControl.exists).ok();
   // select a blank screen
-  await t.click(selectScreenControl).expect(empty.exists).ok();
+  await t.click(useScreenControl).expect(empty.exists).ok();
 
   // rename screen
   await select('Screen');
   await t
-    .typeText(nameInput, 'Test Screen', { replace: true })
-    .expect(typeButton('Test Screen').exists)
+    .typeText(nameInput('name'), 'Test Screen', { replace: true })
+    .expect(textButton('Test Screen').exists)
     .ok();
 
   // add a PageHeader and give it a title
 
   await select('PageContent');
   await add('PageHeader', 'Page');
-  await t.typeText(titleInput, 'Test Page').expect(pageTitle.exists).ok();
+  await t
+    .typeText(nameInput('title'), 'Test Page')
+    .expect(pageTitle.exists)
+    .ok();
 
   // add a Layer with a Button that will close it
 
   await select('PageContent');
   await add('Layer');
-  await t.typeText(nameInput, 'test layer');
+  await t.typeText(nameInput('name'), 'test layer');
   await add('Button');
   // set button label
   await t
-    .typeText(labelInput, 'Close Layer', { replace: true })
+    .typeText(nameInput('label'), 'Close Layer', { replace: true })
     .expect(closeLayerControl.exists)
     .ok();
   // set button link
@@ -152,7 +141,7 @@ test('create design', async (t) => {
   await t.click(addActionsControl).expect(backPageHeaderControl.exists).ok();
   await add('Button');
   await t
-    .typeText(labelInput, 'Open Layer', { replace: true })
+    .typeText(nameInput('label'), 'Open Layer', { replace: true })
     .expect(openLayerControl.exists)
     .ok();
   // set button link
@@ -181,17 +170,17 @@ test('create design', async (t) => {
   await add('Screen');
   // set screen name
   await t
-    .typeText(nameInput, 'Second Screen', { replace: true })
+    .typeText(nameInput('name'), 'Second Screen', { replace: true })
     .expect(secondScreenControl.exists)
     .ok();
   // select simple page screen template
-  await t.click(selectScreenControl).expect(empty.exists).ok();
+  await t.click(useScreenControl).expect(empty.exists).ok();
   // select the second screen's PageContent
   await select('PageContent', 1);
   await add('Anchor');
   // set anchor label
   await t
-    .typeText(labelInput, 'First Screen Link', { replace: true })
+    .typeText(nameInput('label'), 'First Screen Link', { replace: true })
     .expect(firstScreenLink.exists)
     .ok();
   // undo
@@ -228,11 +217,45 @@ test('create design', async (t) => {
   await add('DataTable');
   // set dataPath to data
   await t
-    .typeText(dataPathInput, 'data', { replace: true })
+    .typeText(nameInput('dataPath'), 'data', { replace: true })
     .expect(alphaTableHeader.exists)
     .ok();
 
-  //
+  // close design
+  await t.click(textButton(designName)).expect(textButton('close').exists).ok();
+  await t.click(textButton('close')).expect(newControl.exists).ok();
+
+  // create another design
+
+  // NewDesign
+  await t.click(newControl).expect(nameInput('name').exists).ok();
+  // give it a name
+  await t
+    .typeText(nameInput('name'), 'Second Design')
+    .expect(valueInput('name', 'Second Design').exists)
+    .ok();
+  // include the first test design
+  await t
+    .click(nameInput('includes'))
+    .expect(textButton(designName).exists)
+    .ok();
+  await t
+    .click(textButton(designName))
+    .expect(valueInput('includes', designName).exists)
+    .ok();
+  await t.click(createDesignControl).expect(useScreenControl.exists).ok();
+
+  // NewScreen
+  // select included screen
+  const testScreenButton = Selector('button')
+    .withText('Test Screen')
+    .withText(designName);
+  await t
+    .click(Selector('label').withExactText('screen template'))
+    .expect(testScreenButton.exists)
+    .ok();
+  await t.click(testScreenButton).expect(testScreenButton.exists).ok();
+  await t.click(useScreenControl).expect(openLayerControl.exists).ok();
 
   await t.wait(1000);
 });

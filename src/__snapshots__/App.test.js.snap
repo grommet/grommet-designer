@@ -840,6 +840,7 @@ exports[`App create 4`] = `
           >
             <label
               class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="template"
             >
               screen template
             </label>
@@ -851,6 +852,7 @@ exports[`App create 4`] = `
                 aria-haspopup="listbox"
                 aria-label="Open Drop; Selected: [object Object]"
                 class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                id="template"
                 type="button"
               >
                 <div
@@ -878,6 +880,7 @@ exports[`App create 4`] = `
                     </div>
                     <input
                       class="Select__HiddenInput-sc-17idtfo-1 eTPicX"
+                      id="template__input"
                       name="template"
                       readonly=""
                       type="text"

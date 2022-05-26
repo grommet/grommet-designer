@@ -78,8 +78,14 @@ const NewScreen = () => {
             setSelection(id);
           }}
         >
-          <FormField label="screen template" name="template">
-            <Select name="template" options={templates} valueLabel={label}>
+          <FormField label="screen template" htmlFor="template" name="template">
+            <Select
+              id="template"
+              name="template"
+              options={templates}
+              valueKey="name"
+              valueLabel={label}
+            >
               {label}
             </Select>
           </FormField>
