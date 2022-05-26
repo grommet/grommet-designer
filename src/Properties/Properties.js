@@ -38,7 +38,7 @@ import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
-import CopyPropertiesFrom from './CopyPropertiesFrom';
+import Replace from './Replace';
 import Field from '../components/Field';
 // import { getComponentType } from '../utils';
 
@@ -72,7 +72,7 @@ const Properties = () => {
   const [showAdvanced, setShowAdvanced] = useState();
   const [responsiveSize, setResponsiveSize] = useState('medium');
   const [showCode, setShowCode] = useState();
-  const [copyFrom, setCopyFrom] = useState();
+  const [replace, setReplace] = useState();
   const [style, setStyle] = useState(
     component?.style ? JSON.stringify(component.style, null, 2) : '',
   );
@@ -219,7 +219,7 @@ const Properties = () => {
 
   const menuItems = [
     { label: 'show code ...', onClick: () => setShowCode(true) },
-    { label: 'copy properties from ...', onClick: () => setCopyFrom(true) },
+    { label: 'replace ...', onClick: () => setReplace(true) },
     // {
     //   label: `create new design using this ${type.name}`,
     //   onClick: newDesignFrom,
@@ -253,11 +253,8 @@ const Properties = () => {
             {showCode && (
               <ComponentCode id={selection} onDone={() => setShowCode(false)} />
             )}
-            {copyFrom && (
-              <CopyPropertiesFrom
-                targetId={selection}
-                onDone={() => setCopyFrom(false)}
-              />
+            {replace && (
+              <Replace targetId={selection} onDone={() => setReplace(false)} />
             )}
           </Box>
           <Box flex={false} direction="row" align="center">

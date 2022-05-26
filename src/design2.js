@@ -300,18 +300,17 @@ export const getType = (typeName) => {
   return librariesMap[libraryName]?.components[componentName];
 };
 
-export const getName = (id, includeId = false) => {
-  const component = design.components[id];
+export const getName = (id, options) => {
+  const component = (options?.template || design).components[id];
   if (component)
     return (
       component.name ||
       (typeof component.props.name === 'string' && component.props.name) ||
       (typeof component.props.label === 'string' && component.props.label) ||
-      `${component.type.split('.')[1] || component.type}${
-        includeId ? ` ${component.id}` : ''
-      }`
+      component.type.split('.')[1] ||
+      component.type
     );
-  const screen = design.screens[id];
+  const screen = (options?.template || design).screens[id];
   if (screen) return screen.name || `Screen ${screen.id}`;
   return id;
 };
@@ -815,9 +814,13 @@ export const setProperty = (id, section, name, value) => {
   });
 };
 
-export const copyProperties = (sourceId, targetId) => {
+export const replace = (
+  sourceId,
+  targetId,
+  { template, includeChildren } = {},
+) => {
+  const source = (template || design).components[sourceId];
   updateComponent(targetId, (nextComponent) => {
-    const source = getComponent(sourceId);
     nextComponent.props = JSON.parse(JSON.stringify(source.props));
     if (source.designProps)
       nextComponent.designProps = JSON.parse(
@@ -826,6 +829,15 @@ export const copyProperties = (sourceId, targetId) => {
     if (source.responsive)
       nextComponent.responsive = JSON.parse(JSON.stringify(source.responsive));
   });
+  if (includeChildren) {
+    const target = design.components[targetId];
+    if (target.children) target.children.forEach(removeComponent);
+    if (source.children) {
+      source.children.forEach((childId) =>
+        duplicateComponent(childId, { template, within: targetId }),
+      );
+    }
+  }
 };
 
 export const setScreenProperty = (id, name, value) => {

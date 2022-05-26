@@ -82,7 +82,7 @@ const secondScreenControl = Selector('button').withExactText('Second Screen');
 const firstScreenLink = Selector('a').withExactText('First Screen Link');
 const firstScreenOption = Selector('button')
   .withAttribute('role', 'option')
-  .withExactText('Screen');
+  .withExactText('Test Screen');
 // const secondScreenLink = Selector('a').withExactText('Second Screen Link');
 const addDataControl = Selector('button').withAttribute(
   'aria-label',
@@ -109,6 +109,13 @@ test('create design', async (t) => {
   await t.click(createControl).expect(selectScreenControl.exists).ok();
   // select a blank screen
   await t.click(selectScreenControl).expect(empty.exists).ok();
+
+  // rename screen
+  await select('Screen');
+  await t
+    .typeText(nameInput, 'Test Screen', { replace: true })
+    .expect(typeButton('Test Screen').exists)
+    .ok();
 
   // add a PageHeader and give it a title
 
@@ -138,6 +145,7 @@ test('create design', async (t) => {
     .notOk();
 
   // add actions to the PageHeader to open the layer
+  // tests property component editing
 
   await select('PageHeader');
   // add actions
@@ -222,7 +230,9 @@ test('create design', async (t) => {
   await t
     .typeText(dataPathInput, 'data', { replace: true })
     .expect(alphaTableHeader.exists)
-    .ok()
+    .ok();
 
-    .wait(2000);
+  //
+
+  await t.wait(1000);
 });

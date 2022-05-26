@@ -38,6 +38,7 @@ const Screen = ({ first, id }) => {
         <Button
           fill
           hoverIndicator
+          aria-label={`Select ${name}`}
           onClick={(event) => {
             if (event.shiftKey) setSelection(undefined);
             else {
