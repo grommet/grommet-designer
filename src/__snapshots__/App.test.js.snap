@@ -12,7 +12,7 @@ exports[`App create 1`] = `
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 eTttHY"
+          class="StyledBox-sc-13pk1d4-0 ekYltT"
         >
           <div
             class="StyledGrid-sc-1wofa1l-0 iheCTs"
@@ -145,7 +145,7 @@ exports[`App create 2`] = `
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 hzTDiM"
+          class="StyledBox-sc-13pk1d4-0 gRrpoX"
         >
           <div
             class="StyledGrid-sc-1wofa1l-0 iheCTs"
@@ -490,7 +490,7 @@ exports[`App create 3`] = `
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 hzTDiM"
+          class="StyledBox-sc-13pk1d4-0 gRrpoX"
         >
           <div
             class="StyledGrid-sc-1wofa1l-0 iheCTs"

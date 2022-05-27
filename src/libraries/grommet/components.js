@@ -335,22 +335,18 @@ export const components = {
     },
     properties: {
       ...reusedBoxProps,
+      width: Dimension,
       wrap: false,
     },
     structure: [
       {
-        label: 'Content layout',
-        properties: [
-          'direction',
-          'justify',
-          'align',
-          'pad',
-          'gap',
-          'overflow',
-          'wrap',
-        ],
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
       },
-      reusedBoxStructure[1],
+      {
+        label: reusedBoxStructure[1].label,
+        properties: [...reusedBoxStructure[1].properties, 'width'],
+      },
       reusedBoxStructure[2],
     ],
   },
@@ -380,16 +376,8 @@ export const components = {
     },
     structure: [
       {
-        label: 'Content layout',
-        properties: [
-          'direction',
-          'justify',
-          'align',
-          'pad',
-          'gap',
-          'overflow',
-          'wrap',
-        ],
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
       },
       reusedBoxStructure[1],
       reusedBoxStructure[2],
@@ -602,8 +590,15 @@ export const components = {
     defaultProps: {
       pad: 'small',
     },
-    properties: reusedBoxProps,
-    structure: reusedBoxStructure,
+    properties: { ...reusedBoxProps, wrap: false },
+    structure: [
+      {
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
+      },
+      reusedBoxStructure[1],
+      reusedBoxStructure[2],
+    ],
   },
   CardFooter: {
     component: CardFooter,
@@ -1887,7 +1882,9 @@ export const components = {
         adjusted.onOrder = (data) => setDataByPath(designProps.dataPath, data);
       }
       if (children) {
-        adjusted.children = (value) => <DesignComponent id={children[0]} />;
+        adjusted.children = (value) => (
+          <DesignComponent id={children[0]} datum={value} />
+        );
       }
       return { ...props, ...adjusted };
     },
@@ -1906,13 +1903,18 @@ export const components = {
       value: 0,
       values: MeterValues,
     },
-    adjustProps: (props, { datum }) => {
+    designProperties: {
+      dataPath: '',
+    },
+    adjustProps: (props, { datum, component: { designProps } }) => {
       const adjusted = {
         value:
           typeof props.value === 'string'
             ? replaceWithData(props.value, datum)
             : props.value,
       };
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
       return { ...props, ...adjusted };
     },
   },
