@@ -415,6 +415,7 @@ export const components = {
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
       border: reusedBoxProps.border,
       gap: reusedBoxProps.gap,
+      pad: reusedBoxProps.pad,
     },
   },
   PageHeader: {
