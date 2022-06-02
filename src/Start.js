@@ -15,6 +15,7 @@ import {
   TextInput,
 } from 'grommet';
 import { Brush, List as ListIcon, Search } from 'grommet-icons';
+import { useDesigns } from './design2';
 import AppSettings from './AppSettings';
 import Manage from './Manage';
 
@@ -46,8 +47,7 @@ const DesignButton = ({ label, onClick, url }) => (
 );
 
 const Start = ({ onLoadProps, onNew }) => {
-  const [designs, setDesigns] = useState([]);
-  const [designsFetched, setDesignsFetched] = useState([]);
+  const designs = useDesigns({ fetched: true });
   const [search, setSearch] = useState();
   const [error, setError] = useState();
   const [manage, setManage] = useState();
@@ -57,40 +57,23 @@ const Start = ({ onLoadProps, onNew }) => {
     document.title = 'Grommet Designer';
   }, []);
 
-  // load design names from local storage
-  useEffect(() => {
-    let stored = localStorage.getItem('designs');
-    if (stored) {
-      // prune out non-existing designs
-      const nextDesigns = JSON.parse(stored).filter((name) =>
-        localStorage.getItem(name),
-      );
-      setDesigns(nextDesigns);
-      localStorage.setItem('designs', JSON.stringify(nextDesigns));
-    }
-  }, []);
-
-  // load previously fetched designs from local storage
-  useEffect(() => {
-    let stored = localStorage.getItem('designs-fetched');
-    if (stored) {
-      setDesignsFetched(JSON.parse(stored));
-    }
-  }, []);
-
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
-  const designsData = useMemo(() => {
+  const matchingDesigns = useMemo(() => {
     return designs.filter(
-      (name) => !searchExp || name.search(searchExp) !== -1,
+      ({ name }) => !searchExp || name.search(searchExp) !== -1,
     );
   }, [designs, searchExp]);
 
-  const designsFetchedData = useMemo(() => {
-    return designsFetched.filter(
-      ({ name }) => !searchExp || name.search(searchExp) !== -1,
-    );
-  }, [designsFetched, searchExp]);
+  const localData = useMemo(
+    () => matchingDesigns.filter(({ local }) => local),
+    [matchingDesigns],
+  );
+
+  const fetchedData = useMemo(
+    () => matchingDesigns.filter(({ local }) => !local),
+    [matchingDesigns],
+  );
 
   return (
     <Page kind="narrow" gap="large" height={{ min: '100vh' }}>
@@ -131,8 +114,8 @@ const Start = ({ onLoadProps, onNew }) => {
                 </Box>
               )}
             </Header>
-            <List data={designsData} pad="none">
-              {(name) => {
+            <List data={localData} pad="none">
+              {({ name }) => {
                 const url = `/?name=${encodeURIComponent(name)}`;
                 return (
                   <DesignButton
@@ -147,10 +130,10 @@ const Start = ({ onLoadProps, onNew }) => {
           </Box>
         )}
 
-        {designsFetched?.length > 0 && (
+        {fetchedData?.length > 0 && (
           <Box>
             <Heading level={2}>fetched designs</Heading>
-            <List data={designsFetchedData} pad="none">
+            <List data={fetchedData} pad="none">
               {({ name, id }) => {
                 const url = `/?id=${encodeURIComponent(id)}`;
                 return (
@@ -168,7 +151,7 @@ const Start = ({ onLoadProps, onNew }) => {
       </PageContent>
 
       <PageContent flex align="center" justify="center" animation="fadeIn">
-        {!designs?.length && !designsFetched?.length && (
+        {!designs?.length && (
           <Text size="3xl" color="text-weak">
             Hi, ... maybe create a new design?
           </Text>
@@ -246,7 +229,7 @@ const Start = ({ onLoadProps, onNew }) => {
         <Manage
           onClose={() => {
             setManage(false);
-            setDesigns([...designs]); // trigger re-load of offloaded state
+            // setDesigns([...designs]); // trigger re-load of offloaded state
           }}
         />
       )}

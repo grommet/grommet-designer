@@ -81,7 +81,11 @@ const fetchPublished = async (id, password) => {
       );
       if (index !== 0) {
         if (index !== -1) designsFetched.splice(index, 1);
-        designsFetched.unshift({ name: pubDesign.name, id });
+        designsFetched.unshift({
+          name: pubDesign.name,
+          id,
+          date: pubDesign.date,
+        });
         localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
       }
 
@@ -103,6 +107,7 @@ export const load = async ({
 
   if (name) {
     const stored = localStorage.getItem(name);
+    // TODO: handle removed design
     design = JSON.parse(stored);
     // if this isn't a full design, we've offloaded it and need to fetch
     // the full one
@@ -144,20 +149,20 @@ export const load = async ({
 
 const store = () => {
   if (design.readonly) return;
-  const date = new Date();
-  date.setMilliseconds(0);
-  design.date = date.toISOString();
+  const now = new Date();
+  now.setMilliseconds(0);
+  design.date = now.toISOString();
+  design.local = true;
   localStorage.setItem(design.name, JSON.stringify(design));
 
-  // keep track of the name in the list of design names
+  // keep track of the descriptor in the list of designs
   const stored = localStorage.getItem('designs');
   const designs = stored ? JSON.parse(stored) : [];
-  const index = designs.indexOf(design.name);
-  if (index !== 0) {
-    if (index !== -1) designs.splice(index, 1);
-    designs.unshift(design.name);
-    localStorage.setItem('designs', JSON.stringify(designs));
-  }
+  const index = designs.findIndex(({ name }) => name === design.name);
+  if (index !== -1) designs.splice(index, 1);
+  const { name, id, date, local } = design;
+  designs.unshift({ name, id, date, local });
+  localStorage.setItem('designs', JSON.stringify(designs));
 };
 
 const lazilyStore = () => {
@@ -976,12 +981,38 @@ export const setDataIndex = (path, index) => {
 
 // hooks
 
-export const useDesigns = () => {
+export const useDesigns = ({ fetched } = {}) => {
   const [designs, setDesigns] = useState([]);
   useEffect(() => {
+    let nextDesigns = [];
     let stored = localStorage.getItem('designs');
-    if (stored) setDesigns(JSON.parse(stored));
-  }, []);
+    let updated = false;
+    if (stored) {
+      nextDesigns = JSON.parse(stored).map((des) => {
+        // convert to descriptor format
+        if (typeof des === 'string') {
+          updated = true;
+          const stored2 = localStorage.getItem(des);
+          if (stored2) {
+            const { name, id, date } = JSON.parse(stored2);
+            return { name, id, date, local: true };
+          }
+          return undefined;
+        }
+        // const stored2 = localStorage.getItem(des.name);
+        // const { name, id, date } = JSON.parse(stored2);
+        // return { name, id, date, local: true };
+        return des;
+      });
+    }
+    // in case we changed anything, store back
+    if (updated) localStorage.setItem('designs', JSON.stringify(nextDesigns));
+    if (fetched) {
+      stored = localStorage.getItem('designs-fetched');
+      if (stored) nextDesigns = [...nextDesigns, ...JSON.parse(stored)];
+    }
+    setDesigns(nextDesigns);
+  }, [fetched]);
   return designs;
 };
 
