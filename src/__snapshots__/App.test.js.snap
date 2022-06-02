@@ -90,7 +90,7 @@ exports[`App create 1`] = `
           </div>
           <input
             accept=".json"
-            class="StyledFileInput-sc-rl7ywv-0 dByZlI"
+            class="StyledFileInput-sc-rl7ywv-0 hGmtlR"
             type="file"
           />
         </div>
