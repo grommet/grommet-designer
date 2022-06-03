@@ -33,7 +33,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     theme: 'grommet',
     themeUrl: '',
   });
-  const designs = useDesigns();
+  const designs = useDesigns({ fetched: true });
   const nameRef = useRef();
 
   useEffect(() => {
@@ -147,6 +147,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
                 placeholder="none"
                 multiple
                 options={designs}
+                labelKey="name"
               />
             </FormField>
           )}

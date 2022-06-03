@@ -66,12 +66,12 @@ const Start = ({ onLoadProps, onNew }) => {
   }, [designs, searchExp]);
 
   const localData = useMemo(
-    () => matchingDesigns.filter(({ local }) => local),
+    () => matchingDesigns.filter(({ id, local }) => local || !id),
     [matchingDesigns],
   );
 
   const fetchedData = useMemo(
-    () => matchingDesigns.filter(({ local }) => !local),
+    () => matchingDesigns.filter(({ id, local }) => !local && id),
     [matchingDesigns],
   );
 

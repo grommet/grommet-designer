@@ -87,6 +87,8 @@ const DesignSettings = ({ onClose }) => {
             plain
             options={designs}
             value={design.includes || []}
+            labelKey="name"
+            valueKey={(option) => option.id || option.name}
             onChange={({ value }) => setDesignProperty('includes', value)}
           />
         </Field>

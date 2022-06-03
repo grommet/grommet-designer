@@ -39,8 +39,9 @@ const NewScreen = () => {
   const templates = useMemo(() => {
     const result = [];
     if (design.includes) {
-      design.includes.forEach((name) => {
-        const stored = localStorage.getItem(name);
+      design.includes.forEach(({ id, name }) => {
+        let stored = localStorage.getItem(name);
+        if (!stored) stored = localStorage.getItem(id);
         if (stored) {
           const include = JSON.parse(stored);
           result.push(...addTemplates(include));
