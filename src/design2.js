@@ -107,7 +107,17 @@ export const load = async ({
 
   if (name) {
     const stored = localStorage.getItem(name);
-    // TODO: handle removed design
+
+    if (!stored) {
+      // design doesn't exist anymore, remove name
+      const stored2 = localStorage.getItem('designs');
+      if (stored2) {
+        const designs = JSON.parse(stored2).filter(({ name: n }) => n !== name);
+        localStorage.setItem('designs', JSON.stringify(designs));
+      }
+      throw new Error(404);
+    }
+
     design = JSON.parse(stored);
     // if this isn't a full design, we've offloaded it and need to fetch
     // the full one
@@ -494,7 +504,7 @@ export const removeDesign = () => {
   // remove from the stored list of local design names
   const stored = localStorage.getItem('designs');
   if (stored) {
-    const designs = JSON.parse(stored).filter((n) => n !== name);
+    const designs = JSON.parse(stored).filter(({ name: n }) => n !== name);
     localStorage.setItem('designs', JSON.stringify(designs));
   }
 

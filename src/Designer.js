@@ -97,10 +97,11 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
       .catch((e) => {
         // need to prompt user for password?
         if (e.message === '401') setAuth(true);
+        else if (e.message === '404') onClose();
         else throw e;
       });
     return () => setReady(false);
-  }, [loadProps, thumb]);
+  }, [loadProps, onClose, thumb]);
 
   // browser navigation
 
