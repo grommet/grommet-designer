@@ -1,4 +1,4 @@
-// TODO: remove
+// TODO: remove file
 export const getComponentType = (libraries, typeName) => {
   const [libraryName, componentName] = typeName.split('.');
   let component;

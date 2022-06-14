@@ -54,9 +54,7 @@ const NewScreen = () => {
     return result;
   }, [design.includes]);
 
-  const [value, setValue] = useState({
-    template: templates.find((t) => t.name === 'empty page'),
-  });
+  const [value, setValue] = useState({ template: templates[0] });
 
   return (
     <Box fill direction="row" justify="center">

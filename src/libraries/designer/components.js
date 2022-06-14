@@ -102,12 +102,21 @@ export const components = {
     },
     adjustProps: (props) => {
       if (props.component) {
-        // TODO: handle !includeChildren case
-        const children = <DesignComponent id={props.component} />;
+        // TODO: verify !includeChildren case
+        const children = (
+          <DesignComponent id={props.component}>
+            {!props.includeChildren ? props.children : null}
+          </DesignComponent>
+        );
         return { ...props, children };
       }
       return props;
     },
+    // copy: (source, copy, { duplicateComponent }) => {
+    //   if (source.props?.component) {
+    //     copy.props.component = idMap[source.props.component];
+    //   }
+    // },
   },
   Screen: {
     name: 'Screen',
