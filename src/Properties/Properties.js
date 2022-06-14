@@ -113,7 +113,7 @@ const Properties = () => {
         target: '_blank',
       },
     ].filter((i) => i);
-  }, [type]);
+  }, [component, type]);
 
   const referencesRef = useRef();
 

@@ -809,7 +809,11 @@ export const duplicateComponent = (id, options, idMapArg) => {
     // If this came from a template, remember where it came from,
     // so we can provide an option to update it if the template
     // changes.
-    if (options?.template) {
+    if (
+      options?.template &&
+      design.includes &&
+      design.includes.find((i) => i.name === options.template.name)
+    ) {
       const { name, date, id: designId } = options.template;
       component.template = { name, date, id: designId, component: id };
     }
