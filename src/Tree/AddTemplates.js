@@ -23,8 +23,8 @@ const AddTemplates = ({ addOptions, onClose, searchExp }) => {
     result.push(buildTemplates(design));
 
     if (design.includes) {
-      design.includes.forEach((name) => {
-        const stored = localStorage.getItem(name);
+      design.includes.forEach(({ id, name }) => {
+        const stored = localStorage.getItem(id) || localStorage.getItem(name);
         if (stored) result.push(buildTemplates(JSON.parse(stored)));
       });
     }

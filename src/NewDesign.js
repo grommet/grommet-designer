@@ -99,7 +99,9 @@ const NewDesign = ({ onClose, onLoadProps }) => {
             name="name"
             required
             validate={(name) =>
-              designs.find((n) => n === name) ? 'existing' : undefined
+              designs.find(({ name: n, local }) => local && n === name)
+                ? 'existing'
+                : undefined
             }
           >
             <TextInput ref={nameRef} id="name" name="name" />

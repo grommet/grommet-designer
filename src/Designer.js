@@ -24,6 +24,7 @@ import {
   getDesign,
   getLocationForPath,
   getPathForLocation,
+  getRoot,
   getScreen,
   getType,
   isValidId,
@@ -75,20 +76,27 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
     loadDesign(loadProps)
       .then((design) => {
         if (!thumb) {
-          // load any saved state for this design
+          // initialize selection, location, and mode
           const params = parseUrlParams(window.location.search);
+          const paramSelection =
+            params.selection && parseInt(params.selection, 10);
           const stored = localStorage.getItem(`${design.name}--state`);
           if (stored) {
             const savedState = JSON.parse(stored);
             setMode(params.mode || savedState.mode);
-            if (isValidId(savedState.selection))
-              setSelection(savedState.selection);
-            setLocation(savedState.location);
+            const nextSelection = paramSelection || savedState.selection;
+            if (isValidId(nextSelection)) setSelection(nextSelection);
+            if (paramSelection) {
+              const root = getRoot(paramSelection);
+              const path = getScreen(root).path;
+              setLocation(getLocationForPath(path));
+            } else setLocation(savedState.location);
           } else {
             setMode(params.mode || 'edit');
             if (loadProps.location)
               setLocation(getLocationForPath(loadProps.location));
-            if (loadProps.selection) setSelection(loadProps.selection);
+            if (paramSelection || loadProps.selection)
+              setSelection(paramSelection || loadProps.selection);
           }
         }
         return design;

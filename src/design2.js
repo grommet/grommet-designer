@@ -154,6 +154,8 @@ export const load = async ({
         }),
     );
 
+  // TODO: load includes and see if any have changed
+
   return design;
 };
 
@@ -803,6 +805,14 @@ export const duplicateComponent = (id, options, idMapArg) => {
 
     // ensure we aren't hiding the new one to start with
     delete component.hide;
+
+    // If this came from a template, remember where it came from,
+    // so we can provide an option to update it if the template
+    // changes.
+    if (options?.template) {
+      const { name, date, id: designId } = options.template;
+      component.template = { name, date, id: designId, component: id };
+    }
   }
 
   return component.id;

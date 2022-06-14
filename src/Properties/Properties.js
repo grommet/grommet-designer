@@ -26,6 +26,7 @@ import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
 import {
   duplicateComponent,
   getComponent,
+  getDesign,
   getParent,
   getReferences,
   getType,
@@ -53,6 +54,14 @@ const Properties = () => {
   const component = useComponent(selection);
 
   const type = component ? getType(component.type) : undefined;
+  const references = useMemo(() => getReferences(selection), [selection]);
+  const [showAdvanced, setShowAdvanced] = useState();
+  const [responsiveSize, setResponsiveSize] = useState('medium');
+  const [showCode, setShowCode] = useState();
+  const [replace, setReplace] = useState();
+  const [style, setStyle] = useState(
+    component?.style ? JSON.stringify(component.style, null, 2) : '',
+  );
 
   const hideable = useMemo(() => {
     // // for Reference component, hideable is driven by where the reference points
@@ -68,14 +77,43 @@ const Properties = () => {
     // }
     return type?.hideable;
   }, [type]);
-  const references = useMemo(() => getReferences(selection), [selection]);
-  const [showAdvanced, setShowAdvanced] = useState();
-  const [responsiveSize, setResponsiveSize] = useState('medium');
-  const [showCode, setShowCode] = useState();
-  const [replace, setReplace] = useState();
-  const [style, setStyle] = useState(
-    component?.style ? JSON.stringify(component.style, null, 2) : '',
-  );
+
+  const menuItems = useMemo(() => {
+    let templateItem;
+    if (component.template) {
+      const { id: tId, name: tName, component: selection } = component.template;
+      const template = getDesign().includes.find(
+        ({ id, name, local }) =>
+          (!local && id === tId) || (local && name === tName),
+      );
+      if (template)
+        templateItem = {
+          label: `open ${tName}`,
+          href:
+            '/?' +
+            (template.local ? `name=${template.name}` : `id=${template.id}`) +
+            `&selection=${selection}`,
+        };
+    }
+    return [
+      { label: 'show code ...', onClick: () => setShowCode(true) },
+      { label: 'replace ...', onClick: () => setReplace(true) },
+      // {
+      //   label: `create new design using this ${type.name}`,
+      //   onClick: newDesignFrom,
+      // },
+      templateItem,
+      // component.type === 'designer.Reference'
+      //   ? { label: 'disconnect Reference', onClick: disconnect }
+      //   : undefined,
+      // { label: 'reset', onClick: reset },
+      {
+        label: `help on ${type.name}`,
+        href: type.documentation,
+        target: '_blank',
+      },
+    ].filter((i) => i);
+  }, [type]);
 
   const referencesRef = useRef();
 
@@ -216,24 +254,6 @@ const Properties = () => {
         </Fragment>
       ));
   };
-
-  const menuItems = [
-    { label: 'show code ...', onClick: () => setShowCode(true) },
-    { label: 'replace ...', onClick: () => setReplace(true) },
-    // {
-    //   label: `create new design using this ${type.name}`,
-    //   onClick: newDesignFrom,
-    // },
-    // component.type === 'designer.Reference'
-    //   ? { label: 'disconnect Reference', onClick: disconnect }
-    //   : undefined,
-    // { label: 'reset', onClick: reset },
-    {
-      label: `help on ${type.name}`,
-      href: type.documentation,
-      target: '_blank',
-    },
-  ].filter((i) => i);
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
