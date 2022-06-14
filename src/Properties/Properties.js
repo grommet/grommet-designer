@@ -80,7 +80,7 @@ const Properties = () => {
 
   const menuItems = useMemo(() => {
     let templateItem;
-    if (component.template) {
+    if (component?.template) {
       const { id: tId, name: tName, component: selection } = component.template;
       const template = getDesign().includes.find(
         ({ id, name, local }) =>
@@ -95,6 +95,14 @@ const Properties = () => {
             `&selection=${selection}`,
         };
     }
+
+    const helpItem = type
+      ? {
+          label: `help on ${type.name}`,
+          href: type.documentation,
+          target: '_blank',
+        }
+      : undefined;
     return [
       { label: 'show code ...', onClick: () => setShowCode(true) },
       { label: 'replace ...', onClick: () => setReplace(true) },
@@ -107,11 +115,7 @@ const Properties = () => {
       //   ? { label: 'disconnect Reference', onClick: disconnect }
       //   : undefined,
       // { label: 'reset', onClick: reset },
-      {
-        label: `help on ${type.name}`,
-        href: type.documentation,
-        target: '_blank',
-      },
+      helpItem,
     ].filter((i) => i);
   }, [component, type]);
 
