@@ -17,7 +17,7 @@ import { pushPath } from './utils';
 import { newDesign, useDesigns } from './design2';
 import app from './templates/app';
 
-const builtInTemplates = { 'generic app': app };
+const builtInTemplates = [app];
 
 const newPath = '/_new';
 
@@ -41,10 +41,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     return () => pushPath('/');
   }, []);
 
-  const templates = useMemo(
-    () => [...Object.keys(builtInTemplates), ...designs],
-    [designs],
-  );
+  const templates = useMemo(() => [...builtInTemplates, ...designs], [designs]);
 
   useEffect(() => nameRef.current.focus(), []);
 
@@ -68,18 +65,30 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           onChange={setValue}
           onSubmit={() => {
             const loadProps = {};
-            if (designs.includes(value.source)) {
-              // loading an existing design, load what we've got
-              // and change the name
-              loadProps.design = JSON.parse(localStorage.getItem(value.source));
-              ReactGA.event({ category: 'switch', action: 'duplicate design' });
-            } else if (builtInTemplates[value.source]) {
-              const template = builtInTemplates[value.source];
-              loadProps.design = template;
-              template.theme = value.themeUrl || value.theme;
-              loadProps.location =
-                template.screens[template.screenOrder[0]].path;
-              ReactGA.event({ category: 'switch', action: 'template design' });
+            if (value.startWith === startWithOptions[1]) {
+              if (designs.includes(value.template)) {
+                // loading an existing design, load what we've got
+                // and change the name
+                const design = JSON.parse(
+                  localStorage.getItem(value.template.name) ||
+                    localStorage.getItem(value.template.id),
+                );
+                loadProps.location = design.screens[design.screenOrder[0]].path;
+                loadProps.design = design;
+                ReactGA.event({
+                  category: 'switch',
+                  action: 'duplicate design',
+                });
+              } else if (builtInTemplates.includes(value.template)) {
+                const design = JSON.parse(JSON.stringify(value.template));
+                design.theme = value.themeUrl || value.theme;
+                loadProps.location = design.screens[design.screenOrder[0]].path;
+                loadProps.design = design;
+                ReactGA.event({
+                  category: 'switch',
+                  action: 'template design',
+                });
+              }
             } else {
               loadProps.design = newDesign(
                 value.name,
@@ -115,8 +124,13 @@ const NewDesign = ({ onClose, onLoadProps }) => {
             options={startWithOptions}
           />
           {value.startWith === startWithOptions[1] && (
-            <FormField label="template" htmlFor="template" name="template">
-              <Select name="template" options={templates} />
+            <FormField
+              label="template"
+              htmlFor="template"
+              name="template"
+              required
+            >
+              <Select name="template" options={templates} labelKey="name" />
             </FormField>
           )}
           {(value.startWith === startWithOptions[0] ||
@@ -155,11 +169,13 @@ const NewDesign = ({ onClose, onLoadProps }) => {
           )}
           <Footer margin={{ vertical: 'large' }}>
             <Button
-              title="create design"
+              title={`${
+                value.startWith === startWithOptions[1] ? 'duplicate' : 'create'
+              } design`}
               type="submit"
               primary
               label={`${
-                value.source === 'existing design' ? 'Duplicate' : 'Create'
+                value.startWith === startWithOptions[1] ? 'Duplicate' : 'Create'
               } Design`}
             />
           </Footer>

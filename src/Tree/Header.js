@@ -58,6 +58,7 @@ const Header = ({ onClose, property, setMode }) => {
         <GrommetHeader border="bottom" gap="none">
           <Box flex>
             <Menu
+              a11yTitle="Open design menu"
               hoverIndicator
               dropProps={{ align: { top: 'bottom' } }}
               items={[

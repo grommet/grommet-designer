@@ -224,6 +224,7 @@ test('create design', async (t) => {
   // close design
   await t.click(textButton(designName)).expect(textButton('close').exists).ok();
   await t.click(textButton('close')).expect(newControl.exists).ok();
+  await t.expect(Selector('a').withExactText(designName).exists).ok();
 
   // create another design
 
@@ -256,6 +257,48 @@ test('create design', async (t) => {
     .ok();
   await t.click(testScreenButton).expect(testScreenButton.exists).ok();
   await t.click(useScreenControl).expect(openLayerControl.exists).ok();
+
+  // delete design
+
+  await t
+    .click(textButton('Second Design'))
+    .expect(textButton('delete ...').exists)
+    .ok();
+  await t
+    .click(textButton('delete ...'))
+    .expect(textButton('Yes, delete').exists)
+    .ok();
+  await t.wait(500);
+  await t.click(textButton('Yes, delete')).expect(newControl.exists).ok();
+  await t.expect(Selector('a').withExactText('Second Design').exists).notOk();
+  await t.expect(Selector('a').withExactText(designName).exists).ok();
+
+  // duplicate design
+
+  // NewDesign
+  await t.click(newControl).expect(nameInput('name').exists).ok();
+  // give it a name
+  await t
+    .typeText(nameInput('name'), 'Third Design')
+    .expect(valueInput('name', 'Third Design').exists)
+    .ok();
+  // choose dplicate existing
+  await t
+    .click(Selector('label').withExactText('duplicate an existing design'))
+    .expect(nameInput('template').exists)
+    .ok();
+  await t
+    .click(nameInput('template'))
+    .expect(textButton(designName).exists)
+    .ok();
+  await t
+    .click(textButton(designName))
+    .expect(valueInput('template', designName).exists)
+    .ok();
+  await t
+    .click(titleButton('duplicate design'))
+    .expect(textButton('Test Screen').exists)
+    .ok();
 
   await t.wait(1000);
 });
