@@ -16,7 +16,7 @@ exports[`App empty 1`] = `
         grommet designer
       </h1>
       <p
-        class="StyledParagraph-sc-tbetod-0 cfAovM"
+        class="StyledParagraph-sc-tbetod-0 jPrJSP"
       >
         design with grommet components
       </p>
@@ -31,7 +31,7 @@ exports[`App empty 1`] = `
         class="StyledBox-sc-13pk1d4-0 kGMroR"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 fvmIiV FileInput__ContentsBox-sc-1jzq7im-0 cWXikG"
+        class="StyledBox-sc-13pk1d4-0 fvmIiV FileInput__ContentsBox-sc-1jzq7im-0 eFrTsG"
       >
         <div
           class="StyledBox-sc-13pk1d4-0 USRwM"
@@ -50,7 +50,7 @@ exports[`App empty 1`] = `
         </div>
         <input
           accept=".json"
-          class="StyledFileInput-sc-rl7ywv-0 jBwQTO"
+          class="StyledFileInput-sc-rl7ywv-0 euBYKt"
           type="file"
         />
       </div>
@@ -282,7 +282,7 @@ exports[`App empty 2`] = `
         class="sc-gsnTZi jfxDfq"
       >
         <p
-          class="StyledParagraph-sc-tbetod-0 hnrRJw"
+          class="StyledParagraph-sc-tbetod-0 eyDUlL"
         >
           This Box is currently empty. Add components to it, so it can do its layout thing.
         </p>
