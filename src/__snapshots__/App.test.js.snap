@@ -33,7 +33,7 @@ exports[`App create 1`] = `
               class="StyledBox-sc-13pk1d4-0 iEzZsk"
             >
               <p
-                class="StyledParagraph-sc-tbetod-0 dXMFEr"
+                class="StyledParagraph-sc-tbetod-0 bvzhFE"
               >
                 design with grommet components
               </p>
@@ -71,7 +71,7 @@ exports[`App create 1`] = `
         class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 ekPFxt FileInput__ContentsBox-sc-1jzq7im-0 cWXikG"
+          class="StyledBox-sc-13pk1d4-0 ekPFxt FileInput__ContentsBox-sc-1jzq7im-0 eFrTsG"
         >
           <div
             class="StyledBox-sc-13pk1d4-0 USRwM"
@@ -90,7 +90,7 @@ exports[`App create 1`] = `
           </div>
           <input
             accept=".json"
-            class="StyledFileInput-sc-rl7ywv-0 hGmtlR"
+            class="StyledFileInput-sc-rl7ywv-0 jBxAvu"
             type="file"
           />
         </div>
@@ -951,7 +951,7 @@ exports[`App create 5`] = `
             class="sc-gsnTZi jfxDfq"
           >
             <p
-              class="StyledParagraph-sc-tbetod-0 hnrRJw"
+              class="StyledParagraph-sc-tbetod-0 eyDUlL"
             >
               This PageContent is currently empty. Add some content to it.
             </p>
