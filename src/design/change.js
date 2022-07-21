@@ -92,6 +92,7 @@ export const copyComponent = ({
   externalReferences = true,
 }) => {
   const component = templateDesign.components[id];
+  if (!component) return undefined;
 
   if (!externalReferences && component.type === 'designer.Reference') {
     const referenceComponent =
@@ -120,40 +121,44 @@ export const copyComponent = ({
   idMap[id] = nextId;
 
   if (component.children) {
-    nextComponent.children = component.children.map((childId) => {
-      const nextChildId = copyComponent({
-        nextDesign,
-        templateDesign,
-        id: childId,
-        idMap,
-        libraries,
-        screen,
-        externalReferences,
-      });
-      return nextChildId;
-    });
+    nextComponent.children = component.children
+      .map((childId) => {
+        const nextChildId = copyComponent({
+          nextDesign,
+          templateDesign,
+          id: childId,
+          idMap,
+          libraries,
+          screen,
+          externalReferences,
+        });
+        return nextChildId;
+      })
+      .filter((childId) => childId);
   }
 
   // copy components where a property is an embedded component
   if (component.propComponents) {
-    nextComponent.propComponents = component.propComponents.map((childId) => {
-      const nextChildId = copyComponent({
-        nextDesign,
-        templateDesign,
-        id: childId,
-        idMap,
-        libraries,
-        screen,
-        externalReferences,
-      });
-      // update corresponding property
-      Object.keys(nextComponent.props).forEach((prop) => {
-        if (nextComponent.props[prop] === childId) {
-          nextComponent.props[prop] = nextChildId; // TODO: !!! DataTable columns
-        }
-      });
-      return nextChildId;
-    });
+    nextComponent.propComponents = component.propComponents
+      .map((childId) => {
+        const nextChildId = copyComponent({
+          nextDesign,
+          templateDesign,
+          id: childId,
+          idMap,
+          libraries,
+          screen,
+          externalReferences,
+        });
+        // update corresponding property
+        Object.keys(nextComponent.props).forEach((prop) => {
+          if (nextComponent.props[prop] === childId) {
+            nextComponent.props[prop] = nextChildId; // TODO: !!! DataTable columns
+          }
+        });
+        return nextChildId;
+      })
+      .filter((childId) => childId);
   }
 
   // handle any deeper component copying, like DataTable columns render
