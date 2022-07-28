@@ -70,7 +70,6 @@ const Tree = ({ onClose, root, setMode }) => {
   // }, [design, selected]);
 
   const [copied, setCopied] = useState();
-  const [collapsed, setCollapsed] = useState(false);
   const treeRef = useRef();
   // const selectionRef = useRef();
 
@@ -142,8 +141,7 @@ const Tree = ({ onClose, root, setMode }) => {
           setSelection(duplicateComponent(copied, { within: selection }));
         }
       } else if (event.key === 's') {
-        screens.forEach((id) => setScreenProperty(id, 'collapsed', !collapsed));
-        setCollapsed(!collapsed);
+        screens.forEach((id) => setScreenProperty(id, 'collapsed', true));
       }
     }
   };
