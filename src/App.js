@@ -31,7 +31,10 @@ const App = () => {
       ...baseTheme,
       global: {
         ...baseTheme.global,
-        colors: { background: { dark: '#282828', light: '#f8f8f8' } },
+        colors: {
+          ...baseTheme.global.colors,
+          background: { dark: '#282828', light: '#f8f8f8' },
+        },
         drop: {
           zIndex: 300,
         },
@@ -43,7 +46,9 @@ const App = () => {
         zIndex: 300,
       },
       tip: {
+        ...baseTheme.tip,
         content: {
+          ...baseTheme.tip?.content,
           background: 'background',
         },
       },
