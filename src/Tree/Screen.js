@@ -8,7 +8,7 @@ import DragDropContext from './DragDropContext';
 import ScreenDropArea from './ScreenDropArea';
 
 const Screen = ({ first, id }) => {
-  const [selection, setSelection, { setLocation }] =
+  const [selection, setSelection, { setLocation, selectionPath }] =
     useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
 
@@ -17,6 +17,7 @@ const Screen = ({ first, id }) => {
   if (!screen) return null;
 
   const name = getName(id);
+  const selectionAncestor = selectionPath.includes(id);
 
   const CollapseIcon = screen.collapsed ? FormNext : FormDown;
 
@@ -58,7 +59,9 @@ const Screen = ({ first, id }) => {
           <Box
             pad={{ vertical: 'small', horizontal: 'small' }}
             background={
-              (selection === id && 'selected-background') || undefined
+              (selection === id && 'selected-background') ||
+              (selectionAncestor && 'background-contrast') ||
+              undefined
             }
           >
             <Heading
@@ -79,6 +82,7 @@ const Screen = ({ first, id }) => {
           tabIndex="-1"
           onClick={() => setLocation({ screen: id })}
         >
+          <Box pad="xxsmall" />
           <Component id={screen.root} />
         </Box>
       )}

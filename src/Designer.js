@@ -20,6 +20,7 @@ import Tree from './Tree/Tree';
 // import Comments from './Comments/Comments';
 import {
   load as loadDesign,
+  getAncestors,
   getComponent,
   getDesign,
   getLocationForPath,
@@ -30,6 +31,7 @@ import {
   isValidId,
   setDesignProperty,
   setProperty,
+  uncollapseAncestors,
   useDesignSummary,
   useScreen,
 } from './design2';
@@ -249,16 +251,20 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
     return [];
   }, [location, screen]);
 
+  const selectionPath = useMemo(() => getAncestors(selection), [selection]);
+
+  useEffect(() => uncollapseAncestors(selectionPath), [selectionPath]);
+
   const selectionContext = useMemo(
     () =>
       mode === 'edit'
         ? [
             selection,
             setSelection,
-            { followLink, followLinkOption, setLocation },
+            { followLink, followLinkOption, setLocation, selectionPath },
           ]
         : [undefined, undefined, { followLink, followLinkOption }],
-    [followLink, followLinkOption, mode, selection],
+    [followLink, followLinkOption, mode, selection, selectionPath],
   );
 
   if (auth)

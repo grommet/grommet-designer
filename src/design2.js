@@ -304,6 +304,14 @@ export const getDescendants = (id) => {
   return result;
 };
 
+export const getAncestors = (id) => {
+  if (!id) return [];
+  if (!design?.components?.[id] && !design?.screens?.[id]) return [id];
+  const parent = getParent(id);
+  if (parent) return [...getAncestors(parent), id];
+  return [id];
+};
+
 export const getReferences = (id) =>
   Object.keys(design.components)
     .filter((id2) => {
@@ -930,17 +938,23 @@ export const moveScreen = (id, options) => {
   notify();
 };
 
-export const toggleCollapsed = (id) => {
+export const toggleCollapsed = (id, collapsed) => {
   if (design.screens[id])
     updateScreen(
       id,
-      (nextScreen) => (nextScreen.collapsed = !nextScreen.collapsed),
+      (nextScreen) =>
+        (nextScreen.collapsed = collapsed ?? !nextScreen.collapsed),
     );
   else
     updateComponent(
       id,
-      (nextComponent) => (nextComponent.collapsed = !nextComponent.collapsed),
+      (nextComponent) =>
+        (nextComponent.collapsed = collapsed ?? !nextComponent.collapsed),
     );
+};
+
+export const uncollapseAncestors = (ancestors) => {
+  ancestors.forEach((id) => toggleCollapsed(id, false));
 };
 
 export const addData = () => {

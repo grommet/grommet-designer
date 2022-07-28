@@ -14,7 +14,7 @@ import ComponentDropArea from './ComponentDropArea';
 import DragDropContext from './DragDropContext';
 
 const Component = ({ id, first }) => {
-  const [selection, setSelection, { followLinkOption }] =
+  const [selection, setSelection, { followLinkOption, selectionPath }] =
     useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
@@ -32,6 +32,7 @@ const Component = ({ id, first }) => {
 
   const name = getName(id);
   const subName = component.type.split('.')[1] || component.type;
+  const selectionAncestor = selectionPath.includes(id);
 
   // let reference;
   // if (component.type === 'designer.Reference')
@@ -97,6 +98,7 @@ const Component = ({ id, first }) => {
             background={
               (dragOver && 'focus') ||
               (selection === id && 'selected-background') ||
+              (selectionAncestor && 'background-contrast') ||
               undefined
             }
           >
