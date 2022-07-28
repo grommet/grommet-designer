@@ -916,7 +916,7 @@ exports[`App create 4`] = `
               title="Use selected screen template"
               type="submit"
             >
-              Use template
+              Use Template
             </button>
           </footer>
         </form>

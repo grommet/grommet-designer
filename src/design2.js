@@ -24,8 +24,10 @@ export const listen = (id = 'all', func) => {
   if (!listeners[id]) listeners[id] = [];
   listeners[id].push(func);
   return () => {
-    listeners[id] = listeners[id].filter((f) => f !== func);
-    if (!listeners[id].length) delete listeners[id];
+    if (listeners[id]) {
+      listeners[id] = listeners[id].filter((f) => f !== func);
+      if (!listeners[id].length) delete listeners[id];
+    }
   };
 };
 

@@ -45,8 +45,8 @@ const add = async (type, search) => {
 const newControl = Selector('a').withAttribute('title', 'start a new design');
 
 const designName = 'test design';
-const createDesignControl = titleButton('create design');
-const useScreenControl = titleButton('Use selected screen template');
+const createDesignControl = textButton('Create Design');
+const useScreenControl = textButton('Use Template');
 const empty = Selector('p').withExactText(
   'This PageContent is currently empty. Add some content to it.',
 );

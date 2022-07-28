@@ -93,7 +93,7 @@ const NewScreen = () => {
               title="Use selected screen template"
               type="submit"
               primary
-              label="Use template"
+              label="Use Template"
             />
           </Footer>
         </Form>
