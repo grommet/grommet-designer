@@ -1069,9 +1069,9 @@ export const useDesignSummary = () => {
 };
 
 export const useTheme = () => {
-  const [th, setStateTheme] = useState(theme);
+  const [, setStateTheme] = useState(theme);
   useEffect(() => listen('theme', setStateTheme), []);
-  return th;
+  return theme;
 };
 
 export const useScreens = () => {
