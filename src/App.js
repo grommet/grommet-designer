@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Grommet, grommet } from 'grommet';
 import AppContext from './AppContext';
@@ -7,28 +7,7 @@ import Loading from './Loading';
 import Start from './Start';
 import NewDesign from './NewDesign';
 import { parseUrlParams } from './utils';
-
-const designerTheme = {
-  ...grommet,
-  global: {
-    ...grommet.global,
-    colors: { background: { dark: '#282828', light: '#f8f8f8' } },
-    drop: {
-      zIndex: 300,
-    },
-  },
-  // so designer layers are on top of Canvas layers
-  // HPE theme uses 110 due to common header, so need to higher
-  layer: {
-    ...grommet.layer,
-    zIndex: 300,
-  },
-  tip: {
-    content: {
-      background: 'background',
-    },
-  },
-};
+import { useTheme } from './design2';
 
 const calculateGrommetThemeMode = (themeMode) =>
   (themeMode === 'auto' &&
@@ -44,6 +23,32 @@ const App = () => {
   const [loadProps, setLoadProps] = useState();
   const [appSettings, setAppSettings] = useState({});
   const [thumb, setThumb] = useState();
+  const designTheme = useTheme();
+
+  const designerTheme = useMemo(() => {
+    const baseTheme = designTheme || grommet;
+    return {
+      ...baseTheme,
+      global: {
+        ...baseTheme.global,
+        colors: { background: { dark: '#282828', light: '#f8f8f8' } },
+        drop: {
+          zIndex: 300,
+        },
+      },
+      // so designer layers are on top of Canvas layers
+      // HPE theme uses 110 due to common header, so need to higher
+      layer: {
+        ...baseTheme.layer,
+        zIndex: 300,
+      },
+      tip: {
+        content: {
+          background: 'background',
+        },
+      },
+    };
+  }, [designTheme]);
 
   const appContextValue = useMemo(
     () => ({
@@ -102,17 +107,15 @@ const App = () => {
     else setStart(true);
   }, []);
 
+  const onClose = useCallback(() => {
+    setLoadProps(undefined);
+    setStart(true);
+  }, []);
+
   let content;
   if (loadProps) {
     content = (
-      <Designer
-        loadProps={loadProps}
-        onClose={() => {
-          setLoadProps(undefined);
-          setStart(true);
-        }}
-        thumb={thumb}
-      />
+      <Designer loadProps={loadProps} onClose={onClose} thumb={thumb} />
     );
   } else if (newDesign) {
     content = (

@@ -142,6 +142,8 @@ export const load = async ({
 
   theme = await loadTheme(design.theme);
 
+  notify('theme', theme);
+
   // load data: copy from design, fetch remote ones
   data = design.data ? JSON.parse(JSON.stringify(design.data)) : {};
   Object.keys(data)
@@ -1065,9 +1067,9 @@ export const useDesignSummary = () => {
 };
 
 export const useTheme = () => {
-  const [, setStateTheme] = useState(theme);
+  const [th, setStateTheme] = useState(theme);
   useEffect(() => listen('theme', setStateTheme), []);
-  return theme;
+  return th;
 };
 
 export const useScreens = () => {
