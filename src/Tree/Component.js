@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Box, Button, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -18,6 +18,7 @@ const Component = ({ id, first }) => {
     useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
+  const selectionRef = useRef();
 
   const component = useComponent(id);
 
@@ -27,6 +28,16 @@ const Component = ({ id, first }) => {
     if (type.initialize)
       type.initialize(comp.props, { component: comp, followLinkOption });
   }, [id, followLinkOption]);
+
+  // scroll to show if selected component
+  useEffect(() => {
+    if (id === selection && selectionRef.current) {
+      const rect = selectionRef.current.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        selectionRef.current.scrollIntoView();
+      }
+    }
+  }, [id, selection]);
 
   if (!component) return null;
 
@@ -61,6 +72,7 @@ const Component = ({ id, first }) => {
           <Box pad="small" />
         )}
         <Button
+          ref={id === selection ? selectionRef : undefined}
           fill
           hoverIndicator
           aria-label={`Select ${name}`}
