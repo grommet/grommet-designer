@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Heading, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -17,22 +11,21 @@ const AddComponent = ({ onClose, property }) => {
   const [selection] = useContext(SelectionContext);
   const component = useComponent(selection);
   const onlyScreen = !selection && !property;
+  const [addLocation, setAddLocation] = useState();
 
   // addOptions is what eventually gets passed to addComponent()
-  const [addOptions, setAddOptions] = useState(
+  const addOptions = useMemo(() => {
     // property
-    (property?.onChange && { id: property.id, onChange: property.onChange }) ||
-      // screen
-      (!component && { within: selection }) ||
-      undefined, // let AddLocation tell us
-  );
+    if (property?.onChange)
+      return { id: property.id, onChange: property.onChange };
+    // screen
+    if (!component) return { within: selection };
+    // component
+    if (addLocation) return { [addLocation]: selection };
+    return {};
+  }, [property, component, addLocation, selection]);
   const [search, setSearch] = useState(onlyScreen ? 'screen' : '');
   const inputRef = useRef();
-
-  const onChangeLocation = useCallback(
-    (nextAddOptions) => setAddOptions(nextAddOptions),
-    [],
-  );
 
   useEffect(() => inputRef.current?.focus(), [addOptions]);
 
@@ -65,7 +58,7 @@ const AddComponent = ({ onClose, property }) => {
         </Box>
         {component && (
           <Box flex={false} pad="small">
-            <AddLocation onChange={onChangeLocation} />
+            <AddLocation value={addLocation} onChange={setAddLocation} />
           </Box>
         )}
         <Box flex overflow="auto">

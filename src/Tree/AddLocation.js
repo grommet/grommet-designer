@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { Box, RadioButtonGroup, Tip } from 'grommet';
 import { Blank } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -79,28 +79,21 @@ const locationVisuals = {
   ],
 };
 
-const AddLocation = ({ onChange }) => {
+const AddLocation = ({ value, onChange }) => {
   const [selection] = useContext(SelectionContext);
   const component = useComponent(selection);
-  const type = getType(component.type);
+  const type = useMemo(() => getType(component.type), [component]);
 
-  const locations = React.useMemo(() => {
+  const locations = useMemo(() => {
     const parent = getParent(selection);
     if (!parent) return ['within', 'containing'];
     if (type?.container) return ['within', 'after', 'before', 'containing'];
     return ['after', 'before', 'containing'];
   }, [selection, type]);
 
-  const [addLocation, setAddLocation] = React.useState(
-    locations[type?.container === 'rarely' ? 1 : 0],
-  );
-
-  const changeAddLocation = useCallback(
-    (nextAddLocation) => {
-      setAddLocation(nextAddLocation);
-      onChange({ [nextAddLocation]: selection });
-    },
-    [onChange, selection],
+  useEffect(
+    () => onChange(locations[type?.container === 'rarely' ? 1 : 0]),
+    [locations, onChange, type],
   );
 
   const Option = ({ option, checked, hover }) => {
@@ -123,8 +116,8 @@ const AddLocation = ({ onChange }) => {
       name="add-location"
       options={locations}
       disabled={locations.length === 1}
-      value={addLocation}
-      onChange={(event) => changeAddLocation(event.target.value)}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
       direction="row"
     >
       {(option, { checked, hover }) => (
