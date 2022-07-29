@@ -27,7 +27,7 @@ const ColorLabel =
   (theme) =>
   ({ selected, value }) =>
     (
-      <Box pad="small" direction="row" gap="small" align="center">
+      <Box pad="xsmall" direction="row" gap="small" align="center">
         <ThemeContext.Extend value={theme}>
           <Box pad="small" background={value} />
         </ThemeContext.Extend>
@@ -79,12 +79,13 @@ const ColorProperty = forwardRef(
       >
         {!value && (
           <Button
-            icon={<Text color="text-weak">{'{}'}</Text>}
             onClick={() => {
               onChange('{}');
               setFocusDataPath(true);
             }}
-          />
+          >
+            <Text color="text-weak">{'{}'}</Text>
+          </Button>
         )}
       </ArrayProperty>
     );

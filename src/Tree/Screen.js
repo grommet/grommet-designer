@@ -31,7 +31,7 @@ const Screen = ({ first, id }) => {
             hoverIndicator
             onClick={() => toggleCollapsed(id)}
           >
-            <Box pad="xsmall">
+            <Box pad="xxsmall">
               <CollapseIcon color="border" />
             </Box>
           </Button>
@@ -57,7 +57,7 @@ const Screen = ({ first, id }) => {
           }}
         >
           <Box
-            pad={{ vertical: 'small', horizontal: 'small' }}
+            pad={{ vertical: 'xsmall', horizontal: 'small' }}
             background={
               (selection === id && 'selected-background') ||
               (selectionAncestor && 'background-contrast') ||
@@ -79,6 +79,7 @@ const Screen = ({ first, id }) => {
       {!screen.collapsed && screen.root && (
         <Box
           flex={false}
+          pad={{ left: 'xsmall' }}
           tabIndex="-1"
           onClick={() => setLocation({ screen: id })}
         >

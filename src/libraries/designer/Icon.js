@@ -4,7 +4,7 @@ import * as icons from 'grommet-icons';
 import metadata from 'grommet-icons/metadata';
 
 const exp = new RegExp(/^[A-Z]/);
-export const names = Object.keys(icons).filter(n => exp.test(n));
+export const names = Object.keys(icons).filter((n) => exp.test(n));
 export const aliases = metadata;
 
 // map size to align with font sizes better, empirically determined,
@@ -15,7 +15,7 @@ const sizes = {
 };
 
 export const SelectLabel = ({ selected, value }) => (
-  <Box pad="small" direction="row" gap="small" align="center">
+  <Box pad="xsmall" direction="row" gap="small" align="center">
     <Icon icon={value} />
     <Text weight={selected ? 'bold' : undefined}>{value}</Text>
   </Box>

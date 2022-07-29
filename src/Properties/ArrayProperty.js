@@ -4,7 +4,7 @@ import Field from '../components/Field';
 import DataPathField from './DataPathField';
 
 const OptionLabel = ({ selected, value }) => (
-  <Box pad="small">
+  <Box pad="xsmall">
     <Text weight={selected ? 'bold' : undefined}>
       {(typeof value !== 'string' ? JSON.stringify(value) : value) || ''}
     </Text>
@@ -77,12 +77,13 @@ const ArrayProperty = React.forwardRef(
       <Field key={name} ref={ref || fieldRef} label={name} htmlFor={name}>
         {(dataPath && !value && (
           <Button
-            icon={<Text color="text-weak">{'{}'}</Text>}
             onClick={() => {
               onChange('{}');
               setFocusDataPath(true);
             }}
-          />
+          >
+            <Text color="text-weak">{'{}'}</Text>
+          </Button>
         )) ||
           children}
         <Select

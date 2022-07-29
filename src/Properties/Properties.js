@@ -353,7 +353,7 @@ const Properties = () => {
               )}
               {hideable && component.name && (
                 <Field label="hide" htmlFor="hide">
-                  <Box pad="small">
+                  <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
                     <CheckBox
                       id="hide"
                       name="hide"
@@ -386,11 +386,7 @@ const Properties = () => {
 
             <Box flex={false} border={type.structure ? 'bottom' : undefined}>
               <Header>
-                <Heading
-                  level={3}
-                  size="small"
-                  margin={{ horizontal: 'medium', vertical: 'medium' }}
-                >
+                <Heading level={3} size="xxsmall" margin="small">
                   Properties
                 </Heading>
                 {type.respondable && !component.responsive && (
@@ -418,7 +414,7 @@ const Properties = () => {
                     gap="small"
                   >
                     <Box margin={{ end: 'medium' }}>
-                      <Heading level={4} size="small" margin="none">
+                      <Heading level={4} size="xsmall" margin="none">
                         ResponsiveContext
                       </Heading>
                       <Paragraph margin="none" size="small">
@@ -521,11 +517,11 @@ const Properties = () => {
                           >
                             <Heading
                               level={4}
-                              size="small"
+                              size="xsmall"
                               margin={{
-                                horizontal: 'medium',
-                                top: 'small',
-                                bottom: 'medium',
+                                horizontal: 'small',
+                                top: 'xxsmall',
+                                bottom: 'small',
                               }}
                             >
                               {label}
@@ -540,7 +536,7 @@ const Properties = () => {
                   <Box flex="grow" border="top">
                     {renderProperties('props', type.properties)}
                     {parentType?.container && (
-                      <Box pad="medium">
+                      <Box pad="small">
                         <Paragraph size="small" color="text-xweak">
                           adjust the layout of this {type.name} via its
                           containing{' '}
@@ -554,7 +550,7 @@ const Properties = () => {
                   </Box>
                 )}
 
-                <Box pad="medium">
+                <Box pad="small">
                   <CheckBox
                     label="advanced"
                     checked={showAdvanced}

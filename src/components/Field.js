@@ -9,13 +9,13 @@ const Field = React.forwardRef(
       align="center"
       justify="between"
       border="bottom"
-      pad={{ horizontal: 'small' }}
+      pad={{ horizontal: 'xsmall' }}
       {...rest}
     >
       <Box
         as="label"
         flex={false}
-        pad={{ vertical: 'small', horizontal: 'small' }}
+        pad={{ vertical: 'xsmall', horizontal: 'xsmall' }}
         htmlFor={htmlFor}
       >
         <Text>{label}</Text>

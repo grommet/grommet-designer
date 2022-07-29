@@ -32,7 +32,10 @@ const FunctionProperty = React.forwardRef(
                   {jsonValue(value)}
                 </Text>
               )}
-              <Box flex={false} pad="small">
+              <Box
+                flex={false}
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              >
                 <FormDown color="control" />
               </Box>
             </Box>

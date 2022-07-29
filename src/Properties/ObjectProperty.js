@@ -21,7 +21,10 @@ const ObjectProperty = React.forwardRef(
                       {jsonValue(value)}
                     </Text>
                   )}
-                  <Box flex={false} pad="small">
+                  <Box
+                    flex={false}
+                    pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                  >
                     {expand ? (
                       <FormUp color="control" />
                     ) : (

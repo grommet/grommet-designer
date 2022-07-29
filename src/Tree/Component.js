@@ -54,7 +54,10 @@ const Component = ({ id, first }) => {
   return (
     <Box>
       {first && <ComponentDropArea id={id} where="before" />}
-      <Box direction="row">
+      <Box
+        direction="row"
+        pad={!component.children ? { left: 'xsmall' } : undefined}
+      >
         {component.children ? (
           <Button
             title={`toggle collapse ${name}`}
@@ -64,7 +67,7 @@ const Component = ({ id, first }) => {
             hoverIndicator
             onClick={() => toggleCollapsed(id)}
           >
-            <Box pad="xsmall">
+            <Box pad="xxsmall">
               <CollapseIcon color="border" />
             </Box>
           </Button>
@@ -106,7 +109,7 @@ const Component = ({ id, first }) => {
             direction="row"
             align="center"
             gap="medium"
-            pad={{ vertical: 'xsmall', horizontal: 'small' }}
+            pad={{ vertical: 'xxsmall', horizontal: 'small' }}
             background={
               (dragOver && 'focus') ||
               (selection === id && 'selected-background') ||
@@ -126,7 +129,7 @@ const Component = ({ id, first }) => {
         </Button>
       </Box>
       {!component.collapsed && component.children && (
-        <Box pad={{ left: 'small' }}>
+        <Box pad={{ left: 'xsmall' }}>
           {component.children.map((childId, index) => (
             <Component key={childId} id={childId} first={index === 0} />
           ))}

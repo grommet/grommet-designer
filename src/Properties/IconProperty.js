@@ -41,12 +41,13 @@ const IconProperty = React.forwardRef(({ name, onChange, value }, ref) => {
     >
       {!value && (
         <Button
-          icon={<Text color="text-weak">{'{}'}</Text>}
           onClick={() => {
             onChange('{}');
             setFocusDataPath(true);
           }}
-        />
+        >
+          <Text color="text-weak">{'{}'}</Text>
+        </Button>
       )}
     </ArrayProperty>
   );

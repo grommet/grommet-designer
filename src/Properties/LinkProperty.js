@@ -23,7 +23,7 @@ const LinkLabel = ({ selected, value }) => {
     label = JSON.stringify(value);
   }
   return (
-    <Box pad="small">
+    <Box pad="xsmall">
       <Text weight={selected ? 'bold' : undefined}>{label}</Text>
     </Box>
   );
