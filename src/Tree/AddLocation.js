@@ -103,17 +103,6 @@ const AddLocation = ({ onChange }) => {
     [onChange, selection],
   );
 
-  useEffect(
-    () =>
-      // this feels like too much of a hack :(
-      setTimeout(
-        () =>
-          changeAddLocation(locations[type?.container === 'rarely' ? 1 : 0]),
-        1,
-      ),
-    [changeAddLocation, locations, type],
-  );
-
   const Option = ({ option, checked, hover }) => {
     return (
       <Tip content={`${option} ${getName(selection)}`}>
