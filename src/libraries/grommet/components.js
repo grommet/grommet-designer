@@ -412,10 +412,13 @@ export const components = {
     ),
     documentation: 'https://v2.grommet.io/page',
     properties: {
+      align: reusedBoxProps.align,
+      justify: reusedBoxProps.justify,
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
       border: reusedBoxProps.border,
       gap: reusedBoxProps.gap,
       pad: reusedBoxProps.pad,
+      flex: reusedBoxProps.flex,
     },
   },
   PageHeader: {
