@@ -27,7 +27,10 @@ const AddComponent = ({ onClose, property }) => {
   const [search, setSearch] = useState(onlyScreen ? 'screen' : '');
   const inputRef = useRef();
 
-  useEffect(() => inputRef.current?.focus(), [addOptions]);
+  useEffect(() => {
+    inputRef.current?.focus();
+    return undefined;
+  }, [addOptions]);
 
   const searchExp = search ? new RegExp(search, 'i') : undefined;
 

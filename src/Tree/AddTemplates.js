@@ -43,7 +43,7 @@ const AddTemplates = ({ addOptions, onClose, searchExp }) => {
       const { name } = design;
 
       return (
-        <Box flex={false} border="top">
+        <Box key={name} flex={false} border="top">
           <Box
             pad={{ horizontal: 'small', vertical: 'xsmall' }}
             margin={{ top: 'small' }}

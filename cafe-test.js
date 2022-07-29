@@ -224,7 +224,7 @@ test('create design', async (t) => {
   // close design
   await t.click(textButton(designName)).expect(textButton('close').exists).ok();
   await t.click(textButton('close')).expect(newControl.exists).ok();
-  await t.expect(Selector('a').withExactText(designName).exists).ok();
+  await t.expect(Selector('a').withText(designName).exists).ok();
 
   // create another design
 
@@ -271,7 +271,7 @@ test('create design', async (t) => {
   await t.wait(500);
   await t.click(textButton('Yes, delete')).expect(newControl.exists).ok();
   await t.expect(Selector('a').withExactText('Second Design').exists).notOk();
-  await t.expect(Selector('a').withExactText(designName).exists).ok();
+  await t.expect(Selector('a').withText(designName).exists).ok();
 
   // duplicate design
 

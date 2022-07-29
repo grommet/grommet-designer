@@ -43,7 +43,10 @@ const NewDesign = ({ onClose, onLoadProps }) => {
 
   const templates = useMemo(() => [...builtInTemplates, ...designs], [designs]);
 
-  useEffect(() => nameRef.current.focus(), []);
+  useEffect(() => {
+    nameRef.current?.focus();
+    return undefined;
+  }, []);
 
   return (
     <Page kind="narrow" height={{ min: '100vh' }}>

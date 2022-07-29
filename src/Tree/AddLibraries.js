@@ -40,7 +40,7 @@ const AddLibraries = ({ addOptions, onClose, searchExp }) => {
           !searchExp || names.some((name) => name.match(searchExp)),
       )
       .map(({ name, Icon, components: names }) => (
-        <Box flex={false}>
+        <Box key={name} flex={false}>
           <Box
             direction="row"
             gap="medium"
