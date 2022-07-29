@@ -183,9 +183,9 @@ const store = (args = {}) => {
   localStorage.setItem('designs', JSON.stringify(designs));
 };
 
-const lazilyStore = () => {
+const lazilyStore = (args) => {
   if (storeTimer) clearTimeout(storeTimer);
-  storeTimer = setTimeout(store, 1000);
+  storeTimer = setTimeout(() => store(args), 1000);
 };
 
 const getUrlForId = (id) => {
@@ -422,26 +422,26 @@ export const isValidId = (id) =>
 // passing a function to manage an update, make a copy, let the function
 // update the copy, and then automatically replacing the original and
 // notifying
-const updateComponent = (id, func, { preserveLocal } = {}) => {
+const updateComponent = (id, func, { preserveLocal, preserveDate } = {}) => {
   const nextComponent = JSON.parse(JSON.stringify(design.components[id]));
   if (func) {
     func(nextComponent);
     design.components[id] = nextComponent;
     if (!preserveLocal) design.local = true;
     notify(id, nextComponent);
-    if (design.local) lazilyStore();
+    if (design.local) lazilyStore({ preserveDate });
   }
   return nextComponent;
 };
 
-const updateScreen = (id, func, { preserveLocal } = {}) => {
+const updateScreen = (id, func, { preserveLocal, preserveDate } = {}) => {
   const nextScreen = JSON.parse(JSON.stringify(design.screens[id]));
   if (func) {
     func(nextScreen);
     design.screens[id] = nextScreen;
     if (!preserveLocal) design.local = true;
     notify(id, nextScreen);
-    if (design.local) lazilyStore();
+    if (design.local) lazilyStore({ preserveDate });
   }
   return nextScreen;
 };
@@ -978,7 +978,7 @@ export const toggleCollapsed = (id, collapsed) => {
         id,
         (nextScreen) =>
           (nextScreen.collapsed = collapsed ?? !nextScreen.collapsed),
-        { preserveLocal: true },
+        { preserveLocal: true, preserveDate: true },
       );
     }
   } else {
@@ -990,7 +990,7 @@ export const toggleCollapsed = (id, collapsed) => {
         id,
         (nextComponent) =>
           (nextComponent.collapsed = collapsed ?? !nextComponent.collapsed),
-        { preserveLocal: true },
+        { preserveLocal: true, preserveDate: true },
       );
     }
   }
