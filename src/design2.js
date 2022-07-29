@@ -104,6 +104,7 @@ export const load = async ({
   password,
 }) => {
   if (storeTimer) clearTimeout(storeTimer);
+  let needStore;
 
   if (name) {
     const stored = localStorage.getItem(name);
@@ -119,21 +120,18 @@ export const load = async ({
     }
 
     design = JSON.parse(stored);
-    delete design.local; // so we don't re-store it and update the date
-    // if this isn't a full design, we've offloaded it and need to fetch
-    // the full one
     if (!design.screens && design.id) {
       design = await fetchPublished(design.id, password);
-      design.local = true;
+      needStore = true;
     }
   } else if (designProp) {
     design = designProp;
-    design.local = true;
+    needStore = true;
   } else if (id) {
     design = await fetchPublished(id, password);
   } else {
     design = newDesign();
-    design.local = true;
+    needStore = true;
   }
 
   if (includes) design.includes = includes;
@@ -142,7 +140,7 @@ export const load = async ({
 
   notifyChange();
 
-  if (design.local) lazilyStore();
+  if (needStore) lazilyStore();
 
   theme = await loadTheme(design.theme);
 
@@ -161,8 +159,6 @@ export const load = async ({
     );
 
   // TODO: load includes and see if any have changed
-
-  if (name) design.local = true; // undo the delete above
 
   return design;
 };
@@ -525,20 +521,34 @@ export const newDesign = (nameArg, theme = 'grommet') => {
 };
 
 export const removeDesign = () => {
-  const name = design.name;
-
   // clean up listeners
   listeners = {};
 
-  // remove from the stored list of local design names
-  const stored = localStorage.getItem('designs');
-  if (stored) {
-    const designs = JSON.parse(stored).filter(({ name: n }) => n !== name);
-    localStorage.setItem('designs', JSON.stringify(designs));
-  }
+  if (design.local) {
+    const name = design.name;
 
-  // remove this design from local storage
-  localStorage.removeItem(name);
+    // remove from the stored list of local design names
+    const stored = localStorage.getItem('designs');
+    if (stored) {
+      const designs = JSON.parse(stored).filter(({ name: n }) => n !== name);
+      localStorage.setItem('designs', JSON.stringify(designs));
+    }
+
+    // remove this design from local storage
+    localStorage.removeItem(name);
+  } else {
+    const id = design.id;
+
+    // remove from the stored list of local design names
+    const stored = localStorage.getItem('designs-fetched');
+    if (stored) {
+      const designs = JSON.parse(stored).filter(({ id: i }) => i !== id);
+      localStorage.setItem('designs-fetched', JSON.stringify(designs));
+    }
+
+    // remove this design from local storage
+    localStorage.removeItem(id);
+  }
 
   design = undefined;
 };
@@ -853,24 +863,28 @@ export const duplicateComponent = (id, options, idMapArg) => {
 };
 
 export const setProperty = (id, section, name, value) => {
-  updateComponent(id, (nextComponent) => {
-    let props;
-    if (!section) props = nextComponent;
-    else if (Array.isArray(section)) {
-      // e.g. ['responsive', 'small', 'props']
-      props = nextComponent;
-      while (section.length) {
-        const key = section.shift();
-        if (!props[key]) props[key] = {};
-        props = props[key];
+  updateComponent(
+    id,
+    (nextComponent) => {
+      let props;
+      if (!section) props = nextComponent;
+      else if (Array.isArray(section)) {
+        // e.g. ['responsive', 'small', 'props']
+        props = nextComponent;
+        while (section.length) {
+          const key = section.shift();
+          if (!props[key]) props[key] = {};
+          props = props[key];
+        }
+      } else {
+        if (!nextComponent[section]) nextComponent[section] = {};
+        props = nextComponent[section];
       }
-    } else {
-      if (!nextComponent[section]) nextComponent[section] = {};
-      props = nextComponent[section];
-    }
-    if (value === undefined) delete props[name];
-    else props[name] = value;
-  });
+      if (value === undefined) delete props[name];
+      else props[name] = value;
+    },
+    name === 'hide' ? { preserveLocal: true } : {},
+  );
 };
 
 export const replace = (
