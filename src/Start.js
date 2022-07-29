@@ -29,24 +29,8 @@ import friendlyDate from './friendlyDate';
 //   },
 // ];
 
-const millisecondsPerDay = 86400000;
-
-const compareDesigns = (d1, d2) => {
-  const now = new Date();
-  const date1 = new Date(Date.parse(d1.date));
-  const date2 = new Date(Date.parse(d2.date));
-  const delta1 = now - date1;
-  const delta2 = now - date2;
-  const days1 = delta1 / millisecondsPerDay;
-  const days2 = delta2 / millisecondsPerDay;
-  if (days1 < 7 && days2 < 7) return days1 - days2;
-  if (days1 < 7) return -1;
-  if (days2 < 7) return 1;
-  return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
-};
-
 const DesignButton = ({
-  descriptor: { id: idArg, local, name, date, url: urlArg },
+  descriptor: { author, id: idArg, local, name, date, url: urlArg },
   onLoadProps,
 }) => {
   const id = idArg || urlArg?.split('id=')[1];
@@ -69,7 +53,9 @@ const DesignButton = ({
     >
       <Box direction="row" justify="between" pad="small">
         <Text weight="bold">{name}</Text>
-        <Text>{`${local ? 'edited' : 'published'} ${friendlyDate(date)}`}</Text>
+        <Text>{`${local ? '' : `${author} `}${
+          local ? 'edited' : 'published'
+        } ${friendlyDate(date)}`}</Text>
       </Box>
     </Button>
   );
@@ -88,27 +74,16 @@ const Start = ({ onLoadProps, onNew }) => {
 
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
-  const matchingDesigns = useMemo(() => {
-    return designs
-      .filter(({ name }) => !searchExp || name.search(searchExp) !== -1)
-      .sort(compareDesigns);
-  }, [designs, searchExp]);
-
-  // const localData = useMemo(
-  //   () => matchingDesigns.filter(({ id, local }) => local || !id),
-  //   [matchingDesigns],
-  // );
-
-  // const fetchedData = useMemo(
-  //   () => matchingDesigns.filter(({ id, local }) => !local && id),
-  //   [matchingDesigns],
-  // );
+  const matchingDesigns = useMemo(
+    () =>
+      designs.filter(({ name }) => !searchExp || name.search(searchExp) !== -1),
+    [designs, searchExp],
+  );
 
   return (
     <Page kind="narrow" gap="large" height={{ min: '100vh' }}>
       <PageContent gap="large">
         <PageHeader
-          margin={{ top: 'large' }}
           title="grommet designer"
           subtitle="design with grommet components"
           actions={
@@ -131,7 +106,7 @@ const Start = ({ onLoadProps, onNew }) => {
           <Box>
             <Header>
               <Heading level={2}>designs</Heading>
-              {designs.length > 1 && (
+              {designs.length > 10 && (
                 <Box direction="row">
                   <TextInput
                     icon={<Search />}
@@ -156,25 +131,6 @@ const Start = ({ onLoadProps, onNew }) => {
             </List>
           </Box>
         )}
-
-        {/* {fetchedData?.length > 0 && (
-          <Box>
-            <Heading level={2}>fetched designs</Heading>
-            <List data={fetchedData} pad="none">
-              {({ name, id }) => {
-                const url = `/?id=${encodeURIComponent(id)}`;
-                return (
-                  <DesignButton
-                    key={name}
-                    label={name}
-                    url={url}
-                    onClick={() => onLoadProps({ id })}
-                  />
-                );
-              }}
-            </List>
-          </Box>
-        )} */}
       </PageContent>
 
       <PageContent flex align="center" justify="center" animation="fadeIn">

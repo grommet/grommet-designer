@@ -124,7 +124,12 @@ const Publish = () => {
           <TextInput name="password" type="password" />
         </FormField>
         <Box align="center" margin="medium">
-          <Button type="submit" label="Publish" disabled={publishing} />
+          <Button
+            type="submit"
+            label="Publish"
+            secondary
+            disabled={publishing}
+          />
         </Box>
       </Form>
       {publishing && (
@@ -132,10 +137,19 @@ const Publish = () => {
           <Text size="large">...</Text>
         </Box>
       )}
-      {design.date && (
-        <Box margin="small" align="center">
-          <Text size="small" color="text-xweak">
-            Last published {new Date(design.date).toLocaleString()}
+      {design.publishedDate && (
+        <Box
+          margin="small"
+          align="center"
+          direction="row"
+          justify="center"
+          gap="xxsmall"
+        >
+          {design.date !== design.publishedDate ? (
+            <Text size="small">Modified /</Text>
+          ) : null}
+          <Text size="small">
+            Last published {new Date(design.publishedDate).toLocaleString()}
           </Text>
         </Box>
       )}
@@ -211,6 +225,7 @@ const SaveLocally = ({ onClose }) => {
       />
       <Button
         label="Download"
+        secondary
         hoverIndicator
         href={`data:application/json;charset=utf-8,${encodeURIComponent(
           JSON.stringify(design),
@@ -246,6 +261,7 @@ const Developer = () => {
         <Button
           label="Generate Code"
           hoverIndicator
+          secondary
           onClick={() => {
             setCode(generateJSX());
             ReactGA.event({

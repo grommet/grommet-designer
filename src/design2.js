@@ -31,7 +31,7 @@ export const listen = (id = 'all', func) => {
   };
 };
 
-const notify = (id, dataArg, { immediateStore } = {}) => {
+const notify = (id, dataArg) => {
   if (id) {
     if (Array.isArray(id))
       id.forEach(
@@ -41,7 +41,6 @@ const notify = (id, dataArg, { immediateStore } = {}) => {
   }
   if (listeners.data && data[id]) listeners.data.forEach((f) => f(data));
   if (listeners.all) listeners.all.forEach((f) => f(design));
-  immediateStore ? store() : lazilyStore();
 };
 
 const notifyChange = () => {
@@ -52,7 +51,6 @@ const notifyChange = () => {
       if (data) listeners[id].forEach((f) => f(data));
     }
   });
-  lazilyStore();
 };
 
 // loading and storing of the entire design
@@ -73,7 +71,7 @@ const fetchPublished = async (id, password) => {
     .then((pubDesign) => {
       // remember in case we make a change so we can set derivedFromId
       pubDesign.id = id;
-      pubDesign.readonly = true;
+      delete pubDesign.local; // just in case
 
       // update our persistent list of fetched designs
       const stored = localStorage.getItem('designs-fetched');
@@ -121,19 +119,21 @@ export const load = async ({
     }
 
     design = JSON.parse(stored);
+    delete design.local; // so we don't re-store it and update the date
     // if this isn't a full design, we've offloaded it and need to fetch
     // the full one
     if (!design.screens && design.id) {
       design = await fetchPublished(design.id, password);
+      design.local = true;
     }
   } else if (designProp) {
     design = designProp;
-    // store if we don't have it, likely creating a new one
-    if (!localStorage.getItem(design.name)) store();
+    design.local = true;
   } else if (id) {
     design = await fetchPublished(id, password);
   } else {
     design = newDesign();
+    design.local = true;
   }
 
   if (includes) design.includes = includes;
@@ -141,6 +141,8 @@ export const load = async ({
   upgradeDesign(design);
 
   notifyChange();
+
+  if (design.local) lazilyStore();
 
   theme = await loadTheme(design.theme);
 
@@ -160,15 +162,19 @@ export const load = async ({
 
   // TODO: load includes and see if any have changed
 
+  if (name) design.local = true; // undo the delete above
+
   return design;
 };
 
-const store = () => {
-  if (design.readonly) return;
-  const now = new Date();
-  now.setMilliseconds(0);
-  design.date = now.toISOString();
-  design.local = true;
+const store = (args = {}) => {
+  const { preserveDate } = args;
+  if (!design.local) console.error('storing non-local design');
+  if (!preserveDate) {
+    const now = new Date();
+    now.setMilliseconds(0);
+    design.date = now.toISOString();
+  }
   localStorage.setItem(design.name, JSON.stringify(design));
 
   // keep track of the descriptor in the list of designs
@@ -201,7 +207,6 @@ export const publish = ({ email, password, pin }) => {
   pubDesign.date = date.toISOString();
   pubDesign.password = password;
   delete pubDesign.local;
-  delete pubDesign.modified;
 
   const body = JSON.stringify(pubDesign);
   return fetch(apiUrl, {
@@ -215,11 +220,11 @@ export const publish = ({ email, password, pin }) => {
     if (response.ok) {
       response.text().then((id) => {
         pubDesign.publishedUrl = getUrlForId(id);
+        pubDesign.publishedDate = date.toISOString();
         pubDesign.id = id;
         pubDesign.local = true;
-        pubDesign.modified = false;
         design = pubDesign;
-        store();
+        store({ preserveDate: true });
       });
     }
   });
@@ -421,22 +426,26 @@ export const isValidId = (id) =>
 // passing a function to manage an update, make a copy, let the function
 // update the copy, and then automatically replacing the original and
 // notifying
-const updateComponent = (id, func) => {
+const updateComponent = (id, func, { preserveLocal } = {}) => {
   const nextComponent = JSON.parse(JSON.stringify(design.components[id]));
   if (func) {
     func(nextComponent);
     design.components[id] = nextComponent;
+    if (!preserveLocal) design.local = true;
     notify(id, nextComponent);
+    if (design.local) lazilyStore();
   }
   return nextComponent;
 };
 
-const updateScreen = (id, func) => {
+const updateScreen = (id, func, { preserveLocal } = {}) => {
   const nextScreen = JSON.parse(JSON.stringify(design.screens[id]));
   if (func) {
     func(nextScreen);
     design.screens[id] = nextScreen;
+    if (!preserveLocal) design.local = true;
     notify(id, nextScreen);
+    if (design.local) lazilyStore();
   }
   return nextScreen;
 };
@@ -446,7 +455,9 @@ const updateDesign = (func) => {
   if (func) {
     func(nextDesign);
     design = nextDesign;
+    design.local = true;
     notify(undefined, nextDesign);
+    lazilyStore();
   }
   return nextDesign;
 };
@@ -466,7 +477,9 @@ const updateData = (id, func) => {
           });
       }
     } else data[id] = nextData;
+    design.local = true;
     notify(id, nextData);
+    lazilyStore();
   }
   return nextData;
 };
@@ -474,6 +487,7 @@ const updateData = (id, func) => {
 const getNextId = () => {
   const id = design.nextId;
   design.nextId += 1;
+  design.local = true;
   return id;
 };
 
@@ -506,6 +520,7 @@ export const newDesign = (nameArg, theme = 'grommet') => {
     local: true,
   };
   notify(undefined, design, { immediateStore: true });
+  lazilyStore();
   return design;
 };
 
@@ -547,6 +562,7 @@ export const addScreen = () => {
   design.screenOrder = [...design.screenOrder, id];
 
   notify();
+  lazilyStore();
 
   return screen;
 };
@@ -558,6 +574,7 @@ export const removeScreen = (id) => {
   // remove from screenOrder
   design.screenOrder = design.screenOrder.filter((sId) => sId !== id);
   notify(id);
+  lazilyStore();
 };
 
 export const duplicateScreen = (id) => {
@@ -722,6 +739,7 @@ export const removeComponent = (id) => {
   delete design.components[id];
 
   notify(id);
+  lazilyStore();
 };
 
 export const duplicateComponent = (id, options, idMapArg) => {
@@ -936,21 +954,32 @@ export const moveScreen = (id, options) => {
   }
   design.screenOrder = nextScreenOrder;
   notify();
+  lazilyStore();
 };
 
 export const toggleCollapsed = (id, collapsed) => {
-  if (design.screens[id])
-    updateScreen(
-      id,
-      (nextScreen) =>
-        (nextScreen.collapsed = collapsed ?? !nextScreen.collapsed),
-    );
-  else
-    updateComponent(
-      id,
-      (nextComponent) =>
-        (nextComponent.collapsed = collapsed ?? !nextComponent.collapsed),
-    );
+  if (design.screens[id]) {
+    if (collapsed === undefined || design.screens[id].collapsed !== collapsed) {
+      updateScreen(
+        id,
+        (nextScreen) =>
+          (nextScreen.collapsed = collapsed ?? !nextScreen.collapsed),
+        { preserveLocal: true },
+      );
+    }
+  } else {
+    if (
+      collapsed === undefined ||
+      design.components[id].collapsed !== collapsed
+    ) {
+      updateComponent(
+        id,
+        (nextComponent) =>
+          (nextComponent.collapsed = collapsed ?? !nextComponent.collapsed),
+        { preserveLocal: true },
+      );
+    }
+  }
 };
 
 export const uncollapseAncestors = (ancestors) => {
@@ -970,6 +999,7 @@ export const addData = () => {
   data = design.data; // TODO: for now, just local
 
   notify('data', design.data[id]);
+  lazilyStore();
 
   return design.data[id];
 };
@@ -977,6 +1007,7 @@ export const addData = () => {
 export const removeData = (id) => {
   delete design.data[id];
   notify([id, 'data']);
+  lazilyStore();
 };
 
 export const setDataByPath = (path, value) => {
@@ -986,6 +1017,7 @@ export const setDataByPath = (path, value) => {
   if (id && !parts.length) {
     data[id].data = value;
     notify(id);
+    lazilyStore();
   } else {
     let node = data[id].data;
     while (parts.length > 1 && node) {
@@ -997,6 +1029,7 @@ export const setDataByPath = (path, value) => {
     if (node) {
       node[parts[0]] = value;
       notify(id);
+      lazilyStore();
     }
   }
 };
@@ -1008,6 +1041,7 @@ export const resetDataByPath = (path) => {
   if (id && !parts.length) {
     data[id] = JSON.parse(JSON.stringify(design.data[id]));
     notify(id);
+    lazilyStore();
   }
 };
 
@@ -1022,6 +1056,22 @@ export const setDataIndex = (path, index) => {
 };
 
 // hooks
+
+const millisecondsPerDay = 86400000;
+
+const compareDesigns = (d1, d2) => {
+  const now = new Date();
+  const date1 = new Date(Date.parse(d1.date));
+  const date2 = new Date(Date.parse(d2.date));
+  const delta1 = now - date1;
+  const delta2 = now - date2;
+  const days1 = delta1 / millisecondsPerDay;
+  const days2 = delta2 / millisecondsPerDay;
+  if (days1 < 7 && days2 < 7) return days1 - days2;
+  if (days1 < 7) return -1;
+  if (days2 < 7) return 1;
+  return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
+};
 
 export const useDesigns = ({ fetched } = {}) => {
   const [designs, setDesigns] = useState([]);
@@ -1053,7 +1103,16 @@ export const useDesigns = ({ fetched } = {}) => {
       stored = localStorage.getItem('designs-fetched');
       if (stored) nextDesigns = [...nextDesigns, ...JSON.parse(stored)];
     }
-    setDesigns(nextDesigns);
+    setDesigns(
+      nextDesigns.sort(compareDesigns).map((d) => {
+        if (d.id) {
+          const slugName = slugify(d.name);
+          const author = d.id.slice(slugName.length).split('-')[0];
+          return { ...d, author };
+        }
+        return d;
+      }),
+    );
   }, [fetched]);
   return designs;
 };
@@ -1149,6 +1208,7 @@ export const useChanges = () => {
             const nextIndex = Math.min(index + 1, designs.length - 1);
             design = designs[nextIndex];
             notifyChange();
+            lazilyStore();
             setChanges({ designs, index: nextIndex });
           }
         : undefined,
@@ -1158,6 +1218,7 @@ export const useChanges = () => {
             const nextIndex = Math.max(index - 1, 0);
             design = designs[nextIndex];
             notifyChange();
+            lazilyStore();
             setChanges({ designs, index: nextIndex });
           }
         : undefined,
