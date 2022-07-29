@@ -26,6 +26,7 @@ const Edge = ({ name, value, onChange }) => {
                 <FormField key={side} label={side}>
                   <Select
                     options={[
+                      'none',
                       'xsmall',
                       'small',
                       'medium',
@@ -52,6 +53,7 @@ const Edge = ({ name, value, onChange }) => {
           <FormField label={name}>
             <Select
               options={[
+                'none',
                 'xsmall',
                 'small',
                 'medium',

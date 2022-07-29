@@ -430,6 +430,7 @@ export const components = {
     properties: {
       actions: '-component-',
       margin: Edge,
+      pad: Edge,
       parent: '-string-or-component-',
       title: '',
       subtitle: '',
