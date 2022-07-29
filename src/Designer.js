@@ -253,7 +253,11 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
 
   const selectionPath = useMemo(() => getAncestors(selection), [selection]);
 
-  useEffect(() => uncollapseAncestors(selectionPath), [selectionPath]);
+  useEffect(
+    // don't un-collapse the selection itself
+    () => uncollapseAncestors(selectionPath.filter((id) => id !== selection)),
+    [selection, selectionPath],
+  );
 
   const selectionContext = useMemo(
     () =>
