@@ -37,6 +37,12 @@ const DesignButton = ({
   const url = local
     ? `/?name=${encodeURIComponent(name)}`
     : `/?id=${encodeURIComponent(id)}`;
+
+  const bits = [];
+  if (!local && author) bits.push(author);
+  bits.push(local ? 'edited' : 'published');
+  if (date) bits.push(friendlyDate(date));
+
   return (
     <Button
       fill
@@ -53,9 +59,7 @@ const DesignButton = ({
     >
       <Box direction="row" justify="between" pad="small">
         <Text weight="bold">{name}</Text>
-        <Text>{`${local ? '' : `${author} `}${
-          local ? 'edited' : 'published'
-        } ${friendlyDate(date)}`}</Text>
+        <Text>{bits.join(' ')}</Text>
       </Box>
     </Button>
   );

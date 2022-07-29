@@ -1124,6 +1124,14 @@ export const useDesigns = ({ fetched } = {}) => {
           const author = d.id.slice(slugName.length).split('-')[0];
           return { ...d, author };
         }
+        if (d.url) {
+          const slugName = slugify(d.name);
+          const author = d.url
+            .split('=')[1]
+            .slice(slugName.length)
+            .split('-')[0];
+          return { ...d, author };
+        }
         return d;
       }),
     );
