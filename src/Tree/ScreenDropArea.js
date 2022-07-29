@@ -1,43 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box } from 'grommet';
+import { moveScreen } from '../design2';
 import DragDropContext from './DragDropContext';
 
-const ScreenDropArea = ({ screenId, where }) => {
-  const {
-    draggingScreen,
-    dropScreenTarget,
-    dropWhere,
-    moveScreen,
-    setDropScreenTarget,
-    setDropWhere,
-  } = useContext(DragDropContext);
+const ScreenDropArea = ({ id, where }) => {
+  const [dragging] = useContext(DragDropContext);
+  const [dragOver, setDragOver] = useState();
 
   return (
     <Box
       pad="xxsmall"
-      background={
-        draggingScreen &&
-        dropScreenTarget &&
-        dropScreenTarget === screenId &&
-        dropWhere === where
-          ? 'focus'
-          : undefined
-      }
+      background={(dragOver && 'focus') || undefined}
       onDragEnter={(event) => {
-        if (draggingScreen && draggingScreen !== screenId) {
+        if (dragging && dragging !== id) {
           event.preventDefault();
-          setDropScreenTarget(screenId);
-          setDropWhere(where);
-        } else {
-          setDropScreenTarget(undefined);
+          setDragOver(true);
         }
       }}
       onDragOver={(event) => {
-        if (draggingScreen && draggingScreen !== screenId) {
-          event.preventDefault();
+        if (dragOver) event.preventDefault();
+      }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={() => {
+        if (dragOver) {
+          moveScreen(dragging, { [where]: id });
+          setDragOver(false);
         }
       }}
-      onDrop={moveScreen}
     />
   );
 };

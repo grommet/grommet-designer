@@ -12,11 +12,11 @@ const EdgeSizeOptions = ({ options, direction }) => {
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
         {(option, { checked, hover }) => (
           <EdgeSizeState
-            {...props.props}
+            {...props}
             size={option.label}
             checked={checked}
             hover={hover}
-            direction={direction || props.props.direction}
+            direction={direction || props.direction}
           />
         )}
       </InlineOptions>

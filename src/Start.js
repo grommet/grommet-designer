@@ -1,212 +1,147 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useMemo, useState } from 'react';
+// import styled from 'styled-components';
 import {
   Box,
   Button,
-  CheckBox,
   FileInput,
   Header,
   Heading,
-  Image,
-  Markdown,
-  Paragraph,
-  RadioButtonGroup,
+  // Image,
+  List,
+  Page,
+  PageContent,
+  PageHeader,
   Text,
   TextInput,
 } from 'grommet';
-import { List, Search } from 'grommet-icons';
-import { parseUrlParams } from './utils';
+import { Brush, List as ListIcon, Search } from 'grommet-icons';
+import { useDesigns } from './design2';
+import AppSettings from './AppSettings';
 import Manage from './Manage';
+import friendlyDate from './friendlyDate';
 
-const tutorials = [
-  {
-    title: 'introduction',
-    thumb:
-      'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
-    url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
-  },
-];
+// const tutorials = [
+//   {
+//     title: 'introduction',
+//     thumb:
+//       'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
+//     url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
+//   },
+// ];
 
-const inspirations = [
-  {
-    title: 'HPE design system',
-    url: 'https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com',
-  },
-  {
-    title: 'Card',
-    url: 'https://designer.grommet.io/?id=Card-eric-soderberg-hpe-com',
-  },
-];
-
-const ThumbnailContainer = styled.div`
-  transform: scale(0.25);
-  transform-origin: top left;
-  pointer-events: none;
-`;
-
-const ThumbnailFrame = styled.iframe`
-  border: none;
-`;
-
-const Thumbnail = ({ title, url }) => {
-  const [show, setShow] = useState();
-  const ref = useRef();
-
-  // only show content when visible to the user
-  useEffect(() => {
-    const scroller = ref.current.parentNode.parentNode;
-    const update = () => {
-      const scrollerRect = scroller.getBoundingClientRect();
-      const rect = ref.current.getBoundingClientRect();
-      setShow(rect.right > scrollerRect.left && rect.left < scrollerRect.right);
-    };
-    update();
-    let timer;
-    const delay = () => {
-      clearTimeout(timer);
-      timer = setTimeout(update, 1000);
-    };
-    scroller.addEventListener('scroll', delay);
-    return () => {
-      scroller.removeEventListener('scroll', delay);
-      clearTimeout(timer);
-    };
-  }, []);
-
+const DesignButton = ({
+  descriptor: { author, id: idArg, local, name, date, url: urlArg },
+  onLoadProps,
+}) => {
+  const id = idArg || urlArg?.split('id=')[1];
+  const url = local
+    ? `/?name=${encodeURIComponent(name)}`
+    : `/?id=${encodeURIComponent(id)}`;
   return (
-    <Box ref={ref} gap="xsmall">
-      <Box
-        width="medium"
-        height="small"
-        round="xsmall"
-        background="background-front"
-        overflow="hidden"
-      >
-        {show && (
-          <ThumbnailContainer>
-            <ThumbnailFrame
-              width="1536"
-              height="768"
-              title={title}
-              src={`${url}&mode=thumb`}
-            />
-          </ThumbnailContainer>
-        )}
+    <Button
+      fill
+      plain
+      hoverIndicator
+      href={`${url}&mode=edit`}
+      onClick={(event) => {
+        if (!event.ctrlKey && !event.metaKey) {
+          event.preventDefault();
+          window.history.pushState(undefined, undefined, url);
+          onLoadProps(local ? { name } : { id });
+        }
+      }}
+    >
+      <Box direction="row" justify="between" pad="small">
+        <Text weight="bold">{name}</Text>
+        <Text>{`${local ? '' : `${author} `}${
+          local ? 'edited' : 'published'
+        } ${friendlyDate(date)}`}</Text>
       </Box>
-      <Text weight="bold" size="large">
-        {title}
-      </Text>
-    </Box>
+    </Button>
   );
 };
 
-const Start = ({
-  chooseDesign,
-  colorMode,
-  createDesign,
-  importDesign,
-  rtl,
-  setColorMode,
-  setRtl,
-}) => {
-  const [designs, setDesigns] = useState([]);
-  const [designsFetched, setDesignsFetched] = useState([]);
-  const [readme, setReadme] = useState();
+const Start = ({ onLoadProps, onNew }) => {
+  const designs = useDesigns({ fetched: true });
   const [search, setSearch] = useState();
   const [error, setError] = useState();
   const [manage, setManage] = useState();
+  const [settings, setSettings] = useState();
 
   useEffect(() => {
     document.title = 'Grommet Designer';
   }, []);
 
-  // load design names from local storage
-  useEffect(() => {
-    let stored = localStorage.getItem('designs');
-    if (stored) {
-      // prune out non-existing designs
-      const nextDesigns = JSON.parse(stored).filter((name) =>
-        localStorage.getItem(name),
-      );
-      setDesigns(nextDesigns);
-      localStorage.setItem('designs', JSON.stringify(nextDesigns));
+  const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
-      // prune out orphaned designs
-      for (let i = 0; i < localStorage.length; i++) {
-        const name = localStorage.key(i);
-        if (!nextDesigns.includes(name)) {
-          stored = localStorage.getItem(name);
-          try {
-            const design = JSON.parse(stored);
-            if (
-              design.screens &&
-              design.components &&
-              design.version &&
-              design.name
-            ) {
-              // looks like a design, but it isn't in 'designs', remove it
-              console.log('Removed orphan design:', name);
-              localStorage.removeItem(name);
-            }
-          } catch {
-            // no-op
-          }
-        }
-      }
-    }
-  }, []);
-
-  const urls = useMemo(() => {
-    const result = {};
-    designs.forEach((name) => {
-      const stored = localStorage.getItem(name);
-      const design = JSON.parse(stored);
-      result[name] = design.screens
-        ? `/?name=${encodeURIComponent(name)}`
-        : `/?id=${encodeURIComponent(design.id)}`;
-    });
-    return result;
-  }, [designs]);
-
-  // load previously fetched designs from local storage
-  useEffect(() => {
-    let stored = localStorage.getItem('designs-fetched');
-    if (stored) {
-      setDesignsFetched(JSON.parse(stored));
-    }
-  }, []);
-
-  // get README from GitHub
-  useEffect(() => {
-    fetch(
-      'https://raw.githubusercontent.com/grommet/grommet-designer/master/README.md',
-    ).then((response) => {
-      if (response.ok) {
-        response
-          .text()
-          .then((text) => setReadme(text.split('\n').splice(8).join('\n')));
-      }
-    });
-  }, []);
+  const matchingDesigns = useMemo(
+    () =>
+      designs.filter(({ name }) => !searchExp || name.search(searchExp) !== -1),
+    [designs, searchExp],
+  );
 
   return (
-    <Box fill direction="row-responsive" gap="medium" border="between">
-      <Box align="start" pad="large" height="100vh">
-        <Heading margin={{ top: 'none' }}>grommet designer</Heading>
-        <Paragraph size="xlarge">design with grommet components</Paragraph>
-        <Button
-          title="create a new design"
-          primary
-          label="Create"
-          href="/_new"
-          onClick={(event) => {
-            if (!event.ctrlKey && !event.metaKey) {
-              event.preventDefault();
-              createDesign();
-            }
-          }}
+    <Page kind="narrow" gap="large" height={{ min: '100vh' }}>
+      <PageContent gap="large">
+        <PageHeader
+          title="grommet designer"
+          subtitle="design with grommet components"
+          actions={
+            <Button
+              title="start a new design"
+              primary
+              label="New"
+              href="/_new"
+              onClick={(event) => {
+                if (!event.ctrlKey && !event.metaKey) {
+                  event.preventDefault();
+                  onNew();
+                }
+              }}
+            />
+          }
         />
-        <Box flex />
+
+        {designs?.length > 0 && (
+          <Box>
+            <Header>
+              <Heading level={2}>designs</Heading>
+              {designs.length > 10 && (
+                <Box direction="row">
+                  <TextInput
+                    icon={<Search />}
+                    reverse
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                  <Button icon={<ListIcon />} onClick={() => setManage(true)} />
+                </Box>
+              )}
+            </Header>
+            <List data={matchingDesigns} pad="none">
+              {(descriptor) => {
+                return (
+                  <DesignButton
+                    key={descriptor.id}
+                    descriptor={descriptor}
+                    onLoadProps={onLoadProps}
+                  />
+                );
+              }}
+            </List>
+          </Box>
+        )}
+      </PageContent>
+
+      <PageContent flex align="center" justify="center" animation="fadeIn">
+        {!designs?.length && (
+          <Text size="3xl" color="text-weak">
+            Hi, ... maybe create a new design?
+          </Text>
+        )}
+      </PageContent>
+
+      <PageContent>
         {error && (
           <Box
             background={{ color: 'status-error', opacity: 'weak' }}
@@ -225,8 +160,9 @@ const Start = ({
             const reader = new FileReader();
             reader.onload = () => {
               try {
-                const nextDesign = JSON.parse(reader.result);
-                importDesign(nextDesign);
+                const design = JSON.parse(reader.result);
+                // TODO: reconcile if we have existing already
+                onLoadProps({ design });
               } catch (e) {
                 setError(e.message);
               }
@@ -234,125 +170,10 @@ const Start = ({
             reader.readAsText(event.target.files[0]);
           }}
         />
-        <Box
-          flex={false}
-          direction="row"
-          justify="center"
-          gap="medium"
-          margin={{ top: 'large' }}
-        >
-          <RadioButtonGroup
-            id="themeMode"
-            name="themeMode"
-            direction="row"
-            gap="medium"
-            options={['dark', 'light']}
-            value={colorMode || ''}
-            onChange={(event) => {
-              setColorMode(event.target.value);
-            }}
-          />
-          <CheckBox
-            label="right to left"
-            checked={rtl || false}
-            onChange={() => setRtl(!rtl)}
-          />
-        </Box>
-      </Box>
+      </PageContent>
 
-      <Box
-        flex
-        fill
-        overflow="auto"
-        pad={{ vertical: 'medium', horizontal: 'large' }}
-        gap="large"
-      >
-        {designs && designs.length > 0 && (
-          <Box flex={false}>
-            <Header>
-              <Heading level={2}>my designs</Heading>
-              {designs.length > 5 && (
-                <Box
-                  basis="medium"
-                  flex={false}
-                  direction="row"
-                  align="center"
-                  justify="end"
-                  gap="small"
-                >
-                  <TextInput
-                    icon={<Search />}
-                    reverse
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                  />
-                  <Button icon={<List />} onClick={() => setManage(true)} />
-                </Box>
-              )}
-            </Header>
-            <Box direction="row" overflow="auto" gap="medium" border="right">
-              {designs
-                .filter(
-                  (name) =>
-                    !search || name.search(new RegExp(search, 'i')) !== -1,
-                )
-                .map((name, index) => {
-                  const url = urls[name];
-                  return (
-                    <Button
-                      key={name}
-                      plain
-                      href={`${url}&mode=edit`}
-                      onClick={(event) => {
-                        if (!event.ctrlKey && !event.metaKey) {
-                          event.preventDefault();
-                          // if we've offloaded this design, re-load it
-                          const stored = localStorage.getItem(name);
-                          const design = JSON.parse(stored);
-                          if (!design.screens) chooseDesign({ id: design.id });
-                          else chooseDesign({ name });
-                        }
-                      }}
-                    >
-                      <Thumbnail title={name} url={url} />
-                    </Button>
-                  );
-                })}
-            </Box>
-          </Box>
-        )}
-
-        {designsFetched && designsFetched.length > 0 && (
-          <Box flex={false}>
-            <Header>
-              <Heading level={2}>fetched designs</Heading>
-            </Header>
-            <Box direction="row" overflow="auto" gap="medium" border="right">
-              {designsFetched.map(({ name, url }) => {
-                return (
-                  <Button
-                    key={name}
-                    plain
-                    href={url}
-                    onClick={(event) => {
-                      if (!event.ctrlKey && !event.metaKey) {
-                        event.preventDefault();
-                        chooseDesign({ id: parseUrlParams(url).id });
-                      }
-                    }}
-                  >
-                    <Thumbnail title={name} url={url} />
-                  </Button>
-                );
-              })}
-            </Box>
-          </Box>
-        )}
-
-        <Box flex={false} alignSelf="start">
-          <Header alignSelf="stretch">
-            <Heading level={2}>tutorials</Heading>
-          </Header>
+      {/* <Box>
+          <Heading level={2}>tutorial</Heading>
           {tutorials.map(({ thumb, title, url }) => (
             <Button key={title} plain href={url} target="_blank">
               <Box gap="xsmall">
@@ -371,34 +192,31 @@ const Start = ({
               </Box>
             </Button>
           ))}
-        </Box>
+        </Box> */}
 
-        <Box flex={false}>
-          <Heading level={2}>inspiration</Heading>
-          <Box direction="row" overflow="auto" gap="medium">
-            {inspirations.map(({ title, url }) => (
-              <Button key={title} plain href={`${url}&mode=edit`}>
-                <Thumbnail title={title} url={url} />
-              </Button>
-            ))}
-          </Box>
-        </Box>
-
-        {readme && (
-          <Box flex={false}>
-            <Markdown>{readme}</Markdown>
-          </Box>
-        )}
-        {manage && (
-          <Manage
-            onClose={() => {
-              setManage(false);
-              setDesigns([...designs]); // trigger re-load of offloaded state
-            }}
+      <PageContent
+        background={{ color: 'background-contrast', fill: 'horizontal' }}
+      >
+        <Box flex={false} align="end">
+          <Button
+            icon={<Brush />}
+            tip="Change settings"
+            hoverIndicator
+            onClick={() => setSettings(true)}
           />
-        )}
-      </Box>
-    </Box>
+        </Box>
+      </PageContent>
+
+      {settings && <AppSettings onClose={() => setSettings(false)} />}
+      {manage && (
+        <Manage
+          onClose={() => {
+            setManage(false);
+            // setDesigns([...designs]); // trigger re-load of offloaded state
+          }}
+        />
+      )}
+    </Page>
   );
 };
 

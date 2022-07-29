@@ -1,293 +1,964 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App empty 1`] = `
-<div
-  class="StyledGrommet-sc-19lkkz7-0 jWa-Dst"
->
+exports[`App create 1`] = `
+<DocumentFragment>
   <div
-    class="StyledBox-sc-13pk1d4-0 cqUrbm"
+    class="StyledGrommet-sc-19lkkz7-0 cvnUAz"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 dwYsTd"
-    >
-      <h1
-        class="StyledHeading-sc-1rdh4aw-0 bdzteO"
-      >
-        grommet designer
-      </h1>
-      <p
-        class="StyledParagraph-sc-tbetod-0 jPrJSP"
-      >
-        design with grommet components
-      </p>
-      <a
-        class="StyledButton-sc-323bzc-0 bUlsZM"
-        href="/_new"
-        title="create a new design"
-      >
-        Create
-      </a>
-      <div
-        class="StyledBox-sc-13pk1d4-0 kGMroR"
-      />
-      <div
-        class="StyledBox-sc-13pk1d4-0 fvmIiV FileInput__ContentsBox-sc-1jzq7im-0 eFrTsG"
-      >
-        <div
-          class="StyledBox-sc-13pk1d4-0 USRwM"
-        >
-          <span
-            class="StyledText-sc-1sadyjn-0 bsTMTM FileInput__Message-sc-1jzq7im-2 gfzwDx"
-          >
-            Import - drop design file here
-          </span>
-          <a
-            class="StyledAnchor-sc-1rp7lwl-0 eysSdj"
-            tabindex="0"
-          >
-            browse
-          </a>
-        </div>
-        <input
-          accept=".json"
-          class="StyledFileInput-sc-rl7ywv-0 euBYKt"
-          type="file"
-        />
-      </div>
-      <div
-        class="StyledBox-sc-13pk1d4-0 jsEgFI"
-      >
-        <div
-          class="StyledBox-sc-13pk1d4-0 jzOfgr"
-          id="themeMode"
-          role="radiogroup"
-        >
-          <label
-            class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 hZkGAh"
-            for="themeMode-dark"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
-            >
-              <input
-                checked=""
-                class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
-                id="themeMode-dark"
-                name="themeMode"
-                tabindex="0"
-                type="radio"
-                value="dark"
-              />
-              <div
-                class="StyledBox-sc-13pk1d4-0 yCrnp StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
-              >
-                <svg
-                  class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 ebEcYD"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="6"
-                  />
-                </svg>
-              </div>
-            </div>
-            <span
-              class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
-            >
-              dark
-            </span>
-          </label>
-          <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
-          />
-          <label
-            class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 hZkGAh"
-            for="themeMode-light"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
-            >
-              <input
-                class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
-                id="themeMode-light"
-                name="themeMode"
-                tabindex="-1"
-                type="radio"
-                value="light"
-              />
-              <div
-                class="StyledBox-sc-13pk1d4-0 bKTvBx StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
-              />
-            </div>
-            <span
-              class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
-            >
-              light
-            </span>
-          </label>
-        </div>
-        <div
-          class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
-        />
-        <label
-          class="StyledCheckBox__StyledCheckBoxContainer-sc-1dbk5ju-1 Ecyyo"
-          label="right to left"
-        >
-          <div
-            class="StyledBox-sc-13pk1d4-0 gibDHu StyledCheckBox-sc-1dbk5ju-6 eJWclz"
-          >
-            <input
-              class="StyledCheckBox__StyledCheckBoxInput-sc-1dbk5ju-2 cUmXGB"
-              type="checkbox"
-            />
-            <div
-              class="StyledBox-sc-13pk1d4-0 iZMNbh StyledCheckBox__StyledCheckBoxBox-sc-1dbk5ju-3 bNwZfh"
-            />
-          </div>
-          <span>
-            right to left
-          </span>
-        </label>
-      </div>
-    </div>
-    <div
-      class="StyledBox__StyledBoxGap-sc-13pk1d4-1 cDuwKF"
-    />
-    <div
-      class="StyledBox-sc-13pk1d4-0 iyQDwk"
+      class="StyledBox-sc-13pk1d4-0 ciHyFu"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 bLMcwJ"
+        class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 gZzeNk"
-        >
-          <h2
-            class="StyledHeading-sc-1rdh4aw-0 hcNYla"
-          >
-            tutorials
-          </h2>
-        </header>
-        <a
-          class="StyledButton-sc-323bzc-0 iqZbKa"
-          href="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4"
-          target="_blank"
+          class="StyledBox-sc-13pk1d4-0 bcTMrJ"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 iNDmPr"
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 bhtNSP"
+              class="StyledBox-sc-13pk1d4-0 laNGQF"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 eEYars"
             >
-              <img
-                class="StyledImage-sc-ey4zx9-0 hxQdwK"
-                src="https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png"
-              />
+              <h1
+                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+              >
+                grommet designer
+              </h1>
             </div>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 irsgiT"
-            />
-            <span
-              class="StyledText-sc-1sadyjn-0 issflU"
+              class="StyledBox-sc-13pk1d4-0 iEzZsk"
             >
-              introduction
-            </span>
+              <p
+                class="StyledParagraph-sc-tbetod-0 bvzhFE"
+              >
+                design with grommet components
+              </p>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 fUeOYX"
+            >
+              <a
+                class="StyledButton-sc-323bzc-0 ZXZXE"
+                href="/_new"
+                title="start a new design"
+              >
+                New
+              </a>
+            </div>
           </div>
-        </a>
+        </header>
       </div>
       <div
         class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 hFkNOm"
+        class="StyledBox-sc-13pk1d4-0 uBxuw"
       >
-        <h2
-          class="StyledHeading-sc-1rdh4aw-0 hcNYla"
+        <span
+          class="StyledText-sc-1sadyjn-0 kiZVox"
         >
-          inspiration
-        </h2>
+          Hi, ... maybe create a new design?
+        </span>
+      </div>
+      <div
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
+      />
+      <div
+        class="StyledBox-sc-13pk1d4-0 bVaHlQ"
+      >
         <div
-          class="StyledBox-sc-13pk1d4-0 lcZprh"
+          class="StyledBox-sc-13pk1d4-0 ekPFxt FileInput__ContentsBox-sc-1jzq7im-0 eFrTsG"
         >
-          <a
-            class="StyledButton-sc-323bzc-0 iqZbKa"
-            href="https://designer.grommet.io/?id=HPE-design-system-hpedesignsystem-hpe-com&mode=edit"
-          >
-            <div
-              class="StyledBox-sc-13pk1d4-0 iNDmPr"
-            >
-              <div
-                class="StyledBox-sc-13pk1d4-0 bhtNSP"
-              />
-              <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 irsgiT"
-              />
-              <span
-                class="StyledText-sc-1sadyjn-0 issflU"
-              >
-                HPE design system
-              </span>
-            </div>
-          </a>
           <div
-            class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
-          />
-          <a
-            class="StyledButton-sc-323bzc-0 iqZbKa"
-            href="https://designer.grommet.io/?id=Card-eric-soderberg-hpe-com&mode=edit"
+            class="StyledBox-sc-13pk1d4-0 USRwM"
           >
-            <div
-              class="StyledBox-sc-13pk1d4-0 iNDmPr"
+            <span
+              class="StyledText-sc-1sadyjn-0 bsTMTM FileInput__Message-sc-1jzq7im-2 gfzwDx"
             >
-              <div
-                class="StyledBox-sc-13pk1d4-0 bhtNSP"
-              />
-              <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 irsgiT"
-              />
-              <span
-                class="StyledText-sc-1sadyjn-0 issflU"
+              Import - drop design file here
+            </span>
+            <a
+              class="StyledAnchor-sc-1rp7lwl-0 iMFFKf"
+              tabindex="0"
+            >
+              browse
+            </a>
+          </div>
+          <input
+            accept=".json"
+            class="StyledFileInput-sc-rl7ywv-0 jBxAvu"
+            type="file"
+          />
+        </div>
+      </div>
+      <div
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kGhSUQ"
+      />
+      <div
+        class="StyledBox-sc-13pk1d4-0 bcuKhi"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 bVaHlQ"
+        >
+          <div
+            class="StyledBox-sc-13pk1d4-0 eWHGxc"
+          >
+            <button
+              aria-label="Change settings"
+              class="StyledButton-sc-323bzc-0 btzCnY"
+              type="button"
+            >
+              <svg
+                aria-label="Brush"
+                class="StyledIcon-sc-ofa7kd-0 kKhdEN"
+                viewBox="0 0 24 24"
               >
-                Card
-              </span>
-            </div>
-          </a>
+                <path
+                  d="M9.312 11.73a5.001 5.001 0 0 0-5.362 1.12c-1.953 1.952-1.414 8.485-1.414 8.485s6.532.538 8.485-1.415a5.001 5.001 0 0 0 1.12-5.362L22.334 4.364a1.997 1.997 0 0 0 0-2.828 1.995 1.995 0 0 0-2.828 0L9.312 11.729zm1.002-1.617 1.838 1.838 1.697 1.697"
+                  fill="none"
+                  stroke="#000"
+                  stroke-width="2"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
 `;
 
-exports[`App empty 2`] = `
-<div
-  class="StyledGrommet-sc-19lkkz7-0 jWa-Dst"
->
+exports[`App create 2`] = `
+<DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 PBgFD"
-    id="designer-canvas"
-    style="height: 1px;"
+    class="StyledGrommet-sc-19lkkz7-0 cvnUAz"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 eBqmDH"
-      draggable="true"
-      id="2"
-      style="outline: 1px dashed red;"
-      tabindex="-1"
+      class="StyledBox-sc-13pk1d4-0 ciHyFu"
     >
       <div
-        class="sc-gsnTZi jfxDfq"
+        class="StyledBox-sc-13pk1d4-0 bVaHlQ"
       >
-        <p
-          class="StyledParagraph-sc-tbetod-0 eyDUlL"
+        <header
+          class="StyledBox-sc-13pk1d4-0 gRrpoX"
         >
-          This Box is currently empty. Add components to it, so it can do its layout thing.
-        </p>
+          <div
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 laNGQF"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 eEYars"
+            >
+              <h1
+                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+              >
+                new design
+              </h1>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 iEzZsk"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 fUeOYX"
+            >
+              <button
+                aria-label="cancel creating a new design"
+                class="StyledButton-sc-323bzc-0 kYtlmw"
+                type="button"
+              >
+                <svg
+                  aria-label="Close"
+                  class="StyledIcon-sc-ofa7kd-0 kKhdEN"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="m3 3 18 18M3 21 21 3"
+                    fill="none"
+                    stroke="#000"
+                    stroke-width="2"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+        <form>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="name"
+            >
+              name
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 gsTXLM FormField__FormFieldContentBox-sc-m9hood-1 jVcIHD"
+            >
+              <div
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kZzThM"
+              >
+                <input
+                  autocomplete="off"
+                  class="StyledTextInput-sc-1x30a0s-0 fKwwIt"
+                  id="name"
+                  name="name"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 ephcPL"
+            id="startWith"
+            role="radiogroup"
+          >
+            <label
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+              for="startWith-start with a blank design"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+              >
+                <input
+                  checked=""
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                  id="startWith-start with a blank design"
+                  name="startWith"
+                  tabindex="0"
+                  type="radio"
+                  value="start with a blank design"
+                />
+                <div
+                  class="StyledBox-sc-13pk1d4-0 bklLuJ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                >
+                  <svg
+                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fuayET"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="6"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <span
+                class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+              >
+                start with a blank design
+              </span>
+            </label>
+            <div
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+            />
+            <label
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+              for="startWith-duplicate an existing design"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+              >
+                <input
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                  id="startWith-duplicate an existing design"
+                  name="startWith"
+                  tabindex="-1"
+                  type="radio"
+                  value="duplicate an existing design"
+                />
+                <div
+                  class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                />
+              </div>
+              <span
+                class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+              >
+                duplicate an existing design
+              </span>
+            </label>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+            >
+              theme
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 pdYPx FormField__FormFieldContentBox-sc-m9hood-1"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 jzOfgr"
+                role="radiogroup"
+              >
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="grommet"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      checked=""
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="grommet"
+                      name="theme"
+                      tabindex="0"
+                      type="radio"
+                      value="grommet"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bklLuJ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    >
+                      <svg
+                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fuayET"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="6"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    grommet
+                  </span>
+                </label>
+                <div
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+                />
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="hpe"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="hpe"
+                      name="theme"
+                      tabindex="-1"
+                      type="radio"
+                      value="hpe"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    />
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    hpe
+                  </span>
+                </label>
+                <div
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+                />
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="other"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="other"
+                      name="theme"
+                      tabindex="-1"
+                      type="radio"
+                      value="other"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    />
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    other
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="includes"
+            >
+              include other designs to be able to copy their components
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 gsTXLM FormField__FormFieldContentBox-sc-m9hood-1"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-label="none"
+                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                type="button"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 dsfsDz"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 iShJPx"
+                  >
+                    <div
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kZzThM"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt Select__SelectTextInput-sc-17idtfo-0 bQAqdj"
+                        name="includes"
+                        placeholder="none"
+                        readonly=""
+                        tabindex="-1"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hqRAEA"
+                    style="min-width: auto;"
+                  >
+                    <svg
+                      aria-label="FormDown"
+                      class="StyledIcon-sc-ofa7kd-0 llpfFt"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="m18 9-6 6-6-6"
+                        fill="none"
+                        stroke="#000"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <footer
+            class="StyledBox-sc-13pk1d4-0 cPYtxo"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 ZXZXE"
+              title="create design"
+              type="submit"
+            >
+              Create Design
+            </button>
+          </footer>
+        </form>
       </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
+`;
+
+exports[`App create 3`] = `
+<DocumentFragment>
+  <div
+    class="StyledGrommet-sc-19lkkz7-0 cvnUAz"
+  >
+    <div
+      class="StyledBox-sc-13pk1d4-0 ciHyFu"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 bVaHlQ"
+      >
+        <header
+          class="StyledBox-sc-13pk1d4-0 gRrpoX"
+        >
+          <div
+            class="StyledGrid-sc-1wofa1l-0 iheCTs"
+          >
+            <div
+              class="StyledBox-sc-13pk1d4-0 laNGQF"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 eEYars"
+            >
+              <h1
+                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+              >
+                new design
+              </h1>
+            </div>
+            <div
+              class="StyledBox-sc-13pk1d4-0 iEzZsk"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 fUeOYX"
+            >
+              <button
+                aria-label="cancel creating a new design"
+                class="StyledButton-sc-323bzc-0 kYtlmw"
+                type="button"
+              >
+                <svg
+                  aria-label="Close"
+                  class="StyledIcon-sc-ofa7kd-0 kKhdEN"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="m3 3 18 18M3 21 21 3"
+                    fill="none"
+                    stroke="#000"
+                    stroke-width="2"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+        <form>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="name"
+            >
+              name
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 gsTXLM FormField__FormFieldContentBox-sc-m9hood-1 jVcIHD"
+            >
+              <div
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kZzThM"
+              >
+                <input
+                  autocomplete="off"
+                  class="StyledTextInput-sc-1x30a0s-0 fKwwIt"
+                  id="name"
+                  name="name"
+                  value="test design"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 ephcPL"
+            id="startWith"
+            role="radiogroup"
+          >
+            <label
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+              for="startWith-start with a blank design"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+              >
+                <input
+                  checked=""
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                  id="startWith-start with a blank design"
+                  name="startWith"
+                  tabindex="0"
+                  type="radio"
+                  value="start with a blank design"
+                />
+                <div
+                  class="StyledBox-sc-13pk1d4-0 bklLuJ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                >
+                  <svg
+                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fuayET"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="6"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <span
+                class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+              >
+                start with a blank design
+              </span>
+            </label>
+            <div
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+            />
+            <label
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+              for="startWith-duplicate an existing design"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+              >
+                <input
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                  id="startWith-duplicate an existing design"
+                  name="startWith"
+                  tabindex="-1"
+                  type="radio"
+                  value="duplicate an existing design"
+                />
+                <div
+                  class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                />
+              </div>
+              <span
+                class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+              >
+                duplicate an existing design
+              </span>
+            </label>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+            >
+              theme
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 pdYPx FormField__FormFieldContentBox-sc-m9hood-1"
+            >
+              <div
+                class="StyledBox-sc-13pk1d4-0 jzOfgr"
+                role="radiogroup"
+              >
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="grommet"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      checked=""
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="grommet"
+                      name="theme"
+                      tabindex="0"
+                      type="radio"
+                      value="grommet"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bklLuJ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    >
+                      <svg
+                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fuayET"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="6"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    grommet
+                  </span>
+                </label>
+                <div
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+                />
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="hpe"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="hpe"
+                      name="theme"
+                      tabindex="-1"
+                      type="radio"
+                      value="hpe"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    />
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    hpe
+                  </span>
+                </label>
+                <div
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+                />
+                <label
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 kwYmqp"
+                  for="other"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hFizZH StyledRadioButton-sc-g1f6ld-5 hXfoNY"
+                  >
+                    <input
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 cpHFwb"
+                      id="other"
+                      name="theme"
+                      tabindex="-1"
+                      type="radio"
+                      value="other"
+                    />
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 yZdiZ StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cWrMYK"
+                    />
+                  </div>
+                  <span
+                    class="StyledRadioButton__StyledRadioButtonLabel-sc-g1f6ld-2"
+                  >
+                    other
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="includes"
+            >
+              include other designs to be able to copy their components
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 gsTXLM FormField__FormFieldContentBox-sc-m9hood-1"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-label="none"
+                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                type="button"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 dsfsDz"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 iShJPx"
+                  >
+                    <div
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 kZzThM"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt Select__SelectTextInput-sc-17idtfo-0 bQAqdj"
+                        name="includes"
+                        placeholder="none"
+                        readonly=""
+                        tabindex="-1"
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hqRAEA"
+                    style="min-width: auto;"
+                  >
+                    <svg
+                      aria-label="FormDown"
+                      class="StyledIcon-sc-ofa7kd-0 llpfFt"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="m18 9-6 6-6-6"
+                        fill="none"
+                        stroke="#000"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <footer
+            class="StyledBox-sc-13pk1d4-0 cPYtxo"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 ZXZXE"
+              title="create design"
+              type="submit"
+            >
+              Create Design
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`App create 4`] = `
+<DocumentFragment>
+  <div
+    class="StyledGrommet-sc-19lkkz7-0 cvnUAz"
+  >
+    <div
+      class="StyledBox-sc-13pk1d4-0 ehjiZU"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 hNFQxz"
+      >
+        <form>
+          <div
+            class="StyledBox-sc-13pk1d4-0 cltMly FormField__FormFieldBox-sc-m9hood-0 jTOPYT"
+          >
+            <label
+              class="StyledText-sc-1sadyjn-0 kUxDfg"
+              for="template"
+            >
+              screen template
+            </label>
+            <div
+              class="StyledBox-sc-13pk1d4-0 gsTXLM FormField__FormFieldContentBox-sc-m9hood-1"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-label="Open Drop; Selected: [object Object]"
+                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                id="template"
+                type="button"
+              >
+                <div
+                  class="StyledBox-sc-13pk1d4-0 dsfsDz"
+                >
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 iShJPx"
+                  >
+                    <div
+                      class="StyledBox-sc-13pk1d4-0 bvOsUO"
+                    >
+                      <span
+                        class="StyledText-sc-1sadyjn-0 cdHUSp"
+                      >
+                        empty page
+                      </span>
+                      <div
+                        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 gJrKvj"
+                      />
+                      <span
+                        class="StyledText-sc-1sadyjn-0 gsvnHw"
+                      >
+                        generic
+                      </span>
+                    </div>
+                    <input
+                      class="Select__HiddenInput-sc-17idtfo-1 eTPicX"
+                      id="template__input"
+                      name="template"
+                      readonly=""
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="StyledBox-sc-13pk1d4-0 hqRAEA"
+                    style="min-width: auto;"
+                  >
+                    <svg
+                      aria-label="FormDown"
+                      class="StyledIcon-sc-ofa7kd-0 llpfFt"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="m18 9-6 6-6-6"
+                        fill="none"
+                        stroke="#000"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <footer
+            class="StyledBox-sc-13pk1d4-0 ceqcKv"
+          >
+            <button
+              class="StyledButton-sc-323bzc-0 ZXZXE"
+              title="Use selected screen template"
+              type="submit"
+            >
+              Use Template
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`App create 5`] = `
+<DocumentFragment>
+  <div
+    class="StyledGrommet-sc-19lkkz7-0 cvnUAz"
+  >
+    <div
+      class="StyledGrommet-sc-19lkkz7-0 PBgFD"
+      id="designer-canvas"
+      style="height: 1px;"
+    >
+      <div
+        class="StyledBox-sc-13pk1d4-0 fybjsI"
+        id="2"
+        style="outline: 1px dashed red;"
+        tabindex="-1"
+      >
+        <div
+          class="StyledBox-sc-13pk1d4-0 jloYeY"
+          id="3"
+          tabindex="-1"
+        >
+          <div
+            class="sc-gsnTZi jfxDfq"
+          >
+            <p
+              class="StyledParagraph-sc-tbetod-0 eyDUlL"
+            >
+              This PageContent is currently empty. Add some content to it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;

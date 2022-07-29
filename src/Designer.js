@@ -5,258 +5,223 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+// import ReactGA from 'react-ga';
 import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
-import DesignContext from './DesignContext';
+import AppContext from './AppContext';
+import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
-import Canvas from './Canvas';
+import NewScreen from './NewScreen';
+import Canvas from './Canvas2';
+import Data from './Data';
 import Loading from './Loading';
-import ConfirmReplace from './ConfirmReplace';
+import Auth from './Auth';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
-import Comments from './Comments/Comments';
-import { getInitialSelected, getScreenByPath, publish } from './design';
+// import Comments from './Comments/Comments';
+import {
+  load as loadDesign,
+  getAncestors,
+  getComponent,
+  getDesign,
+  getLocationForPath,
+  getPathForLocation,
+  getRoot,
+  getScreen,
+  getType,
+  isValidId,
+  setDesignProperty,
+  setProperty,
+  uncollapseAncestors,
+  useDesignSummary,
+  useScreen,
+} from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
-import designerLibrary from './libraries/designer';
-import grommetLibrary from './libraries/grommet';
-import { loadImports, loadTheme } from './design/load';
-import { parseUrlParams } from './utils';
+import { parseUrlParams, pushPath, pushUrl } from './utils';
 
-const defaultImports = [
-  { name: grommetLibrary.name, library: grommetLibrary },
-  { name: designerLibrary.name, library: designerLibrary },
+const editGridColumns = [
+  ['small', 'medium'],
+  ['1/2', 'flex'],
+  ['small', 'medium'],
 ];
 
-const Designer = ({ design, chooseDesign, updateDesign }) => {
+const commentGridColumns = [
+  ['1/2', 'flex'],
+  ['small', 'medium'],
+];
+
+const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
+  const { grommetThemeMode, setThemeMode } = useContext(AppContext);
   const responsive = useContext(ResponsiveContext);
-  const [selected, setSelected] = useState({});
-  const [imports, setImports] = useState(defaultImports);
-  const libraries = useMemo(
-    () => imports.filter((i) => i.library).map((i) => i.library),
-    [imports],
-  );
-  const [theme, setTheme] = useState();
-  const [mode, setMode] = useState();
-  const [data, setData] = useState();
-  const [confirmReplace, setConfirmReplace] = useState();
-  const [changes, setChanges] = useState([]);
-  const [changeIndex, setChangeIndex] = useState();
-  const selectedComponent = useMemo(
-    () =>
-      selected.component ? design.components[selected.component] : undefined,
-    [design, selected.component],
-  );
+  const [loadProps, setLoadProps] = useState(loadPropsProp);
+  const [auth, setAuth] = useState();
+  const [ready, setReady] = useState(false);
+  const [location, setLocation] = useState();
+  const [selection, setSelection] = useState();
+  const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
 
-  // load state
+  // when the document name changes, update title and URL
+  const summary = useDesignSummary();
+
   useEffect(() => {
-    if (!mode) {
-      const initializeSelected = () => {
-        const {
-          location: { pathname },
-        } = document;
-        const screen = getScreenByPath(design, pathname);
-        if (screen)
-          setSelected({ screen, component: design.screens[screen].root });
-        else setSelected(getInitialSelected(design));
-      };
-
-      const params = parseUrlParams(window.location.search);
-      if (params.mode) {
-        setMode(params.mode);
-        initializeSelected();
-      } else if (!design.local) {
-        setMode('preview');
-        initializeSelected();
-      } else {
-        const stored = localStorage.getItem(`${design.name}--state`);
-        if (stored) {
-          const { mode: nextMode, selected: nextSelected } = JSON.parse(stored);
-          setMode(nextMode);
-          setSelected(nextSelected);
-        } else {
-          setMode('edit');
-          initializeSelected();
-        }
-      }
+    if (summary.local && summary.name) {
+      document.title = summary.name;
+      const url = `${window.location.pathname}?name=${encodeURIComponent(
+        summary.name,
+      )}`;
+      window.history.replaceState(undefined, undefined, url);
     }
-  }, [design, mode]);
+  }, [summary]);
 
-  // load theme
-  useEffect(() => loadTheme(design.theme, setTheme), [design.theme]);
+  // load design when we start
 
-  // align imports with design.imports
   useEffect(() => {
-    // remove any imports we don't want anymore
-    const nextImports = imports.filter(
-      ({ url }) =>
-        !url || design.imports.findIndex((i) => i.url === url) !== -1,
-    );
-    let changed = nextImports.length !== imports.length;
-    // add any imports we don't have yet
-    design.imports.forEach(({ url }) => {
-      if (nextImports.findIndex((i) => i.url === url) === -1) {
-        nextImports.push({ url });
-        changed = true;
-      }
-    });
-    if (changed) setImports(nextImports);
-  }, [design.imports, imports]);
-
-  // load any imports we don't have yet
-  useEffect(() => {
-    loadImports(imports, (f) => {
-      const nextImports = f(imports);
-      setImports(nextImports);
-    });
-  }, [imports]);
-
-  // load data, if needed
-  useEffect(() => {
-    if (design.data) {
-      Object.keys(design.data).forEach((key) => {
-        if (design.data[key].slice(0, 4) === 'http') {
-          fetch(design.data[key])
-            .then((response) => response.json())
-            .then((response) => {
-              setData((prevData) => {
-                const nextData = JSON.parse(JSON.stringify(prevData || {}));
-                nextData[key] = response;
-                return nextData;
-              });
-            });
-        } else if (design.data[key]) {
-          setData((prevData) => {
-            const nextData = JSON.parse(JSON.stringify(prevData || {}));
-            try {
-              nextData[key] = JSON.parse(design.data[key]);
-            } catch (e) {
-              console.warn(e.message);
-            }
-            return nextData;
-          });
+    loadDesign(loadProps)
+      .then((design) => {
+        if (!thumb) {
+          // initialize selection, location, and mode
+          const params = parseUrlParams(window.location.search);
+          const paramSelection =
+            params.selection && parseInt(params.selection, 10);
+          const stored = localStorage.getItem(`${design.name}--state`);
+          if (stored) {
+            const savedState = JSON.parse(stored);
+            setMode(params.mode || savedState.mode);
+            const nextSelection = paramSelection || savedState.selection;
+            if (isValidId(nextSelection)) setSelection(nextSelection);
+            if (paramSelection) {
+              const root = getRoot(paramSelection);
+              const path = getScreen(root).path;
+              setLocation(getLocationForPath(path));
+            } else setLocation(savedState.location);
+          } else {
+            setMode(params.mode || 'edit');
+            if (loadProps.location)
+              setLocation(getLocationForPath(loadProps.location));
+            if (paramSelection || loadProps.selection)
+              setSelection(paramSelection || loadProps.selection);
+          }
         }
+        return design;
+      })
+      .then(() => setReady(true))
+      .catch((e) => {
+        // need to prompt user for password?
+        if (e.message === '401') setAuth(true);
+        else if (e.message === '404') onClose();
+        else throw e;
       });
-    }
-  }, [design.data]);
+    return () => setReady(false);
+  }, [loadProps, onClose, thumb]);
 
   // browser navigation
 
-  // react when user uses browser back and forward buttons
+  // following a link changes component hide or screen path
+  const followLink = useCallback(
+    (link) => {
+      if (Array.isArray(link)) link.forEach(followLink);
+      else if (link.control === 'toggleThemeMode') {
+        setThemeMode(grommetThemeMode === 'dark' ? 'light' : 'dark');
+      } else if (link.component) {
+        const component = getComponent(link.component);
+        setProperty(link.component, undefined, 'hide', !component.hide);
+        if (!component.hide) setSelection(undefined);
+      } else if (link.screen) {
+        setLocation({ screen: link.screen });
+        setSelection(link.screen);
+      }
+    },
+    [grommetThemeMode, setThemeMode],
+  );
+
+  const followLinkOption = useCallback((link, value) => {
+    // figure out which link to use, if any
+    Object.keys(link)
+      .filter((n) => link[n])
+      .forEach((name) => {
+        // function shared by array and non-array cases
+        const follow = (link) => {
+          // TODO: refactor, maybe re-use followLink() above?
+          if (link.control) {
+            const design = getDesign();
+            setDesignProperty(
+              'themeMode',
+              design.themeMode === 'dark' ? 'light' : 'dark',
+            );
+          } else if (link.component) {
+            const component = getComponent(link.component);
+            const type = getType(component.type);
+            const { hideable, selectable } = type;
+            if (selectable) {
+              // -link-checked- cases
+              let active;
+              if (name === '-unchecked-' && !value) active = 1;
+              else if (name === '-checked-' && value) active = 2;
+              else if (name === '-both-') active = component.props.active + 1;
+              if (component.props.active > component.children.length)
+                active = 1;
+              setProperty(link.component, 'props', 'active', active);
+            } else if (hideable) {
+              // -link-checked- cases
+              let hide;
+              if (name === '-checked-') hide = !value;
+              else if (name === '-unchecked-') hide = value;
+              // undefined ok
+              else if (name === '-both-') hide = !value;
+              // -link-option- cases
+              else if (name === '-any-') hide = !value || !value.length;
+              else if (name === '-none-')
+                hide = Array.isArray(value)
+                  ? !!value.length && value[0] !== name
+                  : !!value && value !== name;
+              else
+                hide = Array.isArray(value)
+                  ? !value.includes(name)
+                  : value !== name;
+              if (hide !== undefined && component.hide !== hide)
+                setProperty(link.component, undefined, 'hide', hide);
+            }
+          }
+        };
+
+        if (Array.isArray(link[name])) link[name].forEach(follow);
+        else follow(link[name]);
+      });
+  }, []);
+
+  // when user uses browser back and forward buttons,
+  // clear selection and set path
   useEffect(() => {
     const onPopState = () => {
-      const {
-        location: { pathname },
-      } = document;
-      const screen = getScreenByPath(design, pathname);
-      if (screen)
-        setSelected({ screen, component: design.screens[screen].root });
+      setLocation(getLocationForPath(window.location.pathname));
+      setSelection(undefined);
     };
-
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
-  }, [design]);
+  }, []);
 
-  // push state when the user navigates
   useEffect(() => {
-    if (selected.screen) {
-      const {
-        location: { pathname },
-      } = document;
-      // track selected screen in browser location, so browser
-      // backward/forward controls work
-      const screen = design.screens[selected.screen];
-      if (screen && screen.path !== pathname) {
-        const url = screen.path + window.location.search;
-        window.history.pushState(undefined, undefined, url);
+    if (location) {
+      let nextPath = getPathForLocation(location);
+      if (nextPath !== window.location.pathname) {
+        // track location in browser location, so browser
+        // backward/forward controls work
+        pushPath(nextPath);
       }
     }
-  }, [design, selected.screen]);
+  }, [location]);
 
-  useEffect(() => {
-    document.title = design.name;
-  }, [design.name]);
-
-  // store design
-  useEffect(() => {
-    if (design && design.local) {
-      // do this stuff lazily, so we don't bog down the UI
-      const timer = setTimeout(() => {
-        const date = new Date();
-        date.setMilliseconds(0);
-        design.date = date.toISOString();
-        try {
-          localStorage.setItem(design.name, JSON.stringify(design));
-        } catch (e) {
-          console.error('Failed to save design locally', e);
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [design]);
-
-  // store state
+  // store mode and selection state if they change
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (mode && mode !== 'thumb' && selected.screen) {
+      if (!thumb && mode && selection) {
         localStorage.setItem(
-          `${design.name}--state`,
-          JSON.stringify({ mode, selected }),
+          `${summary.name}--state`,
+          JSON.stringify({ location, mode, selection }),
         );
       }
     }, 1000);
     return () => clearTimeout(timer);
-  }, [design.name, mode, selected]);
-
-  // add to changes, if needed
-  useEffect(() => {
-    // do this stuff lazily to ride out typing sprees
-    const timer = setTimeout(() => {
-      // If we already have this design object, we must be doing an undo or
-      // redo, and therefore no need to add a change
-      if (!changes.some((change) => change === design)) {
-        let nextChanges;
-        nextChanges = [...changes];
-        nextChanges = nextChanges.slice(changeIndex, 10);
-        nextChanges.unshift(design);
-        setChanges(nextChanges);
-        setChangeIndex(0);
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [changes, changeIndex, design]);
-
-  // if selected doesn't exist anymore, reset it
-  useEffect(() => {
-    if (selected.screen && !design.screens[selected.screen]) {
-      setSelected(getInitialSelected(design));
-    } else if (selected.component && !design.components[selected.component]) {
-      setSelected({
-        ...selected,
-        component: design.screens[selected.screen].root,
-      });
-    }
-  }, [design, selected]);
-
-  const changeDesign = useCallback(
-    (design) => {
-      // We are trying to change a published design when we have a local
-      // copy with the same name. Need the user to confirm.
-      if (design && !design.local && localStorage.getItem(design.name)) {
-        setConfirmReplace(design);
-      } else {
-        if (design) {
-          design.local = true;
-          // TODO: don't want to set modified when we are just publishing,
-          // even though we've updated the email and pin
-          if (design.publishedUrl) {
-            // remember that we've changed this design since it was published
-            design.modified = true;
-          }
-        }
-        updateDesign(design);
-      }
-    },
-    [updateDesign],
-  );
+  }, [location, mode, selection, summary.name, thumb]);
 
   const onKey = useCallback(
     (event) => {
@@ -267,137 +232,137 @@ const Designer = ({ design, chooseDesign, updateDesign }) => {
         } else if (event.key === ';') {
           event.preventDefault();
           setMode(mode !== 'comments' ? 'comments' : 'preview');
-        } else if (event.key === 'p' && event.shiftKey) {
-          const stored = localStorage.getItem(`${design.name}--identity`);
-          if (stored) {
-            const identity = JSON.parse(stored);
-            publish({
-              design,
-              ...identity,
-              onChange: updateDesign,
-              onError: (error) => console.error(error),
-            });
-          } else {
-            console.warn('You need to have published to be able to re-publish');
-          }
         }
       }
     },
-    [design, mode, updateDesign],
+    [mode],
   );
 
-  const onUndo = useCallback(() => {
-    const nextChangeIndex = Math.min(changeIndex + 1, changes.length - 1);
-    const nextDesign = changes[nextChangeIndex];
-    updateDesign(nextDesign);
-    setChangeIndex(nextChangeIndex);
-  }, [changes, changeIndex, updateDesign]);
+  // we do this so we can detect when the root of the screen changes
+  const screen = useScreen(location?.screen);
 
-  const onRedo = useCallback(() => {
-    const nextChangeIndex = Math.max(changeIndex - 1, 0);
-    const nextDesign = changes[nextChangeIndex];
-    updateDesign(nextDesign);
-    setChangeIndex(nextChangeIndex);
-  }, [changes, changeIndex, updateDesign]);
+  const [treeRoot, canvasRoot] = useMemo(() => {
+    if (!location) return [];
+    if (location.screen && screen) return [undefined, screen.root];
+    if (location.property) {
+      const { id, value, ...rest } = location.property;
+      return [{ id, value, ...rest }, value];
+    }
+    return [];
+  }, [location, screen]);
 
-  const designContext = useMemo(
-    () => ({
-      changeDesign,
-      chooseDesign,
-      component: selectedComponent,
-      data,
-      design,
-      imports,
-      libraries,
-      mode,
-      onRedo: changeIndex > 0 && onRedo,
-      onUndo: changeIndex < changes.length - 1 && onUndo,
-      selected,
-      setMode,
-      setSelected,
-      theme,
-      updateDesign,
-    }),
-    [
-      changeDesign,
-      changeIndex,
-      changes,
-      chooseDesign,
-      data,
-      design,
-      imports,
-      libraries,
-      mode,
-      onRedo,
-      onUndo,
-      selected,
-      selectedComponent,
-      setMode,
-      setSelected,
-      theme,
-      updateDesign,
-    ],
+  const selectionPath = useMemo(() => getAncestors(selection), [selection]);
+
+  useEffect(
+    // don't un-collapse the selection itself
+    () => uncollapseAncestors(selectionPath.filter((id) => id !== selection)),
+    [selection, selectionPath],
   );
 
-  let columns;
-  if (responsive === 'small' || mode === 'preview') columns = 'flex';
-  else if (mode === 'comments') {
-    columns = [
-      ['1/2', 'flex'],
-      ['small', 'medium'],
-    ];
-  } else if (mode === 'edit') {
-    columns = [
-      ['small', 'medium'],
-      ['1/2', 'flex'],
-      ['small', 'medium'],
-    ];
-  }
-
-  if (!theme) return <Loading />;
-
-  let content = (
-    <ErrorCatcher>
-      <Canvas />
-    </ErrorCatcher>
+  const selectionContext = useMemo(
+    () =>
+      mode === 'edit'
+        ? [
+            selection,
+            setSelection,
+            { followLink, followLinkOption, setLocation, selectionPath },
+          ]
+        : [undefined, undefined, { followLink, followLinkOption }],
+    [followLink, followLinkOption, mode, selection, selectionPath],
   );
 
-  if (confirmReplace || (responsive !== 'small' && mode !== 'preview')) {
+  if (auth)
+    return (
+      <Auth
+        onChange={(password) => {
+          setLoadProps({ ...loadProps, password });
+          setAuth(false);
+        }}
+      />
+    );
+  if (!ready) return <Loading />;
+
+  // console.log('!!! Designer', { location, selection, treeRoot, canvasRoot });
+
+  const Details =
+    selection && ((getScreen(selection) && ScreenDetails) || Properties);
+
+  let content;
+  if (canvasRoot || treeRoot)
     content = (
-      <Grid columns={columns}>
-        {responsive !== 'small' && mode === 'edit' && <Tree />}
+      <ErrorCatcher>
+        <Canvas root={treeRoot?.value || canvasRoot} />
+      </ErrorCatcher>
+    );
+  else if (getScreen(selection)) content = <NewScreen />;
+  else if (selection) content = <Data id={selection} />;
 
-        <Box height="100vh" overflow="auto">
-          {content}
-        </Box>
-
-        {responsive !== 'small' && mode !== 'preview' && (
-          <Box height="100vh">
-            {(mode === 'comments' && <Comments />) ||
-              (selectedComponent && <Properties />) ||
-              (selected.screen && <ScreenDetails />)}
-          </Box>
-        )}
-        {confirmReplace && (
-          <ConfirmReplace
-            design={design}
-            nextDesign={confirmReplace}
-            onDone={(nextDesign) => {
-              if (nextDesign) updateDesign(nextDesign);
-              setConfirmReplace(undefined);
+  if (!thumb && responsive !== 'small') {
+    if (mode === 'edit') {
+      content = (
+        <Grid columns={editGridColumns}>
+          <Tree
+            root={treeRoot}
+            setMode={setMode}
+            onClose={() => {
+              pushUrl('/');
+              onClose();
             }}
           />
-        )}
-      </Grid>
-    );
+          <Box height="100vh" overflow="auto">
+            {content}
+          </Box>
+          {Details && <Details />}
+        </Grid>
+      );
+    } else if (mode === 'comments') {
+      content = (
+        <Grid columns={commentGridColumns}>
+          <Box height="100vh" overflow="auto">
+            {content}
+          </Box>
+          {/* <Comments /> */}
+        </Grid>
+      );
+    }
   }
 
+  // if (/* confirmReplace || */ (responsive !== 'small' && mode !== 'preview')) {
+  //   content = (
+  //     <Grid columns={columns}>
+  //       {mode === 'edit' && <Tree />}
+
+  //       <Box height="100vh" overflow="auto">
+  //         {content}
+  //       </Box>
+
+  //       {responsive !== 'small' && mode !== 'preview' && (
+  //         <Box height="100vh">
+  //           {(mode === 'comments' && <Comments />) ||
+  //             (selectedComponent && <Properties />) ||
+  //             (selected.screen && <ScreenDetails />)}
+  //         </Box>
+  //       )}
+  //       {/* {confirmReplace && (
+  //         <ConfirmReplace
+  //           design={design}
+  //           nextDesign={confirmReplace}
+  //           onDone={(nextDesign) => {
+  //             if (nextDesign) updateDesign(nextDesign);
+  //             setConfirmReplace(undefined);
+  //           }}
+  //         />
+  //       )} */}
+  //     </Grid>
+  //   );
+  // }
+
   return (
-    <DesignContext.Provider value={designContext}>
-      <Keyboard target="document" onKeyDown={onKey}>
+    <Keyboard target="document" onKeyDown={onKey}>
+      <SelectionContext.Provider value={selectionContext}>
         {content}
-      </Keyboard>
-    </DesignContext.Provider>
+      </SelectionContext.Provider>
+    </Keyboard>
   );
 };
 

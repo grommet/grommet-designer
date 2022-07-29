@@ -8,6 +8,7 @@ export const upgradeDesign = (design) => {
       parseInt(id, 10),
     );
   }
+
   // move components out of screens (v2.0)
   if (!design.components) {
     design.components = {};
@@ -18,6 +19,10 @@ export const upgradeDesign = (design) => {
       delete screen.components;
     });
   }
+
+  // remove any screen from screenOrder that don't exist anymore
+  design.screenOrder = design.screenOrder.filter((id) => design.screens[id]);
+
   // remove any children where the component doesn't exist anymore
   Object.keys(design.components)
     .map((id) => design.components[id])
@@ -357,5 +362,22 @@ export const upgradeDesign = (design) => {
       });
     });
 
-  design.version = 3.7;
+  if (design.data) {
+    // update data to use ids
+    const nextData = {};
+    Object.keys(design.data).forEach((key) => {
+      let id = parseInt(key, 10);
+      if (id) nextData[id] = design.data[key];
+      else {
+        // using old style which was just name => serialized data
+        // convert to id => { name, url, data: object }
+        id = design.nextId;
+        design.nextId += 1;
+        nextData[id] = { id, name: key, data: JSON.parse(design.data[key]) };
+      }
+    });
+    design.data = nextData;
+  }
+
+  design.version = 4.0;
 };

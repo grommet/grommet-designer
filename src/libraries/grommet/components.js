@@ -63,6 +63,15 @@ import {
   Video,
   WorldMap,
 } from 'grommet';
+import {
+  getDataByPath,
+  replaceWithData,
+  resetDataByPath,
+  setDataByPath,
+  setDataIndex,
+  setProperty,
+} from '../../design2';
+import DesignComponent from '../../DesignComponent';
 import BoxAlign from './BoxAlign';
 import BoxAnimation from './BoxAnimation';
 import BoxBackgroundImage from './BoxBackgroundImage';
@@ -253,16 +262,14 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      if (props?.onClick)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      return { ...props, ...adjusted };
     },
   },
   Main: {
@@ -328,22 +335,18 @@ export const components = {
     },
     properties: {
       ...reusedBoxProps,
+      width: Dimension,
       wrap: false,
     },
     structure: [
       {
-        label: 'Content layout',
-        properties: [
-          'direction',
-          'justify',
-          'align',
-          'pad',
-          'gap',
-          'overflow',
-          'wrap',
-        ],
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
       },
-      reusedBoxStructure[1],
+      {
+        label: reusedBoxStructure[1].label,
+        properties: [...reusedBoxStructure[1].properties, 'width'],
+      },
       reusedBoxStructure[2],
     ],
   },
@@ -373,16 +376,8 @@ export const components = {
     },
     structure: [
       {
-        label: 'Content layout',
-        properties: [
-          'direction',
-          'justify',
-          'align',
-          'pad',
-          'gap',
-          'overflow',
-          'wrap',
-        ],
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
       },
       reusedBoxStructure[1],
       reusedBoxStructure[2],
@@ -417,7 +412,13 @@ export const components = {
     ),
     documentation: 'https://v2.grommet.io/page',
     properties: {
+      align: reusedBoxProps.align,
+      justify: reusedBoxProps.justify,
       background: { ...reusedBoxProps.background, fill: ['horizontal'] },
+      border: reusedBoxProps.border,
+      gap: reusedBoxProps.gap,
+      pad: reusedBoxProps.pad,
+      flex: reusedBoxProps.flex,
     },
   },
   PageHeader: {
@@ -429,14 +430,19 @@ export const components = {
     properties: {
       actions: '-component-',
       margin: Edge,
+      pad: Edge,
       parent: '-string-or-component-',
       title: '',
       subtitle: '',
     },
-    override: ({ props }, { replaceData }) => {
-      return {
-        title: replaceData(props.title),
-      };
+    adjustProps: (props) => {
+      const adjusted = {};
+      adjusted.title = replaceWithData(props.title);
+      adjusted.subtitle = replaceWithData(props.subtitle);
+      if (props.parent && typeof props.parent === 'number') {
+        adjusted.parent = <DesignComponent id={props.parent} />;
+      }
+      return { ...props, ...adjusted };
     },
   },
   Sidebar: {
@@ -511,6 +517,7 @@ export const components = {
     component: Card,
     name: 'Card',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -538,22 +545,21 @@ export const components = {
         properties: ['onClick', 'hoverIndicator'],
       },
     ],
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      if (props?.onClick)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      return { ...props, ...adjusted };
     },
   },
   CardHeader: {
     component: CardHeader,
     name: 'CardHeader',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -577,6 +583,7 @@ export const components = {
     component: CardBody,
     name: 'CardBody',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -588,13 +595,21 @@ export const components = {
     defaultProps: {
       pad: 'small',
     },
-    properties: reusedBoxProps,
-    structure: reusedBoxStructure,
+    properties: { ...reusedBoxProps, wrap: false },
+    structure: [
+      {
+        label: reusedBoxStructure[0].label,
+        properties: [...reusedBoxStructure[0].properties, 'wrap'],
+      },
+      reusedBoxStructure[1],
+      reusedBoxStructure[2],
+    ],
   },
   CardFooter: {
     component: CardFooter,
     name: 'CardFooter',
     container: true,
+    hideable: true,
     placeholder: ({ background, pad }) =>
       !pad &&
       !background && (
@@ -675,25 +690,25 @@ export const components = {
       responsive: false,
     },
     advancedProperties: ['animate', 'responsive'],
-    override: ({ props }, { setHide }) => {
-      const result = {};
+    adjustProps: (props, { component: { id } }) => {
+      const adjusted = {};
       if (props.modal !== false && props.onClickOutside !== 'ignore') {
-        result.onClickOutside = (event) => {
+        adjusted.onClickOutside = (event) => {
           let node = event.target;
           // only hide if clicking the modal overlay, which is outside root
           while (node && node.id !== 'root') node = node.parentNode;
-          if (!node) setHide(true);
+          if (!node) setProperty(id, undefined, 'hide', true);
         };
       } else if (props.modal === false && props.onClickOutside === 'hide') {
-        result.onClickOutside = (event) => {
+        adjusted.onClickOutside = (event) => {
           let node = event.target;
           // only hide if clicking within the Canvas
           while (node && node.id !== 'designer-canvas') node = node.parentNode;
-          if (node) setHide(true);
+          if (node) setProperty(id, undefined, 'hide', true);
         };
-      } else result.onClickOutside = undefined;
-      result.onEsc = () => setHide(true);
-      return result;
+      } else adjusted.onClickOutside = undefined;
+      adjusted.onEsc = () => setProperty(id, undefined, 'hide', true);
+      return { ...props, ...adjusted };
     },
   },
   Grommet: { component: Grommet, name: 'Grommet', container: true },
@@ -746,6 +761,7 @@ export const components = {
         '6xl',
       ],
       textAlign: TextAlign,
+      tip: '',
       truncate: false,
       weight: WeightOptions({ options: ['normal', 'bold'] }),
       margin: Edge,
@@ -806,7 +822,9 @@ export const components = {
       label: 'anchor',
       color: ['-color-'],
       disabled: false,
+      gap: reusedBoxProps.gap,
       href: '',
+      icon: ['-Icon-'],
       margin: Edge,
       size: ['xsmall', 'small', 'medium', 'large'],
     },
@@ -814,20 +832,15 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['margin', 'color'],
-    override: (
-      { designProps, id, props },
-      { dataContextPath, followLink, replaceData },
-    ) => {
-      return {
-        label: replaceData(props.label),
-        onClick:
-          designProps && designProps.link
-            ? (event) => {
-                event.stopPropagation();
-                followLink(designProps.link, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { component, followLink }) => {
+      const adjusted = {};
+      adjusted.label = replaceWithData(props.label);
+      if (component?.designProps?.link)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(component.designProps.link);
+        };
+      return { ...props, ...adjusted };
     },
   },
   Button: {
@@ -862,17 +875,16 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
-    override: ({ designProps, id, props }, { dataContextPath, followLink }) => {
-      return {
-        badge: props.badge === 0 ? true : props.badge,
-        onClick:
-          designProps && designProps.link
-            ? (event) => {
-                event.stopPropagation();
-                followLink(designProps.link, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { component, followLink }) => {
+      const adjusted = {};
+      if (props.badge !== undefined)
+        adjusted.badge = props.badge === 0 ? true : props.badge;
+      if (component?.designProps?.link)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(component.designProps.link);
+        };
+      return { ...props, ...adjusted };
     },
   },
   DropButton: {
@@ -916,11 +928,11 @@ export const components = {
       tip: '',
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
-    override: ({ props }) => {
-      const result = {};
+    adjustProps: (props, { component, followLink }) => {
+      const adjusted = {};
       if (props.badge !== undefined)
-        result.badge = props.badge === 0 ? true : props.badge;
-      return result;
+        adjusted.badge = props.badge === 0 ? true : props.badge;
+      return { ...props, ...adjusted };
     },
   },
   Menu: {
@@ -944,16 +956,21 @@ export const components = {
       size: ['small', 'medium', 'large', 'xlarge'],
       tip: '',
     },
-    override: ({ id, props }, { followLink }) => {
-      const result = {};
-      result.items = (props.items || []).map((item) => ({
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      adjusted.items = (props.items || []).map((item) => ({
         ...item,
         onClick: (event) => {
           event.stopPropagation();
-          followLink(item.link, { fromId: id });
+          followLink(item.link);
         },
       }));
-      return result;
+      return { ...props, ...adjusted };
+    },
+    relink: (component, { relink }) => {
+      component.props?.items.forEach((item) => {
+        if (item?.link) item.link = relink(item.link);
+      });
     },
   },
   Tabs: {
@@ -1021,29 +1038,18 @@ export const components = {
       dataPath: '',
       link: ['-link-checked-'],
     },
-    override: (
-      { designProps, props },
-      { data, dataContextPath, followLinkOption, replaceData },
-    ) => {
-      const result = {
+    adjustProps: (props, { component: { designProps }, followLinkOption }) => {
+      const adjusted = {
         onChange: designProps?.link
-          ? (event) => {
-              followLinkOption(designProps.link, event.target.checked, {
-                dataContextPath,
-              });
-            }
+          ? (event) => followLinkOption(designProps.link, event.target.checked)
           : undefined,
       };
-      if (props.label) {
-        result.label = replaceData(props.label);
-      }
-      if (designProps?.dataPath) {
-        result.checked =
-          typeof data === 'object' ? data[designProps.dataPath] : data;
-      }
-      return result;
+      if (props.label) adjusted.label = replaceWithData(props.label);
+      if (designProps?.dataPath)
+        adjusted.checked = getDataByPath(designProps.dataPath);
+      return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
       if (designProps?.link) {
         followLinkOption(
           designProps.link,
@@ -1080,21 +1086,21 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    override: (
-      { id, props, designProps },
-      { dataContextPath, followLinkOption },
+    adjustProps: (
+      props,
+      { component: { designProps, id }, followLinkOption },
     ) => {
-      const result = {};
-      if (!props.id) result.id = props.name || id;
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ value }) =>
-          followLinkOption(designProps.link, value, { dataContextPath });
+      const adjusted = {};
+      if (!props.id) adjusted.id = props.name || id;
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ value }) =>
+          followLinkOption(designProps.link, value);
       }
-      return result;
+      return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value);
       }
     },
@@ -1128,6 +1134,7 @@ export const components = {
   Form: {
     component: Form,
     container: true,
+    hideable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
         This Form is currently empty. Add some FormField components to it so it
@@ -1138,57 +1145,66 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    // action to auto-build FormFields based on dataPath
-    actions: (
-      { designProps, id },
-      { addChildComponent, changeDesign, data, design },
-    ) => {
-      if (
-        designProps?.dataPath &&
-        typeof data?.[designProps.dataPath] === 'object'
-      ) {
-        return (
-          <Box direction="row" justify="end" pad="small">
-            <Button
-              label="generate fields"
-              onClick={() => {
-                // add FormField and TextInput children for all keys in the data
-                const nextDesign = JSON.parse(JSON.stringify(design));
-                const nextForm = nextDesign.components[id];
-                Object.keys(data[designProps.dataPath]).forEach((key) => {
-                  // see if we already have a FormField with this name
-                  if (
-                    !nextForm.children ||
-                    !nextForm.children.some(
-                      (childId) =>
-                        nextDesign.components[childId].props?.name === key,
-                    )
-                  ) {
-                    const fieldId = addChildComponent(nextDesign, id, {
-                      type: 'grommet.FormField',
-                      props: { label: key, name: key },
-                    });
-                    addChildComponent(nextDesign, fieldId, {
-                      type: 'grommet.TextInput',
-                      props: { name: key },
-                    });
-                  }
-                });
-                changeDesign(nextDesign);
-              }}
-            />
-          </Box>
-        );
+    // // action to auto-build FormFields based on dataPath
+    // actions: (
+    //   { designProps, id },
+    //   { addChildComponent, changeDesign, data, design },
+    // ) => {
+    //   if (
+    //     designProps?.dataPath &&
+    //     typeof data?.[designProps.dataPath] === 'object'
+    //   ) {
+    //     return (
+    //       <Box direction="row" justify="end" pad="small">
+    //         <Button
+    //           label="generate fields"
+    //           onClick={() => {
+    //             // add FormField and TextInput children for all keys in the data
+    //             const nextDesign = JSON.parse(JSON.stringify(design));
+    //             const nextForm = nextDesign.components[id];
+    //             Object.keys(data[designProps.dataPath]).forEach((key) => {
+    //               // see if we already have a FormField with this name
+    //               if (
+    //                 !nextForm.children ||
+    //                 !nextForm.children.some(
+    //                   (childId) =>
+    //                     nextDesign.components[childId].props?.name === key,
+    //                 )
+    //               ) {
+    //                 const fieldId = addChildComponent(nextDesign, id, {
+    //                   type: 'grommet.FormField',
+    //                   props: { label: key, name: key },
+    //                 });
+    //                 addChildComponent(nextDesign, fieldId, {
+    //                   type: 'grommet.TextInput',
+    //                   props: { name: key },
+    //                 });
+    //               }
+    //             });
+    //             changeDesign(nextDesign);
+    //           }}
+    //         />
+    //       </Box>
+    //     );
+    //   }
+    // },
+    adjustProps: (props, { component, rerender }) => {
+      let adjusted = {};
+      const dataPath = component?.designProps?.dataPath;
+      if (dataPath) {
+        adjusted = {
+          value: getDataByPath(dataPath) || {},
+          onChange: (value) => {
+            setDataByPath(dataPath, value);
+            rerender(value);
+          },
+          onReset: () => {
+            resetDataByPath(dataPath);
+            rerender(undefined);
+          },
+        };
       }
-    },
-    override: ({ designProps }, { data, setData }) => {
-      const result = {};
-      if (designProps?.dataPath) {
-        result.value = data || {};
-        result.onChange = setData;
-        result.onReset = () => setData(undefined);
-      }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   FormField: {
@@ -1228,11 +1244,11 @@ export const components = {
       textAlign: ['start', 'center', 'end'],
       value: '',
     },
-    override: ({ props }) => {
-      const result = {};
+    adjustProps: (props) => {
+      const adjusted = {};
       if (props.mask) {
         // convert regexp from string to RegExp
-        result.mask = props.mask.map((m) => {
+        adjusted.mask = props.mask.map((m) => {
           let regexp;
           if (m.regexp && m.regexp.match) {
             const match = m.regexp.match(/^\/(.*)\/$|(.*)/);
@@ -1245,7 +1261,7 @@ export const components = {
           return { ...m, regexp };
         });
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   RadioButtonGroup: {
@@ -1278,21 +1294,21 @@ export const components = {
     designProperties: {
       link: ['-link-options-'],
     },
-    override: (
-      { id, props, designProps },
-      { dataContextPath, followLinkOption },
+    adjustProps: (
+      props,
+      { component: { designProps, id }, followLinkOption },
     ) => {
-      const result = {};
-      if (!props.id) result.id = props.name || id;
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ target: { value } }) =>
-          followLinkOption(designProps.link, value, { dataContextPath });
+      const adjusted = {};
+      if (!props.id) adjusted.id = props.name || id;
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ target: { value } }) =>
+          followLinkOption(designProps.link, value);
       }
-      return result;
+      return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value || props.defaultValue);
       }
     },
@@ -1346,48 +1362,52 @@ export const components = {
       data: JsonData,
       link: ['-link-options-'],
     },
-    override: (
-      { children, id, props, designProps },
-      { followLinkOption, renderComponent },
+    adjustProps: (
+      props,
+      { component: { id, children, designProps }, followLinkOption },
     ) => {
-      const result = {};
-      if (props.searchPlaceholder) result.onSearch = (text) => {};
-      if (!props.value) result.value = undefined;
-      if (designProps && designProps.link) {
-        result.onChange = ({ value }) => {
+      const adjusted = {};
+      if (props.searchPlaceholder) adjusted.onSearch = (text) => {};
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ value }) => {
           followLinkOption(designProps.link, value);
           inputValues[id] = value;
         };
       } else {
-        result.onChange = ({ value }) => (inputValues[id] = value);
+        adjusted.onChange = ({ value }) => (inputValues[id] = value);
       }
       if (
         props.options.length === 0 &&
-        designProps &&
-        designProps.data &&
+        designProps?.data &&
         Array.isArray(designProps.data)
       ) {
-        result.options = designProps.data;
+        adjusted.options = designProps.data;
       }
       if (props.valueKey)
-        result.valueKey = { key: props.valueKey, reduce: true };
+        adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
-        result.children = (option) =>
-          renderComponent(children[0], { datum: option });
+        adjusted.children = (option) => (
+          <DesignComponent id={children[0]} datum={option} />
+        );
       }
       if (props.valueLabel) {
-        result.valueLabel = renderComponent(props.valueLabel, {
-          datum:
-            props.value ||
-            inputValues[id] ||
-            props.defaultValue ||
-            props.placeholder,
-        });
+        adjusted.valueLabel = (
+          <DesignComponent
+            id={props.valueLabel}
+            datum={
+              props.value ||
+              inputValues[id] ||
+              props.defaultValue ||
+              props.placeholder
+            }
+          />
+        );
       }
-      return result;
+      return { ...props, ...adjusted };
     },
-    initialize: ({ props, designProps }, { followLinkOption }) => {
-      if (designProps && designProps.link) {
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
         followLinkOption(designProps.link, props.value || props.defaultValue);
       }
     },
@@ -1426,12 +1446,15 @@ export const components = {
       type: ['text', 'password'],
       value: '',
     },
-    override: ({ props }, { replaceData }) => ({
-      defaultValue:
-        typeof props.defaultValue === 'string'
-          ? replaceData(props.defaultValue)
-          : props.defaultValue,
-    }),
+    adjustProps: (props) => {
+      const adjusted = {
+        defaultValue:
+          typeof props.defaultValue === 'string'
+            ? replaceWithData(props.defaultValue)
+            : props.defaultValue,
+      };
+      return { ...props, ...adjusted };
+    },
   },
   Avatar: {
     component: Avatar,
@@ -1489,17 +1512,24 @@ export const components = {
       showAdjacentDays: false,
       size: ['small', 'medium', 'large'],
     },
-    override: ({ children, props }, { renderComponent }) => {
-      const result = {};
+    adjustProps: (props, { component: { children } }) => {
+      const adjusted = {};
       if (props.header) {
-        result.header = (datum) => {
-          return renderComponent(props.header, { datum });
-        };
+        adjusted.header = ({ date }) => (
+          <DesignComponent
+            id={props.header}
+            datum={{
+              month: date.toLocaleDateString(undefined, { month: 'long' }),
+            }}
+          />
+        );
       }
       if (children) {
-        result.children = (datum) => renderComponent(children[0], { datum });
+        adjusted.children = (datum) => (
+          <DesignComponent id={children[0]} datum={datum} />
+        );
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Chart: {
@@ -1556,11 +1586,11 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (_, { data }) => {
-      const result = {};
-      // need to use retrieved data for values property
-      if (data) result.values = data;
-      return result;
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
+      return { ...props, ...adjusted };
     },
   },
   Clock: {
@@ -1634,10 +1664,12 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: ({ props }, { data }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
       // need to use retrieved data for data property
-      if (data) result.data = data;
+      if (designProps?.dataPath)
+        adjusted.data = getDataByPath(designProps.dataPath);
+      // if (data) adjusted.data = data;
       // if (props.xAxis && props.xAxis.render) {
       //   if (props.xAxis.key) {
       //     result.yAxis.render = (i) => {
@@ -1647,7 +1679,7 @@ export const components = {
       //     }
       //   }
       // }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   DataTable: {
@@ -1694,42 +1726,38 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (
-      { props },
-      { data, dataContextPath, followLink, renderComponent },
-    ) => {
-      const result = {};
-      // need to use retrieved data for data property
-      if (data) result.data = data;
+    adjustProps: (props, { component: { designProps }, followLink }) => {
+      const adjusted = {};
+      if (designProps?.dataPath)
+        adjusted.data = getDataByPath(designProps.dataPath);
       if (props.onClickRow) {
-        result.onClickRow = (event) => {
+        setDataIndex(designProps.dataPath, undefined);
+        adjusted.onClickRow = (event) => {
           event.stopPropagation();
-          const { index } = event;
-          const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink(props.onClickRow, { dataContextPath: path });
+          if (designProps?.dataPath)
+            setDataIndex(designProps.dataPath, event.index);
+          followLink(props.onClickRow);
         };
       }
-      if (props.onSelect) result.onSelect = (text) => {};
+      if (props.onSelect) adjusted.onSelect = (text) => {};
       if (props.select)
-        result.select = props.select.split(',').map((s) => s.trim());
-      // adjust render columns
-      result.columns = props.columns.map((c) => ({
+        adjusted.select = props.select.split(',').map((s) => s.trim());
+      adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
-          ? (datum) => renderComponent(c.render, { datum })
+          ? (datum) => <DesignComponent id={c.render} datum={datum} />
           : undefined,
       }));
-      return result;
+      return { ...props, ...adjusted };
     },
-    copy: (source, copy, { nextDesign, duplicateComponent }) => {
+    copy: (source, copy, { duplicateComponent }) => {
       // duplicate any columns render components
       if (source.props?.columns) {
         source.props.columns.forEach((column, index) => {
           if (column.render) {
-            copy.props.columns[index].render = duplicateComponent({
-              nextDesign,
-              id: column.render,
-            });
+            copy.props.columns[index].render = duplicateComponent(
+              column.render,
+            );
           }
         });
       }
@@ -1780,14 +1808,15 @@ export const components = {
       dataPath: '',
       render: '-component-',
     },
-    override: ({ designProps, props }, { data, renderComponent }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
       // need to use retrieved data for values property
-      if (data) result.values = data;
-      result.children = (value) => {
-        const index = (result.values || props.values || []).indexOf(value);
-        if (designProps && designProps.render)
-          return renderComponent(designProps.render, { datum: value });
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
+      adjusted.children = (value) => {
+        const index = (adjusted.values || props.values || []).indexOf(value);
+        if (designProps?.render)
+          return <DesignComponent id={designProps.render} datum={value} />;
         return (
           <Box
             fill
@@ -1803,7 +1832,7 @@ export const components = {
           </Box>
         );
       };
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Diagram: {
@@ -1836,29 +1865,33 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    override: (
-      { children, id, props },
-      { data, dataContextPath, followLink, renderComponent, setData },
+    adjustProps: (
+      props,
+      { component: { children, designProps }, followLink },
     ) => {
-      const result = {};
+      const adjusted = {};
       // need to use retrieved data for data property
-      if (data) result.data = data;
+      if (designProps?.dataPath)
+        adjusted.data = getDataByPath(designProps.dataPath);
       if (props.onClickItem) {
-        result.onClickItem = (event) => {
+        if (designProps?.dataPath)
+          setDataIndex(designProps.dataPath, undefined);
+        adjusted.onClickItem = (event) => {
           event.stopPropagation();
-          const { index } = event;
-          const path = dataContextPath ? [...dataContextPath, index] : [index];
-          followLink(props.onClickItem, { dataContextPath: path, fromId: id });
+          if (designProps?.dataPath)
+            setDataIndex(designProps.dataPath, event.index);
+          followLink(props.onClickItem);
         };
       }
-      if (props.onOrder) {
-        result.onOrder = setData;
+      if (props.onOrder && designProps?.dataPath) {
+        adjusted.onOrder = (data) => setDataByPath(designProps.dataPath, data);
       }
       if (children) {
-        result.children = (value) =>
-          renderComponent(children[0], { datum: value });
+        adjusted.children = (value) => (
+          <DesignComponent id={children[0]} datum={value} />
+        );
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Meter: {
@@ -1875,12 +1908,20 @@ export const components = {
       value: 0,
       values: MeterValues,
     },
-    override: ({ props }, { replaceData }) => ({
-      value:
-        typeof props.value === 'string'
-          ? replaceData(props.value)
-          : props.value,
-    }),
+    designProperties: {
+      dataPath: '',
+    },
+    adjustProps: (props, { datum, component: { designProps } }) => {
+      const adjusted = {
+        value:
+          typeof props.value === 'string'
+            ? replaceWithData(props.value, datum)
+            : props.value,
+      };
+      if (designProps?.dataPath)
+        adjusted.values = getDataByPath(designProps.dataPath);
+      return { ...props, ...adjusted };
+    },
   },
   NameValueList: {
     component: NameValueList,
@@ -1927,14 +1968,14 @@ export const components = {
     designProperties: {
       value: '',
     },
-    override: ({ designProps, props }, { renderComponent, replaceData }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
       if (designProps?.value !== undefined)
-        result.children = replaceData(designProps.value);
+        adjusted.children = replaceWithData(designProps.value);
       if (props.name && typeof props.name === 'number') {
-        result.name = renderComponent(props.name);
+        adjusted.name = <DesignComponent id={props.name} />;
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   Notification: {
@@ -1946,23 +1987,26 @@ export const components = {
       message: 'Special message',
     },
     properties: {
-      status: ['critical', 'warning', 'normal', 'unknown'],
+      status: ['critical', 'warning', 'normal', 'unknown', '-data-'],
       message: '',
       title: '',
       toast: false,
       global: false,
       onClose: ['-link-'],
     },
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClose:
-          props && props.onClose
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClose, { dataContextPath, fromId: id });
-              }
-            : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      if (props?.onClose)
+        adjusted.onClose = (event) => {
+          event.stopPropagation();
+          followLink(props.onClose);
+        };
+      adjusted.title = replaceWithData(props.title);
+      adjusted.message = replaceWithData(props.message);
+      // workaround for Notification not being very defensive
+      if (props?.status && (props.status[0] === '{' || props.status[0] === '['))
+        adjusted.status = undefined;
+      return { ...props, ...adjusted };
     },
   },
   Pagination: {
@@ -1998,17 +2042,15 @@ export const components = {
       onClick: ['-link-'],
       removable: false,
     },
-    override: ({ id, props }, { dataContextPath, followLink }) => {
-      return {
-        onClick:
-          props && props.onClick
-            ? (event) => {
-                event.stopPropagation();
-                followLink(props.onClick, { dataContextPath, fromId: id });
-              }
-            : undefined,
-        onRemove: props && props.removable ? () => {} : undefined,
-      };
+    adjustProps: (props, { followLink }) => {
+      const adjusted = {};
+      if (props?.onClick)
+        adjusted.onClick = (event) => {
+          event.stopPropagation();
+          followLink(props.onClick);
+        };
+      if (props?.removable) adjusted.onRemove = () => {};
+      return { ...props, ...adjusted };
     },
   },
   Carousel: {
@@ -2042,8 +2084,8 @@ export const components = {
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
     },
-    override: ({ props }, { replaceData }) => {
-      return { src: replaceData(props.src) };
+    adjustProps: (props) => {
+      return { ...props, src: replaceWithData(props.src) };
     },
   },
   Video: {
@@ -2059,14 +2101,14 @@ export const components = {
       camera: false,
       source: '',
     },
-    override: ({ designProps, id }, { replaceData }) => {
-      const result = {};
+    adjustProps: (props, { component: { designProps, id } }) => {
+      const adjusted = {};
       if (designProps?.source) {
-        const source = replaceData(designProps.source);
-        result.children = <source src={source} />;
+        const source = replaceWithData(designProps.source);
+        adjusted.children = <source src={source} />;
       }
       if (designProps?.camera) {
-        result.id = id;
+        adjusted.id = id;
         if (navigator.mediaDevices.getUserMedia) {
           navigator.mediaDevices
             .getUserMedia({ video: true })
@@ -2078,9 +2120,9 @@ export const components = {
               console.error('Something went wrong!', err);
             });
         }
-        result.style = { transform: 'scale(-1, 1)' };
+        adjusted.style = { transform: 'scale(-1, 1)' };
       }
-      return result;
+      return { ...props, ...adjusted };
     },
   },
   WorldMap: {
@@ -2094,26 +2136,25 @@ export const components = {
       margin: Edge,
       places: WorldMapPlaces,
     },
-    override: ({ props }, { renderComponent }) => {
-      const result = {};
+    adjustProps: (props) => {
+      const adjusted = {};
       if (props.places) {
         // adjust places content
-        result.places = props.places.map((p) => ({
+        adjusted.places = props.places.map((p) => ({
           ...p,
-          content: p.content ? renderComponent(p.content) : undefined,
+          content: p.content ? <DesignComponent id={p.content} /> : undefined,
         }));
       }
-      return result;
+      return { ...props, ...adjusted };
     },
     copy: (source, copy, { nextDesign, duplicateComponent }) => {
       // duplicate any places content components
       if (source.props?.places) {
         source.props.places.forEach((place, index) => {
           if (place.content) {
-            copy.props.places[index].content = duplicateComponent({
-              nextDesign,
-              id: place.content,
-            });
+            copy.props.places[index].content = duplicateComponent(
+              place.content,
+            );
           }
         });
       }

@@ -10,22 +10,15 @@ Live at: [designer.grommet.io](https://designer.grommet.io)
 
 - **command-e** or **control-E** or **command-.**: toggles preview vs. edit mode
 - **command-;** or **control-;**: toggles preview vs. comment mode
-- **ArrowUp** and **ArrowDown**: traverses the selection across siblings
-- **ArrowLeft** and **ArrowRight**: traverses the selection across parent/child
-- **c**: toggles collapsing the currently selected component
-- **p**: initiates searching of the currently selected component's properties
-- **d**: duplicate the current component, and all of its children
 - **a**: opens the add component dialog
-- **command-click** or **control-click**: when adding a component, it
-  will be added as the parent of the currently selected component
-- **command-delete** or **control-backspace**: deletes the currently
-  selected component and all of its children
 - **z**: undo the most recent change
 - **Z**: redo the most recently undone change
 - **command-c** or **control-c**: copies the selected component
 - **command-v** or **control-v**: pastes the previously copied component
   into the selected component
-- **command-shift-p** or **control-shift-p**: re-publish
+- **command-V** or **control-V**: pastes the previously copied component
+  after the selected component
+- **s**: toggles collapsing all screens in the component tree
 
 ### Linking
 
@@ -109,16 +102,15 @@ you want inside '{}'. For example: `{data-source-name[0].property-name}`.
 You can also reference data in Repeater `dataPath`, so that Repeater will
 iterate over an array.
 
-### Imports
+### Includes
 
-Any published design can be used as a "import" from another design. Any
-components in the imported design that have been explicitly given a name will
-be shown in the list of components that can be added. When added, these can
-be copied into the current design by value. In this case, any changes
-published to the imported design will not be reflected in components already
-added in the design using it. Or, components can be added as a reference. In
-this case, any changes published to the imported design will be reflected
-in the importing design, when the browser is refreshed.
+Design can be "included" in another design. Any
+components in the included design that have been explicitly given a name will
+be shown in the list of components that can be added. When added, these
+will copied into the current design by value. If components used from
+the included design are subsequently modified, the modifications can be
+carried propogated via "copy properties from ..." in the component top menu
+on the right side.
 
 ## Local development
 

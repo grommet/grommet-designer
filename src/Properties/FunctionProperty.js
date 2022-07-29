@@ -1,40 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, Button, Heading, Layer, Text } from 'grommet';
 import { Close, FormDown } from 'grommet-icons';
-import DesignContext from '../DesignContext';
 import Field from '../components/Field';
-import ComponentInput from './ComponentInput';
 
 const jsonValue = (value) =>
   typeof value === 'string' ? value : JSON.stringify(value);
 
 const FunctionProperty = React.forwardRef(
-  ({ first, linkOptions, name, property, sub, theme, value, ...rest }, ref) => {
-    // need 'design' for BoxGridArea
-    const { design, selected } = useContext(DesignContext);
-    // need 'component' for BoxGridArea and GridAreas
-    const component = design.components[selected.component];
+  ({ definition, name, value, ...rest }, ref) => {
     const [expand, setExpand] = React.useState();
-    const CustomProperty = property;
-    if (property.inline) {
+    const CustomProperty = definition;
+    if (definition.inline) {
       return (
-        <Field
-          key={name}
-          sub={sub}
-          ref={ref}
-          first={first}
-          label={name}
-          htmlFor={name}
-        >
+        <Field key={name} ref={ref} label={name} htmlFor={name}>
           <CustomProperty
             name={name}
             value={value}
-            theme={theme}
-            linkOptions={linkOptions}
             dropTarget={ref && ref.current}
-            ComponentInput={ComponentInput}
-            component={component}
-            design={design}
             {...rest}
           />
         </Field>
@@ -43,7 +25,7 @@ const FunctionProperty = React.forwardRef(
     return (
       <Box key={name}>
         <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field sub={sub} label={name} first={first}>
+          <Field label={name}>
             <Box direction="row" align="center" gap="small">
               {value && (
                 <Text weight="bold" truncate>
@@ -89,16 +71,7 @@ const FunctionProperty = React.forwardRef(
               pad={{ horizontal: 'medium', bottom: 'medium' }}
             >
               <Box flex={false}>
-                <CustomProperty
-                  name={name}
-                  value={value}
-                  theme={theme}
-                  linkOptions={linkOptions}
-                  ComponentInput={ComponentInput}
-                  component={component}
-                  design={design}
-                  {...rest}
-                />
+                <CustomProperty name={name} value={value} {...rest} />
               </Box>
             </Box>
           </Layer>

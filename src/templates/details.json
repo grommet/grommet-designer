@@ -1,0 +1,142 @@
+{
+  "name": "details",
+  "theme": "grommet",
+  "screens": {
+    "1": {
+      "id": 1,
+      "name": "Details",
+      "path": "/",
+      "root": 2
+    }
+  },
+  "screenOrder": [1],
+  "components": {
+    "2": {
+      "id": 2,
+      "type": "grommet.Page",
+      "props": {},
+      "children": [3, 7]
+    },
+    "3": {
+      "type": "grommet.PageContent",
+      "id": 3,
+      "props": {
+        "border": {
+          "side": "bottom"
+        }
+      },
+      "children": [4]
+    },
+    "4": {
+      "type": "grommet.Header",
+      "id": 4,
+      "props": {
+        "align": "center",
+        "direction": "row",
+        "flex": false,
+        "justify": "between",
+        "gap": "medium"
+      },
+      "children": [5, 6],
+      "collapsed": true
+    },
+    "5": {
+      "type": "grommet.Text",
+      "id": 5,
+      "props": {
+        "weight": "bold"
+      },
+      "text": "Title"
+    },
+    "6": {
+      "type": "grommet.Menu",
+      "id": 6,
+      "props": {
+        "label": "",
+        "icon": "User",
+        "items": [
+          {
+            "label": "sign out"
+          }
+        ]
+      }
+    },
+    "7": {
+      "id": 7,
+      "type": "grommet.PageContent",
+      "props": {},
+      "children": [8, 16]
+    },
+    "8": {
+      "type": "grommet.PageHeader",
+      "id": 8,
+      "props": {
+        "title": "{name}",
+        "margin": {
+          "vertical": "medium"
+        },
+        "actions": 22
+      },
+      "name": "",
+      "propComponents": [22]
+    },
+    "16": {
+      "type": "grommet.NameValueList",
+      "id": 16,
+      "props": {
+        "layout": "column"
+      },
+      "children": [17, 18]
+    },
+    "17": {
+      "type": "grommet.NameValuePair",
+      "id": 17,
+      "props": {
+        "name": "name"
+      },
+      "designProps": {
+        "value": "{name}"
+      }
+    },
+    "18": {
+      "type": "grommet.NameValuePair",
+      "id": 18,
+      "props": {
+        "name": "count"
+      },
+      "designProps": {
+        "value": "{count}"
+      }
+    },
+    "20": {
+      "type": "grommet.Box",
+      "id": 20,
+      "props": {
+        "align": "center",
+        "justify": "center"
+      },
+      "children": [19]
+    },
+    "22": {
+      "type": "grommet.Menu",
+      "id": 22,
+      "props": {
+        "label": "Actions",
+        "items": [
+          {
+            "label": "edit"
+          },
+          {
+            "label": "delete"
+          }
+        ]
+      }
+    }
+  },
+  "nextId": 23,
+  "local": true,
+  "date": "2022-05-07T22:48:08.000Z",
+  "created": "2022-05-07T22:36:42.343Z",
+  "imports": [],
+  "version": 3.7
+}

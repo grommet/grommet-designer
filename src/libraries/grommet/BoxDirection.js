@@ -1,11 +1,13 @@
 import React from 'react';
+import { useComponent } from '../../design2';
 import InlineOptions from './InlineOptions';
 import LayoutState from './LayoutState';
 
 const options = ['column', 'row', 'row-responsive'];
 
-const BoxDirection = ({ props, ...rest }) => {
-  const { align, justify } = props;
+const BoxDirection = ({ id, ...rest }) => {
+  const component = useComponent(id);
+  const { align, justify } = component.props;
   return (
     <InlineOptions name="direction" options={options} {...rest}>
       {(option, { checked, hover }) => (

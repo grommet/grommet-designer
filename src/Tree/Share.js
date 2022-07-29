@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Box,
@@ -15,8 +15,8 @@ import {
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import { dependencies, generateJSX, publish } from '../design';
+import { publish, useDesign } from '../design2';
+import { dependencies, generateJSX } from '../design';
 import Action from '../components/Action';
 
 const Summary = ({ Icon, label, guidance }) => (
@@ -30,7 +30,7 @@ const Summary = ({ Icon, label, guidance }) => (
 );
 
 const Publish = () => {
-  const { design, updateDesign } = useContext(DesignContext);
+  const design = useDesign();
   const [publication, setPublication] = useState();
   const [publishing, setPublishing] = useState();
   const [message, setMessage] = useState();
@@ -62,24 +62,18 @@ const Publish = () => {
     );
     localStorage.setItem('identity', JSON.stringify({ email, pin }));
     setPublishing(true);
-    publish({
-      design,
-      email,
-      password,
-      pin,
-      onChange: (nextDesign) => {
+    publish({ email, password, pin })
+      .then(() => {
         setPublishing(false);
-        updateDesign(nextDesign);
         ReactGA.event({
           category: 'share',
           action: 'publish design',
         });
-      },
-      onError: (error) => {
+      })
+      .catch((error) => {
         setPublishing(false);
         setError(error);
-      },
-    });
+      });
   };
 
   return (
@@ -130,7 +124,12 @@ const Publish = () => {
           <TextInput name="password" type="password" />
         </FormField>
         <Box align="center" margin="medium">
-          <Button type="submit" label="Publish" disabled={publishing} />
+          <Button
+            type="submit"
+            label="Publish"
+            secondary
+            disabled={publishing}
+          />
         </Box>
       </Form>
       {publishing && (
@@ -138,10 +137,19 @@ const Publish = () => {
           <Text size="large">...</Text>
         </Box>
       )}
-      {design.date && (
-        <Box margin="small" align="center">
-          <Text size="small" color="text-xweak">
-            Last published {new Date(design.date).toLocaleString()}
+      {design.publishedDate && (
+        <Box
+          margin="small"
+          align="center"
+          direction="row"
+          justify="center"
+          gap="xxsmall"
+        >
+          {design.date !== design.publishedDate ? (
+            <Text size="small">Modified /</Text>
+          ) : null}
+          <Text size="small">
+            Last published {new Date(design.publishedDate).toLocaleString()}
           </Text>
         </Box>
       )}
@@ -202,7 +210,7 @@ const Publish = () => {
 };
 
 const SaveLocally = ({ onClose }) => {
-  const { design } = useContext(DesignContext);
+  const design = useDesign();
   return (
     <Box align="center">
       <Summary
@@ -217,6 +225,7 @@ const SaveLocally = ({ onClose }) => {
       />
       <Button
         label="Download"
+        secondary
         hoverIndicator
         href={`data:application/json;charset=utf-8,${encodeURIComponent(
           JSON.stringify(design),
@@ -235,7 +244,6 @@ const SaveLocally = ({ onClose }) => {
 };
 
 const Developer = () => {
-  const { design, imports, libraries, theme } = useContext(DesignContext);
   const [code, setCode] = useState();
 
   return (
@@ -253,8 +261,9 @@ const Developer = () => {
         <Button
           label="Generate Code"
           hoverIndicator
+          secondary
           onClick={() => {
-            setCode(generateJSX({ design, imports, libraries, theme }));
+            setCode(generateJSX());
             ReactGA.event({
               category: 'share',
               action: 'generate code',
@@ -269,7 +278,7 @@ const Developer = () => {
 * install nodejs, npm, yarn, and create-react-app (if needed)
 * \`# npx create-react-app my-app\`
 * \`# cd my-app\`
-* \`# yarn add ${dependencies(design).join(' ')}\`
+* \`# yarn add ${dependencies().join(' ')}\`
 * replace the contents of \`src/App.js\` with the text below
 * \`# yarn start\`
             `}

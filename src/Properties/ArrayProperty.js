@@ -1,6 +1,7 @@
-import React from 'react';
-import { Box, Select, Text } from 'grommet';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, Select, Text } from 'grommet';
 import Field from '../components/Field';
+import DataPathField from './DataPathField';
 
 const OptionLabel = ({ selected, value }) => (
   <Box pad="small">
@@ -14,14 +15,13 @@ const ArrayProperty = React.forwardRef(
   (
     {
       children,
-      first,
+      dataPath,
       Label,
       multiple,
       name,
       onChange,
       options,
       searchTest,
-      sub,
       value,
       valueKey,
     },
@@ -29,7 +29,7 @@ const ArrayProperty = React.forwardRef(
   ) => {
     const SelectLabel = React.useMemo(() => Label || OptionLabel, [Label]);
     const [dropTarget, setDropTarget] = React.useState();
-    const fieldRef = React.useCallback(node => setDropTarget(node), []);
+    const fieldRef = React.useCallback((node) => setDropTarget(node), []);
     const [searchText, setSearchText] = React.useState('');
     const searchExp = React.useMemo(
       () => searchText && new RegExp(`${searchText}`, 'i'),
@@ -38,7 +38,7 @@ const ArrayProperty = React.forwardRef(
     let selectOptions = options;
     if (searchExp) {
       selectOptions = options.filter(
-        o =>
+        (o) =>
           searchExp.test(o.label || o) ||
           (searchTest && searchTest(o, searchExp)),
       );
@@ -46,17 +46,45 @@ const ArrayProperty = React.forwardRef(
     if (value !== undefined) {
       selectOptions = [...selectOptions, 'undefined'];
     }
+    let option;
+    if (value !== undefined) {
+      if (valueKey?.reduce)
+        option = options.find((o) => o[valueKey.key] === value);
+      else if (!valueKey) option = value;
+    }
+
+    const [focusDataPath, setFocusDataPath] = useState();
+    const dpRef = useRef();
+
+    useEffect(() => {
+      if (focusDataPath) {
+        dpRef.current.focus();
+        setFocusDataPath(false);
+      }
+    }, [focusDataPath]);
+
+    if (dataPath && (value === '' || value?.[0] === '{'))
+      return (
+        <DataPathField
+          ref={dpRef}
+          name={name}
+          onChange={onChange}
+          value={value}
+        />
+      );
 
     return (
-      <Field
-        key={name}
-        sub={sub}
-        ref={ref || fieldRef}
-        first={first}
-        label={name}
-        htmlFor={name}
-      >
-        {children}
+      <Field key={name} ref={ref || fieldRef} label={name} htmlFor={name}>
+        {(dataPath && !value && (
+          <Button
+            icon={<Text color="text-weak">{'{}'}</Text>}
+            onClick={() => {
+              onChange('{}');
+              setFocusDataPath(true);
+            }}
+          />
+        )) ||
+          children}
         <Select
           ref={ref}
           plain
@@ -66,11 +94,11 @@ const ArrayProperty = React.forwardRef(
           options={selectOptions}
           multiple={multiple}
           value={typeof value === 'boolean' ? value.toString() : value || ''}
-          valueLabel={<SelectLabel value={value} selected />}
+          valueLabel={<SelectLabel option={option} value={value} selected />}
           valueKey={valueKey}
           onChange={({ option, value: nextValue }) => {
             setSearchText(undefined);
-            if (multiple) {
+            if (multiple || valueKey?.reduce) {
               onChange(option === 'undefined' ? undefined : nextValue);
             } else {
               onChange(option === 'undefined' ? undefined : option);
@@ -78,12 +106,12 @@ const ArrayProperty = React.forwardRef(
           }}
           onSearch={
             options.length > 20 || searchExp
-              ? nextSearchText => setSearchText(nextSearchText)
+              ? (nextSearchText) => setSearchText(nextSearchText)
               : undefined
           }
         >
           {(option, index, options, { selected }) => (
-            <SelectLabel value={option} selected={selected} />
+            <SelectLabel option={option} value={option} selected={selected} />
           )}
         </Select>
       </Field>

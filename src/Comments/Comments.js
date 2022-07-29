@@ -16,7 +16,6 @@ import {
   TextArea,
 } from 'grommet';
 import { Blank, Close, Edit, Trash } from 'grommet-icons';
-import DesignContext from '../DesignContext';
 import { apiUrl } from '../design';
 
 const friendlyDate = (iso) => {
@@ -37,7 +36,6 @@ const friendlyDate = (iso) => {
 const breakLines = (text) => text.replace(/(\S)\n/g, (_, c) => `${c}  \n`);
 
 const Comments = () => {
-  const { design, selected, setMode, setSelected } = useContext(DesignContext);
   const [comments, setComments] = useState(design.comments);
   const [active, setActive] = useState();
   const [adding, setAdding] = useState();

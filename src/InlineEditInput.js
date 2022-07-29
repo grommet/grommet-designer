@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const InlineInput = styled.input`
@@ -19,17 +19,21 @@ const InlineInput = styled.input`
   }
 `;
 
-const InlineEditInput = ({ as, placeholder, defaultValue, onChange, size }) => {
+const InlineEditInput = ({
+  as,
+  placeholder,
+  defaultValue,
+  onChange,
+  onDone,
+  size,
+}) => {
   const [value, setValue] = useState(defaultValue);
-  const valueRef = useRef(defaultValue);
   const inputRef = useRef();
 
-  useEffect(() => () => onChange(valueRef.current), [onChange]);
-
-  // maintain focus when editing inline
-  useLayoutEffect(() => {
+  // set focus when editing inline
+  useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
-  });
+  }, []);
 
   return (
     <InlineInput
@@ -39,11 +43,12 @@ const InlineEditInput = ({ as, placeholder, defaultValue, onChange, size }) => {
       value={value}
       onChange={(event) => {
         setValue(event.target.value);
-        valueRef.current = event.target.value;
+        onChange(event.target.value);
       }}
       onClick={(event) => event.stopPropagation()}
       // don't let Enter trigger onClick in ancestors
       onKeyDown={(event) => event.stopPropagation()}
+      onBlur={() => onDone()}
       style={{
         width: size.width,
         height: size.height,

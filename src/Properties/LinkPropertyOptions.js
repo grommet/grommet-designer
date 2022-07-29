@@ -1,5 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Grid, Select, Text } from 'grommet';
+import { getLinkOptions } from '../design2';
+import SelectionContext from '../SelectionContext';
 import LinkLabel from './LinkLabel';
 
 const optionValue = (options) => (option) => {
@@ -26,7 +28,7 @@ const optionValue = (options) => (option) => {
   return result;
 };
 
-const LinkPropertySelect = ({ design, linkOptions, onChange, value }) => {
+const LinkPropertySelect = ({ linkOptions, onChange, value }) => {
   const [searchText, setSearchText] = useState('');
   const searchExp = useMemo(
     () => searchText && new RegExp(`${searchText}`, 'i'),
@@ -53,24 +55,23 @@ const LinkPropertySelect = ({ design, linkOptions, onChange, value }) => {
           ? (nextSearchText) => setSearchText(nextSearchText)
           : undefined
       }
-      valueLabel={<LinkLabel design={design} selected value={value} />}
+      valueLabel={<LinkLabel selected value={value} />}
       valueKey={optionValue(linkOptions)}
     >
       {(option, index, options, { selected }) => (
-        <LinkLabel design={design} selected={selected} value={option} />
+        <LinkLabel selected={selected} value={option} />
       )}
     </Select>
   );
 };
 
 const LinkPropertyOptions = ({
-  // componentId,
-  design,
-  linkOptions, // where we can link to, should rename to "linkTargets"?
   options, // [string | { label: string, value: string }, ...]
   value,
   onChange,
 }) => {
+  const [selection] = useContext(SelectionContext);
+  const linkOptions = getLinkOptions(selection);
   return (
     <Grid
       gap="small"
@@ -87,7 +88,6 @@ const LinkPropertyOptions = ({
           </Text>,
           <LinkPropertySelect
             key="value"
-            design={design}
             linkOptions={linkOptions}
             value={value && value[name]}
             onChange={(nextOptionValue) => {

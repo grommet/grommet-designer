@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, FormField, Heading, Select, TextInput } from 'grommet';
+import ComponentInput from '../../Properties/ComponentInput';
 import useDebounce from './useDebounce';
 import ArrayOfObjects from './ArrayOfObjects';
 
-const Place = ({ ComponentInput, value, onChange, ...rest }) => {
+const Place = ({ id, value, onChange }) => {
   const [place, setPlace] = useDebounce(value, onChange);
 
   return (
@@ -61,14 +62,13 @@ const Place = ({ ComponentInput, value, onChange, ...rest }) => {
         </FormField>
         <FormField label="content">
           <ComponentInput
-            {...rest}
-            name="content"
+            id={id}
             value={place.content}
-            onChange={(id, nextDesign) => {
+            onChange={(id) => {
               const nextPlace = JSON.parse(JSON.stringify(place));
               if (id) nextPlace.content = id;
               else delete nextPlace.content;
-              onChange(nextPlace, nextDesign);
+              onChange(nextPlace);
             }}
           />
         </FormField>

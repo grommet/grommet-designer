@@ -1,15 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Header, Heading, Layer, TextArea } from 'grommet';
 import { Close } from 'grommet-icons';
-import DesignContext from '../DesignContext';
 import { generateJSX } from '../design';
 
-const ComponentCode = ({ component, onDone }) => {
-  const { design, imports, libraries, theme } = useContext(DesignContext);
+const ComponentCode = ({ id, onDone }) => {
   const [code, setCode] = useState();
-  useEffect(() => {
-    setCode(generateJSX({ component, design, imports, libraries, theme }));
-  }, [component, design, imports, libraries, theme]);
+  useEffect(() => setCode(generateJSX(id)), [id]);
   return (
     <Layer onClickOutside={onDone} onEsc={onDone}>
       <Header>

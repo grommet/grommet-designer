@@ -1,112 +1,43 @@
-import React, { useCallback, useContext, useState } from 'react';
-import ReactGA from 'react-ga';
-import { Box, Button, Heading, Layer } from 'grommet';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Box, Button, Heading, Layer, TextInput } from 'grommet';
 import { Close } from 'grommet-icons';
-import DesignContext from '../DesignContext';
-import {
-  addComponent,
-  addScreen,
-  copyComponent,
-  copyScreen,
-  insertComponent,
-} from '../design';
-import AddComponents from './AddComponents';
+import SelectionContext from '../SelectionContext';
+import { useComponent } from '../design2';
+import AddLibraries from './AddLibraries';
 import AddLocation from './AddLocation';
+import AddTemplates from './AddTemplates';
 
-const AddComponent = ({ onClose }) => {
-  const { changeDesign, design, imports, libraries, selected, setSelected } =
-    useContext(DesignContext);
+const AddComponent = ({ onClose, property }) => {
+  const [selection] = useContext(SelectionContext);
+  const component = useComponent(selection);
+  const onlyScreen = !selection && !property;
   const [addLocation, setAddLocation] = useState();
 
-  const onAdd = useCallback(
-    ({ addMode, typeName, starter, template, templateDesign, url }) => {
-      const nextDesign = JSON.parse(JSON.stringify(design));
-      const nextSelected = { ...selected };
+  // addOptions is what eventually gets passed to addComponent()
+  const addOptions = useMemo(() => {
+    // property
+    if (property?.onChange)
+      return { id: property.id, onChange: property.onChange };
+    // screen
+    if (!component) return { within: selection };
+    // component
+    if (addLocation) return { [addLocation]: selection };
+    return {};
+  }, [property, component, addLocation, selection]);
+  const [search, setSearch] = useState(onlyScreen ? 'screen' : '');
+  const inputRef = useRef();
 
-      if (typeName) {
-        if (typeName === 'designer.Screen') {
-          if (starter && starter !== 'default') {
-            copyScreen({ nextDesign, nextSelected, starter, libraries });
-          } else {
-            addScreen({ nextDesign, nextSelected, libraries });
-          }
-        } else {
-          if (starter && starter !== 'default') {
-            const id = copyComponent({
-              nextDesign,
-              templateDesign: starter.starters,
-              id: starter.id,
-              libraries,
-              screen: nextSelected.screen,
-            });
-            nextDesign.components[id].name = starter.name;
-            nextSelected.component = id;
-          } else {
-            addComponent(nextDesign, libraries, nextSelected, typeName);
-          }
-        }
-      } else if (template) {
-        if (addMode === 'copy') {
-          const id = copyComponent({
-            nextDesign,
-            templateDesign,
-            id: template.id,
-            libraries,
-            screen: nextSelected.screen,
-          });
-          nextDesign.components[id].name = template.name;
-          nextSelected.component = id;
-        } else if (addMode === 'reference') {
-          addComponent(
-            nextDesign,
-            libraries,
-            nextSelected,
-            'designer.Reference',
-          );
-          nextDesign.components[nextSelected.component].props.component =
-            template.id;
-          if (url) {
-            nextDesign.components[nextSelected.component].props.design = {
-              url,
-            };
-          }
-        }
-      }
+  useEffect(() => {
+    inputRef.current?.focus();
+    return undefined;
+  }, [addOptions]);
 
-      if (selected.screen === nextSelected.screen) {
-        insertComponent({
-          nextDesign,
-          libraries,
-          selected,
-          id: nextSelected.component,
-          location: addLocation,
-        });
-      }
-
-      changeDesign(nextDesign);
-      setSelected(nextSelected);
-      onClose();
-
-      ReactGA.event({
-        category: 'edit',
-        action: 'add component',
-        label: typeName,
-      });
-    },
-    [
-      addLocation,
-      changeDesign,
-      design,
-      libraries,
-      onClose,
-      selected,
-      setSelected,
-    ],
-  );
+  const searchExp = search ? new RegExp(search, 'i') : undefined;
 
   return (
     <Layer
       position="top-left"
+      animation={false}
       margin="medium"
       full="vertical"
       onEsc={onClose}
@@ -128,22 +59,35 @@ const AddComponent = ({ onClose }) => {
             add
           </Heading>
         </Box>
-        {selected.component && (
+        {component && (
           <Box flex={false} pad="small">
-            <AddLocation
-              design={design}
-              libraries={libraries}
-              selected={selected}
-              onChange={(nextAddLocation) => setAddLocation(nextAddLocation)}
-            />
+            <AddLocation value={addLocation} onChange={setAddLocation} />
           </Box>
         )}
         <Box flex overflow="auto">
-          <AddComponents
-            design={design}
-            imports={imports}
-            libraries={libraries}
-            onAdd={onAdd}
+          {!onlyScreen && (
+            <Box flex={false} pad="small">
+              <TextInput
+                ref={inputRef}
+                placeholder="search ..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </Box>
+          )}
+
+          <AddLibraries
+            addOptions={addOptions}
+            onClose={onClose}
+            property={property}
+            searchExp={searchExp}
+          />
+
+          <AddTemplates
+            addOptions={addOptions}
+            onClose={onClose}
+            property={property}
+            searchExp={searchExp}
           />
         </Box>
       </Box>

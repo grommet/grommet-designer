@@ -4,10 +4,10 @@ import Field from '../components/Field';
 import useDebounce from '../useDebounce';
 
 const StringProperty = React.forwardRef(
-  ({ first, name, onChange, sub, value: valueProp }, ref) => {
+  ({ name, onChange, value: valueProp }, ref) => {
     const [value, setValue] = useDebounce(valueProp, onChange);
     return (
-      <Field key={name} sub={sub} first={first} label={name} htmlFor={name}>
+      <Field key={name} label={name} htmlFor={name}>
         <TextInput
           ref={ref}
           id={name}

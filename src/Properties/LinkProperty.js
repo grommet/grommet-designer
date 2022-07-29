@@ -1,18 +1,17 @@
 import React, { useContext } from 'react';
 import { Box, Text } from 'grommet';
-import DesignContext from '../DesignContext';
-import { getDisplayName } from '../design';
+import { getLinkOptions, getName } from '../design2';
+import SelectionContext from '../SelectionContext';
 import ArrayProperty from './ArrayProperty';
 
 const LinkLabel = ({ selected, value }) => {
-  const { design } = useContext(DesignContext);
   let label;
   if (!value || value.length === 0) {
     label = '';
   } else if (value.component) {
-    label = getDisplayName(design, value.component);
+    label = getName(value.component);
   } else if (value.screen) {
-    label = (design.screens[value.screen] || {}).name; // defensive
+    label = getName(value.screen);
   } else if (value.label) {
     label = value.label;
   } else if (Array.isArray(value)) {
@@ -30,24 +29,22 @@ const LinkLabel = ({ selected, value }) => {
   );
 };
 
-const LinkProperty = React.forwardRef(
-  ({ design, first, name, onChange, linkOptions, sub, value }, ref) => {
-    return (
-      <ArrayProperty
-        ref={ref}
-        name={name}
-        sub={sub}
-        first={first}
-        Label={LinkLabel}
-        options={linkOptions}
-        multiple
-        value={value}
-        labelKey="label"
-        valueKey="key"
-        onChange={onChange}
-      />
-    );
-  },
-);
+const LinkProperty = React.forwardRef(({ name, onChange, value }, ref) => {
+  const [selection] = useContext(SelectionContext);
+  const linkOptions = getLinkOptions(selection);
+  return (
+    <ArrayProperty
+      ref={ref}
+      name={name}
+      Label={LinkLabel}
+      options={linkOptions}
+      multiple
+      value={value}
+      labelKey="label"
+      valueKey="key"
+      onChange={onChange}
+    />
+  );
+});
 
 export default LinkProperty;

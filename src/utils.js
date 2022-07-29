@@ -1,3 +1,4 @@
+// TODO: remove file
 export const getComponentType = (libraries, typeName) => {
   const [libraryName, componentName] = typeName.split('.');
   let component;
@@ -9,15 +10,6 @@ export const getComponentType = (libraries, typeName) => {
   });
   return component || undefined;
 };
-
-export const displayName = (component) =>
-  component.name ||
-  component.text ||
-  component.props.name ||
-  component.props.label ||
-  component.props.icon ||
-  component.type.split('.')[1] ||
-  component.type;
 
 export const getReferenceDesign = (imports, referenceComponent) => {
   if (referenceComponent.props.design)
@@ -34,4 +26,12 @@ export const parseUrlParams = (url) => {
     params[k] = decodeURIComponent(v);
   });
   return params;
+};
+
+export const pushUrl = (url) => {
+  window.history.pushState(undefined, undefined, url);
+};
+
+export const pushPath = (path) => {
+  pushUrl(path + window.location.search);
 };

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Paragraph } from 'grommet';
+import DesignComponent from '../../DesignComponent';
+import { replaceWithData } from '../../design2';
 import Alternative from './Alternative';
 import Icon from './Icon';
 import IFrame from './IFrame';
@@ -34,6 +36,12 @@ export const components = {
       icon: ['-Icon-'],
       size: ['small', 'medium', 'large', 'xlarge'],
     },
+    adjustProps: (props) => {
+      const adjusted = {};
+      if (props.color) adjusted.color = replaceWithData(props.color);
+      if (props.icon) adjusted.icon = replaceWithData(props.icon);
+      return { ...props, ...adjusted };
+    },
   },
   IFrame: {
     component: IFrame,
@@ -44,6 +52,7 @@ export const components = {
     },
   },
   Repeater: {
+    component: Fragment,
     name: 'Repeater',
     container: true,
     placeholder: () => (
@@ -65,8 +74,18 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
+    adjustProps: (props, { component }) => {
+      const children = [];
+      if (component?.children?.length === 1) {
+        for (let i = 0; i < props.count; i += 1) {
+          children.push(<DesignComponent key={i} id={component.children[0]} />);
+        }
+      }
+      return { ...props, children };
+    },
   },
   Reference: {
+    component: ({ children }) => children || null,
     name: 'Reference',
     help: `Reference is a designer specific component for
     use with this design tool. The key property is 'component'
@@ -81,6 +100,23 @@ export const components = {
       component: ['-reference-'],
       includeChildren: true,
     },
+    adjustProps: (props) => {
+      if (props.component) {
+        // TODO: verify !includeChildren case
+        const children = (
+          <DesignComponent id={props.component}>
+            {!props.includeChildren ? props.children : null}
+          </DesignComponent>
+        );
+        return { ...props, children };
+      }
+      return props;
+    },
+    // copy: (source, copy, { duplicateComponent }) => {
+    //   if (source.props?.component) {
+    //     copy.props.component = idMap[source.props.component];
+    //   }
+    // },
   },
   Screen: {
     name: 'Screen',

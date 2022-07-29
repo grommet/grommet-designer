@@ -12,7 +12,7 @@ import {
   Box,
   Button,
   CheckBox,
-  Drop,
+  DropButton,
   Header,
   Heading,
   Keyboard,
@@ -21,30 +21,27 @@ import {
   Paragraph,
   RadioButtonGroup,
   Text,
-  TextInput,
 } from 'grommet';
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
-import DesignContext from '../DesignContext';
+import {
+  duplicateComponent,
+  getComponent,
+  getDesign,
+  getParent,
+  getReferences,
+  getType,
+  removeComponent,
+  setProperty,
+  useComponent,
+} from '../design2';
+import SelectionContext from '../SelectionContext';
 import Property from './Property';
 import TextInputField from './TextInputField';
 import TextAreaField from './TextAreaField';
 import ComponentCode from './ComponentCode';
-import CopyPropertiesFrom from './CopyPropertiesFrom';
-import {
-  addChildComponent,
-  deleteComponent,
-  disconnectReference,
-  duplicateComponent,
-  getAlternativeOptions,
-  getLinkOptions,
-  getParent,
-  getReferences,
-  getScreenForComponent,
-  newFrom,
-  upgradeDesign,
-} from '../design';
+import Replace from './Replace';
 import Field from '../components/Field';
-import { getComponentType } from '../utils';
+// import { getComponentType } from '../utils';
 
 const responsiveSizePad = {
   small: 'xsmall',
@@ -53,67 +50,76 @@ const responsiveSizePad = {
 };
 
 const Properties = () => {
-  const {
-    changeDesign,
-    component,
-    data,
-    design,
-    imports,
-    libraries,
-    selected,
-    setSelected,
-  } = useContext(DesignContext);
+  const [selection, setSelection] = useContext(SelectionContext);
+  const component = useComponent(selection);
 
-  const type = useMemo(
-    () => getComponentType(libraries, component.type) || {},
-    [component, libraries],
-  );
-  const hideable = useMemo(() => {
-    // for Reference component, hideable is driven by where the reference points
-    if (type.name === 'Reference') {
-      const referencedComponent = design.components[component.props.component];
-      if (referencedComponent) {
-        const referencedType = getComponentType(
-          libraries,
-          referencedComponent.type,
-        );
-        return referencedType?.hideable;
-      }
-    }
-    return type.hideable;
-  }, [component, design, libraries, type]);
-  const references = useMemo(
-    () => getReferences(design, component.id),
-    [component, design],
-  );
-  const [showReferences, setShowReferences] = useState();
+  const type = component ? getType(component.type) : undefined;
+  const references = useMemo(() => getReferences(selection), [selection]);
   const [showAdvanced, setShowAdvanced] = useState();
   const [responsiveSize, setResponsiveSize] = useState('medium');
-  const [search, setSearch] = useState();
-  const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
-  const linkOptions = useMemo(
-    () => getLinkOptions(design, libraries, selected),
-    [design, libraries, selected],
-  );
-  const alternativeOptions = useMemo(
-    () => getAlternativeOptions(design, libraries, selected),
-    [design, libraries, selected],
-  );
   const [showCode, setShowCode] = useState();
-  const [copyFrom, setCopyFrom] = useState();
+  const [replace, setReplace] = useState();
   const [style, setStyle] = useState(
-    component.style ? JSON.stringify(component.style, null, 2) : '',
+    component?.style ? JSON.stringify(component.style, null, 2) : '',
   );
 
-  const searchRef = useRef();
-  const defaultRef = useRef();
+  const hideable = useMemo(() => {
+    // // for Reference component, hideable is driven by where the reference points
+    // if (type.name === 'Reference') {
+    //   const referencedComponent = design.components[component.props.component];
+    //   if (referencedComponent) {
+    //     const referencedType = getComponentType(
+    //       libraries,
+    //       referencedComponent.type,
+    //     );
+    //     return referencedType?.hideable;
+    //   }
+    // }
+    return type?.hideable;
+  }, [type]);
+
+  const menuItems = useMemo(() => {
+    let templateItem;
+    if (component?.template) {
+      const { id: tId, name: tName, component: selection } = component.template;
+      const template = getDesign().includes.find(
+        ({ id, name, local }) =>
+          (!local && id === tId) || (local && name === tName),
+      );
+      if (template)
+        templateItem = {
+          label: `open ${tName}`,
+          href:
+            '/?' +
+            (template.local ? `name=${template.name}` : `id=${template.id}`) +
+            `&selection=${selection}`,
+        };
+    }
+
+    const helpItem = type
+      ? {
+          label: `help on ${type.name}`,
+          href: type.documentation,
+          target: '_blank',
+        }
+      : undefined;
+    return [
+      { label: 'show code ...', onClick: () => setShowCode(true) },
+      { label: 'replace ...', onClick: () => setReplace(true) },
+      // {
+      //   label: `create new design using this ${type.name}`,
+      //   onClick: newDesignFrom,
+      // },
+      templateItem,
+      // component.type === 'designer.Reference'
+      //   ? { label: 'disconnect Reference', onClick: disconnect }
+      //   : undefined,
+      // { label: 'reset', onClick: reset },
+      helpItem,
+    ].filter((i) => i);
+  }, [component, type]);
+
   const referencesRef = useRef();
-
-  useEffect(() => setSearch(undefined), [component.id]);
-
-  useEffect(() => {
-    if (search !== undefined) searchRef.current.focus();
-  }, [search]);
 
   // persist showAdvanced state when it changes
   useEffect(() => {
@@ -126,87 +132,56 @@ const Properties = () => {
     if (stored) setShowAdvanced(JSON.parse(stored));
   }, []);
 
-  const setProp = (propName, value, nextDesignArg) => {
-    const nextDesign = nextDesignArg || JSON.parse(JSON.stringify(design));
-    let component = nextDesign.components[selected.component];
-    if (component.responsive && component.responsive[responsiveSize]) {
-      component = component.responsive[responsiveSize];
-    }
-    let props;
-    if (type.properties && type.properties[propName] !== undefined)
-      props = component.props;
-    else if (
-      type.designProperties &&
-      type.designProperties[propName] !== undefined
-    ) {
-      if (!component.designProps) component.designProps = {};
-      props = component.designProps;
-    } else {
-      console.error('unexpected prop', propName);
-      props = component.props;
-    }
-    if (value !== undefined) props[propName] = value;
-    else delete props[propName];
-    if (!nextDesignArg) changeDesign(nextDesign);
-  };
+  useEffect(() => setResponsiveSize('medium'), [selection]);
 
-  const setHide = (hide) => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    component.hide = hide;
-    changeDesign(nextDesign);
-  };
+  if (!component) return null;
 
-  const reset = () => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const component = nextDesign.components[selected.component];
-    component.props = {};
-    delete component.responsive;
-    if (!component.text) component.text = undefined;
-    changeDesign(nextDesign);
+  const parent = getParent(selection, false);
+  const parentType = parent && getType(getComponent(parent)?.type);
 
-    ReactGA.event({
-      category: 'edit',
-      action: 'reset component',
-    });
-  };
+  // const reset = () => {
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   const component = nextDesign.components[selected.component];
+  //   component.props = {};
+  //   delete component.responsive;
+  //   if (!component.text) component.text = undefined;
+  //   changeDesign(nextDesign);
 
-  const newDesignFrom = () => {
-    const [nextDesign, nextSelected] = newFrom({ design, imports, selected });
-    changeDesign(nextDesign);
-    setSelected(nextSelected);
+  //   ReactGA.event({
+  //     category: 'edit',
+  //     action: 'reset component',
+  //   });
+  // };
 
-    ReactGA.event({ category: 'switch', action: 'new design from' });
-  };
+  // const newDesignFrom = () => {
+  //   const [nextDesign, nextSelected] = newFrom({ design, imports, selected });
+  //   changeDesign(nextDesign);
+  //   setSelected(nextSelected);
 
-  const disconnect = () => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const newId = disconnectReference({
-      nextDesign,
-      id: selected.component,
-      imports,
-      libraries,
-    });
-    if (newId) {
-      changeDesign(nextDesign);
-      setSelected({ ...selected, component: newId });
+  //   ReactGA.event({ category: 'switch', action: 'new design from' });
+  // };
 
-      ReactGA.event({
-        category: 'edit',
-        action: 'disconnect reference',
-      });
-    }
-  };
+  // const disconnect = () => {
+  //   const nextDesign = JSON.parse(JSON.stringify(design));
+  //   const newId = disconnectReference({
+  //     nextDesign,
+  //     id: selected.component,
+  //     imports,
+  //     libraries,
+  //   });
+  //   if (newId) {
+  //     changeDesign(nextDesign);
+  //     setSelected({ ...selected, component: newId });
+
+  //     ReactGA.event({
+  //       category: 'edit',
+  //       action: 'disconnect reference',
+  //     });
+  //   }
+  // };
 
   const duplicate = () => {
-    const nextDesign = JSON.parse(JSON.stringify(design));
-    const newId = duplicateComponent({
-      nextDesign,
-      id: selected.component,
-      libraries,
-    });
-    changeDesign(nextDesign);
-    setSelected({ ...selected, component: newId });
+    setSelection(duplicateComponent(selection));
 
     ReactGA.event({
       category: 'edit',
@@ -215,19 +190,16 @@ const Properties = () => {
   };
 
   const delet = () => {
-    if (!design.components[selected.component].coupled) {
-      const nextDesign = JSON.parse(JSON.stringify(design));
-      const nextSelected = { ...selected };
-      deleteComponent(nextDesign, selected.component, nextSelected);
-      upgradeDesign(nextDesign); // clean up links
-      setSelected(nextSelected);
-      changeDesign(nextDesign);
+    // if (!component.coupled) {
+    removeComponent(selection);
+    // TODO: set selection to previous sibling instead of parent
+    setSelection(parent);
 
-      ReactGA.event({
-        category: 'edit',
-        action: 'delete component',
-      });
-    }
+    ReactGA.event({
+      category: 'edit',
+      action: 'delete component',
+    });
+    // }
   };
 
   const onKey = (event) => {
@@ -241,82 +213,55 @@ const Properties = () => {
         event.preventDefault();
         delet();
       }
-      if (event.key === 'p') {
-        event.preventDefault(); // so we don't put the 'p' in the search input
-        if (search === undefined) {
-          setSearch('');
-        } else {
-          searchRef.current.focus();
-        }
-      }
       if (event.key === 'd') {
         event.preventDefault();
         duplicate();
       }
-    } else if (document.activeElement === searchRef.current) {
-      if (event.key === 'Enter' && search && defaultRef.current) {
-        event.preventDefault(); // so we don't put the Enter in the input
-        // focus on first matching property
-        defaultRef.current.focus();
-      }
     }
   };
 
-  const parent = getParent(design, component.id);
-  const parentType = parent && getComponentType(libraries, parent.type);
-  let firstRef = false;
+  const renderProperties = (section, definitions) => {
+    const values =
+      responsiveSize !== 'medium' && component.responsive
+        ? component.responsive[responsiveSize][section]
+        : component[section];
 
-  const renderProperties = (id, properties, props) =>
-    Object.keys(properties)
-      .filter((propName) => !searchExp || searchExp.test(propName))
+    return Object.keys(definitions)
       .filter(
         (propName) =>
           !type.advancedProperties ||
           showAdvanced ||
           type.advancedProperties.indexOf(propName) === -1,
       )
-      .map((propName, index) => (
-        <Fragment key={`${id}-${propName}`}>
+      .map((propName) => (
+        <Fragment key={propName}>
           <Property
-            ref={searchExp && !firstRef ? defaultRef : undefined}
-            first={index === 0}
-            linkOptions={linkOptions}
-            alternativeOptions={alternativeOptions}
-            componentId={component.id}
+            id={selection}
             name={propName}
-            property={properties[propName]}
-            props={props}
+            definition={definitions[propName]}
+            values={values}
             responsiveSize={responsiveSize}
-            value={props ? props[propName] : undefined}
-            onChange={(value, nextDesign) =>
-              setProp(propName, value, nextDesign)
-            }
+            value={values?.[propName]}
+            onChange={(value) => {
+              if (responsiveSize && responsiveSize !== 'medium') {
+                setProperty(
+                  selection,
+                  ['responsive', responsiveSize, section],
+                  propName,
+                  value,
+                );
+              } else {
+                setProperty(selection, section, propName, value);
+              }
+            }}
           />
-          {(firstRef = true)}
         </Fragment>
       ));
-
-  const menuItems = [
-    { label: 'show code ...', onClick: () => setShowCode(true) },
-    { label: 'copy properties from ...', onClick: () => setCopyFrom(true) },
-    {
-      label: `create new design using this ${type.name}`,
-      onClick: newDesignFrom,
-    },
-    component.type === 'designer.Reference'
-      ? { label: 'disconnect Reference', onClick: disconnect }
-      : undefined,
-    { label: 'reset', onClick: reset },
-    {
-      label: `help on ${type.name}`,
-      href: type.documentation,
-      target: '_blank',
-    },
-  ].filter((i) => i);
+  };
 
   return (
     <Keyboard target="document" onKeyDown={onKey}>
-      <Box border="left" fill="vertical">
+      <Box border="left" height="100vh" overflow="auto">
         <Box flex={false} direction="row" justify="between" border="bottom">
           <Box flex direction="row">
             <Menu
@@ -330,83 +275,57 @@ const Properties = () => {
               items={menuItems}
             />
             {showCode && (
-              <ComponentCode
-                component={component}
-                onDone={() => setShowCode(false)}
-              />
+              <ComponentCode id={selection} onDone={() => setShowCode(false)} />
             )}
-            {copyFrom && (
-              <CopyPropertiesFrom
-                component={component}
-                onDone={() => setCopyFrom(false)}
-              />
+            {replace && (
+              <Replace targetId={selection} onDone={() => setReplace(false)} />
             )}
           </Box>
-          {!component.coupled && (
-            <Box flex={false} direction="row" align="center">
+          <Box flex={false} direction="row" align="center">
+            {!component.coupled && (
               <Button
                 title="duplicate"
                 tip="duplicate"
                 icon={<Duplicate />}
+                hoverIndicator
                 onClick={duplicate}
               />
-              {references.length === 0 ? (
-                <Button
-                  title="delete"
-                  tip="delete"
-                  icon={<Trash />}
-                  onClick={delet}
-                />
-              ) : (
-                <Button
-                  ref={referencesRef}
-                  title="references"
-                  tip="references"
-                  icon={<Location />}
-                  onClick={() => setShowReferences(!showReferences)}
-                />
-              )}
-              {showReferences && (
-                <Drop
-                  target={referencesRef.current}
-                  align={{ top: 'bottom', right: 'right' }}
-                  onClickOutside={() => setShowReferences(false)}
-                  onEsc={() => setShowReferences(false)}
-                >
+            )}
+            {references.length === 0 ? (
+              <Button
+                title="delete"
+                tip="delete"
+                icon={<Trash />}
+                hoverIndicator
+                onClick={delet}
+              />
+            ) : (
+              <DropButton
+                ref={referencesRef}
+                title="references"
+                tip="references"
+                icon={<Location />}
+                hoverIndicator
+                dropAlign={{ top: 'bottom' }}
+                dropContent={
                   <Box>
-                    {references.map((r) => (
+                    {references.map((rId) => (
                       <Button
+                        key={rId}
                         hoverIndicator
-                        onClick={() => {
-                          setSelected({
-                            ...selected,
-                            screen: getScreenForComponent(design, r.id),
-                            component: r.id,
-                          });
-                        }}
+                        onClick={() => setSelection(rId)}
                       >
                         <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                          <Text>{r.id}</Text>
+                          <Text>{rId}</Text>
                         </Box>
                       </Button>
                     ))}
                   </Box>
-                </Drop>
-              )}
-            </Box>
-          )}
-        </Box>
-
-        {search !== undefined && (
-          <Box flex={false} border="bottom">
-            <TextInput
-              ref={searchRef}
-              placeholder="search properties ..."
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
+                }
+              />
+            )}
           </Box>
-        )}
+        </Box>
 
         <Box flex overflow="auto">
           <Box flex="grow">
@@ -416,70 +335,53 @@ const Properties = () => {
                   <Markdown>{type.help}</Markdown>
                 </Box>
               )}
-              {(!searchExp || searchExp.test('name')) && (
-                <TextInputField
-                  name="name"
-                  componentId={component.id}
-                  value={component.name || ''}
-                  onChange={(value) => {
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    const component = nextDesign.components[selected.component];
-                    component.name = value;
-                    // don't let unnamed components stay hidden
-                    if (!value) delete component.hide;
-                    changeDesign(nextDesign);
-                  }}
-                />
-              )}
-              {type.text && (!searchExp || searchExp.test('text')) && (
+              <TextInputField
+                name="name"
+                value={component.name || ''}
+                onChange={(value) =>
+                  setProperty(selection, undefined, 'name', value)
+                }
+              />
+              {type.text && (
                 <TextAreaField
                   name="text"
-                  componentId={component.id}
                   value={component.text || ''}
-                  onChange={(value) => {
-                    const nextDesign = JSON.parse(JSON.stringify(design));
-                    const component = nextDesign.components[selected.component];
-                    component.text = value === '' ? undefined : value;
-                    changeDesign(nextDesign);
-                  }}
+                  onChange={(value) =>
+                    setProperty(selection, undefined, 'text', value)
+                  }
                 />
               )}
-              {hideable &&
-                component.name &&
-                (!searchExp || searchExp.test('hide')) && (
-                  <Field label="hide" htmlFor="hide">
-                    <Box pad="small">
-                      <CheckBox
-                        ref={searchExp && !firstRef ? defaultRef : undefined}
-                        id="hide"
-                        name="hide"
-                        checked={!!component.hide}
-                        onChange={() => setHide(!component.hide)}
-                      />
-                      {(firstRef = true)}
-                    </Box>
-                  </Field>
-                )}
+              {hideable && component.name && (
+                <Field label="hide" htmlFor="hide">
+                  <Box pad="small">
+                    <CheckBox
+                      id="hide"
+                      name="hide"
+                      checked={!!component.hide}
+                      onChange={() =>
+                        setProperty(
+                          selection,
+                          undefined,
+                          'hide',
+                          !component.hide,
+                        )
+                      }
+                    />
+                  </Box>
+                </Field>
+              )}
               {type.designProperties && (
-                <Box flex="grow">
-                  {renderProperties(
-                    component.id,
-                    type.designProperties,
-                    (
-                      (component.responsive &&
-                        component.responsive[responsiveSize]) ||
-                      component
-                    ).designProps,
-                  )}
+                <Box flex="grow" border="top">
+                  {renderProperties('designProps', type.designProperties)}
                 </Box>
               )}
-              {type.actions &&
+              {/* {type.actions &&
                 type.actions(component, {
                   addChildComponent,
                   changeDesign,
                   data,
                   design,
-                })}
+                })} */}
             </Box>
 
             <Box flex={false} border={type.structure ? 'bottom' : undefined}>
@@ -498,15 +400,11 @@ const Properties = () => {
                     icon={<Multiple />}
                     hoverIndicator
                     onClick={() => {
-                      const nextDesign = JSON.parse(JSON.stringify(design));
-                      const component =
-                        nextDesign.components[selected.component];
-                      component.responsive = {
+                      setProperty(selection, undefined, 'responsive', {
                         small: { props: {} },
                         large: { props: {} },
                         hide: [],
-                      };
-                      changeDesign(nextDesign);
+                      });
                       setResponsiveSize('medium');
                     }}
                   />
@@ -565,11 +463,12 @@ const Properties = () => {
                         icon={<Trash />}
                         hoverIndicator
                         onClick={() => {
-                          const nextDesign = JSON.parse(JSON.stringify(design));
-                          const component =
-                            nextDesign.components[selected.component];
-                          delete component.responsive;
-                          changeDesign(nextDesign);
+                          setProperty(
+                            selection,
+                            undefined,
+                            'responsive',
+                            undefined,
+                          );
                         }}
                       />
                     </Box>
@@ -586,17 +485,16 @@ const Properties = () => {
                         responsiveSize,
                       )}
                       onChange={({ target: { checked } }) => {
-                        const nextDesign = JSON.parse(JSON.stringify(design));
-                        const component =
-                          nextDesign.components[selected.component];
-                        if (checked)
-                          component.responsive.hide.push(responsiveSize);
-                        else
-                          component.responsive.hide =
-                            component.responsive.hide.filter(
-                              (s) => s !== responsiveSize,
-                            );
-                        changeDesign(nextDesign);
+                        const prevHide = component.responsive.hide;
+                        const nextHide = checked
+                          ? [...prevHide, responsiveSize]
+                          : prevHide.filter((s) => s !== responsiveSize);
+                        setProperty(
+                          selection,
+                          ['responsive'],
+                          'hide',
+                          nextHide,
+                        );
                       }}
                     />
                   </Field>
@@ -608,15 +506,8 @@ const Properties = () => {
               <Box flex="grow">
                 {type.structure ? (
                   <Box flex="grow">
-                    {type.structure
-                      .filter(
-                        ({ properties }) =>
-                          !searchExp ||
-                          properties.some((propName) =>
-                            searchExp.test(propName),
-                          ),
-                      )
-                      .map(({ label, properties: propertyNames }) => {
+                    {type.structure.map(
+                      ({ label, properties: propertyNames }) => {
                         const sectionProperties = {};
                         propertyNames.forEach(
                           (name) =>
@@ -639,44 +530,23 @@ const Properties = () => {
                             >
                               {label}
                             </Heading>
-                            {renderProperties(
-                              component.id,
-                              sectionProperties,
-                              (
-                                (component.responsive &&
-                                  component.responsive[responsiveSize]) ||
-                                component
-                              ).props,
-                            )}
-                            {(firstRef = true)}
+                            {renderProperties('props', sectionProperties)}
                           </Box>
                         );
-                      })}
+                      },
+                    )}
                   </Box>
                 ) : (
-                  <Box flex="grow">
-                    {renderProperties(
-                      component.id,
-                      type.properties,
-                      (
-                        (component.responsive &&
-                          component.responsive[responsiveSize]) ||
-                        component
-                      ).props,
-                    )}
-                    {parentType && parentType.container && (
+                  <Box flex="grow" border="top">
+                    {renderProperties('props', type.properties)}
+                    {parentType?.container && (
                       <Box pad="medium">
                         <Paragraph size="small" color="text-xweak">
                           adjust the layout of this {type.name} via its
                           containing{' '}
                           <Anchor
                             label={parentType.name}
-                            onClick={() => {
-                              setSelected({
-                                ...selected,
-                                component: parent.id,
-                              });
-                            }}
+                            onClick={() => setSelection(parent)}
                           />
                         </Paragraph>
                       </Box>
@@ -693,17 +563,16 @@ const Properties = () => {
                   />
                 </Box>
 
-                {(!searchExp || searchExp.test('style')) && showAdvanced && (
+                {showAdvanced && (
                   <TextAreaField
                     name="style"
-                    componentId={component.id}
                     value={style}
                     onChange={(value) => {
                       setStyle(value);
                       try {
                         // only save it when it's valid
                         const json = JSON.parse(value);
-                        setProp('style', json);
+                        setProperty(selection, undefined, 'style', json);
                       } catch (e) {
                         // console.log('!!! catch');
                       }
