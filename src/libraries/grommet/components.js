@@ -708,6 +708,7 @@ export const components = {
         };
       } else adjusted.onClickOutside = undefined;
       adjusted.onEsc = () => setProperty(id, undefined, 'hide', true);
+      adjusted.target = document.getElementById('designer-canvas');
       return { ...props, ...adjusted };
     },
   },
