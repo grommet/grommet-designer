@@ -18,6 +18,7 @@ import { Brush, List as ListIcon, Search } from 'grommet-icons';
 import { useDesigns } from './design2';
 import AppSettings from './AppSettings';
 import Manage from './Manage';
+import friendlyDate from './friendlyDate';
 
 // const tutorials = [
 //   {
@@ -28,23 +29,51 @@ import Manage from './Manage';
 //   },
 // ];
 
-const DesignButton = ({ label, onClick, url }) => (
-  <Button
-    fill
-    plain
-    hoverIndicator
-    href={`${url}&mode=edit`}
-    onClick={(event) => {
-      if (!event.ctrlKey && !event.metaKey) {
-        event.preventDefault();
-        window.history.pushState(undefined, undefined, url);
-        onClick();
-      }
-    }}
-  >
-    <Box pad="small">{label}</Box>
-  </Button>
-);
+const millisecondsPerDay = 86400000;
+
+const compareDesigns = (d1, d2) => {
+  const now = new Date();
+  const date1 = new Date(Date.parse(d1.date));
+  const date2 = new Date(Date.parse(d2.date));
+  const delta1 = now - date1;
+  const delta2 = now - date2;
+  const days1 = delta1 / millisecondsPerDay;
+  const days2 = delta2 / millisecondsPerDay;
+  if (days1 < 7 && days2 < 7) return days1 - days2;
+  if (days1 < 7) return -1;
+  if (days2 < 7) return 1;
+  return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
+};
+
+const DesignButton = ({
+  descriptor: { id: idArg, local, name, date, url: urlArg },
+  onLoadProps,
+}) => {
+  const id = idArg || urlArg?.split('id=')[1];
+  const url = local
+    ? `/?name=${encodeURIComponent(name)}`
+    : `/?id=${encodeURIComponent(id)}`;
+  return (
+    <Button
+      fill
+      plain
+      hoverIndicator
+      href={`${url}&mode=edit`}
+      onClick={(event) => {
+        if (!event.ctrlKey && !event.metaKey) {
+          event.preventDefault();
+          window.history.pushState(undefined, undefined, url);
+          onLoadProps(local ? { name } : { id });
+        }
+      }}
+    >
+      <Box direction="row" justify="between" pad="small">
+        <Text weight="bold">{name}</Text>
+        <Text>{`${local ? 'edited' : 'published'} ${friendlyDate(date)}`}</Text>
+      </Box>
+    </Button>
+  );
+};
 
 const Start = ({ onLoadProps, onNew }) => {
   const designs = useDesigns({ fetched: true });
@@ -60,20 +89,20 @@ const Start = ({ onLoadProps, onNew }) => {
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
   const matchingDesigns = useMemo(() => {
-    return designs.filter(
-      ({ name }) => !searchExp || name.search(searchExp) !== -1,
-    );
+    return designs
+      .filter(({ name }) => !searchExp || name.search(searchExp) !== -1)
+      .sort(compareDesigns);
   }, [designs, searchExp]);
 
-  const localData = useMemo(
-    () => matchingDesigns.filter(({ id, local }) => local || !id),
-    [matchingDesigns],
-  );
+  // const localData = useMemo(
+  //   () => matchingDesigns.filter(({ id, local }) => local || !id),
+  //   [matchingDesigns],
+  // );
 
-  const fetchedData = useMemo(
-    () => matchingDesigns.filter(({ id, local }) => !local && id),
-    [matchingDesigns],
-  );
+  // const fetchedData = useMemo(
+  //   () => matchingDesigns.filter(({ id, local }) => !local && id),
+  //   [matchingDesigns],
+  // );
 
   return (
     <Page kind="narrow" gap="large" height={{ min: '100vh' }}>
@@ -101,7 +130,7 @@ const Start = ({ onLoadProps, onNew }) => {
         {designs?.length > 0 && (
           <Box>
             <Header>
-              <Heading level={2}>my designs</Heading>
+              <Heading level={2}>designs</Heading>
               {designs.length > 1 && (
                 <Box direction="row">
                   <TextInput
@@ -114,15 +143,13 @@ const Start = ({ onLoadProps, onNew }) => {
                 </Box>
               )}
             </Header>
-            <List data={localData} pad="none">
-              {({ name }) => {
-                const url = `/?name=${encodeURIComponent(name)}`;
+            <List data={matchingDesigns} pad="none">
+              {(descriptor) => {
                 return (
                   <DesignButton
-                    key={name}
-                    label={name}
-                    url={url}
-                    onClick={() => onLoadProps({ name })}
+                    key={descriptor.id}
+                    descriptor={descriptor}
+                    onLoadProps={onLoadProps}
                   />
                 );
               }}
@@ -130,7 +157,7 @@ const Start = ({ onLoadProps, onNew }) => {
           </Box>
         )}
 
-        {fetchedData?.length > 0 && (
+        {/* {fetchedData?.length > 0 && (
           <Box>
             <Heading level={2}>fetched designs</Heading>
             <List data={fetchedData} pad="none">
@@ -147,7 +174,7 @@ const Start = ({ onLoadProps, onNew }) => {
               }}
             </List>
           </Box>
-        )}
+        )} */}
       </PageContent>
 
       <PageContent flex align="center" justify="center" animation="fadeIn">
