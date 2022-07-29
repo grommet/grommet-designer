@@ -18,12 +18,14 @@ const valueInput = (name, value) =>
   nameInput(name).withAttribute('value', value);
 
 const typeSelect = (type) =>
-  textButton(type).withAttribute('aria-label', `Select ${type}`);
+  Selector('button')
+    .withText(type)
+    .withAttribute('aria-label', `Select ${type}`);
 const typeMenu = (type) =>
   textButton(type).withAttribute('aria-label', 'Open Menu');
 
-const select = async (type, index) => {
-  let selector = typeSelect(type);
+const select = async (type, index, name) => {
+  let selector = typeSelect(name || type);
   if (index !== undefined) selector = selector.nth(index);
   await t.click(selector).expect(typeMenu(type).exists).ok();
 };
@@ -58,6 +60,10 @@ const closeLayerControl = textButton('Close Layer');
 const openLayerControl = textButton('Open Layer');
 const linkLabel = Selector('label').withExactText('link');
 const testLayerOption = textButton('test layer').withAttribute(
+  'role',
+  'option',
+);
+const testAlternativeOption = textButton('test alternative').withAttribute(
   'role',
   'option',
 );
@@ -164,6 +170,46 @@ test('create design', async (t) => {
     .click(closeLayerControl, { modifiers: { shift: true } })
     .expect(closeLayerControl.exists)
     .notOk();
+
+  // add an Alternative and link to it with two buttons inside
+  await select('PageContent');
+  await add('Alternative');
+  await t.typeText(nameInput('name'), 'test alternative');
+  // first Button
+  await add('Button');
+  await t
+    .typeText(nameInput('label'), 'First', { replace: true })
+    .expect(textButton('First').exists)
+    .ok();
+  // set button link to alternative
+  await t.click(linkLabel).expect(testAlternativeOption.exists).ok();
+  await t
+    .click(testAlternativeOption)
+    .expect(testAlternativeOption.exists)
+    .notOk();
+  // second Button
+  await select('Alternative', undefined, 'test alternative');
+  await add('Button');
+  await t
+    .typeText(nameInput('label'), 'Second', { replace: true })
+    .expect(Selector('button').withText('Second').exists) // not in canvas
+    .ok();
+  // set button link to alternative
+  await t.click(linkLabel).expect(testAlternativeOption.exists).ok();
+  await t
+    .click(testAlternativeOption)
+    .expect(testAlternativeOption.exists)
+    .notOk();
+  // click First
+  await t
+    .click(textButton('First'), { modifiers: { shift: true } })
+    .expect(textButton('Second').exists)
+    .ok();
+  // click Second
+  await t
+    .click(textButton('Second'), { modifiers: { shift: true } })
+    .expect(textButton('First').exists)
+    .ok();
 
   // add a screen with a link to the first screen
 

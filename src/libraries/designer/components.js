@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Paragraph } from 'grommet';
 import DesignComponent from '../../DesignComponent';
-import { replaceWithData } from '../../design2';
+import { replaceWithData, setProperty } from '../../design2';
 import Alternative from './Alternative';
 import Icon from './Icon';
 import IFrame from './IFrame';
@@ -26,6 +26,11 @@ export const components = {
     },
     properties: {
       active: 1,
+    },
+    follow: (props, { component: { id, children } }) => {
+      const nextActive =
+        props.active === children.length ? 1 : props.active + 1;
+      setProperty(id, 'props', 'active', nextActive);
     },
   },
   Icon: {

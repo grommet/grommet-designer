@@ -123,8 +123,14 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         setThemeMode(grommetThemeMode === 'dark' ? 'light' : 'dark');
       } else if (link.component) {
         const component = getComponent(link.component);
-        setProperty(link.component, undefined, 'hide', !component.hide);
-        if (!component.hide) setSelection(undefined);
+        const type = getType(component.type);
+        if (type.selectable && type.follow) {
+          type.follow(component.props, { component });
+        }
+        if (type.hideable) {
+          setProperty(link.component, undefined, 'hide', !component.hide);
+          if (!component.hide) setSelection(undefined);
+        }
       } else if (link.screen) {
         setLocation({ screen: link.screen });
         setSelection(link.screen);
