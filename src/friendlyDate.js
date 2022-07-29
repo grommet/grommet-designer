@@ -22,11 +22,11 @@ const friendlyDate = (iso8601) => {
     return 'just now';
   } else if (deltaSeconds < 60) {
     return deltaSeconds + ' seconds ago';
-  } else if (deltaMinutes == 1) {
+  } else if (deltaMinutes === 1) {
     return '1 minute ago';
   } else if (deltaMinutes < 60) {
     return deltaMinutes + ' minutes ago';
-  } else if (deltaHours == 1) {
+  } else if (deltaHours === 1) {
     return '1 hour ago';
   } else if (deltaHours < 6) {
     return deltaHours + ' hours ago';
