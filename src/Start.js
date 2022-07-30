@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   FileInput,
+  Grid,
   Header,
   Heading,
   // Image,
@@ -29,19 +30,19 @@ import friendlyDate from './friendlyDate';
 //   },
 // ];
 
+const keyFor = (d) => d.id || d.url || d.name;
+
+const Bit = ({ children }) => <Text color="text-xweak">{children}</Text>;
+
 const DesignButton = ({
   descriptor: { author, id: idArg, local, name, date, url: urlArg },
+  size,
   onLoadProps,
 }) => {
   const id = idArg || urlArg?.split('id=')[1];
   const url = local
     ? `/?name=${encodeURIComponent(name)}`
     : `/?id=${encodeURIComponent(id)}`;
-
-  const bits = [];
-  if (!local && author) bits.push(author);
-  bits.push(local ? 'edited' : 'published');
-  if (date) bits.push(friendlyDate(date));
 
   return (
     <Button
@@ -59,7 +60,17 @@ const DesignButton = ({
     >
       <Box direction="row" justify="between" pad="small">
         <Text weight="bold">{name}</Text>
-        <Text>{bits.join(' ')}</Text>
+        <Box flex="grow" direction="row" justify="end">
+          <Grid
+            columns={['auto', 'xsmall', 'xsmall']}
+            justify="end"
+            gap="small"
+          >
+            <Bit>{!local && author ? author : ''}</Bit>
+            <Bit>{size}</Bit>
+            <Bit>{date ? friendlyDate(date) : ''}</Bit>
+          </Grid>
+        </Box>
       </Box>
     </Button>
   );
@@ -71,10 +82,26 @@ const Start = ({ onLoadProps, onNew }) => {
   const [error, setError] = useState();
   const [manage, setManage] = useState();
   const [settings, setSettings] = useState();
+  const [sizes, setSizes] = useState({});
 
   useEffect(() => {
     document.title = 'Grommet Designer';
   }, []);
+
+  // lazily go through existing designs to calculate their sizes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const d = designs.filter((d) => !sizes[keyFor(d)])[0];
+      if (d) {
+        const nextSizes = JSON.parse(JSON.stringify(sizes));
+        const key = keyFor(d);
+        const stored = localStorage.getItem(key);
+        nextSizes[key] = stored ? `${Math.round(stored.length / 1024)} K` : '-';
+        setSizes(nextSizes);
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [designs, sizes]);
 
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
 
@@ -126,8 +153,9 @@ const Start = ({ onLoadProps, onNew }) => {
               {(descriptor) => {
                 return (
                   <DesignButton
-                    key={descriptor.id}
+                    key={descriptor.id || descriptor.url || descriptor.name}
                     descriptor={descriptor}
+                    size={sizes[keyFor(descriptor)]}
                     onLoadProps={onLoadProps}
                   />
                 );
