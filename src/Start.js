@@ -33,7 +33,11 @@ import friendlyDate from './friendlyDate';
 
 const keyFor = (d) => d.id || d.url || d.name;
 
-const Bit = ({ children }) => <Text color="text-xweak">{children}</Text>;
+const Bit = ({ children }) => (
+  <Text color="text-weak" textAlign="end">
+    {children}
+  </Text>
+);
 
 const DesignButton = ({
   descriptor: { author, id: idArg, local, name, date, url: urlArg },

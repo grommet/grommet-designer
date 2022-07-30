@@ -283,6 +283,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   if (auth)
     return (
       <Auth
+        onCancel={onClose}
         onChange={(password) => {
           setLoadProps({ ...loadProps, password });
           setAuth(false);
