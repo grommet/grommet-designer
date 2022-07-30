@@ -17,6 +17,7 @@ let dataIndexes = {}; // path -> index
 let imports = {};
 
 let listeners = {}; // id -> [f(), ...]
+let problem;
 
 // listen for updates
 
@@ -171,16 +172,24 @@ const store = (args = {}) => {
     now.setMilliseconds(0);
     design.date = now.toISOString();
   }
-  localStorage.setItem(design.name, JSON.stringify(design));
+  try {
+    localStorage.setItem(design.name, JSON.stringify(design));
 
-  // keep track of the descriptor in the list of designs
-  const stored = localStorage.getItem('designs');
-  const designs = stored ? JSON.parse(stored) : [];
-  const index = designs.findIndex(({ name }) => name === design.name);
-  if (index !== -1) designs.splice(index, 1);
-  const { name, id, date, local } = design;
-  designs.unshift({ name, id, date, local });
-  localStorage.setItem('designs', JSON.stringify(designs));
+    // keep track of the descriptor in the list of designs
+    const stored = localStorage.getItem('designs');
+    const designs = stored ? JSON.parse(stored) : [];
+    const index = designs.findIndex(({ name }) => name === design.name);
+    if (index !== -1) designs.splice(index, 1);
+    const { name, id, date, local } = design;
+    designs.unshift({ name, id, date, local });
+    localStorage.setItem('designs', JSON.stringify(designs));
+  } catch (e) {
+    console.error(e);
+    problem = `Alas, this browser has run out of room in local storage.
+      If you delete a design you don't need or have already published,
+      that will free up some space.`;
+    notify('problem', problem);
+  }
 };
 
 const lazilyStore = (args) => {
@@ -1069,6 +1078,11 @@ export const setDataIndex = (path, index) => {
   else dataIndexes[path] = nextIndex;
 };
 
+export const setProblem = (nextProblem) => {
+  problem = nextProblem;
+  notify('problem', problem);
+};
+
 // hooks
 
 const millisecondsPerDay = 86400000;
@@ -1245,4 +1259,10 @@ export const useChanges = () => {
           }
         : undefined,
   };
+};
+
+export const useProblem = () => {
+  const [, setProblem] = useState(problem);
+  useEffect(() => listen('problem', setProblem), []);
+  return problem;
 };

@@ -45,7 +45,8 @@ const Duplicate = ({ onClose }) => {
           onSubmit={({ value }) => {
             const design = JSON.parse(JSON.stringify(getDesign()));
             design.name = value.name;
-            delete design.readonly; // in case this was fetched
+            delete design.id;
+            design.local = true;
             load({ design });
             ReactGA.event({ category: 'switch', action: 'duplicate design' });
             onClose();

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 // import ReactGA from 'react-ga';
-import { Box, Grid, Keyboard, ResponsiveContext } from 'grommet';
+import { Box, Grid, Keyboard, Notification, ResponsiveContext } from 'grommet';
 import AppContext from './AppContext';
 import SelectionContext from './SelectionContext';
 import ErrorCatcher from './ErrorCatcher';
@@ -30,9 +30,11 @@ import {
   getType,
   isValidId,
   setDesignProperty,
+  setProblem,
   setProperty,
   uncollapseAncestors,
   useDesignSummary,
+  useProblem,
   useScreen,
 } from './design2';
 import ScreenDetails from './Properties/ScreenDetails';
@@ -58,6 +60,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
   const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
+  const problem = useProblem();
 
   // when the document name changes, update title and URL
   const summary = useDesignSummary();
@@ -331,6 +334,19 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         </Grid>
       );
     }
+  }
+
+  if (problem) {
+    content = (
+      <Grid columns="auto" rows={['auto', 'flex']}>
+        <Notification
+          status="warning"
+          message={problem}
+          onClose={() => setProblem()}
+        />
+        {content}
+      </Grid>
+    );
   }
 
   // if (/* confirmReplace || */ (responsive !== 'small' && mode !== 'preview')) {
