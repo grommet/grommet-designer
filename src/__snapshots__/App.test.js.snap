@@ -104,8 +104,8 @@ exports[`App create 1`] = `
         <div
           class="StyledBox-sc-13pk1d4-0 bVaHlQ"
         >
-          <div
-            class="StyledBox-sc-13pk1d4-0 eWHGxc"
+          <footer
+            class="StyledBox-sc-13pk1d4-0 kDdkHE"
           >
             <button
               aria-label="Change settings"
@@ -125,7 +125,7 @@ exports[`App create 1`] = `
                 />
               </svg>
             </button>
-          </div>
+          </footer>
         </div>
       </div>
     </div>

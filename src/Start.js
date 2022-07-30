@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   FileInput,
+  Footer,
   Grid,
   Header,
   Heading,
@@ -15,10 +16,10 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Brush, List as ListIcon, Search } from 'grommet-icons';
+import { Brush, Search } from 'grommet-icons';
 import { useDesigns } from './design2';
 import AppSettings from './AppSettings';
-import Manage from './Manage';
+// import Manage from './Manage';
 import friendlyDate from './friendlyDate';
 
 // const tutorials = [
@@ -80,7 +81,7 @@ const Start = ({ onLoadProps, onNew }) => {
   const designs = useDesigns({ fetched: true });
   const [search, setSearch] = useState();
   const [error, setError] = useState();
-  const [manage, setManage] = useState();
+  // const [manage, setManage] = useState();
   const [settings, setSettings] = useState();
   const [sizes, setSizes] = useState({});
 
@@ -145,7 +146,7 @@ const Start = ({ onLoadProps, onNew }) => {
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
-                  <Button icon={<ListIcon />} onClick={() => setManage(true)} />
+                  {/* <Button icon={<ListIcon />} onClick={() => setManage(true)} /> */}
                 </Box>
               )}
             </Header>
@@ -229,25 +230,25 @@ const Start = ({ onLoadProps, onNew }) => {
       <PageContent
         background={{ color: 'background-contrast', fill: 'horizontal' }}
       >
-        <Box flex={false} align="end">
+        <Footer justify="end">
           <Button
             icon={<Brush />}
             tip="Change settings"
             hoverIndicator
             onClick={() => setSettings(true)}
           />
-        </Box>
+        </Footer>
       </PageContent>
 
       {settings && <AppSettings onClose={() => setSettings(false)} />}
-      {manage && (
+      {/* {manage && (
         <Manage
           onClose={() => {
             setManage(false);
             // setDesigns([...designs]); // trigger re-load of offloaded state
           }}
         />
-      )}
+      )} */}
     </Page>
   );
 };
