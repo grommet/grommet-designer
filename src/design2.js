@@ -346,6 +346,7 @@ export const getName = (id, options) => {
       component.name ||
       (typeof component.props.name === 'string' && component.props.name) ||
       (typeof component.props.label === 'string' && component.props.label) ||
+      (typeof component.props.title === 'string' && component.props.title) ||
       component.type.split('.')[1] ||
       component.type
     );
