@@ -36,44 +36,46 @@ const Screen = ({ first, id }) => {
             </Box>
           </Button>
         )}
-        <Button
-          fill
-          hoverIndicator
-          aria-label={`Select ${name}`}
-          onClick={(event) => {
-            if (event.shiftKey) setSelection(undefined);
-            else {
-              setLocation({ screen: id });
-              setSelection(id);
-            }
-          }}
-          draggable
-          onDragStart={(event) => {
-            event.dataTransfer.setData('text/plain', ''); // for Firefox
-            setDragging(id);
-          }}
-          onDragEnd={() => {
-            if (dragging === id) setDragging(undefined);
-          }}
-        >
-          <Box
-            pad={{ vertical: 'xsmall', horizontal: 'small' }}
-            background={
-              (selection === id && 'selected-background') ||
-              (selectionAncestor && 'background-contrast') ||
-              undefined
-            }
+        <Box flex>
+          <Button
+            fill
+            hoverIndicator
+            aria-label={`Select ${name}`}
+            onClick={(event) => {
+              if (event.shiftKey) setSelection(undefined);
+              else {
+                setLocation({ screen: id });
+                setSelection(id);
+              }
+            }}
+            draggable
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', ''); // for Firefox
+              setDragging(id);
+            }}
+            onDragEnd={() => {
+              if (dragging === id) setDragging(undefined);
+            }}
           >
-            <Heading
-              level={3}
-              size="xsmall"
-              margin="none"
-              color="selected-text"
+            <Box
+              pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              background={
+                (selection === id && 'selected-background') ||
+                (selectionAncestor && 'background-contrast') ||
+                undefined
+              }
             >
-              {name}
-            </Heading>
-          </Box>
-        </Button>
+              <Heading
+                level={3}
+                size="xsmall"
+                margin="none"
+                color="selected-text"
+              >
+                {name}
+              </Heading>
+            </Box>
+          </Button>
+        </Box>
       </Box>
 
       {!screen.collapsed && screen.root && (

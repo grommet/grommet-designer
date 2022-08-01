@@ -74,59 +74,61 @@ const Component = ({ id, first }) => {
         ) : (
           <Box pad="small" />
         )}
-        <Button
-          ref={id === selection ? selectionRef : undefined}
-          fill
-          hoverIndicator
-          aria-label={`Select ${name}`}
-          onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
-          draggable={!component.coupled}
-          onDragStart={(event) => {
-            event.dataTransfer.setData('text/plain', ''); // for Firefox
-            setDragging(id);
-          }}
-          onDragEnd={() => {
-            if (dragging === id) setDragging(undefined);
-          }}
-          onDragEnter={(event) => {
-            if (dragging && dragging !== id && getComponent(dragging)) {
-              event.preventDefault();
-              setDragOver(true);
-            }
-          }}
-          onDragOver={(event) => {
-            if (dragOver) event.preventDefault();
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={() => {
-            if (dragOver) {
-              moveComponent(dragging, { within: id });
-              setDragOver(false);
-            }
-          }}
-        >
-          <Box
-            direction="row"
-            align="center"
-            gap="medium"
-            pad={{ vertical: 'xxsmall', horizontal: 'small' }}
-            background={
-              (dragOver && 'focus') ||
-              (selection === id && 'selected-background') ||
-              (selectionAncestor && 'background-contrast') ||
-              undefined
-            }
+        <Box flex>
+          <Button
+            ref={id === selection ? selectionRef : undefined}
+            fill
+            hoverIndicator
+            aria-label={`Select ${name}`}
+            onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
+            draggable={!component.coupled}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', ''); // for Firefox
+              setDragging(id);
+            }}
+            onDragEnd={() => {
+              if (dragging === id) setDragging(undefined);
+            }}
+            onDragEnter={(event) => {
+              if (dragging && dragging !== id && getComponent(dragging)) {
+                event.preventDefault();
+                setDragOver(true);
+              }
+            }}
+            onDragOver={(event) => {
+              if (dragOver) event.preventDefault();
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={() => {
+              if (dragOver) {
+                moveComponent(dragging, { within: id });
+                setDragOver(false);
+              }
+            }}
           >
-            <Text size="medium" truncate>
-              {name}
-            </Text>
-            {subName !== name && (
-              <Text size="small" truncate>
-                {subName}
+            <Box
+              direction="row"
+              align="center"
+              gap="medium"
+              pad={{ vertical: 'xxsmall', horizontal: 'small' }}
+              background={
+                (dragOver && 'focus') ||
+                (selection === id && 'selected-background') ||
+                (selectionAncestor && 'background-contrast') ||
+                undefined
+              }
+            >
+              <Text size="medium" truncate>
+                {name}
               </Text>
-            )}
-          </Box>
-        </Button>
+              {subName !== name && (
+                <Text size="small" truncate>
+                  {subName}
+                </Text>
+              )}
+            </Box>
+          </Button>
+        </Box>
       </Box>
       {!component.collapsed && component.children && (
         <Box pad={{ left: 'xsmall' }}>
