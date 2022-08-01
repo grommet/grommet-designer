@@ -207,9 +207,10 @@ export const upgradeDesign = (design) => {
     .map((id) => design.components[id])
     .forEach((component) => {
       const validLink = (l) =>
-        l.control ||
-        (design.screens[l.screen] &&
-          (!l.component || design.components[l.component]));
+        l &&
+        (l.control ||
+          (design.screens[l.screen] &&
+            (!l.component || design.components[l.component])));
       if (component?.designProps?.link) {
         const link = component.designProps.link;
         if (Array.isArray(link)) {
