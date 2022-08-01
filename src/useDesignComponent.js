@@ -124,16 +124,16 @@ const useDesignComponent = (id, datum) => {
     }
 
     if (setSelection) {
-      const priorClick = props.onClick;
+      const propClick = props.onClick;
       props.onClick = (event) => {
-        if (!event.shiftKey) {
+        if (event.shiftKey) {
           event.stopPropagation();
           if (selection !== id) setSelection(id);
           else if (type.text)
             setInlineEditSize(
               document.getElementById(id).getBoundingClientRect(),
             );
-        } else if (priorClick) priorClick(event);
+        } else if (propClick) propClick(event);
       };
       props.tabIndex = '-1';
       if (selection === id) {
