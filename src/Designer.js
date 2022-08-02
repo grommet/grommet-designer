@@ -100,6 +100,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
             setMode(params.mode || 'edit');
             if (loadProps.location)
               setLocation(getLocationForPath(loadProps.location));
+            else setLocation({ screen: Object.keys(design.screens)[0] });
             if (paramSelection || loadProps.selection)
               setSelection(paramSelection || loadProps.selection);
           }
