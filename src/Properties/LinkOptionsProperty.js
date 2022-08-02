@@ -32,10 +32,7 @@ const LinkOptionsProperty = ({ value, onChange }) => {
     </Box>
   );
 
-  const names = [
-    ...Object.keys(specialNames),
-    ...component.props.options,
-  ];
+  const names = [...Object.keys(specialNames), ...component.props.options];
 
   return (
     <Grid
@@ -66,6 +63,7 @@ const LinkOptionsProperty = ({ value, onChange }) => {
               ? (nextSearchText) => setSearchText(nextSearchText)
               : undefined
           }
+          onClose={() => setSearchText('')}
           valueLabel={<LinkLabel selected value={value?.[name]} />}
         >
           {(option, index, options, { selected }) => (
