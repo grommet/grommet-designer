@@ -90,8 +90,12 @@ const fetchPublished = async (id, password) => {
         localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
       }
 
-      // cache locally, in case we want to import for templates
-      localStorage.setItem(pubDesign.id, JSON.stringify(pubDesign));
+      try {
+        // cache locally, in case we want to import for templates
+        localStorage.setItem(pubDesign.id, JSON.stringify(pubDesign));
+      } catch (e) {
+        console.log('running out of local storage to store design');
+      }
 
       return pubDesign;
     });
