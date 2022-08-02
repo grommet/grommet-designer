@@ -1,4 +1,5 @@
 import { getDisplayName } from './get';
+import grommetLibrary from '../libraries/grommet';
 
 // Upgrade to latest design structure
 export const upgradeDesign = (design) => {
@@ -234,6 +235,17 @@ export const upgradeDesign = (design) => {
             delete component.designProps.link;
           }
         }
+      }
+    });
+
+  // update component.type to use path syntax
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .forEach((component) => {
+      if (!component.type.includes('.')) {
+        if (grommetLibrary.components[component.type])
+          component.type = `grommet.${component.type}`;
+        else component.type = `designer.${component.type}`;
       }
     });
 
