@@ -330,6 +330,15 @@ export const getAncestors = (id) => {
   return [id];
 };
 
+export const getSibling = (id) => {
+  const parentId = getParent(id);
+  if (parentId) {
+    const parent = getComponent(parentId);
+    const index = parent.children.indexOf(id);
+    return parent.children[index - 1] || parent.children[index + 1];
+  }
+};
+
 export const getReferences = (id) =>
   Object.keys(design.components)
     .filter((id2) => {

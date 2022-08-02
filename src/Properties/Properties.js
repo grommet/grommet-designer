@@ -30,6 +30,7 @@ import {
   getDesign,
   getParent,
   getReferences,
+  getSibling,
   getType,
   removeComponent,
   setProperty,
@@ -201,9 +202,9 @@ const Properties = () => {
 
   const delet = () => {
     // if (!component.coupled) {
+    const nextSelection = getSibling(selection) || parent;
     removeComponent(selection);
-    // TODO: set selection to previous sibling instead of parent
-    setSelection(parent);
+    setSelection(nextSelection);
 
     ReactGA.event({
       category: 'edit',
