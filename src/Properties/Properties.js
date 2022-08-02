@@ -21,6 +21,7 @@ import {
   Paragraph,
   RadioButtonGroup,
   Text,
+  ThemeContext,
 } from 'grommet';
 import { Duplicate, Location, Multiple, Trash } from 'grommet-icons';
 import {
@@ -47,6 +48,15 @@ const responsiveSizePad = {
   small: 'xsmall',
   medium: 'small',
   large: 'medium',
+};
+
+const deHPETheme = {
+  radioButton: {
+    container: {
+      extend: undefined,
+    },
+    extend: undefined,
+  },
 };
 
 const Properties = () => {
@@ -260,327 +270,337 @@ const Properties = () => {
   };
 
   return (
-    <Keyboard target="document" onKeyDown={onKey}>
-      <Box border="left" height="100vh" overflow="auto">
-        <Box flex={false} direction="row" justify="between" border="bottom">
-          <Box flex direction="row">
-            <Menu
-              hoverIndicator
-              label={
-                <Text weight="bold" truncate>
-                  {type.name}
-                </Text>
-              }
-              dropProps={{ align: { top: 'bottom', left: 'left' } }}
-              items={menuItems}
-            />
-            {showCode && (
-              <ComponentCode id={selection} onDone={() => setShowCode(false)} />
-            )}
-            {replace && (
-              <Replace targetId={selection} onDone={() => setReplace(false)} />
-            )}
-          </Box>
-          <Box flex={false} direction="row" align="center">
-            {!component.coupled && (
-              <Button
-                title="duplicate"
-                tip="duplicate"
-                icon={<Duplicate />}
+    <ThemeContext.Extend value={deHPETheme}>
+      <Keyboard target="document" onKeyDown={onKey}>
+        <Box border="left" height="100vh" overflow="auto">
+          <Box flex={false} direction="row" justify="between" border="bottom">
+            <Box flex direction="row">
+              <Menu
                 hoverIndicator
-                onClick={duplicate}
-              />
-            )}
-            {references.length === 0 ? (
-              <Button
-                title="delete"
-                tip="delete"
-                icon={<Trash />}
-                hoverIndicator
-                onClick={delet}
-              />
-            ) : (
-              <DropButton
-                ref={referencesRef}
-                title="references"
-                tip="references"
-                icon={<Location />}
-                hoverIndicator
-                dropAlign={{ top: 'bottom' }}
-                dropContent={
-                  <Box>
-                    {references.map((rId) => (
-                      <Button
-                        key={rId}
-                        hoverIndicator
-                        onClick={() => setSelection(rId)}
-                      >
-                        <Box pad={{ horizontal: 'small', vertical: 'xsmall' }}>
-                          <Text>{rId}</Text>
-                        </Box>
-                      </Button>
-                    ))}
-                  </Box>
+                label={
+                  <Text weight="bold" truncate>
+                    {type.name}
+                  </Text>
                 }
+                dropProps={{ align: { top: 'bottom', left: 'left' } }}
+                items={menuItems}
               />
-            )}
-          </Box>
-        </Box>
-
-        <Box flex overflow="auto">
-          <Box flex="grow">
-            <Box>
-              {type.help && (
-                <Box pad={{ horizontal: 'medium' }} border="bottom">
-                  <Markdown>{type.help}</Markdown>
-                </Box>
+              {showCode && (
+                <ComponentCode
+                  id={selection}
+                  onDone={() => setShowCode(false)}
+                />
               )}
-              <TextInputField
-                name="name"
-                value={component.name || ''}
-                onChange={(value) =>
-                  setProperty(selection, undefined, 'name', value)
-                }
-              />
-              {type.text && (
-                <TextAreaField
-                  name="text"
-                  value={component.text || ''}
-                  onChange={(value) =>
-                    setProperty(selection, undefined, 'text', value)
+              {replace && (
+                <Replace
+                  targetId={selection}
+                  onDone={() => setReplace(false)}
+                />
+              )}
+            </Box>
+            <Box flex={false} direction="row" align="center">
+              {!component.coupled && (
+                <Button
+                  title="duplicate"
+                  tip="duplicate"
+                  icon={<Duplicate />}
+                  hoverIndicator
+                  onClick={duplicate}
+                />
+              )}
+              {references.length === 0 ? (
+                <Button
+                  title="delete"
+                  tip="delete"
+                  icon={<Trash />}
+                  hoverIndicator
+                  onClick={delet}
+                />
+              ) : (
+                <DropButton
+                  ref={referencesRef}
+                  title="references"
+                  tip="references"
+                  icon={<Location />}
+                  hoverIndicator
+                  dropAlign={{ top: 'bottom' }}
+                  dropContent={
+                    <Box>
+                      {references.map((rId) => (
+                        <Button
+                          key={rId}
+                          hoverIndicator
+                          onClick={() => setSelection(rId)}
+                        >
+                          <Box
+                            pad={{ horizontal: 'small', vertical: 'xsmall' }}
+                          >
+                            <Text>{rId}</Text>
+                          </Box>
+                        </Button>
+                      ))}
+                    </Box>
                   }
                 />
               )}
-              {hideable && component.name && (
-                <Field label="hide" htmlFor="hide">
-                  <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
-                    <CheckBox
-                      id="hide"
-                      name="hide"
-                      checked={!!component.hide}
-                      onChange={() =>
-                        setProperty(
-                          selection,
-                          undefined,
-                          'hide',
-                          !component.hide,
-                        )
-                      }
-                    />
+            </Box>
+          </Box>
+
+          <Box flex overflow="auto">
+            <Box flex="grow">
+              <Box>
+                {type.help && (
+                  <Box pad={{ horizontal: 'medium' }} border="bottom">
+                    <Markdown>{type.help}</Markdown>
                   </Box>
-                </Field>
-              )}
-              {type.designProperties && (
-                <Box flex="grow" border="top">
-                  {renderProperties('designProps', type.designProperties)}
-                </Box>
-              )}
-              {/* {type.actions &&
+                )}
+                <TextInputField
+                  name="name"
+                  value={component.name || ''}
+                  onChange={(value) =>
+                    setProperty(selection, undefined, 'name', value)
+                  }
+                />
+                {type.text && (
+                  <TextAreaField
+                    name="text"
+                    value={component.text || ''}
+                    onChange={(value) =>
+                      setProperty(selection, undefined, 'text', value)
+                    }
+                  />
+                )}
+                {hideable && component.name && (
+                  <Field label="hide" htmlFor="hide">
+                    <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
+                      <CheckBox
+                        id="hide"
+                        name="hide"
+                        checked={!!component.hide}
+                        onChange={() =>
+                          setProperty(
+                            selection,
+                            undefined,
+                            'hide',
+                            !component.hide,
+                          )
+                        }
+                      />
+                    </Box>
+                  </Field>
+                )}
+                {type.designProperties && (
+                  <Box flex="grow" border="top">
+                    {renderProperties('designProps', type.designProperties)}
+                  </Box>
+                )}
+                {/* {type.actions &&
                 type.actions(component, {
                   addChildComponent,
                   changeDesign,
                   data,
                   design,
                 })} */}
-            </Box>
+              </Box>
 
-            <Box flex={false} border={type.structure ? 'bottom' : undefined}>
-              <Header>
-                <Heading level={3} size="xxsmall" margin="small">
-                  Properties
-                </Heading>
-                {type.respondable && !component.responsive && (
-                  <Button
-                    title="ResponsiveContext variations"
-                    tip="responsive context variations"
-                    icon={<Multiple />}
-                    hoverIndicator
-                    onClick={() => {
-                      setProperty(selection, undefined, 'responsive', {
-                        small: { props: {} },
-                        large: { props: {} },
-                        hide: [],
-                      });
-                      setResponsiveSize('medium');
-                    }}
-                  />
-                )}
-              </Header>
-              {component.responsive && (
-                <>
-                  <Box
-                    border="top"
-                    pad={{ start: 'medium', vertical: 'small' }}
-                    gap="small"
-                  >
-                    <Box margin={{ end: 'medium' }}>
-                      <Heading level={4} size="xsmall" margin="none">
-                        ResponsiveContext
-                      </Heading>
-                      <Paragraph margin="none" size="small">
-                        Properties set for medium size are used unless
-                        over-ridden by a property for small or large size.
-                      </Paragraph>
-                    </Box>
-                    <Box direction="row" align="center" justify="between">
-                      <RadioButtonGroup
-                        name=""
-                        direction="row"
-                        options={['small', 'medium', 'large']}
-                        value={responsiveSize}
-                        onChange={({ target: { value: nextResponsiveSize } }) =>
-                          setResponsiveSize(nextResponsiveSize)
-                        }
-                      >
-                        {(option, { checked }) => (
-                          <Box
-                            border={{
-                              side: 'all',
-                              size: 'small',
-                              color: checked ? 'selected-text' : 'border',
-                            }}
-                            pad={{
-                              vertical: 'xsmall',
-                              horizontal: responsiveSizePad[option],
-                            }}
-                            round="xxsmall"
-                          >
-                            <Text
-                              size="small"
-                              color={checked ? 'selected-text' : 'border'}
-                              weight={checked ? 'bold' : undefined}
+              <Box flex={false} border={type.structure ? 'bottom' : undefined}>
+                <Header>
+                  <Heading level={3} size="xxsmall" margin="small">
+                    Properties
+                  </Heading>
+                  {type.respondable && !component.responsive && (
+                    <Button
+                      title="ResponsiveContext variations"
+                      tip="responsive context variations"
+                      icon={<Multiple />}
+                      hoverIndicator
+                      onClick={() => {
+                        setProperty(selection, undefined, 'responsive', {
+                          small: { props: {} },
+                          large: { props: {} },
+                          hide: [],
+                        });
+                        setResponsiveSize('medium');
+                      }}
+                    />
+                  )}
+                </Header>
+                {component.responsive && (
+                  <>
+                    <Box
+                      border="top"
+                      pad={{ start: 'medium', vertical: 'small' }}
+                      gap="small"
+                    >
+                      <Box margin={{ end: 'medium' }}>
+                        <Heading level={4} size="xsmall" margin="none">
+                          ResponsiveContext
+                        </Heading>
+                        <Paragraph margin="none" size="small">
+                          Properties set for medium size are used unless
+                          over-ridden by a property for small or large size.
+                        </Paragraph>
+                      </Box>
+                      <Box direction="row" align="center" justify="between">
+                        <RadioButtonGroup
+                          name=""
+                          direction="row"
+                          options={['small', 'medium', 'large']}
+                          value={responsiveSize}
+                          onChange={({
+                            target: { value: nextResponsiveSize },
+                          }) => setResponsiveSize(nextResponsiveSize)}
+                        >
+                          {(option, { checked }) => (
+                            <Box
+                              border={{
+                                side: 'all',
+                                size: 'small',
+                                color: checked ? 'selected-text' : 'border',
+                              }}
+                              pad={{
+                                vertical: 'xsmall',
+                                horizontal: responsiveSizePad[option],
+                              }}
+                              round="xxsmall"
                             >
-                              {option[0].toUpperCase()}
-                            </Text>
-                          </Box>
+                              <Text
+                                size="small"
+                                color={checked ? 'selected-text' : 'border'}
+                                weight={checked ? 'bold' : undefined}
+                              >
+                                {option[0].toUpperCase()}
+                              </Text>
+                            </Box>
+                          )}
+                        </RadioButtonGroup>
+                        <Button
+                          icon={<Trash />}
+                          hoverIndicator
+                          onClick={() => {
+                            setProperty(
+                              selection,
+                              undefined,
+                              'responsive',
+                              undefined,
+                            );
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                    <Field
+                      label={`hide when ${responsiveSize}`}
+                      htmlFor="responsiveHide"
+                      first
+                    >
+                      <CheckBox
+                        id="responsiveHide"
+                        name="responsiveHide"
+                        checked={component.responsive.hide.includes(
+                          responsiveSize,
                         )}
-                      </RadioButtonGroup>
-                      <Button
-                        icon={<Trash />}
-                        hoverIndicator
-                        onClick={() => {
+                        onChange={({ target: { checked } }) => {
+                          const prevHide = component.responsive.hide;
+                          const nextHide = checked
+                            ? [...prevHide, responsiveSize]
+                            : prevHide.filter((s) => s !== responsiveSize);
                           setProperty(
                             selection,
-                            undefined,
-                            'responsive',
-                            undefined,
+                            ['responsive'],
+                            'hide',
+                            nextHide,
                           );
                         }}
                       />
-                    </Box>
-                  </Box>
-                  <Field
-                    label={`hide when ${responsiveSize}`}
-                    htmlFor="responsiveHide"
-                    first
-                  >
-                    <CheckBox
-                      id="responsiveHide"
-                      name="responsiveHide"
-                      checked={component.responsive.hide.includes(
-                        responsiveSize,
-                      )}
-                      onChange={({ target: { checked } }) => {
-                        const prevHide = component.responsive.hide;
-                        const nextHide = checked
-                          ? [...prevHide, responsiveSize]
-                          : prevHide.filter((s) => s !== responsiveSize);
-                        setProperty(
-                          selection,
-                          ['responsive'],
-                          'hide',
-                          nextHide,
-                        );
-                      }}
-                    />
-                  </Field>
-                </>
-              )}
-            </Box>
-
-            {type.properties && (
-              <Box flex="grow">
-                {type.structure ? (
-                  <Box flex="grow">
-                    {type.structure.map(
-                      ({ label, properties: propertyNames }) => {
-                        const sectionProperties = {};
-                        propertyNames.forEach(
-                          (name) =>
-                            (sectionProperties[name] = type.properties[name]),
-                        );
-                        return (
-                          <Box
-                            key={label}
-                            flex={false}
-                            margin={{ top: 'small' }}
-                          >
-                            <Heading
-                              level={4}
-                              size="xsmall"
-                              margin={{
-                                horizontal: 'small',
-                                top: 'xxsmall',
-                                bottom: 'small',
-                              }}
-                            >
-                              {label}
-                            </Heading>
-                            {renderProperties('props', sectionProperties)}
-                          </Box>
-                        );
-                      },
-                    )}
-                  </Box>
-                ) : (
-                  <Box flex="grow" border="top">
-                    {renderProperties('props', type.properties)}
-                    {parentType?.container && (
-                      <Box pad="small">
-                        <Paragraph size="small" color="text-xweak">
-                          adjust the layout of this {type.name} via its
-                          containing{' '}
-                          <Anchor
-                            label={parentType.name}
-                            onClick={() => setSelection(parent)}
-                          />
-                        </Paragraph>
-                      </Box>
-                    )}
-                  </Box>
-                )}
-
-                <Box pad="small">
-                  <CheckBox
-                    label="advanced"
-                    checked={showAdvanced}
-                    toggle
-                    onChange={() => setShowAdvanced(!showAdvanced)}
-                  />
-                </Box>
-
-                {showAdvanced && (
-                  <TextAreaField
-                    name="style"
-                    value={style}
-                    onChange={(value) => {
-                      setStyle(value);
-                      try {
-                        // only save it when it's valid
-                        const json = JSON.parse(value);
-                        setProperty(selection, undefined, 'style', json);
-                      } catch (e) {
-                        // console.log('!!! catch');
-                      }
-                    }}
-                  />
+                    </Field>
+                  </>
                 )}
               </Box>
-            )}
+
+              {type.properties && (
+                <Box flex="grow">
+                  {type.structure ? (
+                    <Box flex="grow">
+                      {type.structure.map(
+                        ({ label, properties: propertyNames }) => {
+                          const sectionProperties = {};
+                          propertyNames.forEach(
+                            (name) =>
+                              (sectionProperties[name] = type.properties[name]),
+                          );
+                          return (
+                            <Box
+                              key={label}
+                              flex={false}
+                              margin={{ top: 'small' }}
+                            >
+                              <Heading
+                                level={4}
+                                size="xsmall"
+                                margin={{
+                                  horizontal: 'small',
+                                  top: 'xxsmall',
+                                  bottom: 'small',
+                                }}
+                              >
+                                {label}
+                              </Heading>
+                              {renderProperties('props', sectionProperties)}
+                            </Box>
+                          );
+                        },
+                      )}
+                    </Box>
+                  ) : (
+                    <Box flex="grow" border="top">
+                      {renderProperties('props', type.properties)}
+                      {parentType?.container && (
+                        <Box pad="small">
+                          <Paragraph size="small" color="text-xweak">
+                            adjust the layout of this {type.name} via its
+                            containing{' '}
+                            <Anchor
+                              label={parentType.name}
+                              onClick={() => setSelection(parent)}
+                            />
+                          </Paragraph>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
+
+                  <Box pad="small">
+                    <CheckBox
+                      label="advanced"
+                      checked={showAdvanced}
+                      toggle
+                      onChange={() => setShowAdvanced(!showAdvanced)}
+                    />
+                  </Box>
+
+                  {showAdvanced && (
+                    <TextAreaField
+                      name="style"
+                      value={style}
+                      onChange={(value) => {
+                        setStyle(value);
+                        try {
+                          // only save it when it's valid
+                          const json = JSON.parse(value);
+                          setProperty(selection, undefined, 'style', json);
+                        } catch (e) {
+                          // console.log('!!! catch');
+                        }
+                      }}
+                    />
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Keyboard>
+      </Keyboard>
+    </ThemeContext.Extend>
   );
 };
 
