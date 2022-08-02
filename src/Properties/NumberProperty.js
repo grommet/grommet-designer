@@ -18,7 +18,7 @@ const NumberProperty = React.forwardRef(
               regexp: /^-?\d*$|^\{|^\{.+/,
             },
           ]}
-          value={value !== undefined ? value : ''}
+          value={value !== undefined && value !== null ? value : ''}
           onChange={(event) => {
             let nextValue;
             // data reference
