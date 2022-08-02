@@ -239,6 +239,10 @@ export const publish = ({ email, password, pin }) => {
   });
 };
 
+export const revert = async () => {
+  return await load({ id: design.id });
+};
+
 // read
 
 export const getScreen = (id) => design.screens[id];

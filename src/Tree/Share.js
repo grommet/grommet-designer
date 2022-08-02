@@ -10,12 +10,13 @@ import {
   Markdown,
   MaskedInput,
   Paragraph,
+  Spinner,
   Text,
   TextArea,
   TextInput,
 } from 'grommet';
 import { CloudUpload, Copy, Code, Download } from 'grommet-icons';
-import { publish, useDesign } from '../design2';
+import { publish, revert, useDesign } from '../design2';
 import { dependencies, generateJSX } from '../design';
 import Action from '../components/Action';
 
@@ -29,10 +30,11 @@ const Summary = ({ Icon, label, guidance }) => (
   </Box>
 );
 
-const Publish = () => {
+const Publish = ({ onClose }) => {
   const design = useDesign();
   const [publication, setPublication] = useState();
   const [publishing, setPublishing] = useState();
+  const [reverting, setReverting] = useState();
   const [message, setMessage] = useState();
   const [error, setError] = useState();
   const previewRef = useRef();
@@ -205,6 +207,24 @@ const Publish = () => {
           <Text>{message}</Text>
         </Box>
       )}
+      {design.id && design.date !== design.publishedDate && (
+        <Box
+          margin={{ top: 'medium' }}
+          alignSelf="center"
+          direction="row"
+          gap="small"
+        >
+          <Button
+            label="Revert to last published"
+            disabled={reverting}
+            onClick={() => {
+              setReverting(true);
+              revert().then(onClose);
+            }}
+          />
+          {reverting && <Spinner />}
+        </Box>
+      )}
     </Box>
   );
 };
@@ -297,7 +317,7 @@ const Share = ({ onClose }) => (
       columns={{ count: 'fit', size: 'small' }}
       gap="large"
     >
-      <Publish />
+      <Publish onClose={onClose} />
       <SaveLocally onClose={onClose} />
       <Developer />
     </Grid>
