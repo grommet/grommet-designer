@@ -10,14 +10,9 @@ const SizeOptions = ({ options }) => {
       : options;
     return (
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
-        {(option, { checked, hover }) => {
+        {(option, { checked }) => {
           return (
-            <SizeState
-              {...props.props}
-              size={option.value}
-              checked={checked}
-              hover={hover}
-            />
+            <SizeState {...props.props} size={option.value} checked={checked} />
           );
         }}
       </InlineOptions>

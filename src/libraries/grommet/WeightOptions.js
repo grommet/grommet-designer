@@ -10,13 +10,12 @@ const WeightOption = ({ options }) => {
       : options;
     return (
       <InlineOptions name={props.name} options={adjustedOptions} {...props}>
-        {(option, { checked, hover }) => {
+        {(option, { checked }) => {
           return (
             <WeightState
               {...props.props}
               weight={option.value}
               checked={checked}
-              hover={hover}
             />
           );
         }}

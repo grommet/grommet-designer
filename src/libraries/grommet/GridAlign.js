@@ -8,7 +8,7 @@ const GridAlign = ({ props, ...rest }) => {
   const { justify } = props;
   return (
     <InlineOptions name="align" options={options} {...rest}>
-      {(option, { checked, hover }) => (
+      {(option, { checked }) => (
         <LayoutState
           align={option.value}
           axis="cross"
@@ -16,7 +16,6 @@ const GridAlign = ({ props, ...rest }) => {
           justify={justify}
           label={option.label}
           checked={checked}
-          hover={hover}
         />
       )}
     </InlineOptions>

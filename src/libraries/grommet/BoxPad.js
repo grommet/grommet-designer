@@ -20,7 +20,7 @@ const stroke = {
   strokeLinecap: 'square',
 };
 
-const PadState = ({ checked, hover, name, option }) => {
+const PadState = ({ checked, name, option }) => {
   let content;
   if (name === 'pad') {
     const d = deltas[option.value];
@@ -59,7 +59,7 @@ const PadState = ({ checked, hover, name, option }) => {
   }
 
   return (
-    <InlineOption checked={checked} hover={hover} label={option.label}>
+    <InlineOption checked={checked} label={option.label}>
       <Blank color={checked ? 'selected-text' : 'border'}>
         <g {...stroke}>{content}</g>
       </Blank>
@@ -67,26 +67,25 @@ const PadState = ({ checked, hover, name, option }) => {
   );
 };
 
-const BoxPad = props => {
+const BoxPad = (props) => {
   const { name, value } = props;
   const adjustedOptions = options.filter(
-    o => name === 'pad' || typeof o === 'string',
+    (o) => name === 'pad' || typeof o === 'string',
   );
   if (value) adjustedOptions.push(undefinedOption);
   return (
     <InlineOptions name={name} options={adjustedOptions} {...props}>
-      {(option, { checked, hover }) => {
+      {(option, { checked }) => {
         if (option.label === undefinedOption.label) {
-          return <UndefinedOption checked={checked} hover={hover} />;
+          return <UndefinedOption checked={checked} />;
         } else if (option.label === variedOption.label) {
-          return <VariedOption checked={checked} hover={hover} />;
+          return <VariedOption checked={checked} />;
         }
         return (
           <PadState
             name={name}
             option={option}
             checked={checked}
-            hover={hover}
             {...props.props}
           />
         );

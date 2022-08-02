@@ -1,14 +1,10 @@
 import React from 'react';
 import { Box, Tip } from 'grommet';
 
-const InlineOption = ({ border, checked, children, hover, label, pad }) => {
+const InlineOption = ({ border, children, label, pad }) => {
   return (
     <Tip content={label}>
-      <Box
-        border={border}
-        pad={pad || 'xsmall'}
-        background={hover && !checked ? { color: 'active' } : undefined}
-      >
+      <Box border={border} pad={pad || 'xsmall'}>
         {children}
       </Box>
     </Tip>

@@ -14,26 +14,25 @@ const options = [
   variedOption,
 ];
 
-const GridGap = props => {
+const GridGap = (props) => {
   const { name, value } = props;
   const adjustedOptions = options.filter(
-    o => name === 'gap' || typeof o === 'string',
+    (o) => name === 'gap' || typeof o === 'string',
   );
   if (value) adjustedOptions.push(undefinedOption);
   return (
     <InlineOptions name={name} options={adjustedOptions} {...props}>
-      {(option, { checked, hover }) => {
+      {(option, { checked }) => {
         if (option.label === undefinedOption.label) {
-          return <UndefinedOption checked={checked} hover={hover} />;
+          return <UndefinedOption checked={checked} />;
         } else if (option.label === variedOption.label) {
-          return <VariedOption checked={checked} hover={hover} />;
+          return <VariedOption checked={checked} />;
         }
         return (
           <EdgeSizeState
             {...props.props}
             size={option.label}
             checked={checked}
-            hover={hover}
             direction={name === 'row' ? 'column' : 'row'}
           />
         );

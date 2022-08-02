@@ -12,9 +12,9 @@ const short = {
   xxlarge: 'xxL',
 };
 
-const SizeState = ({ checked, hover, size }) => {
+const SizeState = ({ checked, size }) => {
   return (
-    <InlineOption checked={checked} hover={hover} label={size}>
+    <InlineOption checked={checked} label={size}>
       <Text
         size={size}
         weight={checked ? 'bold' : undefined}

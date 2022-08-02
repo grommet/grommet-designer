@@ -86,19 +86,11 @@ const Line = ({ coords }) => (
   />
 );
 
-const LayoutState = ({
-  align,
-  axis,
-  checked,
-  direction,
-  hover,
-  justify,
-  label,
-}) => {
+const LayoutState = ({ align, axis, checked, direction, justify, label }) => {
   const c = contentCoords({ align, direction, justify });
   const e = edgeCoords({ axis, direction });
   return (
-    <InlineOption checked={checked} hover={hover} label={label}>
+    <InlineOption label={label}>
       <Blank color={checked ? 'selected-text' : 'border'}>
         <Edge coords={e[0]} />
         <Edge coords={e[1]} />

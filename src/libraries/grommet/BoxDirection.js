@@ -10,7 +10,7 @@ const BoxDirection = ({ id, ...rest }) => {
   const { align, justify } = component.props;
   return (
     <InlineOptions name="direction" options={options} {...rest}>
-      {(option, { checked, hover }) => (
+      {(option, { checked }) => (
         <LayoutState
           align={align}
           axis="main"
@@ -18,7 +18,6 @@ const BoxDirection = ({ id, ...rest }) => {
           justify={justify}
           label={option.label}
           checked={checked}
-          hover={hover}
         />
       )}
     </InlineOptions>

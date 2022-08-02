@@ -10,7 +10,7 @@ const BoxAlign = ({ id, ...rest }) => {
   const { direction, justify } = component.props;
   return (
     <InlineOptions name="align" options={options} {...rest}>
-      {(option, { checked, hover }) => (
+      {(option, { checked }) => (
         <LayoutState
           align={option.value}
           axis="cross"
@@ -18,7 +18,6 @@ const BoxAlign = ({ id, ...rest }) => {
           justify={justify}
           label={option.label}
           checked={checked}
-          hover={hover}
         />
       )}
     </InlineOptions>

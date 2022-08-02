@@ -7,9 +7,9 @@ const short = {
   normal: 'N',
 };
 
-const WeightState = ({ checked, hover, weight }) => {
+const WeightState = ({ checked, weight }) => {
   return (
-    <InlineOption checked={checked} hover={hover} label={weight}>
+    <InlineOption checked={checked} label={weight}>
       <Text
         weight={weight === 'bold' ? 'bold' : undefined}
         color={checked ? 'selected-text' : 'border'}

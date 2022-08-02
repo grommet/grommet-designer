@@ -14,14 +14,11 @@ const AddMethod = ({ id, value, onChange }) => {
     if (!value) onChange(methods[0]);
   }, [value, onChange]);
 
-  const Option = ({ option, checked, hover }) => {
+  const Option = ({ option, checked }) => {
     const Icon = methodIcons[option];
     return (
       <Tip content={option}>
-        <Box
-          pad="xsmall"
-          background={hover && !checked ? { color: 'active' } : undefined}
-        >
+        <Box pad="xsmall">
           <Icon color={checked ? 'selected-text' : 'border'} />
         </Box>
       </Tip>
@@ -37,9 +34,7 @@ const AddMethod = ({ id, value, onChange }) => {
       onChange={(event) => onChange(event.target.value)}
       direction="row"
     >
-      {(option, { checked, hover }) => (
-        <Option option={option} checked={checked} hover={hover} />
-      )}
+      {(option, { checked }) => <Option option={option} checked={checked} />}
     </RadioButtonGroup>
   );
 };

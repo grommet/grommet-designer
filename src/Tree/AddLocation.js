@@ -96,13 +96,10 @@ const AddLocation = ({ value, onChange }) => {
     [locations, onChange, type],
   );
 
-  const Option = ({ option, checked, hover }) => {
+  const Option = ({ option, checked }) => {
     return (
       <Tip content={`${option} ${getName(selection)}`}>
-        <Box
-          pad="xsmall"
-          background={hover && !checked ? { color: 'active' } : undefined}
-        >
+        <Box pad="xsmall">
           <Blank color={checked ? 'selected-text' : 'border'}>
             <g>{locationVisuals[option]}</g>
           </Blank>
@@ -120,9 +117,7 @@ const AddLocation = ({ value, onChange }) => {
       onChange={(event) => onChange(event.target.value)}
       direction="row"
     >
-      {(option, { checked, hover }) => (
-        <Option option={option} checked={checked} hover={hover} />
-      )}
+      {(option, { checked }) => <Option option={option} checked={checked} />}
     </RadioButtonGroup>
   );
 };

@@ -12,14 +12,13 @@ const size = {
   4: 'small',
 };
 
-const HeadingLevel = props => {
+const HeadingLevel = (props) => {
   return (
     <InlineOptions name={props.name} options={options} {...props}>
-      {(option, { checked, hover }) => {
+      {(option, { checked }) => {
         return (
           <InlineOption
             checked={checked}
-            hover={hover}
             pad={{ vertical: 'xsmall', horizontal: 'small' }}
           >
             <Text

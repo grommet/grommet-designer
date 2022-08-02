@@ -9,8 +9,8 @@ const stroke = {
 
 export const trueOption = { label: 'true', value: true, domValue: 'true' };
 
-const TrueOption = ({ checked, hover }) => (
-  <InlineOption checked={checked} hover={hover} label={trueOption.label}>
+const TrueOption = ({ checked }) => (
+  <InlineOption checked={checked} label={trueOption.label}>
     <Blank color={checked ? 'selected-text' : 'border'}>
       <g {...stroke}>
         <line x1={2} y1={2} x2={22} y2={2} />

@@ -42,10 +42,10 @@ const Edge = ({ coords }) => (
   />
 );
 
-const EdgeSizeState = ({ checked, direction, hover, size }) => {
+const EdgeSizeState = ({ checked, direction, size }) => {
   const e = edgeCoords({ direction, size });
   return (
-    <InlineOption checked={checked} hover={hover} label={size}>
+    <InlineOption checked={checked} label={size}>
       <Blank color={checked ? 'selected-text' : 'border'}>
         <Edge coords={e[0]} />
         <Edge coords={e[1]} />
