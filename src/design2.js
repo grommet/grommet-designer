@@ -1139,7 +1139,7 @@ export const useDesigns = ({ fetched } = {}) => {
         if (d.id) id = d.id;
         else if (d.url) id = d.url.split('=')[1];
         if (id && id.toLowerCase().startsWith(slugName)) {
-          const author = d.id.slice(slugName.length).split('-')[1];
+          const author = id.slice(slugName.length).split('-')[1];
           return { ...d, author };
         }
         return d;
