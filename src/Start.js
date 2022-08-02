@@ -31,7 +31,7 @@ import friendlyDate from './friendlyDate';
 //   },
 // ];
 
-const keyFor = (d) => d.id || d.url || d.name;
+const keyFor = (d) => (d.local && d.name) || d.id || d.url || d.name;
 
 const Bit = ({ children }) => (
   <Text color="text-weak" textAlign="end">

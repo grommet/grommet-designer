@@ -564,10 +564,10 @@ export const removeDesign = () => {
 };
 
 const slugify = (name) =>
-  `/${name
+  name
     .toLocaleLowerCase()
     .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '')}`;
+    .replace(/[^\w-]+/g, '');
 
 export const addScreen = () => {
   const id = getNextId();
@@ -576,7 +576,7 @@ export const addScreen = () => {
     Object.values(design.screens).map((s) => s.name),
   );
 
-  const screen = { id, name, path: slugify(name) };
+  const screen = { id, name, path: `/${slugify(name)}` };
   design.screens[id] = screen;
 
   design.screenOrder = [...design.screenOrder, id];
@@ -602,7 +602,7 @@ export const duplicateScreen = (id) => {
   const screen = JSON.parse(JSON.stringify(source));
   screen.id = getNextId();
   screen.name = `${source.name} - copy`;
-  screen.path = slugify(screen.name);
+  screen.path = `/${slugify(screen.name)}`;
   design.screens[screen.id] = screen;
   design.screenOrder.push(screen.id);
   if (screen.root) {
@@ -1134,17 +1134,12 @@ export const useDesigns = ({ fetched } = {}) => {
     }
     setDesigns(
       nextDesigns.sort(compareDesigns).map((d) => {
-        if (d.id) {
-          const slugName = slugify(d.name);
-          const author = d.id.slice(slugName.length).split('-')[0];
-          return { ...d, author };
-        }
-        if (d.url) {
-          const slugName = slugify(d.name);
-          const author = d.url
-            .split('=')[1]
-            .slice(slugName.length)
-            .split('-')[0];
+        const slugName = slugify(d.name);
+        let id;
+        if (d.id) id = d.id;
+        else if (d.url) id = d.url.split('=')[1];
+        if (id && id.toLowerCase().startsWith(slugName)) {
+          const author = d.id.slice(slugName.length).split('-')[1];
           return { ...d, author };
         }
         return d;
