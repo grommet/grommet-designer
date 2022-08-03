@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { Box, Button, Text } from 'grommet';
 import { FormDown, FormNext } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -11,6 +12,10 @@ import {
 } from '../design2';
 import ComponentDropArea from './ComponentDropArea';
 import DragDropContext from './DragDropContext';
+
+const NonInteractiveBox = styled(Box)`
+  pointer-events: none;
+`;
 
 const Component = ({ id, first }) => {
   const [selection, setSelection, { selectionPath }] =
@@ -111,7 +116,7 @@ const Component = ({ id, first }) => {
             aria-label={`Select ${name}`}
             onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
           >
-            <Box
+            <NonInteractiveBox
               direction="row"
               align="center"
               gap="medium"
@@ -131,7 +136,7 @@ const Component = ({ id, first }) => {
                   {subName}
                 </Text>
               )}
-            </Box>
+            </NonInteractiveBox>
           </Button>
         </Box>
       </Box>
