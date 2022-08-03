@@ -68,7 +68,7 @@ const testAlternativeOption = textButton('test alternative').withAttribute(
   'option',
 );
 const addActionsControl = labelButton('Add actions');
-const backPageHeaderControl = textButton('back to PageHeader');
+const backPageHeaderControl = textButton('back to Test Page');
 const secondScreenControl = textButton('Second Screen');
 const firstScreenLink = Selector('a').withExactText('First Screen Link');
 const firstScreenOption = textButton('Test Screen').withAttribute(
@@ -134,15 +134,12 @@ test('create design', async (t) => {
   await t.click(testLayerOption).expect(testLayerOption.exists).notOk();
 
   // close the Layer
-  await t
-    .click(closeLayerControl, { modifiers: { shift: true } })
-    .expect(closeLayerControl.exists)
-    .notOk();
+  await t.click(closeLayerControl).expect(closeLayerControl.exists).notOk();
 
   // add actions to the PageHeader to open the layer
   // tests property component editing
 
-  await select('PageHeader');
+  await select('PageHeader', undefined, 'Test Page');
   // add actions
   await t.click(addActionsControl).expect(backPageHeaderControl.exists).ok();
   await add('Button');
@@ -160,16 +157,10 @@ test('create design', async (t) => {
     .notOk();
 
   // open the Layer
-  await t
-    .click(openLayerControl, { modifiers: { shift: true } })
-    .expect(closeLayerControl.exists)
-    .ok();
+  await t.click(openLayerControl).expect(closeLayerControl.exists).ok();
 
   // close the Layer
-  await t
-    .click(closeLayerControl, { modifiers: { shift: true } })
-    .expect(closeLayerControl.exists)
-    .notOk();
+  await t.click(closeLayerControl).expect(closeLayerControl.exists).notOk();
 
   // add an Alternative and link to it with two buttons inside
   await select('PageContent');
@@ -201,15 +192,9 @@ test('create design', async (t) => {
     .expect(testAlternativeOption.exists)
     .notOk();
   // click First
-  await t
-    .click(textButton('First'), { modifiers: { shift: true } })
-    .expect(textButton('Second').exists)
-    .ok();
+  await t.click(textButton('First')).expect(textButton('Second').exists).ok();
   // click Second
-  await t
-    .click(textButton('Second'), { modifiers: { shift: true } })
-    .expect(textButton('First').exists)
-    .ok();
+  await t.click(textButton('Second')).expect(textButton('First').exists).ok();
 
   // add a screen with a link to the first screen
 
@@ -238,14 +223,15 @@ test('create design', async (t) => {
   await t.click(firstScreenOption).expect(firstScreenOption.exists).notOk();
 
   // follow link to first screen
-  // without shift key, shouldn't navigate
-  await t.click(firstScreenLink).expect(pageTitle.exists).notOk();
   // TODO: the following isn't working, seems like TestCafe isn't sending
   // the 'shift' modifier
-  // // with shift, should navigate
-  // await t.click(firstScreenLink, { modifiers: { shift: true } })
-  // .expect(pageTitle.exists)
-  // .ok();
+  // // with shift key, shouldn't navigate
+  // await t
+  //   .click(firstScreenLink, { modifiers: { shift: true } })
+  //   .expect(pageTitle.exists)
+  //   .notOk();
+  // without shift, should navigate
+  await t.click(firstScreenLink).expect(pageTitle.exists).ok();
 
   // add data
   // add
