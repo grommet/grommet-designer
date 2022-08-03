@@ -971,15 +971,10 @@ export const setDataProperty = (id, name, value) => {
 
 export const moveComponent = (id, options) => {
   // remove from old parent
-  const priorParent = getComponent(getParent(id));
-  const priorIndex = priorParent.children.indexOf(id);
-  priorParent.children.splice(priorIndex, 1);
-  // // if we're moving within children, promote children first
-  // if (isDescendent(design, dropTarget, dragging)) {
-  //   const component = nextDesign.components[dragging];
-  //   priorParent.children = [...priorParent.children, ...component.children];
-  //   component.children = undefined;
-  // }
+  updateComponent(getParent(id), (nextComponent) => {
+    const priorIndex = nextComponent.children.indexOf(id);
+    nextComponent.children.splice(priorIndex, 1);
+  });
   // insert into new parent
   insertComponent(id, options);
 };
