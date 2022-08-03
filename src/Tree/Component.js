@@ -74,37 +74,41 @@ const Component = ({ id, first }) => {
         ) : (
           <Box pad="small" />
         )}
-        <Box flex>
+        <Box
+          flex
+          draggable={!component.coupled}
+          onDragStart={(event) => {
+            event.dataTransfer.setData('text/plain', ''); // for Firefox
+            setDragging(id);
+          }}
+          onDragEnd={() => {
+            if (dragging === id) setDragging(undefined);
+          }}
+          onDragEnter={(event) => {
+            if (dragging && dragging !== id && getComponent(dragging)) {
+              event.preventDefault();
+              setDragOver(true);
+            }
+          }}
+          onDragOver={(event) => {
+            if (id === 32 && !dragOver) if (dragOver) event.preventDefault();
+          }}
+          onDragLeave={() => {
+            setDragOver(false);
+          }}
+          onDrop={() => {
+            if (dragOver) {
+              moveComponent(dragging, { within: id });
+              setDragOver(false);
+            }
+          }}
+        >
           <Button
             ref={id === selection ? selectionRef : undefined}
             fill
             hoverIndicator
             aria-label={`Select ${name}`}
             onClick={(event) => setSelection(event.shiftKey ? undefined : id)}
-            draggable={!component.coupled}
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', ''); // for Firefox
-              setDragging(id);
-            }}
-            onDragEnd={() => {
-              if (dragging === id) setDragging(undefined);
-            }}
-            onDragEnter={(event) => {
-              if (dragging && dragging !== id && getComponent(dragging)) {
-                event.preventDefault();
-                setDragOver(true);
-              }
-            }}
-            onDragOver={(event) => {
-              if (dragOver) event.preventDefault();
-            }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={() => {
-              if (dragOver) {
-                moveComponent(dragging, { within: id });
-                setDragOver(false);
-              }
-            }}
           >
             <Box
               direction="row"

@@ -36,7 +36,17 @@ const Screen = ({ first, id }) => {
             </Box>
           </Button>
         )}
-        <Box flex>
+        <Box
+          flex
+          draggable
+          onDragStart={(event) => {
+            event.dataTransfer.setData('text/plain', ''); // for Firefox
+            setDragging(id);
+          }}
+          onDragEnd={() => {
+            if (dragging === id) setDragging(undefined);
+          }}
+        >
           <Button
             fill
             hoverIndicator
@@ -47,14 +57,6 @@ const Screen = ({ first, id }) => {
                 setLocation({ screen: id });
                 setSelection(id);
               }
-            }}
-            draggable
-            onDragStart={(event) => {
-              event.dataTransfer.setData('text/plain', ''); // for Firefox
-              setDragging(id);
-            }}
-            onDragEnd={() => {
-              if (dragging === id) setDragging(undefined);
             }}
           >
             <Box
