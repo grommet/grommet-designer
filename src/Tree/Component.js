@@ -5,7 +5,6 @@ import SelectionContext from '../SelectionContext';
 import {
   getComponent,
   getName,
-  getType,
   moveComponent,
   toggleCollapsed,
   useComponent,
@@ -14,7 +13,7 @@ import ComponentDropArea from './ComponentDropArea';
 import DragDropContext from './DragDropContext';
 
 const Component = ({ id, first }) => {
-  const [selection, setSelection, { followLinkOption, selectionPath }] =
+  const [selection, setSelection, { selectionPath }] =
     useContext(SelectionContext);
   const [dragging, setDragging] = useContext(DragDropContext);
   const [dragOver, setDragOver] = useState();
@@ -22,12 +21,14 @@ const Component = ({ id, first }) => {
 
   const component = useComponent(id);
 
-  useEffect(() => {
-    const comp = getComponent(id);
-    const type = getType(comp.type);
-    if (type.initialize)
-      type.initialize(comp.props, { component: comp, followLinkOption });
-  }, [id, followLinkOption]);
+  // // TODO: Why do we initialize() in the Tree ???
+  // useEffect(() => {
+  //   const comp = getComponent(id);
+  //   const type = getType(comp.type);
+  //   if (!!type.initialize) console.log('!!! initialize?', { id: comp.id, type: type.name });
+  //   if (type.initialize)
+  //     type.initialize(comp.props, { component: comp, followLinkOption });
+  // }, [id, followLinkOption]);
 
   // scroll to show if selected component
   useEffect(() => {
@@ -91,7 +92,7 @@ const Component = ({ id, first }) => {
             }
           }}
           onDragOver={(event) => {
-            if (id === 32 && !dragOver) if (dragOver) event.preventDefault();
+            if (dragOver) event.preventDefault();
           }}
           onDragLeave={() => {
             setDragOver(false);

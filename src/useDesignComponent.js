@@ -9,7 +9,13 @@ import styled from 'styled-components';
 import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import SelectionContext from './SelectionContext';
-import { getType, replaceWithData, setProperty, useComponent } from './design2';
+import {
+  // getComponent,
+  getType,
+  replaceWithData,
+  setProperty,
+  useComponent,
+} from './design2';
 import DesignComponent from './DesignComponent';
 import InlineEditInput from './InlineEditInput';
 
@@ -181,6 +187,13 @@ const useDesignComponent = (id, datum) => {
     setSelection,
     type,
   ]);
+
+  // useEffect(() => {
+  //   const component = getComponent(id);
+  //   const type = getType(component.type);
+  //   if (type.initialize)
+  //     type.initialize(component.props, { component, followLinkOption });
+  // }, [id, followLinkOption]);
 
   if (props === undefined) return renderNull;
 
