@@ -6,8 +6,9 @@ import Field from '../components/Field';
 const BooleanProperty = React.forwardRef(({ name, onChange, value }, ref) => (
   <Field key={name} label={name} htmlFor={name}>
     <Box
-      pad={{ vertical: 'xsmall', horizontal: 'small' }}
+      pad={{ horizontal: 'small' }}
       direction="row"
+      align="center"
       gap="small"
     >
       <CheckBox
@@ -20,7 +21,7 @@ const BooleanProperty = React.forwardRef(({ name, onChange, value }, ref) => (
       {value === false && (
         <Box
           title="undefine"
-          pad={{ horizontal: 'xxsmall' }}
+          pad="xsmall"
           round="xsmall"
           hoverIndicator
           onClick={() => onChange(undefined)}
