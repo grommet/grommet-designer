@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Box, Grid, Select, Text } from 'grommet';
 import { getComponent, getLinkOptions } from '../design2';
 import SelectionContext from '../SelectionContext';
@@ -11,7 +11,7 @@ const specialNames = {
 const LinkOptionsProperty = ({ value, onChange }) => {
   const [selection] = useContext(SelectionContext);
   const component = getComponent(selection);
-  const linkOptions = getLinkOptions(selection);
+  const linkOptions = useMemo(() => getLinkOptions(selection), [selection]);
   const [searchText, setSearchText] = React.useState('');
   const searchExp = React.useMemo(
     () => searchText && new RegExp(`${searchText}`, 'i'),

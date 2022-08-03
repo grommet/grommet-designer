@@ -71,7 +71,7 @@ const LinkPropertyOptions = ({
   onChange,
 }) => {
   const [selection] = useContext(SelectionContext);
-  const linkOptions = getLinkOptions(selection);
+  const linkOptions = useMemo(() => getLinkOptions(selection), [selection]);
   return (
     <Grid
       gap="small"

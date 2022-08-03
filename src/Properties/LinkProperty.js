@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Box, Text } from 'grommet';
 import { getLinkOptions, getName } from '../design2';
 import SelectionContext from '../SelectionContext';
@@ -31,7 +31,7 @@ const LinkLabel = ({ selected, value }) => {
 
 const LinkProperty = React.forwardRef(({ name, onChange, value }, ref) => {
   const [selection] = useContext(SelectionContext);
-  const linkOptions = getLinkOptions(selection);
+  const linkOptions = useMemo(() => getLinkOptions(selection), [selection]);
   return (
     <ArrayProperty
       ref={ref}
