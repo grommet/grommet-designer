@@ -234,6 +234,7 @@ export const publish = ({ email, password, pin }) => {
         pubDesign.local = true;
         design = pubDesign;
         store({ preserveDate: true });
+        notify(undefined, pubDesign);
       });
     }
   });
