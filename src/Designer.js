@@ -122,22 +122,24 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   // following a link changes component hide or screen path
   const followLink = useCallback(
     (link) => {
-      if (Array.isArray(link)) link.forEach(followLink);
-      else if (link.control === 'toggleThemeMode') {
-        setThemeMode(grommetThemeMode === 'dark' ? 'light' : 'dark');
-      } else if (link.component) {
-        const component = getComponent(link.component);
-        const type = getType(component.type);
-        if (type.selectable && type.follow) {
-          type.follow(component.props, { component });
+      if (link) {
+        if (Array.isArray(link)) link.forEach(followLink);
+        else if (link.control === 'toggleThemeMode') {
+          setThemeMode(grommetThemeMode === 'dark' ? 'light' : 'dark');
+        } else if (link.component) {
+          const component = getComponent(link.component);
+          const type = getType(component.type);
+          if (type.selectable && type.follow) {
+            type.follow(component.props, { component });
+          }
+          if (type.hideable) {
+            setProperty(link.component, undefined, 'hide', !component.hide);
+            if (!component.hide) setSelection(undefined);
+          }
+        } else if (link.screen) {
+          setLocation({ screen: link.screen });
+          setSelection(link.screen);
         }
-        if (type.hideable) {
-          setProperty(link.component, undefined, 'hide', !component.hide);
-          if (!component.hide) setSelection(undefined);
-        }
-      } else if (link.screen) {
-        setLocation({ screen: link.screen });
-        setSelection(link.screen);
       }
     },
     [grommetThemeMode, setThemeMode],

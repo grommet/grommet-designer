@@ -1732,7 +1732,8 @@ export const components = {
       if (designProps?.dataPath)
         adjusted.data = getDataByPath(designProps.dataPath);
       if (props.onClickRow) {
-        setDataIndex(designProps.dataPath, undefined);
+        if (designProps?.dataPath)
+          setDataIndex(designProps.dataPath, undefined);
         adjusted.onClickRow = (event) => {
           event.stopPropagation();
           if (designProps?.dataPath)
