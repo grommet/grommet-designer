@@ -10,7 +10,7 @@ import { ResponsiveContext } from 'grommet';
 import Icon from './libraries/designer/Icon';
 import SelectionContext from './SelectionContext';
 import {
-  // getComponent,
+  getComponent,
   getType,
   replaceWithData,
   setProperty,
@@ -188,12 +188,12 @@ const useDesignComponent = (id, datum) => {
     type,
   ]);
 
-  // useEffect(() => {
-  //   const component = getComponent(id);
-  //   const type = getType(component.type);
-  //   if (type.initialize)
-  //     type.initialize(component.props, { component, followLinkOption });
-  // }, [id, followLinkOption]);
+  useEffect(() => {
+    const component = getComponent(id);
+    const type = getType(component.type);
+    if (type.initialize)
+      type.initialize(component.props, { component, followLinkOption });
+  }, [id, followLinkOption]);
 
   if (props === undefined) return renderNull;
 
