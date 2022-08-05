@@ -292,7 +292,7 @@ export const getRoot = (id, traverseProps = true) => {
 };
 
 export const getPathForLocation = (location) => {
-  if (location.screen) return getScreen(location.screen).path;
+  if (location.screen) return getScreen(location.screen)?.path;
   if (location.data) return `/-data-${location.data}`;
   if (location.property) {
     const { id } = location.property;
@@ -587,7 +587,7 @@ const slugify = (name) =>
     .replace(/ /g, '-')
     .replace(/[^\w-]+/g, '');
 
-export const addScreen = () => {
+export const addScreen = (after) => {
   const id = getNextId();
   const name = generateName(
     'Screen',
@@ -597,7 +597,11 @@ export const addScreen = () => {
   const screen = { id, name, path: `/${slugify(name)}` };
   design.screens[id] = screen;
 
-  design.screenOrder = [...design.screenOrder, id];
+  // insert after current screen
+  const root = getRoot(after);
+  const index = design.screenOrder.indexOf(root);
+  if (index !== -1) design.screenOrder.splice(index + 1, 0, id);
+  else design.screenOrder = [...design.screenOrder, id];
 
   notify();
   lazilyStore();

@@ -6,13 +6,14 @@ import SelectionContext from '../SelectionContext';
 import AddButton from './AddButton';
 
 const AddLibraries = ({ addOptions, onClose, searchExp }) => {
-  const [, setSelection, { setLocation }] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const libraries = getLibraries();
 
   const onAdd = useCallback(
     (typeName) => {
       if (typeName === 'designer.Screen') {
-        const screen = addScreen();
+        const screen = addScreen(selection);
         setLocation({ screen: screen.id });
         setSelection(screen.id);
       } else {
@@ -28,7 +29,7 @@ const AddLibraries = ({ addOptions, onClose, searchExp }) => {
 
       onClose();
     },
-    [addOptions, onClose, setLocation, setSelection],
+    [addOptions, onClose, selection, setLocation, setSelection],
   );
 
   return libraries.map((library) => {
