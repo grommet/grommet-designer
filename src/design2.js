@@ -1210,7 +1210,12 @@ export const useScreen = (id) => {
 
 export const useComponent = (id) => {
   const [, setComponent] = useState(design?.components[id]);
-  useEffect(() => listen(id, setComponent), [id]);
+  useEffect(() => {
+    listen(id, setComponent);
+    // update to latest in case it changed between initial return
+    // and starting to listen
+    setComponent(design?.components[id]);
+  }, [id]);
   return design?.components[id];
 };
 
