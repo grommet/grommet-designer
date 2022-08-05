@@ -601,7 +601,7 @@ export const addScreen = (after) => {
   const root = getRoot(after);
   const index = design.screenOrder.indexOf(root);
   if (index !== -1) design.screenOrder.splice(index + 1, 0, id);
-  else design.screenOrder = [...design.screenOrder, id];
+  else design.screenOrder.push(id);
 
   notify();
   lazilyStore();
@@ -626,7 +626,10 @@ export const duplicateScreen = (id) => {
   screen.name = `${source.name} - copy`;
   screen.path = `/${slugify(screen.name)}`;
   design.screens[screen.id] = screen;
-  design.screenOrder.push(screen.id);
+  // insert right after screen being duplicated
+  const index = design.screenOrder.indexOf(id);
+  if (index !== -1) design.screenOrder.splice(index + 1, 0, screen.id);
+  else design.screenOrder.push(screen.id);
   if (screen.root) {
     screen.root = duplicateComponent(screen.root, {});
   }
