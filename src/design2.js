@@ -623,7 +623,15 @@ export const duplicateScreen = (id) => {
   const source = design.screens[id];
   const screen = JSON.parse(JSON.stringify(source));
   screen.id = getNextId();
+
+  // ensure a unique name
   screen.name = `${source.name} - copy`;
+  let suffix = 1;
+  while (Object.values(design.screens).find((s) => s.name === screen.name)) {
+    suffix += 1;
+    screen.name = `${source.name} - copy ${suffix}`;
+  }
+
   screen.path = `/${slugify(screen.name)}`;
   design.screens[screen.id] = screen;
   // insert right after screen being duplicated
