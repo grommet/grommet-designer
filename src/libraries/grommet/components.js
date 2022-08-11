@@ -1039,7 +1039,10 @@ export const components = {
       dataPath: '',
       link: ['-link-checked-'],
     },
-    adjustProps: (props, { component: { designProps }, followLinkOption }) => {
+    adjustProps: (
+      props,
+      { component: { children, designProps }, followLinkOption },
+    ) => {
       const adjusted = {
         onChange: designProps?.link
           ? (event) => followLinkOption(designProps.link, event.target.checked)
@@ -1048,6 +1051,11 @@ export const components = {
       if (props.label) adjusted.label = replaceWithData(props.label);
       if (designProps?.dataPath)
         adjusted.checked = getDataByPath(designProps.dataPath);
+      if (children && children[0]) {
+        adjusted.children = (state) => (
+          <DesignComponent id={children[0]} datum={state} />
+        );
+      }
       return { ...props, ...adjusted };
     },
     initialize: (props, { component: { designProps }, followLinkOption }) => {
