@@ -1117,16 +1117,18 @@ export const setProblem = (nextProblem) => {
 const millisecondsPerDay = 86400000;
 
 const compareDesigns = (d1, d2) => {
-  const now = new Date();
-  const date1 = new Date(Date.parse(d1.date));
-  const date2 = new Date(Date.parse(d2.date));
-  const delta1 = now - date1;
-  const delta2 = now - date2;
-  const days1 = delta1 / millisecondsPerDay;
-  const days2 = delta2 / millisecondsPerDay;
-  if (days1 < 7 && days2 < 7) return days1 - days2;
-  if (days1 < 7) return -1;
-  if (days2 < 7) return 1;
+  if (d1?.date && d2?.date) {
+    const now = new Date();
+    const date1 = new Date(Date.parse(d1.date));
+    const date2 = new Date(Date.parse(d2.date));
+    const delta1 = now - date1;
+    const delta2 = now - date2;
+    const days1 = delta1 / millisecondsPerDay;
+    const days2 = delta2 / millisecondsPerDay;
+    if (days1 < 7 && days2 < 7) return days1 - days2;
+    if (days1 < 7) return -1;
+    if (days2 < 7) return 1;
+  }
   return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
 };
 
