@@ -1166,17 +1166,20 @@ export const useDesigns = ({ fetched } = {}) => {
       if (stored) nextDesigns = [...nextDesigns, ...JSON.parse(stored)];
     }
     setDesigns(
-      nextDesigns.sort(compareDesigns).map((d) => {
-        const slugName = slugify(d.name);
-        let id;
-        if (d.id) id = d.id;
-        else if (d.url) id = d.url.split('=')[1];
-        if (id && id.toLowerCase().startsWith(slugName)) {
-          const author = id.slice(slugName.length).split('-')[1];
-          return { ...d, author };
-        }
-        return d;
-      }),
+      nextDesigns
+        .filter((d) => d)
+        .sort(compareDesigns)
+        .map((d) => {
+          const slugName = slugify(d.name);
+          let id;
+          if (d.id) id = d.id;
+          else if (d.url) id = d.url.split('=')[1];
+          if (id && id.toLowerCase().startsWith(slugName)) {
+            const author = id.slice(slugName.length).split('-')[1];
+            return { ...d, author };
+          }
+          return d;
+        }),
     );
   }, [fetched]);
   return designs;
