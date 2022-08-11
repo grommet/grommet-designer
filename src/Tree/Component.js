@@ -123,6 +123,7 @@ const Component = ({ id, first }) => {
               pad={{ vertical: 'xxsmall', horizontal: 'small' }}
               background={
                 (dragOver && 'focus') ||
+                (dragging === id && 'background-contrast') ||
                 (selection === id && 'selected-background') ||
                 (selectionAncestor && 'background-contrast') ||
                 undefined
