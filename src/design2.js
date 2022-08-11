@@ -1129,7 +1129,10 @@ const compareDesigns = (d1, d2) => {
     if (days1 < 7) return -1;
     if (days2 < 7) return 1;
   }
-  return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
+  if (d1?.name && d2?.name) {
+    return d1.name.toLowerCase().localeCompare(d2.name.toLowerCase());
+  }
+  return -1;
 };
 
 export const useDesigns = ({ fetched } = {}) => {
