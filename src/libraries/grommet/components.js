@@ -827,7 +827,7 @@ export const components = {
       href: '',
       icon: ['-Icon-'],
       margin: Edge,
-      size: ['xsmall', 'small', 'medium', 'large'],
+      size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', '2xl'],
     },
     designProperties: {
       link: ['-link-'],
