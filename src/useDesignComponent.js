@@ -190,9 +190,11 @@ const useDesignComponent = (id, datum) => {
 
   useEffect(() => {
     const component = getComponent(id);
-    const type = getType(component.type);
-    if (type.initialize)
-      type.initialize(component.props, { component, followLinkOption });
+    if (component) {
+      const type = getType(component.type);
+      if (type.initialize)
+        type.initialize(component.props, { component, followLinkOption });
+    }
   }, [id, followLinkOption]);
 
   if (props === undefined) return renderNull;
