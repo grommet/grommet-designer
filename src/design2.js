@@ -868,6 +868,14 @@ export const duplicateComponent = (id, options, idMapArg) => {
         if (component.props[prop] && definition === '-link-') {
           component.props[prop] = relink(component.props[prop]);
         }
+        if (
+          component.props[prop] &&
+          Array.isArray(definition) &&
+          definition[0] === '-reference-'
+        ) {
+          component.props[prop] =
+            idMap[component.props[prop]] || component.props[prop];
+        }
       });
 
       if (type.designProperties)

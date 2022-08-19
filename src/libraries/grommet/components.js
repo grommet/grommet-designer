@@ -2165,7 +2165,7 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    copy: (source, copy, { nextDesign, duplicateComponent }) => {
+    copy: (source, copy, { duplicateComponent }) => {
       // duplicate any places content components
       if (source.props?.places) {
         source.props.places.forEach((place, index) => {
