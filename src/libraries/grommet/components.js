@@ -840,9 +840,9 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['margin', 'color'],
-    adjustProps: (props, { component, followLink }) => {
+    adjustProps: (props, { component, datum, followLink }) => {
       const adjusted = {};
-      adjusted.label = replaceWithData(props.label);
+      adjusted.label = replaceWithData(props.label, datum);
       if (component?.designProps?.link)
         adjusted.onClick = (event) => {
           event.stopPropagation();
@@ -883,8 +883,9 @@ export const components = {
       link: ['-link-'],
     },
     advancedProperties: ['color', 'fill', 'gap', 'margin', 'size'],
-    adjustProps: (props, { component, followLink }) => {
+    adjustProps: (props, { component, datum, followLink }) => {
       const adjusted = {};
+      if (props.label) adjusted.label = replaceWithData(props.label, datum);
       if (props.badge !== undefined)
         adjusted.badge = props.badge === 0 ? true : props.badge;
       if (component?.designProps?.link)
