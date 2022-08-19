@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext } from 'react';
+import React, { forwardRef, useContext, useMemo } from 'react';
 import { Box, Button, Text } from 'grommet';
 import { Location } from 'grommet-icons';
 import SelectionContext from '../SelectionContext';
@@ -21,8 +21,12 @@ const ReferenceLabel = ({ selected, option }) => {
 const ReferenceProperty = forwardRef(({ name, onChange, value }, ref) => {
   const [, setSelection] = useContext(SelectionContext);
   const design = useDesign();
-  const options = Object.values(design.components).filter(
-    (c) => c.type !== 'designer.Reference' && c.name,
+  const options = useMemo(
+    () =>
+      Object.values(design.components).filter(
+        (c) => c.type !== 'designer.Reference' && c.name,
+      ),
+    [design],
   );
 
   return (
