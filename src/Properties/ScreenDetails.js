@@ -13,7 +13,8 @@ import {
 import TextInputField from './TextInputField';
 
 const ScreenDetails = () => {
-  const [selection, setSelection] = useContext(SelectionContext);
+  const [selection, setSelection, { setLocation }] =
+    useContext(SelectionContext);
   const screen = useScreen(selection);
 
   if (!screen) return null;
@@ -25,7 +26,9 @@ const ScreenDetails = () => {
 
   const duplicate = () => {
     // empty object prevents trying to add as a child
-    setSelection(duplicateScreen(selection));
+    const nextScreenId = duplicateScreen(selection);
+    setLocation({ screen: nextScreenId });
+    setSelection(nextScreenId);
 
     ReactGA.event({
       category: 'edit',
