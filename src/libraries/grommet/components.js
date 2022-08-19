@@ -809,7 +809,14 @@ export const components = {
       label: 'panel',
     },
     properties: {
-      label: 'panel',
+      label: '-string-or-component-',
+    },
+    adjustProps: (props, { component: { designProps } }) => {
+      const adjusted = {};
+      if (props.label && typeof props.label === 'number') {
+        adjusted.label = <DesignComponent id={props.label} />;
+      }
+      return { ...props, ...adjusted };
     },
   },
   Anchor: {
