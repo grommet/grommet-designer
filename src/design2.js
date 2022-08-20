@@ -644,6 +644,24 @@ export const duplicateScreen = (id) => {
   return screen.id;
 };
 
+const getOrAddReferencedImportsScreen = () => {
+  let screen = Object.values(design.screens).find(
+    (s) => s.name === 'Referenced Imports',
+  );
+  if (!screen) {
+    const id = getNextId();
+    const name = 'Referenced Imports';
+    screen = { id, name, path: `/${slugify(name)}` };
+    design.screens[id] = screen;
+    design.screenOrder.push(id);
+    const root = addComponent('grommet.Box', { within: id });
+    screen.root = root.id;
+    notify();
+    lazilyStore();
+  }
+  return screen;
+};
+
 const insertComponent = (id, options) => {
   // insert this component into the right parent
   if (options.within) {
@@ -788,6 +806,14 @@ export const removeComponent = (id) => {
   // NOTE: We might still have references in Button and Menu.items links or
   // Reference. We leave them alone and let upgrade() clean up eventually.
 
+  // remove from addedImportIdMap
+  if (design.addedImportIdMap) {
+    Object.keys(design.addedImportIdMap).forEach((key) => {
+      if (design.addedImportIdMap[key] === id)
+        delete design.addedImportIdMap[key];
+    });
+  }
+
   // delete component
   delete design.components[id];
 
@@ -873,8 +899,30 @@ export const duplicateComponent = (id, options, idMapArg) => {
           Array.isArray(definition) &&
           definition[0] === '-reference-'
         ) {
-          component.props[prop] =
-            idMap[component.props[prop]] || component.props[prop];
+          if (idMap[component.props[prop]])
+            // we added this component just now, connect it
+            component.props[prop] = idMap[component.props[prop]];
+          else if (design.addedImportIdMap?.[component.props[prop]])
+            // we added this component previously, connect it
+            component.props[prop] =
+              design.addedImportIdMap[component.props[prop]];
+          else {
+            // get or create screen to hold copy of referenced component
+            const importsScreen = getOrAddReferencedImportsScreen();
+            // duplicate the referenced component into the screen
+            const referencedId = duplicateComponent(
+              component.props[prop],
+              { template: source },
+              idMap,
+            );
+            // remember the mapping, in case we need it another time
+            if (!design.addedImportIdMap) design.addedImportIdMap = {};
+            design.addedImportIdMap[component.props[prop]] = referencedId;
+            // insert into screen root
+            insertComponent(referencedId, { within: importsScreen.root });
+            // connect to local copy
+            component.props[prop] = referencedId;
+          }
         }
       });
 

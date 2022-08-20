@@ -394,5 +394,13 @@ export const upgradeDesign = (design) => {
     design.data = nextData;
   }
 
-  design.version = 4.0;
+  // 4.1
+  // remove any missing design.addedImportIdMap entries
+  if (design.addedImportIdMap)
+    Object.keys(design.addedImportIdMap).forEach((key) => {
+      if (!design.components[design.addedImportIdMap[key]])
+        delete design.addedImportIdMap[key];
+    });
+
+  design.version = 4.1;
 };
