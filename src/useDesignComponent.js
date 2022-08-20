@@ -25,7 +25,8 @@ const Placeholder = styled.div`
   pointer-events: none;
 `;
 
-const useDesignComponent = (id, datum) => {
+// pass style so selection of a Reference shows the selection indicator
+const useDesignComponent = (id, datum, style) => {
   const [selection, setSelection, { followLink, followLinkOption }] =
     useContext(SelectionContext);
   const responsiveSize = useContext(ResponsiveContext);
@@ -61,7 +62,7 @@ const useDesignComponent = (id, datum) => {
     )
       return [undefined, null];
 
-    let props = { ...component.props };
+    let props = { ...component.props, style };
     // use any responsive props
     const responsiveProps = component.responsive?.[responsiveSize]?.props;
     if (responsiveProps) props = { ...props, ...responsiveProps };

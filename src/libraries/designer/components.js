@@ -90,7 +90,10 @@ export const components = {
     },
   },
   Reference: {
-    component: ({ children }) => children || null,
+    component: ({ children, style }) => {
+      if (children && style) return React.cloneElement(children, { style });
+      else return children || null;
+    },
     name: 'Reference',
     help: `Reference is a designer specific component for
     use with this design tool. The key property is 'component'
@@ -108,8 +111,9 @@ export const components = {
     adjustProps: (props) => {
       if (props.component) {
         // TODO: verify !includeChildren case
+        // pass style through to be able to show selection
         const children = (
-          <DesignComponent id={props.component}>
+          <DesignComponent id={props.component} style={props.style}>
             {!props.includeChildren ? props.children : null}
           </DesignComponent>
         );
@@ -117,11 +121,6 @@ export const components = {
       }
       return props;
     },
-    // copy: (source, copy, { duplicateComponent }) => {
-    //   if (source.props?.component) {
-    //     copy.props.component = idMap[source.props.component];
-    //   }
-    // },
   },
   Screen: {
     name: 'Screen',
