@@ -186,6 +186,7 @@ const useDesignComponent = (id, datum, style) => {
     responsiveSize,
     selection,
     setSelection,
+    style,
     type,
   ]);
 
