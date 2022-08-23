@@ -1101,6 +1101,7 @@ export const components = {
     },
     advancedProperties: ['gap'],
     designProperties: {
+      dataPath: '',
       link: ['-link-options-'],
     },
     adjustProps: (
@@ -1114,6 +1115,8 @@ export const components = {
         adjusted.onChange = ({ value }) =>
           followLinkOption(designProps.link, value);
       }
+      if (designProps?.dataPath)
+        adjusted.options = getDataByPath(designProps.dataPath);
       return { ...props, ...adjusted };
     },
     initialize: (props, { component: { designProps }, followLinkOption }) => {
@@ -1309,6 +1312,7 @@ export const components = {
     },
     advancedProperties: ['gap'],
     designProperties: {
+      dataPath: '',
       link: ['-link-options-'],
     },
     adjustProps: (
@@ -1322,6 +1326,8 @@ export const components = {
         adjusted.onChange = ({ target: { value } }) =>
           followLinkOption(designProps.link, value);
       }
+      if (designProps?.dataPath)
+        adjusted.options = getDataByPath(designProps.dataPath);
       return { ...props, ...adjusted };
     },
     initialize: (props, { component: { designProps }, followLinkOption }) => {

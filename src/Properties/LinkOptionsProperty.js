@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { Box, Grid, Select, Text } from 'grommet';
-import { getComponent, getLinkOptions } from '../design2';
+import { getComponent, getDataByPath, getLinkOptions } from '../design2';
 import SelectionContext from '../SelectionContext';
 
 const specialNames = {
@@ -32,7 +32,17 @@ const LinkOptionsProperty = ({ value, onChange }) => {
     </Box>
   );
 
-  const names = [...Object.keys(specialNames), ...component.props.options];
+  // options could be explicit or driven by dataPath
+  const names = Object.keys(specialNames);
+  if (component.designProps.dataPath) {
+    let data = getDataByPath(component.designProps.dataPath);
+    // apply valueKey if needed
+    if (component.props.valueKey)
+      data = data.map((d) => d[component.props.valueKey]);
+    names.push.apply(names, data);
+  } else {
+    names.push.apply(names, component.props.options);
+  }
 
   return (
     <Grid
