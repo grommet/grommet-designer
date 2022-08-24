@@ -403,10 +403,11 @@ export const getDataByPath = (path, datum) => {
 export const replaceWithData = (text, datum) =>
   // replace {data-name.key-name} with with data[data-name][key-name] content
   // OR replace {key-name} with datum[key-name] content
-  (text || '').replace(
-    /\{[^}]*\}/g,
-    (match) => getDataByPath(match.slice(1, match.length - 1), datum) || match,
-  );
+  (text || '').replace(/\{[^}]*\}/g, (match) => {
+    const matched = getDataByPath(match.slice(1, match.length - 1), datum);
+    if (matched && typeof matched !== 'object') return matched;
+    return match;
+  });
 
 export const getImports = () => imports;
 
