@@ -42,6 +42,9 @@ const notify = (id, dataArg) => {
   }
   if (listeners.data && data[id]) listeners.data.forEach((f) => f(data));
   if (listeners.all) listeners.all.forEach((f) => f(design));
+  // We separate 'change' from 'all' to prevent undo/redo from being treated
+  // as new changes. Note that `notifyChange` doesn't call 'change' listeners.
+  if (listeners.change) listeners.change.forEach((f) => f(design));
 };
 
 const notifyChange = () => {
@@ -1313,42 +1316,58 @@ export const useData = (id) => {
 };
 
 export const useChanges = () => {
+  // We hold the changes here to enable undo/redo.
+  // A key point is that designs within the designs array should never refer
+  // to the same object as the design global in this file. They should
+  // always be serialized copies.
   const [{ designs, index }, setChanges] = useState({
     designs: design ? [JSON.parse(JSON.stringify(design))] : [],
     index: design ? 0 : -1,
   });
 
   useEffect(() => {
-    listen('all', () => {
-      // TODO: delay to ride out small changes better
-      setChanges((prevChanges) => {
-        const { designs: prevDesigns, index: prevIndex } = prevChanges;
-        const nextDesigns = prevDesigns.slice(prevIndex, 10);
-        nextDesigns.unshift(JSON.parse(JSON.stringify(design)));
-        return { designs: nextDesigns, index: 0 };
-      });
+    let timer;
+    return listen('change', () => {
+      // ride out quick change sequences, like character typing or drag/drop
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setChanges((prevChanges) => {
+          const { designs: prevDesigns, index: prevIndex } = prevChanges;
+          const nextDesigns = prevDesigns.slice(prevIndex, 10);
+          nextDesigns.unshift(JSON.parse(JSON.stringify(design)));
+          return { designs: nextDesigns, index: 0 };
+        });
+      }, 800);
     });
-  }, []);
+  }, [designs]);
 
   return {
     undo:
       index < designs.length - 1
         ? () => {
-            const nextIndex = Math.min(index + 1, designs.length - 1);
-            design = designs[nextIndex];
-            notifyChange();
-            lazilyStore();
-            setChanges({ designs, index: nextIndex });
+            setChanges((prevChanges) => {
+              const { designs: prevDesigns, index: prevIndex } = prevChanges;
+              const nextDesigns = prevDesigns.slice(0);
+              const nextIndex = Math.min(prevIndex + 1, prevDesigns.length - 1);
+              design = JSON.parse(JSON.stringify(designs[nextIndex]));
+              notifyChange();
+              lazilyStore();
+              return { designs: nextDesigns, index: nextIndex };
+            });
           }
         : undefined,
     redo:
       index > 0
         ? () => {
-            const nextIndex = Math.max(index - 1, 0);
-            design = designs[nextIndex];
-            notifyChange();
-            lazilyStore();
-            setChanges({ designs, index: nextIndex });
+            setChanges((prevChanges) => {
+              const { designs: prevDesigns, index: prevIndex } = prevChanges;
+              const nextDesigns = prevDesigns.slice(0);
+              const nextIndex = Math.max(prevIndex - 1, 0);
+              design = JSON.parse(JSON.stringify(designs[nextIndex]));
+              notifyChange();
+              lazilyStore();
+              return { designs: nextDesigns, index: nextIndex };
+            });
           }
         : undefined,
   };

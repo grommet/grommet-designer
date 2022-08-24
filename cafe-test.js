@@ -214,6 +214,8 @@ test('create design', async (t) => {
     .typeText(nameInput('label'), 'First Screen Link', { replace: true })
     .expect(firstScreenLink.exists)
     .ok();
+  // ensure undo/redo changes have absorbed the anchor label change
+  await t.wait(1000);
   // undo
   await t.click(undoControl).expect(firstScreenLink.exists).notOk();
   // redo
