@@ -895,14 +895,10 @@ export const duplicateComponent = (id, options, idMapArg) => {
 
       Object.keys(type.properties).forEach((prop) => {
         const definition = type.properties[prop];
-        if (component.props[prop] && definition === '-link-') {
+        if (component.props[prop] && definition.includes?.('-link-')) {
           component.props[prop] = relink(component.props[prop]);
         }
-        if (
-          component.props[prop] &&
-          Array.isArray(definition) &&
-          definition[0] === '-reference-'
-        ) {
+        if (component.props[prop] && definition.includes?.('-reference-')) {
           if (idMap[component.props[prop]])
             // we added this component just now, connect it
             component.props[prop] = idMap[component.props[prop]];
@@ -933,7 +929,10 @@ export const duplicateComponent = (id, options, idMapArg) => {
       if (type.designProperties)
         Object.keys(type.designProperties).forEach((prop) => {
           const definition = type.designProperties[prop];
-          if (component?.designProps?.[prop] && definition === '-link-') {
+          if (
+            component?.designProps?.[prop] &&
+            definition.includes?.('-link-')
+          ) {
             component.designProps[prop] = relink(component.designProps[prop]);
           }
         });
