@@ -34,7 +34,7 @@ const LinkOptionsProperty = ({ value, onChange }) => {
 
   // options could be explicit or driven by dataPath
   const names = Object.keys(specialNames);
-  if (component.designProps.dataPath) {
+  if (component?.designProps?.dataPath) {
     let data = getDataByPath(component.designProps.dataPath);
     // apply valueKey if needed
     if (component.props.valueKey)
