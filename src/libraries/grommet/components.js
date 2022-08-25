@@ -1417,13 +1417,6 @@ export const components = {
           <DesignComponent id={children[0]} datum={option} />
         );
       }
-      // ensure we don't pass options as objects without a labelKey
-      // TODO: make grommet more resilient
-      if (adjusted.options && typeof adjusted.options[0] === 'object') {
-        if (!props.labelKey) {
-          adjusted.labelKey = Object.keys(adjusted.options[0])[0];
-        }
-      }
       if (props.valueLabel) {
         adjusted.valueLabel = (
           <DesignComponent
