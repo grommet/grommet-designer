@@ -26,15 +26,6 @@ const Component = ({ id, first }) => {
 
   const component = useComponent(id);
 
-  // // TODO: Why do we initialize() in the Tree ???
-  // useEffect(() => {
-  //   const comp = getComponent(id);
-  //   const type = getType(comp.type);
-  //   if (!!type.initialize) console.log('!!! initialize?', { id: comp.id, type: type.name });
-  //   if (type.initialize)
-  //     type.initialize(comp.props, { component: comp, followLinkOption });
-  // }, [id, followLinkOption]);
-
   // scroll to show if selected component
   useEffect(() => {
     if (id === selection && selectionRef.current) {
@@ -50,10 +41,6 @@ const Component = ({ id, first }) => {
   const name = getName(id);
   const subName = component.type.split('.')[1] || component.type;
   const selectionAncestor = selectionPath.includes(id);
-
-  // let reference;
-  // if (component.type === 'designer.Reference')
-  //   reference = getComponent(component.props.component);
 
   const CollapseIcon = component.collapsed ? FormNext : FormDown;
 
