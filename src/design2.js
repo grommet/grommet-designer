@@ -1118,6 +1118,7 @@ export const addData = () => {
 
 export const removeData = (id) => {
   delete design.data[id];
+  delete data[id];
   notify([id, 'data']);
   lazilyStore();
 };
