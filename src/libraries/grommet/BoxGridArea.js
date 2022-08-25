@@ -1,17 +1,18 @@
 import React from 'react';
 import { Box, FormField, Paragraph, Select } from 'grommet';
-import { getParent } from '../../design'; // TODO: fix
+import { getComponent, getParent } from '../../design2';
 
 const BoxGridArea = ({ value, onChange, design, component }) => {
   let message;
-  const parent = getParent(design, component.id);
+  const parentId = getParent(component.id);
   let areas;
-  if (!parent) {
+  if (!parentId) {
     message = `
       Well, gridArea only does anything when the parent component is a Grid.
       Currently, this Box has no parent.
     `;
   } else {
+    const parent = getComponent(parentId);
     areas = parent.props.areas && parent.props.areas.map((a) => a.name);
     if (parent.type !== 'grommet.Grid') {
       message = `

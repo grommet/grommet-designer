@@ -1,4 +1,4 @@
-import { getDisplayName } from './get';
+import { getName } from '../design2';
 import grommetLibrary from '../libraries/grommet';
 
 // Upgrade to latest design structure
@@ -341,7 +341,7 @@ export const upgradeDesign = (design) => {
     .forEach((component) => {
       const alignLabel = (link) => {
         if (link.component) {
-          link.label = getDisplayName(design, link.component);
+          link.label = getName(link.component, { template: design });
         } else if (link.screen) {
           link.label = (design.screens[link.screen] || {}).name;
         }

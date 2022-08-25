@@ -1,19 +1,12 @@
 import React, { useMemo } from 'react';
 import { Box, FormField, Select, TextInput } from 'grommet';
 import { ThemeContext } from 'styled-components';
-import { getDisplayName, getScreenForComponent } from '../../design';
+import { getLinkOptions, getName, getRoot, getTheme } from '../../design2';
 import ArrayOfObjects from './ArrayOfObjects';
 
-const Connection = ({
-  value,
-  onChange,
-  theme,
-  component,
-  design,
-  linkOptions,
-  targetOptions,
-}) => {
+const Connection = ({ value, onChange, targetOptions }) => {
   const baseTheme = React.useContext(ThemeContext);
+  const theme = getTheme();
 
   const colorOptions = React.useMemo(() => {
     const merged = { ...baseTheme.global.colors, ...theme.global.colors };
@@ -110,28 +103,25 @@ const Connection = ({
 };
 
 // convert array of strings to be an object for editing, back if can be
-const DiagramConnections = ({ value = [], onChange, ...rest }) => {
-  const { component, design, linkOptions } = rest;
-
+const DiagramConnections = ({ id, value = [], onChange, ...rest }) => {
   // targets are any linkOptions in the same screen
   const targetOptions = useMemo(() => {
-    const screen = getScreenForComponent(design, component.id);
+    const linkOptions = getLinkOptions(id);
+    const screen = getRoot(id);
     const options = linkOptions
       .filter((o) => o.screen === screen && o.component)
       .map((o) => ({ label: o.label, target: String(o.component) }));
     options.push({ label: 'undefined', target: 'undefined' });
     return options;
-  }, [component, design, linkOptions]);
+  }, [id]);
 
   return (
     <ArrayOfObjects
+      id={id}
       value={value}
       name="connections"
       labelKey={(item) =>
-        `${getDisplayName(design, item.fromTarget)} + ${getDisplayName(
-          design,
-          item.toTarget,
-        )}`
+        `${getName(item.fromTarget)} + ${getName(item.toTarget)}`
       }
       Edit={Connection}
       onChange={onChange}
