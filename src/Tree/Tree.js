@@ -54,64 +54,9 @@ const within = (node, container) => {
 // or { id, value, onChange } for property components
 const Tree = ({ onClose, root, setMode }) => {
   const [selection, setSelection] = useContext(SelectionContext);
-
   const screens = useScreens();
-
-  // const selectedAncestors = useMemo(() => {
-  //   const result = [];
-  //   if (selected.component) {
-  //     let parent = getParent(design, selected.component);
-  //     while (parent) {
-  //       result.push(parent.id);
-  //       parent = getParent(design, parent.id);
-  //     }
-  //   }
-  //   return result;
-  // }, [design, selected]);
-
   const [copied, setCopied] = useState();
   const treeRef = useRef();
-  // const selectionRef = useRef();
-
-  // ensure selected component is visible in the tree
-  // useEffect(() => {
-  //   // we use a timeout to give any expansion a chance to complete first
-  //   const timer = setTimeout(() => {
-  //     if (selectionRef.current) {
-  //       const rect = selectionRef.current.getBoundingClientRect();
-  //       if (rect.bottom < 0 || rect.top > window.innerHeight) {
-  //         selectionRef.current.scrollIntoView();
-  //       }
-  //       if (within(document.activeElement, treeRef.current)) {
-  //         document.activeElement.blur();
-  //       }
-  //     }
-  //   }, 20);
-  //   return () => clearTimeout(timer);
-  // }, [selection]);
-
-  // // ensure selected component is expanded in the tree
-  // useEffect(() => {
-  //   // only change local designs, otherwise we might have to prompt for change
-  //   if (design.local && selected.component) {
-  //     let parent = getParent(design, selected.component);
-  //     while (parent && !parent.collapsed) {
-  //       parent = getParent(design, parent.id);
-  //     }
-  //     if (parent) {
-  //       const nextDesign = JSON.parse(JSON.stringify(design));
-  //       nextDesign.components[parent.id].collapsed = false;
-  //       updateDesign(nextDesign);
-  //     } else {
-  //       // if ancestors aren't collapsed, perhaps the screen is?
-  //       if (design.screens[selected.screen].collapsed) {
-  //         const nextDesign = JSON.parse(JSON.stringify(design));
-  //         nextDesign.screens[selected.screen].collapsed = false;
-  //         updateDesign(nextDesign);
-  //       }
-  //     }
-  //   }
-  // }, [design, selected, updateDesign]);
 
   const [dragging, setDragging] = useState();
   const dragDropContext = useMemo(() => [dragging, setDragging], [dragging]);
