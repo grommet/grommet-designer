@@ -1418,17 +1418,21 @@ export const components = {
         );
       }
       if (props.valueLabel) {
-        adjusted.valueLabel = (
-          <DesignComponent
-            id={props.valueLabel}
-            datum={
-              props.value ||
-              inputValues[id] ||
-              props.defaultValue ||
-              props.placeholder
-            }
-          />
-        );
+        if (props.value || inputValues[id] || props.defaultValue) {
+          adjusted.valueLabel = (
+            <DesignComponent
+              id={props.valueLabel}
+              datum={
+                props.value ||
+                inputValues[id] ||
+                props.defaultValue ||
+                props.placeholder
+              }
+            />
+          );
+        } else {
+          adjusted.valueLabel = undefined;
+        }
       }
       return { ...props, ...adjusted };
     },
