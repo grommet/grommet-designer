@@ -134,7 +134,7 @@ const useDesignComponent = (id, datum, style) => {
       const propClick = props.onClick;
       props.onClick = (event) => {
         if (event.shiftKey || !propClick) {
-          event.stopPropagation();
+          if (event.shiftKey) event.stopPropagation();
           if (selection !== id) setSelection(id);
           else if (type.text)
             setInlineEditSize(
