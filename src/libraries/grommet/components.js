@@ -2115,8 +2115,8 @@ export const components = {
       opacity: ['weak', 'medium', 'strong'],
       src: ImageSrc,
     },
-    adjustProps: (props) => {
-      return { ...props, src: replaceWithData(props.src) };
+    adjustProps: (props, { datum }) => {
+      return { ...props, src: replaceWithData(props.src, datum) };
     },
   },
   Video: {

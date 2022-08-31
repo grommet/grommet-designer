@@ -41,10 +41,10 @@ export const components = {
       icon: ['-Icon-'],
       size: ['small', 'medium', 'large', 'xlarge'],
     },
-    adjustProps: (props) => {
+    adjustProps: (props, { datum }) => {
       const adjusted = {};
-      if (props.color) adjusted.color = replaceWithData(props.color);
-      if (props.icon) adjusted.icon = replaceWithData(props.icon);
+      if (props.color) adjusted.color = replaceWithData(props.color, datum);
+      if (props.icon) adjusted.icon = replaceWithData(props.icon, datum);
       return { ...props, ...adjusted };
     },
   },
