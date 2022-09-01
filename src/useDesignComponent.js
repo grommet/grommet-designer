@@ -25,6 +25,8 @@ const Placeholder = styled.div`
   pointer-events: none;
 `;
 
+let clickBusy = false;
+
 // pass style so selection of a Reference shows the selection indicator
 const useDesignComponent = (id, datum, style) => {
   const [selection, setSelection, { followLink, followLinkOption }] =
@@ -133,14 +135,30 @@ const useDesignComponent = (id, datum, style) => {
     if (setSelection) {
       const propClick = props.onClick;
       props.onClick = (event) => {
-        if (event.shiftKey || !propClick) {
-          if (event.shiftKey) event.stopPropagation();
-          if (selection !== id) setSelection(id);
-          else if (type.text)
+        if (selection === id) {
+          if (type.text) {
             setInlineEditSize(
               document.getElementById(id).getBoundingClientRect(),
             );
-        } else if (propClick) propClick(event);
+          }
+        } else if (!clickBusy) {
+          setSelection(id);
+          // only change selection for the first design component
+          clickBusy = true;
+          setTimeout(() => {
+            clickBusy = false;
+          }, 2);
+        }
+        if (event.shiftKey) event.stopPropagation();
+        else if (propClick) propClick(event);
+        // if (event.shiftKey || !propClick) {
+        //   // how to
+        //   if (selection !== id) setSelection(id);
+        //   else if (type.text)
+        //     setInlineEditSize(
+        //       document.getElementById(id).getBoundingClientRect(),
+        //     );
+        // } else if (propClick) propClick(event);
       };
       props.tabIndex = '-1';
       if (selection === id) {
