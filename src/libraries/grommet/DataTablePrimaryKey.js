@@ -20,7 +20,10 @@ const PrimaryKey = ({ dropTarget, onChange, value }) => {
       value={typeof value === 'boolean' ? value.toString() : value || ''}
       valueLabel={<OptionLabel value={value} selected />}
       onChange={({ option }) => {
-        onChange(option === 'undefined' ? undefined : option);
+        let nextValue = option;
+        if (option === 'undefined') nextValue = undefined;
+        if (option === 'false') nextValue = false;
+        onChange(nextValue);
       }}
     >
       {(option, index, options, { selected }) => (
