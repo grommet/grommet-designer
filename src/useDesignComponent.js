@@ -135,20 +135,23 @@ const useDesignComponent = (id, datum, style) => {
     if (setSelection) {
       const propClick = props.onClick;
       props.onClick = (event) => {
-        if (selection === id) {
-          if (type.text) {
-            setInlineEditSize(
-              document.getElementById(id).getBoundingClientRect(),
-            );
+        if (!clickBusy) {
+          if (selection === id) {
+            if (type.text) {
+              setInlineEditSize(
+                document.getElementById(id).getBoundingClientRect(),
+              );
+            }
+          } else {
+            setSelection(id);
           }
-        } else if (!clickBusy) {
-          setSelection(id);
           // only change selection for the first design component
           clickBusy = true;
           setTimeout(() => {
             clickBusy = false;
           }, 2);
         }
+
         if (event.shiftKey) event.stopPropagation();
         else if (propClick) propClick(event);
         // if (event.shiftKey || !propClick) {
