@@ -174,9 +174,16 @@ const useDesignComponent = (id, datum, style) => {
       children = props.children;
       delete props.children;
     } else if (component.children?.length) {
-      children = component.children.map((childId) => (
-        <DesignComponent key={childId} id={childId} datum={datum} />
-      ));
+      children = component.children
+        .filter((childId) => {
+          // Filter out hidden components.
+          // We cannot detect if DesignComponent will render null at this point.
+          const child = getComponent(childId);
+          return child && !child.hide;
+        })
+        .map((childId) => (
+          <DesignComponent key={childId} id={childId} datum={datum} />
+        ));
     } else if (inlineEditSize) {
       const useArea = type.name === 'Paragraph' || type.name === 'Markdown';
       children = (
