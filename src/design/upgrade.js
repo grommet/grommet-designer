@@ -402,5 +402,14 @@ export const upgradeDesign = (design) => {
         delete design.addedImportIdMap[key];
     });
 
+  // convert any empty string property values to undefined
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .forEach((component) => {
+      Object.keys(component.props).forEach((name) => {
+        if (component.props[name] === '') delete component.props[name];
+      });
+    });
+
   design.version = 4.1;
 };
