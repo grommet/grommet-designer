@@ -14,7 +14,7 @@ const StringProperty = React.forwardRef(
           name={name}
           plain
           value={value || ''}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={(event) => setValue(event.target.value || undefined)}
           style={{ textAlign: 'end' }}
         />
       </Field>
