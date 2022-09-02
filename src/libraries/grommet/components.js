@@ -1756,7 +1756,7 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    adjustProps: (props, { component: { designProps }, followLink }) => {
+    adjustProps: (props, { component: { designProps, id }, followLink }) => {
       const adjusted = {};
       if (designProps?.dataPath)
         adjusted.data = getDataByPath(designProps.dataPath);
@@ -1770,9 +1770,11 @@ export const components = {
           followLink(props.onClickRow);
         };
       }
-      if (props.onSelect) adjusted.onSelect = (text) => {};
+      if (props.onSelect)
+        adjusted.onSelect = (selected) => (inputValues[id] = selected);
       if (props.select)
         adjusted.select = props.select.split(',').map((s) => s.trim());
+      else adjusted.select = inputValues[id];
       adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c.render
