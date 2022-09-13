@@ -64,6 +64,7 @@ export const structure = [
       'RadioButtonGroup',
       'RangeInput',
       'Select',
+      'SelectMultiple',
       'TextArea',
       'TextInput',
     ],

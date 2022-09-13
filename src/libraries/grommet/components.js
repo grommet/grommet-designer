@@ -50,6 +50,7 @@ import {
   RadioButtonGroup,
   RangeInput,
   Select,
+  SelectMultiple,
   Sidebar,
   Spinner,
   Stack,
@@ -1376,6 +1377,94 @@ export const components = {
       placeholder: '',
       plain: false,
       searchPlaceholder: '',
+      size: ['small', 'medium', 'large', 'xlarge'],
+      value: '',
+      valueKey: '',
+      valueLabel: '-component-',
+    },
+    designProperties: {
+      dataPath: '',
+      data: JsonData,
+      link: ['-link-options-'],
+    },
+    adjustProps: (
+      props,
+      { component: { id, children, designProps }, followLinkOption },
+    ) => {
+      const adjusted = {};
+      if (props.searchPlaceholder) adjusted.onSearch = (text) => {};
+      if (!props.value) adjusted.value = undefined;
+      if (designProps?.link) {
+        adjusted.onChange = ({ value }) => {
+          followLinkOption(designProps.link, value);
+          inputValues[id] = value;
+        };
+      } else {
+        adjusted.onChange = ({ value }) => (inputValues[id] = value);
+      }
+      if (
+        props.options.length === 0 &&
+        designProps?.data &&
+        Array.isArray(designProps.data)
+      ) {
+        adjusted.options = designProps.data;
+      }
+      if (designProps?.dataPath)
+        adjusted.options = getDataByPath(designProps.dataPath);
+      if (props.valueKey)
+        adjusted.valueKey = { key: props.valueKey, reduce: true };
+      if (children && children[0]) {
+        adjusted.children = (option) => (
+          <DesignComponent id={children[0]} datum={option} />
+        );
+      }
+      if (props.valueLabel) {
+        if (props.value || inputValues[id] || props.defaultValue) {
+          adjusted.valueLabel = (
+            <DesignComponent
+              id={props.valueLabel}
+              datum={
+                props.value ||
+                inputValues[id] ||
+                props.defaultValue ||
+                props.placeholder
+              }
+            />
+          );
+        } else {
+          adjusted.valueLabel = undefined;
+        }
+      }
+      return { ...props, ...adjusted };
+    },
+    initialize: (props, { component: { designProps }, followLinkOption }) => {
+      if (designProps?.link) {
+        followLinkOption(designProps.link, props.value || props.defaultValue);
+      }
+    },
+  },
+  SelectMultiple: {
+    component: SelectMultiple,
+    name: 'SelectMultiple',
+    container: 'rarely',
+    documentation: 'https://v2.grommet.io/selectmultiple',
+    defaultProps: {
+      options: ['option 1', 'option 2'],
+    },
+    properties: {
+      defaultValue: '',
+      disabled: false,
+      dropAlign: DropAlign,
+      dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
+      icon: ['-Icon-'],
+      labelKey: '',
+      limit: 0,
+      name: '',
+      options: SelectOptions,
+      placeholder: '',
+      plain: false,
+      searchPlaceholder: '',
+      showSelectedInline: true,
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
       valueKey: '',
