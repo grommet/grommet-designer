@@ -1466,7 +1466,7 @@ export const components = {
       searchPlaceholder: '',
       showSelectedInline: true,
       size: ['small', 'medium', 'large', 'xlarge'],
-      value: '',
+      value: ['-property- options'],
       valueKey: '',
       valueLabel: '-component-',
     },
