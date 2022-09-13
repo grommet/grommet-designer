@@ -24,7 +24,7 @@ exports[`App create 1`] = `
               class="StyledBox-sc-13pk1d4-0 eEYars"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+                class="StyledHeading-sc-1rdh4aw-0 jZJHGC"
               >
                 grommet designer
               </h1>
@@ -157,7 +157,7 @@ exports[`App create 2`] = `
               class="StyledBox-sc-13pk1d4-0 eEYars"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+                class="StyledHeading-sc-1rdh4aw-0 jZJHGC"
               >
                 new design
               </h1>
@@ -415,7 +415,7 @@ exports[`App create 2`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                class="StyledButton-sc-323bzc-0 ghVuhX StyledSelect__StyledSelectDropButton-sc-znp66n-5 iRgMjD"
                 type="button"
               >
                 <div
@@ -429,7 +429,7 @@ exports[`App create 2`] = `
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt Select__SelectTextInput-sc-17idtfo-0 bQAqdj"
+                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt StyledSelect__SelectTextInput-sc-znp66n-4 lbPTGE"
                         name="includes"
                         placeholder="none"
                         readonly=""
@@ -502,7 +502,7 @@ exports[`App create 3`] = `
               class="StyledBox-sc-13pk1d4-0 eEYars"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 hFEsIS"
+                class="StyledHeading-sc-1rdh4aw-0 jZJHGC"
               >
                 new design
               </h1>
@@ -760,7 +760,7 @@ exports[`App create 3`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                class="StyledButton-sc-323bzc-0 ghVuhX StyledSelect__StyledSelectDropButton-sc-znp66n-5 iRgMjD"
                 type="button"
               >
                 <div
@@ -774,7 +774,7 @@ exports[`App create 3`] = `
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt Select__SelectTextInput-sc-17idtfo-0 bQAqdj"
+                        class="StyledTextInput-sc-1x30a0s-0 fKwwIt StyledSelect__SelectTextInput-sc-znp66n-4 lbPTGE"
                         name="includes"
                         placeholder="none"
                         readonly=""
@@ -851,7 +851,7 @@ exports[`App create 4`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="Open Drop; Selected: [object Object]"
-                class="StyledButton-sc-323bzc-0 ghVuhX Select__StyledSelectDropButton-sc-17idtfo-2 ikQPYb"
+                class="StyledButton-sc-323bzc-0 ghVuhX StyledSelect__StyledSelectDropButton-sc-znp66n-5 iRgMjD"
                 id="template"
                 type="button"
               >
@@ -879,7 +879,7 @@ exports[`App create 4`] = `
                       </span>
                     </div>
                     <input
-                      class="Select__HiddenInput-sc-17idtfo-1 eTPicX"
+                      class="StyledSelect__HiddenInput-sc-znp66n-2 jIqbfH"
                       id="template__input"
                       name="template"
                       readonly=""
