@@ -1099,6 +1099,7 @@ export const components = {
       name: '',
       options: SelectOptions,
       value: ['-property- options'],
+      defaultValue: ['-property- options'],
     },
     advancedProperties: ['gap'],
     designProperties: {
@@ -1452,7 +1453,7 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
-      defaultValue: '',
+      defaultValue: ['-property- options'],
       disabled: false,
       dropAlign: DropAlign,
       dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
