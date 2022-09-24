@@ -8,6 +8,7 @@ const ArrayOfObjects = ({
   defaultObject = {},
   name,
   value = [],
+  itemKey,
   labelKey,
   onChange,
   Edit,
@@ -79,7 +80,7 @@ const ArrayOfObjects = ({
   if (reorder)
     return (
       <Box pad={{ bottom: 'small' }} gap="small">
-        <List data={value} pad="none" onOrder={onChange}>
+        <List data={value} pad="none" itemKey={itemKey} onOrder={onChange}>
           {(item) => (
             <Box>
               <Text>{getLabel(item)}</Text>
