@@ -306,7 +306,6 @@ const Properties = () => {
                 />
               )}
             </Box>
-            {selection}
             <Box flex={false} direction="row" align="center">
               {!component.coupled && (
                 <Button
