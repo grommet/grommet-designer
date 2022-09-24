@@ -175,12 +175,14 @@ const useDesignComponent = (id, datum, style) => {
       delete props.children;
     } else if (component.children?.length) {
       children = component.children
-        .filter((childId) => {
-          // Filter out hidden components.
-          // We cannot detect if DesignComponent will render null at this point.
-          const child = getComponent(childId);
-          return child && !child.hide;
-        })
+        // NOTE: I can't remember why we added this fitler, but it is
+        // causing problems with toggling Layer visibility if we uncomment it.
+        // .filter((childId) => {
+        //   // Filter out hidden components.
+        //   // We cannot detect if DesignComponent will render null at this point.
+        //   const child = getComponent(childId);
+        //   return child && !child.hide;
+        // })
         .map((childId) => (
           <DesignComponent key={childId} id={childId} datum={datum} />
         ));
