@@ -64,7 +64,7 @@ const useDesignComponent = (id, datum, style) => {
     )
       return [undefined, null];
 
-    let props = { ...component.props, style };
+    let props = { ...component.props, style: { ...component.style, ...style } };
     // use any responsive props
     const responsiveProps = component.responsive?.[responsiveSize]?.props;
     if (responsiveProps) props = { ...props, ...responsiveProps };

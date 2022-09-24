@@ -144,6 +144,13 @@ const Properties = () => {
   }, []);
 
   useEffect(() => setResponsiveSize('medium'), [selection]);
+  useEffect(
+    () =>
+      setStyle(
+        component?.style ? JSON.stringify(component.style, null, 2) : '',
+      ),
+    [component.style],
+  );
 
   if (!component) return null;
 
@@ -299,6 +306,7 @@ const Properties = () => {
                 />
               )}
             </Box>
+            {selection}
             <Box flex={false} direction="row" align="center">
               {!component.coupled && (
                 <Button
