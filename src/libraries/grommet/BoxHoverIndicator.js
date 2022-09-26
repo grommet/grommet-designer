@@ -6,13 +6,17 @@ import VariedOption, { variedOption } from './VariedOption';
 
 const BoxHoverIndicator = (props) => {
   const { name, value, onChange } = props;
+  // The extra Box fixes an issue with Tip not placing itself correctly
+  // with CheckBox
   const content = [
     <Tip key="check" content={value !== true ? 'true' : 'false'}>
-      <CheckBox
-        name={name}
-        checked={value === true}
-        onChange={(event) => onChange(event.target.checked)}
-      />
+      <Box>
+        <CheckBox
+          name={name}
+          checked={value === true}
+          onChange={(event) => onChange(event.target.checked)}
+        />
+      </Box>
     </Tip>,
   ];
   if (value !== undefined) {
@@ -28,7 +32,7 @@ const BoxHoverIndicator = (props) => {
     );
   }
   return (
-    <Box direction="row" pad={{ horizontal: 'small' }}>
+    <Box direction="row" align="center" pad={{ horizontal: 'small' }}>
       {content}
     </Box>
   );
