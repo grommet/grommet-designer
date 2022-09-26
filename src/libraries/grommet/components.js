@@ -1867,7 +1867,7 @@ export const components = {
       else adjusted.select = inputValues[id];
       adjusted.columns = props.columns.map((c) => ({
         ...c,
-        render: c.render
+        render: c?.render
           ? (datum) => <DesignComponent id={c.render} datum={datum} />
           : undefined,
       }));
