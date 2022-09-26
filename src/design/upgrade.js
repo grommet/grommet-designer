@@ -411,5 +411,13 @@ export const upgradeDesign = (design) => {
       });
     });
 
+  // remove any undefined DataTable columns
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter((component) => component.type === 'grommet.DataTable')
+    .forEach((component) => {
+      component.props.columns = component.props.columns.filter((c) => c);
+    });
+
   design.version = 4.1;
 };
