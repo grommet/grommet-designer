@@ -149,7 +149,7 @@ const Properties = () => {
       setStyle(
         component?.style ? JSON.stringify(component.style, null, 2) : '',
       ),
-    [component.style],
+    [component?.style],
   );
 
   if (!component) return null;
