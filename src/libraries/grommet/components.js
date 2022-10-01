@@ -2035,12 +2035,17 @@ export const components = {
       dataPath: '',
     },
     adjustProps: (props, { datum, component: { designProps } }) => {
-      const adjusted = {
-        value:
-          typeof props.value === 'string'
-            ? replaceWithData(props.value, datum)
-            : props.value,
-      };
+      const adjusted = {};
+      if (typeof props.value === 'string')
+        adjusted.value = replaceWithData(props.value, datum);
+      if (Array.isArray(props.values)) {
+        adjusted.values = props.values.map((v) => {
+          const val = { ...v };
+          if (typeof v?.value === 'string')
+            val.value = parseInt(replaceWithData(v.value, datum), 10);
+          return val;
+        });
+      }
       if (designProps?.dataPath)
         adjusted.values = getDataByPath(designProps.dataPath);
       return { ...props, ...adjusted };

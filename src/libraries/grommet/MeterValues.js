@@ -1,13 +1,6 @@
 import React from 'react';
 import { ThemeContext } from 'styled-components';
-import {
-  Box,
-  CheckBox,
-  FormField,
-  Select,
-  Text,
-  TextInput,
-} from 'grommet';
+import { Box, CheckBox, FormField, Select, Text, TextInput } from 'grommet';
 import { getTheme } from '../../design2';
 import ArrayOfObjects from './ArrayOfObjects';
 
@@ -40,7 +33,7 @@ const Value = ({ value, onChange }) => {
               const nextValue = JSON.parse(JSON.stringify(value));
               nextValue.value =
                 // allow for data references
-                event.target.value === '{'
+                event.target.value[0] === '{'
                   ? event.target.value
                   : parseInt(event.target.value, 10);
               // eslint-disable-next-line no-self-compare
