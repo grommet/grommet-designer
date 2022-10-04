@@ -219,6 +219,7 @@ export const components = {
       ],
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       height: Dimension,
+      a11yTitle: '',
       hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
       responsive: true,
@@ -260,7 +261,7 @@ export const components = {
       },
       {
         label: 'Interaction',
-        properties: ['onClick', 'hoverIndicator'],
+        properties: ['a11yTitle', 'onClick', 'hoverIndicator'],
       },
     ],
     adjustProps: (props, { followLink }) => {
@@ -429,12 +430,13 @@ export const components = {
     hideable: true,
     documentation: 'https://v2.grommet.io/page',
     properties: {
+      title: '',
+      subtitle: '',
+      a11yTitle: '',
       actions: '-component-',
       margin: Edge,
       pad: Edge,
       parent: '-string-or-component-',
-      title: '',
-      subtitle: '',
     },
     adjustProps: (props) => {
       const adjusted = {};
@@ -492,6 +494,7 @@ export const components = {
     ),
     documentation: 'https://v2.grommet.io/grid',
     properties: {
+      a11yTitle: '',
       align: ['stretch', 'start', 'center', 'end'],
       alignContent: ['stretch', 'start', 'center', 'end'],
       areas: GridAreas,
@@ -530,6 +533,7 @@ export const components = {
     properties: {
       ...reusedBoxProps,
       height: Dimension,
+      a11yTitle: '',
       hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
       width: Dimension,
@@ -543,7 +547,7 @@ export const components = {
       reusedBoxStructure[2],
       {
         label: 'Interaction',
-        properties: ['onClick', 'hoverIndicator'],
+        properties: ['a11yTitle', 'onClick', 'hoverIndicator'],
       },
     ],
     adjustProps: (props, { followLink }) => {
@@ -792,6 +796,7 @@ export const components = {
     container: true,
     documentation: 'https://v2.grommet.io/accordion',
     properties: {
+      a11yTitle: '',
       animate: true,
       multiple: false,
     },
@@ -829,6 +834,7 @@ export const components = {
     },
     properties: {
       label: 'anchor',
+      a11yTitle: '',
       color: ['-color-'],
       disabled: false,
       gap: reusedBoxProps.gap,
@@ -954,16 +960,17 @@ export const components = {
       label: 'Menu',
     },
     properties: {
+      label: 'Actions',
+      icon: ['-Icon-'],
+      a11yTitle: '',
+      items: MenuItems,
       disabled: false,
       dropAlign: DropAlign,
       dropBackground: {
         color: ['-color-'],
         opacity: ['weak', 'medium', 'strong'],
       },
-      icon: ['-Icon-'],
-      items: MenuItems,
       kind: ['-theme-'],
-      label: 'Actions',
       open: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       tip: '',
@@ -994,6 +1001,7 @@ export const components = {
       justify: 'center',
     },
     properties: {
+      a11yTitle: '',
       activeIndex: 0,
       flex: ['grow', 'shrink', true, false],
       justify: ['start', 'center', 'end'],
@@ -1038,11 +1046,12 @@ export const components = {
       label: 'CheckBox',
     },
     properties: {
+      name: '',
+      a11yTitle: '',
       checked: false,
       defaultChecked: false,
       disabled: false,
       label: 'enabled?',
-      name: '',
       reverse: false,
       toggle: false,
     },
@@ -1085,6 +1094,9 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      name: '',
+      a11yTitle: '',
+      options: SelectOptions,
       direction: BoxDirection,
       disabled: false,
       gap: EdgeSizeOptions({
@@ -1098,8 +1110,6 @@ export const components = {
           'xlarge',
         ],
       }),
-      name: '',
-      options: SelectOptions,
       value: ['-property- options'],
       defaultValue: ['-property- options'],
     },
@@ -1136,9 +1146,10 @@ export const components = {
       format: 'mm/dd/yyyy',
     },
     properties: {
+      name: '',
+      a11yTitle: '',
       defaultValue: '',
       disabled: false,
-      name: '',
       inline: false,
       format: '',
       value: '',
@@ -1148,10 +1159,11 @@ export const components = {
     component: FileInput,
     name: 'FileInput',
     properties: {
+      name: '',
+      a11yTitle: '',
       disabled: false,
       id: '',
       multiple: false,
-      name: '',
       renderFile: '-component- grommet.Box {"pad":"small"}',
     },
   },
@@ -1260,9 +1272,10 @@ export const components = {
     name: 'MaskedInput',
     documentation: 'https://v2.grommet.io/maskedinput',
     properties: {
+      name: '',
+      a11yTitle: '',
       disabled: false,
       mask: MaskedInputMask,
-      name: '',
       plain: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       textAlign: ['start', 'center', 'end'],
@@ -1296,6 +1309,9 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      name: '',
+      a11yTitle: '',
+      options: SelectOptions,
       defaultValue: '',
       direction: BoxDirection,
       disabled: false,
@@ -1310,8 +1326,6 @@ export const components = {
           'xlarge',
         ],
       }),
-      name: '',
-      options: SelectOptions,
       value: '-property- options',
     },
     advancedProperties: ['gap'],
@@ -1350,6 +1364,8 @@ export const components = {
       step: 1,
     },
     properties: {
+      name: '',
+      a11yTitle: '',
       defaultValue: '',
       max: 10,
       min: 0,
@@ -1366,6 +1382,9 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      name: '',
+      a11yTitle: '',
+      options: SelectOptions,
       clear: false,
       closeOnChange: true,
       defaultValue: '',
@@ -1375,8 +1394,6 @@ export const components = {
       icon: ['-Icon-'],
       labelKey: '',
       multiple: false,
-      name: '',
-      options: SelectOptions,
       placeholder: '',
       plain: false,
       searchPlaceholder: '',
@@ -1455,6 +1472,9 @@ export const components = {
       options: ['option 1', 'option 2'],
     },
     properties: {
+      name: '',
+      a11yTitle: '',
+      options: SelectOptions,
       defaultValue: ['-property- options'],
       disabled: false,
       dropAlign: DropAlign,
@@ -1462,8 +1482,6 @@ export const components = {
       icon: ['-Icon-'],
       labelKey: '',
       limit: 0,
-      name: '',
-      options: SelectOptions,
       placeholder: '',
       plain: false,
       searchPlaceholder: '',
@@ -1539,10 +1557,11 @@ export const components = {
     name: 'TextArea',
     documentation: 'https://v2.grommet.io/textarea',
     properties: {
+      name: '',
+      a11yTitle: '',
       defaultValue: '',
       disabled: false,
       fill: false,
-      name: '',
       placeholder: '',
       plain: false,
       resize: ['vertical', 'horizontal', true, false],
@@ -1555,10 +1574,11 @@ export const components = {
     name: 'TextInput',
     documentation: 'https://v2.grommet.io/textinput',
     properties: {
+      name: '',
+      a11yTitle: '',
       defaultValue: '',
       disabled: false,
       icon: ['-Icon-'],
-      name: '',
       placeholder: '',
       plain: false,
       reverse: false,
@@ -1621,6 +1641,7 @@ export const components = {
       showAdjacentDays: true,
     },
     properties: {
+      a11yTitle: '',
       animate: false,
       date: '',
       daysOfWeek: false,
@@ -1668,6 +1689,7 @@ export const components = {
       ],
     },
     properties: {
+      a11yTitle: '',
       bounds: ChartBounds,
       color: {
         color: ['-color-'],
@@ -1719,6 +1741,7 @@ export const components = {
     component: Clock,
     name: 'Clock',
     properties: {
+      a11yTitle: '',
       hourLimit: ['12', '24'],
       precision: ['hours', 'minutes', 'seconds'],
       run: ['forward', 'backward'],
@@ -1907,6 +1930,7 @@ export const components = {
       ],
     },
     properties: {
+      a11yTitle: '',
       basis: [
         'xxsmall',
         'xsmall',
@@ -1981,6 +2005,7 @@ export const components = {
       ],
     },
     properties: {
+      a11yTitle: '',
       data: JsonData,
       onClickItem: ['-link-'],
       onOrder: false,
@@ -2025,6 +2050,7 @@ export const components = {
     component: Meter,
     name: 'Meter',
     properties: {
+      a11yTitle: '',
       background: ['-color-'],
       color: ['-color-'],
       max: 100,
@@ -2211,10 +2237,11 @@ export const components = {
       src: 'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
     },
     properties: {
+      src: ImageSrc,
+      a11yTitle: '',
       fill: ['horizontal', 'vertical', true, false],
       fit: ['cover', 'contain'],
       opacity: ['weak', 'medium', 'strong'],
-      src: ImageSrc,
     },
     adjustProps: (props, { datum }) => {
       return { ...props, src: replaceWithData(props.src, datum) };
@@ -2224,6 +2251,7 @@ export const components = {
     component: Video,
     name: 'Video',
     properties: {
+      a11yTitle: '',
       autoPlay: false,
       controls: [false, 'over', 'below'],
       fit: ['cover', 'contain'],
@@ -2261,6 +2289,7 @@ export const components = {
     component: WorldMap,
     name: 'WorldMap',
     properties: {
+      a11yTitle: '',
       color: ['-color-'],
       fill: ['horizontal', 'vertical', true, false],
       gridArea: BoxGridArea,
