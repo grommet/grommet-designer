@@ -862,6 +862,8 @@ export const components = {
     properties: {
       label: 'Click Me',
       icon: ['-Icon-'],
+      a11yTitle: '',
+      tip: '',
       active: false,
       badge: 0,
       color: ['-color-'],
@@ -877,7 +879,6 @@ export const components = {
       reverse: false,
       secondary: false,
       size: ['small', 'medium', 'large'],
-      tip: '',
       type: ['button', 'reset', 'submit'],
     },
     designProperties: {
@@ -911,6 +912,10 @@ export const components = {
       open: true,
     },
     properties: {
+      label: 'Click Me',
+      icon: ['-Icon-'],
+      a11yTitle: '',
+      tip: '',
       badge: 0,
       color: ['-color-'],
       disabled: false,
@@ -925,9 +930,7 @@ export const components = {
       gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       hoverIndicator: BoxHoverIndicator,
       href: '',
-      icon: ['-Icon-'],
       kind: ['-theme-'],
-      label: 'Click Me',
       margin: Edge,
       open: [true, false],
       plain: false,
@@ -935,7 +938,6 @@ export const components = {
       reverse: false,
       secondary: false,
       size: ['small', 'medium', 'large'],
-      tip: '',
     },
     advancedProperties: ['color', 'disabled', 'gap', 'margin'],
     adjustProps: (props, { component, followLink }) => {
@@ -1737,6 +1739,7 @@ export const components = {
       series: ['amount'],
     },
     properties: {
+      a11yTitle: '',
       axis: DataChartAxis,
       bounds: DataChartBounds,
       chart: DataChartChart,
@@ -1816,6 +1819,7 @@ export const components = {
       ],
     },
     properties: {
+      a11yTitle: '',
       background: {
         header: {
           color: ['-color-'],
