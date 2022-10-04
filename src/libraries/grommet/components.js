@@ -728,6 +728,7 @@ export const components = {
       size: SizeOptions({
         options: ['small', 'medium', 'large', 'xlarge'],
       }),
+      a11yTitle: '',
       textAlign: TextAlign,
       truncate: false,
       margin: HeadingMargin,
@@ -739,6 +740,7 @@ export const components = {
     name: 'Paragraph',
     text: 'Paragraph',
     properties: {
+      a11yTitle: '',
       fill: false,
       size: SizeOptions({
         options: ['small', 'medium', 'large', 'xlarge', 'xxlarge'],
@@ -753,6 +755,7 @@ export const components = {
     name: 'Text',
     text: 'Text',
     properties: {
+      a11yTitle: '',
       size: [
         'xsmall',
         'small',
@@ -2197,6 +2200,7 @@ export const components = {
     properties: {
       name: '',
       value: 'Tag',
+      a11yTitle: '',
       onClick: ['-link-'],
       removable: false,
     },
