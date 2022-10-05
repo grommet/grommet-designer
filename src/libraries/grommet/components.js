@@ -1433,7 +1433,7 @@ export const components = {
         adjusted.options = designProps.data;
       }
       if (designProps?.dataPath)
-        adjusted.options = getDataByPath(designProps.dataPath);
+        adjusted.options = getDataByPath(designProps.dataPath) || [];
       if (props.valueKey)
         adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
