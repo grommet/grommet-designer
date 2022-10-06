@@ -54,7 +54,7 @@ const DesignSettings = ({ onClose }) => {
             name="theme"
             direction="row"
             gap="medium"
-            options={['grommet', 'hpe', 'other']}
+            options={['grommet', 'hpe', 'hpe-next', 'other']}
             value={design.theme.startsWith('http') ? 'other' : design.theme}
             onChange={(event) => {
               if (event.target.value === 'other') {

@@ -27,14 +27,14 @@ const themes = [
   {
     name: 'hpe',
     packageName: 'grommet-theme-hpe',
-    packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
+    // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-2.min.js',
   },
   {
     name: 'hpe-1',
     packageName: 'grommet-theme-hpe',
-    packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/v1.0.5',
+    // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/v1.0.5',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-1.min.js',
   },
@@ -44,14 +44,14 @@ const themes = [
     designerUrl:
       'https://theme-designer.grommet.io/?id=HPE-0-eric-soderberg-hpe-com',
   },
-  // deprecated, upgrade designs to use v2
   {
     label: 'hpe-next',
     name: 'hpe',
     packageName: 'grommet-theme-hpe',
-    packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
+    // packageUrl:
+    //   'https://github.com/grommet/grommet-theme-hpe/tarball/NEXT-stable',
     jsUrl:
-      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-2.min.js',
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-next.min.js',
   },
 ];
 
@@ -63,7 +63,8 @@ export const themeForValue = (value) =>
       theme.packageName === value ||
       theme.jsUrl === value ||
       theme.designerUrl === value ||
-      theme.name === value,
+      theme.name === value ||
+      theme.label === value,
   );
 
 export const themeForUrl = (url) =>
