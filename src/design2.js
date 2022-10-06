@@ -827,7 +827,9 @@ export const removeComponent = (id) => {
 
 export const duplicateComponent = (id, options, idMapArg) => {
   const source = options?.template || design;
-  const component = JSON.parse(JSON.stringify(source.components[id]));
+  const sourceComponent = source.components[id];
+  if (!sourceComponent) return undefined;
+  const component = JSON.parse(JSON.stringify(sourceComponent));
   component.id = getNextId();
   design.components[component.id] = component;
 
@@ -915,11 +917,13 @@ export const duplicateComponent = (id, options, idMapArg) => {
               { template: source },
               idMap,
             );
-            // remember the mapping, in case we need it another time
-            if (!design.addedImportIdMap) design.addedImportIdMap = {};
-            design.addedImportIdMap[component.props[prop]] = referencedId;
-            // insert into screen root
-            insertComponent(referencedId, { within: importsScreen.root });
+            if (referencedId) {
+              // remember the mapping, in case we need it another time
+              if (!design.addedImportIdMap) design.addedImportIdMap = {};
+              design.addedImportIdMap[component.props[prop]] = referencedId;
+              // insert into screen root
+              insertComponent(referencedId, { within: importsScreen.root });
+            }
             // connect to local copy
             component.props[prop] = referencedId;
           }
