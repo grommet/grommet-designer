@@ -67,7 +67,7 @@ const Property = React.forwardRef(
           return (
             <ArrayProperty
               ref={ref}
-              options={['toolbar']}
+              options={['toolbar', 'cta-primary', 'cta-alternate']}
               value={value}
               {...rest}
             />

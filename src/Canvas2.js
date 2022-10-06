@@ -26,7 +26,7 @@ const Canvas = ({ root }) => {
       themeMode={grommetThemeMode}
       dir={direction}
       full="min"
-      style={{ height: '1px' }}
+      // style={{ height: '1px' }}
     >
       {content}
     </Grommet>
