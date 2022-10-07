@@ -97,10 +97,10 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
               setLocation(getLocationForPath(path));
             } else setLocation(savedState.location);
           } else {
-            setMode(params.mode || 'edit');
+            setMode(params.mode || (loadProps.id && 'preview') || 'edit');
             if (loadProps.location)
               setLocation(getLocationForPath(loadProps.location));
-            else setLocation({ screen: Object.keys(design.screens)[0] });
+            else setLocation(getLocationForPath(window.location.pathname));
             if (paramSelection || loadProps.selection)
               setSelection(paramSelection || loadProps.selection);
           }
