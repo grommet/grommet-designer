@@ -71,24 +71,29 @@ const Space = () => {
             active ? (
               <Box pad="small" gap="small">
                 <Header>
-                  <Heading level={3} size="small" margin="none">
-                    {active.label}
-                  </Heading>
+                  <Box direction="row" gap="small" align="center">
+                    <Box pad="xsmall" background={active.color} />
+                    <Heading level={3} size="small" margin="none">
+                      {active.label}
+                    </Heading>
+                  </Box>
                   <Text>{active.value} K</Text>
                 </Header>
-                {active.big?.map((b) => (
-                  <Box
-                    direction="row"
-                    gap="medium"
-                    justify="between"
-                    align="top"
-                  >
-                    <Text weight="bold">{b.key}</Text>
-                    <Text wordBreak="keep-all">
-                      {Math.round(b.size / 1024)} K
-                    </Text>
-                  </Box>
-                ))}
+                <Box pad={{ start: 'medium' }}>
+                  {active.big?.map((b) => (
+                    <Box
+                      direction="row"
+                      gap="medium"
+                      justify="between"
+                      align="top"
+                    >
+                      <Text weight="bold">{b.key}</Text>
+                      <Text wordBreak="keep-all">
+                        {Math.round(b.size / 1024)} K
+                      </Text>
+                    </Box>
+                  ))}
+                </Box>
               </Box>
             ) : undefined
           }
