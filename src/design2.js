@@ -118,7 +118,7 @@ export const load = async ({
       const stored2 = localStorage.getItem('designs');
       if (stored2) {
         const designs = JSON.parse(stored2).filter(
-          ({ name: n, local }) => !local || n !== name,
+          ({ name: n, local }) => !(local && n === name),
         );
         localStorage.setItem('designs', JSON.stringify(designs));
       }
@@ -569,7 +569,7 @@ export const removeDesign = () => {
   const stored = localStorage.getItem('designs');
   const prevDesigns = stored ? JSON.parse(stored) : [];
   const nextDesigns = prevDesigns.filter(
-    (des) => des.name === design.name && des.id === design.id,
+    (des) => !(des.name === design.name && des.id === design.id),
   );
   localStorage.setItem('designs', JSON.stringify(nextDesigns));
 
@@ -1196,6 +1196,7 @@ export const useDesigns = ({ localOnly } = {}) => {
   useEffect(() => {
     const stored = localStorage.getItem('designs');
     let nextDesigns = stored ? JSON.parse(stored) : [];
+
     // merge in old "designs-fetched", if any
     const stored2 = localStorage.getItem('designs-fetched');
     if (stored2) {
@@ -1212,6 +1213,15 @@ export const useDesigns = ({ localOnly } = {}) => {
       localStorage.setItem('designs', JSON.stringify(nextDesigns));
       localStorage.removeItem('designs-fetched');
     }
+
+    // convert any designs with "url" to "id"
+    nextDesigns.forEach((des) => {
+      if (des.url && !des.id) {
+        des.id = des.url.split('id=')[1];
+        delete des.url;
+      }
+    });
+
     setDesigns(
       nextDesigns
         .filter((d) => d && (!localOnly || d.local))
