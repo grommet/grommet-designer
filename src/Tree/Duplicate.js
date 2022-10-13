@@ -15,7 +15,8 @@ import { Close } from 'grommet-icons';
 import { getDesign, load, useDesigns } from '../design2';
 
 const Duplicate = ({ onClose }) => {
-  const designs = useDesigns(); // just local to check for duplicate name
+  // just local to check for duplicate name
+  const designs = useDesigns({ localOnly: true });
   const nameRef = useRef();
 
   // useEffect(() => nameRef.current.focus(), []);

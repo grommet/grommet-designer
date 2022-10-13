@@ -13,7 +13,7 @@ import Action from '../components/Action';
 import Field from '../components/Field';
 
 const DesignSettings = ({ onClose }) => {
-  const designs = useDesigns();
+  const designs = useDesigns({ localOnly: true });
   const design = useDesign();
   const [name, setName] = useDebounce(design.name || '', (nextName) =>
     setDesignProperty('name', nextName),

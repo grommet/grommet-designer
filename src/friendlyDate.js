@@ -1,5 +1,5 @@
 const dayFormatter = new Intl.DateTimeFormat([], {
-  month: 'long',
+  month: 'short',
   day: 'numeric',
 });
 

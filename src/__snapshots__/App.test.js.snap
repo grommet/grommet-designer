@@ -104,29 +104,76 @@ exports[`App create 1`] = `
         <div
           class="StyledBox-sc-13pk1d4-0 frbVGL"
         >
-          <footer
-            class="StyledBox-sc-13pk1d4-0 eZIgAP"
+          <div
+            class="StyledBox-sc-13pk1d4-0 gHoOfe"
           >
-            <button
-              aria-label="Change settings"
-              class="StyledButton-sc-323bzc-0 wfYUD"
-              type="button"
+            <h2
+              class="StyledHeading-sc-1rdh4aw-0 evXIdU"
+            >
+              storage
+            </h2>
+            <div
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 jtYnpY"
+            />
+            <div
+              class="StyledBox-sc-13pk1d4-0 dEmnTc"
             >
               <svg
-                aria-label="Brush"
-                class="StyledIcon-sc-ofa7kd-0 jQvEgu"
-                viewBox="0 0 24 24"
+                class="StyledMeter-sc-nsxarx-0 kCzifM"
+                height="24"
+                preserveAspectRatio="none"
+                viewBox="0 0 384 24"
+                width="384"
               >
                 <path
-                  d="M9.312 11.73a5.001 5.001 0 0 0-5.362 1.12c-1.953 1.952-1.414 8.485-1.414 8.485s6.532.538 8.485-1.415a5.001 5.001 0 0 0 1.12-5.362L22.334 4.364a1.997 1.997 0 0 0 0-2.828 1.995 1.995 0 0 0-2.828 0L9.312 11.729zm1.002-1.617 1.838 1.838 1.697 1.697"
+                  d="M 0,12 L 384,12"
                   fill="none"
-                  stroke="#000"
-                  stroke-width="2"
+                  stroke="#F2F2F2"
+                  stroke-linecap="square"
+                  stroke-opacity="0.4"
+                  stroke-width="24"
                 />
               </svg>
-            </button>
-          </footer>
+              <div
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iISQcM"
+              />
+              <span
+                class="StyledText-sc-1sadyjn-0 jbJJSg"
+              >
+                0 K total
+              </span>
+            </div>
+          </div>
         </div>
+      </div>
+      <div
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 BJHnT"
+      />
+      <div
+        class="StyledBox-sc-13pk1d4-0 frbVGL"
+      >
+        <footer
+          class="StyledBox-sc-13pk1d4-0 eZIgAP"
+        >
+          <button
+            aria-label="Change settings"
+            class="StyledButton-sc-323bzc-0 wfYUD"
+            type="button"
+          >
+            <svg
+              aria-label="Brush"
+              class="StyledIcon-sc-ofa7kd-0 jQvEgu"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M9.312 11.73a5.001 5.001 0 0 0-5.362 1.12c-1.953 1.952-1.414 8.485-1.414 8.485s6.532.538 8.485-1.415a5.001 5.001 0 0 0 1.12-5.362L22.334 4.364a1.997 1.997 0 0 0 0-2.828 1.995 1.995 0 0 0-2.828 0L9.312 11.729zm1.002-1.617 1.838 1.838 1.697 1.697"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </footer>
       </div>
     </div>
   </div>

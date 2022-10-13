@@ -77,21 +77,17 @@ const fetchPublished = async (id, password) => {
       pubDesign.id = id;
       delete pubDesign.local; // just in case
 
-      // update our persistent list of fetched designs
-      const stored = localStorage.getItem('designs-fetched');
-      const designsFetched = stored ? JSON.parse(stored) : [];
-      const index = designsFetched.findIndex(
-        ({ name }) => name === pubDesign.name,
+      // update our persistent list of designs
+      const stored = localStorage.getItem('designs');
+      const designs = stored ? JSON.parse(stored) : [];
+      const index = designs.findIndex(
+        ({ name, id, local }) =>
+          !local && name === pubDesign.name && id === pubDesign.id,
       );
-      if (index !== 0) {
-        if (index !== -1) designsFetched.splice(index, 1);
-        designsFetched.unshift({
-          name: pubDesign.name,
-          id,
-          date: pubDesign.date,
-        });
-        localStorage.setItem('designs-fetched', JSON.stringify(designsFetched));
-      }
+      if (index !== -1) designs.splice(index, 1);
+      const { name, date } = pubDesign;
+      designs.unshift({ name, id, date });
+      localStorage.setItem('designs', JSON.stringify(designs));
 
       try {
         // cache locally, in case we want to import for templates
@@ -118,10 +114,12 @@ export const load = async ({
     const stored = localStorage.getItem(name);
 
     if (!stored) {
-      // design doesn't exist anymore, remove name
+      // design doesn't exist anymore, remove name from list
       const stored2 = localStorage.getItem('designs');
       if (stored2) {
-        const designs = JSON.parse(stored2).filter(({ name: n }) => n !== name);
+        const designs = JSON.parse(stored2).filter(
+          ({ name: n, local }) => !local || n !== name,
+        );
         localStorage.setItem('designs', JSON.stringify(designs));
       }
       throw new Error(404);
@@ -185,7 +183,9 @@ const store = (args = {}) => {
     // keep track of the descriptor in the list of designs
     const stored = localStorage.getItem('designs');
     const designs = stored ? JSON.parse(stored) : [];
-    const index = designs.findIndex(({ name }) => name === design.name);
+    const index = designs.findIndex(
+      ({ name, local }) => local && name === design.name,
+    );
     if (index !== -1) designs.splice(index, 1);
     const { name, id, date, local } = design;
     designs.unshift({ name, id, date, local });
@@ -193,8 +193,8 @@ const store = (args = {}) => {
   } catch (e) {
     console.error(e);
     problem = `Alas, this browser has run out of room in local storage.
-      If you delete a design you don't need or have already published,
-      that will free up some space.`;
+      If you delete a design you don't need or offload a design you have
+      already published, that will free up some space.`;
     notify('problem', problem);
   }
 };
@@ -451,6 +451,13 @@ export const isValidId = (id) =>
 
 // update
 
+const beLocal = () => {
+  if (!design.local) {
+    design.local = true;
+    delete design.id;
+  }
+};
+
 // passing a function to manage an update, make a copy, let the function
 // update the copy, and then automatically replacing the original and
 // notifying
@@ -459,7 +466,7 @@ const updateComponent = (id, func, { preserveLocal, preserveDate } = {}) => {
   if (func) {
     func(nextComponent);
     design.components[id] = nextComponent;
-    if (!preserveLocal) design.local = true;
+    if (!preserveLocal) beLocal();
     notify(id, nextComponent);
     if (design.local) lazilyStore({ preserveDate });
   }
@@ -471,7 +478,7 @@ const updateScreen = (id, func, { preserveLocal, preserveDate } = {}) => {
   if (func) {
     func(nextScreen);
     design.screens[id] = nextScreen;
-    if (!preserveLocal) design.local = true;
+    if (!preserveLocal) beLocal();
     notify(id, nextScreen);
     if (design.local) lazilyStore({ preserveDate });
   }
@@ -483,7 +490,7 @@ const updateDesign = (func) => {
   if (func) {
     func(nextDesign);
     design = nextDesign;
-    design.local = true;
+    beLocal();
     notify(undefined, nextDesign);
     lazilyStore();
   }
@@ -505,7 +512,7 @@ const updateData = (id, func) => {
           });
       }
     } else data[id] = nextData;
-    design.local = true;
+    beLocal();
     notify(id, nextData);
     lazilyStore();
   }
@@ -515,7 +522,7 @@ const updateData = (id, func) => {
 const getNextId = () => {
   const id = design.nextId;
   design.nextId += 1;
-  design.local = true;
+  beLocal();
   return id;
 };
 
@@ -556,31 +563,15 @@ export const removeDesign = () => {
   // clean up listeners
   listeners = {};
 
-  if (design.local) {
-    const name = design.name;
+  localStorage.removeItem(design.local ? design.name : design.id);
 
-    // remove from the stored list of local design names
-    const stored = localStorage.getItem('designs');
-    if (stored) {
-      const designs = JSON.parse(stored).filter(({ name: n }) => n !== name);
-      localStorage.setItem('designs', JSON.stringify(designs));
-    }
-
-    // remove this design from local storage
-    localStorage.removeItem(name);
-  } else {
-    const id = design.id;
-
-    // remove from the stored list of local design names
-    const stored = localStorage.getItem('designs-fetched');
-    if (stored) {
-      const designs = JSON.parse(stored).filter(({ id: i }) => i !== id);
-      localStorage.setItem('designs-fetched', JSON.stringify(designs));
-    }
-
-    // remove this design from local storage
-    localStorage.removeItem(id);
-  }
+  // remove from the stored list of designs
+  const stored = localStorage.getItem('designs');
+  const prevDesigns = stored ? JSON.parse(stored) : [];
+  const nextDesigns = prevDesigns.filter(
+    (des) => des.name === design.name && des.id === design.id,
+  );
+  localStorage.setItem('designs', JSON.stringify(nextDesigns));
 
   design = undefined;
 };
@@ -989,7 +980,8 @@ export const setProperty = (id, section, name, value) => {
       if (value === undefined) delete props[name];
       else props[name] = value;
     },
-    name === 'hide' ? { preserveLocal: true } : {},
+    // don't mark as local if we're just changing visibility
+    name === 'hide' ? { preserveLocal: true, preserveDate: true } : {},
   );
 };
 
@@ -1199,39 +1191,30 @@ const compareDesigns = (d1, d2) => {
   return -1;
 };
 
-export const useDesigns = ({ fetched } = {}) => {
+export const useDesigns = ({ localOnly } = {}) => {
   const [designs, setDesigns] = useState([]);
   useEffect(() => {
-    let nextDesigns = [];
-    let stored = localStorage.getItem('designs');
-    let updated = false;
-    if (stored) {
-      nextDesigns = JSON.parse(stored).map((des) => {
-        // convert to descriptor format
-        if (typeof des === 'string') {
-          updated = true;
-          const stored2 = localStorage.getItem(des);
-          if (stored2) {
-            const { name, id, date } = JSON.parse(stored2);
-            return { name, id, date, local: true };
-          }
-          return undefined;
-        }
-        // const stored2 = localStorage.getItem(des.name);
-        // const { name, id, date } = JSON.parse(stored2);
-        // return { name, id, date, local: true };
-        return des;
+    const stored = localStorage.getItem('designs');
+    let nextDesigns = stored ? JSON.parse(stored) : [];
+    // merge in old "designs-fetched", if any
+    const stored2 = localStorage.getItem('designs-fetched');
+    if (stored2) {
+      const fetched = JSON.parse(stored2);
+      fetched.forEach((des) => {
+        const havePublished = localStorage.getItem(`${des.name}--identity`);
+        if (
+          !nextDesigns.some(
+            (d) => d.name === des.name && d.id === des.id && havePublished,
+          )
+        )
+          nextDesigns.push(des);
       });
-    }
-    // in case we changed anything, store back
-    if (updated) localStorage.setItem('designs', JSON.stringify(nextDesigns));
-    if (fetched) {
-      stored = localStorage.getItem('designs-fetched');
-      if (stored) nextDesigns = [...nextDesigns, ...JSON.parse(stored)];
+      localStorage.setItem('designs', JSON.stringify(nextDesigns));
+      localStorage.removeItem('designs-fetched');
     }
     setDesigns(
       nextDesigns
-        .filter((d) => d)
+        .filter((d) => d && (!localOnly || d.local))
         .sort(compareDesigns)
         .map((d) => {
           const slugName = slugify(d.name);
@@ -1245,7 +1228,7 @@ export const useDesigns = ({ fetched } = {}) => {
           return d;
         }),
     );
-  }, [fetched]);
+  }, [localOnly]);
   return designs;
 };
 
@@ -1382,4 +1365,47 @@ export const useProblem = () => {
   const [, setProblem] = useState(problem);
   useEffect(() => listen('problem', setProblem), []);
   return problem;
+};
+
+// rebuilds the "designs" list in local storage from all "*--state"
+// items in local storage
+export const rebuild = () => {
+  const localDesigns = [];
+  const fetchedDesigns = [];
+  // find everything in local storage with a name ending in "--state"
+  const stateKeys = Object.keys(localStorage).filter((n) =>
+    n.match(/--state$/),
+  );
+  stateKeys.forEach((key) => {
+    const [name] = key.split('--');
+    // has to have an item in local storage with the name
+    const stored = localStorage.getItem(name);
+    if (stored) {
+      // does it exist and look like a design?
+      const des = JSON.parse(stored);
+      if (des.name && des.date && des.screens) {
+        const { date, id, local, name } = des;
+        if (local) {
+          if (id) localDesigns.push({ name, id, date, local });
+          else localDesigns.push({ name, date, local });
+        } else fetchedDesigns.push({ name, id, date });
+      }
+    }
+  });
+  // compare with the lists we already have and log differences
+  let stored = localStorage.getItem('designs');
+  const listedDesigns = stored ? JSON.parse(stored) : [];
+  const rebuiltDesigns = [];
+  listedDesigns.forEach((des) => {
+    rebuiltDesigns.push(des);
+    if (!localDesigns.some((d) => d.name === des.name))
+      console.log(`Did not find design '${des.name}' via state`);
+  });
+  localDesigns.forEach((des) => {
+    if (!listedDesigns.some((d) => d.name === des.name)) {
+      console.warn(`Did not find design '${des.name}' via list`);
+      rebuiltDesigns.push(des);
+    }
+  });
+  localStorage.setItem('designs', JSON.stringify(rebuiltDesigns));
 };

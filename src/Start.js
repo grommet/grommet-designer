@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-// import styled from 'styled-components';
 import {
   Box,
   Button,
@@ -8,7 +7,6 @@ import {
   Grid,
   Header,
   Heading,
-  // Image,
   List,
   Page,
   PageContent,
@@ -19,17 +17,8 @@ import {
 import { Brush, Search } from 'grommet-icons';
 import { useDesigns } from './design2';
 import AppSettings from './AppSettings';
-// import Manage from './Manage';
+import Space from './Space';
 import friendlyDate from './friendlyDate';
-
-// const tutorials = [
-//   {
-//     title: 'introduction',
-//     thumb:
-//       'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer-tutorial-introduction.png',
-//     url: 'https://us-central1-grommet-designer.cloudfunctions.net/images/eric-soderberg-hpe-com/designer%20introduction%202a.mp4',
-//   },
-// ];
 
 const keyFor = (d) => (d.local && d.name) || d.id || d.url || d.name;
 
@@ -82,7 +71,7 @@ const DesignButton = ({
 };
 
 const Start = ({ onLoadProps, onNew }) => {
-  const designs = useDesigns({ fetched: true });
+  const designs = useDesigns();
   const [search, setSearch] = useState();
   const [error, setError] = useState();
   // const [manage, setManage] = useState();
@@ -93,19 +82,16 @@ const Start = ({ onLoadProps, onNew }) => {
     document.title = 'Grommet Designer';
   }, []);
 
-  // lazily go through existing designs to calculate their sizes
+  // go through existing designs to calculate their sizes
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const d = designs.filter((d) => !sizes[keyFor(d)])[0];
-      if (d) {
-        const nextSizes = JSON.parse(JSON.stringify(sizes));
-        const key = keyFor(d);
-        const stored = localStorage.getItem(key);
-        nextSizes[key] = stored ? `${Math.round(stored.length / 1024)} K` : '-';
-        setSizes(nextSizes);
-      }
-    }, 1000);
-    return () => clearTimeout(timer);
+    const d = designs.filter((d) => !sizes[keyFor(d)])[0];
+    if (d) {
+      const nextSizes = JSON.parse(JSON.stringify(sizes));
+      const key = keyFor(d);
+      const stored = localStorage.getItem(key);
+      nextSizes[key] = stored ? `${Math.round(stored.length / 1024)} K` : '-';
+      setSizes(nextSizes);
+    }
   }, [designs, sizes]);
 
   const searchExp = useMemo(() => search && new RegExp(search, 'i'), [search]);
@@ -150,7 +136,6 @@ const Start = ({ onLoadProps, onNew }) => {
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                   />
-                  {/* <Button icon={<ListIcon />} onClick={() => setManage(true)} /> */}
                 </Box>
               )}
             </Header>
@@ -209,31 +194,13 @@ const Start = ({ onLoadProps, onNew }) => {
         />
       </PageContent>
 
-      {/* <Box>
-          <Heading level={2}>tutorial</Heading>
-          {tutorials.map(({ thumb, title, url }) => (
-            <Button key={title} plain href={url} target="_blank">
-              <Box gap="xsmall">
-                <Box
-                  width="medium"
-                  height="small"
-                  round="xsmall"
-                  background="background-front"
-                  overflow="hidden"
-                >
-                  <Image src={thumb} fit="contain" />
-                </Box>
-                <Text weight="bold" size="large">
-                  {title}
-                </Text>
-              </Box>
-            </Button>
-          ))}
-        </Box> */}
-
       <PageContent
         background={{ color: 'background-contrast', fill: 'horizontal' }}
       >
+        <Space />
+      </PageContent>
+
+      <PageContent>
         <Footer justify="end">
           <Button
             icon={<Brush />}
@@ -245,14 +212,6 @@ const Start = ({ onLoadProps, onNew }) => {
       </PageContent>
 
       {settings && <AppSettings onClose={() => setSettings(false)} />}
-      {/* {manage && (
-        <Manage
-          onClose={() => {
-            setManage(false);
-            // setDesigns([...designs]); // trigger re-load of offloaded state
-          }}
-        />
-      )} */}
     </Page>
   );
 };
