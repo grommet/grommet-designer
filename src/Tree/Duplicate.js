@@ -47,6 +47,10 @@ const Duplicate = ({ onClose }) => {
             const design = JSON.parse(JSON.stringify(getDesign()));
             design.name = value.name;
             delete design.id;
+            delete design.publishedUrl;
+            delete design.publishedDate;
+            delete design.email;
+            delete design.password;
             design.local = true;
             load({ design });
             ReactGA.event({ category: 'switch', action: 'duplicate design' });
