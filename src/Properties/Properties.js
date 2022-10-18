@@ -602,6 +602,10 @@ const Properties = () => {
                       }}
                     />
                   )}
+
+                  <Text alignSelf="end" color="text-weak">
+                    {selection}
+                  </Text>
                 </Box>
               )}
             </Box>
