@@ -308,7 +308,11 @@ export const upgradeDesign = (design) => {
   Object.keys(design.components)
     .map((id) => design.components[id])
     .filter(
-      (component) => component.props.options && component?.designProps?.link,
+      (component) =>
+        component.props.options &&
+        component?.designProps?.link &&
+        // only remove links for options, not when options come from data
+        !component?.designProps?.dataPath,
     )
     .forEach((component) => {
       Object.keys(component.designProps.link).forEach((name) => {
