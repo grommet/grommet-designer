@@ -40,6 +40,7 @@ const Column = ({ id, value, onChange }) => {
       <FormField label="render">
         <ComponentInput
           id={id}
+          name="render"
           value={column.render}
           onChange={(id) => {
             const nextColumn = JSON.parse(JSON.stringify(column));

@@ -255,6 +255,40 @@ test('create design', async (t) => {
     .expect(alphaTableHeader.exists)
     .ok();
 
+  // add column render for DataTable
+
+  // open columns Layer
+  await t
+    .click(Selector('button').withText('columns'))
+    .expect(Selector('h3').withExactText('columns').exists)
+    .ok();
+  // click name column
+  await t
+    .click(Selector('li').withText('name'))
+    .expect(labelButton('Add render').exists)
+    .ok();
+  // click +
+  await t
+    .click(labelButton('Add render'))
+    .expect(Selector('button').withText('back to DataTable').exists)
+    .ok();
+  // add Text
+  await add('Text');
+  // set text to name with prefix
+  await t
+    .typeText(
+      Selector('textarea').withAttribute('name', 'text'),
+      'senor {name}',
+      { replace: true },
+    )
+    .expect(Selector('span').withExactText('senor {name}').exists)
+    .ok();
+  // go back to DataTable
+  await t
+    .click(Selector('button').withText('back to DataTable'))
+    .expect(Selector('th').withExactText('senor alpha').exists)
+    .ok();
+
   // close design
   await t.click(textButton(designName)).expect(textButton('close').exists).ok();
   await t.click(textButton('close')).expect(newControl.exists).ok();
