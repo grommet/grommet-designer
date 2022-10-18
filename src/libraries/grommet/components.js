@@ -1915,14 +1915,12 @@ export const components = {
       }));
       return { ...props, ...adjusted };
     },
-    copy: (source, copy, { duplicateComponent }) => {
+    updateDeepPropertyComponents: (source, copy, { idMap }) => {
       // duplicate any columns render components
       if (source.props?.columns) {
         source.props.columns.forEach((column, index) => {
           if (column.render) {
-            copy.props.columns[index].render = duplicateComponent(
-              column.render,
-            );
+            copy.props.columns[index].render = idMap[column.render];
           }
         });
       }
@@ -2324,14 +2322,12 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    copy: (source, copy, { duplicateComponent }) => {
+    updateDeepPropertyComponents: (source, copy, { idMap }) => {
       // duplicate any places content components
       if (source.props?.places) {
         source.props.places.forEach((place, index) => {
           if (place.content) {
-            copy.props.places[index].content = duplicateComponent(
-              place.content,
-            );
+            copy.props.places[index].content = idMap[place.content];
           }
         });
       }

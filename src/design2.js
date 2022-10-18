@@ -839,8 +839,8 @@ export const duplicateComponent = (id, options, idMapArg) => {
 
   // copy property components
   if (component.propComponents) {
-    component.propComponents = component.propComponents.map((childId) =>
-      duplicateComponent(childId, { template: options?.template }, idMap),
+    component.propComponents = component.propComponents.map((propId) =>
+      duplicateComponent(propId, { template: options?.template }, idMap),
     );
     // update corresponding property references
     Object.keys(type.properties).forEach((name) => {
@@ -856,11 +856,10 @@ export const duplicateComponent = (id, options, idMapArg) => {
     });
   }
 
-  // handle any deeper component copying, like DataTable columns render
-  if (type.copy) {
-    type.copy(source.components[id], component, {
-      duplicateComponent: (id) =>
-        duplicateComponent(id, { template: options?.template }, idMap),
+  // allow deep property component to update their references
+  if (type.updateDeepPropertyComponents) {
+    type.updateDeepPropertyComponents(source.components[id], component, {
+      idMap,
     });
   }
 
