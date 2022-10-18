@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, FormField, Select, Text, TextInput } from 'grommet';
+import { Box, CheckBox, FormField, Select, Text, TextInput } from 'grommet';
 import { getLinkOptions } from '../../design2';
 import useDebounce from './useDebounce';
 import ArrayOfObjects from './ArrayOfObjects';
@@ -37,41 +37,67 @@ const MenuItem = ({ id, value, onChange }) => {
   return (
     <Box flex="grow" align="end">
       <Box flex="grow">
-        <FormField label="label">
-          <TextInput
-            value={item.label || ''}
-            onChange={(event) => {
-              const nextItem = JSON.parse(JSON.stringify(item));
-              nextItem.label = event.target.value;
-              setItem(nextItem);
-            }}
+        <Box pad="small">
+          <CheckBox
+            label="group?"
+            checked={Array.isArray(item)}
+            onChange={(event) => setItem(event.target.checked ? [] : {})}
           />
-        </FormField>
-        <FormField label="link">
-          <Select
-            multiple
-            options={linkOptions}
-            value={item.link || []}
-            onChange={({ value }) => {
-              const nextItem = JSON.parse(JSON.stringify(item));
-              nextItem.link = value;
-              onChange(nextItem);
-            }}
-            valueLabel={<LinkLabel selected value={item.link} />}
-            valueKey={optionValue(linkOptions)}
-          >
-            {(option, index, options, { selected }) => (
-              <LinkLabel selected={selected} value={option} />
-            )}
-          </Select>
-        </FormField>
+        </Box>
+        {Array.isArray(item) ? (
+          <ArrayOfObjects
+            name="items"
+            itemKey="label"
+            labelKey="label"
+            Edit={MenuItem}
+            value={item}
+            onChange={(nextItem) => setItem(nextItem)}
+          />
+        ) : (
+          <>
+            <FormField label="label">
+              <TextInput
+                value={item.label || ''}
+                onChange={(event) => {
+                  const nextItem = JSON.parse(JSON.stringify(item));
+                  nextItem.label = event.target.value;
+                  setItem(nextItem);
+                }}
+              />
+            </FormField>
+            <FormField label="link">
+              <Select
+                multiple
+                options={linkOptions}
+                value={item.link || []}
+                onChange={({ value }) => {
+                  const nextItem = JSON.parse(JSON.stringify(item));
+                  nextItem.link = value;
+                  onChange(nextItem);
+                }}
+                valueLabel={<LinkLabel selected value={item.link} />}
+                valueKey={optionValue(linkOptions)}
+              >
+                {(option, index, options, { selected }) => (
+                  <LinkLabel selected={selected} value={option} />
+                )}
+              </Select>
+            </FormField>
+          </>
+        )}
       </Box>
     </Box>
   );
 };
 
 const MenuItems = (props) => (
-  <ArrayOfObjects name="items" labelKey="label" Edit={MenuItem} {...props} />
+  <ArrayOfObjects
+    name="items"
+    itemKey="label"
+    labelKey="label"
+    Edit={MenuItem}
+    {...props}
+  />
 );
 
 export default MenuItems;

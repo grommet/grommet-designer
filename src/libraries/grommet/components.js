@@ -992,13 +992,25 @@ export const components = {
     },
     adjustProps: (props, { followLink }) => {
       const adjusted = {};
-      adjusted.items = (props.items || []).map((item) => ({
-        ...item,
-        onClick: (event) => {
-          event.stopPropagation();
-          followLink(item.link);
-        },
-      }));
+      adjusted.items = (props.items || []).map((item) => {
+        if (Array.isArray(item)) {
+          return item.map((subItem) => ({
+            ...subItem,
+            onClick: (event) => {
+              event.stopPropagation();
+              followLink(subItem.link);
+            },
+          }));
+        } else {
+          return {
+            ...item,
+            onClick: (event) => {
+              event.stopPropagation();
+              followLink(item.link);
+            },
+          };
+        }
+      });
       return { ...props, ...adjusted };
     },
     relink: (component, { relink }) => {
