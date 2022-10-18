@@ -9,6 +9,7 @@ import {
   TextInput,
 } from 'grommet';
 import { Add, Trash } from 'grommet-icons';
+import { getComponent } from '../../design2';
 
 const CoordinateInput = ({ value, index, name, max, onChange }) => (
   <MaskedInput
@@ -32,9 +33,10 @@ const CoordinateInput = ({ value, index, name, max, onChange }) => (
   />
 );
 
-const GridAreas = ({ component, responsiveSize, value, onChange }) => {
+const GridAreas = ({ id, responsiveSize, value, onChange }) => {
+  const component = getComponent(id);
   let { columns, rows } = component.props;
-  if (component.responsive && component.responsive[responsiveSize]) {
+  if (component?.responsive?.[responsiveSize]) {
     const responsiveProps = component.responsive[responsiveSize].props;
     if (responsiveProps.columns) ({ columns } = responsiveProps);
     if (responsiveProps.rows) ({ rows } = responsiveProps);
