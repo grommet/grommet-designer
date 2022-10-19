@@ -10,6 +10,7 @@ const ArrayOfObjects = ({
   value = [],
   itemKey,
   labelKey,
+  messages = { single: 'item', plural: 'items' },
   onChange,
   Edit,
   ...rest
@@ -62,7 +63,7 @@ const ArrayOfObjects = ({
             icon={<Trash />}
             hoverIndicator
             tip={{
-              content: 'Delete',
+              content: `Delete ${messages.single}`,
               dropProps: { align: { right: 'left' } },
             }}
             onClick={() => {
@@ -121,7 +122,7 @@ const ArrayOfObjects = ({
         <Button
           icon={<Add />}
           tip={{
-            content: 'Add item',
+            content: `Add ${messages.single}`,
             dropProps: { align: { left: 'right' } },
           }}
           hoverIndicator
@@ -135,7 +136,7 @@ const ArrayOfObjects = ({
         <Button
           icon={<ReorderIcon />}
           tip={{
-            content: 'Re-order items',
+            content: `Re-order ${messages.plural}`,
             dropProps: { align: { right: 'left' } },
           }}
           disabled={value.length <= 1}

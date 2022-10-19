@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, CheckBox, FormField, Select, Text, TextInput } from 'grommet';
 import { getLinkOptions } from '../../design2';
 import useDebounce from './useDebounce';
@@ -37,67 +37,85 @@ const MenuItem = ({ id, value, onChange }) => {
   return (
     <Box flex="grow" align="end">
       <Box flex="grow">
-        <Box pad="small">
-          <CheckBox
-            label="group?"
-            checked={Array.isArray(item)}
-            onChange={(event) => setItem(event.target.checked ? [] : {})}
+        <FormField label="label">
+          <TextInput
+            value={item.label || ''}
+            onChange={(event) => {
+              const nextItem = JSON.parse(JSON.stringify(item));
+              nextItem.label = event.target.value;
+              setItem(nextItem);
+            }}
           />
-        </Box>
-        {Array.isArray(item) ? (
-          <ArrayOfObjects
-            name="items"
-            itemKey="label"
-            labelKey="label"
-            Edit={MenuItem}
-            value={item}
-            onChange={(nextItem) => setItem(nextItem)}
-          />
-        ) : (
-          <>
-            <FormField label="label">
-              <TextInput
-                value={item.label || ''}
-                onChange={(event) => {
-                  const nextItem = JSON.parse(JSON.stringify(item));
-                  nextItem.label = event.target.value;
-                  setItem(nextItem);
-                }}
-              />
-            </FormField>
-            <FormField label="link">
-              <Select
-                multiple
-                options={linkOptions}
-                value={item.link || []}
-                onChange={({ value }) => {
-                  const nextItem = JSON.parse(JSON.stringify(item));
-                  nextItem.link = value;
-                  onChange(nextItem);
-                }}
-                valueLabel={<LinkLabel selected value={item.link} />}
-                valueKey={optionValue(linkOptions)}
-              >
-                {(option, index, options, { selected }) => (
-                  <LinkLabel selected={selected} value={option} />
-                )}
-              </Select>
-            </FormField>
-          </>
-        )}
+        </FormField>
+        <FormField label="link">
+          <Select
+            multiple
+            options={linkOptions}
+            value={item.link || []}
+            onChange={({ value }) => {
+              const nextItem = JSON.parse(JSON.stringify(item));
+              nextItem.link = value;
+              onChange(nextItem);
+            }}
+            valueLabel={<LinkLabel selected value={item.link} />}
+            valueKey={optionValue(linkOptions)}
+          >
+            {(option, index, options, { selected }) => (
+              <LinkLabel selected={selected} value={option} />
+            )}
+          </Select>
+        </FormField>
       </Box>
     </Box>
   );
 };
 
-const MenuItems = (props) => (
+const MenuItemGroup = (props) => (
   <ArrayOfObjects
-    name="items"
+    name="group"
     itemKey="label"
     labelKey="label"
     Edit={MenuItem}
     {...props}
   />
 );
+
+const MenuItems = ({ value, ...rest }) => {
+  const [groups, setGroups] = useState(
+    value?.length ? Array.isArray(value?.[0]) : undefined,
+  );
+
+  return (
+    <Box>
+      <Box pad="small">
+        <CheckBox
+          label="groups?"
+          disabled={value?.length}
+          checked={groups}
+          onChange={(event) => setGroups(event.target.checked)}
+        />
+      </Box>
+      {groups ? (
+        <ArrayOfObjects
+          messages={{ single: 'group', plural: 'groups' }}
+          defaultObject={[]}
+          value={value}
+          Edit={MenuItemGroup}
+          {...rest}
+          name="groups"
+        />
+      ) : (
+        <ArrayOfObjects
+          name="items"
+          itemKey="label"
+          labelKey="label"
+          value={value}
+          Edit={MenuItem}
+          {...rest}
+        />
+      )}
+    </Box>
+  );
+};
 
 export default MenuItems;
