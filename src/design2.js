@@ -400,14 +400,31 @@ export const getDataByPath = (path, datum) => {
   return node;
 };
 
-export const replaceWithData = (text, datum) =>
-  // replace {data-name.key-name} with with data[data-name][key-name] content
-  // OR replace {key-name} with datum[key-name] content
-  (text || '').replace(/\{[^}]*\}/g, (match) => {
-    const matched = getDataByPath(match.slice(1, match.length - 1), datum);
-    if (matched && typeof matched !== 'object') return matched;
+export const replaceWithData = (text, datum, top = true) => {
+  let result = text ?? '';
+  let proceed = typeof result === 'string';
+
+  const matcher = (match) => {
+    const path = match.slice(1, match.length - 1);
+    const found = getDataByPath(
+      path,
+      top && result === text ? datum : undefined,
+    );
+    if (found && typeof found !== 'object')
+      return replaceWithData(found, undefined, false);
     return match;
-  });
+  };
+
+  while (proceed) {
+    // replace {data-name.key-name} with with data[data-name][key-name] content
+    // OR replace {key-name} with datum[key-name] content
+    const nextResult = result.replace(/\{[^}{]*\}/g, matcher);
+    // keep replacing if we changed anything, allows nesting
+    if (nextResult !== result) result = nextResult;
+    else proceed = false;
+  }
+  return result;
+};
 
 export const getImports = () => imports;
 
