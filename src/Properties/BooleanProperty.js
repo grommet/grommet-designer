@@ -5,12 +5,7 @@ import Field from '../components/Field';
 
 const BooleanProperty = React.forwardRef(({ name, onChange, value }, ref) => (
   <Field key={name} label={name} htmlFor={name}>
-    <Box
-      pad={{ horizontal: 'small' }}
-      direction="row"
-      align="center"
-      gap="small"
-    >
+    <Box pad="small" direction="row" align="center" gap="small">
       <CheckBox
         ref={ref}
         id={name}

@@ -1075,8 +1075,8 @@ export const components = {
     properties: {
       name: '',
       a11yTitle: '',
-      checked: false,
-      defaultChecked: false,
+      checked: '-string-or-boolean-',
+      defaultChecked: '-string-or-boolean-',
       disabled: false,
       label: 'enabled?',
       reverse: false,
@@ -1088,7 +1088,7 @@ export const components = {
     },
     adjustProps: (
       props,
-      { component: { children, designProps }, followLinkOption },
+      { component: { children, designProps }, datum, followLinkOption },
     ) => {
       const adjusted = {
         onChange: designProps?.link
@@ -1096,6 +1096,10 @@ export const components = {
           : undefined,
       };
       if (props.label) adjusted.label = replaceWithData(props.label);
+      if (typeof props.defaultChecked === 'string')
+        adjusted.defaultChecked = getDataByPath(props.defaultChecked, datum);
+      if (typeof props.checked === 'string')
+        adjusted.checked = getDataByPath(props.checked, datum);
       if (designProps?.dataPath)
         adjusted.checked = getDataByPath(designProps.dataPath);
       if (children && children[0]) {

@@ -14,6 +14,7 @@ import ObjectProperty from './ObjectProperty';
 import OptionsProperty from './OptionsProperty';
 import ReferenceProperty from './ReferenceProperty';
 import StringProperty from './StringProperty';
+import StringOrBooleanProperty from './StringOrBooleanProperty';
 import StringOrComponentProperty from './StringOrComponentProperty';
 
 const Property = React.forwardRef(
@@ -123,6 +124,9 @@ const Property = React.forwardRef(
       }
       if (definition.includes('-component-')) {
         return <ComponentProperty ref={ref} value={value} {...rest} />;
+      }
+      if (definition.includes('-string-or-boolean-')) {
+        return <StringOrBooleanProperty ref={ref} value={value} {...rest} />;
       }
       return <StringProperty ref={ref} value={value} {...rest} />;
     } else if (typeof definition === 'number') {
