@@ -71,17 +71,23 @@ const MenuItem = ({ id, value, onChange }) => {
 };
 
 const MenuItemGroup = (props) => (
-  <ArrayOfObjects
-    name="group"
-    itemKey="label"
-    labelKey="label"
-    Edit={MenuItem}
-    {...props}
-  />
+  <Box
+    margin={{ vertical: 'small' }}
+    pad={{ vertical: 'small' }}
+    background="background-contrast"
+  >
+    <ArrayOfObjects
+      name="group"
+      itemKey="label"
+      labelKey="label"
+      Edit={MenuItem}
+      {...props}
+    />
+  </Box>
 );
 
-const MenuItems = ({ value, ...rest }) => {
-  const [groups, setGroups] = useState(
+const MenuItems = ({ value, onChange, ...rest }) => {
+  const [useGroups, setUseGroups] = useState(
     value?.length ? Array.isArray(value?.[0]) : undefined,
   );
 
@@ -89,18 +95,24 @@ const MenuItems = ({ value, ...rest }) => {
     <Box>
       <Box pad="small">
         <CheckBox
-          label="groups?"
-          disabled={value?.length}
-          checked={groups}
-          onChange={(event) => setGroups(event.target.checked)}
+          label="group items"
+          checked={useGroups}
+          onChange={(event) => {
+            const nextUseGroups = event.target.checked;
+            if (nextUseGroups) onChange([value]);
+            else onChange(value.flat());
+            setUseGroups(nextUseGroups);
+          }}
         />
       </Box>
-      {groups ? (
+      {useGroups ? (
         <ArrayOfObjects
           messages={{ single: 'group', plural: 'groups' }}
           defaultObject={[]}
           value={value}
+          labelKey={(group) => group.map((g) => g.label).join(', ')}
           Edit={MenuItemGroup}
+          onChange={onChange}
           {...rest}
           name="groups"
         />
@@ -111,6 +123,7 @@ const MenuItems = ({ value, ...rest }) => {
           labelKey="label"
           value={value}
           Edit={MenuItem}
+          onChange={onChange}
           {...rest}
         />
       )}
