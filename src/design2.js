@@ -384,19 +384,35 @@ export const getTheme = () => theme;
 
 export const getData = (id) => data[id];
 
+export const getFromData = (key, datum) =>
+  datum ? datum[key] : Object.values(data).find((d) => d.name === key)?.data;
+
+// name -> get data[name].data
+// name, datum -> datum[name]
+// {name} -> data[name].data
+// {name}, datum -> datum[name]
+// part1.part2 -> data[part1].data[part2]
+// part1.part2, datum -> datum[part1][part2]
 export const getDataByPath = (path, datum) => {
-  const parts = path.split('.');
-  let key = parts.shift();
-  let pathSoFar = key; // pathSoFar is used for dataIndexes as we go
-  let node = datum
-    ? datum[key]
-    : Object.values(data).find((d) => d.name === key)?.data;
-  while (parts.length && node) {
-    if (Array.isArray(node)) node = node[dataIndexes[pathSoFar] ?? 0];
-    const key = parts.shift();
-    pathSoFar = `${pathSoFar}.${key}`;
-    node = node[key];
+  let node;
+
+  if (path[0] === '{') {
+    const pathRef = path.slice(1, path.length - 1);
+    node = getFromData(pathRef, datum);
+  } else {
+    const parts = path.split('.');
+    let key = parts.shift();
+    let pathSoFar = key; // pathSoFar is used for dataIndexes as we go
+    node = getFromData(key, datum);
+    while (parts.length && node) {
+      if (Array.isArray(node)) node = node[dataIndexes[pathSoFar] ?? 0];
+      const key = parts.shift();
+      pathSoFar = `${pathSoFar}.${key}`;
+      node = node[key];
+    }
   }
+
+  if (node?.[0] === '{') node = getDataByPath(node);
   return node;
 };
 

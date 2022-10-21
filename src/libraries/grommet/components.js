@@ -1900,10 +1900,13 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
-    adjustProps: (props, { component: { designProps, id }, followLink }) => {
+    adjustProps: (
+      props,
+      { component: { designProps, id }, datum, followLink },
+    ) => {
       const adjusted = {};
       if (designProps?.dataPath)
-        adjusted.data = getDataByPath(designProps.dataPath);
+        adjusted.data = getDataByPath(designProps.dataPath, datum);
       if (props.onClickRow) {
         if (designProps?.dataPath)
           setDataIndex(designProps.dataPath, undefined);
