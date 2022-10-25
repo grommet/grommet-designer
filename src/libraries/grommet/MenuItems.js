@@ -99,7 +99,7 @@ const MenuItems = ({ value, onChange, ...rest }) => {
           checked={useGroups}
           onChange={(event) => {
             const nextUseGroups = event.target.checked;
-            if (nextUseGroups) onChange([value]);
+            if (nextUseGroups) onChange(value ? [value] : []);
             else onChange(value.flat());
             setUseGroups(nextUseGroups);
           }}
@@ -110,7 +110,9 @@ const MenuItems = ({ value, onChange, ...rest }) => {
           messages={{ single: 'group', plural: 'groups' }}
           defaultObject={[]}
           value={value}
-          labelKey={(group) => group.map((g) => g.label).join(', ')}
+          labelKey={(group) =>
+            group ? group.map((g) => g.label).join(', ') : 'empty'
+          }
           Edit={MenuItemGroup}
           onChange={onChange}
           {...rest}
