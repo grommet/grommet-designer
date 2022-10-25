@@ -2099,7 +2099,9 @@ export const components = {
     adjustProps: (props, { datum, component: { designProps } }) => {
       const adjusted = {};
       if (typeof props.value === 'string')
-        adjusted.value = replaceWithData(props.value, datum);
+        adjusted.value = parseInt(replaceWithData(props.value, datum), 10);
+      if (typeof props.max === 'string')
+        adjusted.max = parseInt(replaceWithData(props.max, datum), 10);
       if (Array.isArray(props.values)) {
         adjusted.values = props.values.map((v) => {
           const val = { ...v };
