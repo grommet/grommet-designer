@@ -1909,8 +1909,13 @@ export const components = {
       { component: { designProps, id }, datum, followLink },
     ) => {
       const adjusted = {};
-      if (designProps?.dataPath)
+      if (designProps?.dataPath) {
         adjusted.data = getDataByPath(designProps.dataPath, datum);
+        if (!Array.isArray(adjusted.data)) {
+          console.warn('DataTable data is not an array', adjusted.data);
+          adjusted.data = [];
+        }
+      }
       if (props.onClickRow) {
         if (designProps?.dataPath)
           setDataIndex(designProps.dataPath, undefined);
@@ -2055,8 +2060,13 @@ export const components = {
     ) => {
       const adjusted = {};
       // need to use retrieved data for data property
-      if (designProps?.dataPath)
+      if (designProps?.dataPath) {
         adjusted.data = getDataByPath(designProps.dataPath, datum);
+        if (!Array.isArray(adjusted.data)) {
+          console.warn('List data is not an array', adjusted.data);
+          adjusted.data = [];
+        }
+      }
       if (props.onClickItem) {
         if (designProps?.dataPath)
           setDataIndex(designProps.dataPath, undefined);
