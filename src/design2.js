@@ -384,8 +384,13 @@ export const getTheme = () => theme;
 
 export const getData = (id) => data[id];
 
-export const getFromData = (key, datum) =>
-  datum ? datum[key] : Object.values(data).find((d) => d.name === key)?.data;
+export const getFromData = (key, datum) => {
+  if (datum) {
+    if (!key.length) return datum;
+    return datum[key];
+  }
+  return Object.values(data).find((d) => d.name === key)?.data;
+};
 
 // name -> get data[name].data
 // name, datum -> datum[name]
@@ -439,6 +444,7 @@ export const replaceWithData = (text, datum, top = true) => {
     if (nextResult !== result) result = nextResult;
     else proceed = false;
   }
+
   return result;
 };
 

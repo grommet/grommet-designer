@@ -1929,7 +1929,12 @@ export const components = {
       adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c?.render
-          ? (datum) => <DesignComponent id={c.render} datum={datum} />
+          ? (datum) => (
+              <DesignComponent
+                id={c.render}
+                datum={getDataByPath(c.property, datum)}
+              />
+            )
           : undefined,
       }));
       return { ...props, ...adjusted };
@@ -2051,12 +2056,12 @@ export const components = {
     },
     adjustProps: (
       props,
-      { component: { children, designProps }, followLink },
+      { component: { children, designProps }, datum, followLink },
     ) => {
       const adjusted = {};
       // need to use retrieved data for data property
       if (designProps?.dataPath)
-        adjusted.data = getDataByPath(designProps.dataPath);
+        adjusted.data = getDataByPath(designProps.dataPath, datum);
       if (props.onClickItem) {
         if (designProps?.dataPath)
           setDataIndex(designProps.dataPath, undefined);
