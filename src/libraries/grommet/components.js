@@ -1929,12 +1929,7 @@ export const components = {
       adjusted.columns = props.columns.map((c) => ({
         ...c,
         render: c?.render
-          ? (datum) => (
-              <DesignComponent
-                id={c.render}
-                datum={getDataByPath(c.property, datum)}
-              />
-            )
+          ? (datum) => <DesignComponent id={c.render} datum={datum} />
           : undefined,
       }));
       return { ...props, ...adjusted };
