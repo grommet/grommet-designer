@@ -1095,13 +1095,13 @@ export const components = {
           ? (event) => followLinkOption(designProps.link, event.target.checked)
           : undefined,
       };
-      if (props.label) adjusted.label = replaceWithData(props.label);
+      if (props.label) adjusted.label = replaceWithData(props.label, datum);
       if (typeof props.defaultChecked === 'string')
         adjusted.defaultChecked = getDataByPath(props.defaultChecked, datum);
       if (typeof props.checked === 'string')
         adjusted.checked = getDataByPath(props.checked, datum);
       if (designProps?.dataPath)
-        adjusted.checked = getDataByPath(designProps.dataPath);
+        adjusted.checked = getDataByPath(designProps.dataPath, datum);
       if (children && children[0]) {
         adjusted.children = (state) => (
           <DesignComponent id={children[0]} datum={state} />
@@ -1619,11 +1619,11 @@ export const components = {
       type: ['text', 'password'],
       value: '',
     },
-    adjustProps: (props) => {
+    adjustProps: (props, { datum }) => {
       const adjusted = {
         defaultValue:
           typeof props.defaultValue === 'string'
-            ? replaceWithData(props.defaultValue)
+            ? replaceWithData(props.defaultValue, datum)
             : props.defaultValue,
       };
       return { ...props, ...adjusted };
@@ -2170,10 +2170,11 @@ export const components = {
     designProperties: {
       value: '',
     },
-    adjustProps: (props, { component: { designProps } }) => {
+    adjustProps: (props, { component: { designProps }, datum }) => {
       const adjusted = {};
-      if (designProps?.value !== undefined)
-        adjusted.children = replaceWithData(designProps.value);
+      if (designProps?.value !== undefined) {
+        adjusted.children = replaceWithData(designProps.value, datum);
+      }
       if (props.name && typeof props.name === 'number') {
         adjusted.name = <DesignComponent id={props.name} />;
       }
@@ -2196,15 +2197,15 @@ export const components = {
       global: false,
       onClose: ['-link-'],
     },
-    adjustProps: (props, { followLink }) => {
+    adjustProps: (props, { datum, followLink }) => {
       const adjusted = {};
       if (props?.onClose)
         adjusted.onClose = (event) => {
           event.stopPropagation();
           followLink(props.onClose);
         };
-      adjusted.title = replaceWithData(props.title);
-      adjusted.message = replaceWithData(props.message);
+      adjusted.title = replaceWithData(props.title, datum);
+      adjusted.message = replaceWithData(props.message, datum);
       // workaround for Notification not being very defensive
       if (props?.status && (props.status[0] === '{' || props.status[0] === '['))
         adjusted.status = undefined;
@@ -2306,10 +2307,10 @@ export const components = {
       camera: false,
       source: '',
     },
-    adjustProps: (props, { component: { designProps, id } }) => {
+    adjustProps: (props, { component: { designProps, id }, datum }) => {
       const adjusted = {};
       if (designProps?.source) {
-        const source = replaceWithData(designProps.source);
+        const source = replaceWithData(designProps.source, datum);
         adjusted.children = <source src={source} />;
       }
       if (designProps?.camera) {
