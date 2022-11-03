@@ -121,6 +121,9 @@ const ScreenDetails = () => {
             />
           </Box>
         </Box>
+        <Text alignSelf="end" color="text-weak">
+          {selection}
+        </Text>
       </Box>
     </Keyboard>
   );

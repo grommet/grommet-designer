@@ -22,14 +22,12 @@ import {
   load as loadDesign,
   getAncestors,
   getComponent,
-  getDesign,
   getLocationForPath,
   getPathForLocation,
   getRoot,
   getScreen,
   getType,
   isValidId,
-  setDesignProperty,
   setProblem,
   setProperty,
   uncollapseAncestors,
@@ -138,67 +136,60 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
           }
         } else if (link.screen) {
           setLocation({ screen: link.screen });
-          setSelection(link.screen);
+          // delay so any click handler setting selection finishes first
+          setTimeout(() => setSelection(link.screen), 1);
         }
       }
     },
     [grommetThemeMode, setThemeMode],
   );
 
-  const followLinkOption = useCallback((link, value) => {
-    // figure out which link to use, if any
-    Object.keys(link)
-      .filter((n) => link[n])
-      .forEach((name) => {
-        // function shared by array and non-array cases
-        const follow = (link) => {
-          // TODO: refactor, maybe re-use followLink() above?
-          if (link.control) {
-            const design = getDesign();
-            setDesignProperty(
-              'themeMode',
-              design.themeMode === 'dark' ? 'light' : 'dark',
-            );
-          } else if (link.component) {
-            const component = getComponent(link.component);
-            const type = getType(component.type);
-            const { hideable, selectable } = type;
-            if (selectable) {
-              // -link-checked- cases
-              let active;
-              if (name === '-unchecked-' && !value) active = 1;
-              else if (name === '-checked-' && value) active = 2;
-              else if (name === '-both-') active = component.props.active + 1;
-              if (component.props.active > component.children.length)
-                active = 1;
-              setProperty(link.component, 'props', 'active', active);
-            } else if (hideable) {
-              // -link-checked- cases
-              let hide;
-              if (name === '-checked-') hide = !value;
-              else if (name === '-unchecked-') hide = value;
-              // undefined ok
-              else if (name === '-both-') hide = !value;
-              // -link-option- cases
-              else if (name === '-any-') hide = !value || !value.length;
-              else if (name === '-none-')
-                hide = Array.isArray(value)
-                  ? !!value.length && value[0] !== name
-                  : !!value && value !== name;
-              else
-                hide = Array.isArray(value)
-                  ? !value.includes(name)
-                  : value !== name;
-              if (hide !== undefined && component.hide !== hide)
-                setProperty(link.component, undefined, 'hide', hide);
-            }
-          }
-        };
-
-        if (Array.isArray(link[name])) link[name].forEach(follow);
-        else follow(link[name]);
-      });
+  const unfollowLink = useCallback((link) => {
+    if (link) {
+      if (Array.isArray(link)) link.forEach(unfollowLink);
+      else if (link.component) {
+        const component = getComponent(link.component);
+        const type = getType(component.type);
+        if (type.hideable) setProperty(link.component, undefined, 'hide', true);
+      }
+    }
   }, []);
+
+  const followLinkOption = useCallback(
+    (link, value) => {
+      const hasValue = (Array.isArray(value) && value.length) || value;
+
+      // divide links into what we should unfollow and what we should follow
+      const unfollow = [];
+      const follow = [];
+      Object.keys(link)
+        .filter((n) => link[n])
+        .forEach((name) => {
+          const inValue =
+            (Array.isArray(value) && value.includes(name)) || value === name;
+          if (
+            ((name === '-unchecked-' || name === '-none-') && hasValue) ||
+            ((name === '-checked-' || name === '-any-' || name === '-both-') &&
+              !hasValue) ||
+            (name[0] !== '-' && !inValue)
+          )
+            unfollow.push(link[name]);
+          else if (
+            ((name === '-unchecked-' || name === '-none-') && !hasValue) ||
+            ((name === '-checked-' || name === '-any-' || name === '-both-') &&
+              hasValue) ||
+            (name[0] !== '-' && inValue)
+          )
+            follow.push(link[name]);
+        });
+
+      // unfollow first
+      unfollow.forEach(unfollowLink);
+      // then follow
+      follow.forEach(followLink);
+    },
+    [followLink, unfollowLink],
+  );
 
   // when user uses browser back and forward buttons,
   // clear selection and set path
