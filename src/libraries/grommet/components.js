@@ -1468,8 +1468,8 @@ export const components = {
       if (props.valueKey)
         adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
-        adjusted.children = (option) => (
-          <DesignComponent id={children[0]} datum={option} />
+        adjusted.children = (option, index, options, state) => (
+          <DesignComponent id={children[0]} datum={{ ...option, ...state }} />
         );
       }
       if (props.valueLabel) {
@@ -1557,8 +1557,8 @@ export const components = {
       if (props.valueKey)
         adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
-        adjusted.children = (option) => (
-          <DesignComponent id={children[0]} datum={option} />
+        adjusted.children = (option, index, options, state) => (
+          <DesignComponent id={children[0]} datum={{ ...option, ...state }} />
         );
       }
       if (props.valueLabel) {
