@@ -110,6 +110,11 @@ const MenuItems = ({ value, onChange, ...rest }) => {
           messages={{ single: 'group', plural: 'groups' }}
           defaultObject={[]}
           value={value}
+          itemKey={(group) =>
+            group
+              ? group.map((g) => g.label).join('-') || group.length
+              : 'empty'
+          }
           labelKey={(group) =>
             group ? group.map((g) => g.label).join(', ') : 'empty'
           }
