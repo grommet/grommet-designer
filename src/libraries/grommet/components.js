@@ -1055,6 +1055,11 @@ export const components = {
       plain: false,
       reverse: false,
     },
+    adjustProps: (props, { datum }) => {
+      const adjusted = {};
+      if (props.title) adjusted.title = replaceWithData(props.title, datum);
+      return { ...props, ...adjusted };
+    },
   },
   Tip: {
     component: Tip,
