@@ -310,6 +310,8 @@ export const getLocationForPath = (path) => {
   if (match) return { property: { id: parseInt(match[1], 10) } };
   match = /^\/-data-(\d+)$/.exec(path);
   if (match) return { data: parseInt(match[1], 10) };
+  // no matches, return path for first screen
+  return { screen: Object.keys(design.screens)[0] };
 };
 
 export const getDescendants = (id) => {
