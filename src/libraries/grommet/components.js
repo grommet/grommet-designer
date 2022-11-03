@@ -1095,6 +1095,9 @@ export const components = {
           ? (event) => followLinkOption(designProps.link, event.target.checked)
           : undefined,
       };
+      // set unique id if we have a datum, so CheckBoxes in List work
+      if (datum)
+        adjusted.id = JSON.stringify(datum).replace(/[^a-zA-Z0-9]/g, '-');
       if (props.label) adjusted.label = replaceWithData(props.label, datum);
       if (typeof props.defaultChecked === 'string')
         adjusted.defaultChecked = getDataByPath(props.defaultChecked, datum);
