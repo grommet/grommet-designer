@@ -84,7 +84,8 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
           const paramSelection =
             params.selection && parseInt(params.selection, 10);
           const stored = localStorage.getItem(`${design.name}--state`);
-          if (stored) {
+          // don't use stored state if loading from remote id
+          if (!loadProps.id && stored) {
             const savedState = JSON.parse(stored);
             setMode(params.mode || savedState.mode);
             const nextSelection = paramSelection || savedState.selection;
