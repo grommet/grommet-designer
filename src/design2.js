@@ -413,9 +413,11 @@ export const getDataByPath = (path, datum) => {
     node = getFromData(key, datum);
     while (parts.length && node) {
       if (Array.isArray(node)) node = node[dataIndexes[pathSoFar] ?? 0];
-      const key = parts.shift();
-      pathSoFar = `${pathSoFar}.${key}`;
-      node = node[key];
+      else {
+        const key = parts.shift();
+        pathSoFar = `${pathSoFar}.${key}`;
+        node = node[key];
+      }
     }
   }
 

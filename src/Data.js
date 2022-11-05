@@ -1,4 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Box,
   Button,
@@ -11,19 +17,52 @@ import {
 } from 'grommet';
 import { Trash } from 'grommet-icons';
 import Field from './components/Field';
-import { removeData, setDataProperty, useData } from './design2';
+import { getData, removeData, setDataProperty, useData } from './design2';
 import SelectionContext from './SelectionContext';
+
+const dataToString = (data) => JSON.stringify(data?.data, null, 2) || '';
 
 const Data = ({ id }) => {
   const [, setSelection] = useContext(SelectionContext);
   const data = useData(id);
-  const [json, setJson] = React.useState(
-    data ? JSON.stringify(data.data, null, 2) : '',
-  );
+
+  // we keep the latest text in a ref so parseAndSet can use it lazily
+  const text = useRef(dataToString(data));
+
+  // dataText tracks what the TextArea contains, which might not be valid JSON
+  // as the user types
+  const [dataText, setDataText] = useState(text.current);
+
+  // any errors parsing the JSON are save here so they can be shown to the user
+  const [error, setError] = useState(false);
+
+  const parseAndSet = useCallback(() => {
+    if (text.current) {
+      try {
+        const nextValue = JSON.parse(text.current);
+        setError(false);
+        setDataProperty(id, 'data', nextValue);
+      } catch (e) {
+        setError(e.message);
+      }
+    } else {
+      setDataProperty(id, 'data', undefined);
+    }
+  }, [id]);
+
+  // when data changes, set and reset. This could be due to the user navigating
+  // between different data ids.
   useEffect(() => {
-    if (data) setJson(JSON.stringify(data.data, null, 2));
-  }, [data]);
-  const [error, setError] = React.useState(false);
+    setDataText(dataToString(getData(id)));
+    return () => parseAndSet();
+  }, [id, parseAndSet]);
+
+  // lazily parse and set to ride out user typing
+  useEffect(() => {
+    text.current = dataText;
+    const timer = setTimeout(() => parseAndSet(), 500);
+    return () => clearTimeout(timer);
+  }, [dataText, parseAndSet]);
 
   if (!data) return null;
 
@@ -78,23 +117,9 @@ const Data = ({ id }) => {
             <TextArea
               id="data"
               name="data"
-              value={json || ''}
+              value={dataText}
               rows={40}
-              onChange={(event) => {
-                const value = event.target.value;
-                setJson(value);
-                if (value) {
-                  try {
-                    const nextJson = JSON.parse(value);
-                    setError(false);
-                    setDataProperty(id, 'data', nextJson);
-                  } catch (e) {
-                    setError(e.message);
-                  }
-                } else {
-                  setDataProperty(id, 'data', undefined);
-                }
-              }}
+              onChange={(event) => setDataText(event.target.value)}
             />
           )}
           {error && (
