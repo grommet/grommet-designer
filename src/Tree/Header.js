@@ -14,7 +14,9 @@ import ConfirmDelete from './ConfirmDelete';
 import Duplicate from './Duplicate';
 import DesignSettings from './DesignSettings';
 import Help from './Help';
-import Sharing from './Share';
+import Export from './Export';
+import Publish from './Publish';
+import GenerateCode from './GenerateCode';
 
 const within = (node, container) => {
   if (!node) return false;
@@ -25,7 +27,9 @@ const within = (node, container) => {
 const Header = ({ onClose, property, setMode }) => {
   const [adding, setAdding] = useState();
   const [editing, setEditing] = useState();
-  const [sharing, setSharing] = useState();
+  const [publishing, setPublishing] = useState();
+  const [exporting, setExporting] = useState();
+  const [generatingCode, setGeneratingCode] = useState();
   const [deleting, setDeleting] = useState();
   const [duplicating, setDuplicating] = useState();
   const [help, setHelp] = useState();
@@ -63,19 +67,24 @@ const Header = ({ onClose, property, setMode }) => {
               dropProps={{ align: { top: 'bottom' } }}
               items={[
                 { label: 'configure', onClick: () => setEditing(true) },
-                { label: 'share', onClick: () => setSharing(true) },
                 {
                   label: 'preview [control .]',
                   onClick: () => setMode('preview'),
                 },
-                {
-                  label: 'comments [control ;]',
-                  onClick: () => setMode('comments'),
-                },
+                // {
+                //   label: 'comments [control ;]',
+                //   onClick: () => setMode('comments'),
+                // },
+                { label: 'publish', onClick: () => setPublishing(true) },
+                { label: 'export', onClick: () => setExporting(true) },
                 { label: 'duplicate', onClick: () => setDuplicating(true) },
+                {
+                  label: 'generate code',
+                  onClick: () => setGeneratingCode(true),
+                },
                 { label: 'help', onClick: () => setHelp(true) },
                 { label: 'close', onClick: onClose },
-                { label: 'delete ...', onClick: () => setDeleting(true) },
+                { label: 'delete', onClick: () => setDeleting(true) },
               ]}
             >
               <Box
@@ -126,11 +135,15 @@ const Header = ({ onClose, property, setMode }) => {
           <ConfirmDelete onClose={() => setDeleting(false)} onDone={onClose} />
         )}
         {duplicating && <Duplicate onClose={() => setDuplicating(false)} />}
-        {sharing && <Sharing onClose={() => setSharing(false)} />}
+        {publishing && <Publish onClose={() => setPublishing(false)} />}
+        {exporting && <Export onClose={() => setExporting(false)} />}
         {adding && (
           <AddComponent onClose={() => setAdding(false)} property={property} />
         )}
         {editing && <DesignSettings onClose={() => setEditing(false)} />}
+        {generatingCode && (
+          <GenerateCode onClose={() => setGeneratingCode(false)} />
+        )}
         {help && <Help onClose={() => setHelp(false)} />}
       </Box>
     </Keyboard>

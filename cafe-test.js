@@ -330,10 +330,10 @@ test('create design', async (t) => {
 
   await t
     .click(textButton('Second Design'))
-    .expect(textButton('delete ...').exists)
+    .expect(textButton('delete').exists)
     .ok();
   await t
-    .click(textButton('delete ...'))
+    .click(textButton('delete'))
     .expect(textButton('Yes, delete').exists)
     .ok();
   await t.wait(500);
