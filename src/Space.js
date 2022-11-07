@@ -67,9 +67,10 @@ const Space = () => {
       </Heading>
       <Box direction="row" gap="medium" align="center">
         <Tip
+          dropProps={{ align: { bottom: 'top' } }}
           content={
             active ? (
-              <Box pad="small" gap="small">
+              <Box pad="small" gap="small" flex={false}>
                 <Header>
                   <Box direction="row" gap="small" align="center">
                     <Box pad="xsmall" background={active.color} />
