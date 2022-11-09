@@ -426,7 +426,7 @@ export const getDataByPath = (path, datum) => {
 };
 
 export const replaceWithData = (text, datum, top = true) => {
-  let result = text ?? '';
+  let result = text ?? undefined;
   let proceed = typeof result === 'string';
 
   const matcher = (match) => {

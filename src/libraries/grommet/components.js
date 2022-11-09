@@ -440,8 +440,8 @@ export const components = {
     },
     adjustProps: (props) => {
       const adjusted = {};
-      adjusted.title = replaceWithData(props.title);
-      adjusted.subtitle = replaceWithData(props.subtitle);
+      if (props.title) adjusted.title = replaceWithData(props.title);
+      if (props.subtitle) adjusted.subtitle = replaceWithData(props.subtitle);
       if (props.parent && typeof props.parent === 'number') {
         adjusted.parent = <DesignComponent id={props.parent} />;
       }
@@ -864,7 +864,7 @@ export const components = {
     advancedProperties: ['margin', 'color'],
     adjustProps: (props, { component, datum, followLink }) => {
       const adjusted = {};
-      adjusted.label = replaceWithData(props.label, datum);
+      if (props.label) adjusted.label = replaceWithData(props.label, datum);
       if (component?.designProps?.link)
         adjusted.onClick = (event) => {
           event.stopPropagation();
@@ -2212,8 +2212,9 @@ export const components = {
           event.stopPropagation();
           followLink(props.onClose);
         };
-      adjusted.title = replaceWithData(props.title, datum);
-      adjusted.message = replaceWithData(props.message, datum);
+      if (props.title) adjusted.title = replaceWithData(props.title, datum);
+      if (props.message)
+        adjusted.message = replaceWithData(props.message, datum);
       // workaround for Notification not being very defensive
       if (props?.status && (props.status[0] === '{' || props.status[0] === '['))
         adjusted.status = undefined;
