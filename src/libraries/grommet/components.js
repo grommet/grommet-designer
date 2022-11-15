@@ -224,6 +224,7 @@ export const components = {
       onClick: ['-link-'],
       responsive: true,
       round: BoxRound,
+      skeleton: false,
       width: Dimension,
       wrap: false,
     },
@@ -257,7 +258,14 @@ export const components = {
       },
       {
         label: 'Style',
-        properties: ['animation', 'background', 'border', 'elevation', 'round'],
+        properties: [
+          'animation',
+          'background',
+          'border',
+          'elevation',
+          'round',
+          'skeleton',
+        ],
       },
       {
         label: 'Interaction',
@@ -421,6 +429,7 @@ export const components = {
       gap: reusedBoxProps.gap,
       pad: reusedBoxProps.pad,
       flex: reusedBoxProps.flex,
+      skeleton: false,
     },
   },
   PageHeader: {
