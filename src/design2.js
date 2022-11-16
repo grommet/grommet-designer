@@ -210,7 +210,7 @@ const getUrlForId = (id) => {
   return [protocol, '//', host, pathname, search, hash].join('');
 };
 
-export const publish = ({ email, password, pin }) => {
+export const publish = ({ email, password, pin, suffix }) => {
   // add some metadata
   const pubDesign = JSON.parse(JSON.stringify(design));
   pubDesign.email = email;
@@ -219,6 +219,8 @@ export const publish = ({ email, password, pin }) => {
   pubDesign.date = date.toISOString();
   pubDesign.password = password;
   delete pubDesign.local;
+  const originalName = pubDesign.name;
+  if (suffix) pubDesign.name = `${pubDesign.name} ${suffix}`;
 
   const body = JSON.stringify(pubDesign);
   return fetch(apiUrl, {
@@ -231,9 +233,27 @@ export const publish = ({ email, password, pin }) => {
   }).then((response) => {
     if (response.ok) {
       response.text().then((id) => {
-        pubDesign.publishedUrl = getUrlForId(id);
-        pubDesign.publishedDate = date.toISOString();
-        pubDesign.id = id;
+        if (suffix) {
+          pubDesign.name = originalName;
+          const version = {
+            url: getUrlForId(id),
+            date: date.toISOString(),
+            id: id,
+            suffix,
+          };
+          if (!pubDesign.publishedVersions) pubDesign.publishedVersions = [];
+          const index = pubDesign.publishedVersions.findIndex(
+            (v) => v.suffix === suffix,
+          );
+          if (index === -1)
+            pubDesign.publishedVersions.unshift(version); // add to the list
+          else pubDesign.publishedVersions[index] = version; // update
+        } else {
+          // non-suffixed version
+          pubDesign.publishedUrl = getUrlForId(id);
+          pubDesign.publishedDate = date.toISOString();
+          pubDesign.id = id;
+        }
         pubDesign.local = true;
         design = pubDesign;
         store({ preserveDate: true });
@@ -243,8 +263,44 @@ export const publish = ({ email, password, pin }) => {
   });
 };
 
-export const revert = async () => {
-  return await load({ id: design.id });
+export const revert = async ({ id }) => {
+  const name = design.name;
+  const publishedVersions = design.publishedVersions
+    ? [...design.publishedVersions]
+    : undefined;
+  await load({ id });
+  // restore name and publishedVersions
+  const nextDesign = JSON.parse(JSON.stringify(design));
+  nextDesign.name = name;
+  if (publishedVersions) nextDesign.publishedVersions = publishedVersions;
+  nextDesign.local = true;
+  design = nextDesign;
+  store({ preserveDate: true });
+  notify(undefined, nextDesign);
+};
+
+export const unpublish = ({ id, pin = 0 }) => {
+  const date = new Date();
+  date.setMilliseconds(pin);
+  const body = JSON.stringify({ date: date.toISOString() });
+  return fetch(`${apiUrl}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Content-Length': body.length,
+    },
+    body,
+  }).then((response) => {
+    if (response.ok || response.status === 400) {
+      // remove if it from the list
+      const nextDesign = JSON.parse(JSON.stringify(design));
+      const index = nextDesign.publishedVersions.findIndex((v) => v.id === id);
+      if (index !== -1) nextDesign.publishedVersions.splice(index, 1);
+      design = nextDesign;
+      store({ preserveDate: true });
+      notify(undefined, nextDesign);
+    }
+  });
 };
 
 // read

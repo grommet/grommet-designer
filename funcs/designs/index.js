@@ -169,8 +169,26 @@ exports.designs = (req, res) => {
   }
 
   if (req.method === 'DELETE') {
-    const file = bucket.file(`${req.url}.json`);
-    return file.delete().then(() => res.status(200).send());
+    const parts = req.url.split('/');
+    const id = decodeURIComponent(parts[1]);
+    const file = bucket.file(`${id}.json`);
+    const { date } = req.body;
+
+    return file
+      .download()
+      .then((data) => {
+        const existingDesign = JSON.parse(data[0]);
+
+        const existingPin = new Date(existingDesign.date).getMilliseconds();
+        const pin = new Date(date).getMilliseconds();
+        if (pin !== existingPin) {
+          res.status(403).send('Unauthorized');
+          return;
+        }
+
+        return file.delete().then(() => res.status(200).send());
+      })
+      .catch((e) => res.status(400).send(e.message));
   }
 
   res.status(405).send();
