@@ -14,6 +14,7 @@ import NewScreen from './NewScreen';
 import Canvas from './Canvas2';
 import Data from './Data';
 import Loading from './Loading';
+import NotFound from './NotFound';
 import Auth from './Auth';
 import Properties from './Properties/Properties';
 import Tree from './Tree/Tree';
@@ -55,6 +56,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
   const [loadProps, setLoadProps] = useState(loadPropsProp);
   const [auth, setAuth] = useState();
   const [ready, setReady] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const [location, setLocation] = useState();
   const [selection, setSelection] = useState();
   const [mode, setMode] = useState(thumb ? 'thumb' : undefined);
@@ -111,6 +113,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         // need to prompt user for password?
         if (e.message === '401') setAuth(true);
         else if (e.message === '404') onClose();
+        else if (e.message === '400') setNotFound(true);
         else throw e;
       });
     return () => setReady(false);
@@ -285,6 +288,7 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         }}
       />
     );
+  if (notFound) return <NotFound />;
   if (!ready) return <Loading />;
 
   // console.log('!!! Designer', { location, selection, treeRoot, canvasRoot });
