@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import {
   Accordion,
@@ -28,18 +28,6 @@ const Publish = ({ onClose }) => {
   const [changing, setChanging] = useState();
   const [adding, setAdding] = useState();
   const [error, setError] = useState();
-
-  // const versions = useMemo(() => {
-  //   let result = [];
-  //   if (design.publishedVersions) result = [...design.publishedVersions];
-  //   if (design.publishedUrl)
-  //     result.push({
-  //       suffix: '',
-  //       date: design.publishedDate,
-  //       url: design.publishedUrl,
-  //     });
-  //   return result;
-  // }, [design]);
 
   useEffect(() => {
     let stored =
@@ -131,6 +119,16 @@ const Publish = ({ onClose }) => {
         <Menu
           icon={<More />}
           items={[
+            ...(version.suffix
+              ? [
+                  {
+                    label: 're-publish',
+                    onClick: () => {
+                      onPublish({ ...publication, suffix: version.suffix });
+                    },
+                  },
+                ]
+              : []),
             {
               label: 'revert to',
               onClick: () => {
@@ -142,16 +140,19 @@ const Publish = ({ onClose }) => {
               onClick: () => onDelete({ id: version.id, pin: publication.pin }),
             },
           ]}
+          dropProps={{ align: { right: 'right', top: 'bottom' } }}
         />
-        <Button
-          label="re-publish"
-          secondary={version.suffix ? undefined : true}
-          hoverIndicator
-          disabled={changing}
-          onClick={() => {
-            onPublish({ ...publication, suffix: version.suffix });
-          }}
-        />
+        {!version.suffix && (
+          <Button
+            label="re-publish"
+            secondary={version.suffix ? undefined : true}
+            hoverIndicator
+            disabled={changing}
+            onClick={() => {
+              onPublish({ ...publication, suffix: version.suffix });
+            }}
+          />
+        )}
       </Box>
     </Box>
   );
