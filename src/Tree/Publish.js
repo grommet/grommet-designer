@@ -70,7 +70,6 @@ const Publish = ({ onClose }) => {
   const [publication, setPublication] = useState();
   const [changing, setChanging] = useState();
   const [adding, setAdding] = useState();
-  const [error, setError] = useState();
 
   useEffect(() => {
     let stored =
@@ -98,10 +97,7 @@ const Publish = ({ onClose }) => {
           action: 'publish design',
         });
       })
-      .catch((err) => {
-        setChanging(false);
-        setError(err);
-      });
+      .catch(() => setChanging(false));
   };
 
   const onRevert = ({ id }) => {
@@ -114,10 +110,7 @@ const Publish = ({ onClose }) => {
           action: 'revert design',
         });
       })
-      .catch((err) => {
-        setChanging(false);
-        setError(err);
-      });
+      .catch(() => setChanging(false));
   };
 
   const onDelete = ({ id, pin }) => {
@@ -130,10 +123,7 @@ const Publish = ({ onClose }) => {
           action: 'unpublish design',
         });
       })
-      .catch((err) => {
-        setChanging(false);
-        setError(err);
-      });
+      .catch(() => setChanging(false));
   };
 
   const Version = ({ version }) => (
