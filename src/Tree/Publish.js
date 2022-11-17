@@ -22,6 +22,49 @@ import { Add, More, Subtract } from 'grommet-icons';
 import { publish, revert, unpublish, useDesign } from '../design2';
 import Action from '../components/Action';
 
+const SecurityFields = () => (
+  <>
+    <Paragraph>
+      We use your email combined with a PIN # so that nobody else can modify
+      your published copy.
+    </Paragraph>
+    <FormField
+      name="email"
+      label="Email"
+      required
+      validate={{ regexp: /\w+@\w+\.\w+/ }}
+    >
+      <TextInput name="email" />
+    </FormField>
+    <FormField
+      name="pin"
+      label="PIN to change"
+      required
+      validate={{ regexp: /\d{3}/, message: 'three digits' }}
+    >
+      <MaskedInput
+        name="pin"
+        type="password"
+        mask={[
+          {
+            length: 3,
+            regexp: /^\d{1,3}$/,
+            placeholder: '###',
+          },
+        ]}
+      />
+    </FormField>
+    <FormField
+      name="password"
+      label="Password to access"
+      help="optional"
+      margin={{ bottom: 'medium' }}
+    >
+      <TextInput name="password" type="password" />
+    </FormField>
+  </>
+);
+
 const Publish = ({ onClose }) => {
   const design = useDesign();
   const [publication, setPublication] = useState();
@@ -169,51 +212,17 @@ const Publish = ({ onClose }) => {
         onChange={setPublication}
         onSubmit={({ value }) => onPublish(value)}
       >
-        <Accordion>
-          <AccordionPanel label="security">
-            <Paragraph>
-              We use your email combined with a PIN # so that nobody else can
-              modify your published copy.
-            </Paragraph>
-            <FormField
-              name="email"
-              label="Email"
-              required
-              validate={{ regexp: /\w+@\w+\.\w+/ }}
-            >
-              <TextInput name="email" />
-            </FormField>
-            <FormField
-              name="pin"
-              label="PIN to change"
-              required
-              validate={{ regexp: /\d{3}/, message: 'three digits' }}
-              error={error}
-            >
-              <MaskedInput
-                name="pin"
-                type="password"
-                mask={[
-                  {
-                    length: 3,
-                    regexp: /^\d{1,3}$/,
-                    placeholder: '###',
-                  },
-                ]}
-              />
-            </FormField>
-            <FormField
-              name="password"
-              label="Password to access"
-              help="optional"
-              margin={{ bottom: 'medium' }}
-            >
-              <TextInput name="password" type="password" />
-            </FormField>
-          </AccordionPanel>
-        </Accordion>
+        {design.publishedUrl ? (
+          <Accordion>
+            <AccordionPanel label="security">
+              <SecurityFields />
+            </AccordionPanel>
+          </Accordion>
+        ) : (
+          <SecurityFields />
+        )}
 
-        {design.publishedUrl && (
+        {design.publishedUrl ? (
           <Box margin={{ top: 'medium' }}>
             <Version
               version={{
@@ -224,6 +233,8 @@ const Publish = ({ onClose }) => {
               }}
             />
           </Box>
+        ) : (
+          <Button primary label="publish" type="submit" />
         )}
 
         <Header>
