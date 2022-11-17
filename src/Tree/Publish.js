@@ -18,7 +18,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { More } from 'grommet-icons';
+import { Add, More, Subtract } from 'grommet-icons';
 import { publish, revert, unpublish, useDesign } from '../design2';
 import Action from '../components/Action';
 
@@ -26,19 +26,20 @@ const Publish = ({ onClose }) => {
   const design = useDesign();
   const [publication, setPublication] = useState();
   const [changing, setChanging] = useState();
+  const [adding, setAdding] = useState();
   const [error, setError] = useState();
 
-  const versions = useMemo(() => {
-    let result = [];
-    if (design.publishedVersions) result = [...design.publishedVersions];
-    if (design.publishedUrl)
-      result.push({
-        suffix: '',
-        date: design.publishedDate,
-        url: design.publishedUrl,
-      });
-    return result;
-  }, [design]);
+  // const versions = useMemo(() => {
+  //   let result = [];
+  //   if (design.publishedVersions) result = [...design.publishedVersions];
+  //   if (design.publishedUrl)
+  //     result.push({
+  //       suffix: '',
+  //       date: design.publishedDate,
+  //       url: design.publishedUrl,
+  //     });
+  //   return result;
+  // }, [design]);
 
   useEffect(() => {
     let stored =
@@ -104,6 +105,57 @@ const Publish = ({ onClose }) => {
       });
   };
 
+  const Version = ({ version }) => (
+    <Box
+      flex={false}
+      margin={{ vertical: 'small' }}
+      direction="row"
+      justify="between"
+      align="center"
+      gap="large"
+    >
+      <Box flex={false}>
+        <Anchor href={version.url}>
+          <Text weight="bold">
+            {design.name} {version.suffix}
+          </Text>
+        </Anchor>
+        <Text color="text-weak" size="small">
+          {new Date(version.date).toLocaleString()}
+        </Text>
+        {!version.suffix && design.date !== design.publishedDate && (
+          <Text>not up to date</Text>
+        )}
+      </Box>
+      <Box flex={false} direction="row" align="center">
+        <Menu
+          icon={<More />}
+          items={[
+            {
+              label: 'revert to',
+              onClick: () => {
+                onRevert({ id: version.id });
+              },
+            },
+            {
+              label: 'delete',
+              onClick: () => onDelete({ id: version.id, pin: publication.pin }),
+            },
+          ]}
+        />
+        <Button
+          label="re-publish"
+          secondary={version.suffix ? undefined : true}
+          hoverIndicator
+          disabled={changing}
+          onClick={() => {
+            onPublish({ ...publication, suffix: version.suffix });
+          }}
+        />
+      </Box>
+    </Box>
+  );
+
   return (
     <Action label="publish" animation="fadeIn" onClose={onClose}>
       <Paragraph>
@@ -160,76 +212,59 @@ const Publish = ({ onClose }) => {
           </AccordionPanel>
         </Accordion>
 
-        {versions.length > 0 && (
-          <>
-            <Header>
-              <Heading level="2" size="small">
-                versions
-              </Heading>
-              {changing && <Spinner />}
-            </Header>
-
-            <List data={versions} pad="none">
-              {(version) => (
-                <Box
-                  flex={false}
-                  margin={{ vertical: 'small' }}
-                  direction="row"
-                  justify="between"
-                  align="center"
-                  gap="large"
-                >
-                  <Box flex={false}>
-                    <Anchor href={version.url}>
-                      <Text weight="bold">
-                        {design.name} {version.suffix}
-                      </Text>
-                    </Anchor>
-                    <Text color="text-weak" size="small">
-                      {new Date(version.date).toLocaleString()}
-                    </Text>
-                  </Box>
-                  <Box flex={false} direction="row" align="center">
-                    <Menu
-                      icon={<More />}
-                      items={[
-                        {
-                          label: 'revert to',
-                          onClick: () => {
-                            onRevert({ id: version.id });
-                          },
-                        },
-                        {
-                          label: 'delete',
-                          onClick: () =>
-                            onDelete({ id: version.id, pin: publication.pin }),
-                        },
-                      ]}
-                    />
-                    <Button
-                      label="re-publish"
-                      hoverIndicator
-                      disabled={changing}
-                      onClick={() => {
-                        onPublish({ ...publication, suffix: version.suffix });
-                      }}
-                    />
-                  </Box>
-                </Box>
-              )}
-            </List>
-            <Heading level={2} size="small" margin={{ top: 'large' }}>
-              new version
-            </Heading>
-          </>
+        {design.publishedUrl && (
+          <Box margin={{ top: 'medium' }}>
+            <Version
+              version={{
+                suffix: '',
+                id: design.id,
+                date: design.publishedDate,
+                url: design.publishedUrl,
+              }}
+            />
+          </Box>
         )}
 
-        <FormField name="suffix" label="version suffix">
-          <TextInput name="suffix" />
-        </FormField>
-        <Box align="start" margin={{ vertical: 'medium' }}>
-          <Button type="submit" label="Publish" secondary disabled={changing} />
-        </Box>
+        <Header>
+          <Heading level="2" size="small">
+            snapshots
+          </Heading>
+          {changing && <Spinner />}
+          <Button
+            icon={adding ? <Subtract /> : <Add />}
+            title={`${adding ? 'cancel adding' : 'add'} a snapshot`}
+            onClick={() => setAdding(!adding)}
+          />
+        </Header>
+
+        {adding && (
+          <Box
+            direction="row"
+            gap="medium"
+            align="center"
+            justify="between"
+            margin={{ bottom: 'medium' }}
+          >
+            <Box direction="row" gap="xsmall" align="baseline">
+              <Text>{design.name}</Text>
+              <FormField name="suffix">
+                <TextInput name="suffix" placeholder="suffix" />
+              </FormField>
+            </Box>
+            <Button
+              type="submit"
+              label="publish"
+              secondary
+              disabled={changing}
+            />
+          </Box>
+        )}
+
+        {design.publishedVersions && (
+          <List data={design.publishedVersions} pad="none">
+            {(version) => <Version version={version} />}
+          </List>
+        )}
       </Form>
     </Action>
   );
