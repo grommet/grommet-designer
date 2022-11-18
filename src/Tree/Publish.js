@@ -91,6 +91,7 @@ const Publish = ({ onClose }) => {
     setChanging(true);
     publish({ email, password, pin, suffix })
       .then(() => {
+        setAdding(false);
         setChanging(false);
         ReactGA.event({
           category: 'share',

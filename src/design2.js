@@ -1,5 +1,5 @@
 // singleton to manage design access and updates
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiUrl, upgradeDesign } from './design';
 import { loadTheme } from './themes';
 import designerLibrary from './libraries/designer';
@@ -658,21 +658,27 @@ export const newDesign = (nameArg, theme = 'grommet') => {
   return design;
 };
 
-export const removeDesign = () => {
-  // clean up listeners
-  listeners = {};
-
-  localStorage.removeItem(design.local ? design.name : design.id);
-
+export const removeDesign = (id) => {
   // remove from the stored list of designs
   const stored = localStorage.getItem('designs');
   const prevDesigns = stored ? JSON.parse(stored) : [];
-  const nextDesigns = prevDesigns.filter(
-    (des) => !(des.name === design.name && des.id === design.id),
-  );
-  localStorage.setItem('designs', JSON.stringify(nextDesigns));
+  let nextDesigns;
 
-  design = undefined;
+  if (id) {
+    // this path is used by NotFound when attempting to load a deleted design
+    nextDesigns = prevDesigns.filter((des) => !(des.id === id));
+  } else {
+    nextDesigns = prevDesigns.filter(
+      (des) => !(des.name === design.name && des.id === design.id),
+    );
+    // clean up listeners
+    listeners = {};
+    design = undefined;
+    localStorage.removeItem(design.local ? design.name : design.id);
+  }
+
+  localStorage.setItem('designs', JSON.stringify(nextDesigns));
+  notify();
 };
 
 const slugify = (name) =>
@@ -1291,7 +1297,8 @@ const compareDesigns = (d1, d2) => {
 
 export const useDesigns = ({ localOnly } = {}) => {
   const [designs, setDesigns] = useState([]);
-  useEffect(() => {
+
+  const loadDesigns = useCallback(() => {
     const stored = localStorage.getItem('designs');
     let nextDesigns = stored ? JSON.parse(stored) : [];
 
@@ -1320,23 +1327,29 @@ export const useDesigns = ({ localOnly } = {}) => {
       }
     });
 
-    setDesigns(
-      nextDesigns
-        .filter((d) => d && (!localOnly || d.local))
-        .sort(compareDesigns)
-        .map((d) => {
-          const slugName = slugify(d.name);
-          let id;
-          if (d.id) id = d.id;
-          else if (d.url) id = d.url.split('=')[1];
-          if (id && id.toLowerCase().startsWith(slugName)) {
-            const author = id.slice(slugName.length).split('-')[1];
-            return { ...d, author };
-          }
-          return d;
-        }),
-    );
+    return nextDesigns
+      .filter((d) => d && (!localOnly || d.local))
+      .sort(compareDesigns)
+      .map((d) => {
+        const slugName = slugify(d.name);
+        let id;
+        if (d.id) id = d.id;
+        else if (d.url) id = d.url.split('=')[1];
+        if (id && id.toLowerCase().startsWith(slugName)) {
+          const author = id.slice(slugName.length).split('-')[1];
+          return { ...d, author };
+        }
+        return d;
+      });
   }, [localOnly]);
+
+  useEffect(
+    () => listen('all', () => setDesigns(loadDesigns())),
+    [loadDesigns],
+  );
+
+  useEffect(() => setDesigns(loadDesigns()), [loadDesigns]);
+
   return designs;
 };
 
@@ -1352,7 +1365,7 @@ export const useDesignSummary = () => {
   );
   useEffect(
     () =>
-      listen('all', ({ name, local }) => {
+      listen('all', ({ name, local } = {}) => {
         setSummary((prev) => {
           if (name !== prev.name || local !== prev.local)
             return { name, local };

@@ -288,7 +288,18 @@ const Designer = ({ loadProps: loadPropsProp, onClose, thumb }) => {
         }}
       />
     );
-  if (notFound) return <NotFound />;
+
+  if (notFound)
+    return (
+      <NotFound
+        id={loadProps.id}
+        onDone={() => {
+          pushUrl('/');
+          onClose();
+        }}
+      />
+    );
+
   if (!ready) return <Loading />;
 
   // console.log('!!! Designer', { location, selection, treeRoot, canvasRoot });
