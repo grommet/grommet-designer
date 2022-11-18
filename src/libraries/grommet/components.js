@@ -2213,6 +2213,7 @@ export const components = {
       toast: false,
       global: false,
       onClose: ['-link-'],
+      icon: ['-Icon-'],
     },
     adjustProps: (props, { datum, followLink }) => {
       const adjusted = {};
