@@ -199,7 +199,7 @@ export const components = {
     },
     properties: {
       ...reusedBoxProps,
-      alignSelf: ['stretch', 'start', 'center', 'end'],
+      alignSelf: ['stretch', 'start', 'center', 'end', 'baseline'],
       animation: BoxAnimation,
       basis: [
         'xxsmall',
@@ -1888,6 +1888,7 @@ export const components = {
         { name: 'Eric', count: 5 },
         { name: 'Shimi', count: 7 },
       ],
+      step: 50,
     },
     properties: {
       a11yTitle: '',
@@ -1917,6 +1918,7 @@ export const components = {
       select: '',
       size: ['small', 'medium', 'large', 'xlarge'],
       sortable: false,
+      step: 50,
     },
     designProperties: {
       dataPath: '',
@@ -2210,6 +2212,7 @@ export const components = {
       status: ['critical', 'warning', 'normal', 'unknown', '-data-'],
       message: '',
       title: '',
+      time: 4000,
       toast: false,
       global: false,
       onClose: ['-link-'],
