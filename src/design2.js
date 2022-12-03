@@ -673,8 +673,8 @@ export const removeDesign = (id) => {
     );
     // clean up listeners
     listeners = {};
-    design = undefined;
     localStorage.removeItem(design.local ? design.name : design.id);
+    design = undefined;
   }
 
   localStorage.setItem('designs', JSON.stringify(nextDesigns));
