@@ -990,40 +990,42 @@ export const duplicateComponent = (id, options, idMapArg) => {
       const component = design.components[idMap[sourceId]];
       const type = getType(component.type);
 
-      Object.keys(type.properties).forEach((prop) => {
-        const definition = type.properties[prop];
-        if (component.props[prop] && definition.includes?.('-link-')) {
-          component.props[prop] = relink(component.props[prop]);
-        }
-        if (component.props[prop] && definition.includes?.('-reference-')) {
-          if (idMap[component.props[prop]])
-            // we added this component just now, connect it
-            component.props[prop] = idMap[component.props[prop]];
-          else if (design.addedImportIdMap?.[component.props[prop]])
-            // we added this component previously, connect it
-            component.props[prop] =
-              design.addedImportIdMap[component.props[prop]];
-          else {
-            // get or create screen to hold copy of referenced component
-            const importsScreen = getOrAddReferencedImportsScreen();
-            // duplicate the referenced component into the screen
-            const referencedId = duplicateComponent(
-              component.props[prop],
-              { template: source },
-              idMap,
-            );
-            if (referencedId) {
-              // remember the mapping, in case we need it another time
-              if (!design.addedImportIdMap) design.addedImportIdMap = {};
-              design.addedImportIdMap[component.props[prop]] = referencedId;
-              // insert into screen root
-              insertComponent(referencedId, { within: importsScreen.root });
-            }
-            // connect to local copy
-            component.props[prop] = referencedId;
+      if (type.properties)
+        // Form doesn't have any
+        Object.keys(type.properties).forEach((prop) => {
+          const definition = type.properties[prop];
+          if (component.props[prop] && definition.includes?.('-link-')) {
+            component.props[prop] = relink(component.props[prop]);
           }
-        }
-      });
+          if (component.props[prop] && definition.includes?.('-reference-')) {
+            if (idMap[component.props[prop]])
+              // we added this component just now, connect it
+              component.props[prop] = idMap[component.props[prop]];
+            else if (design.addedImportIdMap?.[component.props[prop]])
+              // we added this component previously, connect it
+              component.props[prop] =
+                design.addedImportIdMap[component.props[prop]];
+            else {
+              // get or create screen to hold copy of referenced component
+              const importsScreen = getOrAddReferencedImportsScreen();
+              // duplicate the referenced component into the screen
+              const referencedId = duplicateComponent(
+                component.props[prop],
+                { template: source },
+                idMap,
+              );
+              if (referencedId) {
+                // remember the mapping, in case we need it another time
+                if (!design.addedImportIdMap) design.addedImportIdMap = {};
+                design.addedImportIdMap[component.props[prop]] = referencedId;
+                // insert into screen root
+                insertComponent(referencedId, { within: importsScreen.root });
+              }
+              // connect to local copy
+              component.props[prop] = referencedId;
+            }
+          }
+        });
 
       if (type.designProperties)
         Object.keys(type.designProperties).forEach((prop) => {
