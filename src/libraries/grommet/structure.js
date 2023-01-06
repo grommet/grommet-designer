@@ -65,8 +65,10 @@ export const structure = [
       'RangeInput',
       'Select',
       'SelectMultiple',
+      'StarRating',
       'TextArea',
       'TextInput',
+      'ThumbsRating',
     ],
   },
   {

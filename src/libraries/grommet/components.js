@@ -54,12 +54,14 @@ import {
   Sidebar,
   Spinner,
   Stack,
+  StarRating,
   Tab,
   Tabs,
   Tag,
   Text,
   TextArea,
   TextInput,
+  ThumbsRating,
   Tip,
   Video,
   WorldMap,
@@ -1229,6 +1231,9 @@ export const components = {
     designProperties: {
       dataPath: '',
     },
+    properties: {
+      kind: '',
+    },
     // // action to auto-build FormFields based on dataPath
     // actions: (
     //   { designProps, id },
@@ -1418,7 +1423,6 @@ export const components = {
       max: 10,
       min: 0,
       step: 1,
-      value: 0,
     },
   },
   Select: {
@@ -1600,6 +1604,11 @@ export const components = {
       }
     },
   },
+  StarRating: {
+    component: StarRating,
+    name: 'StarRating',
+    documentation: 'https://v2.grommet.io/starrating',
+  },
   TextArea: {
     component: TextArea,
     name: 'TextArea',
@@ -1645,6 +1654,11 @@ export const components = {
       };
       return { ...props, ...adjusted };
     },
+  },
+  ThumbsRating: {
+    component: ThumbsRating,
+    name: 'ThumbsRating',
+    documentation: 'https://v2.grommet.io/thumbsrating',
   },
   Avatar: {
     component: Avatar,
