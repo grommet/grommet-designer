@@ -75,6 +75,18 @@ const Property = React.forwardRef(
           );
         return null;
       }
+      if (definition.includes('-theme-form-kind-')) {
+        if (rest.name === 'kind')
+          return (
+            <ArrayProperty
+              ref={ref}
+              options={['survey']}
+              value={value}
+              {...rest}
+            />
+          );
+        return null;
+      }
       if (definition.includes('-data-')) {
         return (
           <ArrayProperty
