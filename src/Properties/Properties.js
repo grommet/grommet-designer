@@ -254,6 +254,7 @@ const Properties = () => {
       .map((propName) => (
         <Fragment key={propName}>
           <Property
+            type={component.type}
             id={selection}
             name={propName}
             definition={definitions[propName]}

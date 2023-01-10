@@ -64,15 +64,22 @@ const Property = React.forwardRef(
       }
       if (definition.includes('-theme-')) {
         // get options from theme, special casing
-        if (rest.name === 'kind' && theme.button.toolbar)
-          return (
-            <ArrayProperty
-              ref={ref}
-              options={['toolbar', 'cta-primary', 'cta-alternate']}
-              value={value}
-              {...rest}
-            />
-          );
+        if (rest.name === 'kind') {
+          let options;
+          if (theme.button.toolbar && rest?.type === 'grommet.Button')
+            options = ['toolbar', 'cta-primary', 'cta-alternate'];
+          else if (rest?.type === 'grommet.Form') options = ['survey'];
+
+          if (options)
+            return (
+              <ArrayProperty
+                ref={ref}
+                options={options}
+                value={value}
+                {...rest}
+              />
+            );
+        }
         return null;
       }
       if (definition.includes('-data-')) {
