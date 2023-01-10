@@ -1232,7 +1232,7 @@ export const components = {
       dataPath: '',
     },
     properties: {
-      kind: ['-theme-form-kind-'],
+      kind: ['-theme-'],
     },
     // // action to auto-build FormFields based on dataPath
     // actions: (
