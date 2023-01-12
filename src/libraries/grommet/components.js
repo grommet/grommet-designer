@@ -181,8 +181,7 @@ const inputValues = {}; // { component-id: value }
 
 const convertSelectValue = (options, valueKey, value) => {
   if (valueKey)
-    if (valueKey.reduce)
-      return options.select((o) => o[valueKey.key] === value);
+    if (valueKey.reduce) return options.find((o) => o[valueKey.key] === value);
   return value;
 };
 
