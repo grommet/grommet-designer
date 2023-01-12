@@ -179,6 +179,13 @@ const reusedBoxStructure = [
 // where we hold changed input values so we can track uncontrolled components
 const inputValues = {}; // { component-id: value }
 
+const convertSelectValue = (options, valueKey, value) => {
+  if (valueKey)
+    if (valueKey.reduce)
+      return options.select((o) => o[valueKey.key] === value);
+  return value;
+};
+
 export const components = {
   Box: {
     component: Box,
@@ -1452,7 +1459,7 @@ export const components = {
       searchPlaceholder: '',
       size: ['small', 'medium', 'large', 'xlarge'],
       value: '',
-      valueKey: '',
+      valueKey: { key: '', reduce: true },
       valueLabel: '-component-',
     },
     designProperties: {
@@ -1484,24 +1491,23 @@ export const components = {
       }
       if (designProps?.dataPath)
         adjusted.options = getDataByPath(designProps.dataPath) || [];
-      if (props.valueKey)
-        adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
         adjusted.children = (option, index, options, state) => (
           <DesignComponent id={children[0]} datum={{ ...option, ...state }} />
         );
       }
       if (props.valueLabel) {
-        if (props.value || inputValues[id] || props.defaultValue) {
+        let value = props.value || inputValues[id] || props.defaultValue;
+        if (value) {
+          value = convertSelectValue(
+            adjusted.options || props.options,
+            props.valueKey,
+            value,
+          );
           adjusted.valueLabel = (
             <DesignComponent
               id={props.valueLabel}
-              datum={
-                props.value ||
-                inputValues[id] ||
-                props.defaultValue ||
-                props.placeholder
-              }
+              datum={value || props.placeholder}
             />
           );
         } else {
@@ -1541,7 +1547,7 @@ export const components = {
       showSelectedInline: true,
       size: ['small', 'medium', 'large', 'xlarge'],
       value: ['-property- options'],
-      valueKey: '',
+      valueKey: { key: '', reduce: true },
       valueLabel: '-component-',
     },
     designProperties: {
@@ -1573,24 +1579,25 @@ export const components = {
       }
       if (designProps?.dataPath)
         adjusted.options = getDataByPath(designProps.dataPath);
-      if (props.valueKey)
-        adjusted.valueKey = { key: props.valueKey, reduce: true };
       if (children && children[0]) {
         adjusted.children = (option, index, options, state) => (
           <DesignComponent id={children[0]} datum={{ ...option, ...state }} />
         );
       }
       if (props.valueLabel) {
-        if (props.value || inputValues[id] || props.defaultValue) {
+        let value = props.value || inputValues[id] || props.defaultValue;
+        if (value) {
+          value = convertSelectValue(
+            adjusted.options || props.options,
+            props.valueKey,
+            value,
+          );
+        }
+        if (value) {
           adjusted.valueLabel = (
             <DesignComponent
               id={props.valueLabel}
-              datum={
-                props.value ||
-                inputValues[id] ||
-                props.defaultValue ||
-                props.placeholder
-              }
+              datum={value || props.placeholder}
             />
           );
         } else {

@@ -423,5 +423,22 @@ export const upgradeDesign = (design) => {
       component.props.columns = component.props.columns.filter((c) => c);
     });
 
-  design.version = 4.1;
+  // convert any Select and SelectMultiple valueKey to string to an object
+  Object.keys(design.components)
+    .map((id) => design.components[id])
+    .filter(
+      (component) =>
+        (component.type === 'grommet.Select' ||
+          component.type === 'grommet.SelectMultiple') &&
+        component.props.valueKey &&
+        typeof component.props.valueKey === 'string',
+    )
+    .forEach((component) => {
+      component.props.valueKey = {
+        key: component.props.valueKey,
+        reduce: true,
+      };
+    });
+
+  design.version = 4.2;
 };
