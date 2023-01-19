@@ -11,13 +11,22 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Cards,
   Carousel,
   Chart,
   CheckBox,
   CheckBoxGroup,
   Clock,
+  Data,
   DataChart,
+  DataFilter,
+  DataFilters,
+  DataSearch,
+  DataSort,
+  DataSummary,
   DataTable,
+  DataTableColumns,
+  // DataView,
   DateInput,
   Diagram,
   Distribution,
@@ -63,6 +72,7 @@ import {
   TextInput,
   ThumbsRating,
   Tip,
+  Toolbar,
   Video,
   WorldMap,
 } from 'grommet';
@@ -90,7 +100,7 @@ import DataChartAxis from './DataChartAxis';
 import DataChartBounds from './DataChartBounds';
 import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
-import DataTableColumns from './DataTableColumns';
+import DataTableColumnsProp from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
 import DiagramConnections from './DiagramConnections';
 import Dimension from './Dimension';
@@ -497,6 +507,18 @@ export const components = {
       },
       ...reusedBoxStructure,
     ],
+  },
+  Toolbar: {
+    component: Toolbar,
+    name: 'Toolbar',
+    container: true,
+    hideable: true,
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Toolbar is currently empty. Add components to it.
+      </Paragraph>
+    ),
+    properties: {},
   },
   Grid: {
     component: Grid,
@@ -1806,6 +1828,46 @@ export const components = {
       return { ...props, ...adjusted };
     },
   },
+  Cards: {
+    component: Cards,
+    name: 'Cards',
+    container: true,
+    defaultProps: {
+      data: [
+        { name: 'Eric', count: 5 },
+        { name: 'Shimi', count: 7 },
+      ],
+    },
+    properties: {
+      a11yTitle: '',
+      data: JsonData,
+    },
+    designProperties: {
+      dataPath: '',
+    },
+    // placeholder: () => (
+    //   <Paragraph size="large" textAlign="center" color="placeholder">
+    //     This Cards is currently empty. Add a Card to it.
+    //   </Paragraph>
+    // ),
+    adjustProps: (props, { component: { children, designProps }, datum }) => {
+      const adjusted = {};
+      // need to use retrieved data for data property
+      if (designProps?.dataPath) {
+        adjusted.data = getDataByPath(designProps.dataPath, datum);
+        if (!Array.isArray(adjusted.data)) {
+          console.warn('Cards data is not an array', adjusted.data);
+          adjusted.data = [];
+        }
+      }
+      if (children) {
+        adjusted.children = (value) => (
+          <DesignComponent id={children[0]} datum={value} />
+        );
+      }
+      return { ...props, ...adjusted };
+    },
+  },
   Clock: {
     component: Clock,
     name: 'Clock',
@@ -1816,6 +1878,45 @@ export const components = {
       run: ['forward', 'backward'],
       size: ['small', 'medium', 'large', 'xlarge'],
       type: ['analog', 'digital'],
+    },
+  },
+  Data: {
+    component: Data,
+    name: 'Data',
+    container: true,
+    defaultProps: {
+      data: [
+        { name: 'Eric', count: 33 },
+        { name: 'Jessica', count: 2 },
+        { name: 'Mike', count: 27 },
+        { name: 'Taylor', count: 3 },
+      ],
+    },
+    properties: {
+      a11yTitle: '',
+      data: JsonData,
+      toolbar: [true, 'search', 'filters'],
+      updateOn: ['change', 'submit'],
+    },
+    designProperties: {
+      dataPath: '',
+    },
+    placeholder: () => (
+      <Paragraph size="large" textAlign="center" color="placeholder">
+        This Data is currently empty. Add a Cards, DataTable, or List to it.
+      </Paragraph>
+    ),
+    adjustProps: (props, { component: { designProps }, datum }) => {
+      const adjusted = {};
+      // need to use retrieved data for data property
+      if (designProps?.dataPath) {
+        adjusted.data = getDataByPath(designProps.dataPath, datum);
+        if (!Array.isArray(adjusted.data)) {
+          console.warn('List data is not an array', adjusted.data);
+          adjusted.data = [];
+        }
+      }
+      return { ...props, ...adjusted };
     },
   },
   DataChart: {
@@ -1897,6 +1998,39 @@ export const components = {
       return { ...props, ...adjusted };
     },
   },
+  DataFilters: {
+    component: DataFilters,
+    name: 'DataFilters',
+    defaultProps: {
+      drop: true,
+    },
+    properties: {
+      drop: true,
+      options: SelectOptions,
+      property: '',
+      range: { min: 0, max: 100 },
+    },
+  },
+  DataFilter: {
+    component: DataFilter,
+    name: 'DataFilter',
+    properties: {},
+  },
+  DataSearch: {
+    component: DataSearch,
+    name: 'DataSearch',
+    properties: {},
+  },
+  DataSort: {
+    component: DataSort,
+    name: 'DataSort',
+    properties: {},
+  },
+  DataSummary: {
+    component: DataSummary,
+    name: 'DataSummary',
+    properties: {},
+  },
   DataTable: {
     component: DataTable,
     name: 'DataTable',
@@ -1923,7 +2057,7 @@ export const components = {
           opacity: ['weak', 'medium', 'strong'],
         },
       },
-      columns: DataTableColumns,
+      columns: DataTableColumnsProp,
       data: JsonData,
       fill: [true, 'horizontal', 'vertical', false],
       groupBy: '',
@@ -1971,12 +2105,13 @@ export const components = {
       if (props.select)
         adjusted.select = props.select.split(',').map((s) => s.trim());
       else adjusted.select = inputValues[id];
-      adjusted.columns = props.columns.map((c) => ({
-        ...c,
-        render: c?.render
-          ? (datum) => <DesignComponent id={c.render} datum={datum} />
-          : undefined,
-      }));
+      if (props.columns)
+        adjusted.columns = props.columns.map((c) => ({
+          ...c,
+          render: c?.render
+            ? (datum) => <DesignComponent id={c.render} datum={datum} />
+            : undefined,
+        }));
       return { ...props, ...adjusted };
     },
     updateDeepPropertyComponents: (source, copy, { idMap }) => {
@@ -1988,6 +2123,18 @@ export const components = {
           }
         });
       }
+    },
+  },
+  DataTableColumns: {
+    component: DataTableColumns,
+    name: 'DataTableColumns',
+    defaultProps: {
+      drop: true,
+      options: [],
+    },
+    properties: {
+      drop: true,
+      options: SelectOptions,
     },
   },
   Distribution: {

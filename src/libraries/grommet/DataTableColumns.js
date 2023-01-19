@@ -139,7 +139,7 @@ const Column = ({ id, value, onChange }) => {
   );
 };
 
-const DataTableColumns = (props) => (
+const DataTableColumnsProp = (props) => (
   <ArrayOfObjects
     name="columns"
     itemKey="property"
@@ -149,4 +149,4 @@ const DataTableColumns = (props) => (
   />
 );
 
-export default DataTableColumns;
+export default DataTableColumnsProp;

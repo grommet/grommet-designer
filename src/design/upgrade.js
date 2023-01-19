@@ -418,10 +418,14 @@ export const upgradeDesign = (design) => {
   // remove any undefined DataTable columns
   Object.keys(design.components)
     .map((id) => design.components[id])
-    .filter((component) => component.type === 'grommet.DataTable')
-    .forEach((component) => {
-      component.props.columns = component.props.columns.filter((c) => c);
-    });
+    .filter(
+      (component) =>
+        component.type === 'grommet.DataTable' && component.props.columns,
+    )
+    .forEach(
+      (component) =>
+        (component.props.columns = component.props.columns.filter((c) => c)),
+    );
 
   // convert any Select and SelectMultiple valueKey to string to an object
   Object.keys(design.components)
