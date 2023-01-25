@@ -102,6 +102,7 @@ import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
 import DataTableColumnsProp from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
+import DataView from './DataView';
 import DiagramConnections from './DiagramConnections';
 import Dimension from './Dimension';
 import EdgeSizeOptions from './EdgeSizeOptions';
@@ -1897,6 +1898,7 @@ export const components = {
       data: JsonData,
       toolbar: [true, 'search', 'filters'],
       updateOn: ['change', 'submit'],
+      view: DataView,
     },
     designProperties: {
       dataPath: '',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Heading, Layer, Text } from 'grommet';
-import { Close, FormDown } from 'grommet-icons';
+import { Close, FormClose, FormDown } from 'grommet-icons';
 import Field from '../components/Field';
 
 const jsonValue = (value) =>
@@ -23,24 +23,26 @@ const FunctionProperty = React.forwardRef(
       );
     }
     return (
-      <Box key={name}>
-        <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-          <Field label={name}>
-            <Box direction="row" align="center" gap="small">
-              {value && (
-                <Text weight="bold" truncate>
-                  {jsonValue(value)}
-                </Text>
-              )}
-              <Box
-                flex={false}
-                pad={{ vertical: 'xsmall', horizontal: 'small' }}
-              >
-                <FormDown color="control" />
+      <Box key={name} direction="row" fill="horizontal">
+        <Box flex>
+          <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
+            <Field label={name}>
+              <Box direction="row" align="center" gap="small">
+                {value && (
+                  <Text weight="bold" truncate>
+                    {jsonValue(value)}
+                  </Text>
+                )}
+                <Box
+                  flex={false}
+                  pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                >
+                  <FormDown color="control" />
+                </Box>
               </Box>
-            </Box>
-          </Field>
-        </Button>
+            </Field>
+          </Button>
+        </Box>
         {expand && (
           <Layer
             position="right"
@@ -78,6 +80,19 @@ const FunctionProperty = React.forwardRef(
               </Box>
             </Box>
           </Layer>
+        )}
+        {value && (
+          <Box flex={false} border={{ side: 'bottom' }}>
+            <Button
+              tip={`clear`}
+              hoverIndicator
+              onClick={() => rest.onChange(undefined)}
+            >
+              <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
+                <FormClose />
+              </Box>
+            </Button>
+          </Box>
         )}
       </Box>
     );
