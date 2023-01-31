@@ -26,7 +26,7 @@ import {
   DataSummary,
   DataTable,
   DataTableColumns,
-  // DataView,
+  DataView,
   DateInput,
   Diagram,
   Distribution,
@@ -102,7 +102,8 @@ import DataChartChart from './DataChartChart';
 import DataChartSeries from './DataChartSeries';
 import DataTableColumnsProp from './DataTableColumns';
 import DataTablePrimaryKey from './DataTablePrimaryKey';
-import DataView from './DataView';
+import DataViewProp from './DataView';
+import DataViews from './DataViews';
 import DiagramConnections from './DiagramConnections';
 import Dimension from './Dimension';
 import EdgeSizeOptions from './EdgeSizeOptions';
@@ -1898,7 +1899,8 @@ export const components = {
       data: JsonData,
       toolbar: [true, 'search', 'filters'],
       updateOn: ['change', 'submit'],
-      view: DataView,
+      view: DataViewProp,
+      views: DataViews,
     },
     designProperties: {
       dataPath: '',
@@ -2138,6 +2140,11 @@ export const components = {
       drop: true,
       options: SelectOptions,
     },
+  },
+  DataView: {
+    component: DataView,
+    name: 'DataView',
+    properties: {},
   },
   Distribution: {
     component: Distribution,

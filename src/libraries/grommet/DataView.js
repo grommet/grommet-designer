@@ -59,7 +59,7 @@ const DataViewProperty = ({ id, value = [], onChange }) => {
   );
 };
 
-const DataView = ({ value = {}, onChange, ...rest }) => {
+const DataViewProp = ({ value = {}, onChange, ...rest }) => {
   const [item, setItem] = useDebounce(value, onChange);
 
   return (
@@ -134,4 +134,4 @@ const DataView = ({ value = {}, onChange, ...rest }) => {
   );
 };
 
-export default DataView;
+export default DataViewProp;

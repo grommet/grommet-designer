@@ -89,6 +89,7 @@ export const structure = [
       'DataSummary',
       'DataTable',
       'DataTableColumns',
+      'DataView',
       'Diagram',
       'Distribution',
       'List',
