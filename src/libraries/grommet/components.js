@@ -2010,9 +2010,7 @@ export const components = {
     },
     properties: {
       drop: true,
-      options: SelectOptions,
-      property: '',
-      range: { min: 0, max: 100 },
+      layer: false,
     },
   },
   DataFilter: {
