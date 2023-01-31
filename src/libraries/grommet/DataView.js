@@ -37,7 +37,7 @@ const DataViewProperty = ({ id, value = [], onChange }) => {
                 value={item.min || ''}
                 onChange={(event) => {
                   const nextItem = JSON.parse(JSON.stringify(item));
-                  nextItem.min = event.target.value;
+                  nextItem.min = parseInt(event.target.value, 10);
                   setItem(nextItem);
                 }}
               />
@@ -47,7 +47,7 @@ const DataViewProperty = ({ id, value = [], onChange }) => {
                 value={item.max || ''}
                 onChange={(event) => {
                   const nextItem = JSON.parse(JSON.stringify(item));
-                  nextItem.search = event.target.value;
+                  nextItem.max = parseInt(event.target.value, 10);
                   setItem(nextItem);
                 }}
               />
