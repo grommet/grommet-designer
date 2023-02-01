@@ -1,5 +1,9 @@
 import { grommet } from 'grommet';
 
+const themeDesignerUrl = `https://theme-designer.grommet.io`;
+const themesApiUrl =
+  'https://us-central1-grommet-designer.cloudfunctions.net/themes';
+
 const themes = [
   {
     name: 'aruba',
@@ -57,8 +61,8 @@ const themes = [
 
 export default themes;
 
-export const themeForValue = (value) =>
-  themes.find(
+export const themeForValue = (value) => {
+  let result = themes.find(
     (theme) =>
       theme.packageName === value ||
       theme.jsUrl === value ||
@@ -66,9 +70,17 @@ export const themeForValue = (value) =>
       theme.name === value ||
       theme.label === value,
   );
-
-export const themeForUrl = (url) =>
-  themes.find((theme) => url.search(`/${theme.packageName}/`) !== -1);
+  if (!result && value.startsWith(themeDesignerUrl)) {
+    // e.g. https://theme-designer.grommet.io/?id=hacktoberfest2022-eric-soderberg-hpe-com
+    const id = value.split('=')[1];
+    const name = id.split('-')[0];
+    result = {
+      name,
+      designerUrl: `${themesApiUrl}/${id}`,
+    };
+  }
+  return result;
+};
 
 const npmTheme = {};
 
@@ -97,11 +109,28 @@ export const loadThemePackage = async ({ url, name, packageName }) => {
   return npmTheme[packageName];
 };
 
+const loadDesignerTheme = async ({ name, url }) => {
+  if (npmTheme[name]) return npmTheme[name];
+  return fetch(url)
+    .then((response) => {
+      if (response.ok) return response.json();
+      throw new Error(response.status);
+    })
+    .then((pubTheme) => {
+      npmTheme[name] = pubTheme;
+      return pubTheme;
+    });
+};
+
 export const loadTheme = async (themeValue) => {
   const themeDesc = themeForValue(themeValue);
   if (themeDesc?.jsUrl) {
-    const { packageName, name } = themeDesc;
-    return await loadThemePackage({ name, packageName, url: themeDesc.jsUrl });
+    const { packageName, name, jsUrl: url } = themeDesc;
+    return await loadThemePackage({ name, packageName, url });
+  }
+  if (themeDesc?.designerUrl) {
+    const { name, designerUrl: url } = themeDesc;
+    return await loadDesignerTheme({ name, url });
   }
   return grommet;
 };
