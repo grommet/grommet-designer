@@ -303,6 +303,12 @@ export const unpublish = ({ id, pin = 0 }) => {
   });
 };
 
+export const close = () => {
+  // if we are closing a design that isn't local,
+  // remove the copy in local storage
+  if (!design.local && design.id) localStorage.removeItem(design.id);
+};
+
 // read
 
 export const getScreen = (id) => design.screens[id];
@@ -1341,20 +1347,32 @@ export const useDesigns = ({ localOnly } = {}) => {
       }
     });
 
-    return nextDesigns
-      .filter((d) => d && (!localOnly || d.local))
-      .sort(compareDesigns)
-      .map((d) => {
-        const slugName = slugify(d.name);
-        let id;
-        if (d.id) id = d.id;
-        else if (d.url) id = d.url.split('=')[1];
-        if (id && id.toLowerCase().startsWith(slugName)) {
-          const author = id.slice(slugName.length).split('-')[1];
-          return { ...d, author };
-        }
-        return d;
-      });
+    // remove any designs that have the same id as a local one with that id
+
+    return (
+      nextDesigns
+        .filter((d) => d)
+        // filter out any designs that have the same id as a local one
+        .filter(
+          (d) =>
+            d.local ||
+            (!d.local &&
+              !nextDesigns.some((d2) => d2.local && d2.id && d2.id === d.id)),
+        )
+        .filter((d) => !localOnly || d.local)
+        .sort(compareDesigns)
+        .map((d) => {
+          const slugName = slugify(d.name);
+          let id;
+          if (d.id) id = d.id;
+          else if (d.url) id = d.url.split('=')[1];
+          if (id && id.toLowerCase().startsWith(slugName)) {
+            const author = id.slice(slugName.length).split('-')[1];
+            return { ...d, author };
+          }
+          return d;
+        })
+    );
   }, [localOnly]);
 
   useEffect(

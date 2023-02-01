@@ -8,7 +8,7 @@ import {
   Text,
 } from 'grommet';
 import { Add, FormDown, Redo, Undo } from 'grommet-icons';
-import { useChanges, useDesignSummary } from '../design2';
+import { close, useChanges, useDesignSummary } from '../design2';
 import AddComponent from './AddComponent';
 import ConfirmDelete from './ConfirmDelete';
 import Duplicate from './Duplicate';
@@ -83,7 +83,13 @@ const Header = ({ onClose, property, setMode }) => {
                   onClick: () => setGeneratingCode(true),
                 },
                 { label: 'help', onClick: () => setHelp(true) },
-                { label: 'close', onClick: onClose },
+                {
+                  label: 'close',
+                  onClick: () => {
+                    close();
+                    onClose();
+                  },
+                },
                 { label: 'delete', onClick: () => setDeleting(true) },
               ]}
             >

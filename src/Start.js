@@ -74,7 +74,6 @@ const Start = ({ onLoadProps, onNew }) => {
   const designs = useDesigns();
   const [search, setSearch] = useState();
   const [error, setError] = useState();
-  // const [manage, setManage] = useState();
   const [settings, setSettings] = useState();
   const [sizes, setSizes] = useState({});
 
