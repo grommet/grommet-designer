@@ -586,11 +586,23 @@ const updateScreen = (id, func, { preserveLocal, preserveDate } = {}) => {
 
 const updateDesign = (func) => {
   const nextDesign = JSON.parse(JSON.stringify(design));
+  const originalName = nextDesign.name;
   if (func) {
     func(nextDesign);
     design = nextDesign;
     beLocal();
     notify(undefined, nextDesign);
+    if (nextDesign.name !== originalName) {
+      // remove previous design from local storage
+      localStorage.removeItem(`${originalName}--state`);
+      localStorage.removeItem(originalName);
+      const stored = localStorage.getItem('designs');
+      const prevDesigns = stored ? JSON.parse(stored) : [];
+      const nextDesigns = prevDesigns.filter(
+        (des) => !(des.name === originalName && des.local),
+      );
+      localStorage.setItem('designs', JSON.stringify(nextDesigns));
+    }
     lazilyStore();
   }
   return nextDesign;
