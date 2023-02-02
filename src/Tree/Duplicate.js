@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'grommet';
 import { Close } from 'grommet-icons';
-import { getDesign, load, useDesigns } from '../design2';
+import { close, getDesign, load, useDesigns } from '../design2';
 
 const Duplicate = ({ onClose }) => {
   // just local to check for duplicate name
@@ -45,6 +45,9 @@ const Duplicate = ({ onClose }) => {
           validate="change"
           onSubmit={({ value }) => {
             const design = JSON.parse(JSON.stringify(getDesign()));
+            // if current design isn't local, free up some local storage
+            // space first
+            close();
             design.name = value.name;
             delete design.id;
             delete design.publishedUrl;

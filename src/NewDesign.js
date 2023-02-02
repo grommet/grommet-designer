@@ -33,7 +33,7 @@ const NewDesign = ({ onClose, onLoadProps }) => {
     theme: 'grommet',
     themeUrl: '',
   });
-  const designs = useDesigns();
+  const designs = useDesigns({ localOnly: true });
   const nameRef = useRef();
 
   useEffect(() => {
