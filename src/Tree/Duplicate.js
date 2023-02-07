@@ -52,6 +52,7 @@ const Duplicate = ({ onClose }) => {
             delete design.id;
             delete design.publishedUrl;
             delete design.publishedDate;
+            delete design.publishedVersions;
             delete design.email;
             delete design.password;
             design.local = true;
