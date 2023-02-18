@@ -66,7 +66,7 @@ const fetchPublished = async (id, password) => {
   if (password) {
     options.headers = { Authorization: `Basic ${btoa(password)}` };
   }
-  return fetch(`${apiUrl}/${id}`, options)
+  return fetch(`${apiUrl}/${encodeURIComponent(id)}`, options)
     .then((response) => {
       if (response.status === 401) throw new Error(401);
       if (response.ok) return response.json();
@@ -233,6 +233,7 @@ export const publish = ({ email, password, pin, suffix }) => {
   }).then((response) => {
     if (response.ok) {
       response.text().then((id) => {
+        // FYI, id is not encoded
         if (suffix) {
           pubDesign.name = originalName;
           const version = {
@@ -283,7 +284,7 @@ export const unpublish = ({ id, pin = 0 }) => {
   const date = new Date();
   date.setMilliseconds(pin);
   const body = JSON.stringify({ date: date.toISOString() });
-  return fetch(`${apiUrl}/${id}`, {
+  return fetch(`${apiUrl}/${encodeURIComponent(id)}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -294,8 +295,15 @@ export const unpublish = ({ id, pin = 0 }) => {
     if (response.ok || response.status === 400) {
       // remove if it from the list
       const nextDesign = JSON.parse(JSON.stringify(design));
-      const index = nextDesign.publishedVersions.findIndex((v) => v.id === id);
-      if (index !== -1) nextDesign.publishedVersions.splice(index, 1);
+      if (nextDesign.id === id) {
+        delete nextDesign.publishedUrl;
+        delete nextDesign.publishedDate;
+      } else {
+        const index = nextDesign.publishedVersions.findIndex(
+          (v) => v.id === id,
+        );
+        if (index !== -1) nextDesign.publishedVersions.splice(index, 1);
+      }
       design = nextDesign;
       store({ preserveDate: true });
       notify(undefined, nextDesign);

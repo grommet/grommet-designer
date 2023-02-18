@@ -41,7 +41,7 @@ exports.designs = (req, res) => {
 
   if (req.method === 'GET') {
     const parts = req.url.split('/');
-    const id = decodeURIComponent(parts[1]);
+    const id = parts[1];
     const authorization = req.get('Authorization');
     let password;
     if (authorization) {
@@ -51,7 +51,7 @@ exports.designs = (req, res) => {
     }
 
     // get the design in question, no matter the sub-paths
-    const file = bucket.file(`${id}.json`);
+    const file = bucket.file(`${encodeURIComponent(id)}.json`);
     return file
       .download()
       .then((data) => {
@@ -103,13 +103,15 @@ exports.designs = (req, res) => {
 
   if (req.method === 'POST') {
     const parts = req.url.split('/');
-    const designId = decodeURIComponent(parts[1]);
+    const designId = parts[1];
 
     if (designId && parts[2] === 'comments') {
       // comment
       const comment = req.body;
       const createdAt = new Date().toISOString();
-      const id = `${designId}/comments/${encodeURIComponent(createdAt)}`;
+      const id = `${encodeURIComponent(designId)}/comments/${encodeURIComponent(
+        createdAt,
+      )}`;
       comment.createdAt = createdAt;
       comment.id = id;
       const file = bucket.file(`${id}.json`);
@@ -122,13 +124,11 @@ exports.designs = (req, res) => {
     } else if (parts.length === 2) {
       // new design
       const design = req.body;
-      const id = encodeURIComponent(
-        `${design.name}-${design.email.replace('@', '-')}`.replace(
-          /\.|\s+|\//g,
-          '-',
-        ),
+      const id = `${design.name}-${design.email.replace('@', '-')}`.replace(
+        /\.|\s+|\//g,
+        '-',
       );
-      const file = bucket.file(`${id}.json`);
+      const file = bucket.file(`${encodeURIComponent(id)}.json`);
 
       return file
         .download()
@@ -170,8 +170,8 @@ exports.designs = (req, res) => {
 
   if (req.method === 'DELETE') {
     const parts = req.url.split('/');
-    const id = decodeURIComponent(parts[1]);
-    const file = bucket.file(`${id}.json`);
+    const id = parts[1];
+    const file = bucket.file(`${encodeURIComponent(id)}.json`);
     const { date } = req.body;
 
     return file
