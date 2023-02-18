@@ -38,7 +38,9 @@ const LinkOptionsProperty = ({ value, onChange }) => {
     let data = getDataByPath(component.designProps.dataPath);
     // apply valueKey if needed
     if (component.props.valueKey)
-      data = data.map((d) => d[component.props.valueKey]);
+      data = data.map(
+        (d) => d[component.props.valueKey?.key || component.props.valueKey],
+      );
     names.push.apply(names, data);
   } else {
     names.push.apply(names, component.props.options);
