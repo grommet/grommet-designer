@@ -1506,7 +1506,7 @@ export const components = {
         adjusted.onChange = ({ value }) => (inputValues[id] = value);
       }
       if (
-        props.options.length === 0 &&
+        props.options?.length === 0 &&
         designProps?.data &&
         Array.isArray(designProps.data)
       ) {
@@ -1519,6 +1519,8 @@ export const components = {
           <DesignComponent id={children[0]} datum={{ ...option, ...state }} />
         );
       }
+      // Select requires a options array, fix Select someday
+      if (!props.options && !adjusted.options) adjusted.options = [];
       if (props.valueLabel) {
         let value = props.value || inputValues[id] || props.defaultValue;
         if (value) {
@@ -1594,7 +1596,7 @@ export const components = {
         adjusted.onChange = ({ value }) => (inputValues[id] = value);
       }
       if (
-        props.options.length === 0 &&
+        props.options?.length === 0 &&
         designProps?.data &&
         Array.isArray(designProps.data)
       ) {
@@ -1602,6 +1604,8 @@ export const components = {
       }
       if (designProps?.dataPath)
         adjusted.options = getDataByPath(designProps.dataPath);
+      // SelectMultiple requires a options array, fix SelectMultiple someday
+      if (!props.options && !adjusted.options) adjusted.options = [];
       if (children && children[0]) {
         adjusted.children = (option, index, options, state) => (
           <DesignComponent id={children[0]} datum={{ ...option, ...state }} />

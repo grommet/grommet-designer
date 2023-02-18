@@ -20,7 +20,7 @@ const ArrayProperty = React.forwardRef(
       multiple,
       name,
       onChange,
-      options,
+      options = [],
       searchTest,
       value,
       valueKey,
