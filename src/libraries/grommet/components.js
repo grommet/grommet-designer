@@ -1678,6 +1678,7 @@ export const components = {
       suggestions: TextInputSuggestions,
       textAlign: ['start', 'center', 'end'],
       type: ['text', 'password'],
+      width: Dimension,
       value: '',
     },
     adjustProps: (props, { datum }) => {
