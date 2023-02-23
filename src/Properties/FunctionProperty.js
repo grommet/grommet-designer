@@ -10,6 +10,7 @@ const FunctionProperty = React.forwardRef(
   ({ definition, name, value, ...rest }, ref) => {
     const [expand, setExpand] = React.useState();
     const CustomProperty = definition;
+
     if (definition.inline) {
       return (
         <Field key={name} ref={ref} label={name} htmlFor={name}>
@@ -22,6 +23,7 @@ const FunctionProperty = React.forwardRef(
         </Field>
       );
     }
+
     return (
       <Box key={name} direction="row" fill="horizontal">
         <Box flex>
