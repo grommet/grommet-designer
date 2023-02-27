@@ -1541,9 +1541,13 @@ export const components = {
       }
       return { ...props, ...adjusted };
     },
-    initialize: (props, { component: { designProps }, followLinkOption }) => {
+    initialize: (
+      props,
+      { component: { designProps, id }, followLinkOption },
+    ) => {
       if (designProps?.link) {
         followLinkOption(designProps.link, props.value || props.defaultValue);
+        if (!props.value && props.defaultValue) delete inputValues[id];
       }
     },
   },
