@@ -108,15 +108,23 @@ const Component = ({ id, first }) => {
                 (dragOver && 'focus') ||
                 (dragging === id && 'background-contrast') ||
                 (selection === id && 'selected-background') ||
-                (selectionAncestor && 'background-contrast') ||
+                (selectionAncestor && 'active-background') ||
                 undefined
               }
             >
-              <Text size="medium" truncate>
+              <Text
+                size="medium"
+                truncate
+                color={(selection === id && 'selected-text') || undefined}
+              >
                 {name}
               </Text>
               {subName !== name && (
-                <Text size="small" truncate>
+                <Text
+                  size="small"
+                  truncate
+                  color={(selection === id && 'selected-text') || undefined}
+                >
                   {subName}
                 </Text>
               )}

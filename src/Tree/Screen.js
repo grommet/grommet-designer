@@ -63,7 +63,7 @@ const Screen = ({ first, id }) => {
               pad={{ vertical: 'xsmall', horizontal: 'small' }}
               background={
                 (selection === id && 'selected-background') ||
-                (selectionAncestor && 'background-contrast') ||
+                (selectionAncestor && 'active-background') ||
                 undefined
               }
             >
@@ -71,7 +71,11 @@ const Screen = ({ first, id }) => {
                 level={3}
                 size="xsmall"
                 margin="none"
-                color="selected-text"
+                color={
+                  (selection === id && 'selected-text') ||
+                  (selectionAncestor && 'active-text') ||
+                  undefined
+                }
               >
                 {name}
               </Heading>

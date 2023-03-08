@@ -48,7 +48,11 @@ const Data = () => {
                   selection === id ? 'selected-background' : undefined
                 }
               >
-                <Text size="medium" truncate>
+                <Text
+                  size="medium"
+                  truncate
+                  color={(selection === id && 'selected-text') || undefined}
+                >
                   {allData[id].name}
                 </Text>
               </Box>
