@@ -871,6 +871,7 @@ export const components = {
       label: 'panel',
     },
     properties: {
+      header: '-component-',
       label: '-string-or-component-',
     },
     adjustProps: (props, { component: { designProps } }) => {

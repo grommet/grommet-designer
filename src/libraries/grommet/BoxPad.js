@@ -60,7 +60,7 @@ const PadState = ({ checked, name, option }) => {
 
   return (
     <InlineOption checked={checked} label={option.label}>
-      <Blank color={checked ? 'selected-text' : 'border'}>
+      <Blank color={checked ? 'selected-background' : 'border'}>
         <g {...stroke}>{content}</g>
       </Blank>
     </InlineOption>

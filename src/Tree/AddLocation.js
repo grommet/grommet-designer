@@ -100,7 +100,7 @@ const AddLocation = ({ value, onChange }) => {
     return (
       <Tip content={`${option} ${getName(selection)}`}>
         <Box pad="xsmall">
-          <Blank color={checked ? 'selected-text' : 'border'}>
+          <Blank color={checked ? 'selected-background' : 'border'}>
             <g>{locationVisuals[option]}</g>
           </Blank>
         </Box>

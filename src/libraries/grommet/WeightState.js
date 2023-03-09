@@ -12,7 +12,7 @@ const WeightState = ({ checked, weight }) => {
     <InlineOption checked={checked} label={weight}>
       <Text
         weight={weight === 'bold' ? 'bold' : undefined}
-        color={checked ? 'selected-text' : 'border'}
+        color={checked ? 'selected-background' : 'border'}
       >
         {short[weight] || 'x'}
       </Text>

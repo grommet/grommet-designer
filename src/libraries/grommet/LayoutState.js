@@ -91,7 +91,7 @@ const LayoutState = ({ align, axis, checked, direction, justify, label }) => {
   const e = edgeCoords({ axis, direction });
   return (
     <InlineOption label={label}>
-      <Blank color={checked ? 'selected-text' : 'border'}>
+      <Blank color={checked ? 'selected-background' : 'border'}>
         <Edge coords={e[0]} />
         <Edge coords={e[1]} />
         <Line coords={c[0]} />

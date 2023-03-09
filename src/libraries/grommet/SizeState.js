@@ -18,7 +18,7 @@ const SizeState = ({ checked, size }) => {
       <Text
         size={size}
         weight={checked ? 'bold' : undefined}
-        color={checked ? 'selected-text' : 'border'}
+        color={checked ? 'selected-background' : 'border'}
       >
         {short[size] || 'x'}
       </Text>
