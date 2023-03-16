@@ -1569,6 +1569,7 @@ export const components = {
       dropAlign: DropAlign,
       dropHeight: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       icon: ['-Icon-'],
+      help: '',
       labelKey: '',
       limit: 0,
       placeholder: '',
