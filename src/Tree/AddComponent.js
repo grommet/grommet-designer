@@ -37,6 +37,7 @@ const AddComponent = ({ onClose, property }) => {
   return (
     <Layer
       position="top-left"
+      modal={false}
       animation={false}
       margin="medium"
       full="vertical"

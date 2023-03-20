@@ -48,37 +48,40 @@ const FunctionProperty = React.forwardRef(
         {expand && (
           <Layer
             position="right"
+            modal={false}
             margin="medium"
             animation="fadeIn"
             onEsc={() => setExpand(false)}
             onClickOutside={() => setExpand(false)}
           >
-            <Box
-              direction="row"
-              align="center"
-              justify="between"
-              gap="medium"
-              pad="small"
-              flex={false}
-            >
-              <Heading margin={{ left: 'small', vertical: 'none' }} level={3}>
-                {name}
-              </Heading>
-              <Button
-                tip={{
-                  content: 'close',
-                  dropProps: { align: { right: 'left' } },
-                }}
-                icon={<Close />}
-                onClick={() => setExpand(false)}
-              />
-            </Box>
-            <Box
-              overflow="auto"
-              pad={{ horizontal: 'medium', bottom: 'medium' }}
-            >
-              <Box flex={false}>
-                <CustomProperty name={name} value={value} {...rest} />
+            <Box flex elevation="medium" round="xsmall">
+              <Box
+                direction="row"
+                align="center"
+                justify="between"
+                gap="medium"
+                pad="small"
+                flex={false}
+              >
+                <Heading margin={{ left: 'small', vertical: 'none' }} level={3}>
+                  {name}
+                </Heading>
+                <Button
+                  tip={{
+                    content: 'close',
+                    dropProps: { align: { right: 'left' } },
+                  }}
+                  icon={<Close />}
+                  onClick={() => setExpand(false)}
+                />
+              </Box>
+              <Box
+                overflow="auto"
+                pad={{ horizontal: 'medium', bottom: 'medium' }}
+              >
+                <Box flex={false}>
+                  <CustomProperty name={name} value={value} {...rest} />
+                </Box>
               </Box>
             </Box>
           </Layer>
