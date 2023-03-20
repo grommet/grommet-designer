@@ -2452,6 +2452,7 @@ export const components = {
       value: 'Tag',
       a11yTitle: '',
       onClick: ['-link-'],
+      onRemove: ['-link-'],
       removable: false,
     },
     adjustProps: (props, { followLink }) => {
@@ -2461,7 +2462,12 @@ export const components = {
           event.stopPropagation();
           followLink(props.onClick);
         };
-      if (props?.removable) adjusted.onRemove = () => {};
+      if (props?.onRemove)
+        adjusted.onRemove = (event) => {
+          event.stopPropagation();
+          followLink(props.onRemove);
+        };
+      else if (props?.removable) adjusted.onRemove = () => {};
       return { ...props, ...adjusted };
     },
   },
