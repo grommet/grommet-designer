@@ -937,6 +937,7 @@ export const components = {
       href: '',
       kind: ['-theme-'],
       margin: Edge,
+      pad: BoxPad,
       plain: [true, false],
       primary: false,
       reverse: false,
