@@ -33,7 +33,7 @@ const themes = [
     packageName: 'grommet-theme-hpe',
     // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
     jsUrl:
-      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-next.min.js',
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe.min.js',
   },
   {
     name: 'hpe-1',
