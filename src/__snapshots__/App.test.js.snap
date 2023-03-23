@@ -491,12 +491,12 @@ exports[`App create 2`] = `
                     style="min-width: auto;"
                   >
                     <svg
-                      aria-label="Down"
+                      aria-label="FormDown"
                       class="StyledIcon-sc-ofa7kd-0 eSslYk"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="m2 8.35 10.173 9.823L21.997 8"
+                        d="m18 9-6 6-6-6"
                         fill="none"
                         stroke="#000"
                         stroke-width="2"
@@ -836,12 +836,12 @@ exports[`App create 3`] = `
                     style="min-width: auto;"
                   >
                     <svg
-                      aria-label="Down"
+                      aria-label="FormDown"
                       class="StyledIcon-sc-ofa7kd-0 eSslYk"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="m2 8.35 10.173 9.823L21.997 8"
+                        d="m18 9-6 6-6-6"
                         fill="none"
                         stroke="#000"
                         stroke-width="2"
@@ -939,12 +939,12 @@ exports[`App create 4`] = `
                     style="min-width: auto;"
                   >
                     <svg
-                      aria-label="Down"
+                      aria-label="FormDown"
                       class="StyledIcon-sc-ofa7kd-0 eSslYk"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="m2 8.35 10.173 9.823L21.997 8"
+                        d="m18 9-6 6-6-6"
                         fill="none"
                         stroke="#000"
                         stroke-width="2"

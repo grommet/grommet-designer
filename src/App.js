@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Grommet, grommet } from 'grommet';
 import { deepMerge } from 'grommet/utils';
-import { Down } from 'grommet-icons/icons/Down';
 import AppContext from './AppContext';
 import Designer from './Designer';
 import Loading from './Loading';
@@ -24,18 +23,6 @@ const appTheme = {
   // HPE theme uses 110 due to common header, so need to higher
   layer: {
     zIndex: 300,
-  },
-  // HPE theme icons don't render work the way we dynamically load
-  // the theme. So, replace problematic ones here.
-  menu: {
-    icons: {
-      down: Down,
-    },
-  },
-  select: {
-    icons: {
-      down: Down,
-    },
   },
   tip: {
     content: {

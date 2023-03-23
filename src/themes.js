@@ -33,7 +33,7 @@ const themes = [
     packageName: 'grommet-theme-hpe',
     // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
     jsUrl:
-      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-2.min.js',
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-next.min.js',
   },
   {
     name: 'hpe-1',
@@ -84,7 +84,7 @@ export const themeForValue = (value) => {
 
 const npmTheme = {};
 
-export const loadThemePackage = async ({ url, name, packageName }) => {
+const loadThemePackage = async ({ url, name, packageName }) => {
   const nameParts = packageName.split('-'); // [grommet, theme, hpe]
   const varName = nameParts
     .map((p) => `${p[0].toUpperCase()}${p.slice(1)}`)
