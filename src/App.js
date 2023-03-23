@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactGA from 'react-ga';
 import { Grommet, grommet } from 'grommet';
+import { deepMerge } from 'grommet/utils';
+import { Down } from 'grommet-icons/icons/Down';
 import AppContext from './AppContext';
 import Designer from './Designer';
 import Loading from './Loading';
@@ -8,6 +10,39 @@ import Start from './Start';
 import NewDesign from './NewDesign';
 import { parseUrlParams } from './utils';
 import { useTheme } from './design2';
+
+const appTheme = {
+  global: {
+    colors: {
+      background: { dark: '#282828', light: '#f8f8f8' },
+    },
+    drop: {
+      zIndex: 300,
+    },
+  },
+  // so designer layers are on top of Canvas layers
+  // HPE theme uses 110 due to common header, so need to higher
+  layer: {
+    zIndex: 300,
+  },
+  // HPE theme icons don't render work the way we dynamically load
+  // the theme. So, replace problematic ones here.
+  menu: {
+    icons: {
+      down: Down,
+    },
+  },
+  select: {
+    icons: {
+      down: Down,
+    },
+  },
+  tip: {
+    content: {
+      background: 'background',
+    },
+  },
+};
 
 const calculateGrommetThemeMode = (themeMode) =>
   (themeMode === 'auto' &&
@@ -26,33 +61,7 @@ const App = () => {
   const designTheme = useTheme();
 
   const designerTheme = useMemo(() => {
-    const baseTheme = designTheme || grommet;
-    return {
-      ...baseTheme,
-      global: {
-        ...baseTheme.global,
-        colors: {
-          ...baseTheme.global.colors,
-          background: { dark: '#282828', light: '#f8f8f8' },
-        },
-        drop: {
-          zIndex: 300,
-        },
-      },
-      // so designer layers are on top of Canvas layers
-      // HPE theme uses 110 due to common header, so need to higher
-      layer: {
-        ...baseTheme.layer,
-        zIndex: 300,
-      },
-      tip: {
-        ...baseTheme.tip,
-        content: {
-          ...baseTheme.tip?.content,
-          background: 'background',
-        },
-      },
-    };
+    return deepMerge(designTheme || grommet, appTheme);
   }, [designTheme]);
 
   const appContextValue = useMemo(
