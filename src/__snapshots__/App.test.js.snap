@@ -42,7 +42,7 @@ exports[`App create 1`] = `
               class="StyledBox-sc-13pk1d4-0 cEdQcm"
             >
               <a
-                class="StyledButton-sc-323bzc-0 cAhCQN"
+                class="StyledButton-sc-323bzc-0 cAfsGo"
                 href="/_new"
                 title="start a new design"
               >
@@ -71,8 +71,13 @@ exports[`App create 1`] = `
         class="StyledBox-sc-13pk1d4-0 fVwFV"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 hdlnlw FileInput__ContentsBox-sc-1jzq7im-0 dEasdy"
+          class="StyledBox-sc-13pk1d4-0 hdlnlw FileInput__ContentsBox-sc-1jzq7im-0 jAUCeI"
         >
+          <input
+            accept=".json"
+            class="StyledFileInput-sc-rl7ywv-0 evbEmK"
+            type="file"
+          />
           <div
             class="StyledBox-sc-13pk1d4-0 bNZYRh"
           >
@@ -83,16 +88,11 @@ exports[`App create 1`] = `
             </span>
             <a
               class="StyledAnchor-sc-1rp7lwl-0 goYAIb"
-              tabindex="0"
+              tabindex="-1"
             >
               browse
             </a>
           </div>
-          <input
-            accept=".json"
-            class="StyledFileInput-sc-rl7ywv-0 evbEmK"
-            type="file"
-          />
         </div>
       </div>
       <div
@@ -157,12 +157,12 @@ exports[`App create 1`] = `
         >
           <button
             aria-label="Change settings"
-            class="StyledButton-sc-323bzc-0 bsJryl"
+            class="StyledButton-sc-323bzc-0 ckELTg"
             type="button"
           >
             <svg
               aria-label="Brush"
-              class="StyledIcon-sc-ofa7kd-0 ejqDKc"
+              class="StyledIcon-sc-ofa7kd-0 bQiAMQ"
               viewBox="0 0 24 24"
             >
               <path
@@ -217,12 +217,12 @@ exports[`App create 2`] = `
             >
               <button
                 aria-label="cancel creating a new design"
-                class="StyledButton-sc-323bzc-0 cJeOQt"
+                class="StyledButton-sc-323bzc-0 hZNOgI"
                 type="button"
               >
                 <svg
                   aria-label="Close"
-                  class="StyledIcon-sc-ofa7kd-0 ejqDKc"
+                  class="StyledIcon-sc-ofa7kd-0 bQiAMQ"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -462,7 +462,7 @@ exports[`App create 2`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 iJopwO StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
+                class="StyledButton-sc-323bzc-0 uLElv StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
                 type="button"
               >
                 <div
@@ -511,7 +511,7 @@ exports[`App create 2`] = `
             class="StyledBox-sc-13pk1d4-0 BsHmh"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cAhCQN"
+              class="StyledButton-sc-323bzc-0 cAfsGo"
               title="create design"
               type="submit"
             >
@@ -562,12 +562,12 @@ exports[`App create 3`] = `
             >
               <button
                 aria-label="cancel creating a new design"
-                class="StyledButton-sc-323bzc-0 cJeOQt"
+                class="StyledButton-sc-323bzc-0 hZNOgI"
                 type="button"
               >
                 <svg
                   aria-label="Close"
-                  class="StyledIcon-sc-ofa7kd-0 ejqDKc"
+                  class="StyledIcon-sc-ofa7kd-0 bQiAMQ"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -807,7 +807,7 @@ exports[`App create 3`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 iJopwO StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
+                class="StyledButton-sc-323bzc-0 uLElv StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
                 type="button"
               >
                 <div
@@ -856,7 +856,7 @@ exports[`App create 3`] = `
             class="StyledBox-sc-13pk1d4-0 BsHmh"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cAhCQN"
+              class="StyledButton-sc-323bzc-0 cAfsGo"
               title="create design"
               type="submit"
             >
@@ -898,7 +898,7 @@ exports[`App create 4`] = `
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="Open Drop; Selected: [object Object]"
-                class="StyledButton-sc-323bzc-0 iJopwO StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
+                class="StyledButton-sc-323bzc-0 uLElv StyledSelect__StyledSelectDropButton-sc-znp66n-5 eUyixX"
                 id="template"
                 type="button"
               >
@@ -959,7 +959,7 @@ exports[`App create 4`] = `
             class="StyledBox-sc-13pk1d4-0 kYOLuO"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cAhCQN"
+              class="StyledButton-sc-323bzc-0 cAfsGo"
               title="Use selected screen template"
               type="submit"
             >

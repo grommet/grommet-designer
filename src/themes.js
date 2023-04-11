@@ -31,19 +31,26 @@ const themes = [
   {
     name: 'hpe',
     packageName: 'grommet-theme-hpe',
-    // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/stable',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe.min.js',
   },
   {
-    name: 'hpe-1',
+    label: 'hpe-1',
+    name: 'hpe',
     packageName: 'grommet-theme-hpe',
-    // packageUrl: 'https://github.com/grommet/grommet-theme-hpe/tarball/v1.0.5',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-1.min.js',
   },
   {
+    label: 'hpe-2',
+    name: 'hpe',
+    packageName: 'grommet-theme-hpe',
+    jsUrl:
+      'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-2.min.js',
+  },
+  {
     label: 'hpe-0',
+    name: 'hpe',
     packageName: 'grommet-theme-hpe',
     designerUrl:
       'https://theme-designer.grommet.io/?id=HPE-0-eric-soderberg-hpe-com',
@@ -52,14 +59,10 @@ const themes = [
     label: 'hpe-next',
     name: 'hpe',
     packageName: 'grommet-theme-hpe',
-    // packageUrl:
-    //   'https://github.com/grommet/grommet-theme-hpe/tarball/NEXT-stable',
     jsUrl:
       'https://grommet.github.io/grommet-theme-hpe/grommet-theme-hpe-next.min.js',
   },
 ];
-
-export default themes;
 
 export const themeForValue = (value) => {
   let result = themes.find(
