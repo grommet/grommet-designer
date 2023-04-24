@@ -26,6 +26,7 @@ import {
   DataSummary,
   DataTable,
   DataTableColumns,
+  DataTableGroupBy,
   DataView,
   DateInput,
   Diagram,
@@ -929,6 +930,7 @@ export const components = {
       tip: '',
       active: false,
       badge: 0,
+      busy: false,
       color: ['-color-'],
       disabled: false,
       fill: ['horizontal', 'vertical'],
@@ -943,6 +945,7 @@ export const components = {
       reverse: false,
       secondary: false,
       size: ['small', 'medium', 'large'],
+      success: false,
       type: ['button', 'reset', 'submit'],
     },
     designProperties: {
@@ -2142,6 +2145,18 @@ export const components = {
   DataTableColumns: {
     component: DataTableColumns,
     name: 'DataTableColumns',
+    defaultProps: {
+      drop: true,
+      options: [],
+    },
+    properties: {
+      drop: true,
+      options: SelectOptions,
+    },
+  },
+  DataTableGroupBy: {
+    component: DataTableGroupBy,
+    name: 'DataTableGroupBy',
     defaultProps: {
       drop: true,
       options: [],
