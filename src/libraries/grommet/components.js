@@ -2317,6 +2317,7 @@ export const components = {
       background: ['-color-'],
       color: ['-color-'],
       max: 100,
+      reverse: false,
       round: false,
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge', 'full'],
       thickness: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
