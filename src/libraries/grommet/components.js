@@ -124,7 +124,6 @@ import SizeOptions from './SizeOptions';
 import TextAlign from './TextAlign';
 import TextAreaValue from './TextAreaValue';
 import TextInputSuggestions from './TextInputSuggestions';
-import WeightOptions from './WeightOptions';
 import WorldMapPlaces from './WorldMapPlaces';
 import DropAlign from './DropAlign';
 import Edge from './Edge';
@@ -826,7 +825,7 @@ export const components = {
       textAlign: TextAlign,
       tip: '',
       truncate: false,
-      weight: WeightOptions({ options: ['normal', 'bold'] }),
+      weight: ['normal', 500, 'bold'],
       margin: Edge,
       color: ['-color-'],
     },
