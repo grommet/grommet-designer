@@ -5398,7 +5398,7 @@ grommet-icons@^4.10.0:
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.33.1"
-  resolved "https://github.com/grommet/grommet/tarball/stable#06844fd745a8fe8c1fe771a63f67896cc3b65cf2"
+  resolved "https://github.com/grommet/grommet/tarball/stable#6348bc6626887a75f242c66b73a98c7a6c781adc"
   dependencies:
     grommet-icons "^4.10.0"
     hoist-non-react-statics "^3.2.0"
@@ -7010,9 +7010,9 @@ makeerror@1.0.12:
     tmpl "1.0.5"
 
 markdown-to-jsx@^7.2.0:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.3.1.tgz#11bfd95573d3ada43c149d03e8cf81c8a8f7773d"
-  integrity sha512-UQm7q0Pj/OjNoVbSJWb81qQFFZlZluOdn5fAb/GP5ku9LiBvCDqu8laEDsTFXweYQeLxnTexNcjRZdyOW+souw==
+  version "7.3.2"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.3.2.tgz#f286b4d112dad3028acc1e77dfe1f653b347e131"
+  integrity sha512-B+28F5ucp83aQm+OxNrPkS8z0tMKaeHiy0lHJs3LqCyDQFtWuenaIrkaVTgAm1pf1AU85LXltva86hlaT17i8Q==
 
 match-url-wildcard@0.0.4:
   version "0.0.4"
