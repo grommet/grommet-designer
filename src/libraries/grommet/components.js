@@ -2064,7 +2064,7 @@ export const components = {
     },
     properties: {
       a11yTitle: '',
-      allowSelectAll: [true, false],
+      allowSelectAll: true,
       background: {
         header: {
           color: ['-color-'],
