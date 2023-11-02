@@ -463,6 +463,7 @@ export const components = {
       subtitle: '',
       a11yTitle: '',
       actions: '-component-',
+      level: HeadingLevel,
       margin: Edge,
       pad: Edge,
       parent: '-string-or-component-',
@@ -2063,6 +2064,7 @@ export const components = {
     },
     properties: {
       a11yTitle: '',
+      allowSelectAll: true,
       background: {
         header: {
           color: ['-color-'],
