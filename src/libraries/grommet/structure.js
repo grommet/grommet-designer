@@ -82,6 +82,7 @@ export const structure = [
       'Clock',
       'Data',
       'DataChart',
+      'DataClearFilters',
       'DataFilter',
       'DataFilters',
       'DataSearch',
