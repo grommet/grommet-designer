@@ -19,6 +19,7 @@ import {
   Clock,
   Data,
   DataChart,
+  DataClearFilters,
   DataFilter,
   DataFilters,
   DataSearch,
@@ -2015,6 +2016,35 @@ export const components = {
       //   }
       // }
       return { ...props, ...adjusted };
+    },
+  },
+  DataClearFilters: {
+    component: DataClearFilters,
+    name: 'DataClearFilters',
+    properties: {
+      label: 'Clear Filters',
+      icon: ['-Icon-'],
+      a11yTitle: '',
+      tip: '',
+      active: false,
+      badge: 0,
+      busy: false,
+      color: ['-color-'],
+      disabled: false,
+      fill: ['horizontal', 'vertical'],
+      gap: ['xxsmall', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
+      hoverIndicator: BoxHoverIndicator,
+      href: '',
+      kind: ['-theme-'],
+      margin: Edge,
+      pad: BoxPad,
+      plain: [true, false],
+      primary: false,
+      reverse: false,
+      secondary: false,
+      size: ['small', 'medium', 'large'],
+      success: false,
+      type: ['button', 'reset', 'submit'],
     },
   },
   DataFilters: {
