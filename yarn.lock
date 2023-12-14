@@ -5421,13 +5421,13 @@ graphlib@^2.1.5:
     lodash "^4.17.15"
 
 grommet-icons@^4.10.0:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/grommet-icons/-/grommet-icons-4.11.0.tgz#8cb97d24e84a02c1fb23f84c776ffc46b61ae29d"
-  integrity sha512-ArXf2XyXmpk5JsQ8NudzNz3mbWv+TeZkPiyog2s9yoNAWTlIr3vzNjr97uon/Xm4Uiq2kiHkvO4i2fG1u6EaDg==
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/grommet-icons/-/grommet-icons-4.12.0.tgz#122c1f09c100f2ea6321c401107038caeda8a6b8"
+  integrity sha512-aPFVjdCBLbaUOpxzrNakxYz6DNYxS5lJeLP4tI6nZFfOzLhWH5LBf+tfkL/ZkLMNZC1Uqsw9awPvyvT03xLOsA==
 
 "grommet-icons@https://github.com/grommet/grommet-icons/tarball/stable":
-  version "4.11.0"
-  resolved "https://github.com/grommet/grommet-icons/tarball/stable#f8e865f2f8f977e34b5dd14ef987b7cfc27242c5"
+  version "4.12.0"
+  resolved "https://github.com/grommet/grommet-icons/tarball/stable#7a5f9b056f422be5a0f43af85f4f5c4c3fd268d5"
 
 "grommet@https://github.com/grommet/grommet/tarball/stable":
   version "2.34.1"
@@ -10606,9 +10606,9 @@ whatwg-encoding@^1.0.5:
     iconv-lite "0.4.24"
 
 whatwg-fetch@^3.6.2:
-  version "3.6.19"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.19.tgz#caefd92ae630b91c07345537e67f8354db470973"
-  integrity sha512-d67JP4dHSbm2TrpFj8AbO8DnL1JXL5J9u0Kq2xW6d0TFDbCA3Muhdt8orXC22utleTVj7Prqt82baN6RBvnEgw==
+  version "3.6.20"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz#580ce6d791facec91d37c72890995a0b48d31c70"
+  integrity sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==
 
 whatwg-mimetype@^2.3.0:
   version "2.3.0"
