@@ -11,38 +11,41 @@ const ObjectProperty = React.forwardRef(
     const [expand, setExpand] = React.useState();
     return (
       <Box key={name}>
-        <Box flex direction="row" gap="small">
-          <Field flex label={name}>
-            {value && (
-              <Text weight="bold" truncate>
-                {jsonValue(value)}
-              </Text>
-            )}
-            <span style={{ display: 'flex' }}>
+        <Box flex direction="row">
+          <Box flex>
+            <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
+              <Field flex label={name}>
+                <Box direction="row" align="center" gap="small">
+                  {value && (
+                    <Text weight="bold" truncate>
+                      {jsonValue(value)}
+                    </Text>
+                  )}
+                  <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
+                    {expand ? (
+                      <FormUp color="control" />
+                    ) : (
+                      <FormDown color="control" />
+                    )}
+                  </Box>
+                </Box>
+              </Field>
+            </Button>
+          </Box>
+          {value && (
+            <Box flex={false} border={{ side: 'bottom' }}>
               <Button
-                ref={ref}
+                tip={`clear ${name}`}
                 hoverIndicator
-                onClick={() => setExpand(!expand)}
+                onClick={() => onChange(undefined)}
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
               >
                 <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
-                  {expand ? (
-                    <FormUp color="control" />
-                  ) : (
-                    <FormDown color="control" />
-                  )}
+                  <FormClose />
                 </Box>
               </Button>
-              {value && (
-                <Button
-                  icon={<FormClose />}
-                  tip={`clear ${name}`}
-                  hoverIndicator
-                  onClick={() => onChange(undefined)}
-                  pad={{ vertical: 'xsmall', horizontal: 'small' }}
-                />
-              )}
-            </span>
-          </Field>
+            </Box>
+          )}
         </Box>
         {expand && (
           <Box pad={{ left: 'small' }} border="bottom">
