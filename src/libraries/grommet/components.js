@@ -515,6 +515,7 @@ export const components = {
   Toolbar: {
     component: Toolbar,
     name: 'Toolbar',
+    documentation: 'https://v2.grommet.io/toolbar',
     container: true,
     hideable: true,
     placeholder: () => (
@@ -522,7 +523,43 @@ export const components = {
         This Toolbar is currently empty. Add components to it.
       </Paragraph>
     ),
-    properties: {},
+    defaultProps: {
+      align: 'start',
+      cssGap: 'small',
+      direction: 'row',
+      flex: false,
+      gap: 'small',
+    },
+    properties: {
+      ...reusedBoxProps,
+      alignSelf: ['stretch', 'start', 'center', 'end', 'baseline'],
+      animation: BoxAnimation,
+      basis: [
+        'xxsmall',
+        'xsmall',
+        'small',
+        'medium',
+        'large',
+        'xlarge',
+        'xxlarge',
+        'full',
+        '1/2',
+        '1/3',
+        '2/3',
+        '1/4',
+        '3/4',
+        'auto',
+      ],
+      flex: false,
+      height: Dimension,
+      a11yTitle: '',
+      hoverIndicator: BoxHoverIndicator,
+      responsive: true,
+      round: BoxRound,
+      skeleton: false,
+      width: Dimension,
+      wrap: false,
+    },
   },
   Grid: {
     component: Grid,
@@ -1901,6 +1938,7 @@ export const components = {
   Data: {
     component: Data,
     name: 'Data',
+    documentation: 'https://v2.grommet.io/data',
     container: true,
     defaultProps: {
       data: [
@@ -1913,6 +1951,9 @@ export const components = {
     properties: {
       a11yTitle: '',
       data: JsonData,
+      filteredTotal: 0,
+      id: '',
+      total: 0,
       toolbar: [true, 'search', 'filters'],
       updateOn: ['change', 'submit'],
       view: DataViewProp,
@@ -2050,37 +2091,57 @@ export const components = {
   DataFilters: {
     component: DataFilters,
     name: 'DataFilters',
+    documentation: 'https://v2.grommet.io/datafilters',
     defaultProps: {
       drop: true,
     },
     properties: {
       drop: true,
+      heading: '',
       layer: false,
+      clearFilters: true,
+      updateOn: ['change', 'submit'],
     },
   },
   DataFilter: {
     component: DataFilter,
     name: 'DataFilter',
-    properties: {},
+    documentation: 'https://v2.grommet.io/datafilter',
+    properties: {
+      property: '',
+    },
   },
   DataSearch: {
     component: DataSearch,
     name: 'DataSearch',
-    properties: {},
+    documentation: 'https://v2.grommet.io/datasearch',
+    defaultProps: {
+      drop: true,
+      responsive: true,
+    },
+    properties: {
+      drop: true,
+      responsive: true,
+    },
   },
   DataSort: {
     component: DataSort,
     name: 'DataSort',
-    properties: {},
+    documentation: 'https://v2.grommet.io/datasort',
+    properties: {
+      drop: true,
+    },
   },
   DataSummary: {
     component: DataSummary,
     name: 'DataSummary',
+    documentation: 'https://v2.grommet.io/datasummary',
     properties: {},
   },
   DataTable: {
     component: DataTable,
     name: 'DataTable',
+    documentation: 'https://v2.grommet.io/datatable',
     defaultProps: {
       columns: [
         { header: 'Name', property: 'name', primary: true },
@@ -2176,6 +2237,7 @@ export const components = {
   DataTableColumns: {
     component: DataTableColumns,
     name: 'DataTableColumns',
+    documentation: 'https://v2.grommet.io/datatablecolumns',
     defaultProps: {
       drop: true,
       options: [],
@@ -2188,18 +2250,18 @@ export const components = {
   DataTableGroupBy: {
     component: DataTableGroupBy,
     name: 'DataTableGroupBy',
+    documentation: 'https://v2.grommet.io/datatablegroupby',
     defaultProps: {
-      drop: true,
       options: [],
     },
     properties: {
-      drop: true,
       options: SelectOptions,
     },
   },
   DataView: {
     component: DataView,
     name: 'DataView',
+    documentation: 'https://v2.grommet.io/dataview',
     properties: {},
   },
   Distribution: {
