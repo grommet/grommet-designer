@@ -198,6 +198,8 @@ const convertSelectValue = (options, valueKey, value) => {
   return value;
 };
 
+const grommetWebsite = 'https://v2.grommet.io';
+
 export const components = {
   Box: {
     component: Box,
@@ -213,7 +215,7 @@ export const components = {
           layout thing.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/box',
+    documentation: `${grommetWebsite}/box`,
     defaultProps: {
       align: 'center',
       justify: 'center',
@@ -315,7 +317,7 @@ export const components = {
           This Main is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/main',
+    documentation: `${grommetWebsite}/main`,
     defaultProps: {
       fill: 'vertical',
       flex: 'grow',
@@ -336,7 +338,7 @@ export const components = {
           This Nav is currently empty. Add Buttons to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/nav',
+    documentation: `${grommetWebsite}/nav`,
     defaultProps: {
       align: 'center',
       flex: false,
@@ -356,7 +358,7 @@ export const components = {
           This Header is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/header',
+    documentation: `${grommetWebsite}/header`,
     defaultProps: {
       align: 'center',
       direction: 'row',
@@ -393,7 +395,7 @@ export const components = {
           This Footer is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/header',
+    documentation: `${grommetWebsite}/header`,
     defaultProps: {
       align: 'center',
       direction: 'row',
@@ -424,7 +426,7 @@ export const components = {
         This Page is currently empty. Add a PageContent to it.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/page',
+    documentation: `${grommetWebsite}/page`,
     properties: {
       background: reusedBoxProps.background,
       fill: reusedBoxProps.fill,
@@ -441,7 +443,7 @@ export const components = {
         This PageContent is currently empty. Add some content to it.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/page',
+    documentation: `${grommetWebsite}/page`,
     properties: {
       align: reusedBoxProps.align,
       justify: reusedBoxProps.justify,
@@ -458,7 +460,7 @@ export const components = {
     name: 'PageHeader',
     container: true,
     hideable: true,
-    documentation: 'https://v2.grommet.io/page',
+    documentation: `${grommetWebsite}/page`,
     properties: {
       title: '',
       subtitle: '',
@@ -491,7 +493,7 @@ export const components = {
           This Sidebar is currently empty. Add a Nav component to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/sidebar',
+    documentation: `${grommetWebsite}/sidebar`,
     defaultProps: {
       align: 'stretch',
       direction: 'column',
@@ -515,7 +517,7 @@ export const components = {
   Toolbar: {
     component: Toolbar,
     name: 'Toolbar',
-    documentation: 'https://v2.grommet.io/toolbar',
+    documentation: `${grommetWebsite}/toolbar`,
     container: true,
     hideable: true,
     placeholder: () => (
@@ -572,7 +574,7 @@ export const components = {
         This Grid is currently empty. Define columns and add components to it.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/grid',
+    documentation: `${grommetWebsite}/grid`,
     properties: {
       a11yTitle: '',
       align: ['stretch', 'start', 'center', 'end'],
@@ -609,7 +611,7 @@ export const components = {
           This Card is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/card',
+    documentation: `${grommetWebsite}/card`,
     properties: {
       ...reusedBoxProps,
       height: Dimension,
@@ -652,7 +654,7 @@ export const components = {
           This CardHeader is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/card',
+    documentation: `${grommetWebsite}/card`,
     defaultProps: {
       align: 'center',
       direction: 'row',
@@ -676,7 +678,7 @@ export const components = {
           This CardBody is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/card',
+    documentation: `${grommetWebsite}/card`,
     defaultProps: {
       pad: 'small',
     },
@@ -702,7 +704,7 @@ export const components = {
           This CardFooter is currently empty. Add components to it.
         </Paragraph>
       ),
-    documentation: 'https://v2.grommet.io/card',
+    documentation: `${grommetWebsite}/card`,
     defaultProps: {
       align: 'center',
       direction: 'row',
@@ -724,7 +726,7 @@ export const components = {
         stacked.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/stack',
+    documentation: `${grommetWebsite}/stack`,
     properties: {
       anchor: [
         'center',
@@ -754,7 +756,7 @@ export const components = {
         something.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/layer',
+    documentation: `${grommetWebsite}/layer`,
     help: `The Layer can be seen by giving it a name and turning off 'hide',
     allowing you to populate its contents. Wire up a Layer so it can be
     dynamically shown via a Button or Menu link, List onClickItem,
@@ -814,7 +816,7 @@ export const components = {
     component: Heading,
     name: 'Heading',
     text: 'Heading',
-    documentation: 'https://v2.grommet.io/heading',
+    documentation: `${grommetWebsite}/heading`,
     properties: {
       level: HeadingLevel,
       size: SizeOptions({
@@ -846,6 +848,7 @@ export const components = {
     component: Text,
     name: 'Text',
     text: 'Text',
+    documentation: `${grommetWebsite}/text`,
     properties: {
       a11yTitle: '',
       size: [
@@ -873,6 +876,7 @@ export const components = {
     component: Markdown,
     name: 'Markdown',
     text: 'Markdown',
+    documentation: `${grommetWebsite}/markdown`,
     properties: {
       components: {
         p: {
@@ -889,7 +893,7 @@ export const components = {
     component: Accordion,
     name: 'Accordion',
     container: true,
-    documentation: 'https://v2.grommet.io/accordion',
+    documentation: `${grommetWebsite}/accordion`,
     properties: {
       a11yTitle: '',
       animate: true,
@@ -905,7 +909,7 @@ export const components = {
     component: AccordionPanel,
     name: 'AccordionPanel',
     container: true,
-    documentation: 'https://v2.grommet.io/accordion',
+    documentation: `${grommetWebsite}/accordion`,
     defaultProps: {
       label: 'panel',
     },
@@ -925,6 +929,7 @@ export const components = {
     component: Anchor,
     name: 'Anchor',
     container: 'rarely',
+    documentation: `${grommetWebsite}/anchor`,
     defaultProps: {
       label: 'anchor',
     },
@@ -958,6 +963,7 @@ export const components = {
     component: Button,
     name: 'Button',
     container: 'rarely',
+    documentation: `${grommetWebsite}/button`,
     defaultProps: {
       label: 'Button',
     },
@@ -1010,7 +1016,7 @@ export const components = {
     help: `The dropContent of DropButton can be seen by setting the 'open'
     property to 'true', allowing you to populate the contents. You can then
     restore 'open' to 'undefined', so the button is interactive again.`,
-    documentation: 'https://v2.grommet.io/dropbutton',
+    documentation: `${grommetWebsite}/dropbutton`,
     defaultProps: {
       label: 'Drop Button',
       dropAlign: { top: 'bottom' },
@@ -1055,6 +1061,7 @@ export const components = {
   Menu: {
     component: Menu,
     name: 'Menu',
+    documentation: `${grommetWebsite}/menu`,
     defaultProps: {
       label: 'Menu',
     },
@@ -1107,7 +1114,7 @@ export const components = {
     component: Tabs,
     name: 'Tabs',
     container: true,
-    documentation: 'https://v2.grommet.io/tabs',
+    documentation: `${grommetWebsite}/tabs`,
     defaultProps: {
       justify: 'center',
     },
@@ -1128,7 +1135,7 @@ export const components = {
     component: Tab,
     name: 'Tab',
     container: true,
-    documentation: 'https://v2.grommet.io/tabs',
+    documentation: `${grommetWebsite}/tab`,
     defaultProps: {
       title: 'tab',
     },
@@ -1149,7 +1156,7 @@ export const components = {
     component: Tip,
     name: 'Tip',
     container: true,
-    documentation: 'https://v2.grommet.io/tip',
+    documentation: `${grommetWebsite}/tip`,
     properties: {
       content: '',
       plain: false,
@@ -1158,6 +1165,7 @@ export const components = {
   CheckBox: {
     component: CheckBox,
     name: 'CheckBox',
+    documentation: `${grommetWebsite}/checkbox`,
     defaultProps: {
       label: 'CheckBox',
     },
@@ -1213,6 +1221,7 @@ export const components = {
   CheckBoxGroup: {
     component: CheckBoxGroup,
     name: 'CheckBoxGroup',
+    documentation: `${grommetWebsite}/checkboxgroup`,
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1265,6 +1274,7 @@ export const components = {
   DateInput: {
     component: DateInput,
     name: 'DateInput',
+    documentation: `${grommetWebsite}/dateinput`,
     defaultProps: {
       format: 'mm/dd/yyyy',
     },
@@ -1281,6 +1291,7 @@ export const components = {
   FileInput: {
     component: FileInput,
     name: 'FileInput',
+    documentation: `${grommetWebsite}/fileinput`,
     properties: {
       name: '',
       a11yTitle: '',
@@ -1293,6 +1304,7 @@ export const components = {
   Form: {
     component: Form,
     container: true,
+    documentation: `${grommetWebsite}/form`,
     hideable: true,
     placeholder: () => (
       <Paragraph size="large" textAlign="center" color="placeholder">
@@ -1379,7 +1391,7 @@ export const components = {
       </Paragraph>
     ),
     name: 'FormField',
-    documentation: 'https://v2.grommet.io/formfield',
+    documentation: `${grommetWebsite}/formfield`,
     defaultProps: {
       label: 'FormField',
     },
@@ -1396,7 +1408,7 @@ export const components = {
   MaskedInput: {
     component: MaskedInput,
     name: 'MaskedInput',
-    documentation: 'https://v2.grommet.io/maskedinput',
+    documentation: `${grommetWebsite}/maskedinput`,
     properties: {
       name: '',
       a11yTitle: '',
@@ -1430,7 +1442,7 @@ export const components = {
   RadioButtonGroup: {
     component: RadioButtonGroup,
     name: 'RadioButtonGroup',
-    documentation: 'https://v2.grommet.io/radiobuttongroup',
+    documentation: `${grommetWebsite}/radiobuttongroup`,
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1483,7 +1495,7 @@ export const components = {
   RangeInput: {
     component: RangeInput,
     name: 'RangeInput',
-    documentation: 'https://v2.grommet.io/rangeinput',
+    documentation: `${grommetWebsite}/rangeinput`,
     defaultProps: {
       max: 10,
       min: 0,
@@ -1503,7 +1515,7 @@ export const components = {
     component: Select,
     name: 'Select',
     container: 'rarely',
-    documentation: 'https://v2.grommet.io/select',
+    documentation: `${grommetWebsite}/select`,
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1598,7 +1610,7 @@ export const components = {
     component: SelectMultiple,
     name: 'SelectMultiple',
     container: 'rarely',
-    documentation: 'https://v2.grommet.io/selectmultiple',
+    documentation: `${grommetWebsite}/selectmultiple`,
     defaultProps: {
       options: ['option 1', 'option 2'],
     },
@@ -1690,12 +1702,12 @@ export const components = {
   StarRating: {
     component: StarRating,
     name: 'StarRating',
-    documentation: 'https://v2.grommet.io/starrating',
+    documentation: `${grommetWebsite}/starrating`,
   },
   TextArea: {
     component: TextArea,
     name: 'TextArea',
-    documentation: 'https://v2.grommet.io/textarea',
+    documentation: `${grommetWebsite}/textarea`,
     properties: {
       name: '',
       a11yTitle: '',
@@ -1712,7 +1724,7 @@ export const components = {
   TextInput: {
     component: TextInput,
     name: 'TextInput',
-    documentation: 'https://v2.grommet.io/textinput',
+    documentation: `${grommetWebsite}/textinput`,
     properties: {
       name: '',
       a11yTitle: '',
@@ -1742,12 +1754,13 @@ export const components = {
   ThumbsRating: {
     component: ThumbsRating,
     name: 'ThumbsRating',
-    documentation: 'https://v2.grommet.io/thumbsrating',
+    documentation: `${grommetWebsite}/thumbsrating`,
   },
   Avatar: {
     component: Avatar,
     name: 'Avatar',
     container: true,
+    documentation: `${grommetWebsite}/avatar`,
     help: `Typically an Avatar has either a background, a src,
     or an Icon child.`,
     placeholder: ({ background, src }) =>
@@ -1757,7 +1770,6 @@ export const components = {
           ?
         </Text>
       ),
-    documentation: 'https://v2.grommet.io/avatar',
     defaultProps: {
       align: 'center',
       flex: false,
@@ -1781,7 +1793,7 @@ export const components = {
     help: `The 'date' and 'reference' properties needs to be in ISO8601 format.
     `,
     container: 'rarely',
-    documentation: 'https://v2.grommet.io/calendar',
+    documentation: `${grommetWebsite}/calendar`,
     defaultProps: {
       locale: 'en-US',
       showAdjacentDays: true,
@@ -1824,6 +1836,7 @@ export const components = {
   Chart: {
     component: Chart,
     name: 'Chart',
+    documentation: `${grommetWebsite}/chart`,
     defaultProps: {
       type: 'bar',
       values: [
@@ -1887,6 +1900,7 @@ export const components = {
     component: Cards,
     name: 'Cards',
     container: true,
+    documentation: `${grommetWebsite}/cards`,
     defaultProps: {
       data: [
         { name: 'Eric', count: 5 },
@@ -1926,6 +1940,7 @@ export const components = {
   Clock: {
     component: Clock,
     name: 'Clock',
+    documentation: `${grommetWebsite}/clock`,
     properties: {
       a11yTitle: '',
       hourLimit: ['12', '24'],
@@ -1938,7 +1953,7 @@ export const components = {
   Data: {
     component: Data,
     name: 'Data',
-    documentation: 'https://v2.grommet.io/data',
+    documentation: `${grommetWebsite}/data`,
     container: true,
     defaultProps: {
       data: [
@@ -1955,7 +1970,6 @@ export const components = {
       id: '',
       total: 0,
       toolbar: [true, 'search', 'filters'],
-      updateOn: ['change', 'submit'],
       view: DataViewProp,
       views: DataViews,
     },
@@ -1983,7 +1997,7 @@ export const components = {
   DataChart: {
     component: DataChart,
     name: 'DataChart',
-    documentation: 'https://v2.grommet.io/datachart',
+    documentation: `${grommetWebsite}/datachart`,
     help: `The DataChart can be seen by giving it some 'data' and 'series'.
     You can then customize it from the default by defining 'chart'.
     `,
@@ -2062,6 +2076,7 @@ export const components = {
   DataClearFilters: {
     component: DataClearFilters,
     name: 'DataClearFilters',
+    documentation: `${grommetWebsite}/dataclearfilters`,
     properties: {
       label: 'Clear Filters',
       icon: ['-Icon-'],
@@ -2091,22 +2106,23 @@ export const components = {
   DataFilters: {
     component: DataFilters,
     name: 'DataFilters',
-    documentation: 'https://v2.grommet.io/datafilters',
+    documentation: `${grommetWebsite}/datafilters`,
     defaultProps: {
-      drop: true,
+      clearFilters: true,
+      updateOn: 'submit',
     },
     properties: {
-      drop: true,
+      drop: false,
       heading: '',
       layer: false,
-      clearFilters: true,
+      clearFilters: false,
       updateOn: ['change', 'submit'],
     },
   },
   DataFilter: {
     component: DataFilter,
     name: 'DataFilter',
-    documentation: 'https://v2.grommet.io/datafilter',
+    documentation: `${grommetWebsite}/datafilter`,
     properties: {
       property: '',
     },
@@ -2114,11 +2130,7 @@ export const components = {
   DataSearch: {
     component: DataSearch,
     name: 'DataSearch',
-    documentation: 'https://v2.grommet.io/datasearch',
-    defaultProps: {
-      drop: true,
-      responsive: true,
-    },
+    documentation: `${grommetWebsite}/datasearch`,
     properties: {
       drop: true,
       responsive: true,
@@ -2127,21 +2139,21 @@ export const components = {
   DataSort: {
     component: DataSort,
     name: 'DataSort',
-    documentation: 'https://v2.grommet.io/datasort',
+    documentation: `${grommetWebsite}/datasort`,
     properties: {
-      drop: true,
+      drop: false,
     },
   },
   DataSummary: {
     component: DataSummary,
     name: 'DataSummary',
-    documentation: 'https://v2.grommet.io/datasummary',
+    documentation: `${grommetWebsite}/datasummary`,
     properties: {},
   },
   DataTable: {
     component: DataTable,
     name: 'DataTable',
-    documentation: 'https://v2.grommet.io/datatable',
+    documentation: `${grommetWebsite}/datatable`,
     defaultProps: {
       columns: [
         { header: 'Name', property: 'name', primary: true },
@@ -2237,20 +2249,20 @@ export const components = {
   DataTableColumns: {
     component: DataTableColumns,
     name: 'DataTableColumns',
-    documentation: 'https://v2.grommet.io/datatablecolumns',
+    documentation: `${grommetWebsite}/datatablecolumns`,
     defaultProps: {
       drop: true,
       options: [],
     },
     properties: {
-      drop: true,
+      drop: false,
       options: SelectOptions,
     },
   },
   DataTableGroupBy: {
     component: DataTableGroupBy,
     name: 'DataTableGroupBy',
-    documentation: 'https://v2.grommet.io/datatablegroupby',
+    documentation: `${grommetWebsite}/datatablegroupby`,
     defaultProps: {
       options: [],
     },
@@ -2261,7 +2273,7 @@ export const components = {
   DataView: {
     component: DataView,
     name: 'DataView',
-    documentation: 'https://v2.grommet.io/dataview',
+    documentation: `${grommetWebsite}/dataview`,
     properties: {},
   },
   Distribution: {
@@ -2270,6 +2282,7 @@ export const components = {
     help: `The 'values' property needs to be ordered largest to
     smallest.
     `,
+    documentation: `${grommetWebsite}/distribution`,
     defaultProps: {
       gap: 'xsmall',
       values: [
@@ -2340,6 +2353,7 @@ export const components = {
   Diagram: {
     component: Diagram,
     name: 'Diagram',
+    documentation: `${grommetWebsite}/diagram`,
     properties: {
       animation: false,
       connections: DiagramConnections,
@@ -2349,6 +2363,7 @@ export const components = {
     component: List,
     name: 'List',
     container: true,
+    documentation: `${grommetWebsite}/list`,
     defaultProps: {
       data: [
         { name: 'Eric', count: 5 },
@@ -2405,6 +2420,7 @@ export const components = {
   Meter: {
     component: Meter,
     name: 'Meter',
+    documentation: `${grommetWebsite}/meter`,
     properties: {
       a11yTitle: '',
       background: ['-color-'],
@@ -2444,7 +2460,7 @@ export const components = {
     component: NameValueList,
     name: 'NameValueList',
     container: true,
-    documentation: 'https://v2.grommet.io/namevaluelist',
+    documentation: `${grommetWebsite}/namevaluelist`,
     defaultProps: {
       layout: 'column',
     },
@@ -2475,7 +2491,7 @@ export const components = {
     component: NameValuePair,
     name: 'NameValuePair',
     container: true,
-    documentation: 'https://v2.grommet.io/namevaluepair',
+    documentation: `${grommetWebsite}/namevaluepair`,
     defaultProps: {
       name: 'name',
     },
@@ -2500,7 +2516,7 @@ export const components = {
     component: Notification,
     name: 'Notification',
     hideable: true,
-    documentation: 'https://v2.grommet.io/notification',
+    documentation: `${grommetWebsite}/notification`,
     defaultProps: {
       message: 'Special message',
     },
@@ -2533,6 +2549,7 @@ export const components = {
   Pagination: {
     component: Pagination,
     name: 'Pagination',
+    documentation: `${grommetWebsite}/pagination`,
     defaultProps: {
       numberItems: 27,
     },
@@ -2546,6 +2563,7 @@ export const components = {
   Spinner: {
     component: Spinner,
     name: 'Spinner',
+    documentation: `${grommetWebsite}/spinner`,
     properties: {
       size: ['small', 'medium', 'large'],
     },
@@ -2553,7 +2571,7 @@ export const components = {
   Tag: {
     component: Tag,
     name: 'Tag',
-    documentation: 'https://v2.grommet.io/tag',
+    documentation: `${grommetWebsite}/tag`,
     defaultProps: {
       value: 'Tag',
     },
@@ -2591,7 +2609,7 @@ export const components = {
         thing.
       </Paragraph>
     ),
-    documentation: 'https://v2.grommet.io/carousel',
+    documentation: `${grommetWebsite}/carousel`,
     properties: {
       controls: [true, false, 'arrows', 'selectors'],
       fill: [true, false],
@@ -2603,6 +2621,7 @@ export const components = {
   Image: {
     component: Image,
     name: 'Image',
+    documentation: `${grommetWebsite}/image`,
     defaultProps: {
       src: 'https://photos.smugmug.com/Pinnacles-May-2019/n-8KLNDR/i-bxkrqwL/0/1c7fa7f2/M/i-bxkrqwL-M.jpg',
     },
@@ -2620,6 +2639,7 @@ export const components = {
   Video: {
     component: Video,
     name: 'Video',
+    documentation: `${grommetWebsite}/video`,
     properties: {
       a11yTitle: '',
       autoPlay: false,
@@ -2658,6 +2678,7 @@ export const components = {
   WorldMap: {
     component: WorldMap,
     name: 'WorldMap',
+    documentation: `${grommetWebsite}/worldmap`,
     properties: {
       a11yTitle: '',
       color: ['-color-'],
