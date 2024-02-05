@@ -2132,8 +2132,8 @@ export const components = {
     name: 'DataSearch',
     documentation: `${grommetWebsite}/datasearch`,
     properties: {
-      drop: true,
-      responsive: true,
+      drop: false,
+      responsive: false,
     },
   },
   DataSort: {
@@ -2251,7 +2251,6 @@ export const components = {
     name: 'DataTableColumns',
     documentation: `${grommetWebsite}/datatablecolumns`,
     defaultProps: {
-      drop: true,
       options: [],
     },
     properties: {
