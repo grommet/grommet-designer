@@ -2134,6 +2134,7 @@ export const components = {
     properties: {
       drop: false,
       responsive: false,
+      updateOn: ['change', 'submit'],
     },
   },
   DataSort: {
