@@ -87,7 +87,7 @@ exports[`App create 1`] = `
               Import - drop design file here
             </span>
             <a
-              class="StyledAnchor-sc-1rp7lwl-0 fsOcCa"
+              class="StyledAnchor-sc-1rp7lwl-0 dfUjWi"
               tabindex="-1"
             >
               browse
@@ -250,11 +250,11 @@ exports[`App create 2`] = `
               class="StyledBox-sc-13pk1d4-0 fptPIw FormField__FormFieldContentBox-sc-m9hood-1 efnPPG"
             >
               <div
-                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 esbWVR"
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 sGmPi"
               >
                 <input
                   autocomplete="off"
-                  class="StyledTextInput-sc-1x30a0s-0 bIwrn"
+                  class="StyledTextInput-sc-1x30a0s-0 bORRxU"
                   id="name"
                   name="name"
                   value=""
@@ -472,11 +472,11 @@ exports[`App create 2`] = `
                     class="StyledBox-sc-13pk1d4-0 IxTtJ"
                   >
                     <div
-                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 esbWVR"
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 sGmPi"
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 bIwrn StyledSelect__SelectTextInput-sc-znp66n-4 ldRtXx"
+                        class="StyledTextInput-sc-1x30a0s-0 eEjIFH StyledSelect__SelectTextInput-sc-znp66n-4 ldRtXx"
                         name="includes"
                         placeholder="none"
                         readonly=""
@@ -595,11 +595,11 @@ exports[`App create 3`] = `
               class="StyledBox-sc-13pk1d4-0 fptPIw FormField__FormFieldContentBox-sc-m9hood-1 efnPPG"
             >
               <div
-                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 esbWVR"
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 sGmPi"
               >
                 <input
                   autocomplete="off"
-                  class="StyledTextInput-sc-1x30a0s-0 bIwrn"
+                  class="StyledTextInput-sc-1x30a0s-0 bORRxU"
                   id="name"
                   name="name"
                   value="test design"
@@ -817,11 +817,11 @@ exports[`App create 3`] = `
                     class="StyledBox-sc-13pk1d4-0 IxTtJ"
                   >
                     <div
-                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 esbWVR"
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 sGmPi"
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 bIwrn StyledSelect__SelectTextInput-sc-znp66n-4 ldRtXx"
+                        class="StyledTextInput-sc-1x30a0s-0 eEjIFH StyledSelect__SelectTextInput-sc-znp66n-4 ldRtXx"
                         name="includes"
                         placeholder="none"
                         readonly=""

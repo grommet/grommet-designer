@@ -240,6 +240,7 @@ export const components = {
         '3/4',
         'auto',
       ],
+      cssGap: false,
       elevation: ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'],
       height: Dimension,
       a11yTitle: '',
@@ -256,6 +257,7 @@ export const components = {
       {
         label: 'Content layout',
         properties: [
+          'cssGap',
           'direction',
           'justify',
           'align',
@@ -1285,6 +1287,8 @@ export const components = {
       disabled: false,
       inline: false,
       format: '',
+      readOnly: false,
+      readOnlyCopy: false,
       value: '',
     },
   },
@@ -1733,6 +1737,8 @@ export const components = {
       icon: ['-Icon-'],
       placeholder: '',
       plain: false,
+      readOnly: false,
+      readOnlyCopy: false,
       reverse: false,
       size: ['small', 'medium', 'large', 'xlarge'],
       suggestions: TextInputSuggestions,
