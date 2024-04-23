@@ -77,6 +77,7 @@ import {
   Toolbar,
   Video,
   WorldMap,
+  ToggleGroup,
 } from 'grommet';
 import {
   getDataByPath,
@@ -2564,6 +2565,8 @@ export const components = {
       numberItems: 27,
       numberMiddlePages: 3,
       size: ['small', 'medium', 'large'],
+      stepOptions: false,
+      summary: false,
     },
   },
   Spinner: {
@@ -2603,6 +2606,18 @@ export const components = {
         };
       else if (props?.removable) adjusted.onRemove = () => {};
       return { ...props, ...adjusted };
+    },
+  },
+  ToggleGroup: {
+    component: ToggleGroup,
+    name: 'ToggleGroup',
+    documentation: `${grommetWebsite}/togglegroup`,
+    defaultProps: {},
+    properties: {
+      multiple: false,
+      options: SelectOptions,
+      value: ['-property- options'],
+      defaultValue: ['-property- options'],
     },
   },
   Carousel: {
