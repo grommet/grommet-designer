@@ -2377,6 +2377,7 @@ export const components = {
         { name: 'Eric', count: 5 },
         { name: 'Shimi', count: 7 },
       ],
+      showIndex: true,
     },
     properties: {
       a11yTitle: '',
