@@ -1163,6 +1163,7 @@ export const components = {
     properties: {
       content: '',
       plain: false,
+      defaultVisible: false,
     },
   },
   CheckBox: {
@@ -2376,6 +2377,7 @@ export const components = {
         { name: 'Eric', count: 5 },
         { name: 'Shimi', count: 7 },
       ],
+      showIndex: true,
     },
     properties: {
       a11yTitle: '',
@@ -2386,6 +2388,7 @@ export const components = {
       paginate: false,
       primaryKey: '',
       secondaryKey: '',
+      showIndex: true,
     },
     designProperties: {
       dataPath: '',
