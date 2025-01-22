@@ -1814,6 +1814,7 @@ export const components = {
       fill: false,
       firstDayOfWeek: [0, 1],
       header: '-component-',
+      level: [1, 2, 3, 4, 5, 6],
       locale: '',
       margin: Edge,
       range: false,
