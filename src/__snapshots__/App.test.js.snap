@@ -3,46 +3,46 @@
 exports[`App create 1`] = `
 <DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 ksMitv"
+    class="StyledGrommet-sc-19lkkz7-0 QhRDE"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 fWtxei"
+      class="StyledBox-sc-13pk1d4-0 dKXHxp"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dVDNsM"
+        class="StyledBox-sc-13pk1d4-0 dZMfQL"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 fYhfQh"
+          class="StyledBox-sc-13pk1d4-0 jvLlVG"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 dzOdPB"
+            class="StyledGrid-sc-1wofa1l-0 cJkpq"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 cZVWOV"
+              class="StyledBox-sc-13pk1d4-0 hfeySC"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 jixZPk"
+              class="StyledBox-sc-13pk1d4-0 hBYNKn"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 eWRtdx"
+                class="StyledHeading-sc-1rdh4aw-0 ikhFiW"
               >
                 grommet designer
               </h1>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 hWvBss"
+              class="StyledBox-sc-13pk1d4-0 kXVAcb"
             >
               <p
-                class="StyledParagraph-sc-tbetod-0 ccTRWL"
+                class="StyledParagraph-sc-tbetod-0 bDQcwE"
               >
                 design with grommet components
               </p>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 beSXpv"
+              class="StyledBox-sc-13pk1d4-0 izOalw"
             >
               <a
-                class="StyledButton-sc-323bzc-0 cYtGvH"
+                class="StyledButton-sc-323bzc-0 fbuytQ"
                 href="/_new"
                 title="start a new design"
               >
@@ -53,41 +53,41 @@ exports[`App create 1`] = `
         </header>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eWqFqG"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kjonhx"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 gqKXmE"
+        class="StyledBox-sc-13pk1d4-0 gSsoUf"
       >
         <span
-          class="StyledText-sc-1sadyjn-0 igawMg"
+          class="StyledText-sc-1sadyjn-0 hvLNvj"
         >
           Hi, ... maybe create a new design?
         </span>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eWqFqG"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kjonhx"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 dVDNsM"
+        class="StyledBox-sc-13pk1d4-0 dZMfQL"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 judZmN FileInput__ContentsBox-sc-1jzq7im-0 cYjMQm"
+          class="StyledBox-sc-13pk1d4-0 btQNee FileInput__ContentsBox-sc-1jzq7im-0 kGErCx"
         >
           <input
             accept=".json"
-            class="StyledFileInput-sc-rl7ywv-0 frjtxY"
+            class="StyledFileInput-sc-rl7ywv-0 jiaCRr"
             type="file"
           />
           <div
-            class="StyledBox-sc-13pk1d4-0 Nvcnc"
+            class="StyledBox-sc-13pk1d4-0 jYVGif"
           >
             <span
-              class="StyledText-sc-1sadyjn-0 bEBFBF FileInput__Message-sc-1jzq7im-2 jGndZo"
+              class="StyledText-sc-1sadyjn-0 ddWZXK FileInput__Message-sc-1jzq7im-2 eQgcKP"
             >
               Import - drop design file here
             </span>
             <a
-              class="StyledAnchor-sc-1rp7lwl-0 ibZVEM"
+              class="StyledAnchor-sc-1rp7lwl-0 ehsigv"
               tabindex="-1"
             >
               browse
@@ -96,31 +96,31 @@ exports[`App create 1`] = `
         </div>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eWqFqG"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kjonhx"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 jDvbfO"
+        class="StyledBox-sc-13pk1d4-0 ggcKV"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 dVDNsM"
+          class="StyledBox-sc-13pk1d4-0 dZMfQL"
         >
           <div
-            class="StyledBox-sc-13pk1d4-0 WdSth"
+            class="StyledBox-sc-13pk1d4-0 fRzXAO"
           >
             <h2
-              class="StyledHeading-sc-1rdh4aw-0 eMUNZA"
+              class="StyledHeading-sc-1rdh4aw-0 dFFSsD"
             >
               storage
             </h2>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 qRNKF"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 SPZOm"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 bQOdBX"
+              class="StyledBox-sc-13pk1d4-0 tMflY"
             >
               <svg
                 aria-label="Bar meter with values 0, 0, 0, 0, 0, 0, 0 out of 100"
-                class="StyledMeter-sc-nsxarx-0 fCRjcO"
+                class="StyledMeter-sc-nsxarx-0 miTLV"
                 height="24"
                 preserveAspectRatio="none"
                 viewBox="0 0 384 24"
@@ -136,10 +136,10 @@ exports[`App create 1`] = `
                 />
               </svg>
               <div
-                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
               />
               <span
-                class="StyledText-sc-1sadyjn-0 iUzxnW"
+                class="StyledText-sc-1sadyjn-0 juYoGh"
               >
                 0 K total
               </span>
@@ -148,22 +148,22 @@ exports[`App create 1`] = `
         </div>
       </div>
       <div
-        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 eWqFqG"
+        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 kjonhx"
       />
       <div
-        class="StyledBox-sc-13pk1d4-0 dVDNsM"
+        class="StyledBox-sc-13pk1d4-0 dZMfQL"
       >
         <footer
-          class="StyledBox-sc-13pk1d4-0 kqfjRo"
+          class="StyledBox-sc-13pk1d4-0 dbLOxT"
         >
           <button
             aria-label="Change settings"
-            class="StyledButton-sc-323bzc-0 dvzzNv"
+            class="StyledButton-sc-323bzc-0 djTDjU"
             type="button"
           >
             <svg
               aria-label="Brush"
-              class="StyledIcon-sc-ofa7kd-0 bqRbRY"
+              class="StyledIcon-sc-ofa7kd-0 goWrNb"
               viewBox="0 0 24 24"
             >
               <path
@@ -184,46 +184,46 @@ exports[`App create 1`] = `
 exports[`App create 2`] = `
 <DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 ksMitv"
+    class="StyledGrommet-sc-19lkkz7-0 QhRDE"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 fWtxei"
+      class="StyledBox-sc-13pk1d4-0 dKXHxp"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dVDNsM"
+        class="StyledBox-sc-13pk1d4-0 dZMfQL"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 ckSugz"
+          class="StyledBox-sc-13pk1d4-0 lfABzo"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 dzOdPB"
+            class="StyledGrid-sc-1wofa1l-0 cJkpq"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 cZVWOV"
+              class="StyledBox-sc-13pk1d4-0 hfeySC"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 jixZPk"
+              class="StyledBox-sc-13pk1d4-0 hBYNKn"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 eWRtdx"
+                class="StyledHeading-sc-1rdh4aw-0 ikhFiW"
               >
                 new design
               </h1>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 hWvBss"
+              class="StyledBox-sc-13pk1d4-0 kXVAcb"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 beSXpv"
+              class="StyledBox-sc-13pk1d4-0 izOalw"
             >
               <button
                 aria-label="cancel creating a new design"
-                class="StyledButton-sc-323bzc-0 geHpTD"
+                class="StyledButton-sc-323bzc-0 hNaRlg"
                 type="button"
               >
                 <svg
                   aria-label="Close"
-                  class="StyledIcon-sc-ofa7kd-0 bqRbRY"
+                  class="StyledIcon-sc-ofa7kd-0 goWrNb"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -239,23 +239,23 @@ exports[`App create 2`] = `
         </header>
         <form>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
               for="name"
             >
               name
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 eYrCJw FormField__FormFieldContentBox-sc-m9hood-1 hcNNyd"
+              class="StyledBox-sc-13pk1d4-0 fyOzHn FormField__FormFieldContentBox-sc-m9hood-1 cxiqWq"
             >
               <div
-                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 jHtDgz"
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 gcUiwQ"
               >
                 <input
                   autocomplete="off"
-                  class="StyledTextInput-sc-1x30a0s-0 fnwidb"
+                  class="StyledTextInput-sc-1x30a0s-0 bXwWgM"
                   id="name"
                   name="name"
                   value=""
@@ -264,20 +264,20 @@ exports[`App create 2`] = `
             </div>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lciERv"
+            class="StyledBox-sc-13pk1d4-0 kNtCvU"
             id="startWith"
             role="radiogroup"
           >
             <label
-              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
               for="startWith-start with a blank design"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
               >
                 <input
                   checked=""
-                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                   id="startWith-start with a blank design"
                   name="startWith"
                   tabindex="0"
@@ -285,10 +285,10 @@ exports[`App create 2`] = `
                   value="start with a blank design"
                 />
                 <div
-                  class="StyledBox-sc-13pk1d4-0 hUkyGR StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                  class="StyledBox-sc-13pk1d4-0 cwFOsa StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                 >
                   <svg
-                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fwWmrz"
+                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 eqcBvA"
                     preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
@@ -307,17 +307,17 @@ exports[`App create 2`] = `
               </span>
             </label>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
             />
             <label
-              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
               for="startWith-duplicate an existing design"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
               >
                 <input
-                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                   id="startWith-duplicate an existing design"
                   name="startWith"
                   tabindex="-1"
@@ -325,7 +325,7 @@ exports[`App create 2`] = `
                   value="duplicate an existing design"
                 />
                 <div
-                  class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                  class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                 />
               </div>
               <span
@@ -336,30 +336,30 @@ exports[`App create 2`] = `
             </label>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
             >
               theme
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 efNsjV FormField__FormFieldContentBox-sc-m9hood-1 XhivO"
+              class="StyledBox-sc-13pk1d4-0 gERgyG FormField__FormFieldContentBox-sc-m9hood-1 hrVpMh"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 bvWvwP"
+                class="StyledBox-sc-13pk1d4-0 bVWETU"
                 role="radiogroup"
               >
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="grommet"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
                       checked=""
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="grommet"
                       name="theme"
                       tabindex="0"
@@ -367,10 +367,10 @@ exports[`App create 2`] = `
                       value="grommet"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 hUkyGR StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cwFOsa StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     >
                       <svg
-                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fwWmrz"
+                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 eqcBvA"
                         preserveAspectRatio="xMidYMid meet"
                         viewBox="0 0 24 24"
                       >
@@ -389,17 +389,17 @@ exports[`App create 2`] = `
                   </span>
                 </label>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
                 />
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="hpe"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="hpe"
                       name="theme"
                       tabindex="-1"
@@ -407,7 +407,7 @@ exports[`App create 2`] = `
                       value="hpe"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     />
                   </div>
                   <span
@@ -417,17 +417,17 @@ exports[`App create 2`] = `
                   </span>
                 </label>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
                 />
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="other"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="other"
                       name="theme"
                       tabindex="-1"
@@ -435,7 +435,7 @@ exports[`App create 2`] = `
                       value="other"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     />
                   </div>
                   <span
@@ -448,36 +448,36 @@ exports[`App create 2`] = `
             </div>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
               for="includes"
             >
               include other designs to be able to copy their components
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 eYrCJw FormField__FormFieldContentBox-sc-m9hood-1 XhivO"
+              class="StyledBox-sc-13pk1d4-0 fyOzHn FormField__FormFieldContentBox-sc-m9hood-1 hrVpMh"
             >
               <button
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 eKvjSA StyledSelect__StyledSelectDropButton-sc-znp66n-5 hweaGw"
+                class="StyledButton-sc-323bzc-0 eVwmj StyledSelect__StyledSelectDropButton-sc-znp66n-5 ehdLEn"
                 type="button"
               >
                 <div
-                  class="StyledBox-sc-13pk1d4-0 kmCpPX"
+                  class="StyledBox-sc-13pk1d4-0 igOwdA"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 llKkdx"
+                    class="StyledBox-sc-13pk1d4-0 cVoXzm"
                   >
                     <div
-                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 jHtDgz"
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 gcUiwQ"
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 hgBTwY StyledSelect__SelectTextInput-sc-znp66n-4 hPdVtq"
+                        class="StyledTextInput-sc-1x30a0s-0 eRBumP StyledSelect__SelectTextInput-sc-znp66n-4 bDUGdd"
                         inert=""
                         name="includes"
                         placeholder="none"
@@ -489,12 +489,12 @@ exports[`App create 2`] = `
                     </div>
                   </div>
                   <div
-                    class="StyledBox-sc-13pk1d4-0 iBKXSA"
+                    class="StyledBox-sc-13pk1d4-0 idcWnv"
                     style="min-width: auto;"
                   >
                     <svg
                       aria-label="FormDown"
-                      class="StyledIcon-sc-ofa7kd-0 iVpWnA"
+                      class="StyledIcon-sc-ofa7kd-0 jLyKIv"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -510,10 +510,10 @@ exports[`App create 2`] = `
             </div>
           </div>
           <footer
-            class="StyledBox-sc-13pk1d4-0 DhbmI"
+            class="StyledBox-sc-13pk1d4-0 vDozn"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cYtGvH"
+              class="StyledButton-sc-323bzc-0 fbuytQ"
               title="create design"
               type="submit"
             >
@@ -530,46 +530,46 @@ exports[`App create 2`] = `
 exports[`App create 3`] = `
 <DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 ksMitv"
+    class="StyledGrommet-sc-19lkkz7-0 QhRDE"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 fWtxei"
+      class="StyledBox-sc-13pk1d4-0 dKXHxp"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dVDNsM"
+        class="StyledBox-sc-13pk1d4-0 dZMfQL"
       >
         <header
-          class="StyledBox-sc-13pk1d4-0 ckSugz"
+          class="StyledBox-sc-13pk1d4-0 lfABzo"
         >
           <div
-            class="StyledGrid-sc-1wofa1l-0 dzOdPB"
+            class="StyledGrid-sc-1wofa1l-0 cJkpq"
           >
             <div
-              class="StyledBox-sc-13pk1d4-0 cZVWOV"
+              class="StyledBox-sc-13pk1d4-0 hfeySC"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 jixZPk"
+              class="StyledBox-sc-13pk1d4-0 hBYNKn"
             >
               <h1
-                class="StyledHeading-sc-1rdh4aw-0 eWRtdx"
+                class="StyledHeading-sc-1rdh4aw-0 ikhFiW"
               >
                 new design
               </h1>
             </div>
             <div
-              class="StyledBox-sc-13pk1d4-0 hWvBss"
+              class="StyledBox-sc-13pk1d4-0 kXVAcb"
             />
             <div
-              class="StyledBox-sc-13pk1d4-0 beSXpv"
+              class="StyledBox-sc-13pk1d4-0 izOalw"
             >
               <button
                 aria-label="cancel creating a new design"
-                class="StyledButton-sc-323bzc-0 geHpTD"
+                class="StyledButton-sc-323bzc-0 hNaRlg"
                 type="button"
               >
                 <svg
                   aria-label="Close"
-                  class="StyledIcon-sc-ofa7kd-0 bqRbRY"
+                  class="StyledIcon-sc-ofa7kd-0 goWrNb"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -585,23 +585,23 @@ exports[`App create 3`] = `
         </header>
         <form>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
               for="name"
             >
               name
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 eYrCJw FormField__FormFieldContentBox-sc-m9hood-1 hcNNyd"
+              class="StyledBox-sc-13pk1d4-0 fyOzHn FormField__FormFieldContentBox-sc-m9hood-1 cxiqWq"
             >
               <div
-                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 jHtDgz"
+                class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 gcUiwQ"
               >
                 <input
                   autocomplete="off"
-                  class="StyledTextInput-sc-1x30a0s-0 fnwidb"
+                  class="StyledTextInput-sc-1x30a0s-0 bXwWgM"
                   id="name"
                   name="name"
                   value="test design"
@@ -610,20 +610,20 @@ exports[`App create 3`] = `
             </div>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lciERv"
+            class="StyledBox-sc-13pk1d4-0 kNtCvU"
             id="startWith"
             role="radiogroup"
           >
             <label
-              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
               for="startWith-start with a blank design"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
               >
                 <input
                   checked=""
-                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                   id="startWith-start with a blank design"
                   name="startWith"
                   tabindex="0"
@@ -631,10 +631,10 @@ exports[`App create 3`] = `
                   value="start with a blank design"
                 />
                 <div
-                  class="StyledBox-sc-13pk1d4-0 hUkyGR StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                  class="StyledBox-sc-13pk1d4-0 cwFOsa StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                 >
                   <svg
-                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fwWmrz"
+                    class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 eqcBvA"
                     preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24"
                   >
@@ -653,17 +653,17 @@ exports[`App create 3`] = `
               </span>
             </label>
             <div
-              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+              class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
             />
             <label
-              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+              class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
               for="startWith-duplicate an existing design"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
               >
                 <input
-                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                  class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                   id="startWith-duplicate an existing design"
                   name="startWith"
                   tabindex="-1"
@@ -671,7 +671,7 @@ exports[`App create 3`] = `
                   value="duplicate an existing design"
                 />
                 <div
-                  class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                  class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                 />
               </div>
               <span
@@ -682,30 +682,30 @@ exports[`App create 3`] = `
             </label>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
             >
               theme
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 efNsjV FormField__FormFieldContentBox-sc-m9hood-1 XhivO"
+              class="StyledBox-sc-13pk1d4-0 gERgyG FormField__FormFieldContentBox-sc-m9hood-1 hrVpMh"
             >
               <div
-                class="StyledBox-sc-13pk1d4-0 bvWvwP"
+                class="StyledBox-sc-13pk1d4-0 bVWETU"
                 role="radiogroup"
               >
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="grommet"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
                       checked=""
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="grommet"
                       name="theme"
                       tabindex="0"
@@ -713,10 +713,10 @@ exports[`App create 3`] = `
                       value="grommet"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 hUkyGR StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cwFOsa StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     >
                       <svg
-                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 fwWmrz"
+                        class="StyledRadioButton__StyledRadioButtonIcon-sc-g1f6ld-3 eqcBvA"
                         preserveAspectRatio="xMidYMid meet"
                         viewBox="0 0 24 24"
                       >
@@ -735,17 +735,17 @@ exports[`App create 3`] = `
                   </span>
                 </label>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
                 />
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="hpe"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="hpe"
                       name="theme"
                       tabindex="-1"
@@ -753,7 +753,7 @@ exports[`App create 3`] = `
                       value="hpe"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     />
                   </div>
                   <span
@@ -763,17 +763,17 @@ exports[`App create 3`] = `
                   </span>
                 </label>
                 <div
-                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                  class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
                 />
                 <label
-                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 jwFtvV"
+                  class="StyledRadioButton__StyledRadioButtonContainer-sc-g1f6ld-0 ePwewi"
                   for="other"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 irUZj StyledRadioButton-sc-g1f6ld-5 PXmNZ"
+                    class="StyledBox-sc-13pk1d4-0 jkMDxk StyledRadioButton-sc-g1f6ld-5 csPPCC"
                   >
                     <input
-                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bBXsOB"
+                      class="StyledRadioButton__StyledRadioButtonInput-sc-g1f6ld-1 bSAvtm"
                       id="other"
                       name="theme"
                       tabindex="-1"
@@ -781,7 +781,7 @@ exports[`App create 3`] = `
                       value="other"
                     />
                     <div
-                      class="StyledBox-sc-13pk1d4-0 injqDh StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 kEoueS"
+                      class="StyledBox-sc-13pk1d4-0 cPZwve StyledRadioButton__StyledRadioButtonBox-sc-g1f6ld-4 cmgBqV"
                     />
                   </div>
                   <span
@@ -794,36 +794,36 @@ exports[`App create 3`] = `
             </div>
           </div>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
               for="includes"
             >
               include other designs to be able to copy their components
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 eYrCJw FormField__FormFieldContentBox-sc-m9hood-1 XhivO"
+              class="StyledBox-sc-13pk1d4-0 fyOzHn FormField__FormFieldContentBox-sc-m9hood-1 hrVpMh"
             >
               <button
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="none"
-                class="StyledButton-sc-323bzc-0 eKvjSA StyledSelect__StyledSelectDropButton-sc-znp66n-5 hweaGw"
+                class="StyledButton-sc-323bzc-0 eVwmj StyledSelect__StyledSelectDropButton-sc-znp66n-5 ehdLEn"
                 type="button"
               >
                 <div
-                  class="StyledBox-sc-13pk1d4-0 kmCpPX"
+                  class="StyledBox-sc-13pk1d4-0 igOwdA"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 llKkdx"
+                    class="StyledBox-sc-13pk1d4-0 cVoXzm"
                   >
                     <div
-                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 jHtDgz"
+                      class="StyledTextInput__StyledTextInputContainer-sc-1x30a0s-1 gcUiwQ"
                     >
                       <input
                         autocomplete="off"
-                        class="StyledTextInput-sc-1x30a0s-0 hgBTwY StyledSelect__SelectTextInput-sc-znp66n-4 hPdVtq"
+                        class="StyledTextInput-sc-1x30a0s-0 eRBumP StyledSelect__SelectTextInput-sc-znp66n-4 bDUGdd"
                         inert=""
                         name="includes"
                         placeholder="none"
@@ -835,12 +835,12 @@ exports[`App create 3`] = `
                     </div>
                   </div>
                   <div
-                    class="StyledBox-sc-13pk1d4-0 iBKXSA"
+                    class="StyledBox-sc-13pk1d4-0 idcWnv"
                     style="min-width: auto;"
                   >
                     <svg
                       aria-label="FormDown"
-                      class="StyledIcon-sc-ofa7kd-0 iVpWnA"
+                      class="StyledIcon-sc-ofa7kd-0 jLyKIv"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -856,10 +856,10 @@ exports[`App create 3`] = `
             </div>
           </div>
           <footer
-            class="StyledBox-sc-13pk1d4-0 DhbmI"
+            class="StyledBox-sc-13pk1d4-0 vDozn"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cYtGvH"
+              class="StyledButton-sc-323bzc-0 fbuytQ"
               title="create design"
               type="submit"
             >
@@ -876,60 +876,60 @@ exports[`App create 3`] = `
 exports[`App create 4`] = `
 <DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 ksMitv"
+    class="StyledGrommet-sc-19lkkz7-0 QhRDE"
   >
     <div
-      class="StyledBox-sc-13pk1d4-0 dvyMKY"
+      class="StyledBox-sc-13pk1d4-0 gujfkP"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 dvgDST"
+        class="StyledBox-sc-13pk1d4-0 dGxCKE"
       >
         <form>
           <div
-            class="StyledBox-sc-13pk1d4-0 lAiqC FormField__FormFieldBox-sc-m9hood-0 bJYjgC"
+            class="StyledBox-sc-13pk1d4-0 jJMajl FormField__FormFieldBox-sc-m9hood-0 iWUDpR"
           >
             <label
-              class="StyledText-sc-1sadyjn-0 hjOyAZ"
+              class="StyledText-sc-1sadyjn-0 kdgUbe"
               for="template"
             >
               screen template
             </label>
             <div
-              class="StyledBox-sc-13pk1d4-0 eYrCJw FormField__FormFieldContentBox-sc-m9hood-1 XhivO"
+              class="StyledBox-sc-13pk1d4-0 fyOzHn FormField__FormFieldContentBox-sc-m9hood-1 hrVpMh"
             >
               <button
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-label="Open Drop; Selected: empty page"
-                class="StyledButton-sc-323bzc-0 eKvjSA StyledSelect__StyledSelectDropButton-sc-znp66n-5 hweaGw"
+                class="StyledButton-sc-323bzc-0 eVwmj StyledSelect__StyledSelectDropButton-sc-znp66n-5 ehdLEn"
                 id="template"
                 type="button"
               >
                 <div
-                  class="StyledBox-sc-13pk1d4-0 kmCpPX"
+                  class="StyledBox-sc-13pk1d4-0 igOwdA"
                 >
                   <div
-                    class="StyledBox-sc-13pk1d4-0 llKkdx"
+                    class="StyledBox-sc-13pk1d4-0 cVoXzm"
                   >
                     <div
-                      class="StyledBox-sc-13pk1d4-0 dfFnRC"
+                      class="StyledBox-sc-13pk1d4-0 kJHgOl"
                     >
                       <span
-                        class="StyledText-sc-1sadyjn-0 epapWo"
+                        class="StyledText-sc-1sadyjn-0 jpjXVH"
                       >
                         empty page
                       </span>
                       <div
-                        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 nSztt"
+                        class="StyledBox__StyledBoxGap-sc-13pk1d4-1 iyUWcu"
                       />
                       <span
-                        class="StyledText-sc-1sadyjn-0 fdhJqR"
+                        class="StyledText-sc-1sadyjn-0 hUoxJS"
                       >
                         generic
                       </span>
                     </div>
                     <input
-                      class="StyledSelect__HiddenInput-sc-znp66n-2 llEruv"
+                      class="StyledSelect__HiddenInput-sc-znp66n-2 ipwypk"
                       id="template__input"
                       inert=""
                       name="template"
@@ -938,12 +938,12 @@ exports[`App create 4`] = `
                     />
                   </div>
                   <div
-                    class="StyledBox-sc-13pk1d4-0 iBKXSA"
+                    class="StyledBox-sc-13pk1d4-0 idcWnv"
                     style="min-width: auto;"
                   >
                     <svg
                       aria-label="FormDown"
-                      class="StyledIcon-sc-ofa7kd-0 iVpWnA"
+                      class="StyledIcon-sc-ofa7kd-0 jLyKIv"
                       viewBox="0 0 24 24"
                     >
                       <path
@@ -959,10 +959,10 @@ exports[`App create 4`] = `
             </div>
           </div>
           <footer
-            class="StyledBox-sc-13pk1d4-0 eYqvdH"
+            class="StyledBox-sc-13pk1d4-0 dOSxIw"
           >
             <button
-              class="StyledButton-sc-323bzc-0 cYtGvH"
+              class="StyledButton-sc-323bzc-0 fbuytQ"
               title="Use selected screen template"
               type="submit"
             >
@@ -979,28 +979,28 @@ exports[`App create 4`] = `
 exports[`App create 5`] = `
 <DocumentFragment>
   <div
-    class="StyledGrommet-sc-19lkkz7-0 ksMitv"
+    class="StyledGrommet-sc-19lkkz7-0 QhRDE"
   >
     <div
-      class="StyledGrommet-sc-19lkkz7-0 duqZGP"
+      class="StyledGrommet-sc-19lkkz7-0 cNrwFo"
       id="designer-canvas"
     >
       <div
-        class="StyledBox-sc-13pk1d4-0 iwqcWs"
+        class="StyledBox-sc-13pk1d4-0 cCkSoz"
         id="2"
         style="outline: 1px dashed red;"
         tabindex="-1"
       >
         <div
-          class="StyledBox-sc-13pk1d4-0 guSTqA"
+          class="StyledBox-sc-13pk1d4-0 fRUhiz"
           id="3"
           tabindex="-1"
         >
           <div
-            class="sc-gjcoXW jUHhzZ"
+            class="sc-gnOvAp efQqrN"
           >
             <p
-              class="StyledParagraph-sc-tbetod-0 gJzsVc"
+              class="StyledParagraph-sc-tbetod-0 caijRb"
             >
               This PageContent is currently empty. Add some content to it.
             </p>

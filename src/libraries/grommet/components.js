@@ -247,7 +247,7 @@ export const components = {
       a11yTitle: '',
       hoverIndicator: BoxHoverIndicator,
       onClick: ['-link-'],
-      responsive: true,
+      responsive: ['container', true, false],
       round: BoxRound,
       skeleton: false,
       width: Dimension,
