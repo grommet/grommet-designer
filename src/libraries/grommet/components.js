@@ -1786,6 +1786,12 @@ export const components = {
       round: 'full',
     },
     properties: {
+      imageProps: {
+        a11yTitle: '',
+        fill: ['horizontal', 'vertical', true, false],
+        fit: ['cover', 'contain'],
+        opacity: ['weak', 'medium', 'strong'],
+      },
       size: ['xsmall', 'small', 'medium', 'large', 'xlarge'],
       src: ImageSrc,
       background: reusedBoxProps.background,
