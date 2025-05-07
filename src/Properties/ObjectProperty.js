@@ -11,20 +11,17 @@ const ObjectProperty = React.forwardRef(
     const [expand, setExpand] = React.useState();
     return (
       <Box key={name}>
-        <Box direction="row">
+        <Box flex direction="row">
           <Box flex>
             <Button ref={ref} hoverIndicator onClick={() => setExpand(!expand)}>
-              <Field label={name}>
+              <Field flex label={name}>
                 <Box direction="row" align="center" gap="small">
                   {value && (
                     <Text weight="bold" truncate>
                       {jsonValue(value)}
                     </Text>
                   )}
-                  <Box
-                    flex={false}
-                    pad={{ vertical: 'xsmall', horizontal: 'small' }}
-                  >
+                  <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
                     {expand ? (
                       <FormUp color="control" />
                     ) : (
@@ -36,13 +33,17 @@ const ObjectProperty = React.forwardRef(
             </Button>
           </Box>
           {value && (
-            <Box border={{ side: 'horizontal' }}>
+            <Box flex={false} border={{ side: 'bottom' }}>
               <Button
-                icon={<FormClose />}
                 tip={`clear ${name}`}
                 hoverIndicator
                 onClick={() => onChange(undefined)}
-              />
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
+              >
+                <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
+                  <FormClose />
+                </Box>
+              </Button>
             </Box>
           )}
         </Box>
